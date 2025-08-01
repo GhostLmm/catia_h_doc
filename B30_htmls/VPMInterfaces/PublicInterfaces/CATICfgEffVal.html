@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgEffVal.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgEffVal.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgComponent.html">← 上一页: CATICfgComponent.h</a></div>
+        <div><a href="CATICfgEffectivity.html">下一页: CATICfgEffectivity.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATICfgEffVal_h
+#define CATICfgEffVal_h
+
+#define EFFVALSIZE 5000
+
+// Includes
+//----------  
+#include &quot;sequence_octet.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+// System
+//--------
+#include &quot;CATBaseUnknown.h&quot;
+// Interface ID
+//--------------
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATICfgMileStone.h&quot;
+#include &quot;CATIConfigurableObject.h&quot;
+#include &quot;CATListOfCATIConfigurableObject.h&quot;
+#include &quot;CATListOfCATICfgMileStone.h&quot;
+#include &quot;CATListOfCATIConfigurable.h&quot;
+#include &quot;CATListOfCATICfgORExpression.h&quot;
+#include &quot;CATListOfCATICfgModification.h&quot;
+
+// Classes
+//---------
+class CATICfgEffVal_var;
+class CATListValCATICfgMileStone_var;
+class CATListValCATIConfigurable_var;
+class CATListValCATICfgEffectivity_var;
+class CATListValCATICfgSimpleSpecification_var;
+class CATICfgInterval_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgEffVal ;
+#else
+extern &quot;C&quot; const IID IID_CATICfgEffVal ;
+#endif
+
+//=============================================================================
+
+class ExportedByGUIDVPMInterfaces CATICfgEffVal : public CATBaseUnknown
+{
+CATDeclareInterface;
+
+public:
+/** @nodoc */
+	virtual HRESULT Delete() = 0;
+/** @nodoc */
+	virtual HRESULT Dump() const = 0;
+
+/** @nodoc 
+ * Retrieve the UUID of an &lt;b&gt;EffVal&lt;/b&gt; object 
+ * @param outUid 
+ */
+	virtual HRESULT GetUid( SEQUENCE(octet)&amp; outUid ) const = 0;
+
+
+/** @nodoc 
+ * Retrieve the CO of an &lt;b&gt;EffVal&lt;/b&gt; object 
+ * @param outCO
+ */
+	virtual HRESULT GetConfigurableObject( CATIConfigurableObject_var&amp; outCO ) const = 0;
+
+
+/** @nodoc 
+ * Returns all the mods held by the EffVal
+ * @param  outModificationList 
+ */
+	virtual HRESULT GetListOfMods( CATListOfCATICfgModification_var&amp; outModificationList ) const = 0;
+
+
+/** @nodoc 
+ * Updates the OPTIMSTRING of an &lt;b&gt;EffVal&lt;/b&gt;
+ * @param   cZone
+ * @param   butMod   updates the EffVal taking into account all mods but butMod
+ */
+	virtual HRESULT Update( const CATICfgModification_var&amp; butMod = NULL_var ) = 0;
+
+/** @nodoc 
+ * Updates the OPTIMSTRING of an &lt;b&gt;EffVal&lt;/b&gt; after an AttachMinus
+ * @param  outModificationList 
+ */
+	virtual HRESULT AppendMinusMod( CATICfgModification_var&amp; inMod ) = 0;
+
+/** @nodoc 
+ * Updates the OPTIMSTRING of an &lt;b&gt;EffVal&lt;/b&gt; after an AttachExtension
+ * @param  outModificationList 
+ */
+	virtual HRESULT AppendExtensionMod( CATICfgModification_var&amp; inMod ) = 0;
+
+/** @nodoc 
+ * Updates the OPTIMSTRING of an &lt;b&gt;EffVal&lt;/b&gt; after an AttachPlus
+ * @param  outModificationList 
+ */
+     virtual HRESULT AppendPlusMod( CATICfgModification_var&amp; inMod ) = 0;
+
+/** @nodoc 
+ * Updates the OPTIMSTRING of an &lt;b&gt;EffVal&lt;/b&gt; after a Detach
+ * @param  OptimString already allocated
+ * @param   inMod 
+ */
+	virtual HRESULT RemoveMod( const CATICfgModification_var&amp; inMod ) = 0;
+
+/** @nodoc 
+ * GetModByOid
+ * given an oid, search for it in the mod list held bye the &lt;b&gt;EffVal&lt;/b&gt;
+ */
+	virtual HRESULT GetModByOid( const SEQUENCE(octet)&amp; inOid , CATICfgModification_var&amp; outMod ) const = 0;
+ 
+/** @nodoc */
+	virtual HRESULT Migrate() = 0;
+
+     /**
+      *
+      * Transform an OPTIMSTRING into a list of Domain and ORExp
+      * @param oDomainList    : Domains list
+      * @param oORExpList     : ORExp list
+      *
+      **/
+	virtual HRESULT GetSolvedEffectivity( CATListOfCATUnicodeString&amp; oDomainList , CATListOfCATICfgORExpression_var&amp; oORExpList ) const = 0;
+
+     /**
+      *
+      * Transform an OPTIMSTRING into a list of Xeff
+      * @param oLOXEffs		  : list of Xeff
+      *
+      **/
+	virtual HRESULT GetSolvedEffectivity( CATListValCATICfgXEff_var &amp;oLOXEffs ) const = 0;
+
+/** @nodoc */	
+	virtual HRESULT GetEffectivity( const CATUnicodeString&amp; iDomain , CATICfgEffectivity_var&amp; oEffectivity ) const = 0;
+
+     /**
+      *
+      * Returns solved operations in oOperations and their associated modificaions in oAssociatedModifs.
+      * @param oOperations           : ouput operation list
+      * @param oAssociatedModifs     : output associated modification list
+      *
+      **/
+	virtual HRESULT GetSolvedOperations( CATListOfCATUnicodeString&amp; oOperations , CATListOfCATICfgModification_var&amp; oAssociatedModifs ) const = 0;
+
+     /**
+      *
+      * Returns unsolved operations in oHistories as List of CATICfgHistory_var 
+      * @param oHistories           : ouput operation list
+      *
+      **/
+	virtual HRESULT GetUnsolvedOperations( CATListOfCATICfgHistory_var&amp; oHistories ) const = 0;
+
+
+/** @nodoc
+ * Returns all the specs used in the EffVal
+ * @param  outSpecList 
+ */
+	virtual HRESULT GetListOfSpecs( CATListOfCATICfgSimpleSpecification_var&amp; outSpecList ) const = 0;
+};
+
+// Handler definition 
+CATDeclareHandler(CATICfgEffVal, CATBaseUnknown);
+
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgComponent.html">← 上一页: CATICfgComponent.h</a></div>
+        <div><a href="CATICfgEffectivity.html">下一页: CATICfgEffectivity.h →</a></div>
+    </div>
+</body>
+</html>

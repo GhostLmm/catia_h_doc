@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModelerUI/PublicInterfaces/CATPrtPanelStateCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModelerUI/PublicInterfaces/CATPrtPanelStateCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMmuViewServices.html">← 上一页: CATMmuViewServices.h</a></div>
+        <div><a href="CATPrtUpdateCom.html">下一页: CATPrtUpdateCom.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPrtPanelStateCmd_h
+#define CATPrtPanelStateCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATMMUIPanelStateCmd.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATPathElement.h&quot;
+#include &quot;CATMechanicalModelerUI.h&quot;
+
+/**
+ * Basic class for creation and edition commands with a dialog box in Part Design context.
+ * &lt;b&gt;Role&lt;/b&gt;: Derives this class to implement your command.
+ * &lt;br&gt;
+ * &lt;br&gt;The data members to create are:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATMMUIStateCommand#_MyFeature : The feature modified or created during the command. This 
+ *  data will be returned by the @href CATMMUIStateCommand#GiveMyFeature method.&lt;/li&gt;
+ * &lt;li&gt;A dialog box to display parameters of the feature. The recommended styles for this dialog box are:
+ * &lt;ul&gt;
+ *  &lt;li&gt;&lt;tt&gt;CATDlgWndBtnOKCancel&lt;/tt&gt;: OK and Cancel Buttons
+ *  &lt;li&gt;&lt;tt&gt;CATDlgWndBtnOKCancelPreview&lt;/tt&gt;: Ok, Cancel and Preview Buttons
+ * &lt;/ul&gt;&lt;/li&gt;
+ *&lt;/ul&gt;
+ *
+ * The main methods to override are:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href #BuildGraph : Constructs the state chart&lt;/li&gt;
+ * &lt;li&gt;@href CATMMUIPanelStateCmd#GiveMyPanel : it returns the dialog box created by your command. &lt;/li&gt;
+ * &lt;li&gt;@href #OkAction : to customize the actions on the OK click button events.&lt;/li&gt;
+ * &lt;li&gt;@href #PreviewAction : to customize the actions on the Preview click button events.&lt;/li&gt;
+ * &lt;li&gt;@href #CancelAction : to customize the actions on the Cancel or the Close click button events.&lt;/li&gt;
+ * &lt;/ul&gt;
+
+ */
+class ExportedByCATMechanicalModelerUI CATPrtPanelStateCmd : public CATMMUIPanelStateCmd
+{
+public:
+
+   /**
+    * Constructs a panel state command.
+    * @param iName
+    * The identifier of the command. 
+    * @param iBehavior
+    * The recommended style is &lt;tt&gt;CATDlgEngOneShot&lt;/tt&gt;
+    * @param iFocusMode
+    *   The focus mode.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: With the default mode 
+    *   &lt;tt&gt;CATCommandModeExclusive&lt;/tt&gt;, the command takes the focus and 
+    *   cancels the other commands. This mode is mandatory if the command 
+    *   modifies the model.
+    *   &lt;br&gt;The other possible mode is &lt;tt&gt;CATCommandModeShared&lt;/tt&gt;: the command
+    *   only deactivates the active command and takes the focus. The previous
+    *   command will resume when the current command ends.
+    *   &lt;br&gt;The &lt;tt&gt;CATCommandModeUndefined&lt;/tt&gt; mode is forbidden with a main 
+    *   state command since it needs to take the focus.
+    * @param iCommandMode
+    * &lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;ul&gt;
+    * &lt;li&gt;1: Default value, the command is in creation mode&lt;/li&gt;
+    * &lt;li&gt;0:The command is in edition mode&lt;/li&gt;
+    * &lt;/ul&gt;
+    * @param iWorkingPath
+    * Sets the default value.
+    * @param iActiveObjectPath
+    * Sets the default value.
+    */
+   CATPrtPanelStateCmd(const CATString &amp;     iName,
+                       CATDlgEngBehavior     iBehavior = NULL, 
+                       CATCommandMode        iFocusMode = CATCommandModeExclusive,
+                       int                   iCommandMode = 0,
+                       const CATPathElement* iWorkingPath = 0,
+                       const CATPathElement* iActiveObjectPath = 0);
+
+   virtual ~CATPrtPanelStateCmd();
+
+   /**
+    * Builds the command state chart.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method constructs the state chart with states, agents and transitions.
+    * &lt;br&gt;To associate the dialog box with a state, create this state by:
+    * &lt;ul&gt;
+    * &lt;li&gt;@href CATMMUIPanelStateCmd#GetInitialPanelState, if the state is the initial state&lt;/li&gt;
+    * &lt;li&gt;@href CATMMUIPanelStateCmd#AddPanelState, otherwise&lt;/li&gt;
+    * &lt;/ul&gt;
+    * Caution: your state chart must have only one state associated with the dialog box returned
+    * by the @href CATMMUIPanelStateCmd#GiveMyPanel . 
+    * &lt;br&gt;&lt;br&gt;From this specific state, named &lt;tt&gt;PanelState&lt;/tt&gt; for example, 
+    * some transitions are automatically defined:
+    * &lt;ol&gt;
+    * &lt;li&gt;From the &lt;tt&gt;PanelState&lt;/tt&gt; state to the &lt;tt&gt;Update&lt;/tt&gt; state:&lt;/li&gt;
+    * &lt;br&gt;The &lt;tt&gt;Update&lt;/tt&gt; state is defined by the &lt;tt&gt;CATMMUIStateCommand&lt;/tt&gt; class. 
+    * &lt;ul&gt;
+    * &lt;li&gt;Condition: The end user pushes the Ok Button&lt;/li&gt;
+    * &lt;li&gt;Action Method: @href #OkAction &lt;/li&gt;
+    * &lt;/ul&gt;
+    * &lt;li&gt;From the &lt;tt&gt;PanelState&lt;/tt&gt; state to the &lt;tt&gt;Cancel&lt;/tt&gt; state:&lt;/li&gt;
+    * &lt;br&gt;The &lt;tt&gt;Cancel&lt;/tt&gt; state is defined by the &lt;tt&gt;CATStateCommand&lt;/tt&gt; class.
+    * &lt;ul&gt;
+    * &lt;li&gt;Condition: if the end user pushes the Cancel or the Close Buttons&lt;/li&gt;
+    * &lt;li&gt;Action Method: @href #CancelAction &lt;/li&gt;
+    * &lt;/ul&gt;
+    * &lt;li&gt;From the &lt;tt&gt;PanelState&lt;/tt&gt; state to the &lt;tt&gt;PanelState&lt;/tt&gt; state:&lt;/li&gt;
+    * &lt;ul&gt;
+    * &lt;li&gt;Condition: if the end user pushes the Preview Button&lt;/li&gt;
+    * &lt;li&gt;Action Method: @href #PreviewAction &lt;/li&gt;
+    * &lt;/ul&gt;
+    * &lt;li&gt;From &lt;tt&gt;Update&lt;/tt&gt; state to the &lt;tt&gt;PanelState&lt;/tt&gt; state&lt;/li&gt;
+    * &lt;ul&gt;
+    * &lt;li&gt;Condition: The update applied to the feature
+    *  returned by the @href CATMMUIStateCommand#GiveMyFeature method is wrong&lt;/li&gt;
+    * &lt;li&gt;Action Method: @href #UpdateKOAction &lt;/li&gt;
+    * &lt;/ul&gt;
+    * &lt;li&gt;From &lt;tt&gt;Update&lt;/tt&gt; state to the &lt;tt&gt;NULL&lt;/tt&gt; state:&lt;/li&gt;
+    * &lt;ul&gt;
+    * &lt;li&gt;Condition: The update applied to the feature
+    *  returned by the @href CATMMUIStateCommand#GiveMyFeature method is OK&lt;/li&gt;
+    * &lt;li&gt;Action Method: @href #UpdateOKAction &lt;/li&gt;
+    * &lt;/ul&gt; 
+    * &lt;/ol&gt;
+    * @see CATStateCommand#BuildGraph
+    */
+   virtual void BuildGraph();
+
+   /**
+    * Deals with Ok button click event.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;Action method sets on the transaction between the state created
+    * by the @href CATMMUIPanelStateCmd#GetInitialPanelState and an internal &lt;tt&gt;Update&lt;/tt&gt; state. 
+    * &lt;br&gt;Override this function to customize the actions on the OK button click event, and at the end
+    * of the method, call the current method.
+    * @param iUseless
+    *   There is no data as argument of the 
+    *   &lt;tt&gt;ActionMethod&lt;/tt&gt; methods. 
+    *   
+    */
+   virtual CATBoolean OkAction(void * iUseless);
+
+   /**
+    * Deals with Preview button click event.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;Action method sets on the loop transaction between the state created
+    * by the @href CATMMUIPanelStateCmd#GetInitialPanelState. 
+    * &lt;br&gt;Override this function to customize the actions on the Preview button click event, and at the end
+    * of the method, call the  current method.
+    * @param iUseless
+    *   There is no data as argument of this 
+    *   &lt;tt&gt;ActionMethod&lt;/tt&gt; method. 
+    *   
+    */
+   virtual CATBoolean PreviewAction (void * iUseless);
+
+   /**
+    * Deals with Cancel or Close button click events.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;Action method sets on a transaction between the state created
+    * by the @href CATMMUIPanelStateCmd#GetInitialPanelState and the &lt;tt&gt;Cancel&lt;/tt&gt; state
+    * (defined in the @href CATStateCommand class). 
+    * &lt;br&gt;Override this function to customize the actions on the Cancel or Close button click events, and at the end
+    * of the method, call the current method.
+    * @param iUseless
+    *   There is no data as argument of this 
+    *   &lt;tt&gt;ActionMethod&lt;/tt&gt; method. 
+    *   
+    */
+   virtual CATBoolean CancelAction(void * iUseless);
+
+   /**
+    * Deals a good update after OK. 
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;When the end user has pushed the Ok Button, the state chart goes to
+    * the internal &lt;tt&gt;Update&lt;/tt&gt; state. At this moment two possible cases. The update called on
+    * the feature returned by 
+    * @href CATMMUIStateCommand#GiveMyFeature method is:
+    * &lt;ol&gt;
+    * &lt;li&gt;OK: The state chart goes to the NULL state, the command is ended. The action method sets
+    * on this transition is &lt;tt&gt;UpdateOKAction&lt;/tt&gt;&lt;/li&gt;
+    * &lt;li&gt;KO: The state chart returns to the @href CATMMUIPanelStateCmd#GetInitialPanelState state.
+    * The action method sets on this transition is &lt;tt&gt;UpdateKOAction&lt;/tt&gt;&lt;/li&gt;
+    * &lt;/ol&gt;
+    * &lt;br&gt;Override this function to customize the actions when the update is OK and at the end
+    * of the method, call the current method.
+    * @param iUseless
+    *   There is no data as argument of this
+    *   &lt;tt&gt;ActionMethod&lt;/tt&gt; method. 
+    *   
+    */
+   virtual CATBoolean UpdateOKAction(void * iUseless);
+
+   /**
+    * Deals a wrong update after OK. 
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;When the end user has pushed the Ok Button, the state chart goes to
+    * the internal &lt;tt&gt;Update&lt;/tt&gt; state. At this moment two possible cases. The update called on
+    * the feature  returned by 
+    * @href CATMMUIStateCommand#GiveMyFeature method is:
+    * &lt;ol&gt;
+    * &lt;li&gt;OK: The state chart goes to the NULL state, the command is ended. The action method sets
+    * on this transition is &lt;tt&gt;UpdateOKAction&lt;/tt&gt;&lt;/li&gt;
+    * &lt;li&gt;KO: The state chart returns to the @href CATMMUIPanelStateCmd#GetInitialPanelState state.
+    * The action method sets on this transition is &lt;tt&gt;UpdateKOAction&lt;/tt&gt;&lt;/li&gt;
+    * &lt;/ol&gt;
+    * &lt;br&gt;Override this function to customize the actions when the update is KO and at the end
+    * of the method, call the  current method.
+    * @param iUseless
+    *   There is no data as argument of this
+    *   &lt;tt&gt;ActionMethod&lt;/tt&gt; method. 
+    *   
+    */
+   virtual CATBoolean UpdateKOAction(void * iUseless);
+
+   /**
+    * Cancels the command.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;Called when the command selector gives the focus to an exclusive command,
+    * or if this command completes. In this latter case, the focus is given to 
+    * the default command (usually Select). 
+    * You should not take care of the command destruction. This is done
+    * by the dialog state command engine.
+    * &lt;br&gt;If you override this method, call at the end the current method.
+	 * @param iCmd
+    *   The command that requests to cancel the current one
+    * @param iNotif
+    *   The notification sent
+    */
+   virtual CATStatusChangeRC Cancel(CATCommand* iCmd, CATNotification* iNotif);
+
+
+    /**
+    * @nodoc 
+    */
+   virtual CATBoolean ApplyAction (void * iUseful);
+
+   /**
+    * @nodoc 
+    */
+   virtual CATBoolean InitAction(void * iUseful);
+
+   /** @nodoc */
+   virtual CATBoolean EnterFirstStateAction (void * );
+
+   /** @nodoc */
+   void SetActiveObject(CATBaseUnknown* object); 
+
+private:
+
+   int _InitCompteur;
+   CATISpecObject_var _initialcurrentfeature;
+   CATPathElement _initialactivepath;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMmuViewServices.html">← 上一页: CATMmuViewServices.h</a></div>
+        <div><a href="CATPrtUpdateCom.html">下一页: CATPrtUpdateCom.h →</a></div>
+    </div>
+</body>
+</html>

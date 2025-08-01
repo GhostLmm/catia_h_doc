@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATFillDictionary.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATFillDictionary.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATExtendable.html">← 上一页: CATExtendable.h</a></div>
+        <div><a href="CATGetBackboneConnection.html">下一页: CATGetBackboneConnection.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-C++-*- */
+/* COPYRIGHT DASSAULT SYSTEMES 1997                                      */
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+/*=======================================================================*/
+
+#ifndef __CATFillDictionary
+#define __CATFillDictionary
+
+// this class is used to put information into the dictionary at runtime */
+
+#include &lt;stdio.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATMetaClass;
+
+/**
+ * Do not use this class. For internal use only.
+ * Class used to fill in the interface dictionary at runtime.
+ */
+class ExportedByJS0CORBA CATFillDictionary
+{
+   public :
+      // to put class name, interface name and functions in the dictionary
+/**
+ * Constructs a CATFillDictionary instance by means of a class name that
+ * implements an interface.
+ * @param iClass      Class implementing the interface
+ * @param iInterface  Interface
+ * @param iCreation   Creation function
+ * @param iCondition  Conditional function
+ */
+      CATFillDictionary(const char *iClass, const char *inter, void *iCreation,
+		        void *iCondition = NULL);
+      // to put class id, interface id and functions in the dictionary
+/**
+ * Constructs a CATFillDictionary instance by means of a class GUID and the
+ * interface GUID it implements.
+ * @param iClass      GUID of the class implementing the interface
+ * @param iInterface  GUID of the interface
+ * @param iCreation   Creation function
+ * @param iCondition  Conditional function
+ */
+      CATFillDictionary(const GUID &amp; iClass, const GUID &amp; iInterface,
+                        void * iCreation, void * iCondition = NULL);
+      // to fill the dictionary using the meta-objects
+/**
+ * Constructs a CATFillDictionary instance by means of the meta objects of
+ * both the interface class and the class that implements it.
+ * @param iClassMetaObject      Meta object of the class implementing the interface.
+ * @param iInterfaceMetaObject  Meta object of the interface class.
+ * @param iCreation   Creation function.   
+ * @param iCondition  Conditional function.
+ * @param iInheritanceForInterfaces  Inheritance For Interfaces.
+ */
+      CATFillDictionary(const CATMetaClass * iClassMetaObject,
+								const CATMetaClass * iInterfaceMetaObject,
+								void * iCreation,
+								void * iCondition = NULL,
+								int iInheritanceForInterfaces = 1);
+      // to put commands in the dictionary
+/**
+ * Constructs a CATFillDictionary instance by means of a class that implements an
+ * interface and a creation function.
+ * @param iName Class implementing an interface.      
+ * @param iCreation Creation function.
+ */
+      CATFillDictionary(const char * iname, void * iCreation);
+/**
+ * Constructs a CATFillDictionary instance by means of a class that implements an
+ * interface inside a shared library.
+ * @param iName Class that supports the interface.      
+ * @param iInterface Interface name.
+ * @param iLibrary Library containing the interface implementation code.
+ */
+      CATFillDictionary(const char * iname, const char * iinterface,
+			const char * ilibrary);
+/**
+ * Constructs a CATFillDictionary instance by means of an extension class
+ * that implements an interface for an implementation.
+ * @param iExtensionMetaObject Meta object of the extension.
+ * @param iInterfaceMetaObject Meta object of the interface.
+ * @param iImplementation Implementation name.
+ * @param iCreation Creation function.
+ */
+      CATFillDictionary(CATMetaClass * iExtensionMetaObject,
+                        CATMetaClass * iInterfaceMetaObject,
+			const char * iImplementation,
+			void * iCreation);
+			
+/**
+ * @nodoc 
+ * Fills the functions dictionary with a function pointer and its keyname and function type. 
+ * @param iKeyName          : the keyname of the registered function 
+ * @param iPtrFunct         : the pointer on the function
+ * @param iFunctionTypeName : the type of the registered function
+ * @return 0 if the call has succeeded else 1
+ */		
+	static char RegisterFunction(const char * iKeyName, const void * iPtrFunct, const char * iFunctionTypeName);
+
+/**
+ * @nodoc 
+ * Fills the functions dictionary with a function creation pointer and its keyname. 
+ * For more information about creation functions, see CATCreateClassInstance.h
+ * @param iKeyName          : the keyname of the registered function 
+ * @param iPtrFunct         : the pointer on the creation function 
+ * @return 0 if the call has succeeded else 1
+ */		
+	static char RegisterFunctionCreation(const char * iKeyName, const void * iPtrFunct);
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATExtendable.html">← 上一页: CATExtendable.h</a></div>
+        <div><a href="CATGetBackboneConnection.html">下一页: CATGetBackboneConnection.h →</a></div>
+    </div>
+</body>
+</html>

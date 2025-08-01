@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseCreateObjectNotification.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseCreateObjectNotification.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseCGRDocument.html">← 上一页: CAAVisBaseCGRDocument.h</a></div>
+        <div><a href="CAAVisBaseDefaultDocument.html">下一页: CAAVisBaseDefaultDocument.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAVisBaseCreateObjectNotification_h
+#define CAAVisBaseCreateObjectNotification_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2005
+
+//=============================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Notification corresponding to the &quot;Open&quot;
+//  event.
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//           CAAVisBaseCreateObjectNotification
+//             CATNotification (System Framework)
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//  GetFileName : gets the CGR file name to open.
+//===========================================================================
+
+//System Framework
+#include &quot;CATNotification.h&quot;
+
+#include &quot;CAAVisObjectType.h&quot;
+
+class CAAVisBaseCreateObjectNotification : public CATNotification
+{
+  CATDeclareClass;
+  
+public :
+
+  // Constructs an Open notification from
+  // the name of the CGR file containing
+  // the model to Open.
+  // Parameters
+  //   iFileName
+  //     The CGR file name.
+  CAAVisBaseCreateObjectNotification(CAAVisObjectType iObjectType);
+
+  //Destructor
+  virtual ~CAAVisBaseCreateObjectNotification();
+
+  // Gets the type of the object to be created.
+  CAAVisObjectType GetObjectType();
+
+private:
+
+  //Default constructor
+  CAAVisBaseCreateObjectNotification();
+
+  //Copy constructor
+  CAAVisBaseCreateObjectNotification(const CAAVisBaseCreateObjectNotification &amp;iBrother);
+
+  //Assignment operator
+  CAAVisBaseCreateObjectNotification &amp; operator = (const CAAVisBaseCreateObjectNotification &amp;iBrother);
+
+private:
+
+  CAAVisObjectType _objectType;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseCGRDocument.html">← 上一页: CAAVisBaseCGRDocument.h</a></div>
+        <div><a href="CAAVisBaseDefaultDocument.html">下一页: CAAVisBaseDefaultDocument.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgSimpleSpecification.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgSimpleSpecification.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgSignedSpec.html">← 上一页: CATICfgSignedSpec.h</a></div>
+        <div><a href="CATICfgSpecANDExpression.html">下一页: CATICfgSpecANDExpression.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICfgSimpleSpecification_h
+#define CATICfgSimpleSpecification_h
+
+//COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ *@CAA2Level L1
+ *@CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;sequence_CORBAAny.h&quot;
+#include &quot;CATICfgSpecification.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATICfgSimpleSpecification.h&quot;
+#include &quot;CATListOfCATILinkableObject.h&quot;
+#include &quot;CATICfgSpecLnk.h&quot;
+
+class CATICfgSpecCategory_var;
+class CATUnicodeString ;
+class CATListValCATICfgSimpleSpecification_var;
+class CATILinkableObject_var;
+class CATIConfigurable_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgSimpleSpecification ;
+#else
+extern &quot;C&quot; const IID IID_CATICfgSimpleSpecification ;
+#endif
+
+//=============================================================================
+
+class ExportedByGUIDVPMInterfaces CATICfgSimpleSpecification : public CATICfgSpecification {
+
+     CATDeclareInterface;
+
+public:
+
+/**
+ * Return the Name of this SimpleSpecification.
+ * @param oName
+ *   The SimpleSpecification Name.
+ */
+     virtual HRESULT GetName(CATUnicodeString &amp;oName) const = 0 ;
+
+/**
+ * Return the full Name as Category.SimpleSpecification.
+ * @param oName
+ *   The full Name obtained by concatenation of the owning Category Name and the SimpleSpecification Name.
+ */
+     virtual HRESULT  GetFullName(CATUnicodeString &amp;oName) const = 0 ;
+
+/**
+ * Return the full Name as &quot;Category Oid&quot;.&quot;SimpleSpecification Oid&quot;.
+ * @param oName
+ *   The full Name obtained by concatenation of the owning Category Oid and the SimpleSpecification Oid.
+ */
+     virtual HRESULT  GetFullOid(char*&amp; oOid)  = 0 ;
+
+/**
+ * Return the Description of this SimpleSpecification.
+ * @param oDescription
+ *   The SimpleSpecification Description to return.
+ */
+     virtual HRESULT GetDescription(CATUnicodeString &amp;oDescription) const =0;
+
+/**
+ * Set the Description of this SimpleSpecification.
+ * @param oDescription
+ *   The SimpleSpecification Description to set.
+ */
+     virtual HRESULT  SetDescription(const CATUnicodeString &amp; iDescription) = 0;
+
+/**
+ * Attach this SimpleSpecification to a Configurable.
+ * @param iObjectUUID
+ *   UUID of the Configurable this SimpleSpecification will be attached to.
+ */
+     virtual HRESULT Attach(SEQUENCE(octet) &amp;iObjectUUID)=0;
+
+/** @nodoc
+ * Attach this SimpleSpecification to a Configurable.
+ * @param iCO
+ *   Configurable this SimpleSpecification will be attached to.
+ * @param oSpecLnk
+ *   Link between the configurable and the specification.
+ */
+     virtual HRESULT Attach(const CATIConfigurable_var &amp;iCO, CATICfgSpecLnk_var &amp;oSpecLnk)=0;
+
+/**
+ * Detach this SimpleSpecification from a Configurable.
+ * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: If the SimpleSpecification belongs to a Configuration Rule attached to the
+ * Configurable, the method doesn&#x27;t detach it.
+ * @param iConfigurableUID
+ *   UUID of the Configurable this SimpleSpecification will be detached from.
+ */
+     virtual HRESULT  Detach(SEQUENCE(octet) &amp;iConfigurableUID) = 0;
+
+/**
+ * Return the SpecCategory owning this SimpleSpecification.
+ * @param oCategory
+ *   SpecCategory owning this SimpleSpecification: it may be NULL_var.
+ */
+     virtual HRESULT  GetSpecCategory(CATICfgSpecCategory_var &amp;oCategory) const = 0 ;
+
+/**
+ * Return the list of UUIDs-Configurables this SimpleSpecification is attached to.
+ * @param Ret
+ *   List of UUIDs-Configurables this SimpleSpecification is attached to.
+ */
+     virtual HRESULT GetUIDList(SEQUENCE(CORBAAny)&amp; Ret) const = 0;
+
+/** @nodoc */
+     virtual HRESULT SetPackage() = 0;
+
+/** @nodoc */
+     virtual HRESULT UnsetPackage()= 0;
+
+/** @nodoc */
+     virtual HRESULT IsPackage() const = 0;
+        
+/** @nodoc */
+     virtual HRESULT DefinePackage(SEQUENCE(octet) &amp;iUuid, CATListValCATICfgSimpleSpecification_var &amp;iList) =0;
+
+/** @nodoc */
+     virtual HRESULT GetPackage(const SEQUENCE(octet) &amp;iUuid, CATListValCATICfgSimpleSpecification_var &amp;oList)=0;
+
+/** @nodoc
+ * Return the link between this SimpleSpecification and a UUID-Configurable.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt; S_OK if the SpecLnk link exists, S_FALSE else.
+ * @param iUuid
+ *   UUID of the Configurable this SimpleSpecification is supposed to be linked with.
+ * @param oSpecLink
+ *   Link between this SimpleSpecification and the UUID-Configurable.
+ */
+     virtual HRESULT GetLinkForUID(const SEQUENCE(octet) &amp;iUuid, CATICfgSpecLnk_var &amp;oSpecLink)=0;
+
+/** @nodoc */
+     virtual HRESULT AddWhereUsed(CATILinkableObject_var &amp;iObj) = 0;
+
+/** @nodoc */
+     virtual HRESULT GetWhereUsed(CATListOfCATILinkableObject &amp;oList) const = 0;
+
+/** @nodoc */
+     virtual HRESULT RemoveWhereUsed(CATILinkableObject_var &amp;oList) const = 0;
+
+/** @nodoc */
+     virtual HRESULT SetName(const CATUnicodeString &amp; iName) = 0;
+
+/**
+ * Return the SpecAlias of this SimpleSpecification.
+ * @param oAlias
+ *   SpecAlias of this SimpleSpecification to be returned.
+ */
+     virtual HRESULT GetAlias(CATUnicodeString &amp;oAlias) const = 0;
+
+/**
+ * Sets the Alias of this SimpleSpecification.
+ * @param iAlias
+ *   The SimpleSpecification Alias to set.
+ */
+     virtual HRESULT SetAlias(const CATUnicodeString &amp;iAlias) = 0;
+
+/**
+ * Unsets the Alias of this SimpleSpecification.
+ * @param iAlias
+ *   The SimpleSpecification Alias to unset.
+ */
+     virtual HRESULT UnsetAlias(const CATUnicodeString &amp;iAlias) = 0;
+};
+
+// Handler definition 
+CATDeclareHandler(CATICfgSimpleSpecification, CATICfgSpecification);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgSignedSpec.html">← 上一页: CATICfgSignedSpec.h</a></div>
+        <div><a href="CATICfgSpecANDExpression.html">下一页: CATICfgSpecANDExpression.h →</a></div>
+    </div>
+</body>
+</html>

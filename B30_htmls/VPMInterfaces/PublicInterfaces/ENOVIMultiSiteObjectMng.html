@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVIMultiSiteObjectMng.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVIMultiSiteObjectMng.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIMoveEvent.html">← 上一页: ENOVIMoveEvent.h</a></div>
+        <div><a href="ENOVINamedObject.html">下一页: ENOVINamedObject.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2007
+//=============================================================================
+//
+// ENOVIMultiSiteObjectMng.h
+//=============================================================================
+// Content: Services to get the replication information on an object.
+//
+//=============================================================================
+// History
+//
+// 18/12/2007     Creation                  WPU
+//=============================================================================
+#ifndef ENOVIMultiSiteObjectMng_h
+#define ENOVIMultiSiteObjectMng_h
+
+#include &quot;CATDbBinary.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVIMultiSiteObjectMng;
+#else
+extern &quot;C&quot; const IID IID_ENOVIMultiSiteObjectMng;
+#endif
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+ 
+/**
+ * Interface to access services for getting the replication information on an object.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Class to be used by a client who wants replication information on an object.
+ */
+
+class ExportedByGUIDVPMInterfaces ENOVIMultiSiteObjectMng : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+  /**
+   *   Get the name of Site owning the object.
+   *   @param oSiteOwner [out]
+   *   A CATUnicodeString.
+   *   @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;the site owner has been successfully retrieved&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+   *   &lt;/dl&gt;		
+   */
+  virtual HRESULT GetSiteOwner    (CATUnicodeString&amp;       oSiteOwner)=0;
+ 
+  /**
+   *   Get the ID of Site owning the object.
+   *   @param oSiteID [out]
+   *   a CATDbBinary.  
+   *   @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;the site owner has been successfully retrieved&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+   *   &lt;/dl&gt;		
+   */
+  virtual HRESULT GetSiteOwner    (CATDbBinary&amp;            oSiteId)=0;
+
+  /**
+   *   Checks to see if the object is owned by the local site
+   *   @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The object is owned by local site&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;The object is owned by a remote site&lt;/dd&gt;
+   *   &lt;/dl&gt;		
+   */
+  virtual HRESULT IsOwnedByLocalSite ()=0;
+
+ /**
+   *   Checks to see if the object is owned by the site identified by SiteId
+   *   @param iSiteId [in]. 
+   *   @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The object is owned by iSiteId&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;The object is not owned by iSiteId&lt;/dd&gt;
+   *   &lt;/dl&gt;		
+   */
+  virtual HRESULT IsOwnedByTargetSite(const CATDbBinary&amp; iSiteId) =0;
+  
+};
+
+CATDeclareHandler(ENOVIMultiSiteObjectMng, CATBaseUnknown); 
+
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIMoveEvent.html">← 上一页: ENOVIMoveEvent.h</a></div>
+        <div><a href="ENOVINamedObject.html">下一页: ENOVINamedObject.h →</a></div>
+    </div>
+</body>
+</html>

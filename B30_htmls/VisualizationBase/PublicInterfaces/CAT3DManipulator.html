@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DManipulator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DManipulator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DLodRep.html">← 上一页: CAT3DLodRep.h</a></div>
+        <div><a href="CAT3DMarkerGP.html">下一页: CAT3DMarkerGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DManipulator_h
+#define CAT3DManipulator_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATManipulator.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathLine.h&quot;
+#include &quot;CATMathPlane.h&quot;
+#include &quot;CAT4x4Matrix.h&quot;
+#include &quot;CATMathAxis.h&quot;
+#include &quot;CATTransformationNotification.h&quot;
+#include &quot;CATViz3DViewer.h&quot;
+
+class CAT3DBagRep;
+class CAT3DRep;
+class CAT3DViewpoint;
+class CATDeviceEvent;
+class CATMouseDevice;
+class CATPickPath;
+class CAT3DViewer;
+/**
+  * Class to control a 3D representation.
+  * &lt;b&gt;Role&lt;/b&gt;:
+  * A CAT3DManipulator is a Controller attached to a 3D representation providing 
+  * a proposition of a new position for 3D manipulation after the representation
+  * selected by the user has been manipulated.
+  * &lt;p&gt;
+  * Usage of manipulators
+  * &lt;ul&gt;
+  * &lt;li&gt;In the instanciation : 
+  *	&lt;ol&gt; 
+  *	&lt;li&gt;	Instanciate a manipulator connected to the representation :
+  *		  &lt;pre&gt;CAT3DManipulator * _Manip = new 
+  *		    CAT3DManipulator( this, &quot;MYName&quot;, MYRep, CAT3DManipulator::Translation);&lt;/pre&gt;
+  *	
+  *	&lt;li&gt;	Position the manipulator	
+  *		  &lt;pre&gt;_Manip-&gt;SetPosition( PositionComputedFromNewModelization)&lt;/pre&gt;
+  *			
+  *	&lt;li&gt;	Set characteristics (Invariants)   Note: Do it after SetPosition()
+  *		  &lt;pre&gt;Manip-&gt;SetTranslationDirection( CATMathJ);&lt;/pre&gt;
+  *			
+  *	&lt;li&gt; 	Branch a callback in you father command to be informed about the manipulation
+  *		  &lt;pre&gt;AddAnalyseNotificationCB( _Manip, CATManipulator::GetCATManipulate(), 
+  *		    (CATCommandMethod) &amp;MYCommand::MYCallback, NULL);&lt;/pre&gt;
+  *	&lt;/ol&gt;
+  * &lt;li&gt;In the callback,
+  *	&lt;ol&gt;
+  *     &lt;li&gt; Read data of manipulation
+  *		&lt;ul&gt;
+  *		&lt;li&gt; read the RESULT of the manipulation
+  *		&lt;pre&gt;CATMathAxis Position = ((CAT3DManipulator *)Command)-&gt;GetPosition();&lt;/pre&gt;
+  *
+  *		&lt;li&gt; read the event elementary TRANSFORMATION of the manipulation
+  *	        &lt;pre&gt;CATTransformationNotification *TransfoNotif =
+  *	        ((CATTransformationNotification *) Command-&gt;SendCommandSpecificObject(
+  *	        CATTransformationNotification::ClassName(), Notification));
+  *	        CATMathTransformation *Transformation = TransfoNotif-&gt;GetNotification();
+  *		&lt;/pre&gt;&lt;/ul&gt;
+  *	&lt;li&gt;	In the callback, Update your modelization
+  *	    
+  *	&lt;li&gt;    In the callback, Reposition the manipulator if needed (usualy when there is constraints)
+  *		  	&lt;pre&gt;_Manip-&gt;SetPosition( PositionComputedFromNewModelization)&lt;/pre&gt;
+  *	&lt;/ol&gt;			
+  * &lt;/ul&gt;
+  */		
+
+class ExportedByCATViz CAT3DManipulator : public CATManipulator
+{
+//------------------------------------------------------------------------------
+  CATDeclareClass;
+
+  friend class CAT3DVisuHandle;
+
+  public:
+/**
+* Defines the different types of manipulation available for
+* a 3D representation.
+*
+* @param NoManipulation             The CAT3DManipulator does no specific work
+* @param DirectionTranslation       The CAT3Dmanipulator contrains its position along a given direction during the manipulation
+* @param PlaneTranslation           The CAT3Dmanipulator contrains its position along a given plane during the manipulation
+* @param PlaneMovement              Do not use 
+* @param LineRotation               The CAT3Dmanipulator contrains its position on a circle normal to a given axis
+* @param PointRotation              The CAT3Dmanipulator contrains its position on a sphere centered on a given point
+* @param FrontestPlaneTranslation   The CAT3Dmanipulator contrains its position along a plane parallel to the screen
+**/
+
+    enum ManipulationStyle {
+      NoManipulation,		
+      DirectionTranslation,	
+      PlaneTranslation,		
+      PlaneMovement,
+      LineRotation,		
+      PointRotation,	
+      FrontestPlaneTranslation
+    };
+  
+    // Structors
+    //----------
+    /** Construction of the manipulator.
+     *  @param iFirstStyle = style of manipulation used by Mouse Left button drag
+     *  @param iSecondStyle = style of manipulation used by Mouse Left+Middle buttons drag (left THEN middle)
+     */
+    CAT3DManipulator( CATCommand *iFather, const CATString &amp;iName,
+      CAT3DRep *iRep, 
+      const ManipulationStyle iFirstStyle=NoManipulation, 
+      const ManipulationStyle iSecondStyle=NoManipulation);
+
+   /** @nodoc */
+    virtual ~CAT3DManipulator();
+
+    // Geometry invariants
+    //--------------------
+    /** Sets the invariant point of PointRotation. */
+    virtual void SetRotationPoint( const CATMathPoint &amp;iPoint);
+
+    /** Sets the invariant direction of DirectionTranslation. */
+    virtual void SetTranslationDirection( const CATMathDirection &amp;iWAxis);
+
+    /** Sets the invariant line of LineRotation and PlaneMovement.*/
+    virtual void SetRotationLine( const CATMathLine &amp;iLine);
+
+    /** Sets the invariant plane of PlaneTranslation and PlaneMovement.*/
+    virtual void SetTranslationPlane( const CATMathPlane &amp;iPlane);
+
+    // Current position of the manipulator
+    //------------------------------------
+    /** Gets the current position of the manipulator. 
+        This Position is not linked to the position of any maniulated representation
+        The Manipulator changes that position according to the manipulations */
+    virtual CATMathAxis GetPosition() const;
+    
+    /** Sets the position of the manipulator. */
+    virtual void SetPosition( const CATMathAxis &amp;iPosition);
+
+ /**
+  * @nodoc
+  * Requests an object to be retrieved.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+  *  Asks a command for more information when that command calls you back.
+  * @param iUuid
+  *  The desired object, given by the ClassName method.
+  *  The CAT3DManipulator can return :
+  *    &lt;ol&gt;
+  *    &lt;li&gt;CATTransformationNotification  The notification containing the transformation associated to the manipulation.
+  *    &lt;/ol&gt;
+  * @param iGraphicNotification
+  *  The notification received in the callback which caused the need for that object.
+  * @return
+  *   A pointer to the retrieved object.
+  */  
+  virtual void * SendCommandSpecificObject ( const char *iUuid, CATNotification *iGraphicNotification);
+
+    // Manipulation calls from viewer
+    //-------------------------------
+  /** @nodoc */
+    virtual MInfo BeginManipulate( CATNotification *event, CATManipulator *m);
+  /** @nodoc */
+    virtual MInfo Manipulate( CATNotification *event, CATManipulator *m);
+   /** @nodoc */
+   virtual MInfo EndManipulate( CATNotification *event, CATManipulator *m);
+
+   /** @nodoc */
+   virtual MInfo Preactivate( CATNotification *event, CATManipulator *m);
+  /** @nodoc */
+    virtual MInfo MoveOver( CATNotification *event, CATManipulator *m);
+  /** @nodoc */
+    virtual MInfo Move( CATNotification *event, CATManipulator *m);
+  /** @nodoc */
+    virtual MInfo EndPreactivate( CATNotification *event, CATManipulator *m);
+  /** @nodoc */
+    virtual MInfo Context( CATNotification *event, CATManipulator *m);
+    
+//------------------------------------------------------------------------------
+  protected:
+
+    // Manipulation style
+    // ------------------
+  /** @nodoc */
+    ManipulationStyle _PrimaryManipStyle;			// With Button 1
+  /** @nodoc */
+    ManipulationStyle _SecondaryManipStyle;			// With Button 1 + Button 2
+
+    // Manipulation Reference geometry
+    // -------------------------------
+  /** @nodoc */
+    CATMathDirection _UAxis;			// First vector of the plane
+  /** @nodoc */
+    CATMathDirection _VAxis;			// Second vector of the plane
+  /** @nodoc */
+    CATMathDirection _Normal; 		// Define plane normal (Is always _UAxis ^ _VAxis)
+  /** @nodoc */
+    CATMathDirection _Axis;			// Vector of the axis operation
+  /** @nodoc */
+    CATMathPoint _InvariantPoint;		// Invariant point for rotation and movors
+
+    // Manipulation Tools
+    //-------------------
+  /** @nodoc */
+    virtual MInfo MouseManipulate( CATDeviceEvent *Notification, ManipulationStyle iManipStyle);
+    // Side forward(-1) or backward(+1) of the contact point on the virtual sphere
+  /** @nodoc */
+    int side_;
+   /** @nodoc */
+   CATMathPoint *_RotatePoint;	// Rotate point (Contact or Invariant) for the SpaceDevice
+  /** @nodoc */
+    CATMathVector ComputeTranslationJump( const CATMathVector &amp;KeyboardJump, const CAT3DViewpoint &amp;Viewpoint);
+  /** @nodoc */
+	void ConnectReferencesAxis( ManipulationStyle iManipStyle);
+  /** @nodoc */
+    CATMathDirection *_MousePlaneAxis1;	// First vector of the plane
+  /** @nodoc */
+    CATMathDirection *_MousePlaneAxis2;	// Second vector of the plane
+  /** @nodoc */
+    CATMathDirection *_MousePlaneNormal;	// Second vector of the plane
+  /** @nodoc */
+    ManipulationStyle _CurrentMouseManip;			
+
+    // Geometric tools
+    //----------------
+  /** @nodoc */
+    CATMathPoint GetPickPoint( CATViewerEvent *ViewerEvent);
+  /** @nodoc */
+    int GetPlaneIntersection( CATDeviceEvent *Notification, CATMathDirection &amp;PlaneAxis, 
+      CATMathPoint &amp;PlanePoint, CATMathPoint &amp;Intersection);
+  /** @nodoc */
+    void GetLineIntersection( CATDeviceEvent *Notification, CATMathDirection &amp;LineAxis, 
+      CATMathPoint &amp;LinePoint, CATMathPoint &amp;Intersection);
+  /** @nodoc */
+    void GetSphereIntersection( CATDeviceEvent *Notification, 
+	    const CATMathPoint &amp;iCenter, const double iRadius, int &amp;ioSide, CATMathPoint &amp;oIntersection);
+
+    // Display Feedbacks
+  /** @nodoc */
+    void Feedback( const int DisplayOrHideRep);	// DisplayOrHideRep: 1=Display  0=Hide
+   /** @nodoc */
+   CAT3DBagRep *_FeedbackRep;
+  /** @nodoc */
+    CATPickPath *_RepPath;
+
+    // Dialog datas	
+  /** @nodoc */
+    int _LastGeneralModifier, _LastMouseModifiers;		// For mouse multi-manipulations 
+
+
+    // A classer
+    //----------
+    // Position of the object and event sent while manipulating
+  /** @nodoc */
+    CATTransformationNotification _Transformation;
+  /** @nodoc */
+    CATMathAxis _Position;
+
+    // Contact point between user and object
+  /** @nodoc */
+    CATMathPoint _ContactPoint;
+  /** @nodoc */
+    CATMathAxis _ContactPosition;	// Position proposed
+    
+    // Currently linked objects
+
+    // Attention !!! SVQ 06/02/01 : ne plus utiliser _3DViewer (build impact : CAT3DXYZManipulator dans CATIAApplicationFrame)
+
+    CAT3DViewer *_3DViewer;
+    CATViz3DViewer *_Viz3DViewer;			// Viewer the manipulator work with  (Found in BeginManipulate ViewerEvent
+  /** @nodoc */
+    CAT3DViewpoint *_3DViewpoint;	// Viewpoint manip work in  (Found in ViewerEvent.PickPath.Viewpoint
+
+  /** @nodoc */
+    CATMathTransformation _DataMatrix;		// For decoding
+  /** @nodoc */
+    CAT4x4Matrix _AbsoluteToRepAxisMatrix;
+
+  private :    
+    static CATTrace  *_TraceManipulator3D;
+    static int _TraceManipulator3DCounter;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DLodRep.html">← 上一页: CAT3DLodRep.h</a></div>
+        <div><a href="CAT3DMarkerGP.html">下一页: CAT3DMarkerGP.h →</a></div>
+    </div>
+</body>
+</html>

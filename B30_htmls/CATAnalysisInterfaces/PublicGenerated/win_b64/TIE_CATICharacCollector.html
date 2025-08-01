@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicGenerated/win_b64/TIE_CATICharacCollector.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicGenerated/win_b64/TIE_CATICharacCollector.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATICATSAMWorkshopAddin.html">← 上一页: TIE_CATICATSAMWorkshopAddin.h</a></div>
+        <div><a href="TIE_CATIExpressionCollector.html">下一页: TIE_CATIExpressionCollector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATICharacCollector
+#define __TIE_CATICharacCollector
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATICharacCollector.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATICharacCollector */
+#define declare_TIE_CATICharacCollector(classe) \
+ \
+ \
+class TIECATICharacCollector##classe : public CATICharacCollector \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATICharacCollector, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT GetAvailablePhysicalTypes(int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes, const CATString*          &amp; oUnits) ; \
+      virtual HRESULT GetAvailableEntityPhysicalTypes(CATSamPhysicalType          iCharacPhysicalType, int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes) ; \
+      virtual HRESULT GetAvailableVersions(const CATSamPhysicalType     iPhysicalType, int                        &amp; oNumber, const CATSamCharacVersion* &amp; oVersions) ; \
+      virtual HRESULT GetAvailablePositions(const CATSamPhysicalType    iPhysicalType, const CATSamCharacVersion &amp; iVersion, int                       &amp; oNumber, const CATString*          &amp; oPositions) ; \
+      virtual HRESULT GetNumberOfOccurrences(int &amp; oNumberOfOccurrences) ; \
+      virtual HRESULT GetCurrentOccurrence(int &amp; oOccurrenceNumber) ; \
+      virtual HRESULT SetCurrentOccurrence(const int iOccurrenceNumber) ; \
+      virtual HRESULT IsAnAvailableDefinition(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, CATBoolean                        &amp; oIsCollectable) ; \
+      virtual HRESULT GetCharacCollector(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, const char* const                   iEntityFlags, const CATAnalysisCharacCollector* &amp; oCharacCollector, const CATBoolean                    iCollectValues = TRUE, const CATSamPhysicalType            iEntiyPhysicalTypeToCollect = CATSamPhysicalTypeNone) ; \
+      virtual HRESULT GetCharacCollectorsForOccurrences(int                                       &amp; oNbCharacCollectors, const CATAnalysisCharacCollector* const * &amp; oCharacCollectors, const CATBoolean                            iCollectValues = TRUE) ; \
+      virtual HRESULT DeleteCharacCollector(const CATAnalysisCharacCollector* &amp;iCharacCollector) ; \
+      virtual HRESULT DeleteAll() ; \
+      virtual HRESULT Update(CATBoolean iFullUpdate = TRUE) ; \
+      virtual HRESULT SetContextModel(const CATAnalysisExplicitModel* iModelContext) ; \
+      virtual HRESULT GetContextModel(const CATAnalysisExplicitModel* &amp;oModelContext) ; \
+      virtual HRESULT GetContext(CATAnalysisExplicitParent &amp;oContext) ; \
+};
+
+
+
+#define ENVTIEdeclare_CATICharacCollector(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT GetAvailablePhysicalTypes(int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes, const CATString*          &amp; oUnits) ; \
+virtual HRESULT GetAvailableEntityPhysicalTypes(CATSamPhysicalType          iCharacPhysicalType, int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes) ; \
+virtual HRESULT GetAvailableVersions(const CATSamPhysicalType     iPhysicalType, int                        &amp; oNumber, const CATSamCharacVersion* &amp; oVersions) ; \
+virtual HRESULT GetAvailablePositions(const CATSamPhysicalType    iPhysicalType, const CATSamCharacVersion &amp; iVersion, int                       &amp; oNumber, const CATString*          &amp; oPositions) ; \
+virtual HRESULT GetNumberOfOccurrences(int &amp; oNumberOfOccurrences) ; \
+virtual HRESULT GetCurrentOccurrence(int &amp; oOccurrenceNumber) ; \
+virtual HRESULT SetCurrentOccurrence(const int iOccurrenceNumber) ; \
+virtual HRESULT IsAnAvailableDefinition(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, CATBoolean                        &amp; oIsCollectable) ; \
+virtual HRESULT GetCharacCollector(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, const char* const                   iEntityFlags, const CATAnalysisCharacCollector* &amp; oCharacCollector, const CATBoolean                    iCollectValues = TRUE, const CATSamPhysicalType            iEntiyPhysicalTypeToCollect = CATSamPhysicalTypeNone) ; \
+virtual HRESULT GetCharacCollectorsForOccurrences(int                                       &amp; oNbCharacCollectors, const CATAnalysisCharacCollector* const * &amp; oCharacCollectors, const CATBoolean                            iCollectValues = TRUE) ; \
+virtual HRESULT DeleteCharacCollector(const CATAnalysisCharacCollector* &amp;iCharacCollector) ; \
+virtual HRESULT DeleteAll() ; \
+virtual HRESULT Update(CATBoolean iFullUpdate = TRUE) ; \
+virtual HRESULT SetContextModel(const CATAnalysisExplicitModel* iModelContext) ; \
+virtual HRESULT GetContextModel(const CATAnalysisExplicitModel* &amp;oModelContext) ; \
+virtual HRESULT GetContext(CATAnalysisExplicitParent &amp;oContext) ; \
+
+
+#define ENVTIEdefine_CATICharacCollector(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT  ENVTIEName::GetAvailablePhysicalTypes(int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes, const CATString*          &amp; oUnits)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetAvailablePhysicalTypes(oNumber,oPhysicalTypes,oUnits)); \
+} \
+HRESULT  ENVTIEName::GetAvailableEntityPhysicalTypes(CATSamPhysicalType          iCharacPhysicalType, int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetAvailableEntityPhysicalTypes(iCharacPhysicalType,oNumber,oPhysicalTypes)); \
+} \
+HRESULT  ENVTIEName::GetAvailableVersions(const CATSamPhysicalType     iPhysicalType, int                        &amp; oNumber, const CATSamCharacVersion* &amp; oVersions)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetAvailableVersions(iPhysicalType,oNumber,oVersions)); \
+} \
+HRESULT  ENVTIEName::GetAvailablePositions(const CATSamPhysicalType    iPhysicalType, const CATSamCharacVersion &amp; iVersion, int                       &amp; oNumber, const CATString*          &amp; oPositions)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetAvailablePositions(iPhysicalType,iVersion,oNumber,oPositions)); \
+} \
+HRESULT  ENVTIEName::GetNumberOfOccurrences(int &amp; oNumberOfOccurrences)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetNumberOfOccurrences(oNumberOfOccurrences)); \
+} \
+HRESULT  ENVTIEName::GetCurrentOccurrence(int &amp; oOccurrenceNumber)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetCurrentOccurrence(oOccurrenceNumber)); \
+} \
+HRESULT  ENVTIEName::SetCurrentOccurrence(const int iOccurrenceNumber)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)SetCurrentOccurrence(iOccurrenceNumber)); \
+} \
+HRESULT  ENVTIEName::IsAnAvailableDefinition(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, CATBoolean                        &amp; oIsCollectable)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)IsAnAvailableDefinition(iPhysicalType,iVersion,iPosition,oIsCollectable)); \
+} \
+HRESULT  ENVTIEName::GetCharacCollector(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, const char* const                   iEntityFlags, const CATAnalysisCharacCollector* &amp; oCharacCollector, const CATBoolean                    iCollectValues , const CATSamPhysicalType            iEntiyPhysicalTypeToCollect )  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetCharacCollector(iPhysicalType,iVersion,iPosition,iEntityFlags,oCharacCollector,iCollectValues ,iEntiyPhysicalTypeToCollect )); \
+} \
+HRESULT  ENVTIEName::GetCharacCollectorsForOccurrences(int                                       &amp; oNbCharacCollectors, const CATAnalysisCharacCollector* const * &amp; oCharacCollectors, const CATBoolean                            iCollectValues )  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetCharacCollectorsForOccurrences(oNbCharacCollectors,oCharacCollectors,iCollectValues )); \
+} \
+HRESULT  ENVTIEName::DeleteCharacCollector(const CATAnalysisCharacCollector* &amp;iCharacCollector)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)DeleteCharacCollector(iCharacCollector)); \
+} \
+HRESULT  ENVTIEName::DeleteAll()  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)DeleteAll()); \
+} \
+HRESULT  ENVTIEName::Update(CATBoolean iFullUpdate )  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)Update(iFullUpdate )); \
+} \
+HRESULT  ENVTIEName::SetContextModel(const CATAnalysisExplicitModel* iModelContext)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)SetContextModel(iModelContext)); \
+} \
+HRESULT  ENVTIEName::GetContextModel(const CATAnalysisExplicitModel* &amp;oModelContext)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetContextModel(oModelContext)); \
+} \
+HRESULT  ENVTIEName::GetContext(CATAnalysisExplicitParent &amp;oContext)  \
+{ \
+return (ENVTIECALL(CATICharacCollector,ENVTIETypeLetter,ENVTIELetter)GetContext(oContext)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATICharacCollector(classe)    TIECATICharacCollector##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATICharacCollector(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATICharacCollector, classe) \
+ \
+ \
+CATImplementTIEMethods(CATICharacCollector, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATICharacCollector, classe, 1) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATICharacCollector, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATICharacCollector, classe) \
+ \
+HRESULT  TIECATICharacCollector##classe::GetAvailablePhysicalTypes(int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes, const CATString*          &amp; oUnits)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetAvailablePhysicalTypes(oNumber,oPhysicalTypes,oUnits)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetAvailableEntityPhysicalTypes(CATSamPhysicalType          iCharacPhysicalType, int                       &amp; oNumber, const CATSamPhysicalType* &amp; oPhysicalTypes)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetAvailableEntityPhysicalTypes(iCharacPhysicalType,oNumber,oPhysicalTypes)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetAvailableVersions(const CATSamPhysicalType     iPhysicalType, int                        &amp; oNumber, const CATSamCharacVersion* &amp; oVersions)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetAvailableVersions(iPhysicalType,oNumber,oVersions)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetAvailablePositions(const CATSamPhysicalType    iPhysicalType, const CATSamCharacVersion &amp; iVersion, int                       &amp; oNumber, const CATString*          &amp; oPositions)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetAvailablePositions(iPhysicalType,iVersion,oNumber,oPositions)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetNumberOfOccurrences(int &amp; oNumberOfOccurrences)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetNumberOfOccurrences(oNumberOfOccurrences)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetCurrentOccurrence(int &amp; oOccurrenceNumber)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetCurrentOccurrence(oOccurrenceNumber)); \
+} \
+HRESULT  TIECATICharacCollector##classe::SetCurrentOccurrence(const int iOccurrenceNumber)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;SetCurrentOccurrence(iOccurrenceNumber)); \
+} \
+HRESULT  TIECATICharacCollector##classe::IsAnAvailableDefinition(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, CATBoolean                        &amp; oIsCollectable)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsAnAvailableDefinition(iPhysicalType,iVersion,iPosition,oIsCollectable)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetCharacCollector(const CATSamPhysicalType            iPhysicalType, const CATSamCharacVersion         &amp; iVersion, const CATString                   &amp; iPosition, const char* const                   iEntityFlags, const CATAnalysisCharacCollector* &amp; oCharacCollector, const CATBoolean                    iCollectValues , const CATSamPhysicalType            iEntiyPhysicalTypeToCollect )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetCharacCollector(iPhysicalType,iVersion,iPosition,iEntityFlags,oCharacCollector,iCollectValues ,iEntiyPhysicalTypeToCollect )); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetCharacCollectorsForOccurrences(int                                       &amp; oNbCharacCollectors, const CATAnalysisCharacCollector* const * &amp; oCharacCollectors, const CATBoolean                            iCollectValues )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetCharacCollectorsForOccurrences(oNbCharacCollectors,oCharacCollectors,iCollectValues )); \
+} \
+HRESULT  TIECATICharacCollector##classe::DeleteCharacCollector(const CATAnalysisCharacCollector* &amp;iCharacCollector)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;DeleteCharacCollector(iCharacCollector)); \
+} \
+HRESULT  TIECATICharacCollector##classe::DeleteAll()  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;DeleteAll()); \
+} \
+HRESULT  TIECATICharacCollector##classe::Update(CATBoolean iFullUpdate )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Update(iFullUpdate )); \
+} \
+HRESULT  TIECATICharacCollector##classe::SetContextModel(const CATAnalysisExplicitModel* iModelContext)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;SetContextModel(iModelContext)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetContextModel(const CATAnalysisExplicitModel* &amp;oModelContext)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetContextModel(oModelContext)); \
+} \
+HRESULT  TIECATICharacCollector##classe::GetContext(CATAnalysisExplicitParent &amp;oContext)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetContext(oContext)); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATICharacCollector(classe) \
+ \
+ \
+declare_TIE_CATICharacCollector(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATICharacCollector##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATICharacCollector,&quot;CATICharacCollector&quot;,CATICharacCollector::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATICharacCollector(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATICharacCollector, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATICharacCollector##classe(classe::MetaObject(),CATICharacCollector::MetaObject(),(void *)CreateTIECATICharacCollector##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATICharacCollector(classe) \
+ \
+ \
+declare_TIE_CATICharacCollector(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATICharacCollector##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATICharacCollector,&quot;CATICharacCollector&quot;,CATICharacCollector::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATICharacCollector(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATICharacCollector, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATICharacCollector##classe(classe::MetaObject(),CATICharacCollector::MetaObject(),(void *)CreateTIECATICharacCollector##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATICharacCollector(classe) TIE_CATICharacCollector(classe)
+#else
+#define BOA_CATICharacCollector(classe) CATImplementBOA(CATICharacCollector, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATICATSAMWorkshopAddin.html">← 上一页: TIE_CATICATSAMWorkshopAddin.h</a></div>
+        <div><a href="TIE_CATIExpressionCollector.html">下一页: TIE_CATIExpressionCollector.h →</a></div>
+    </div>
+</body>
+</html>

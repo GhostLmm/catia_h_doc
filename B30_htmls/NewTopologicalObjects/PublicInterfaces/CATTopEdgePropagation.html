@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewTopologicalObjects/PublicInterfaces/CATTopEdgePropagation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NewTopologicalObjects/PublicInterfaces/CATTopEdgePropagation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTopClashOperator.html">← 上一页: CATTopClashOperator.h</a></div>
+        <div><a href="CATTopMultiResult.html">下一页: CATTopMultiResult.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTopEdgePropagation_H
+#define CATTopEdgePropagation_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2005
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATTopOperator.h&quot;
+#include &quot;CATTopDefine.h&quot;
+#include &quot;CATGeoFactory.h&quot;
+#include &quot;ExportedByCATTopologicalObjects.h&quot;
+#include &quot;CATTopEdgePropagationDiagnosis.h&quot;
+
+class CATFace;
+class CATEdge;
+
+/**
+ * Class representing the topological operator which performs an edge propagation on a body.
+ * &lt;ul&gt;
+ * &lt;li&gt;Create it with the CATCreateTopEdgePropagation global function.
+ * &lt;li&gt;Tune it with appropriate options, using the Setxxx methods. 
+ * &lt;li&gt;Run it ( only one time ).
+ * &lt;li&gt;Get the resulting body with the GetResult method. This body is made of a single wire which 
+ * is the result of the propagation. If you do not want to keep this resulting body, 
+ * use the @href CATICGMContainer#Remove method to remove it from the 
+ * geometric factory, after the operator deletion.
+ * &lt;li&gt;Optionally get the two propagation diagnoses with the GetDiagnoses method.
+ * &lt;li&gt;Delete it after use  with the usual C++ delete operator. 
+ * &lt;/ul&gt;
+*/
+
+class ExportedByCATTopologicalObjects CATTopEdgePropagation : public CATTopOperator
+{
+  
+
+  CATCGMVirtualDeclareClass(CATTopEdgePropagation);
+protected:
+
+  /**
+  * @nodoc
+  * Constructor. Do not use. Use &lt;tt&gt;CATCreateTopEdgePropagation&lt;/tt&gt; to create an
+  * &lt;tt&gt;CATTopEdgePropagation&lt;/tt&gt;.
+  */
+  CATTopEdgePropagation ( CATGeoFactory * iFactory , 
+                          CATTopData    * iTopData );
+
+public:
+
+  /**
+  * Destructor.
+  */
+  virtual ~CATTopEdgePropagation();
+
+ 
+  /**
+  * Defines the face to be used as a reference for the orientation of the resulting wire.
+  * &lt;br&gt;This face must be bounded by the initial edge.
+  * @param iReferenceFace
+  * The reference face for the wire orientation.
+  * &lt;ul&gt;
+  * &lt;li&gt;In case the initial edge is a shell internal edge, this service is mandatory
+  * for the result orientation.
+  * &lt;li&gt;In case the initial edge is at the boundary of a single shell, 
+  * this single shell is used as a reference face and this service is useless.
+  * &lt;li&gt;In case the initial edge is at the boundary of several shells (non manifold
+  * situation), this service is mandatory to define the result orientation and specify the
+  * shell on which the propagation is carried out.
+  * &lt;/ul&gt;
+  * &lt;br&gt;This service is meaningless if the input body contains wires.
+  * @param iReferenceOrientation
+  * &lt;ul&gt;
+  * &lt;li&gt;If CATOrientationPositive , the reference orientation is the orientation of the reference face in the shell.
+  * &lt;li&gt;If CATOrientationNegative , the reference orientation is the inverse of the orientation of the reference face in the shell.
+  * &lt;/ul&gt;
+  */
+  virtual void SetReferenceFace ( CATFace      * iReferenceFace, 
+                                  CATOrientation iReferenceOrientation = CATOrientationPositive ) = 0;
+
+  /** 
+  * Defines the boundary propagation mode on shell.
+  * &lt;br&gt;by default this mode is off.
+  * @param iIsBoundaryModeActive
+  * Specifies whether the propagation is restricted to the boundary of the shell.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; or, &lt;tt&gt;FALSE&lt;/tt&gt;.
+  * &lt;br&gt;In case this mode is on, the initial edge has to belong to the boundary
+  * of the shell.
+  * &lt;br&gt;This service is meaningless if the input body contains wires.
+  */
+  virtual void SetBoundaryMode ( const CATBoolean iIsBoundaryModeActive ) = 0;
+
+  /**
+  * Defines the continuity propagation mode.
+  * @param iContinuity
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;CatC0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Point continuity.
+  * &lt;dt&gt;&lt;tt&gt;CatC1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Point and tangency continuity.
+  * &lt;dt&gt;&lt;tt&gt;CatC2&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Point, tangency and curvature continuity.
+  * &lt;/dl&gt;
+  * &lt;br&gt;In case of point continuity and when boundary mode is off, propagation occurs
+  * only around the reference face.
+  * &lt;br&gt;The continuity evaluation does not take into account the junction edge
+  * (continuity is evaluated on their neighbor).
+  */
+  virtual void SetContinuityMode ( const CATResolutionType iContinuity ) = 0;
+
+  /**
+  * Defines the tolerance propagation value for a continuity level.
+  * @param iContinuity
+  * Defines the continuity level.
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;CatC0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Point tolerance in model unit.
+  * &lt;br&gt; Value is restricted to interval [ 0.001 , 0.1 ] with 0.001 as default.
+  * &lt;dt&gt;&lt;tt&gt;CatC1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Tangency tolerance in radians.
+  * &lt;br&gt; Value is restricted to interval [ 0.00872665 radian , 0.0872665 ] with 0.00872665 as default. 
+  * &lt;br&gt;Equivalent value in degree are [ 0.5 degree , 5. degree ].
+  * &lt;dt&gt;&lt;tt&gt;CatC2&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;Curvature tolerance with no dimension.
+  * &lt;br&gt;Value is stricly positive , restricted to interval ] 0 , 1 ] with 0.98 as default..
+  * &lt;br&gt;Curvature value &quot;c&quot; is defined by : | R2 - R1 | / max ( |R1| , |R2| ) &lt; ( 1 - c ) / c.
+  * ( where R1 and R2 are the curvatures on both side ).
+  * &lt;/dl&gt;
+  */
+  virtual void SetTolerance ( const CATResolutionType iContinuity , const double &amp; iTolerance ) = 0;
+
+  /**
+  * Gets the propagation diagnoses at each extremity of the output wire. 
+  * @param oDiagnoses
+  * This array is filled with two diagnoses corresponding to the start and end of the output wire.
+  * @param oDiagnosesValue
+  * If not &lt;tt&gt;NULL&lt;/tt&gt; , this array must be allocated for two values.
+  * &lt;br&gt;It is then filled with the two values corresponding to the limit reached 
+  * at the start and end of the output wire.
+  * &lt;br&gt;&lt;b&gt;In case of&lt;/b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;POINT_DISCONTINUITY&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The value is the lowest point discontinuity found.
+  * &lt;dt&gt;&lt;tt&gt;ANGULAR_DISCONTINUITY&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The value is the lowest angular discontinuity found.
+  * &lt;dt&gt;&lt;tt&gt;CURVATURE_DISCONTINUITY&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The value is the lowest curvature discontinuity found.
+  * &lt;dt&gt;&lt;tt&gt;for other value&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; It is filled with 0 ( meaning less ).
+  * &lt;/dl&gt;
+  */
+  virtual void GetDiagnoses ( CATTopEdgePropagationDiagnosis oDiagnoses [2]         ,
+                              double                       * oDiagnosesValue = NULL ) = 0;
+
+};
+
+
+  /**
+  * Creates a CATTopEdgePropagation operator.
+  * @param iFactory
+  * The factory which creates the resulting body.
+  * @param iTopData
+  * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+  * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+  * @param iBody
+  * The body which contains the initial edge and where the propagation is carried out.
+  * This body can be made either of shells or of wires.
+  * &lt;br&gt;If the body is made of several domains, the propagation is performed only within a single domain 
+  * ( the domain of the initial edge ).
+  * @param iInitialEdge
+  * The first edge to be concatenated.
+  * @return
+  */
+  ExportedByCATTopologicalObjects CATTopEdgePropagation * 
+    CATCreateTopEdgePropagation ( CATGeoFactory * iFactory     , 
+                                  CATTopData    * iTopData     , 
+                                  CATBody       * iBody        , 
+                                  CATEdge       * iInitialEdge );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTopClashOperator.html">← 上一页: CATTopClashOperator.h</a></div>
+        <div><a href="CATTopMultiResult.html">下一页: CATTopMultiResult.h →</a></div>
+    </div>
+</body>
+</html>

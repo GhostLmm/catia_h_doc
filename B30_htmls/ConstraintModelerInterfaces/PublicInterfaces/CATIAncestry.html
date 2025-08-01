@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstraintModelerInterfaces/PublicInterfaces/CATIAncestry.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ConstraintModelerInterfaces/PublicInterfaces/CATIAncestry.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATFeatureType.html">← 上一页: CATFeatureType.h</a></div>
+        <div><a href="CATIBloc.html">下一页: CATIBloc.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIAncestry_h
+#define CATIAncestry_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#include &quot;CATConstraintModelerItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+class CATIAncestry_var;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATConstraintModelerItf IID IID_CATIAncestry;
+#else
+extern &quot;C&quot; const IID IID_CATIAncestry;
+#endif
+
+/**
+ * Interface to retrieve the ancestries of a feature.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface allows users to retrieve the ancestries of a feature.
+ * &lt;br&gt; A feature named F can be the result of a computation named C of different inputs:
+ * &lt;br&gt; &amp;nbsp  F = C ( I1, I2, I3, ...)
+ * &lt;br&gt; A feature&#x27;s ancestries is the subset of inputs that satisfy the following criteria:
+ * &lt;br&gt; applying a specified transformation to the feature&#x27;s ancestries and the computation 
+ * &lt;br&gt; which generates the feature returns the same result as applying the same transformation
+ * &lt;br&gt; directly to the feature.
+ * &lt;br&gt; This can be shown with the following formula: for a transformation named T,
+ * &lt;br&gt; &amp;nbsp  T(F) = C ( I1,T(I2),T(I3), ...)
+ * &lt;br&gt; &amp;nbsp  Here, I2 and I3 are the feature&#x27;s ancestries.
+ *
+ * @see CATIMovable
+ */
+
+class ExportedByCATConstraintModelerItf CATIAncestry: public CATBaseUnknown
+{
+   CATDeclareInterface;
+
+public :
+
+/**
+ * Returns the list of the current feature&#x27;s ancestries.
+ */
+   virtual CATLISTV(CATBaseUnknown_var) GetAncestry() const=0;
+
+/**
+ * Returns the list of the current feature&#x27;s ancestries.
+ */
+   virtual HRESULT  GetAncestry(CATLISTV(CATBaseUnknown_var)&amp; oList) const=0;
+};
+
+CATDeclareHandler(CATIAncestry, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATFeatureType.html">← 上一页: CATFeatureType.h</a></div>
+        <div><a href="CATIBloc.html">下一页: CATIBloc.h →</a></div>
+    </div>
+</body>
+</html>

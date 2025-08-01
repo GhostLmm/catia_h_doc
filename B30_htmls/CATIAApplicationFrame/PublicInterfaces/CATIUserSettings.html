@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAApplicationFrame/PublicInterfaces/CATIUserSettings.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAApplicationFrame/PublicInterfaces/CATIUserSettings.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectMove3D.html">← 上一页: CATISelectMove3D.h</a></div>
+        <div><a href="CATNavigBox.html">下一页: CATNavigBox.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATI_USER_SETTINGS_H
+#define CATI_USER_SETTINGS_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4 CATEditor
+ */
+
+#include &lt;CATInterfaceObject.h&gt;
+#include &lt;CATUnicodeString.h&gt;
+#include &lt;CATSettingRepository.h&gt;
+#include &lt;CATEditorPage.h&gt;
+#include &lt;CATDocument.h&gt;
+#include &quot;CATString.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByOM0EDPRO IID IID_CATIUserSettings;
+#else
+extern &quot;C&quot; const IID IID_CATIUserSettings;
+#endif
+
+/**
+ * Interface to create a Tools Options property page.
+ * &lt;b&gt;Role&lt;/b&gt;: Each property page of the Tools Options
+ * command corresponds to an implementation of the
+ * &lt;tt&gt;CATIUserSettings&lt;/tt&gt; interface. 
+ * &lt;p&gt;
+ * &lt;b&gt;Step by step:&lt;/b&gt; CATUserSettingsManager implements the 
+ * factory &lt;tt&gt;IMyPropertyEdtFactory&lt;/tt&gt; interface. 
+ * This Factory creates a &lt;tt&gt;MyPropertyEdt&lt;/tt&gt; instance class. This class implements the 
+ * &lt;tt&gt;CATIUserSettings&lt;/tt&gt; interface.
+ * &lt;ol&gt;
+ * &lt;li&gt; Create the factory &lt;tt&gt;IMyPropertyEdtFactory&lt;/tt&gt; interface which 
+ *      derives from @href CATIGenericFactory &lt;/li&gt;
+ * &lt;li&gt; Implement this factory interface using macros &lt;/li&gt;
+ * &lt;br&gt;
+ *     This implementation, &lt;tt&gt;MyPropertyEdtFactory&lt;/tt&gt;, is done in the module myModule 
+ *     thanks to 2 macros: 
+ *     @href CAT_EDITOR_DECLARE_FACTORY and @href CAT_EDITOR_DEFINE_FACTORY2 
+ * &lt;ol&gt; 
+ * &lt;li&gt;The header file &lt;tt&gt;MyPropertyEdtFactory.h&lt;/tt&gt; must contain these two lines: &lt;/li&gt;
+ * 
+ * &lt;pre&gt; 
+ *       #include &quot;CATEditorFactory.h&quot;
+ *       #include &quot;MyPropertyEdt.h&quot;
+ * 
+ *       #define ExportedByNOTHING
+ *
+ *       CAT_EDITOR_DECLARE_FACTORY(NOTHING, MyPropertyEdt, MyPropertyEdt);
+ * &lt;/pre&gt;
+ *
+ * &lt;li&gt;The source file &lt;tt&gt;MyPropertyEdtFactory.cpp&lt;/tt&gt; must contain these lines:&lt;/li&gt;
+ *
+ * &lt;pre&gt; 
+ *        #include &quot;MyPropertyEdtFactory.h&quot;
+ *
+ *        CAT_EDITOR_DEFINE_FACTORY2(MyPropertyEdt, MyPropertyEdt);
+ *
+ *        #include &quot;TIE_IMyPropertyEdtFactory.h&quot;
+ *        TIE_IMyPropertyEdtFactory(MyPropertyEdtFactory);
+ *
+ * &lt;/pre&gt;
+ * &lt;/ol&gt;
+ * &lt;li&gt;To declare that CATUserSettingsManager implements IMyPropertyEdtFactory,  
+ *       insert the following line in the &lt;b&gt;interface dictionary&lt;/b&gt;: &lt;/li&gt;
+ * &lt;pre&gt; 
+ *       &lt;b&gt;CATUserSettingsManager&lt;/b&gt;    IMyPropertyEdtFactory  myModule 
+ * &lt;/pre&gt;
+ * &lt;li&gt;To declare that the factory creates an instance of the MyPropertyEdt class, 
+ *       insert the following line in the &lt;b&gt;factory dictionary&lt;/b&gt;: &lt;/li&gt;
+ * &lt;pre&gt; 
+ *       MyPropertyEdt            IMyPropertyEdtFactory      
+ * &lt;/pre&gt;
+ * &lt;li&gt; Implement the CATIUserSettings interface, describe here, with a class which derives from the adapter class @href CATEditor
+ * &lt;/ol&gt; 
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CANNOT be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page.
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ */
+class  ExportedByOM0EDPRO CATIUserSettings : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+
+  /**
+   * Builds the dialog inside the property sheet.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method should instantiate an object 
+   * derived from @href CATDlgFrame giving &lt;tt&gt;iParent&lt;/tt&gt;
+   * as it&#x27;s parent.
+   * @param iParent
+   *   The dialog parent.
+   */
+  virtual void BuildEditor(CATEditorPage * iParent) = 0; 
+
+  /** 
+   * Displays the parameter values.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method requests the dialog object
+   * to display the correct parameter values, usually according to
+   * a @href CATSettingRepository object content.
+   * @param iRepository
+   *   Not used.
+   */
+  virtual void SetUserSettingsValue (CATSettingRepository * iRepository) = 0;
+
+  /**
+   * Applies the modified parameter values.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method saves the modifications made
+   * to parameter values in the property page. The usual
+   * implementation is to call the 
+   * @href CATSettingRepository#SaveRepository method of a setting
+   * object. 
+   * &lt;br&gt;This method must not use any pointer to the dialog object 
+   * built in the @href #BuildEditor method, since it may have been
+   * destroyed.
+   * @param iRepository
+   *   Not used.
+   */
+  virtual void CommitModification(CATSettingRepository * iRepository) = 0;
+  
+  /** 
+   * Cancels the modifications brought to parameter values.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methods cancels the modifications brought
+   * to the parameter values. It is called whenever the end user clicks
+   * Cancel. The usual implementation is to call the
+   * @href CATSettingRepository#Rollback method and then the
+   * @href CATSettingRepository#Commit method of a setting object.
+   * &lt;br&gt;This method must not use any pointer to the dialog object 
+   * built in the @href #BuildEditor method, since it may have been
+   * destroyed.
+   * @param iRepository
+   *   Not used.
+   */
+  virtual void CancelModification( CATSettingRepository * iRepository) = 0;
+
+  /**
+   * @nodoc
+   * Closes secondary dialog objects.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: In the case that the dialog object associated with
+   * the property sheets creates a secondary window,
+   * this method must provide a way to close it.
+   */
+  virtual void CloseWindowFromEditor() = 0;
+
+  /**
+   * Resets parameter values to default.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method resets the parameter values to default 
+   * ones, usually by calling the @href CATSettingRepository#WriteSetting
+   * method of a setting object. The defaults values must be consistent
+   * with those used when called the @href CATSettingRepository#ReadSetting
+   * for the first time.
+   * &lt;br&gt; The &lt;tt&gt;ResetUserSettingsValue&lt;/tt&gt; method is called when 
+   * end user clicks reset.
+   * &lt;br&gt;This method must not use any pointer to the dialog object 
+   * built in the @href #BuildEditor method, since it may have been
+   * destroyed.
+   */
+  virtual void ResetUserSettingsValue () = 0;
+} ;
+CATDeclareHandler(CATIUserSettings, CATBaseUnknown ) ;
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectMove3D.html">← 上一页: CATISelectMove3D.h</a></div>
+        <div><a href="CATNavigBox.html">下一页: CATNavigBox.h →</a></div>
+    </div>
+</body>
+</html>

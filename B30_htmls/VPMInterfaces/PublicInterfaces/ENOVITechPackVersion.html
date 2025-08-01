@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVITechPackVersion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVITechPackVersion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVISubscriberEvent.html">← 上一页: ENOVISubscriberEvent.h</a></div>
+        <div><a href="ENOVIUEAutomaticInstanceCreation.html">下一页: ENOVIUEAutomaticInstanceCreation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// -*-C++-*-
+//===================================================
+// COPYRIGHT DASSAULT SYSTEMES 2003
+//===================================================
+//
+
+/**
+ *  @CAA2Required
+ */
+
+#ifndef ENOVITechPackVersion_H
+#define ENOVITechPackVersion_H
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATListOfENOVITechPackVersion.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;ENOVGenericLink.h&quot;
+
+class CATIVpmAFLAction_var;
+class ENOVIReferenceObject_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVITechPackVersion;
+#else
+extern &quot;C&quot; const IID IID_ENOVITechPackVersion;
+#endif
+
+class ExportedByGUIDVPMInterfaces ENOVITechPackVersion : public CATBaseUnknown {
+
+	CATDeclareInterface;
+
+	public:
+
+		/**
+		* @nodoc
+		* Returns TechPack document.
+		*/
+		virtual HRESULT get_VaultDocumentURL(SEQUENCE(octet) &amp; oDocURL)=0;
+
+		/**
+		* @nodoc
+		* Sets TechPack Document.
+		*/
+		virtual HRESULT set_VaultDocumentURL(const SEQUENCE(octet) &amp; iDocVault)=0;
+
+		
+		/**
+		* @nodoc
+		* Returns TechPack V_version version string.
+		*/
+		virtual HRESULT get_Version(CATUnicodeString &amp; oVersion)=0;
+
+		/**
+		* @nodoc
+		* Set TechPack version, use carefully version string
+		* must be unique for all versions of a TechPack.
+		*/
+		virtual HRESULT set_Version(const CATUnicodeString &amp; iVersion)=0;
+
+		/**
+		* @nodoc
+		* Returns TechPack description.
+		*/
+		virtual HRESULT get_Description(CATUnicodeString &amp; oDesc)=0;
+
+		/**
+		* @nodoc
+		* Sets TechPack description.
+		*/
+		virtual HRESULT set_Description(const CATUnicodeString &amp; iDesc)=0;
+
+		/**
+		* @nodoc
+		* Returns VPMObjects (PS Object) linked (throught
+		* generic links ) to this TechPack.
+		* @param iLinkType2 :
+		*    ENOVGenericLink::Owner only the owning PSObject is returned
+		*    ENOVGenericLink::Reference only the PSObjects referencing
+		*       this TechPackVersion are returned.
+		*    ENOVGenericLink::All all the PSObjects linked to this TechPack
+		*       are returned.
+		*/
+		virtual HRESULT get_LinkedPSObjects(
+			ENOVGenericLink::SecondaryLinkType iLinkType2,
+			CATLISTV(CATBaseUnknown_var) &amp; olObjects)=0;
+
+		/**
+		* @nodoc
+		* Returns TechPack Category.
+		*/
+		virtual HRESULT get_Category(SEQUENCE(octet) &amp; oCategory)=0;
+
+		/**
+		* @nodoc
+		* Sets TechPack Category.
+		*/
+		virtual HRESULT set_Category(const SEQUENCE(octet) &amp; iCategory)=0;
+								
+								
+		/**
+		* @nodoc
+		* Creates a new version from this.
+		*/
+		virtual HRESULT CreateNewVersion(
+		 const ENOVIReferenceObject_var &amp;iNewVersionOwner,
+		 const CATIVpmAFLAction_var &amp;iAction,
+		 ENOVITechPackVersion_var &amp; oNewVersion)=0;
+
+		/**
+		* @nodoc
+		* Returns all TechPack version of this TechPack.
+		*/
+		virtual HRESULT get_AllVersions(
+		 CATLISTV(ENOVITechPackVersion_var) &amp; lVersions)=0;
+    
+		/**
+		* @nodoc
+		* Returns last TechPack version
+		*/
+    virtual HRESULT get_LastVersion(
+		 ENOVITechPackVersion_var &amp; oLastVersion)=0;
+
+		/**
+		* @nodoc
+		* Returns last TechPack version
+		*/
+    virtual HRESULT get_Owner(ENOVIReferenceObject_var &amp; oTechPackOwner)=0;
+
+		/**
+		* @nodoc
+		* S_OK =&gt; It&#x27;s the last version
+    * else S_FALSE
+		*/
+    virtual HRESULT isLastVersion()=0;
+
+
+};
+
+CATDeclareHandler(ENOVITechPackVersion, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVISubscriberEvent.html">← 上一页: ENOVISubscriberEvent.h</a></div>
+        <div><a href="ENOVIUEAutomaticInstanceCreation.html">下一页: ENOVIUEAutomaticInstanceCreation.h →</a></div>
+    </div>
+</body>
+</html>

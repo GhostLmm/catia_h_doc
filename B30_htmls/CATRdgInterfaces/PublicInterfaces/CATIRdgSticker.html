@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATRdgInterfaces/PublicInterfaces/CATIRdgSticker.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATRdgInterfaces/PublicInterfaces/CATIRdgSticker.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRdgRenderingSettingAtt.html">← 上一页: CATIRdgRenderingSettingAtt.h</a></div>
+        <div><a href="CATIRdgWorld.html">下一页: CATIRdgWorld.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIRdgSticker_h
+#define CATIRdgSticker_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATRdgItfCPP.h&quot;
+#include &quot;CATIRdgBase.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+
+class CATString;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATRdgItfCPP IID IID_CATIRdgSticker;
+#else
+extern &quot;C&quot; const IID IID_CATIRdgSticker;
+#endif
+
+/** 
+ * Interface for stickers.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * This is the base interface for stickers.
+ * It is used to access the data needed for rendering.
+ */
+
+class ExportedByCATRdgItfCPP CATIRdgSticker : public CATIRdgBase
+{
+/** @nodoc */
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Returns the sticker priority.
+ * @param oPriority
+ *   The priority (the higher the number, the higher 
+ *   the priority.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetPriority(unsigned int &amp;oPriority) = 0;
+
+/**
+ * Returns the ambient parameters.
+ * @param oCoef
+ *   The coefficient.
+ * @param oColor
+ *   The RGB color. Each color component ranges
+ *   from &lt;code&gt;0.&lt;/code&gt; to &lt;code&gt;1.&lt;/code&gt;. 
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetAmbient(double &amp;oCoef, double oColor[3]) = 0;
+
+/**
+ * Returns the diffuse parameters.
+ * @param oCoef
+ *   The coefficient.
+ * @param oColor
+ *   The RGB color. Each color component ranges
+ *   from &lt;code&gt;0.&lt;/code&gt; to &lt;code&gt;1.&lt;/code&gt;. 
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetDiffuse(double &amp;oCoef, double oColor[3]) = 0;
+
+/**
+ * Returns the specular parameters.
+ * @param oCoef
+ *   The coefficient.
+ * @param oColor
+ *   The RGB color. Each color component ranges
+ *   from &lt;code&gt;0.&lt;/code&gt; to &lt;code&gt;1.&lt;/code&gt;. 
+ * @param oExponent
+ *   The specular exponent.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetSpecular(double &amp;oCoef, double oColor[3], double &amp;oExponent) = 0;
+
+/**
+ * Returns the transparency parameters.
+ * @param oCoef
+ *   The coefficient.
+ * @param oUseColor
+ *   The transparency color status.
+ *   &lt;ul&gt; transparency color status.
+ *   &lt;li&gt; TRUE  consider transparent color &lt;/li&gt;
+ *   &lt;li&gt; FALSE ignore transparent color &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oColor
+ *   The RGB transparency color. Each color component ranges
+ *   from &lt;code&gt;0.&lt;/code&gt; to &lt;code&gt;1.&lt;/code&gt;. 
+ *   When oUseColor is TRUE, all pixels having the same color
+ *   as oColor are considered transparent.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetTransparency(double &amp;oCoef, CATBoolean &amp;oUseColor, double oColor[3]) = 0;
+
+/**
+ * Returns the reflectivity parameters.
+ * @param oCoef
+ *   The coefficient.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetReflectivity(double &amp;oCoef) = 0;
+
+/**
+ * Returns the transformation matrix.
+ * @param oTransfo
+ *   The matrix. The coefficients are given COLUMN by COLUMN.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetTransfo(double oTransfo[12]) = 0;
+
+/** @nodoc */
+    enum CATTextureType { None=1, Image=2, LightMap=3 };
+
+/**
+ * Returns the texture type.
+ * @param oType
+ *   The texture type.
+ *   &lt;ul&gt; texture type.
+ *   &lt;li&gt; None &lt;/li&gt;
+ *   &lt;li&gt; Image &lt;/li&gt;
+ *   &lt;li&gt; Light Map &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetTextureType(CATIRdgSticker::CATTextureType &amp;oType) = 0;
+
+/** @nodoc */
+    enum CATMappingType { Planar=0, Spherical=1, Cylindrical=2};
+
+/**
+ * Returns the mapping type.
+ * @param oMapping
+ *   The mapping type.
+ *   &lt;ul&gt; mapping type.
+ *   &lt;li&gt; Planar &lt;/li&gt;
+ *   &lt;li&gt; Spherical &lt;/li&gt;
+ *   &lt;li&gt; Cylindrical &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetMappingType(CATIRdgSticker::CATMappingType &amp;oMapping) = 0;
+
+/**
+ * Returns the 2D texture parameters.
+ * @param oTexture
+ *   The path of the texture file.
+ * @param oOffset
+ *   The texture offsets on U and V axis.
+ * @param oScale
+ *   The texture scales on U and V axis.
+ * @param oFlip
+ *   The texture flip status on U and V axis.
+ *   &lt;ul&gt; flip status.
+ *   &lt;li&gt; TRUE  texture is flipped &lt;/li&gt;
+ *   &lt;li&gt; FALSE texture is not flipped &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oRepeat
+ *   The texture repeat status on U and V axis.
+ *   &lt;ul&gt; repeat status.
+ *   &lt;li&gt; TRUE  texture is repeated &lt;/li&gt;
+ *   &lt;li&gt; FALSE texture is not repeated &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oAngle
+ *   The texture rotation angle (in degrees).
+ * @param oSize
+ *   The texture size (in pixels).
+ * @param oUseNormal
+ *   The normal check status.
+ *   &lt;ul&gt; normal check status.
+ *   &lt;li&gt; TRUE  normals are checked against sticker normal &lt;/li&gt;
+ *   &lt;li&gt; FALSE normals are not checked against sticker normal &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oReverseNormal
+ *   The normal inversion status.
+ *   &lt;ul&gt; inversion status.
+ *   &lt;li&gt; TRUE  sticker normal is inverted &lt;/li&gt;
+ *   &lt;li&gt; FALSE sticker normal is not inverted &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT Get2DTexture(CATString        &amp;oTexture, 
+                                 double            oOffset[2], 
+                                 double            oScale[2], 
+                                 CATBoolean        oFlip[2],  
+                                 double           &amp;oAngle, 
+                                 int               oSize[2],
+                                 CATBoolean       &amp;oUseNormal,
+                                 CATBoolean       &amp;oReverseNormal) = 0;
+
+/**
+ * Returns the light map parameters.
+ * @param oTexture
+ *   The path of the texture file.
+ * @param oSize
+ *   The texture size (in pixels).
+ * @param oUseNormal
+ *   The normal check status.
+ *   &lt;ul&gt; normal check status.
+ *   &lt;li&gt; TRUE  normals are checked against sticker normal &lt;/li&gt;
+ *   &lt;li&gt; FALSE normals are not checked against sticker normal &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oReverseNormal
+ *   The normal inversion status.
+ *   &lt;ul&gt; inversion status.
+ *   &lt;li&gt; TRUE  sticker normal is inverted &lt;/li&gt;
+ *   &lt;li&gt; FALSE sticker normal is not inverted &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oAmbientOcclusion
+ *   The ambient occlusion status.
+ *   &lt;ul&gt; ambient occlusion status.
+ *   &lt;li&gt; TRUE  ambient occlusion is computed &lt;/li&gt;
+ *   &lt;li&gt; FALSE ambient occlusion is not computed &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oSamples
+ *   The number of rays to trace for ambient occlusion.
+ * @param oRadius
+ *   The maximum distance for ambient occlusion rays.
+ * @param oShadows
+ *   The shadows status.
+ *   &lt;ul&gt; shadows status.
+ *   &lt;li&gt; TRUE  shadows are computed &lt;/li&gt;
+ *   &lt;li&gt; FALSE shadows are not computed &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetLightMap(CATString        &amp;oTexture, 
+                                int               oSize[2],
+                                CATBoolean       &amp;oUseNormal,
+                                CATBoolean       &amp;oReverseNormal,
+                                CATBoolean       &amp;oAmbientOcclusion,
+                                int              &amp;oSamples,
+                                double           &amp;oRadius, 
+                                CATBoolean       &amp;oShadows) = 0;
+};
+
+/** @nodoc */
+CATDeclareHandler(CATIRdgSticker,CATIRdgBase);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRdgRenderingSettingAtt.html">← 上一页: CATIRdgRenderingSettingAtt.h</a></div>
+        <div><a href="CATIRdgWorld.html">下一页: CATIRdgWorld.h →</a></div>
+    </div>
+</body>
+</html>

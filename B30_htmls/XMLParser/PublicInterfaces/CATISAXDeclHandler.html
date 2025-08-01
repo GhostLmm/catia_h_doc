@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATISAXDeclHandler.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATISAXDeclHandler.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXDTDHandler.html">← 上一页: CATISAXDTDHandler.h</a></div>
+        <div><a href="CATISAXDocumentHandler.html">下一页: CATISAXDocumentHandler.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#ifndef CATISAXDeclHandler_h
+#define CATISAXDeclHandler_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATISAXDeclHandler;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATISAXDeclHandler ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface to receive notification of DTD declaration events.
+ *
+ * &lt;p&gt;This is an optional extension handler for SAX2 to provide
+ * information about DTD declarations in an XML document.  XML
+ * readers are not required to support this handler, and this
+ * handler is not included in the core SAX2 distribution.&lt;/p&gt;
+ * 
+ * &lt;p&gt;Note that data-related DTD declarations (unparsed entities and
+ * notations) are already reported through the @href CATISAXDTDHandler interface.&lt;/p&gt;
+ * 
+ * &lt;p&gt;If you are using the declaration handler together with a lexical
+ * handler, all of the events will occur between the
+ * @href CATISAXLexicalHandler#StartDTD and the
+ * @href CATISAXLexicalHandler#EndDTD events.&lt;/p&gt;
+ * 
+ * &lt;p&gt;To set the CATISAXDeclHandler for an CATISAXXMLReader, use the
+ * @href CATISAXXMLReader#SetProperty method
+ * with the propertyId &lt;tt&gt;&quot;http://xml.org/sax/properties/declaration-handler&quot;&lt;/tt&gt;.
+ * If the reader does not support declaration events, it will return a
+ * @href CATSAXNotRecognizedException error or a @href CATSAXNotSupportedException error
+ * when you attempt to register the handler.&lt;/p&gt;
+ * 
+ * @see CATISAXXMLReader, CATISAXLexicalHandler
+ */
+class ExportedByXMLParserItf CATISAXDeclHandler: public CATBaseUnknown {
+	CATDeclareInterface;
+	
+	public:
+
+		/**
+		 * Receives notification of an element type declaration.
+		 *
+		 * &lt;p&gt;The content model will consist of the string &lt;tt&gt;&quot;EMPTY&quot;&lt;/tt&gt;, the
+		 * string &lt;tt&gt;&quot;ANY&quot;&lt;/tt&gt;, or a parenthesised group, optionally followed
+		 * by an occurrence indicator.  The model will be normalized so
+		 * that all parameter entities are fully resolved and all whitespace 
+		 * is removed, and will include the enclosing parentheses.  Other
+		 * normalization (such as removing redundant parentheses or 
+		 * simplifying occurrence indicators) is at the discretion of the
+		 * parser.&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The element type name.
+		 * @param iModel
+		 * The content model as a normalized string.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 */
+		virtual HRESULT ElementDecl(
+			const CATUnicodeString &amp; iName, 
+			const CATUnicodeString &amp; iModel) = 0;
+
+		/**
+		 * Receives notification of an attribute type declaration.
+		 *
+		 * &lt;p&gt;Only the effective (first) declaration for an attribute will
+		 * be reported.  The type will be one of the strings &lt;tt&gt;&quot;CDATA&quot;&lt;/tt&gt;,
+		 * &lt;tt&gt;&quot;ID&quot;&lt;/tt&gt;, &quot;&lt;tt&gt;IDREF&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;IDREFS&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;NMTOKEN&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;NMTOKENS&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;ENTITY&quot;&lt;/tt&gt;,
+		 * &lt;tt&gt;&quot;ENTITIES&quot;&lt;/tt&gt;, a parenthesized token group with 
+		 * the separator &quot;|&quot; and all whitespace removed, or the word
+		 * &lt;tt&gt;&quot;NOTATION&quot;&lt;/tt&gt; followed by a space followed by a parenthesized
+		 * token group with all whitespace removed.&lt;/p&gt;
+		 * 
+		 * &lt;p&gt;Any parameter entities in the attribute value will be
+		 * expanded, but general entities will not.&lt;/p&gt;
+		 *
+		 * @param iElementName
+		 * The name of the associated element.
+		 * @param iAttributeName
+		 * The name of the attribute.
+		 * @param iType
+		 * A string representing the attribute type.
+		 * @param iValueDefault
+		 * A string representing the attribute default (&lt;tt&gt;&quot;#IMPLIED&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;#REQUIRED&quot;&lt;/tt&gt;, or &lt;tt&gt;&quot;#FIXED&quot;&lt;/tt&gt;) or an empty string if none of these applies.
+		 * @param iValue
+		 * A string representing the attribute&#x27;s default value, or an empty string if there is none.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 */
+		virtual HRESULT AttributeDecl(
+			const CATUnicodeString &amp; iElementName, 
+			const CATUnicodeString &amp; iAttributeName,
+			const CATUnicodeString &amp; iType,
+			const CATUnicodeString &amp; iValueDefault,
+			const CATUnicodeString &amp; iValue) = 0;
+
+
+		/**
+		 * Receives notification of an internal entity declaration.
+		 *
+		 * &lt;p&gt;Only the effective (first) declaration for each entity
+		 * will be reported.  All parameter entities in the value
+		 * will be expanded, but general entities will not.&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The name of the entity. If it is a parameter entity, the name will begin with &lt;tt&gt;&#x27;%&#x27;&lt;/tt&gt;.
+		 * @param iValue
+		 * The replacement text of the entity.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 */
+		virtual HRESULT InternalEntityDecl(
+			const CATUnicodeString &amp; iName, 
+			const CATUnicodeString &amp; iValue) = 0;
+
+		/**
+		 * Receives notification of an external entity declaration.
+		 *
+		 * &lt;p&gt;Only the effective (first) declaration for each entity
+		 *  will be reported.&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The name of the entity. If it is a parameter entity, the name will begin with &lt;tt&gt;&#x27;%&#x27;&lt;/tt&gt;.
+		 * @param iPublicId
+		 * The declared public identifier of the entity, or an empty string if none was declared.
+		 * @param iSystemId
+		 * The declared system identifier of the entity.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 */
+		virtual HRESULT ExternalEntityDecl(
+			const CATUnicodeString &amp; iName, 
+			const CATUnicodeString &amp; iPublicId,
+			const CATUnicodeString &amp; iSystemId) = 0;
+		
+
+};
+CATDeclareHandler(CATISAXDeclHandler, CATBaseUnknown);
+
+
+#endif // CATISAXDeclHandler_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXDTDHandler.html">← 上一页: CATISAXDTDHandler.h</a></div>
+        <div><a href="CATISAXDocumentHandler.html">下一页: CATISAXDocumentHandler.h →</a></div>
+    </div>
+</body>
+</html>

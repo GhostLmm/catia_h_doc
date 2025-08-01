@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATSAXXMLReaderAdapter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATSAXXMLReaderAdapter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSAXParserAdapter.html">← 上一页: CATSAXParserAdapter.h</a></div>
+        <div><a href="CATSAXXMLReaderOptions.html">下一页: CATSAXXMLReaderOptions.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#ifndef CATSAXXMLReaderAdapter_h
+#define CATSAXXMLReaderAdapter_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserCls.h&quot;
+#include &quot;CATISAXXMLReader.h&quot;
+#include &quot;CATISAXDocumentHandler.h&quot;
+#include &quot;CATISAXParser.h&quot;
+class CATISAXInputSource_var;
+class CATISAXErrorHandler_var;
+class CATISAXDTDHandler_var;
+class CATISAXEntityResolver_var;
+
+/**
+ * Class to adapt a SAX2 CATISAXXMLReader as a SAX1 CATISAXParser.
+ *
+ * &lt;p&gt;This class wraps a SAX2 @href CATISAXXMLReader and makes it act as a SAX1 @href CATISAXParser. 
+ * The @href CATISAXXMLReader must support a &lt;tt&gt;TRUE&lt;/tt&gt; value for the &lt;tt&gt;http://xml.org/sax/features/namespace-prefixes&lt;/tt&gt; property 
+ * or parsing will fail with a @href CATSAXException ; if the @href CATISAXXMLReader supports a &lt;tt&gt;FALSE&lt;/tt&gt; value 
+ * for the &lt;tt&gt;http://xml.org/sax/features/namespaces&lt;/tt&gt; property, that will also be used to improve efficiency&lt;/p&gt;
+ *
+ * @see CATISAXXMLReader, CATISAXParser
+ */
+class ExportedByXMLParserCls CATSAXXMLReaderAdapter: public CATISAXParser {
+	CATDeclareClass;
+	
+	public:
+		
+		/**
+		 * Factory method.
+		 *
+		 * @param iReader
+		 * The reader to encapsulate
+		 * @param oParser
+		 * The resulting parser
+		 */
+		static HRESULT CreateAdapter(
+			const CATISAXXMLReader_var&amp; iReader,
+			CATISAXParser_var&amp; oParser);
+
+		/**
+		 * Destructor.
+		 */
+		virtual ~CATSAXXMLReaderAdapter();
+		
+		// Implement the CATISAXParser interface.
+
+		/**
+		 * Parses an XML document.
+		 * @see CATISAXParser#Parse
+		 */
+		virtual HRESULT Parse(
+			const CATISAXInputSource_var&amp; iInputSource);
+		
+		/**
+		 * Parses an XML document from a system identifier (URI).
+		 * @see CATISAXParser#Parse
+		 */
+		virtual HRESULT Parse(
+			const CATUnicodeString &amp; iSystemId);
+		
+		/**
+		 * Allows an application to register a document event handler.
+		 * @see CATISAXParser#SetDocumentHandler
+		 */
+		virtual HRESULT SetDocumentHandler(
+			const CATISAXDocumentHandler_var&amp; iDocumentHandler);
+		
+		/**
+		 * Allows an application to register a DTD event handler.
+		 * @see CATISAXParser#SetDTDHandler
+		 */
+		virtual HRESULT SetDTDHandler(
+			const CATISAXDTDHandler_var&amp; iDTDHandler);
+		
+		/**
+		 * Allows an application to register a custom entity resolver.
+		 * @see CATISAXParser#SetEntityResolver
+		 */
+		virtual HRESULT SetEntityResolver(
+			const CATISAXEntityResolver_var&amp; iEntityResolver);
+		
+		/**
+		 * Allows an application to register an error event handler.
+		 * @see CATISAXParser#SetErrorHandler
+		 */
+		virtual HRESULT SetErrorHandler(
+			const CATISAXErrorHandler_var&amp; iErrorHandler);
+
+	private:
+		/**
+		 * Constructor
+		 *
+		 * @param iReader
+		 * The reader to encapsulate
+		 */
+		CATSAXXMLReaderAdapter(
+			const CATISAXXMLReader_var&amp; iReader);
+		CATSAXXMLReaderAdapter (CATSAXXMLReaderAdapter &amp;);
+		CATSAXXMLReaderAdapter&amp; operator=(CATSAXXMLReaderAdapter&amp;);
+
+		void _SetupHandlers();
+		void _CleanupHandlers();
+
+	private:
+		CATISAXXMLReader_var _reader;
+		CATISAXDocumentHandler_var _documentHandler;
+};
+
+#endif // CATSAXXMLReaderAdapter_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSAXParserAdapter.html">← 上一页: CATSAXParserAdapter.h</a></div>
+        <div><a href="CATSAXXMLReaderOptions.html">下一页: CATSAXXMLReaderOptions.h →</a></div>
+    </div>
+</body>
+</html>

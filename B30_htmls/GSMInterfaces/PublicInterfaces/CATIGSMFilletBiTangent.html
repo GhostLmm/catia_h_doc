@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMFilletBiTangent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMFilletBiTangent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMFillet.html">← 上一页: CATIGSMFillet.h</a></div>
+        <div><a href="CATIGSMFilletTriTangent.html">下一页: CATIGSMFilletTriTangent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMFilletBiTangent_H
+#define CATIGSMFilletBiTangent_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATGSMFilletDef.h&quot;
+#include &quot;CATGSMOrientation.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMFilletBiTangent;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMFilletBiTangent;
+#endif
+
+class CATIGSMIntegratedLaw_var;
+
+/** 
+ * Fillet Bi-Tangent feature. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to access data of the Fillet Bi-Tangent feature created by using two 
+ * support surfaces, their orientation, a radius, and options 
+ * (supports trimming and fillet extremities type)
+ * 
+ * &lt;br&gt;Note: 
+ * &lt;br&gt; CATGSMFilletSupportsTrimMode 
+ *  &lt;ul&gt;
+ *  &lt;li&gt;CATGSMNoTrim=0&lt;/li&gt;
+ *  &lt;li&gt;CATGSMTrim=1&lt;/li&gt;
+ *  &lt;li&gt;CATGSMTrimSupport1=2&lt;/li&gt;
+ *  &lt;li&gt;CATGSMTrimSupport2=3&lt;/li&gt;
+ *  &lt;/ul&gt;
+ * &lt;br&gt; CATGSMFilletExtremitiesMode  
+ *  &lt;ul&gt;
+ *  &lt;li&gt;CATGSMSmooth=0&lt;/li&gt;
+ *  &lt;li&gt;CATGSMStraight=1&lt;/li&gt;
+ *  &lt;li&gt;CATGSMMaximum=2&lt;/li&gt;
+ *  &lt;li&gt;CATGSMMinimum=3&lt;/li&gt;
+ *  &lt;/ul&gt;
+ * &lt;br&gt;  CATGSMFilletSectionType
+ *  &lt;ul&gt;
+ *  &lt;li&gt;CATGSMCircularSection=0&lt;/li&gt;
+ *  &lt;li&gt;CATGSMConicalSection=1&lt;/li&gt;
+ *  &lt;/ul&gt;
+ * &lt;br&gt;  CATGSMFilletRadiusType
+ *  &lt;ul&gt;
+ *  &lt;li&gt;CATGSMRadiusDefault=0&lt;/li&gt;
+ *  &lt;li&gt;CATGSMRadiusChordLength=1&lt;/li&gt;
+ *  &lt;/ul&gt;
+ * @see CATIGSMFactory#CreateFillet,CATGSMFilletExtremitiesMode,CATGSMFilletSupportsTrimMode,CATGSMFilletSectionType,CATGSMFilletRadiusType
+ */
+class ExportedByCATGitInterfaces CATIGSMFilletBiTangent : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public:  
+    
+  /**
+    * Gets the first support surface feature.
+    *   @param oElem
+    *      first support surface feature
+    */ 
+ virtual    HRESULT GetFirstElem(CATISpecObject_var &amp; oElem) = 0;
+  
+  /**
+    * Sets the first support surface feature.
+    *   @param iElem
+    *      first support surface feature
+    */ 
+ virtual    HRESULT SetFirstElem(const CATISpecObject_var iElem) = 0;
+  
+  /**
+    * Gets the second support surface feature.
+    *   @param oElem
+    *      second support surface feature
+    */ 
+ virtual    HRESULT GetSecondElem(CATISpecObject_var &amp; oElem) = 0;
+  
+  /**
+    * Sets the second support surface feature.
+    *   @param iElem
+    *      second support surface feature
+    */ 
+ virtual    HRESULT SetSecondElem(const CATISpecObject_var iElem) = 0;
+  
+  /**
+    * Gets fillet radius.
+    *   @param oRadius
+    *      Radius value
+    */ 
+ virtual    HRESULT GetRadius(double &amp; oRadius) = 0;
+  
+  /**
+    * Gets fillet radius.
+    *   @param oRadius
+    *      Radius value
+    */ 
+ virtual    HRESULT GetRadius(CATICkeParm_var &amp; oRadius) = 0;
+  
+  /**
+    * Sets fillet radius.
+    *   @param iRadius
+    *      Radius value
+    */ 
+ virtual    HRESULT SetRadius(double iRadius) = 0;
+  
+  /**
+    * Sets fillet radius.
+    *   @param iRadius
+    *      Radius value
+    */ 
+ virtual    HRESULT SetRadius(const CATICkeParm_var iRadius) = 0;
+  
+  /**
+    * Gets the first orientation used to specify fillet center position.&lt;BR&gt;
+    * Orientation is same or inverse than the normal to the first surface support&lt;BR&gt;
+    *   @param oOrientation
+    *      first orientation 
+    */
+ virtual    HRESULT GetFirstOrientation(CATGSMOrientation &amp; oOrientation) = 0;
+  
+  /**
+    * Sets the first orientation used to specify fillet center position.&lt;BR&gt;
+    * Orientation is same or inverse than the normal to the first surface support&lt;BR&gt;
+    *   @param iOrientation
+    *      first orientation 
+    */
+ virtual    HRESULT SetFirstOrientation(CATGSMOrientation iOrientation) = 0;
+  
+  /**
+    * Gets the second orientation used to specify fillet center position.&lt;BR&gt;
+    * Orientation is same or inverse than the normal to the second surface support&lt;BR&gt;
+    *   @param Orientation
+    *      second oOrientation 
+    */
+ virtual    HRESULT GetSecondOrientation(CATGSMOrientation &amp; oOrientation) = 0;
+  
+  /**
+    * Sets the second orientation used to specify fillet center position.&lt;BR&gt;
+    * Orientation is same or inverse than the normal to the second surface support&lt;BR&gt;
+    *   @param iOrientation
+    *      second orientation 
+    */
+ virtual    HRESULT SetSecondOrientation(CATGSMOrientation iOrientation) = 0; 
+  
+  /**
+    * Inverts first orientation used to specify fillet center position.
+    */
+ virtual    HRESULT InvertFirstOrientation() = 0;
+  
+  /**
+    * Inverts second orientation used to specify fillet center position.
+    */
+ virtual    HRESULT InvertSecondOrientation() = 0;
+  
+  /**
+    * Gets  whether support surfaces are trimmed or not.
+    *   @param oMode
+    *     The trim mode  
+    *   @see CATGSMFilletSupportsTrimMode
+    */
+ virtual    HRESULT GetSupportsTrimMode(CATGSMFilletSupportsTrimMode &amp; oMode) = 0;
+  
+  /**
+    * Sets trim mode for bitangent fillet.
+    * &lt;br&gt; It allows to activate the trim of the 2 support surfaces
+	* &lt;br&gt; if CATGSMTrim the 2 supports are trimmed and assembled with the fillet ribbon.
+    *   @param iMode
+    *     The trim mode 
+    *   @see CATGSMFilletSupportsTrimMode
+    */ 
+ virtual    HRESULT SetSupportsTrimMode(CATGSMFilletSupportsTrimMode iMode) = 0; 
+  
+  /**
+    * Gets fillet ribbon relimitation mode (or fillet extremities mode).
+    *   @param oMode
+    *  Fillet extremities mode : 
+    *  CATGSMSmooth or CATGSMStraight or CATGSMMaximum or CATGSMMinimum
+    */
+ virtual    HRESULT GetRibbonRelimitationMode(CATGSMFilletExtremitiesMode &amp; oMode) = 0;
+ 
+  /**
+    * Sets fillet ribbon relimitation mode (or fillet extremities mode).
+    *   @param iMode
+    *  Fillet extremities mode :
+    *  CATGSMSmooth or CATGSMStraight or CATGSMMaximum or CATGSMMinimum
+    */
+ virtual    HRESULT SetRibbonRelimitationMode(CATGSMFilletExtremitiesMode iMode) = 0; 
+
+  /**
+    * Gets Spine.
+    *   @param oElem
+    *  Spine used for variable fillet 
+    */
+ virtual    HRESULT GetSpine(CATISpecObject_var &amp; oElem) = 0;
+
+   /**
+    * Sets Spine.
+    *   @param iElem
+    *  Spine used for variable fillet 
+    */
+ virtual    HRESULT SetSpine(const CATISpecObject_var iElem) = 0;
+
+  /**
+    * Gets Hold Curve.
+    *   @param oElem
+    *  Hold Curve used for variable fillet 
+    */
+ virtual    HRESULT GetHoldCurve(CATISpecObject_var &amp; oElem) = 0;
+
+  /**
+    * Sets Hold Curve.
+    *   @param iElem
+    *  Hold Curve used for variable fillet 
+    */ 
+ virtual    HRESULT SetHoldCurve(const CATISpecObject_var iElem) = 0;
+
+  /**
+    * Get the list of the faces to keep for fillet operation.
+    *   @param oSpecFaces
+    */ 
+ virtual    HRESULT GetListOfFacesToKeep(CATLISTV(CATISpecObject_var) &amp; oSpecFaces) = 0;
+
+  /**
+    * Append a new face to keep.
+    *   @param iSpecFace
+    */ 
+ virtual	HRESULT AppendNewFaceToKeep(const CATISpecObject_var iSpecFace) = 0;
+
+  /**
+    * Remove a face to keep.
+    *   @param iSpecFace
+    */ 
+ virtual    HRESULT RemoveFaceToKeep(const CATISpecObject_var iSpecFace) = 0;
+
+ /**
+   * Remove all the faces to keep.
+   */ 
+ virtual    HRESULT RemoveAllFacesToKeep() = 0;
+
+  /**
+   * Gets Integrated Law to manage Variable Shape Fillet with law.
+   *   @param oILaw
+   *        Integrated law
+   *   @see CATIGSMIntegratedLaw
+   */ 
+ virtual    HRESULT GetIntegratedLaw(CATIGSMIntegratedLaw_var &amp; oILaw) = 0;
+  /**
+   * Sets Integrated Law to manage Variable Shape Fillet with law.
+   *   @param iILaw
+   *        Integrated law
+   *   @see CATIGSMIntegratedLaw
+   */ 
+ virtual    HRESULT SetIntegratedLaw(const CATIGSMIntegratedLaw_var &amp; iILaw) = 0;
+
+  /**
+   * Sets Law first relimiter for variable shape fillet with law management.
+   * &lt;br&gt;Relimiters must be point on spine.
+   * &lt;br&gt;The input law  will be mapped between first and second relimiters.
+   *   @param iPointOnSpine
+   *        Point on curve
+   */ 
+ virtual    HRESULT SetFirstLawRelimiter(const CATISpecObject_var &amp; iPointOnSpine) = 0;
+
+ /**
+   * Gets Law first relimiter for variable shape fillet with law management.
+   * &lt;br&gt;Relimiters must be point on spine.
+   * &lt;br&gt;The input law  will be mapped between first and second relimiters.
+   *   @param oPointOnSpine
+   *        Point on curve
+   */
+ virtual    HRESULT GetFirstLawRelimiter(CATISpecObject_var &amp; oPointOnSpine) = 0;
+
+  /**
+   * Sets Law second relimiter for variable shape fillet with law management.
+   * &lt;br&gt;Relimiters must be point on spine.
+   * &lt;br&gt;The input law  will be mapped between first and second relimiters.
+   *   @param iPointOnSpine
+   *        Point on curve
+   *   @see CATIGSMIntegratedLaw
+   */ 
+ virtual    HRESULT SetSecondLawRelimiter(const CATISpecObject_var &amp; iPointOnSpine) = 0;
+
+  /**
+   * Gets Law second relimiter for variable shape fillet with law management.
+   * &lt;br&gt;Relimiters must be point on spine.
+   * &lt;br&gt;The input law  will be mapped between first and second relimiters.
+   *   @param oPointOnSpine
+   *        Point on curve
+   * @see CATIGSMIntegratedLaw
+   */ 
+ virtual    HRESULT GetSecondLawRelimiter(CATISpecObject_var &amp; oPointOnSpine) = 0;
+
+ 
+ /**
+  * Sets the shape type of the fillet cross-section.
+  *  @param iSectionType
+  *    The section type.
+  *  @see CATGSMFilletSectionType, CATIGSMFilletBiTangent#SetConicalSectionParameter
+  */
+ virtual    HRESULT SetSectionType(CATGSMFilletSectionType iSectionType) = 0;
+
+ /**
+  * Gets the shape type of the fillet cross-section.
+  *  @param oSectionType
+  *    The section type.
+  *  @see CATGSMFilletSectionType, CATIGSMFilletBiTangent#GetConicalSectionParameter
+  */
+ virtual    HRESULT GetSectionType(CATGSMFilletSectionType &amp; oSectionType) = 0;
+
+ /**
+  * Sets the tightness value for the conical cross-section.
+  * &lt;br&gt; if the section type is  &lt;tt&gt;CATGSMCircularSection&lt;tt&gt; this parameter is not taken into account.
+  *  @param iParam
+  *    The tightness value for the conic arc if the section type is &lt;tt&gt;CATGSMConicalSection&lt;tt&gt;.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *    &lt;tt&gt;0 &lt; iParam &lt; 1&lt;/tt&gt;
+  *  @see CATIGSMFilletBiTangent#SetSectionType
+  */
+ virtual    HRESULT SetConicalSectionParameter(const CATICkeParm_var &amp; iParam) = 0;
+
+ /**
+  * Gets the tightness value for the conical cross-section.
+  * &lt;br&gt; if the section type is  &lt;tt&gt;CATGSMCircularSection&lt;tt&gt; this parameter is not taken into account.
+  *  @param oParam
+  *    The tightness value for the conic arc if the section type is &lt;tt&gt;CATGSMConicalSection&lt;tt&gt;.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *    &lt;tt&gt;0 &lt; oParam &lt; 1&lt;/tt&gt;
+  *  @see CATIGSMFilletBiTangent#GetSectionType
+  */
+ virtual    HRESULT GetConicalSectionParameter(CATICkeParm_var &amp; oParam) = 0;
+ 
+ /**
+  * Sets the radius type.
+  * &lt;br&gt; if the radius type is  &lt;tt&gt;CATGSMRadiusChordLength&lt;tt&gt;, the radius parameter 
+  * &lt;br&gt; set via &lt;tt&gt;SetRadius&lt;tt&gt; will be used as Chord Length parameter.
+  *  @param iFilletRadiusType
+  *    The radius type.
+  *  @see CATGSMFilletRadiusType, CATIGSMFilletBiTangent#SetRadius
+  */
+ virtual    HRESULT SetRadiusType(CATGSMFilletRadiusType iFilletRadiusType) = 0;
+
+ /**
+  * Gets the radius type.
+  * &lt;br&gt; if the radius type is  &lt;tt&gt;CATGSMRadiusChordLength&lt;tt&gt;, the radius parameter 
+  * &lt;br&gt; set via &lt;tt&gt;SetRadius&lt;tt&gt; will be used as Chord Length parameter.
+  *  @param oFilletRadiusType
+  *    The radius type.
+  *  @see CATGSMFilletRadiusType, CATIGSMFilletBiTangent#SetRadius
+  */
+ virtual    HRESULT GetRadiusType(CATGSMFilletRadiusType &amp; oFilletRadiusType) = 0;
+
+
+};
+CATDeclareHandler (CATIGSMFilletBiTangent, CATBaseUnknown);
+#endif // CATIGSMFilletBiTangent_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMFillet.html">← 上一页: CATIGSMFillet.h</a></div>
+        <div><a href="CATIGSMFilletTriTangent.html">下一页: CATIGSMFilletTriTangent.h →</a></div>
+    </div>
+</body>
+</html>

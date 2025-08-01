@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATWorkshopFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATWorkshopFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATWorkshopConfigurationFactory.html">← 上一页: CATWorkshopConfigurationFactory.h</a></div>
+        <div><a href="CClassFactory.html">下一页: CClassFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATWorkshopFactory_h
+#define CATWorkshopFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &lt;CD0FRAME.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CATUnicodeString.h&gt;
+
+/**
+* Base class to create a workshop factory.
+* &lt;b&gt;Role&lt;/b&gt;: To create a factory class for your workshop, 
+* use the macro @href CATDeclareWorkshopFactory for the header file (.h) and   
+* the @href CATImplementWorkshopFactory for the source file (.cpp). 
+* @see CATIWorkshop
+*/
+class ExportedByCD0FRAME CATWorkshopFactory : public CATBaseUnknown
+{
+public:
+  
+  /** @nodoc */
+  CATWorkshopFactory();
+  virtual ~CATWorkshopFactory();
+  
+  /** @nodoc */
+  int IsAuthorized(const char *) const;
+  
+  /** @nodoc */
+  virtual unsigned char        Support(const CATUnicodeString &amp; EditName) = 0;
+  /** @nodoc */
+  virtual CATInterfaceObject * Create(const CATUnicodeString &amp; ItfName) = 0;
+};
+
+/**
+* Defines the header file of a workshop factory class.
+* &lt;b&gt;Role&lt;/b&gt;: To create an instance of your workshop, you must define a factory 
+* interface which derives from CATIGenericFactory.&lt;br&gt;
+* This interface is implemented using a factory class as an extension of 
+* the CATApplicationFrame class and is created by the two macros &lt;tt&gt;CATDeclareWorkshopFactory&lt;/tt&gt; 
+* and @href CATImplementWorkshopFactory.  
+* @param Workshop
+*    The name of the workshop&#x27;s class. This class must implement @href CATIWorkshop.
+*    &lt;br&gt;
+*    &lt;br&gt;
+* &lt;b&gt;Example:&lt;/b&gt; &lt;tt&gt;MyWorkshopFactory&lt;/tt&gt; is a class which implements the &lt;tt&gt;IMyWorkshopFactory&lt;/tt&gt; 
+*    factory interface, creates the &lt;tt&gt;MyWorkshop&lt;/tt&gt; workshop and is defined in the
+*    shared library myModule.dll
+* &lt;pre&gt; 
+* 1) The header file &lt;tt&gt;MyWorkshopFactory.h&lt;/tt&gt; must contain these two lines:
+*
+*       #include &quot;CATWorkshopFactory.h&quot;
+*       &lt;b&gt;CATDeclareWorkshopFactory&lt;/b&gt;(MyWorkshop);
+*
+* 2) The source file &lt;tt&gt;MyWorkshopFactory.cpp&lt;/tt&gt; must contain these lines:
+*
+*       #include &quot;MyWorkshop.h&quot;
+*       #include &quot;MyWorkshopFactory.h&quot;
+*
+*       #include &quot;TIE_&lt;tt&gt;IMyWorkshopFactory&lt;/tt&gt;.h&quot;
+*
+*       CATImplementWorkshopFactory(MyWorkshop, IMyWorkshopFactory);
+*
+* 3) To declare that CATApplicationFrame implements IMyWorkshopFactory,  
+*       insert the following line in the &lt;b&gt;interface dictionary&lt;/b&gt;:
+*
+*       CATApplicationFrame    IMyWorkshopFactory  myModule 
+*
+* 4) To declare that the factory creates an instance of the MyWorkshop class, 
+*       insert the following line in the &lt;b&gt;factory dictionary&lt;/b&gt;:
+* 
+*       MyWorkshop            IMyWorkshopFactory      
+* &lt;/pre&gt;
+* @see CATImplementWorkshopFactory, CATIWorkshop 
+*/
+#define CATDeclareWorkshopFactory(Workshop)                        \
+class Workshop##Factory : public CATWorkshopFactory                \
+{                                                                  \
+  CATDeclareClass;                                                 \
+                                                                   \
+public:                                                            \
+                                                                   \
+  Workshop##Factory();                                             \
+  ~Workshop##Factory();                                            \
+                                                                   \
+  unsigned char        Support(const CATUnicodeString &amp; EditName); \
+  CATInterfaceObject * Create(const CATUnicodeString &amp; ItfName);   \
+};
+
+#ifndef CATFrmMkStringFromDefine
+/** @nodoc */
+#define CATFrmMkStringFromDefine1(x) #x
+/** @nodoc */
+#define CATFrmMkStringFromDefine(x) CATFrmMkStringFromDefine1(x)
+#endif
+
+/**
+* Defines the source file of the workshop factory class.
+* &lt;b&gt;Role&lt;/b&gt;: To create an instance of your workshop, you must define a factory 
+* interface which derives from CATIGenericFactory.&lt;br&gt;
+* This interface is implemented using a factory class as an extension of 
+* the CATApplicationFrame class and is created by the two macros @href CATDeclareWorkshopFactory 
+* and &lt;tt&gt;CATImplementWorkshopFactory&lt;/tt&gt;.  
+*
+* @param Workshop
+*    The name of the workshop&#x27;s class. This class must implement @href CATIWorkshop.
+* @param WFactory
+*    The name of the workshop factory interface deriving from CATIGenericFactory. 
+*    &lt;br&gt;
+*    &lt;br&gt;
+* &lt;b&gt;Example:&lt;/b&gt; &lt;tt&gt;MyWorkshopFactory&lt;/tt&gt; is a class which implements the &lt;tt&gt;IMyWorkshopFactory&lt;/tt&gt; 
+*    factory interface, creates the &lt;tt&gt;MyWorkshop&lt;/tt&gt; workshop and is defined in the
+*    shared library myModule.dll
+* &lt;pre&gt; 
+* 1) The header file &lt;tt&gt;MyWorkshopFactory.h&lt;/tt&gt; must contain these two lines:
+*
+*       #include &quot;CATWorkshopFactory.h&quot;
+*       CATDeclareWorkshopFactory(MyWorkshop);
+*
+* 2) The source file &lt;tt&gt;MyWorkshopFactory.cpp&lt;/tt&gt; must contain these lines:
+*
+*       #include &quot;MyWorkshop.h&quot;
+*       #include &quot;MyWorkshopFactory.h&quot;
+*
+*       #include &quot;TIE_IMyWorkshopFactory.h&quot;
+*
+*       &lt;b&gt;CATImplementWorkshopFactory&lt;/b&gt;(MyWorkshop, IMyWorkshopFactory);
+*
+* 3) To declare that CATApplicationFrame implements IMyWorkshopFactory,  
+*       insert the following line in the &lt;b&gt;interface dictionary&lt;/b&gt;:
+*
+*       CATApplicationFrame    IMyWorkshopFactory  myModule 
+*
+* 4) To declare that the factory creates an instance of the MyWorkshop class, 
+*       insert the following line in the &lt;b&gt;factory dictionary&lt;/b&gt;:
+* 
+*       MyWorkshop            IMyWorkshopFactory      
+* &lt;/pre&gt;
+* @see CATDeclareWorkshopFactory, CATIWorkshop 
+*/
+#define CATImplementWorkshopFactory(Workshop, WFactory)                     \
+TIE_##WFactory(Workshop##Factory);                                          \
+                                                                            \
+CATImplementKindOf(Workshop##Factory, CodeExtension,                        \
+		   CATWorkshopFactory, CATApplicationFrame);                \
+                                                                            \
+Workshop##Factory::Workshop##Factory()                                      \
+{}                                                                          \
+                                                                            \
+Workshop##Factory::~Workshop##Factory()                                     \
+{}                                                                          \
+                                                                            \
+unsigned char Workshop##Factory::Support(const CATUnicodeString &amp; EditName) \
+{                                                                           \
+  const CATUnicodeString editType = #Workshop;                              \
+  return (editType == EditName);                                            \
+}                                                                           \
+                                                                            \
+CATInterfaceObject * Workshop##Factory::Create                              \
+  (const CATUnicodeString &amp; ItfName)                                        \
+{                                                                           \
+  if (!IsAuthorized(CATFrmMkStringFromDefine(_MK_FWNAME_)))                 \
+    return NULL;                                                            \
+  CATBaseUnknown * work = new Workshop;                                     \
+  CATInterfaceObject * inter =  work-&gt;QueryInterface(ItfName.CastToCharPtr());  \
+  work-&gt;Release(); \
+  return inter ; \
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATWorkshopConfigurationFactory.html">← 上一页: CATWorkshopConfigurationFactory.h</a></div>
+        <div><a href="CClassFactory.html">下一页: CClassFactory.h →</a></div>
+    </div>
+</body>
+</html>

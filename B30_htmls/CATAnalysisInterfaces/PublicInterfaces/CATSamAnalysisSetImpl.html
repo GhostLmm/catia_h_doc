@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATSamAnalysisSetImpl.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATSamAnalysisSetImpl.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamAnalysisModelNotification.html">← 上一页: CATSamAnalysisModelNotification.h</a></div>
+        <div><a href="CATSamAnalysisUpdateTools.html">下一页: CATSamAnalysisUpdateTools.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATSamAnalysisSetImpl
+//
+//=============================================================================
+//
+// Usage Notes: this class extends AnalysisSet feature for CATIAAnalysisSet
+//=============================================================================
+// Mar. 99   Creation                       
+//=============================================================================
+#ifndef CATSamAnalysisSetImpl_H
+#define CATSamAnalysisSetImpl_H
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U2
+  */
+
+#include &quot;CATAnalysisToolkit.h&quot;
+#include &quot;CATBaseObject.h&quot;
+
+class CATIAAnalysisEntities;
+class CATIAAnalysisOutputEntities;
+class CATIAAnalysisSets;
+class CATIAAnalysisImages;
+class CATIScriptMethodCall;
+class CATBaseDispatch;
+class CATIABasicComponents;
+
+/**
+ * Root object used to implement derived classes of CATIAAnalysisSet.
+ * Declare your interface as &lt;b&gt;interface MyInterface : CATIAAnalysisSet&lt;/b&gt;&lt;br&gt;
+ * Implement it as &lt;b&gt;class MyImplementation : public CATSamAnalysisSetImpl&lt;/b&gt;.
+ */
+class ExportedByCATAnalysisToolkit CATSamAnalysisSetImpl : public CATBaseObject
+{
+	CATDeclareClass;
+  
+	public :
+/**
+ * Default Constructor.
+ */
+    CATSamAnalysisSetImpl();
+/**
+ * Default Destructor.
+ */
+		virtual ~CATSamAnalysisSetImpl();
+
+/**
+ * Returns the parent object.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+ * The parent object of a given object is the object just above
+ * in the object structure, usually the object that created this
+ * object and that aggregates it.
+ * In the case of an object part of a collection, the parent object
+ * is not the collection object itself, but the object that 
+ * aggregates the collection object.
+ */
+    virtual HRESULT __stdcall get_Parent ( CATBaseDispatch*&amp; oParent ); 
+
+/**
+ * Returns the type of the analysis Set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_Type(CATBSTR &amp; oType);
+/**
+ * Returns the name of the analysis Set.
+ * All implementations should not override this default implementation.
+ */
+  	HRESULT put_Name(const CATBSTR &amp; iNameBSTR);
+/**
+ * Sets the name of the analysis Set.
+ * All implementations should not override this default implementation.
+ */
+		HRESULT get_Name(CATBSTR &amp; oName);
+
+/**
+ * Update an Analysis Set.
+ * All implementations should not override this default implementation.
+ */
+    virtual HRESULT Update();
+
+  /**
+ * Returns the analysis entities collection associated to a set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisEntities(CATIAAnalysisEntities*&amp; oAnalysisEntities);	
+/**
+ * Returns the analysis output entities collection associated to a set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisOutputEntities(CATIAAnalysisOutputEntities*&amp; oAnalysisEntities);
+
+/**
+ * Returns the analysis sets collection associated with an analysis set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisSets(CATIAAnalysisSets*&amp; oAnalysisSets);
+/**
+ * Returns the analysis image collection associated with an analysis set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisImages(CATIAAnalysisImages*&amp; oAnalysisImages);
+/**
+ * Returns the BasicComponent collection associated with an analysis set.
+ * All implementations should not override this default implementation.
+ */
+    HRESULT get_BasicComponents(CATIABasicComponents*&amp; oBasicComponents);
+/**
+ * Returns an object from its name.
+ * All implementations should not override this default implementation.
+ * @param IDName   The searched obect name
+ * @return    The searched object
+ * All implementations should not override this default implementation.
+ */
+    HRESULT GetItem(const CATBSTR &amp; iNameBSTR, CATBaseDispatch *&amp; oObject);
+
+/**
+ * Helps the resolution mechanism of the macros generation.
+ * &lt;b&gt;Role:&lt;/b&gt;
+ * This interface must be implemented by objects that want to specify a custom
+ * access path in the Automation container-content hierarchy.
+ * &lt;br&gt;
+ * It contains a single method which generates a &lt;tt&gt;CATIScriptMethodCall&lt;/tt&gt;.
+ * This generated object describes how to access the object from its container.
+ * @see CATIAutomationResolution 
+ */
+    virtual HRESULT GetResolution(CATIScriptMethodCall *&amp; oResolution, CATBaseDispatch * iObjectToResolve);
+/**
+ * Retrieve the accurate CATBaseDispatch or CATIABase interface on a component.
+ * Returns with this methode Your VB Interface build by derivation of CATIAAnalysisSet.
+ * @see CATIBaseAccess
+ */
+    virtual HRESULT GiveAccurateExposedInterface(CATBaseDispatch** oBasePointer);
+
+	private :
+// ...Structors. No implementation provided. Just declared to avoid that 
+// someone could build this class.
+		CATSamAnalysisSetImpl(const CATSamAnalysisSetImpl &amp;);
+		CATSamAnalysisSetImpl&amp; operator=(const CATSamAnalysisSetImpl &amp;);
+};   
+
+#endif      
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamAnalysisModelNotification.html">← 上一页: CATSamAnalysisModelNotification.h</a></div>
+        <div><a href="CATSamAnalysisUpdateTools.html">下一页: CATSamAnalysisUpdateTools.h →</a></div>
+    </div>
+</body>
+</html>

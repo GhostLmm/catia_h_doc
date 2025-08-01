@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisSupport.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisSupport.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisSetInit.html">← 上一页: CATISamAnalysisSetInit.h</a></div>
+        <div><a href="CATISamAnalysisTransition.html">下一页: CATISamAnalysisTransition.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamAnalysisSupport_h
+#define CATISamAnalysisSupport_h
+//=================================================================================
+// COPYRIGHT DASSAULT SYSTEMES 1999  
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+//=================================================================================
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATAnalysisInterface.h&quot;
+#include &quot;CATSamDefs.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;booleanDef.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+class CATILinkableObject;
+class CATISpecObject;
+class CATISamAnalysisConnector;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamAnalysisSupport;
+#else
+extern &quot;C&quot; const IID IID_CATISamAnalysisSupport;
+#endif
+/**
+ * Interface to Analysis Support.
+ * &lt;b&gt;Role:&lt;/b&gt; Interface designed to manage &lt;b&gt;Analysis Support&lt;/b&gt;.&lt;br&gt;
+ * This interfaces is implemented on AnalysisEntity, and some basic components like:
+ * SAMSingleGeomPtr, SAMMultiGeomPtr. It allows to setup, valuate, retrieve and remove the connectors
+ * to the pointed objects. &lt;br&gt;
+ * @see CATISamAnalysisConnector 
+ */ 
+
+class  ExportedByCATAnalysisInterface CATISamAnalysisSupport : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+	public:
+
+/**
+ *  Retrieves the authorized types. 
+ *  These types are defined as a bit mask as defined for the startup definition.
+ *  @param oType The type of support that can be used. 
+ */
+		virtual HRESULT GetAuthorizedSupports(SAM_SupportId&amp; oType) const = 0;
+
+
+/**
+ *  Retrieves an enumerations combination describing the kind of defined entities.
+ *  @param oType The type of support that can be used (specific to analysis entities).
+ */
+	    virtual HRESULT GetAvailableSupport(SAM_SupportId&amp; oType) const = 0;
+
+/**
+ *  Adds an entity to the definition of the Analysis support.
+ *	Both of the parameters can not be null. &lt;p&gt;
+ *  Warning! Even if an entity description is added several times, it will be added once.
+ *  This entity is described by a couple of data as defined for an analysis connector.
+ *	@param iLinkable CATILinkableObject that identify the object to be pointed.
+ *	@param iSpecObject CATISpecObject that identify the object to be pointed for positionning management and
+ *  instance/reference management. (Most current use is the CATIProduct Feature object).
+ *	@param iType to be set as &quot;GeometrySmartConnector&quot;
+ */
+	    virtual HRESULT AddEntity (const CATILinkableObject* iLinkable,const CATISpecObject* iSpecObject,
+                                 const CATUnicodeString&amp; iType = NULL) = 0;
+
+/**
+ *  Removes an entity from the definition of the Analysis support.
+ *  This entity is described by a couple of data as defined for an analysis connector.
+ *	@param iLinkable CATILinkableObject that identify the object to be pointed.
+ *	@param iSpecObject CATISpecObject that identify the object to be pointed for positionning management and
+ *  instance/reference management. (Most current use is the CATIProduct Feature object).
+ *	@param iType to be set as &quot;GeometrySmartConnector&quot;
+ */
+		virtual HRESULT RemoveEntity (const CATILinkableObject* iSupport,const CATISpecObject* iSpecObject,
+                                  const CATUnicodeString&amp; iType = NULL) = 0;
+
+/**
+ *  The given data description can be added if it isn&#x27;t already bound, 
+ *	else it is removed from the support, or may be substitute to another
+ *	description.
+ *  This entity is described by a couple of data as defined for an analysis connector.
+ *	@param iLinkable CATILinkableObject that identify the object to be pointed.
+ *	@param iSpecObject CATISpecObject that identify the object to be pointed for positionning management and
+ *  instance/reference management. (Most current use is the CATIProduct Feature object).
+ *	@param oModifStatus: A flag that defines how the new entity has been switched in the support:
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; &lt;font color=&quot;red&quot;&gt;0&lt;/font color=&quot;red&quot;&gt;: It has been REMOVED because it was already in the support.&lt;/li&gt;
+ *	&lt;li&gt;&lt;font color=&quot;red&quot;&gt;1&lt;/font color=&quot;red&quot;&gt;: It has been ADDED because it wasn&#x27;t in the support yet.&lt;/li&gt;
+ *	&lt;li&gt;&lt;font color=&quot;red&quot;&gt;2&lt;/font color=&quot;red&quot;&gt;: It has been SUBSTITUTEED to another data of the same kind.&lt;/li&gt;&lt;/ul&gt;
+ *	@param iType: define the type of analysis connector used to bind given data.&lt;br&gt; To be set as&quot;GeometrySmartConnector&quot;
+ */
+		virtual HRESULT SwitchEntity (const CATILinkableObject* iLinkable,
+									  const CATISpecObject*	iSpecObject,
+									  int&amp; oModifStatus, 
+									  const CATUnicodeString&amp; iType = NULL) = 0;
+
+/**
+ *  Retrieves the entities corresponding to the given interface identifier.
+ *	The returned list is supposed to contain connectors that can be valuable
+ *  as connectors.
+ *	Each connector corresponds to a support entity. It binds the defining
+ *	couple of data.
+ */
+		virtual HRESULT GetEntities (CATLISTV(CATBaseUnknown_var)&amp; oSupport,
+									 const IID &amp;iid) const = 0;
+
+/**
+ *  Returns the number of bound entities in the support.
+ *	@param oEntitiesNumber Number of valid support found.
+ */
+		virtual HRESULT GetEntitiesNumber (int&amp; oEntitiesNumber) const = 0;
+
+/**
+ *  Returns the minimum and the maximum numbers of entities needed to have
+ *	a consistent definition of the support.
+ *  If oMinNumber is less than 0, there is no minimal amount.
+ *	If oMaxNumber is less than 0, there is no maximal amount.
+ *	@param oMinNumber Minimal number of connector to define the support.
+ *	@param oMaxNumber Maximal number of connector to define the support.
+ * 
+ */
+		virtual HRESULT GetMinAndMaxEntitiesNumber (int&amp; oMinNumber, 
+													int&amp; oMaxNumber) const = 0;
+/**
+ * @nodoc
+ *  Retrieves the entities that can no more be valuated.
+ *	The returned list is supposed to contain connectors that can no more be solved 
+ *  as a connector&#x27;s attributes
+ *	@param oSupport :
+ *			List of non-valuable connectors.
+ */
+		virtual HRESULT GetNonSolvedSupport (CATLISTV(CATBaseUnknown_var)&amp; oSupport) = 0;
+
+/**
+ *  Removes all the support defined on an Analysis Entity.
+ */
+		virtual HRESULT RemoveAllSupports () = 0;
+
+/**
+ * Setups the authorized types. 
+ * These types are defined as a bit mask defined in CATSamDefs for the startup definition.
+ * @param iType The type of support that can be used. 
+ * @param iAdd Addition mode:
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt;&lt;font color=&quot;red&quot;&gt;0&lt;/font color=&quot;red&quot;&gt;: SupportId is replaced.&lt;/li&gt;
+ *	   &lt;li&gt;&lt;font color=&quot;red&quot;&gt;1&lt;/font color=&quot;red&quot;&gt;: SupportId is added.&lt;/li&gt;&lt;/ul&gt;
+ */
+
+    virtual HRESULT SetAuthorizedSupports(SAM_SupportId iType, int iAdd=0) = 0;
+
+/**
+ *  Setups the minimum and the maximum numbers of entities needed to have
+ *	a consistent definition of the support for the startup definition.
+ *  If iMinNumber is less than 0, there is no minimal amount.
+ *	If iMaxNumber is less than 0, there is no maximal amount.
+ *	@param oMinNumber Minimal number of connector to define the support.
+ *	@param oMaxNumber Maximal number of connector to define the support.
+ * 
+ */
+		virtual HRESULT SetMinAndMaxEntitiesNumber (int iMinNumber,int iMaxNumber) = 0;
+
+/**
+ *  Retrieves the list of analysis connectors.
+ *	Each connector corresponds to a support entity. It defines the couple of pointed data.
+ *	No controle is done on the validity of the connector. It can be empty.
+ *	@param oSupport Collection of AnalysisConnector.
+ */
+    virtual HRESULT GetEntities (CATLISTV(CATBaseUnknown_var)&amp; oSupport) const = 0;
+
+/**
+ *  Sets the list of analysis connectors.
+ *  This methode is dedicated for support definition at the level of a startup. For this, 
+ *  use the @href CATISamAnalysisModelFactory#CreateConnector and put the returned connector
+ *  in the iSupport List. Each connector corresponds to a support entity. 
+ *  It defines the couple of pointed data.
+ *  No controle is done on the validity of the connector. It can be empty.
+ *	@param iRemove Empty the list or set up at the end.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;1&lt;/font color=&quot;red&quot;&gt; Existing connectors will be removed. &lt;/li&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;2&lt;/font color=&quot;red&quot;&gt; New connectors will be added to existing one.  &lt;/li&gt;
+ * &lt;/ul&gt;
+ *	@param iSupport Collection of AnalysisConnector.
+ */
+		virtual HRESULT SetEntities (int iRemove, const CATLISTV(CATBaseUnknown_var)&amp; iSupport) const = 0;
+
+/**
+ * @nodoc
+ *  Removes the entities that can no more be valuated.
+ */
+		virtual HRESULT RemoveNonSolvedSupport () = 0;
+
+ /**
+ * Removes a connector.
+ * @param ipiConnector The connector to remove.
+ */
+    virtual HRESULT RemoveConnector (const CATISamAnalysisConnector* ipiConnector ) = 0;
+
+/**
+ * Sets update behaviour.
+ * @param iMode 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;1&lt;/font color=&quot;red&quot;&gt; The analysisEntity or a basic component that selects a BRep 
+ * (ex: SAMSingleGeomPtr, SAMMultiGeomPtr) has to be informed 
+ * when the BRep (particular pointed object) is modified. &lt;/li&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;0&lt;/font color=&quot;red&quot;&gt; Otherwise.  &lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+    virtual HRESULT SetUpdateMode(int iMode) = 0 ;
+
+/**
+ * Retrieves update behaviour.
+ * @param oMode
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;1&lt;/font color=&quot;red&quot;&gt; The analysisEntity or a basic component that selects a BRep 
+ * (ex: SAMSingleGeomPtr, SAMMultiGeomPtr) has to be informed 
+ * when the BRep (particular pointed object) is modified. &lt;/li&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;0&lt;/font color=&quot;red&quot;&gt; Otherwise.  &lt;/li&gt;
+ * &lt;/ul&gt;
+*/
+    virtual HRESULT GetUpdateMode(int &amp; oMode) const = 0;
+
+/**
+ * Sets the default connector type.
+ * @param iType the connector type.
+ * &lt;br&gt;&lt;b&gt;Default value&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt;If not specified a &lt;font color=&quot;red&quot;&gt;GeometrySmartConnector&lt;/font color=&quot;red&quot;&gt; will be created.&lt;/li&gt;
+ *     &lt;li&gt;If specified a connector build by derivation of GeometrySmartConnector is required.&lt;/li&gt;&lt;/ul&gt;
+ * &lt;b&gt;Note that this method must be used on startup and not on feature instance.&lt;/b&gt;
+ */
+    virtual HRESULT SetConnectorType(const CATUnicodeString &amp; iType) = 0 ;
+
+/**
+ * Retrieves  the default connector type.
+ * @return the connector type.
+*/
+    virtual CATUnicodeString GetConnectorType() const = 0;
+
+/**
+ * Sets if boundary representations of a MechanicalTool-Body can be selected.
+ * This method must be used on a 
+ * @param iBRepAuthorized
+ * &lt;ul&gt;&lt;li&gt; &lt;font color=&quot;red&quot;&gt;TRUE&lt;/font color=&quot;red&quot;&gt; Boundary representations of a MechanicalTool-Body may be selected &lt;/li&gt;
+ *     &lt;li&gt; &lt;font color=&quot;red&quot;&gt;FALSE&lt;/font color=&quot;red&quot;&gt; Boundary representations of a MechanicalTool-Body can&#x27;t be selected &lt;/li&gt; &lt;/ul&gt;
+ */
+    virtual HRESULT SetBodyControl(CATBoolean iBRepAuthorized) = 0 ;
+
+/**
+ * Retrieves if boundary representations of a MechanicalTool-Body can be selected.
+ * @param oBRepAuthorized
+ * &lt;ul&gt; &lt;li&gt; &lt;font color=&quot;red&quot;&gt;TRUE&lt;/font color=&quot;red&quot;&gt; Boundary representations of a MechanicalTool-Body may be selected &lt;/li&gt;
+ *      &lt;li&gt; &lt;font color=&quot;red&quot;&gt;FALSE&lt;/font color=&quot;red&quot;&gt; Boundary representations of a MechanicalTool-Body can&#x27;t be selected &lt;/li&gt; &lt;/ul&gt;
+*/
+    virtual HRESULT GetBodyControl(CATBoolean &amp;oBRepAuthorized) const = 0;
+
+/**
+ *  Check if a support can be added in an entity.
+ *  This support is described by a couple of data as defined for an analysis connector.
+ *	@param iPointed      CATILinkableObject that identify the object to be pointed.
+ *	@param iPositionning CATISpecObject that identify the object to be pointed for positionning management and
+ *  instance/reference management. (Most current use is the CATIProduct Feature object).&lt;br&gt;
+ *  This method delegated its answer to CATISamSupportFilter is the object is implementing this interface, &lt;br&gt; 
+ *  else SAM_SupportId of iPointed is checked.
+ *  @return HRESULT 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;&lt;li&gt;&lt;font color=&quot;red&quot;&gt;S_OK&lt;/font color=&quot;red&quot;&gt; Valid Support./li&gt;
+ *     &lt;li&gt;&lt;font color=&quot;red&quot;&gt;E_FAIL&lt;/font color=&quot;red&quot;&gt; Otherwise.  &lt;/li&gt;&lt;/ul&gt;
+ *
+ */
+    virtual HRESULT CheckSupport (const CATILinkableObject* iPointed,const CATISpecObject* iPositionning) const = 0;
+
+};
+
+CATDeclareHandler(CATISamAnalysisSupport,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisSetInit.html">← 上一页: CATISamAnalysisSetInit.h</a></div>
+        <div><a href="CATISamAnalysisTransition.html">下一页: CATISamAnalysisTransition.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSNInteroperability/PublicInterfaces/CATBatchServices2.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PSNInteroperability/PublicInterfaces/CATBatchServices2.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATBatchServices.html">← 上一页: CATBatchServices.h</a></div>
+        <div><a href="CATBatchServices3.html">下一页: CATBatchServices3.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATBatchServices2__H
+#define CATBatchServices2__H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CATPinServices.h&quot;
+#include &quot;IUnknown.h&quot;
+
+/**
+* Services used to initialize  with a dedicated ENOVIAvpm server.
+*/
+
+/**
+* Initialize the V5 session to communicate with an ENOVIAvpm V4 server
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method initializes the CATIA V5 session and establishes the connection
+* with ENOVIAvpm V4 running on a dedicated Unix host.
+* &lt;p&gt;
+* This method creates a CATIA V5 session if it is not yet initialized. 
+* Use @href CATTerminateBatch at the end of the application to close this session.
+* &lt;br&gt;If there is no server running to which this method can connect to, 
+* a new ENOVIAvpm V4 server is launched on the dedicated Unix host by submitting 
+* the &lt;tt&gt;StartVPMBatchFromV5Batch.sh&lt;/tt&gt; shell script.
+* &lt;br&gt;The &lt;tt&gt;CV5VpmStart&lt;/tt&gt; environment variable can be declared to set the unix directory where the 
+* &lt;tt&gt;StartVPMBatchFromV5Batch.sh&lt;/tt&gt; shell script is located on the dedicated Unix host.
+* &lt;br&gt;
+* the &lt;tt&gt;CV5VpmStartTimeOut&lt;/tt&gt; environment variable can be declared 
+*    to set the timeout of the connection. By default, the timeout is &lt;tt&gt;300&lt;/tt&gt;.
+* &lt;br&gt;
+* This method can be used for Unix and Windows clients.  
+* For Unix client, the dedicated host can be the current local host. 
+* @see @href CATInitBatch .
+* &lt;/p&gt;
+*
+*&lt;p&gt;If needed, your Imakefile.mk should include the module: &lt;b&gt;CATPinServices&lt;/b&gt; &lt;/p&gt;
+*&lt;p&gt;
+* @param iHostName
+*    Unix host name
+*
+* @return
+*  &lt;ul&gt;
+*   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: The communication channel is successfuly established&lt;/li&gt; 
+*   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: The input string for Hostname is empty
+*   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+*   &lt;ul&gt;
+*      &lt;li&gt;&lt;tt&gt;ERR_2001&lt;/tt&gt;: ENOVIAvpm server cannot be launched&lt;/li&gt;   
+*   &lt;/ul&gt;
+*  &lt;/ul&gt;
+*/
+HRESULT ExportedByCATPinServices CATInitBatchOnHost (char* iHostName);
+
+extern char nameServer[];
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATBatchServices.html">← 上一页: CATBatchServices.h</a></div>
+        <div><a href="CATBatchServices3.html">下一页: CATBatchServices3.h →</a></div>
+    </div>
+</body>
+</html>

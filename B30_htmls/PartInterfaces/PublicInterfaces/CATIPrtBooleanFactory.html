@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIPrtBooleanFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIPrtBooleanFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtAxis1.html">← 上一页: CATIPrtAxis1.h</a></div>
+        <div><a href="CATIPrtBooleanOperation.html">下一页: CATIPrtBooleanOperation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPrtBooleanFactory_H
+#define CATIPrtBooleanFactory_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATIContainer.h&quot; 
+ 
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIPrtBooleanFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIPrtBooleanFactory;
+#endif
+
+/**
+ * Class to define common boolean operations.
+ * &lt;b&gt;Role&lt;/b&gt;: A boolean operation is an operation between two non operated
+ * mechanical bodies. The operation will insert iSecond body
+ * after the last feature 
+ * of iFirst body, the iFirst body may have no feature.
+ * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;:&lt;br&gt;
+ * - Users must set iFirst body as current body.&lt;br&gt;
+ * - The two bodies must be both updated.&lt;br&gt;
+ * - iSecond body must be different of iFirst body and therefore not be 
+ * linked to iFirst body (no specification loop is tolered). 
+ */
+class ExportedByPartItf CATIPrtBooleanFactory: public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+/**
+ * Adds iSecond body to iFirst body.
+ * @param iFirst
+ *   Current body.
+ * @param iSecond
+ *   Body to be added to the iFirst body.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst
+ * @return The created boolean operation. 
+ */    
+  virtual CATISpecObject_var CreateAdd       (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/**
+ * Removes iSecond body to iFirst body.
+ * @param iFirst
+ *   Current body.
+ * @param iSecond
+ *   Body to be removed to the iFirst body.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst
+ * @return The created boolean operation. 
+ */  
+  virtual CATISpecObject_var CreateRemove    (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/**
+ * Intersects iSecond body to iFirst body.
+ * @param iFirst
+ *   Current body.
+ * @param iSecond
+ *   Body to be intersected to the iFirst body.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst
+ * @return The created boolean operation.
+ */
+  virtual CATISpecObject_var CreateIntersect (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/**
+ * Assembles iSecond body to iFirst body.
+ * @param iFirst
+ *   Current body.
+ * @param iSecond
+ *   Body to be assembled to the iFirst body. If the polarity of the first
+ * feature of the iSecond body is either positive nor negative, the operation 
+ * will either add nor remove iSecond body to iFirst body.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst
+ * @return The created boolean operation. 
+ */
+  virtual CATISpecObject_var CreateAssemble  (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/** @nodoc */ 
+  virtual CATISpecObject_var  CreateStartUpBooleanOperation(CATIContainer_var featcont) = 0 ;
+/** @nodoc */
+  virtual CATISpecObject_var  CreateStartUpAdd(CATIContainer_var featcont) = 0 ;
+/** @nodoc */
+  virtual CATISpecObject_var  CreateStartUpRemove(CATIContainer_var featcont) = 0  ;
+/** @nodoc */
+  virtual CATISpecObject_var  CreateStartUpIntersect(CATIContainer_var featcont)= 0  ;
+/** @nodoc */
+  virtual CATISpecObject_var  CreateStartUpAssemble(CATIContainer_var featcont) = 0 ;
+/** @nodoc */
+  virtual void ModifyBooleanStartUpR12(CATIContainer_var featcont) = 0 ;
+/** @nodoc */
+  virtual void ModifyBooleanStartUpR13(CATIContainer_var featcont) = 0 ;    
+/**
+ * @deprecated V5R14
+ * use CATISpecObject_var CreateAdd (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * or  CATISpecObject_var CreateVolumicAdd (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * depending of the type of boolean add you want to create
+ */    
+  virtual CATISpecObject_var CreateAdd (CATISpecObject_var iFirst, CATISpecObject_var iSecond, int iType )  =0;
+/**
+ * @deprecated V5R14
+ * use CATISpecObject_var CreateRemove (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * or  CATISpecObject_var CreateVolumicRemove (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * depending of the type of boolean remove you want to create
+ */  
+  virtual CATISpecObject_var CreateRemove (CATISpecObject_var iFirst, CATISpecObject_var iSecond, int iType )  =0;
+/**
+ * @deprecated V5R14
+ * use CATISpecObject_var CreateIntersect (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * or  CATISpecObject_var CreateVolumicIntersect (CATISpecObject_var iFirst, CATISpecObject_var iSecond)  =0;
+ * depending of the type of boolean intersect you want to create
+ */
+  virtual CATISpecObject_var CreateIntersect (CATISpecObject_var iFirst, CATISpecObject_var iSecond, int iType )  =0;
+/** @nodoc */
+  virtual CATISpecObject_var CreateAssemble (CATISpecObject_var iFirst, CATISpecObject_var iSecond, int iType )  =0;  
+/**
+ * Adds iSecond volume or body to iFirst volume.
+ * @param iFirst
+ *   Volume to be modified.
+ * @param iSecond
+ *   Volume or body to be added to the iFirst volume.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst if iSecond is a body
+ * @return The created volumic boolean operation. 
+ */    
+  virtual CATISpecObject_var CreateVolumicAdd (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/**
+ * Removes iSecond volume or body to iFirst volume.
+ * @param iFirst
+ *   Volume to be modified.
+ * @param iSecond
+ *   Volume or body to be removed to the iFirst volume.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst if iSecond is a body
+ * @return The created volumic boolean operation. 
+ */  
+  virtual CATISpecObject_var CreateVolumicRemove (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+/**
+ * Intersects iSecond volume or body to iFirst volume.
+ * @param iFirst
+ *   Volume to be modified.
+ * @param iSecond
+ *   Volume or body to be intersected to the iFirst volume.
+ * @param AggregateSecondOperand
+ *	 Whether iSecond has to be aggregated to iFirst if iSecond is a body
+ * @return The created volumic boolean operation.
+ */
+  virtual CATISpecObject_var CreateVolumicIntersect (CATISpecObject_var iFirst, CATISpecObject_var iSecond, CATBoolean AggregateSecondOperand = TRUE )  =0;
+};
+CATDeclareHandler (CATIPrtBooleanFactory, CATBaseUnknown);
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtAxis1.html">← 上一页: CATIPrtAxis1.h</a></div>
+        <div><a href="CATIPrtBooleanOperation.html">下一页: CATIPrtBooleanOperation.h →</a></div>
+    </div>
+</body>
+</html>

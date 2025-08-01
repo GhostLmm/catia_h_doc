@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATCommonLayoutInterfaces/PublicInterfaces/CATEcwLightNwkCableForPercentFill.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATCommonLayoutInterfaces/PublicInterfaces/CATEcwLightNwkCableForPercentFill.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEcwLightNwkArcForPercentFill.html">← 上一页: CATEcwLightNwkArcForPercentFill.h</a></div>
+        <div><a href="CATEcwLightNwkNodeForPercentFill.html">下一页: CATEcwLightNwkNodeForPercentFill.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEcwLightNwkCableForPercentFill_H_
+#define CATEcwLightNwkCableForPercentFill_H_
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+
+// ============================================================================
+// |
+// |   Component Identifier: CATEcwLightNwkCableForPercentFill
+// |
+// ============================================================================
+// |
+// |
+// ============================================================================
+// |
+// |   Audit Trail:
+// |      Author:
+// |      Date:       Aug. 04, 2008
+// |      Chg ID: 
+// |      Chg nature: Creation
+// |
+// |      Modified:
+// |      Date:
+// |      Chg ID:
+// |      Chg nature:
+// |
+// ============================================================================
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+#include &quot;CATCommonLayoutItfCPP.h&quot;
+
+/**
+  &lt;b&gt;Role&lt;\b&gt; 
+  * This is a CAA exposed class, meant to represent the Cable object
+  * as defined in ECV (Electrical Cableway Route Management) application.
+  * 
+  * This class should NOT be instantiated by the user
+  * The creation various instances of this class and setting data of various 
+  * class members by use of Setxxx methods should not be managed by the CAA user.  
+  *
+  * This class shall be required by the CAA user, so as to calculate Percent Fill
+  * (hereafter referred as PF) information. 
+  * This class is an input argument to the CATIEcvPercentFill::ComputePercentFill
+  * The ONLY method that the user should use from this class is GetCableData. 
+  * This shall give him more details about the Cable
+  * 
+  * Warning: All other methods of CATEcwLightNwkCableForPercentFill should not 
+  * be used by the user
+ */
+class ExportedByCATCommonLayoutItfCPP CATEcwLightNwkCableForPercentFill : public CATBaseUnknown
+{
+  CATDeclareClass;
+
+  public:
+
+    /**
+    * Constructor
+    * @param iDBKey
+    *   Input the unique key of the cable
+    */ 
+    CATEcwLightNwkCableForPercentFill( int iDBKey );
+    virtual ~CATEcwLightNwkCableForPercentFill();
+ 
+    /**
+      * Method called by ManageCablesFromDatabase Command UI to set data for later use.
+      * the CAA user shall not use the following method
+      * 
+      * @param dCurrentCableOD 
+      *   input: the OD of current Cable
+    */
+    void SetCurrentCableOD        ( double dCurrentCableOD );
+
+    /**
+      * Method called by ManageCablesFromDatabase Command UI to set data for later use.
+      * the CAA user shall not use the following method
+      * 
+      * @param dCurrentCableArea 
+      *   input: the cumulative Area of current Cables
+    */
+    void SetCurrentCableArea      ( double dCurrentCableArea );
+
+    /**
+      * Method called by ManageCablesFromDatabase Command UI to set data for later use.
+      * the CAA user shall not use the following method
+      * 
+      * @param iLRoutedCablesDiameter 
+      *   input: the List of Diameters of Current Cables
+    */
+    void SetListOfRoutedCablesODs ( CATListOfDouble iLRoutedCablesDiameter );
+
+    /**
+      * Method called by ManageCablesFromDatabase Command UI to set data for later use.
+      * the CAA user shall not use the following method
+      * 
+      * @param dTotalCommonCableSize 
+      *   input: the cumulative Diameters of Current Cables
+    */
+    void SetTotalCommonCableSize  ( double dTotalCommonCableSize );
+
+    /**
+      * Method can be called by the user from within his custom implementation of 
+      * CATIEcvPercentFill::ComputePercentFillValue
+      * 
+      * @param odCurrentCableOD 
+      *   output: the OD of current Cable
+      * @param odCurrentCableArea 
+      *   output: the cumulative Area of current Cables
+      * @param oLRoutedCablesDiameter 
+      *   output: the List of Diameters of Current Cables
+      * @param odTotalCommonCableSize 
+      *   output: the cumulative Diameters of Current Cables
+    */
+    void GetCableData( double          &amp; odCurrentCableOD );//,
+                       //double          &amp; odCurrentCableArea,
+                       //CATListOfDouble &amp; oLRoutedCablesDiameter,
+                       //double          &amp; odTotalCommonCableSize );
+
+ private:
+
+    // unique identifier of this cable
+    int             _DBKey;
+    // List of ODs of cables
+    CATListOfDouble _iLRoutedCablesDiameter;
+    // Current cable OD being
+    double          _dCurrentCableOD;
+    // Current cable Area being
+    double          _dCurrentCableArea;
+    // Total common cable Size of cables
+    double          _dTotalCommonCableSize;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEcwLightNwkArcForPercentFill.html">← 上一页: CATEcwLightNwkArcForPercentFill.h</a></div>
+        <div><a href="CATEcwLightNwkNodeForPercentFill.html">下一页: CATEcwLightNwkNodeForPercentFill.h →</a></div>
+    </div>
+</body>
+</html>

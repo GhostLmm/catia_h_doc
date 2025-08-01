@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTPSInterfaces/PublicInterfaces/CATITPSToleranceZone.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTPSInterfaces/PublicInterfaces/CATITPSToleranceZone.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSThreadGeometrySpecification.html">← 上一页: CATITPSThreadGeometrySpecification.h</a></div>
+        <div><a href="CATITPSToleranceZoneConstraint.html">下一页: CATITPSToleranceZoneConstraint.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATITPSToleranceZone_H
+#define CATITPSToleranceZone_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999 - 2018
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATTPSToleranceZoneForm.h&quot;
+#include &quot;CATTPSToleranceValueType.h&quot;
+
+class CATITTRS;
+class CATMathAxis;
+class CATMathVector;
+class CATICkeParm_var;
+
+extern &quot;C&quot; const IID IID_CATITPSToleranceZone;
+
+/**
+ * Interface for accessing tolerance zone informations of a TPS.
+ * Warning &lt;tt&gt;CATMathSetOfVectors&lt;/tt&gt; is a protected interface (not exposed)
+ * of Mathematics framework. Subject to change.
+ *   @see CATTPSToleranceZoneForm
+ */
+class CATITPSToleranceZone : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+    * Sets tolerance zone value (in millimeters).
+    * For tabulated value, use @href CATITPSToleranceZone#SetValue with parameter signature.
+    *&lt;br /&gt;The index optional argument is interesting for linear non uniform tolerance to manage
+    * the &quot;lower&quot; (IndexOfBound = 1, default) and &quot;upper&quot; (IndexOfBound = 2) bounds of the linear non uniform tolerance zone.
+    */
+    virtual HRESULT SetValue ( const double iValue, int IndexOfBound = 1 ) = 0;
+
+    /**
+    * Retrieves tolerance zone value (in millimeters); in case of tabulated type, returned value is
+    * the resolved value.
+    *&lt;br /&gt;The index optional argument is interesting for linear non uniform tolerance to manage
+    * the &quot;lower&quot; (IndexOfBound = 1, default) and &quot;upper&quot; (IndexOfBound = 2) bounds of the linear non uniform tolerance zone.
+    */
+    virtual HRESULT GetValue ( double* oValue, int IndexOfBound = 1 ) const = 0;
+
+    /**
+     * Sets tolerance zone value. 
+     *&lt;br/&gt; Complements method @href CATITPSToleranceZone#SetValue for CATTPSTolTabulatedValue value; in this context,
+     * parameter type is String while in the other situations Length parameter is employed.
+     *&lt;br /&gt;Second parameter is an optional argument; when specified (not null) it addresses linear non uniform tolerance,
+     * CATTPSTolLinearNonUniformValue, to manage the &quot;upper&quot; bound of the linear non uniform tolerance zone.
+     */
+    virtual HRESULT SetValue ( CATICkeParm_var &amp; ispTolValue, CATICkeParm_var * ipspLinearNonUniUpperLimitTolValue = NULL ) = 0;
+
+    /**
+     * Retrieves tolerance zone value.
+     *&lt;br /&gt;Complements method @href CATITPSToleranceZone#GetValue for CATTPSTolTabulatedValue value; in this context,
+     * parameter type is String while in the other situations Length parameter is employed.
+     *&lt;br /&gt;Second parameter is an optional argument; when specified (not null) it addresses linear non uniform tolerance,
+     * CATTPSTolLinearNonUniformValue, to manage the &quot;upper&quot; bound of the linear non uniform tolerance zone.
+     */
+    virtual HRESULT GetValue ( CATICkeParm_var &amp; ospTolValue, CATICkeParm_var * opspLinearNonUniUpperLimitTolValue = NULL ) const = 0;
+
+    /**
+     * Sets tolerance zone form.
+     */
+    virtual HRESULT SetForm (const CATTPSToleranceZoneForm iForm) = 0;
+
+    /**
+     * Retrieves tolerance zone form.
+     *   @param oForm [out, CATTPSToleranceZoneForm#Release]
+     *     The tolerance zone form.
+     */
+    virtual HRESULT GetForm (CATTPSToleranceZoneForm * oForm) const = 0;
+
+    /**
+     * Get the direction in which we must apply the tolerance zone.
+     * If the class of the TTRS is cylindrical, the normal is the direction of the cylindre.
+     * If the class of the TTRS is planar, the normal is the normal of the plane.
+     *   @param opiDirection [out, CATITTRS#Release]
+     *     The the direction in which we must apply the tolerance zone.
+     */
+    virtual HRESULT GetDirection (CATMathVector * oNormal, CATITTRS ** opiDirection) const = 0;
+
+    /**
+     * Sets the value type of tolerance zone.     
+     *&lt;br /&gt;&lt;em&gt;Notice:&lt;em/&gt; Local enumeration type &lt;em&gt;&quot;enum ValueType {Numerical,Tabulated,NonUniform};&quot;&lt;em/&gt; whose definition is reminded
+     * in this comment has been substituted by global enum @href CATTPSToleranceValueType with same values. For existing code, just replace
+     * &lt;em&gt;&quot;ValueType&quot;&lt;em/&gt; by &lt;em&gt;&quot;CATTPSToleranceValueType&quot;&lt;em/&gt; to pass successfully the compilation.
+     *&lt;br/&gt;Behavioral upward compatibility is guaranteed.
+     *  @param iType
+     *   value type.
+     *  returns S_OK when the value type has been correctly set, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT SetToleranceValueType (const CATTPSToleranceValueType iType) = 0;
+
+    /**
+     * Retrieve the value type of tolerance zone.     
+     *&lt;br /&gt;&lt;em&gt;Notice:&lt;em/&gt; Local enumeration type &lt;em&gt;&quot;enum ValueType {Numerical,Tabulated,NonUniform};&quot;&lt;em/&gt; whose definition is reminded
+     * in this comment has been substituted by global enum @href CATTPSToleranceValueType with same values. For existing code, just replace
+     * &lt;em&gt;&quot;ValueType&quot;&lt;em/&gt; by &lt;em&gt;&quot;CATTPSToleranceValueType&quot;&lt;em/&gt; to pass successfully the compilation.
+     *&lt;br/&gt;Behavioral upward compatibility is guaranteed.
+     *  @param oType
+     *   value type.
+     *  returns S_OK when the value type has been correctly retrieved, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT GetToleranceValueType (CATTPSToleranceValueType&amp; oType) const = 0;
+
+    /**
+     * Sets boundaries of Non Uniform and Linear Non Uniform tolerance zone.
+     *  @param ipMMBoundary
+     *   Maximum material boundary.
+     *  @param ipLMBoundary
+     *   Least material boundary.
+     *  returns S_OK when the boundaries have been correctly set,
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT SetNonUniformToleranceZone (const CATITTRS* ipMMBoundary, const CATITTRS* ipLMBoundary) = 0;
+
+    /**
+     * Retrieves boundaries of Non Uniform and Linear Non Uniform  tolerance zone.  
+     *  @param opMMBoundary [out, CATITTRS#Release]
+     *   Maximum material boundary. 
+     *  @param opLMBoundary [out, CATITTRS#Release]
+     *   Least material boundary.
+     *  returns S_OK when the boundaries have been correctly retrieved, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT GetNonUniformToleranceZone (CATITTRS ** opMMBoundary, CATITTRS ** opLMBoundary) const = 0;
+
+    /**
+     * Sets Any Cross Section symbol.
+     *  @param iValue
+     *   Any Cross Section.
+     *  returns S_OK when the value has been correctly set, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT SetAnyCrossSection (const CATBoolean iValue) = 0;
+
+    /**
+     * Retrieves Any Cross Section symbol.
+     *  @param oValue
+     *   Any Cross Section.
+     *  returns S_OK when the value has been correctly retrieved, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT GetAnyCrossSection (CATBoolean&amp; oValue) const = 0;
+
+    /**
+     * Checks if the options for ACS will be proposed of not
+     *  @param obACSCreation     
+     *  returns S_OK when the ACS can be proposed
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT CheckACSCreation (CATBoolean &amp;obACSCreation) = 0;
+
+
+};
+
+CATDeclareHandler (CATITPSToleranceZone, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSThreadGeometrySpecification.html">← 上一页: CATITPSThreadGeometrySpecification.h</a></div>
+        <div><a href="CATITPSToleranceZoneConstraint.html">下一页: CATITPSToleranceZoneConstraint.h →</a></div>
+    </div>
+</body>
+</html>

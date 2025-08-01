@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATVizGlobals.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATVizGlobals.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVizCursor.html">← 上一页: CATVizCursor.h</a></div>
+        <div><a href="CATVizMacForMetaClass.html">下一页: CATVizMacForMetaClass.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#ifndef CATVizGlobals_H
+#define CATVizGlobals_H
+
+/**
+ * @nodoc
+ * Enum for CATCGRContainer access
+ */
+enum CATVizCGRMode
+{
+   CATVizCGRModeRead  = 0x00000001,
+   CATVizCGRModeWrite = 0x00000002
+};
+
+/**
+ * Defines the method used for writing the CGR.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:This context is used in @href CATReadCgr and @href CATWriteCgr .
+ * @param CATVizCGRAccessModeDirect
+ *   The cgr file will be streamed directly to disk (slower, but no size limitations 
+ * @param CATVizCGRAccessModeMemory
+ *   The cgr file will be streamed in memory and then to the disk
+ */
+enum CATVizCGRAccessMode
+{
+   CATVizCGRAccessModeDirect = 0x00000010,
+   CATVizCGRAccessModeMemory = 0x00000020
+};
+
+/** 
+ * @nodoc 
+ * Semantic Level applied on the scene graph and the render
+ */
+typedef enum
+{
+   LOW = -1,
+   LOD0,
+   LOD1,
+   LOD2,
+   LOD3,
+   LSGFACES,
+   LSG,
+   HIGH
+} CATVizSemanticLevel;
+
+/** 
+ * @nodoc 
+ * Target CGR Release
+ */
+typedef enum
+{
+   CGRR8   = 1100830, // Do not use, not fully tested
+   CGRR9   = 1100920, // Do not use, not fully tested
+   CGRR10  = 1101050, // Do not use, not fully tested
+   CGRR11  = 1101110, // Do not use, not fully tested
+   CGRR12  = 1101240, // Do not use, not fully tested
+   CGRR13  = 1101340, // Do not use, not fully tested
+   CGRR14  = 1101430, // Do not use, not fully tested
+   CGRR15  = 1101510,
+   CGRR16  = 1101610,
+   CGRR17  = 1101730,
+   CGRR18  = 1101850,
+   CGRR19  = 1101910,
+   CGRR201 = 2100110,
+} CATVizTargetCGR;
+
+/** @nodoc */
+#define ALLOCATE_VERTICES      (0x1)
+/** @nodoc */
+#define GET_VERTICES           (0x2)
+/** @nodoc */
+#define ALLOCATE_NORMALS       (0x4)
+/** @nodoc */
+#define GET_NORMALS            (0x8)
+/** @nodoc */
+#define ALLOCATE_TEXTURES      (0x10)
+/** @nodoc */
+#define GET_TEXTURES           (0x20)
+/** @nodoc */
+#define NO_GPU_STORAGE         (0x40)
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVizCursor.html">← 上一页: CATVizCursor.h</a></div>
+        <div><a href="CATVizMacForMetaClass.html">下一页: CATVizMacForMetaClass.h →</a></div>
+    </div>
+</body>
+</html>

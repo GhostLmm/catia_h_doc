@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDMAInteroperability/PublicInterfaces/CATIVPMAccess.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CDMAInteroperability/PublicInterfaces/CATIVPMAccess.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIProductDatabase.html">← 上一页: CATIProductDatabase.h</a></div>
+        <div><a href="CDMAdoc.html">下一页: CDMAdoc.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+//===================================================================
+#ifndef CATIVPMAccess_H
+#define CATIVPMAccess_H
+
+#include &quot;CDMAdoc.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */ 
+
+class CATUnicodeString;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCDMAdoc IID IID_CATIVPMAccess ;
+#else
+extern &quot;C&quot; const IID IID_CATIVPMAccess ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * CATIVPMAccess allows to retrieve data from a ENOVIAvpm V4 database.
+ * &lt;b&gt;Role: &lt;/b&gt;
+ * This interface is called on typed object that corresponds to the opening method of a long field in ENOVIAvpm V4.
+ *&lt;br&gt; 
+ * So, for instance, if the &lt;tt&gt;$CUR_ACC_MET_DATA&lt;/tt&gt; column of the &lt;tt&gt;$EXT_LF&lt;/tt&gt; table gives &lt;tt&gt;DBLFAIX&lt;/tt&gt;, 
+ * then the implementation of the &lt;tt&gt;&#x27;DBLFAIX&#x27;&lt;/tt&gt; object will be called to read the file.
+ * &lt;p&gt;
+ * &lt;b&gt;Note:&lt;/b&gt; Only the following access methods are supported:
+ *  &lt;ul&gt; 
+ *   &lt;li&gt;DBLFCDM&lt;/li&gt;
+ *   &lt;li&gt;DBLFLCA&lt;/li&gt;
+ *   &lt;li&gt;DBLFAIX
+ *		&lt;br&gt;only the following modes of DBLFAIX are supported:
+ *		&lt;ul&gt;
+ *        &lt;li&gt;&lt;tt&gt;UNIX PATH&lt;/tt&gt;&lt;/li&gt;
+ *        &lt;li&gt;&lt;tt&gt;BIN PATH&lt;/tt&gt;&lt;/li&gt;
+ *      &lt;/ul&gt;
+ *  &lt;/ul&gt;
+*/
+class ExportedByCDMAdoc CATIVPMAccess: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+  * Extracts a long field from the ENOVIAvpm V4 database and opens it in memory .
+  *
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This methods extracts the given long field from the ENOVIAvpm V4 database and 
+  * opens it in a buffer in memory.
+  *&lt;p&gt;
+  *  @param ilgLF
+  *      length of the long field 
+  *	@param iLongField
+  *      The path to the long field (the &lt;tt&gt;$CUR_ACC_MET_DATA&lt;/tt&gt; column of &lt;tt&gt;$EXT_LF&lt;/tt&gt; table)
+  *	@param olgBuffer
+  *      length of the opened buffer
+  *	@param oBuffer
+  *      The opened buffer.
+  *  @return  
+  *  &lt;ul&gt;
+  *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: execution successful&lt;/li&gt; 
+  *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: The method has failed. A @href CATError class instance is generated.&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+
+	virtual HRESULT ExtractLFToMemory (int &amp; ilgLF, char* iLongField, int &amp; olgBuffer,  char *&amp; oBuffer) = 0 ;
+
+	/**
+	* Extracts a long field from the ENOVIAvpm V4 database to a file.
+	*
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method extracts the given long field from the ENOVIAvpm V4 database and
+	* saves it a local file.
+	* &lt;br&gt; Use @href CATIVPMAccess#ReadDone when the local file is no longer necessary.
+	*   @param ilgLF
+	*      length of the long field
+	*	@param iLongField
+	*      The path to the long field (the $CUR_ACC_MET_DATA column of &lt;tt&gt;$EXT_LF&lt;/tt&gt; table)
+	*	@param ioPath
+	*      The path to the file.
+	*	  &lt;br&gt;If &lt;tt&gt;ioPath&lt;/tt&gt; is not &lt;tt&gt;NULL&lt;/tt&gt;, the document is copied to the specified location. 
+	*	  &lt;br&gt;Otherwise, it could be put on file anywhere.
+	*   @return  
+    *  &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: execution successful&lt;/li&gt; 
+    *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: The method has failed. A @href CATError class instance is generated.&lt;/li&gt;
+    *  &lt;/ul&gt;
+	*/
+
+	virtual HRESULT ExtractLFToFile (int &amp; ilgLF, char* iLongField,  CATUnicodeString &amp; ioPath) = 0 ;
+
+	/**
+	* Post-treatment once the document associated to the long field has been read. 
+	*
+	* &lt;br&gt;&lt;b&gt; Role:&lt;/b&gt; This method enables release the file containing the long field stored previously
+	*      using @href ExtractLFToFile, once the contained document has been read and is no longer necessary.
+	* &lt;br&gt;
+	* &lt;b&gt;Note:&lt;/b&gt;This method must be used only after @href CATIVPMAccess#ExtractLFToFile with the returned path.
+	*   @param iPath
+	*      path of the file
+	*   @return  
+    *  &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: execution successful&lt;/li&gt; 
+    *  &lt;/ul&gt;
+	*/
+
+	virtual HRESULT ReadDone (const CATUnicodeString &amp; iPath) = 0 ;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIVPMAccess, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIProductDatabase.html">← 上一页: CATIProductDatabase.h</a></div>
+        <div><a href="CDMAdoc.html">下一页: CDMAdoc.h →</a></div>
+    </div>
+</body>
+</html>

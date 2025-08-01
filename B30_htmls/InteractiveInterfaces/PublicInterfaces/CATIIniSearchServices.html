@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteractiveInterfaces/PublicInterfaces/CATIIniSearchServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InteractiveInterfaces/PublicInterfaces/CATIIniSearchServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniSearchSVisibilityCriterion.html">← 上一页: CATIIniSearchSVisibilityCriterion.h</a></div>
+        <div><a href="CATIIniSearchStringCriterion.html">下一页: CATIIniSearchStringCriterion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES   2002
+//=============================================================================
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#ifndef CATIIniSearchServices_H
+#define CATIIniSearchServices_H
+
+// System framework
+#include &quot;IUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+// InteractiveInterfaces framework
+#include &quot;CATIIniSearchCriterion.h&quot;
+#include &quot;CATIIniSearchContext.h&quot;
+#include &quot;CATInteractiveInterfaces.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATInteractiveInterfaces IID IID_CATIIniSearchServices;
+#else
+extern &quot;C&quot; const IID IID_CATIIniSearchServices;
+#endif
+
+/**
+ * Class providing general services for analysing a query (string format 
+ * of a criterion).
+ * &lt;b&gt;Role&lt;/b&gt;: This class offers different services to generate a criterion
+ * from a query.
+ * &lt;br&gt;A query is a string format of a criterion. There exist two kinds of 
+ * queries: 
+ * &lt;br&gt;
+ * &lt;li&gt;&lt;b&gt;NLS&lt;/b&gt; queries are dependant on the session&#x27;s language&lt;/li&gt;, 
+ * &lt;li&gt;&lt;b&gt;TransFormat&lt;/b&gt; queries are independant on this parameters.&lt;/li&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * NLS queries are useful in a user interface, whether TransFormat queries
+ * are useful for a stable and language independant view. TransFormat queries
+ * can be used in .CATSettings files, in a code definition of a query for instance.
+ */
+class ExportedByCATInteractiveInterfaces CATIIniSearchServices : public IUnknown
+{
+public:
+  /**
+   * Decodes a query into a criterion.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service enables the conversion of a query without 
+   * context into a Search criterion. In addition, there is the possibility
+   * to display a pop-up window on the screen in case the query is incorrect:
+   * the message would indicate where the errors lay.
+   * &lt;br&gt;&lt;br&gt;
+   * &lt;b&gt;Example&lt;/b&gt;: 
+   * &lt;br&gt;Let us consider the following NLS query: &lt;tt&gt;Name=*1&lt;/tt&gt;.
+   * &lt;br&gt;This service would decompose it as a CATIIniSearchNameCriterion pointer, 
+   * and return S_OK.
+   * &lt;br&gt;&lt;br&gt;
+   * Let us consider the following TransFormat query: &lt;tt&gt;CATPrtSearch.Pad&lt;/tt&gt;.
+   * &lt;br&gt;This service would decompose it as a CATIIniSearchTypeCriterion pointer, 
+   * and return S_OK.
+   * &lt;br&gt;&lt;br&gt;
+   * Let us consider the following incorrect NLS query: &lt;tt&gt;NameWithTypo=*1&lt;/tt&gt;.
+   * &lt;br&gt;It is impossible to decompose this query. Hence, a pop-up window would
+   * show up (if iDisplayMessage==TRUE), and E_FAIL would be returned.
+   * @param iQueryString
+   *    The NLS or TransFormat query corresponding to the criterion.
+   * @param iDisplayMessage
+   *    A CATBoolean to indicate if a pop-up window should be displayed in 
+   *    case the query is incorrect.
+   * @param oCriterion
+   *    The Search criterion generated from the NLS or TransFormat query.
+   * @return 
+   *    &lt;ul&gt;&lt;li&gt;S_OK if the conversion is successful.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL otherwise. The pointer to CATIIniSearchCriterion is then NULL.&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT DecodeStringToCriterion(const CATUnicodeString&amp; iQueryString,
+                                          CATBoolean iDisplayMessage,
+                                          CATIIniSearchCriterion*&amp; oCriterion) = 0;
+
+  /**
+   * Decomposes a complete query (i.e. a query and the string-format
+   * context) into a query and a context.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service enables the decomposition of an NLS or TransFormat
+   * complete query string (i.e. a string containing both the query and the context),
+   * into an NLS or TransFormat query (which will be used to generate a criterion) 
+   * and a context.
+   * &lt;br&gt;
+   * The validity of the query part of the complete string is not analyzed.
+   * &lt;br&gt;&lt;br&gt;
+   * &lt;b&gt;Example&lt;/b&gt;: 
+   * &lt;br&gt;Let us consider the following complete complete query: &lt;tt&gt;Name=*1,all&lt;/tt&gt;.
+   * &lt;br&gt;This service would decompose it as a query &lt;tt&gt;Name=*1&lt;/tt&gt;, and a 
+   * CATIIniSearchContext pointer. S_OK is returned.
+   * &lt;br&gt;&lt;br&gt;
+   * Let us consider the following complete query: &lt;tt&gt;CATPrtSearch.Pad,in&lt;/tt&gt;.
+   * &lt;br&gt;This service would decompose it as a query &lt;tt&gt;CATPrtSearch.Pad&lt;/tt&gt;, 
+   * and a CATIIniSearchContext pointer. S_OK is returned.
+   * &lt;br&gt;&lt;br&gt;
+   * Let us consider the following incorrect complete query: &lt;tt&gt;NameWithTypo=*1&lt;/tt&gt;.
+   * &lt;br&gt;This service would decompose it as a query &lt;tt&gt;NameWithTypo=*1&lt;/tt&gt; and a
+   * CATIIniSearchContext pointer. S_OK is returned. 
+   * &lt;br&gt;When nothing is specified at the end of the string, the default context
+   * is taken into account (refer to &lt;tt&gt;InUIActiveObject&lt;/tt&gt; in @href CATIIniSearchContext#Scope ).
+   * &lt;br&gt;&lt;br&gt;
+   * @param iCompleteQuery
+   *    The complete NLS or TransFormat query to be decomposed.
+   * @param oQuery
+   *    The corresponding NLS or TransFormat query, that can be fed into 
+   *    the @href #DecodeStringToCriterion method to generate a criterion.
+   * @param oContext
+   *    The corresponding context.
+   * @param iTransFormat
+   *    A CATBoolean to specify if the query is a TransFormat query. 
+   *    &lt;ul&gt;&lt;li&gt;TRUE, if the query is a TransFormat query.&lt;/li&gt;
+   *    &lt;li&gt;FALSE, if the query is an NLS query.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK, if the complete query has successfully been decomposed into a query 
+   *    and a context part.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL, if the context (when found) is incorrect.&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT GetQueryAndContextFromString(const CATUnicodeString&amp; iCompleteQuery, 
+                                               CATUnicodeString&amp; oQuery, 
+                                               CATIIniSearchContext*&amp; oContext, 
+                                               CATBoolean iTransFormat) = 0;
+
+  /**
+   * Corrects a string before feeding it into a query.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sometimes input strings can contain symbols that 
+   * could be analyzed as special caracters in a Search query. 
+   * It is then necessary to enclose those symbols within special
+   * exclusive caracters, so that they could be recognized.
+   * &lt;br&gt;&lt;br&gt;Let us consider the following query string: &lt;tt&gt;Name=little, johnny&lt;/tt&gt;
+   * &lt;br&gt;The GetQueryAndContextFromString method would return E_FAIL, 
+   * for the string would be decomposed as &lt;tt&gt;Name=little&lt;/tt&gt;, and 
+   * an unknown context &lt;tt&gt;johnny&lt;/tt&gt; would have been found.
+   * &lt;br&gt;The solution is to call this method so that the &lt;tt&gt;little, johnny&lt;/tt&gt;
+   * string is corrected into a String1 CATUnicodeString instance, which in turned 
+   * could be correctly analyzed.
+   * &lt;br&gt;&lt;br&gt;Let us consider the following query string: &lt;tt&gt;NAME=Lonely*&lt;/tt&gt;
+   * &lt;br&gt;This looks for every object whose name starts with Lonely (case sensitivity
+   * respected). But what if we are looking for every object named Lonely* (star
+   * being part of the name) ?
+   * &lt;br&gt;The &lt;tt&gt;Lonely*&lt;/tt&gt; string should be fed into the CorrectString method,
+   * and the returned CATUnicodeString instance could be then correctly used.
+   * &lt;br&gt;&lt;br&gt;
+   * @param iStringToCorrect
+   *    The string to be corrected.
+   * @param oCorrectedString
+   *    The string once corrected.
+   * @return 
+   *    S_OK always
+   */
+  virtual HRESULT CorrectString(const CATUnicodeString&amp; iStringToCorrect,
+                                CATUnicodeString&amp; oCorrectedString) = 0;
+
+  /**
+   * Tests the validity of a string as a digital value.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service checks if an input string is a valid 
+   * digital value.
+   * &lt;br&gt;&lt;br&gt;
+   * @param iValue
+   *    a CATUnicodeString format of a possible digital value (1.2 for instance).
+   * @param iWithDecimal
+   *    TRUE if the string can contain a decimal symbol.
+   *    FALSE if the string must not contain any decimal symbol.
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK if the CATUnicodeString is a valid digital value.
+   *    E_FAIL if the CATUnicodeString is not a valid digital value (for instance 1.2.3)&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT TestNumValidity(const CATUnicodeString &amp;iValue, 
+                                  CATBoolean iWithDecimal) = 0;
+
+  /**
+   * Tests the validity of a string as a digital value with a unit.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service checks if an input string is a valid digital
+   * value with a unit.
+   * &lt;br&gt;&lt;br&gt;
+   * @param iValueUnit
+   *    a CATUnicodeString format of a possible digital value with unit (1.2kg for instance)
+   * @param iWithDecimal
+   *    TRUE if the digital value can contain a decimal symbol.
+   *    FALSE if the digital value must not contain any decimal symbol.
+   * @param oValue
+   *    The digital value as a CATUnicodeString. Then use the appropriate
+   *    @href CATUnicodeString#ConvertToNum method to convert it into the desired format.
+   *    &lt;br&gt;A CATUnicodeString containing &lt;tt&gt;1.2&lt;/tt&gt; is returned in our example.
+   * @param oUnit
+   *    The unit found in the input string.
+   *    &lt;br&gt;A CATUnicodeString containing &lt;tt&gt;kg&lt;/tt&gt; is returned in our example.
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK if the CATUnicodeString is a valid digital value.&lt;/li&gt;
+   *    &lt;li&gt;S_FALSE if no unit has been found.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL if the CATUnicodeString is not a valid digital value (for instance 1.2.3)&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT TestNumValidity(const CATUnicodeString &amp;iValueUnit, CATBoolean iWithDecimal,
+                                  CATUnicodeString &amp;oValue, CATUnicodeString &amp;oUnit) = 0;
+  
+  /**
+   * Converts a TransFormat query into an NLS query.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service enables you to convert a TransFormat query into 
+   * an NLS query without tinkering with a CATIIniSearchCriterion pointer.
+   * @param iTransFormatQuery
+   *    The TransFormat query
+   * @param oNLSQuery
+   *    The equivalent NLS query
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK if iTransFormatQuery corresponds to a correct query&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL otherwise&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT ConvertFromTransFormatToNLS(const CATUnicodeString&amp; iTransformatQuery,
+                                              CATUnicodeString&amp; oNLSQuery) = 0;
+  
+  /**
+   * Converts an NLS query into a Transformat query.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service enables you to convert an NLS query into 
+   * a Transformat query without tinkering with a CATIIniSearchCriterion pointer.
+   * @param iNLSQuery
+   *    The NLS query
+   * @param oTransformatQuery
+   *    The equivalent Transformat query
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK if iNLSQuery corresponds to a correct query.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT ConvertFromNLSToTransFormat(const CATUnicodeString&amp; iNLSQuery,
+                                              CATUnicodeString&amp; oTransformatQuery) = 0;
+
+
+  /**
+   * Retrieves the wild characters.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service enables you to retrieve the wild card 
+   * character used to replace from 0 to n characters.
+   * @param oWildCardChar
+   *    The wild card character.
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK on success.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT GetWildCardCharacter(CATUnicodeChar&amp; oWildCardChar) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniSearchSVisibilityCriterion.html">← 上一页: CATIIniSearchSVisibilityCriterion.h</a></div>
+        <div><a href="CATIIniSearchStringCriterion.html">下一页: CATIIniSearchStringCriterion.h →</a></div>
+    </div>
+</body>
+</html>

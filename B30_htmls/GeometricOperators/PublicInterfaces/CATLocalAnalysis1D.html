@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricOperators/PublicInterfaces/CATLocalAnalysis1D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricOperators/PublicInterfaces/CATLocalAnalysis1D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIntersectionSurSur.html">← 上一页: CATIntersectionSurSur.h</a></div>
+        <div><a href="CATLocalAnalysis2D.html">下一页: CATLocalAnalysis2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATLocalAnalysis1D_H
+#define CATLocalAnalysis1D_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;Y30UIUTI.h&quot;
+#include &lt;math.h&gt;
+#include &quot;CATCurve.h&quot;
+#include &quot;CATCrvParam.h&quot;
+#include &quot;CATMathVector.h&quot;
+
+#include &quot;CATCGMVirtual.h&quot;
+#include &quot;CATCreateLocalAnalysisD.h&quot;
+class CATSoftwareConfiguration;
+
+class CATLocalAnalysis1DImpl;
+
+/**
+ * Class defining the local analysis on a point of a CATCurve.
+ *&lt;br&gt;It performs curvature, torsion,
+ * main normal and binormal on a point of a CATCurve. This class is not streamable.
+ * The point where the analysis is done can be changed by @href CATLocalAnalysis1D#SetParam.
+ */
+class ExportedByY30UIUTI CATLocalAnalysis1D : public CATCGMVirtual  
+{
+  CATCGMVirtualDeclareClass(CATLocalAnalysis1D);
+    public :
+
+/**
+ * Creates a local analyzer on a point of a CATCurve.
+ * @param iSupport
+ * The curve on which the analysis is done.
+ * @param iPointToAnalyze
+ * The parameter on &lt;tt&gt;iSupport&lt;/tt&gt; of the point to analyze.
+ */    
+     CATLocalAnalysis1D(const CATCurve                 * iSupport       ,
+                        const CATCrvParam              &amp; iPointToAnalyze);
+
+/**
+ * Creates a local analyzer on a point of a CATCurve.
+ * @param iConfig
+ * The level of code (Versionning).
+ * @param iSupport
+ * The curve on which the analysis is done.
+ * @param iPointToAnalyze
+ * The parameter on &lt;tt&gt;iSupport&lt;/tt&gt; of the point to analyze.
+ */    
+     CATLocalAnalysis1D(      CATSoftwareConfiguration * iConfig,
+                        const CATCurve                 * iSupport,
+                        const CATCrvParam              &amp; iPointToAnalyze);
+
+/**
+ * Destructor.
+ */
+     virtual ~CATLocalAnalysis1D() ;
+
+/**
+ * Copy Constructor.
+ */
+     CATLocalAnalysis1D(const CATLocalAnalysis1D&amp; iAnalysisToCopy ) ;
+
+/**
+ * Assignment operator.
+ */
+     CATLocalAnalysis1D&amp; operator = (const CATLocalAnalysis1D&amp; iAnalysisToAffect ) ;
+
+/**
+ * Returns the curvature at the point of &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D.
+ * @return
+ * The curvature : the norm of the cross product of the first derivative and the second derivative 
+ * divided by the cube of the norm of the first derivative.
+ * &lt;br&gt;&lt;tt&gt;Curvature = (FirstDeriv^SecondDeriv).Norm() / (FirstDeriv.Norm())^3&lt;/tt&gt;.
+ */    
+     virtual double        GetCurvature()       ;
+
+/**
+ * Returns the torsion at the point of &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D.
+ * @return
+ * The torsion: Let &lt;tt&gt;V = FirstDeriv ^ SecondDeriv&lt;/tt&gt;. Then,
+ * &lt;br&gt;&lt;tt&gt;Torsion = V*ThirdDeriv / V*V&lt;/tt&gt;, where &lt;tt&gt;*&lt;/tt&gt; is the dot product and &lt;tt&gt;^&lt;/tt&gt; the cross 
+ * product.
+ */
+     virtual double        GetTorsion()         ;
+
+/**
+ * Tests whether the point of &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D is regular.
+ *&lt;br&gt;A point is non regular when the partial derivative of one of its coordinate 
+ * is null.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt;&lt;tt&gt; 0 &lt;/tt&gt; &lt;dd&gt; if it is not regular
+ *    &lt;dt&gt;&lt;tt&gt; 1 &lt;/tt&gt; &lt;dd&gt; if it is regular&lt;/dl&gt;
+ */
+     virtual CATLONG32     IsARegularParam()    ;
+
+/**
+ * Returns the main normal at the point of &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D.
+ * @return
+ * The main normal: Let &lt;tt&gt;V = FirstDeriv ^ SecondDeriv&lt;/tt&gt;. Then,
+ * &lt;br&gt;&lt;tt&gt;MainNormal = (V / V.Norm() ) ^ FirstDeriv / FirstDeriv.Norm() &lt;/tt&gt;, where &lt;tt&gt;^&lt;/tt&gt; is the cross 
+ * product.
+ */
+     virtual CATMathVector GetMainNormal()      ;
+
+/**
+ * Returns the binormal at the point of &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D.
+ * @return
+ * The binormal: Let &lt;tt&gt;V = FirstDeriv ^ SecondDeriv&lt;/tt&gt;. Then,
+ * &lt;br&gt;&lt;tt&gt;BiNormal = V / V.Norm() &lt;/tt&gt;, where &lt;tt&gt;^&lt;/tt&gt; is the cross 
+ * product.
+ */
+     virtual CATMathVector GetBiNormal()        ;
+
+/**
+ * Modifies the point where &lt;tt&gt;this&lt;/tt&gt; CATLocalAnalysis1D is performed.
+ *&lt;br&gt;The analysis is automatically done.
+ * @param iNewParamToAnalyze
+ * The parameter of the new point to analyze.
+ */
+     virtual void          SetParam(CATCrvParam&amp; iNewParamToAnalyze)     ;
+    
+    protected :
+
+/** @nodoc */
+     virtual void          AreFirstAndSecondDerivOK();
+
+     const CATCurve                 * Curve_ptr ;
+           CATCrvParam                Param    ;
+           CATMathVector              FirstDeriv,  SecondDeriv,  ThirdDeriv ;
+           CATLONG32                  F_FirstDeriv, F_SecondDeriv, F_ThirdDeriv;
+           CATSoftwareConfiguration * _Config;
+
+           CATLocalAnalysis1DImpl   * _LocalAnal1DOpe;
+};
+    
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIntersectionSurSur.html">← 上一页: CATIntersectionSurSur.h</a></div>
+        <div><a href="CATLocalAnalysis2D.html">下一页: CATLocalAnalysis2D.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIDraft.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIDraft.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICounterSunkHole.html">← 上一页: CATICounterSunkHole.h</a></div>
+        <div><a href="CATIEdgeFillet.html">下一页: CATIEdgeFillet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIDraft_H
+#define CATIDraft_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIShape.h&gt;
+#include &lt;CATLISTV_CATISpecObject.h&gt;
+//#include &lt;CATListOfCATCells.h&gt;
+#include &lt;ListPOfCATFace.h&gt;
+#include &lt;CATMathDirection.h&gt;
+#include &lt;CATPrtEnum.h&gt;
+#include &quot;ListPOfCATEdge.h&quot;
+#include &lt;CATListOfInt.h&gt;
+
+class CATMathDirection;
+class CATICkeParm_var;
+class CATPointOnCurve_var;
+class CATCurve_var;
+class CATEdge_var;
+class CATWire_var;
+class CATBody_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIDraft;
+#else
+extern &quot;C&quot; const IID IID_CATIDraft;
+#endif
+
+/**
+ * Interface to read or modify the draft feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Drafts are defined on molded parts to make them easier to remove from molds.
+ */
+class ExportedByPartItf CATIDraft : public CATIShape
+{
+  CATDeclareInterface;
+
+  public:
+  /**
+  * Sets the draft angle value.
+  *@param  iAngle
+  *    The draft angle value.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Angle between -90 degrees (not included) to +90 degrees (not included).
+  *    &lt;br&gt;The value should be set in degree.
+  */
+  virtual void ModifyAngle(double iAngle,int iSide=1) = 0;
+  /** @nodoc */
+  virtual void ModifyMode (int iMode,int iSide=1) =0;
+  /** @nodoc */
+  virtual void ModifyBothSidesType (int iBothSidesType) =0;
+  /** @nodoc */
+  virtual void ModifyPropagation (int iPropagation) =0;
+  /** @nodoc */
+  virtual void ModifyNeutralPropagation (int iNeutralPropagation,int iSide=1) =0;
+  /** @nodoc */
+  virtual void AddSupportToDraft(const CATLISTV(CATISpecObject_var)* ihSupportToDraft) =0;
+  /** @nodoc */
+  virtual void DeleteSupportToDraft(CATLISTV(CATISpecObject_var)* ihSupportToDraft) =0;
+  /**
+  * Sets the draft neutral element.
+  *@param  ihNeutral
+  *    The neutral element.
+  *    &lt;br&gt;The intersection of this element and the faces to be drafted
+  *    defines a neutral curve on which the drafted face will lie.
+  *    &lt;br&gt;This element will remain  the same during the draft.
+  *    &lt;br&gt;The neutral element and parting element may be the same element. 
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var could be a plane, a face or a surface.
+  *    &lt;br&gt;NULL_var value is not allowed.
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  */
+  virtual void ModifyNeutral (CATISpecObject_var ihNeutral,int iSide=1) =0;
+  /**
+  * Sets the draft parting element.
+  *@param  ihParting
+  *    The parting element.
+  *    &lt;br&gt;This element cuts the faces to be drafted in two and one portion is drafted according to its
+  *    previously defined pulling direction.
+  *    &lt;br&gt;The parting element and neutral element may be the same element.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var could be a plane, a face or a surface.
+  *    &lt;br&gt;NULL_var value means draft with &lt;b&gt;no&lt;/b&gt; parting element.
+  */
+  virtual void ModifyParting (CATISpecObject_var ihParting) =0;
+  /**
+  * Sets the pulling direction.
+  * @param iPullDir
+  *     The pulling direction.
+  *     &lt;br&gt;This is the direction in which the mold will be removed from the part.
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  * @param iBuild 
+  * Do not use this parameter.
+  */
+  virtual void ModifyPullingDirection (CATMathDirection iPullDir,int iSide=1, int iBuild=1) =0;
+  /**
+  * Sets the pulling direction reference.
+  * @param ihPullDirSpec
+  *     The pulling direction reference.
+  *     &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: If you used a reference you must set the pulling direction iPullDir to the
+  *     CATMathDirection of the reference.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var is either
+  *    &lt;dl&gt;
+  *      &lt;dt&gt;a plane or a planar face or a planar surface&lt;/dt&gt;
+  *      &lt;dd&gt;the pulling direction is normal to this element, or&lt;/dd&gt;
+  *      &lt;dt&gt;a line or a linear edge&lt;/dt&gt;
+  *      &lt;dd&gt;the pulling direction is the direction of the element, or&lt;/dd&gt;
+  *      &lt;dt&gt;NULL_var&lt;/dt&gt;
+  *      &lt;dd&gt;there is no pulling direction reference.&lt;/dd&gt;
+  *    &lt;/dl&gt;
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+	* @param iBuild 
+  * Do not use this parameter.
+  */
+  virtual void ModifyPullingDirection (CATISpecObject_var ihPullDirSpec,int iSide=1, int iBuild=1) =0;
+  /** @nodoc */
+  virtual void ModifyMultiselMode (int iMultiselMode) =0;
+  /** @nodoc */
+	virtual void ModifyPartingEqualNeutral(int iPartingEqualNeutral) = 0;
+
+  /** @nodoc */
+  virtual void AddDraftParam(CATISpecObject_var iObject, double iAngle) = 0;
+  /** @nodoc */
+  virtual void RemoveDraftParam(CATISpecObject_var iObject) = 0;
+
+  /**
+  * Returns the draft angle value.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The value is returned in degree.
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  */ 
+  virtual double GetAngle(int iSide=1) const= 0;
+ /** @nodoc */
+  virtual CATICkeParm_var GetAngleParm(int iSide=1) const=0;
+  /** @nodoc */
+	virtual double GetAngleOnPoint(CATISpecObject_var iPoint) const = 0;
+  /** @nodoc */
+  virtual CATICkeParm_var GetAngleParmOnPoint(CATISpecObject_var iPoint) const = 0;
+
+ /** 
+  *  Returns the draft mode (standard or reflectline).
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The Draft mode is either
+  *	  &lt;tt&gt;0&lt;/tt&gt; standard (the draft&#x27;s neutral element must be input).
+  *	  &lt;tt&gt;1&lt;/tt&gt; reflectline (the draft&#x27;s neutral element is computed as the reflect line).
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  */
+  virtual int GetMode(int iSide=1) const=0;
+ /** @nodoc */
+  virtual int GetBothSidesType() const=0;
+ /** @nodoc */
+  virtual int GetPropagation() const=0;
+ /** @nodoc */
+  virtual int GetNeutralPropagation(int iSide=1) const=0;
+  /**
+  * Returns the pulling direction as a normalized vector.
+  * &lt;br&gt;The pulling direction is the direction in which the mold will be removed from the part.
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  */ 
+  virtual CATMathDirection GetPullingDirection(int iSide=1) const=0;
+  /**
+  *  Returns the pulling direction reference.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var is either
+ *    &lt;dl&gt;
+  *      &lt;dt&gt;a plane or a planar face or a planar surface&lt;/dt&gt;
+  *      &lt;dd&gt;the pulling direction is normal to this element, or&lt;/dd&gt;
+  *      &lt;dt&gt;a line or a linear edge&lt;/dt&gt;
+  *      &lt;dd&gt;the pulling direction is the direction of the element, or&lt;/dd&gt;
+  *      &lt;dt&gt;NULL_var&lt;/dt&gt;
+  *      &lt;dd&gt;there is no pulling direction reference.&lt;/dd&gt;
+  *    &lt;/dl&gt;
+  *@param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.  
+  */ 
+  virtual CATISpecObject_var GetPullingDirectionObject(int iSide=1) const=0;
+  /**
+  * Returns the neutral element.
+  *&lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var is a plane, a face or a surface.
+  */ 
+  virtual CATISpecObject_var GetNeutral(int iSide=1) const=0;
+  /**
+  * Returns the parting element.
+  *&lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var is a plane, a face or a surface.
+  */ 
+  virtual CATISpecObject_var GetParting() const=0;
+  /**
+  * Returns the list of faces to be drafted.
+  *&lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The CATISpecObject_var is a face.
+  */ 
+  virtual CATLISTV(CATISpecObject_var) *  GetSupportToDraft() const= 0;
+ /** @nodoc */
+  virtual CATLISTP(CATFace)  GetFacesToDraft() const= 0;
+ /** @nodoc */
+  virtual CATLISTP(CATFace)  GetNeutralFaces(int iSide=1) const= 0;
+ /** @nodoc */
+  virtual int GetMultiselMode() const=0;
+ /** @nodoc */
+	virtual int GetPartingEqualNeutral() const = 0;  
+
+ /** @nodoc */
+	virtual CATLISTV(CATISpecObject_var)* GetNeutralList(int iSide=1) const = 0;
+ /** @nodoc */
+	virtual void AddNeutral(CATLISTV(CATISpecObject_var)* ihNeutralList,int iSide=1) = 0;
+ /** @nodoc */
+	virtual void DeleteNeutral(CATLISTV(CATISpecObject_var)* ihNeutralList,int iSide=1) = 0;
+ /** @nodoc */
+  virtual  void SetDraftVariationType(CATPrtDraftVariation iVariation) const=0;
+ /** @nodoc */
+  virtual CATPrtDraftVariation GetDraftVariationType() const=0;
+ /** @nodoc */
+  virtual CATLISTV(CATISpecObject_var) * GetPoint() const = 0;
+
+  /** @nodoc */
+  virtual CATEdge_var GetSupportEdge(CATISpecObject_var ihVertex, CATISpecObject_var ihInitialEdge, CATPointOnCurve_var &amp;ohProjectedPoint, CATCurve_var &amp;ohCurveMin) const = 0;
+  /** @nodoc */
+  virtual CATWire_var GetNeutralCurve(CATLISTP(CATEdge)*&amp; oListEdgeSA, CATBody_var&amp; ohBody, CATISpecObject_var&amp; ohNeutralCurve) const = 0;
+  /** @nodoc */
+  virtual void ModifyDrivingMode(int iDrivingMode) = 0;
+  /** @nodoc */
+  virtual int GetDraftDrivingMode() = 0;
+
+  /** @nodoc */
+  virtual HRESULT AddLimitingElement(CATISpecObject_var ihLimitingElement,int iOrientation) = 0;
+  /** @nodoc */
+  virtual HRESULT RemoveLimitingElement(CATISpecObject_var ihLimitingElement) = 0;
+  /** @nodoc */
+  virtual HRESULT SetOrientationOnLimitingElement(CATISpecObject_var ihLimitingElement, int iOrientation) = 0;
+  /** @nodoc */
+  virtual HRESULT GetOrientationOnLimitingElement(CATISpecObject_var ihLimitingElement, int&amp; oOrientation) const = 0;
+  /** @nodoc */
+  virtual HRESULT GetLimitingElements(int iOrientationListNeeded, CATLISTV(CATISpecObject_var)&amp; oLimitingElementList, CATRawCollint &amp; oOrientationList) const = 0;
+ /** @nodoc */
+  virtual  void ModifyFittedParameter (double iValue) =0;
+ /** @nodoc */
+  virtual double GetFittedParameter () const=0;
+ /** @nodoc */
+  virtual CATICkeParm_var GetFittedParm() const=0;
+  
+  /**
+  * Gets the pulling direction orientation.
+  * @param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+	* @param oOrientation 
+  *    Output value
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,-1.
+  */
+  virtual HRESULT GetPullDirOrientation(int iSide, int &amp;oOrientation) = 0;
+  /**
+  * Sets the pulling direction orientation.
+  * @param iOrientation 
+  *    Pullign Direction Orientation value
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,-1.
+  * @param  iSide
+  *    Side number (used in case of draft both sides)
+  *    &lt;br&gt;Specify which side of the parting element will be concerned  
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1,2.
+  */
+  virtual HRESULT SetPullDirOrientation(int iOrientation,int iSide) = 0;
+  
+  /**
+  * Sets the context of Draft feature.
+  * @param iContext
+  *   context can be :
+  *&lt;br&gt;- 0 (Part)       
+  *&lt;br&gt;- 4 (Volume)    
+  *&lt;br&gt;- 5 (Functional)
+  */
+  virtual HRESULT SetContext(int iContext) = 0;
+  
+  /**
+  * Returns the context of Draft feature.
+  * @param oContext
+  *   context can be :
+  *&lt;br&gt;- 0 (Part)       
+  *&lt;br&gt;- 4 (Volume)    
+  *&lt;br&gt;- 5 (Functional)
+  */
+  virtual HRESULT GetContext(int &amp; oContext) = 0;
+};
+
+CATDeclareHandler (CATIDraft, CATIShape); 
+
+#endif // CATIDraft_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICounterSunkHole.html">← 上一页: CATICounterSunkHole.h</a></div>
+        <div><a href="CATIEdgeFillet.html">下一页: CATIEdgeFillet.h →</a></div>
+    </div>
+</body>
+</html>

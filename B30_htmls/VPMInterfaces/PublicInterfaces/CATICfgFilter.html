@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgFilter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgFilter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgEffectivity.html">← 上一页: CATICfgEffectivity.h</a></div>
+        <div><a href="CATICfgGroupModif.html">下一页: CATICfgGroupModif.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICfgFilter_h
+#define CATICfgFilter_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CORBAAnyDef.h&quot;
+#include &quot;sequence_CORBAAny.h&quot;
+
+// Interface ID
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATICfgModification.h&quot;
+#include &quot;CATListOfCATICfgNormalValue.h&quot;
+#include &quot;CATListOfCATIConfigurableObject.h&quot;
+#include &quot;CATListOfCATILinkableObject.h&quot;
+#include &quot;CATICfgModRestriction.h&quot;
+#include &quot;CATHashTabCATVpmFilterStruct.h&quot;
+
+// Class forward declaration
+class CATUnicodeString;
+class CATICfgFilter_var;
+class CATICfgNormalValue_var;
+class CATICfgModContainer_var;
+class CATListValCATICfgModContainer_var;
+
+
+// Class Identifier
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgFilter ;
+#else
+extern &quot;C&quot; const IID IID_CATICfgFilter ;
+#endif
+
+/**
+ * Interface to manage a Configuration Filter.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+ * The Configuration Filter evaluates the Effectivity validity of a given list
+ * of objects, for a specified &lt;b&gt;Domain&lt;/b&gt; and &lt;b&gt;Filtering Mode&lt;/b&gt;.
+ * &lt;br&gt;
+ * A Configuration Filter is composed of a list of criteria which can be:
+ * &lt;dl&gt;
+ *     &lt;dt&gt;Date Intervals
+ *     &lt;dt&gt;Range Intervals
+ *     &lt;dt&gt;Specifications
+ *     &lt;dt&gt;Modifications
+ *     &lt;dd&gt;can not be mixed with other kinds of criteria
+ * &lt;/dl&gt;
+ * Those criteria must be set as @href CATICfgNormalValue objects.
+ * &lt;br&gt;
+ * Since V5R8, only &lt;b&gt;Multi-Level&lt;/b&gt; Filters can be created using the
+ * @href CATICfgManager#CreateMultiLevelFilter method.
+ * &lt;br&gt;
+ * @see @href CATICfgNormalValue
+ */
+class ExportedByGUIDVPMInterfaces CATICfgFilter : public CATBaseUnknown
+{
+CATDeclareInterface;
+
+public:
+    /**
+     * Enumeration of the possible Filtering Modes.
+     * &lt;br&gt;
+     * Filtering Modes affect the way the Specification &quot;AND&quot; expressions are interpreted
+     * by the Configuration Filter, but do not affect the Interval part.
+     * &lt;br&gt;
+     * For a Configuration Filter to consider a Specification &quot;AND&quot; expression valid, the
+     * Specification criteria list in the Filter must:
+     * &lt;dl&gt;
+     *     &lt;dt&gt;Default
+     *     &lt;dd&gt;contain &lt;b&gt;at least all&lt;/b&gt; the Specifications present in the expression.
+     *     &lt;dt&gt;ExactMatch
+     *     &lt;dd&gt;contain &lt;b&gt;exactly&lt;/b&gt; the Specification list present in the expression, no more, no less.
+     *     &lt;dt&gt;PartialMatch
+     *     &lt;dd&gt;contain &lt;b&gt;at least one&lt;/b&gt; of the Specifications present in the expression.
+     *     &lt;dt&gt;ReverseMatch
+     *     &lt;dd&gt;Returns the instances which do not satisfy the filter criteria. This mode is opposite of Default mode.
+     * &lt;/dl&gt;
+     */
+    enum FilteringMode { Default = 1 &lt;&lt; 1 , ExactMatch = 1 &lt;&lt; 2 , PartialMatch = 1 &lt;&lt; 3 ,ReverseMatch = 1 &lt;&lt; 4  };
+
+    /**
+     * Sets the Filtering Mode.
+     * @param iValue
+     *     The Filtering Mode to set.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Filtering Mode is successfully set.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the Filtering Mode setting.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT setFilteringMode( const CATICfgFilter::FilteringMode&amp; iValue ) = 0;
+
+    /**
+     * Returns the Filtering Mode.
+     * @param oValue
+     *     The Filtering Mode.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Filtering Mode is successfully extracted.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the Filtering Mode extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT getFilteringMode( CATICfgFilter::FilteringMode&amp; oValue ) const = 0;
+    
+    /**
+     * Activates/desactivates the 150% filtering mode.
+     * &lt;br&gt;
+     * If activated, the Configuration Filter ignores the Specifications
+     * belonging to Categories not present in the Filter criteria list.
+     * @param iValue
+     *     The 150% flag value.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The 150% flag is successfully changed.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the 150% flag change.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT setMode150( const CATBoolean&amp; iValue ) = 0;
+
+    /**
+     * Returns the 150% flag value.
+     * @param oValue
+     *     The 150% flag value.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The 150% flag is successfully extracted.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the 150% flag extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT getMode150( CATBoolean&amp; oValue ) const = 0;
+
+    /**
+     * Sets the Domain of the Filter.
+     * @param iValue
+     *     The Domain name.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Domain is successfully changed.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the Domain change.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT setDomain( const CATUnicodeString&amp; iValue ) = 0;
+
+    /**
+     * Returns the Domain of the Filter.
+     * @param oValue
+     *     The Domain name.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Domain is successfully extracted.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the Domain extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT getDomain( CATUnicodeString&amp; oValue ) const = 0;
+
+    /**
+     * Adds a criterion to the Filter.
+     * The criteria can be an Interval (date or range), a Specification or
+     * a Modification, but must be passed as a @href CATICfgNormalValue.
+     * &lt;br&gt;
+     * To create such a CATICfgNormalValue, use the @href CATICfgManager#CreateNormalValue
+     * methods
+     * @param iCondition
+     *     The criterion to add.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The criterion is successfully added.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the criterion insertion.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT AddCondition( const CATICfgNormalValue_var&amp; iCondition ) = 0; 
+
+    /** @nodoc
+     * Adds the Modifications controlled by the specified Action as criteria to the Filter.
+     * @param iAction
+     *     The Action controlling the Modifications to add. 
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The criterion is successfully added.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the criterion insertion.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT AddCondition( const CATIVpmAFLAction_var &amp;iAction ) = 0;
+
+    /** @nodoc
+     * Adds specified Modification Container as criterion to the Filter.
+     * &lt;br&gt;
+     * All the Modifications contained in the Container are added to the Filter criteria
+     * list. Moreover, any change to the Container is propagated to the Filter. 
+     * @param iContainer
+     *     The Modification Container to add.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The criterion is successfully added.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the criterion insertion.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT AddCondition( const CATICfgModContainer_var&amp; iContainer ) = 0;
+
+    /**
+     * Removes all the criteria from the Filter.
+     * &lt;br&gt;
+     * This method does not change the Domain nor the Filtering Mode.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The criteria list is successfully cleared.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the criteria list reset.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT resetCriteria() = 0;
+
+    /** @nodoc
+     * A ModRestriction ??
+     */
+    virtual HRESULT SetModRestriction(const CATICfgModRestriction_var &amp; iModRestriction)=0;
+
+    /** @nodoc
+     * A ModRestriction ??
+     */
+    virtual HRESULT GetModRestriction(CATICfgModRestriction_var &amp; oModRestriction)=0;
+
+    /**
+     * Postpones the building of a filter.
+     * The filter will be built after the DMU filter pass with the result of the DMU filter.
+     * @param iFilterName
+     *     The name of the BSF filter.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The BSF name is successfully set.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the BSF name setting.
+     *     &lt;/dl&gt;
+     */    
+    virtual HRESULT SetBSFFilter( const CATUnicodeString&amp; iFilterName ) = 0;
+
+    /** @nodoc
+     * Clones the Configuration Filter.
+     * &lt;br&gt;
+     * The criteria list and the Filtering Mode are duplicated, but not the
+     * Identifier.
+     * @param oFilter
+     *     The duplication result.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The duplication is successful.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the duplication.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT clone( CATICfgFilter_var&amp; oFilter ) const = 0;
+
+    /** @nodoc
+     * The Filter identifier is almost useless because of the use of the
+     * Config Handlers.
+     */
+    virtual HRESULT GetIdentifier( CATUnicodeString&amp; oIdentifier ) const = 0; 
+
+    /**
+     * Returns the Filter criteria list.
+     * @param oContext
+     *     The Configurable Object to which the Filter is associated. Since V5R8, this parameter
+     *     is &lt;b&gt;not relevant anymore&lt;/b&gt;. The returned value should be ignored.
+     * @param oDomain
+     *     The Domain name. Same as @href CATICfgFilter#getDomain.
+     * @param oConditionList
+     *     The criteria list.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The data extraction is successful.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the data extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT GetListOfFilters( CATIConfigurableObject_var&amp; oContext , CATUnicodeString&amp; oDomain , CATListValCATICfgNormalValue_var&amp;  oConditionList ) const = 0;  
+
+    /** @nodoc */
+    virtual HRESULT GetListOfFilters( CATListValCATIConfigurableObject_var&amp; oContextList , CATUnicodeString&amp; oDomain , CATListValCATICfgNormalValue_var&amp;  oConditionList ) const = 0;
+
+    /** @nodoc */
+    virtual HRESULT GetListOfFilters( CATIConfigurableObject_var&amp; oContext , CATUnicodeString&amp; oDomain , CATListValCATICfgNormalValue_var&amp;  oConditionList , CATListValCATICfgModContainer_var&amp; oContainerList ) const = 0;
+
+    /** @nodoc */
+    virtual HRESULT GetListOfFilters( CATListValCATIConfigurableObject_var&amp; oContextList , CATUnicodeString&amp; oDomain , CATListValCATICfgNormalValue_var&amp;  oConditionList , CATListValCATICfgModContainer_var&amp; oContainerList ) const = 0;
+
+    /** @nodoc
+     * Returns the Filter criteria list.
+     * &lt;br&gt;
+     * Since V5R11, it is the preferred method to get the Filter criteria list.
+     * @param oDomain
+     *     The Domain name. Same as @href CATICfgFilter#getDomain.
+     * @param oConditionList
+     *     The criteria list.
+     * @param oContainerList
+     *     The Modification Container list.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The data extraction is successful.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the data extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT GetListOfFilters( CATUnicodeString&amp; oDomain , CATListValCATICfgNormalValue_var&amp;  oConditionList , CATListValCATICfgModContainer_var&amp; oContainerList ) const = 0;  
+
+    /** @nodoc
+     * The Filter size is the criteria count. Not very useful, even for internal processing.
+     */
+    virtual HRESULT GetSize( int&amp; oSize ) const = 0;
+
+    /** @nodoc
+     * Evaluates the validity, against this Configuration Filter, of a set of objects.
+     * &lt;br&gt;
+     * The objects are passed in an hash table. The Filter updates the input table
+     * with the evaluation status computed for each object.
+     * &lt;br&gt;
+     * This is the preferred method for objects validity evaluation.
+     * @param iHTab
+     *     The hash table containing the objects which validity are to be evaluated. The
+     *     results are set directly in this table.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The evaluation is successful.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the evaluation.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT Filter( CATVpmFilterHashTab&amp; iHTab ) = 0;
+
+    /** @nodoc */
+    virtual HRESULT Filter( SEQUENCE(CORBAAny)&amp; iListObjectToFilter , SEQUENCE(CORBAAny)&amp; oListFilteredObject ) = 0;
+
+    /** @nodoc
+     *  Evaluates the validity, against this Configuration Filter, of a set of objects.
+     * &lt;br&gt;
+     * @param iListObjectToFilter
+     *     The list of objects to filter.
+     * @param oListFilteredObject
+     *     The list of objects filtered-in.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The evaluation is successful.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the evaluation.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT Filter( const CATListOfCATILinkableObject&amp; iListObjectToFilter , CATListOfCATILinkableObject&amp; oListFilteredObject ) = 0;
+
+    /** @nodoc */
+    virtual HRESULT Filter( SEQUENCE(CORBAAny)&amp; iListObjectToFilter , CATListOfInt&amp; oListRetrieved ) = 0;
+
+    /** @nodoc */
+    virtual HRESULT GetNonCompliantObjects( SEQUENCE(CORBAAny)&amp; iListOfObject , SEQUENCE(CORBAAny)&amp; oListNonCompliantObject ) = 0;
+
+    /** @nodoc
+     * Same as clone.
+     */
+    virtual HRESULT Copy( CATICfgFilter_var&amp; oFilter ) const = 0;
+
+    /** @nodoc
+     * Since V5R8, all the Configuration Filter should be Multi Level Filters.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Filter is a Multi Level Filter.
+     *         &lt;dt&gt;S_FALSE
+     *         &lt;dd&gt;The Filter is not a Multi Level Filter.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the flag extraction.
+     *     &lt;/dl&gt;
+     */
+    virtual HRESULT IsMultiLevel() const = 0;
+
+    /** @nodoc
+     * As long as the Config Handler are used, this method has few relevantness.
+     */
+    virtual HRESULT isPersistent( CATBoolean&amp; oFlag ) const = 0;
+
+    /** @nodoc */
+    enum TraceLevel { MoreTrace , LessTrace };
+
+    /** @nodoc */
+    virtual void Dump( CATICfgFilter::TraceLevel ilevel = CATICfgFilter::MoreTrace ) const = 0;
+
+
+#if defined(CATIAV5R17)
+    /**
+     * Show/Hide Unsolved Operations.
+     * @param iShow
+     *     If activated, Unsolved Operations are shown.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The Filtering Mode is successfully set.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured during the Filtering Mode setting.
+     *     &lt;/dl&gt;
+     */
+
+     virtual HRESULT SetModeUnsolvedOp(const CATBoolean&amp; iShow) = 0;
+
+    /**
+     * Get filtering mode for Unsolved Operations.
+     * @param oShow
+     *     If TRUE, Unsolved Operations are shown.
+     * @return
+     *     An  HRESULT.
+     *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;dl&gt;
+     *         &lt;dt&gt;S_OK
+     *         &lt;dd&gt;The filtering mode is successfully read.
+     *         &lt;dt&gt;E_FAIL
+     *         &lt;dd&gt;An error occured while reading the filtering mode.
+     *     &lt;/dl&gt;
+     */
+
+     virtual HRESULT GetModeUnsolvedOp(CATBoolean&amp; oShow) = 0;
+
+#endif
+
+
+
+};
+
+// Handler definition 
+CATDeclareHandler( CATICfgFilter , CATBaseUnknown );
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgEffectivity.html">← 上一页: CATICfgEffectivity.h</a></div>
+        <div><a href="CATICfgGroupModif.html">下一页: CATICfgGroupModif.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogKeyword.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogKeyword.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogInstantiation.html">← 上一页: CATICatalogInstantiation.h</a></div>
+        <div><a href="CATICatalogLink.html">下一页: CATICatalogLink.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATICatalogKeyword_H_
+#define CATICatalogKeyword_H_
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;CATCclInterfaces.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATICkeType.h&quot;
+#include &quot;CATICkeUnit.h&quot;
+#include &quot;CATIParmValuator.h&quot;
+#include &quot;booleanDef.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+class CATICatalogChapter ;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATCclInterfaces IID IID_CATICatalogKeyword ;
+#else
+extern &quot;C&quot; const IID IID_CATICatalogKeyword ;
+#endif
+
+/**
+* Interface for the catalog keywords.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This interface is used to handle catalog keywords.&lt;br&gt;
+* A keyword is an object which is used by chapter for describing descriptions.
+* A keyword can be see like a property (dimensions, customers,...).&lt;br&gt;
+* About the keyword: 
+* &lt;ul&gt;
+* &lt;li&gt;It is a data of the chapter. It is created by the @href CATICatalogChapter#AddKeyword 
+* method,&lt;/li&gt;
+* &lt;li&gt;It can have a default value, See the 
+* @href CATICatalogChapter#SetDefaultValue methods,&lt;/li&gt;
+* &lt;li&gt;It can have a value defined on each description of the chapter.To valuate a keyword, 
+* use @href CATICatalogDescription#SetValue methods. &lt;/li&gt;
+* &lt;/ul&gt;
+* This interface enables methods to retrieve informations on a keyword (its name, its type,
+*  its unit and if it is hidden or not inside a Catalog Browser Dialog box)
+* @see CATICatalogChapter,CATICatalogDescription, CATICatalogBrowser
+*/
+
+class ExportedByCATCclInterfaces CATICatalogKeyword : public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public :
+   
+   /**
+   *   Returns the name of the keyword.
+   *   The returned name is the name of the feature.
+   *   @return
+   *     The name of the keyword.
+   */
+   virtual CATUnicodeString GetKeywordName () = 0 ;
+
+   /**
+   *   Returns the type of the keyword.
+   *   @return  CATBaseUnknown#Release
+   *     The type of the keyword or NULL, if an error has occured.
+   */
+   virtual CATICkeType * GetKeywordType () = 0 ;
+   
+   /**
+   *   Returns the unit of the keyword.
+   *   @return  CATBaseUnknown#Release
+   *      The unit of the keyword or NULL, if an error has occured.
+   */
+   virtual CATICkeUnit * GetKeywordUnit () = 0 ;
+   
+   /**
+   *   Returns the &quot;hidden&quot; property.
+   *   &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+   *   When a keyword is hidden, it&#x27;s not displayed in the catalog browser.
+   *   The keyword is only displayed and used in the catalog editor.
+   *   @return
+   *      TRUE is the keyword is hidden, else FALSE.
+   */
+   virtual CATBoolean GetHidden () = 0 ;
+   
+   /**
+   *   Sets the &quot;hidden&quot; property. 
+   *   &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+   *   When a keyword is hidden, it&#x27;s not displayed in the catalog browser.
+   *   The keyword is only displayed and used in the catalog editor.
+   *   @param iBoolean
+   *     TRUE if the keyword is hidden,&lt;/br&gt; 
+   *     FALSE if the keyword is visible.
+   */
+   virtual void SetHidden (CATBoolean iBoolean) = 0 ;
+
+   //-----------------------------------------------------------------------------------------
+   // Methods NODOC or DEPRECATED.
+   //-----------------------------------------------------------------------------------------
+   /**
+   * @nodoc
+   */
+   virtual CATBoolean GetVisibility () = 0 ;
+   
+   /**
+   * @nodoc
+   */
+   virtual void SetVisibility (CATBoolean b) = 0 ;
+   
+   /**
+   * @nodoc
+   * Returns the active relation valuating the parameter.
+   */
+   virtual CATIParmValuator_var Relation() = 0;
+
+   /**
+   *   Retrieves the alias of the keyword.
+   *   The alias is the name displayed in the catalog browser.
+   *   @return
+   *     The alias of the keyword.
+   */
+   virtual CATUnicodeString GetKeywordAlias() =0 ;
+   
+} ;
+
+
+CATDeclareHandler( CATICatalogKeyword, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogInstantiation.html">← 上一页: CATICatalogInstantiation.h</a></div>
+        <div><a href="CATICatalogLink.html">下一页: CATICatalogLink.h →</a></div>
+    </div>
+</body>
+</html>

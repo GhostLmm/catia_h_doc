@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATCommandGlobalUndo.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATCommandGlobalUndo.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCommand.html">← 上一页: CATCommand.h</a></div>
+        <div><a href="CATCommandSelector.html">下一页: CATCommandSelector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef _CATCommandGlobalUndo
+#define _CATCommandGlobalUndo
+
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;JS0FM.h&quot;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;stdlib.h&gt;
+
+
+ /**
+  * Prototype of the global undo/redo methods.
+  * &lt;b&gt;Role&lt;/b&gt;: These methods are passed as parameters of the 
+  * @href CATCommandGlobalUndo class methods.
+  * @param iData
+  *   The data specified by the @href CATCommandGlobalUndo#SetData method.
+  */
+typedef void (*CATGlobalUndoMethod)(void * iData) ;
+
+/**
+ * Base class to create an undo/redo object for a command.
+ * &lt;b&gt;Role&lt;/b&gt;: This class provides methods to undo/redo the command global 
+ * effects.
+ * CNext records instances of this class in a command history that enables 
+ * the end user to undo the previous command. So, each instance of this class
+ * is created at the end of a command and is kept after the command deletion.  
+ * &lt;br&gt;To create such an undo/redo object, you can derive this class and 
+ * override the methods:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href #BeforeUndo &lt;/li&gt;
+ * &lt;li&gt;@href #AfterUndo &lt;/li&gt;
+ * &lt;li&gt;@href #BeforeRedo &lt;/li&gt;
+ * &lt;li&gt;@href #AfterRedo &lt;/li&gt;
+ * &lt;/ul&gt;
+ * or instantiate a &lt;tt&gt;CATCommandGlobalUndo&lt;/tt&gt; object and give as 
+ * arguments the addresses of methods to execute to undo/redo the command.  
+ * &lt;br&gt;Moreover, this undo/redo object must only undo/redo the objects that
+ * are not transactional, that is to say that don&#x27;t belong to a model which 
+ * implements the CATIUndoTransaction interface, because such a model undoes 
+ * and redoes its objects itself.
+ * That&#x27;s the reason why you can specify methods to be called before or after
+ * the transactional model undo/redo.  
+ */
+class ExportedByJS0FM  CATCommandGlobalUndo:public CATBaseUnknown
+{
+  CATDeclareClass;
+
+public:
+
+
+ /**
+  * Constructs an empty undo/redo object.
+  */
+     CATCommandGlobalUndo ();
+
+ /**
+  * Constructs an undo/redo object using undo/redo method addresses.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The addresses of the methods to execute to undo or redo 
+  * the command effects are given as arguments. These methods must be static 
+  * methods of the command, because the command is deleted after its 
+  * completion, whereas the undo/redo methods may be called a long time after.
+  * @param iBeforeUndoMeth
+  *   The method to undo the command effects before the transactional undo.
+  * @param iBeforeRedoMeth
+  *   The method to redo the command effect before the transactional redo.
+  * @param iData
+  *   An object that can be useful for the command undo/redo methods.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A copy of &lt;tt&gt;iData&lt;/tt&gt; is kept. This 
+  *   object will be deallocated by the &lt;tt&gt;iDeallocateMeth&lt;/tt&gt; method given
+  *   as the fourth argument. 
+  * @param iDeallocateMeth
+  *   The method to deallocate the &lt;tt&gt;iData&lt;/tt&gt; object passed as the third 
+  *   argument.
+  *   This method is called when the undo/redo object is removed from the 
+  *   command history.
+  */
+
+     CATCommandGlobalUndo (CATGlobalUndoMethod iBeforeUndoMeth,
+                           CATGlobalUndoMethod iBeforeRedoMeth, 
+                           void * iData,
+                           CATGlobalUndoMethod iDeallocateMeth = NULL);
+ /**
+  * @nodoc
+  */
+     CATCommandGlobalUndo (CATGlobalUndoMethod BeforeUndoMeth, void * data);
+  
+     ~CATCommandGlobalUndo ();
+
+
+ /**
+  * Sets the method to undo the command effects before the transactional undo.
+  * @param iMeth
+  *   The method which undoes the command effects.
+  *   It must be a command&#x27;s static method because the command is deleted 
+  *   after its completion.
+  */
+    virtual void SetBeforeUndoMeth (CATGlobalUndoMethod iMeth);
+
+ /**
+  * Sets the method to redo the command effects before the transactional redo.
+  * @param iMeth
+  *   The method which redoes the command effects.
+  *   It must be a command&#x27;s static method because the command is deleted 
+  *   after its completion.
+  */
+    virtual void SetBeforeRedoMeth (CATGlobalUndoMethod iMeth);
+
+ /**
+  * Sets the method to undo the command effects after the transactional undo.
+  * @param iMeth
+  *   The method which undoes the command effects.
+  *   It must be a command&#x27;s static method because the command is deleted 
+  *   after its completion.
+  */
+    virtual void SetAfterUndoMeth (CATGlobalUndoMethod iMeth);
+
+ /**
+  * Sets the method to redo the command effects after the transactional redo.
+  * @param iMeth
+  *   The method which redoes the command effects.
+  *   It must be a command&#x27;s static method because the command is deleted 
+  *   after its completion.
+  */
+    virtual void SetAfterRedoMeth (CATGlobalUndoMethod iMeth);
+
+ /**
+  * Sets data which may be useful to undo/redo the command effects.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This data will be given as the argument of the 
+  * &lt;tt&gt;CATGlobalUndoMethod&lt;/tt&gt; methods.
+  * @param iData
+  *   An object that can be useful for the command undo and redo methods.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A copy of &lt;tt&gt;iData&lt;/tt&gt; is kept. This 
+  *   object will be deallocated by the method given by the 
+  *   @href #SetDeallocateMeth method.
+  */
+    virtual void SetData (void * iData);
+
+ /**
+  * Sets the method to deallocate the data given with the SetData method.
+  * @param iMeth
+  *   The method which deallocates the data.
+  *   It must be a command&#x27;s static method because the command is deleted 
+  *   after its completion.
+  */
+    virtual void SetDeallocateMeth (CATGlobalUndoMethod iMeth);
+
+ /**
+  * Undoes the command effects before the transactional undo.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Redefine this method when deriving &lt;tt&gt;
+  * CATCommandGlobalUndo&lt;/tt&gt;.
+  * @return
+  *   An HRESULT.
+  *   But it is not taken into account. Whatever the method returns, the 
+  *   dialog goes on.
+  */
+    virtual HRESULT          BeforeUndo();
+
+ /**
+  * Redoes the command effects before the transactional undo.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Redefine this method when deriving &lt;tt&gt;
+  * CATCommandGlobalUndo&lt;/tt&gt;.
+  * @return
+  *   An HRESULT.
+  *   But it is not taken into account. Whatever the method returns, the 
+  *   dialog goes on.
+  */
+    virtual HRESULT          BeforeRedo();
+
+ /**
+  * Undoes the command effects after the transactional undo.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Redefine this method when deriving &lt;tt&gt;
+  * CATCommandGlobalUndo&lt;/tt&gt;.
+  * @return
+  *   An HRESULT.
+  *   But it is not taken into account. Whatever the method returns, the 
+  *   dialog goes on.
+  */
+    virtual HRESULT          AfterUndo();
+
+ /**
+  * Redoes the command effects after the transactional redo.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Redefine this method when deriving &lt;tt&gt;
+  * CATCommandGlobalUndo&lt;/tt&gt;.
+  * @return
+  *   An HRESULT.
+  *   But it is not taken into account. Whatever the method returns, the 
+  *   dialog goes on.
+  */
+    virtual HRESULT          AfterRedo();
+ 
+
+    /*---------------------------------------------*/
+    //  obsolete methods. Do not use it any more 
+    /*---------------------------------------------*/
+
+ /**
+  * @nodoc
+  */
+     virtual void ExecuteUndo () ;
+
+ /**
+  * @nodoc
+  */
+     virtual void ExecuteRedo () ;
+
+ /**
+  * @nodoc
+  */
+     void SetRedoObject (CATCommandGlobalUndo * );
+
+ /**
+  * @nodoc
+  */
+     CATCommandGlobalUndo * GetRedoObject (); 
+
+
+protected:
+
+    /*------------------*/
+    // internal data 
+    /*------------------*/
+
+ /** @nodoc */
+   void *                     _data;
+ /** @nodoc */
+   CATGlobalUndoMethod        _BeforeUndoMeth;
+ /** @nodoc */
+   CATGlobalUndoMethod        _BeforeRedoMeth; 
+ /** @nodoc */
+   CATGlobalUndoMethod        _AfterUndoMeth;
+ /** @nodoc */
+   CATGlobalUndoMethod        _AfterRedoMeth;
+ /** @nodoc */
+   CATGlobalUndoMethod        _DeallocateMeth;
+ /** @nodoc */
+   CATCommandGlobalUndo *     _objectRedo ;
+ 
+};
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCommand.html">← 上一页: CATCommand.h</a></div>
+        <div><a href="CATCommandSelector.html">下一页: CATCommandSelector.h →</a></div>
+    </div>
+</body>
+</html>

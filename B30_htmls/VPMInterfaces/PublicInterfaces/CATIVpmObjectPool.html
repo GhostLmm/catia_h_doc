@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmObjectPool.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmObjectPool.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmObjectOperation.html">← 上一页: CATIVpmObjectOperation.h</a></div>
+        <div><a href="CATIVpmObjectRules.html">下一页: CATIVpmObjectRules.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// -*- C++ -*-
+#ifndef _CATIVpmObjectPool_H
+#define _CATIVpmObjectPool_H
+// --------------------------------------------------------------
+// VPM (c) Copyright Dassault Systemes 1996-2004                           
+// --------------------------------------------------------------       
+// 
+// Macro: CATIVpmObjectPool.h                                      
+//    ENOVIA LCA Object pool interface.
+// 
+// --------------------------------------------------------------       
+// Contents  :  VPM Pool Manager and Base of Facts        
+// --------------------------------------------------------------       
+// Historique:                                                          
+// Creator   : A.HAMONIC                                            
+// Date      : 98/10/09                                            
+// --------------------------------------------------------------       
+//
+/**
+ *	@CAA2Level L1
+ *	@CAA2Usage U3
+ */
+
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATIVpmFactoryObject.h&quot;
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIVpmObjectPool ;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmObjectPool ;
+#endif
+
+/**
+ * Activation of a base of facts.
+ * @param NOACTIVEBD
+ *    The base of facts is not active.
+ * @param ACTIVEBD
+ *    The base of facts is active.
+ */
+enum ActivateBase {
+  NOACTIVEBD =0,
+  ACTIVEBD   =1
+};
+
+/**
+ * Pool operation mode.
+ * @param NOREPLACE
+ *     No replace mode: operations using this mode will fail if the slot is already occupied.
+ * @param REPLACE
+ *     Replace mode: operations using this mode will work even if the designated slot is already occupied.
+ */
+enum PoolSetMode  {
+  NOREPLACE =0,
+  REPLACE   =1
+};
+
+/**
+ *  This interface provides a set of methods to manage a list of 
+ *  VPMObject Pools. These pools will be used by the ENOVIA LCA applications
+ *  to share some information. A Pool could be considered as a kind of 
+ *  base of facts by the Business Rules Manager.
+ *
+ */
+class ExportedByGUIDVPMInterfaces CATIVpmObjectPool : public CATBaseUnknown   
+{
+  /** @nodoc */
+  CATDeclareInterface;
+  
+public:
+
+  /**
+   *
+   * Activate a pool as current.
+   * @param iPoolName
+   *   the name of the pool that is to be activated.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Pool activated&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing &lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT SetCurrentPool 
+  ( const CATUnicodeString&amp; iPoolName   ) = 0 ; 
+
+  /**
+   *
+   * Get the name of a current pool.
+   * @param oPoolName
+   *   returns the name of the current pool.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Pool name returned&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing &lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT GetCurrentPool 
+  ( CATUnicodeString&amp; oPoolName ) = 0 ; 
+  /**
+   *
+   * Change the pool activation flag.
+   * @param iPoolName
+   *   the name of the pool for which you want to change the flag value.
+   * @param iActivateFlag
+   *   the desired value of the flag.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Activated&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing &lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT ActivateSwitch
+  ( const CATUnicodeString&amp; iPoolName    ,
+    const ActivateBase&amp;     iActivateFlag) = 0 ;
+
+
+  /**
+   *
+   * Query the pool activation status.
+   * @param iPoolName
+   *   the name of the pool for which you want to query the status.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Is activated&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;Not activated&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt; Error raised during processing &lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT IsActivated 
+  ( const CATUnicodeString&amp; iPoolName ) = 0 ;
+
+  /**
+   *
+   * Get the list of VPMObject names defined in a pool.
+   * @param iPoolName
+   *   the name of the pool for which to query the list.
+   * @param ioVPMObjectNameList
+   *   the list of VPMObject names.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Defined VPMObject names returned&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;No VPMObject defined&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual HRESULT GetListOfVPMObject 
+  ( const CATUnicodeString&amp;    iPoolName          ,
+    CATListOfCATUnicodeString&amp; ioVPMObjectNameList ) const =0 ;
+
+
+  /**
+   *
+   * Clean a set of variables included into the Pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Flush successful&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;Pool is empty&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual HRESULT Flush 
+  (const CATUnicodeString&amp; iPoolName ) = 0 ; 
+  
+  /**
+   *
+   * Retrieve a typed VPMObject from a pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the object
+   * @param oVPMObject
+   *   the retrieved VPMObject
+   *
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The object exists&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;The object does not exist&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT GetVPMObject 
+  (const CATUnicodeString&amp;   iPoolName      , 
+   const CATUnicodeString&amp;   iVPMObjectName ,
+   CATIVpmFactoryObject_var&amp; oVPMObject     ) const = 0; 
+
+  /**
+   *
+   * Retrieve typed VPMObjects from a pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the object
+   * @param oListOfVPMObject
+   *   the list of VPMObjects retrieved
+   *
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;VPMObjects of given type exist&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;No VPMObject of given type found&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT GetVPMObjectList 
+  ( const CATUnicodeString&amp;             iPoolName        , 
+    const CATUnicodeString&amp;             iVPMObjectName   ,
+    CATLISTV(CATIVpmFactoryObject_var)&amp; oListOfVPMObject )const = 0; 
+  
+
+  /**
+   *
+   * Add a typed VPMObject to the pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the VPMObject
+   * @param iVPMObject
+   *   the VPMObject to be added
+   * @param iSetMode
+   *   indicates whether existing VPMObject should be replaced or not. (NOREPLACE by default)
+   *
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The VPMObject is created&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;The VPMObject already exists&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT SetVPMObject 
+  (const CATUnicodeString&amp;         iPoolName      , 
+   const CATUnicodeString&amp;         iVPMObjectName ,
+   const CATIVpmFactoryObject_var&amp; iVPMObject     ,
+   const PoolSetMode&amp;              iSetMode = NOREPLACE ) = 0; 
+
+  /**
+   *
+   * Add a list of typed VPMObjects.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the object
+   * @param iListOfVPMObject
+   *   the VPMObjects to be added
+   * @param iSetMode
+   *   indicates whether existing VPMObjects should be replaced or not. (NOREPLACE by default)
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The list of VPMObjects is created&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;The list of VPMObjects already exist&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT SetVPMObjectList 
+  ( const CATUnicodeString&amp;             iPoolName              , 
+    const CATUnicodeString&amp;             iVPMObjectName         ,
+    const CATLISTV(CATIVpmFactoryObject_var)&amp; iListOfVPMObject , 
+    const PoolSetMode&amp;                  iSetMode  = NOREPLACE  ) = 0; 
+  
+  /**
+   *
+   * Remove a typed VPMObject from a pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the VPMObject to remove
+   *
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;the VPMObject is removed from the pool&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;the VPMObject does not exist&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *
+   */
+  virtual  HRESULT EraseVPMObject 
+  (const CATUnicodeString&amp;   iPoolName      , 
+   const CATUnicodeString&amp;   iVPMObjectName ) = 0 ; 
+  /**
+   *
+   * Remove a list of typed VPMObjects from a pool.
+   * @param iPoolName
+   *   the name of the pool on which to perform the operation.
+   * @param iVPMObjectName
+   *   the type of the VPMObjects
+   *
+   * @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The list is removed&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;The list does not exist&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Error raised during processing&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   */
+  virtual  HRESULT EraseVPMObjectList 
+  ( const CATUnicodeString&amp;             iPoolName        , 
+    const CATUnicodeString&amp;             iVPMObjectName  ) = 0 ; 
+
+};
+CATDeclareHandler(CATIVpmObjectPool,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmObjectOperation.html">← 上一页: CATIVpmObjectOperation.h</a></div>
+        <div><a href="CATIVpmObjectRules.html">下一页: CATIVpmObjectRules.h →</a></div>
+    </div>
+</body>
+</html>

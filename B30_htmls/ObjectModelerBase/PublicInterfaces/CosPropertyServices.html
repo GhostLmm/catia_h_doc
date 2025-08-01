@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CosPropertyServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CosPropertyServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CosLinkable.html">← 上一页: CosLinkable.h</a></div>
+        <div><a href="ON0GREXT.html">下一页: ON0GREXT.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef COS_PROPERTY_SERVICES_H
+#define COS_PROPERTY_SERVICES_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CORBAAnyDef.h&quot;
+#include &quot;AD0XXBAS.h&quot;
+#include &quot;sequence.h&quot;
+
+/** Type to use with CATIProperty interface methods. 
+  * @see CATIProperty
+  */
+typedef CATUnicodeString PropertyName;
+
+/** 
+  * Property.
+  * @see CATIProperty
+  * @param property_name
+  *           the name of the property.
+  * @param property_value
+  *           the value of the property.
+  */
+struct Property {
+	PropertyName property_name;
+	CORBAAny property_value;
+};
+
+/** @nodoc */
+enum PropertyModeType {
+ 	normal,
+ 	read_only,
+ 	fixed_normal,
+ 	fixed_readonly,
+ 	undefined
+};
+ 
+/** @nodoc */
+struct PropertyDef {
+	PropertyName property_name;
+	CORBAAny property_value;
+	PropertyModeType property_mode;
+};
+
+/** @nodoc */
+struct PropertyMode {
+	PropertyName property_name;
+	PropertyModeType property_mode;
+};
+
+// 
+// --&gt; Definition des sequences
+//
+/** @nodoc */
+DEF_SEQUENCE( PropertyName, AD0XXBAS)
+/** @nodoc */
+DEF_SEQUENCE( Property , AD0XXBAS)
+/** @nodoc */
+DEF_SEQUENCE( PropertyDef, AD0XXBAS)
+/** @nodoc */
+DEF_SEQUENCE( PropertyMode, AD0XXBAS)
+ 
+/** @nodoc */
+typedef SEQUENCE( PropertyDef )		PropertyDefs ;
+/** @nodoc */
+typedef SEQUENCE( PropertyMode )	PropertyModes ; 
+/** Type to use with CATIProperty interface methods. */
+typedef SEQUENCE( PropertyName )  	PropertyNames ;
+/** Type to use with CATIProperty interface methods. */
+typedef SEQUENCE( Property )		Properties ;
+
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CosLinkable.html">← 上一页: CosLinkable.h</a></div>
+        <div><a href="ON0GREXT.html">下一页: ON0GREXT.h →</a></div>
+    </div>
+</body>
+</html>

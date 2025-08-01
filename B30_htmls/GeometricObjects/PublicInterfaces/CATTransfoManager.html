@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATTransfoManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATTransfoManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTorus.html">← 上一页: CATTorus.h</a></div>
+        <div><a href="ExportedByCATCGMGeoMath.html">下一页: ExportedByCATCGMGeoMath.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTransfoManager_H
+#define CATTransfoManager_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+//Windows compatibility
+#include &quot;YP00IMPL.h&quot;
+
+//GeometricObjects libraries
+#include &quot;CATCloneManager.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+
+//Mathematics libraries
+#include &quot;CATMathDef.h&quot;
+
+class CATGeometry;
+class CATICGMObject;
+class CATSurface;
+class CATCurve;
+class CATGeoFactory;
+class CATTransfoUnknown;
+class CATMathTransformation1D;
+class CATMathTransformation2D;
+class CATMathTransformation;
+class CATMathNonLinearTransformation;
+class CATCrvLimits;
+class CATSurLimits;
+class CATMapGeoToAssoc;
+
+/**
+ * Class representing the process of geometric transformation of a CATGeometry.&lt;br&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;The transformation process takes the forward links  into account
+ * &lt;li&gt;A CATTransfoManager can process several CATGeometry at the same time.
+ * &lt;li&gt;If the transformation is linear, a CATTransfoManager has two modes of transformation:
+ *&lt;dl&gt;&lt;dt&gt;CATTransfoManager::Duplicate&lt;/dt&gt;&lt;dd&gt;Duplicates and transforms the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager 
+ *    &lt;dt&gt;CATTransfoManager::Replace&lt;/dt&gt;&lt;dd&gt;Only transforms the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager.
+ *&lt;/dl&gt;
+ * &lt;li&gt;A CATTransfoManager does not duplicate or replace a forward linked object 
+ * if it is geometrically invariant by the transformation, 
+ * except if this forward linked object
+ * is specifically &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager. Invariant means that
+ * it is invariant within its maximum limits. A line is invariant
+ * by a transformation along its direction, a circle is invariant by a rotation
+ * of center the center of the circle, as examples.
+ * A CATTransfoManager duplicates or replaces a forward linked object 
+ * if it is not geometrically invariant by the transformation
+ * &lt;li&gt;A CATTransfoManager offers two types of methods:
+ *&lt;ul&gt;
+ * &lt;li&gt;&quot;user methods&quot; that are called by the application programmer 
+ * to transform CATGeometry: &lt;tt&gt;Add&lt;/tt&gt;, &lt;tt&gt;Run&lt;/tt&gt;
+ * &lt;li&gt;&quot;object methods&quot; that are called by the CATGeometry to
+ * ask for the transformation of their forward linked objects. 
+ * These methods must not be normally called,
+ * except in the &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt; and 
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; methods, 
+ * if you intend to create your own CATGeometry class.
+ *&lt;/ul&gt;
+ * &lt;li&gt;The objects of this class are temporary and cannot be streamed
+ * &lt;/ul&gt;
+ */
+class ExportedByYP00IMPL CATTransfoManager: public CATCloneManager
+{
+public:
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+/**
+ * Defines the mode of the transformation process.
+ * @param CATTransfoManager::Duplicate
+ * Duplicates and transforms the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager.
+ * &lt;br&gt;Does not duplicate a forward linked object 
+ * if it is geometrically invariant by the transformation, 
+ * except if this forward linked object
+ * is specifically &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager.
+ * Duplicates a forward linked object 
+ * if it is not geometrically invariant by the transformation.
+ * @param CATTransfoManager::FullDuplicate
+ * Duplicates and transforms the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager.
+ * &lt;br&gt;Duplicates a forward linked object 
+ * even if it is geometrically invariant by the transformation, 
+ * @param CATTransfoManager::Replace
+ * Only transforms the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager.
+ * &lt;br&gt;Does not replace a forward linked object 
+ * if it is geometrically invariant by the transformation, 
+ * except if this forward linked object
+ * is specifically &lt;tt&gt;Add&lt;/tt&gt;ed to the CATTransfoManager. 
+ * Replaces a forward linked object 
+ * if it is not geometrically invariant by the transformation.
+ * &lt;br&gt;Invariant means that it is invariant within its maximum limits. An line is invariant
+ * by a transformation along its direction, a circle is invariant by a rotation
+ * of center the center of the circle, as examples.
+ */
+  enum CATTransfoManagerType {Duplicate = +10, FullDuplicate = +90, Replace = +50 };
+
+  //***************************************************************************
+  //****** USER METHODS
+  //***************************************************************************
+
+/**
+ * Constructs a CATTransfoManager for linear transformation.
+ * @param iMathTransfo
+ * The transformation to apply.
+ * @param iFactory
+ * A pointer to the factory of the resulting objects
+ * @param iType
+ * The mode of the transformation process.
+ * @param  iConfig
+ * The pointer to the configuration.Should not be &lt;tt&gt;NULL&lt;/tt&gt; in case of topological objects.
+ */
+  CATTransfoManager(const CATMathTransformation  &amp;iMathTransfo     ,
+		               CATGeoFactory                 *iFactory         ,
+		               CATTransfoManagerType          iMode   = Duplicate,
+                   CATSoftwareConfiguration      *iConfig = NULL);
+
+ /**
+   * Adds a CATGeometry to transform with &lt;tt&gt;this&lt;/tt&gt; CATTransfoManager.
+   *&lt;br&gt;All the added objects must belong
+   * to the same factory.
+   * @param iObjectToTransform
+   * A pointer to the CATGeometry to add to the CATTransfoManager.
+   * @param iTransformedObject
+   * If not NULL, it forces the transformation of &lt;tt&gt;iObjectToTransform&lt;/tt&gt; to be
+   * the object &lt;tt&gt;iTransformedObject&lt;/tt&gt;. This must be compatible with the
+   * given transformation of the CATTransfoManager.
+   */
+  void Add(CATICGMObject * iObjectToTransform    ,
+           CATICGMObject * iTransformedObject = 0);
+
+  /**
+   * Runs the CATTransfoManager process.
+   * This method should be called only once.
+   */
+  int Run();
+
+ /**
+  * Retrieves the CATMathTransformation associated with &lt;tt&gt;this&lt;/tt&gt;
+  * CATTransfoManager.
+	* @param oMathTransfo
+  * The associated transformation. This is part of the class and must not be deleted.
+  */
+  void GetMathTransformation(CATMathTransformation * &amp;oMathTransfo) const;
+                                 
+  
+
+
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+  
+
+/**
+ * @nodoc
+ * Constructs a CATTransfoManager for non-linear transformation.
+ * &lt;br&gt;Internal use.
+ * @param iMathTransfo
+ * The non-linear transformation to apply. 
+ * @param iFactory
+ * A pointer to the factory of the resulting objects
+ */
+  CATTransfoManager(const CATMathNonLinearTransformation  &amp;iMathTransfo,
+		                CATGeoFactory                         * iFactory,
+                    CATSoftwareConfiguration              * iConfig = NULL );
+
+
+ /**
+  * @nodoc
+  * Retrieves the CATMathNonLinearTransformation associated with &lt;tt&gt;this&lt;/tt&gt;
+  * CATTransfoManager.
+	* &lt;br&gt;Internal use.
+	* @param oMathTransfo
+  * The associated transformation. This is part of the class and must not be deleted.
+  */
+  void GetMathNonLinearTransformation(CATMathNonLinearTransformation * &amp;oMathTransfo) const;
+
+/**
+ * @nodoc
+ * Retrieves the 1D-transformation to apply to a CATGeometry 
+ * which forward linked object is a CATCurve.
+ * Let us take the following example:
+ * &lt;pre&gt;CATPointOnCurve -&gt; CATCurve&lt;/pre&gt;
+ * If CATCurve is invariant by the CATTransfoManager process, it is sufficient
+ * to use a 1D transformation in the space of the CATCurve to transform the
+ * CATPointOnCurve that points it.
+ * A non-invariant object may also return a 1D-transformation.
+ * @param iCurve
+ * The curve that is invariant by the CATTransfoManager process.
+ * @param Transfo1D
+ * The transformation to apply for processing a CATGeometry that points &lt;tt&gt;iCurve&lt;/tt&gt; .
+ * This object is part of the class and must not be deleted.
+ */
+  CATLONG32 RetrieveTransfoW(CATCurve                *  iCurve    ,
+		        CATMathTransformation1D * &amp;oTransfo1D);
+
+  //***************************************************************************
+  //****** OBJECTS METHODS
+  //***************************************************************************
+
+/**
+ * @nodoc
+ * Retrieves the inverse transformation associated with &lt;tt&gt;this&lt;/tt&gt;
+ * CATTransfoManager.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;.
+ */
+  void GetMathTransformationInverse(CATMathTransformation * &amp;oMathTransfoInverse);
+
+/**
+ * @nodoc
+ * Tests whether the associated transformation is the identity.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;1&lt;/tt&gt; if the associated transformation is the identity , &lt;tt&gt;0&lt;/tt&gt; otherwise.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;.
+ */
+  CATBoolean IsIdentity() const;
+
+/**
+ * @nodoc
+ * Tests whether the associated transformation is a similitude.
+ * @param ioRatio
+ * The value of the scaling, if the associated transformation is a similitude.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not output.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;1&lt;/tt&gt; if the associated transformation is a similitude, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;.
+ */
+  CATBoolean IsSimilitude(CATPositiveLength * ioRatio = NULL) const;
+
+/**
+ * @nodoc
+ * Retrieves the orientation change of the associated transformation.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;.
+ * @param ioOrientationChange
+ * If the associated transformation is linear:
+ * &lt;tt&gt;-1&lt;/tt&gt; for a indirect transformation and &lt;tt&gt;1&lt;/tt&gt; for a direct
+ * transformation.
+ */
+  void GetOrientationChange(CATLONG32 &amp; ioOrientationChange) const;
+  
+/**
+ * @nodoc
+ * Processes the transformation of a CATGeometry (except CATCurve and
+ * CATSurface).
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;
+ * to ask for the transformation of a forward linked object.
+ */
+  void Compute(CATGeometry *  iObjectToTransform,
+	       CATGeometry * &amp;oTransformedObject);
+
+ /**
+ * @nodoc
+ * Processes the transformation of a CATSurface.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;
+ * to ask for the transformation of a forward linked object that is a surface.
+ * @param iSurfaceToTransform
+ * A pointer to the surface to transform.
+ * @param oTransformedSurface
+ * A pointer to the resulting surface.
+ * @param oTransfo2D
+ * The 2D-transformation to apply to an object that points the surface, if
+ * this surface is invariant. This object is part of the class and must not be deleted.
+  */
+  void ComputeUV(CATSurface*               iSurfaceToTransform,
+		 CATSurface*              &amp;oTransformedSurface,
+		 CATMathTransformation2D* &amp;oTransfo2D         );
+
+ /**
+ * @nodoc
+ * Processes the transformation of a CATCurve.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;
+ * to ask for the transformation of a forward linked object that is a curve.
+ *@param iCurveToTransform
+ * A pointer to the curve to transform.
+ * @param oTransformedCurve
+ * A pointer to the resulting curve
+ * @param oTransfo1D
+ * The 1D-transformation to apply to an object that points the curve, if
+ * this curve is invariant. This object is part of the class and must not be deleted.
+  */
+  void ComputeW(CATCurve*                 iCurveToTransform,
+		CATCurve*                &amp;oTransformedCurve,
+		CATMathTransformation1D* &amp;oTransfo1D       );
+
+/**
+ * @nodoc
+ * Tests whether the CATGeometry has been detected as invariant by
+ * &lt;tt&gt;this&lt;/tt&gt; CATTransfoManager.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;1&lt;/tt&gt; if the CATGeometry has been detected as invariant by
+ * &lt;tt&gt;this&lt;/tt&gt; CATTransfoManager, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the methods
+ * &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; and &lt;tt&gt;CATGeometry::Move3D&lt;/tt&gt;.
+ */
+  CATBoolean IsInvariant(CATGeometry* iIn);
+
+/**
+ * @nodoc
+ * Processes the transformation of a CATGeometry. 
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the &lt;tt&gt;CATGeometry::CloneAndMove3D&lt;/tt&gt; method.
+ * @param iIn
+ * The object to transform. 
+ * @return
+ * A pointer to the transformed object.
+  */
+  CATICGMObject* ComputeImage(CATICGMObject * iIn);
+
+/** 
+ * Associates a CATMathTransformation1D to a curve to apply it on CATGeometry
+ * that points to it. 
+ * This is especially usefull together with the &lt;tt&gt;Add&lt;/tt&gt; method to replace a transformed curve by another curve
+ * confused with it.
+ * If it is not the case , the generated model will not be valid.
+ * @param iIn
+ * A pointer to the input curve.
+ * @param iTransfo1D
+ * The 1D transformation on the curve corresponding to the 3D transformation defined by &lt;tt&gt;this&lt;/tt&gt;. 
+ */
+  void SetTransfoW(CATCurve                * iIn       ,
+		   CATMathTransformation1D  &amp;iTransfo1D);
+
+/**
+ * Associates a CATMathTransformation2D to a Surface to apply it on CATGeometry
+ * that points to it.
+ * This is especially usefull together with the &lt;tt&gt;Add&lt;/tt&gt; method to replace a transformed surface by another 
+ * surface confused with it.
+ * If it is not the case , the generated model will not be valid.
+ * @param iIn
+ * A pointer to the input surface.
+ * @param iTransfo2D
+ * The 2D transformation on the surface corresponding to the 3D transformation defined by &lt;tt&gt;this&lt;/tt&gt;. 
+ */
+  void SetTransfoUV(CATSurface              * iIn       ,
+		    CATMathTransformation2D  &amp;iTransfo2D);
+
+/**
+ * @nodoc
+ * Associates a CATCrvLimits to a curve. If a limit has already been associated to this curve,
+ * the current limit will inflate the previous one.
+ * @param iIn
+ * A pointer to the input curve.
+ * @param iBox
+ * The limits to assiocate to the curve. 
+ */
+  void AddToBoxW(CATCurve    * iIn ,
+		 CATCrvLimits &amp;iBox);
+ 
+
+/**
+ * @nodoc
+ * Associates a CATSurLimits to a surface. If a limit has already been associated to this curve,
+ * the current limit will inflate the previous one.
+ * @param iIn
+ * A pointer to the input surface.
+ * @param iBox
+ * The limits to assiocate to the surface. 
+ */
+  void AddToBoxUV(CATSurface    * iIn ,
+		  CATSurLimits   &amp;iBox);
+
+/**
+  * @nodoc
+  * Associates a new CATMathTransformation  with &lt;tt&gt;this&lt;/tt&gt;
+  * CATTransfoManager. To use only with CATTransfoManager::Duplicate.
+  * @param iMathTransfo
+  * The new transformation.
+  */
+  void SetTransformation(const CATMathTransformation &amp; iMathTransfo);
+
+/**
+  * @nodoc
+  * Allow to replace a surface by another which is not confused with it
+  */
+  void SetNoCheckInAdd();
+
+/**
+  * @nodoc
+  * Enables or Disables invariance computation
+  */
+  void SetCheckInvariance(CATBoolean iMode);
+
+  virtual ~CATTransfoManager();
+
+protected:
+  /**/
+  //---------------------------------------------------------------------------
+  //- Data
+  //---------------------------------------------------------------------------
+  //Main data
+	/** @nodoc */
+  CATMathTransformation          * _MathTransfo, * _MathTransfoInverse;
+	/** @nodoc */
+  CATMathNonLinearTransformation * _MathNonLinearTransfo;
+	/** @nodoc */
+  CATLONG32                             _TransfoType;
+
+  //Information concerning the MathTransformation
+	/** @nodoc */
+  CATPositiveLength _Ratio; 
+
+  //Other data
+	/** @nodoc */
+  CATTransfoUnknown   * _TransfoUnknown;
+	/** @nodoc */
+  CATMapGeoToAssoc    * _MapCurveToAssoc;
+
+	/** @nodoc */
+  CATLONG32              _OrientationChange;
+
+	/** @nodoc */
+  CATBoolean        _IsIdentity, _IsSimilitude;
+
+	/** @nodoc */
+  CATLONG32                  _NewTransfo, 
+                        _Status,       // =0 by default, =1 si RunDuplicate 
+                                       // =2 si runDulpicate + Add 
+                        _NoCheckInAdd; // =1 if no search for transfo1D/2D in 
+                                       // Add methode
+  //---------------------------------------------------------------------------
+  //- Internal only
+  //---------------------------------------------------------------------------
+  /** @nodoc */
+  static CATString _OperatorId;
+  /** @nodoc */
+	const CATString * GetOperatorId();
+  /** @nodoc */
+  CATExtCGMReplay *IsRecordable(short &amp; LevelOfRuntime, short &amp;VersionOfStream);
+  /** @nodoc */
+  void WriteInput(CATCGMStream  &amp; ioStream);
+  /** @nodoc */
+  void WriteOutput(CATCGMStream &amp; ioStream);
+  /** @nodoc */
+	CATBoolean ValidateOutput(CATCGMStream&amp; ioStream, CATCGMOutput&amp; os,int VersionNumber=1);
+  /** @nodoc */
+  void Dump( CATCGMOutput&amp; os ) ;
+  /** @nodoc */
+  int RunOperator();
+
+/** @nodoc */
+  virtual void CreateTransformation();
+
+private:
+  void AddInternal(CATICGMObject * iObjectToTransform    ,
+                   CATICGMObject * iTransformedObject = 0);
+  void Clear();
+  void Reset(CATLONG32 &amp; oNoFindLinks);
+  void CreateMathTransformation(const CATMathTransformation &amp; iMathTransfo);
+
+friend class CATTransfoUnknown;
+friend class CATTransfoSimplify;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTorus.html">← 上一页: CATTorus.h</a></div>
+        <div><a href="ExportedByCATCGMGeoMath.html">下一页: ExportedByCATCGMGeoMath.h →</a></div>
+    </div>
+</body>
+</html>

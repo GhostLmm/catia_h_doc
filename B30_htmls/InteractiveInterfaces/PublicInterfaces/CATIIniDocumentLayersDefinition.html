@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteractiveInterfaces/PublicInterfaces/CATIIniDocumentLayersDefinition.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InteractiveInterfaces/PublicInterfaces/CATIIniDocumentLayersDefinition.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniDocumentFiltersDefinition.html">← 上一页: CATIIniDocumentFiltersDefinition.h</a></div>
+        <div><a href="CATIIniInteractiveSession.html">下一页: CATIIniInteractiveSession.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2004
+
+/** 
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#ifndef CATIIniDocumentLayersDefinition_H
+#define CATIIniDocumentLayersDefinition_H
+
+#include &quot;CATInteractiveInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATIIniLayer;
+class CATListPtrCATIIniLayer;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATInteractiveInterfaces IID IID_CATIIniDocumentLayersDefinition;
+#else
+extern &quot;C&quot; const IID IID_CATIIniDocumentLayersDefinition ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface for layer management.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * This interface is implemented on all V5 documents.
+ * To query or modify the layers do not implement this interface, just query the document on this interface.
+ * A layer is managed by a pointer to the @href CATIIniLayer interface.
+ * The layers you will manage with this interface depend on the context.&lt;ul&gt;
+ * &lt;li&gt;If the ui-active document is edited in an assembly (for example a CATPart in a CATProduct), the layers managed by this interface can be:&lt;/li&gt;&lt;ul&gt;
+ *   &lt;li&gt;The layers saved in the document (only applied to this document)
+ *       if the setting defined in Tools/Options/General/Display/Layer Filter is set to &quot;Current filter of the document&quot;&lt;/li&gt;
+ *   &lt;li&gt;The layers saved in the CATSettings (applied to any assembly opened in the session)
+ *       if the setting defined in Tools/Options/General/Display/Layer Filter is set to &quot;Current filter on all documents&quot;&lt;/li&gt;&lt;/ul&gt;
+ * &lt;li&gt;If the ui-active document is a CATProduct, the layers managed are those of the CATSettings.&lt;/li&gt;
+ * &lt;li&gt;If the current document is edited outside of an asembly (it&#x27;s a CATPart, a CATDrawing, etc...), the layers managed are those of the document.&lt;/li&gt;&lt;/ul&gt;
+ */
+class ExportedByCATInteractiveInterfaces CATIIniDocumentLayersDefinition: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Retrieves the layer list.
+ * @param opList
+ *   The list of layers. This pointer must be NULL when calling the method.
+ *   You have to Release each object of the returned list and then Release the returned list pointer after use.
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if a layers list was found&lt;/li&gt;
+ * &lt;li&gt;E_FAIL no layers list was found&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT GetList (CATListPtrCATIIniLayer* &amp;opList) = 0;
+
+/**
+ * Retrieves a layer by its name.
+ * @param iName
+ *   The layer name.
+ * @param opLayer
+ *   The layer found.
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the layer was found&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if the layer does not exist&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT Find (CATUnicodeString  iName,
+                          CATIIniLayer*        &amp;opLayer) = 0;
+    
+/**
+ * Retrieves a layer by its number.
+ * @param iLayerNumber
+ *   The layer number.
+ * @param opLayer
+ *   The layer found.
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the layer was found&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if the layer does not exist&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT Find (int        iLayerNumber,
+                          CATIIniLayer* &amp;opLayer) = 0;
+
+/**
+ * Retrieves the current layer.
+ * @param opLayer
+ *   The Layer. (&lt;tt&gt;NULL&lt;/tt&gt; if there is no current layer)
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the current layer was found&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if no current layer was found&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT GetCurrent (CATIIniLayer* &amp;opLayer) = 0;
+
+/**
+ * Changes the current layer.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * Set a layer as the current one.
+ * This recomputes the visualization because the current layer is always visible so it belongs to the current visualization filter.
+ * @param ipLayer
+ *   The layer. (&lt;tt&gt;NULL&lt;/tt&gt; if no current layer is needed)
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the current layer was changed&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if no current layer was found&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT SetCurrent (CATIIniLayer* &amp;ipLayer) = 0;
+
+/**
+ * Adds a Layer.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * Adds a new layer to the layers list.
+ * Notice: you do not create the layer. All the layers always exist, you may just change their default name or give them a description.
+ * The layers list only contains the modified layers.
+ * @param opLayer
+ *   The created layer.&lt;ul&gt;
+ *   &lt;li&gt;If a new layer was created, opLayer is set and the returned HRESULT is S_OK ;&lt;/li&gt;
+ *   &lt;li&gt;If an existing layer with the same number but with a different name was found, this layer is renamed, opLayer is set NULL and the returned HRESULT is S_OK ;&lt;/li&gt;
+ *   &lt;li&gt;If an existing layer with the same number and the same name was found, opLayer is set to this layer and the returned HRESULT is S_FALSE ;&lt;/li&gt;&lt;/ul&gt;
+ * @param iLayerNumber
+ *   The layer number.
+ * @param iLayerName
+ *   The layer name (optional). If this name is blank, the default name of the layer will be kept.
+ *   The default name is built with the &quot;Layer&quot; word (depends on your language) and the layer number.
+ * @param iLayerComment
+ *   The layer comment (optional).
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the layer was correctly added&lt;/li&gt;
+ * &lt;li&gt;S_FALSE if this layer already exists in the list&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if the layer could not be added&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT Add (CATIIniLayer* &amp;opLayer,
+                         int iLayerNumber,
+                         CATUnicodeString iLayerName = &quot;&quot;,
+                         CATUnicodeString iLayerComment = &quot;&quot;) = 0;
+
+/**
+ * Removes a layer.
+ * @param ipLayer
+ * The layer to remove from the list.
+ * Notice: you do not delete the layer. All the layers always exist, the layers list only contains the modified layers.
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:&lt;ul&gt;
+ * &lt;li&gt;S_OK if the layer was correctly removed&lt;/li&gt;
+ * &lt;li&gt;E_FAIL if the layer does not exist&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual HRESULT Remove (CATIIniLayer* &amp;ipLayer) = 0;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniDocumentFiltersDefinition.html">← 上一页: CATIIniDocumentFiltersDefinition.h</a></div>
+        <div><a href="CATIIniInteractiveSession.html">下一页: CATIIniInteractiveSession.h →</a></div>
+    </div>
+</body>
+</html>

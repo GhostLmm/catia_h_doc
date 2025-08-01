@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATISysDLNameSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATISysDLNameSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISysCommandStatisticsSettingAtt.html">← 上一页: CATISysCommandStatisticsSettingAtt.h</a></div>
+        <div><a href="CATISysDisconnectionSettingAtt.html">下一页: CATISysDisconnectionSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===========================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2003                                         
+//===========================================================================
+//                                                                           
+//  CATISysDLNameSettingAtt                                                
+//                                                                           
+//  Usage Notes: Interface Definition                                          
+//===========================================================================
+//  Creation fevrier  2003                                 adt         	
+//===========================================================================
+#ifndef __CATISYSDLNAMESETTINGATT
+#define __CATISYSDLNAMESETTINGATT
+#include &quot;JS0STDLIB.h&quot;
+#include &quot;CATBaseUnknown.h&quot;   
+#include &quot;CATISysSettingController.h&quot;
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+class CATUnicodeString;
+class CATSettingInfo;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByJS0STDLIB IID IID_CATISysDLNameSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_CATISysDLNameSettingAtt;
+#endif
+
+
+
+
+/**
+* Interface to handle the DLNames.
+* &lt;b&gt;Role&lt;/b&gt;: This interface is implemented by a component which
+* represents the controller of the DLNames. 
+* &lt;br&gt;This interface defines:
+* &lt;ul&gt;
+* &lt;li&gt;A method to set each DLNamw&lt;/li&gt;
+* &lt;li&gt;A method to get the value of each DLName&lt;/li&gt;
+* &lt;li&gt;A method to lock/unlock each parameter&lt;/li&gt;
+* &lt;li&gt;A method to retrieve the informations concerning each parameter&lt;/li&gt;
+* &lt;/ul&gt;
+*/
+class ExportedByJS0STDLIB CATISysDLNameSettingAtt : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public :
+
+/**
+ * Retrieves if one has the right to create or delete new DLNames .
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing if one has 
+ * the right to create or deletenew DLNames in the current list.
+ * @param oRight
+ *     TRUE if the creation is authorized.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDLNameCreationRight (unsigned char &amp;oRight)=0;
+  
+
+/**
+ * Sets the creation right.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the right to create new DLNames in the current list.
+ * @param iRight
+ *     TRUE if the creation is authorized, FALSE to forbid it
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetDLNameCreationRight (unsigned char iRight)=0;
+
+
+/**
+ * Retrieves the state of the parameter DLNameCreationRight.
+ * &lt;br&gt;Refer to @href CATSysSettingController for a detailled description.
+*/
+  virtual HRESULT GetDLNameCreationRightInfo (CATSettingInfo *oInfo)=0;
+  
+/**
+ * Locks or unlocks the parameter DLNameCreationRight. 
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the state of the parameter describing if one has 
+*/
+  virtual HRESULT SetDLNameCreationRightLock (unsigned char iLock)=0;
+
+
+/**
+ * Retrieves if one has the right to create new Root DLNames.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing if one has 
+ * the right to create new DLNames in the current list.
+ * @param oRight
+ *     TRUE if the creation is authorized.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetRootDLNameCreationRight (unsigned char &amp;oRight)=0;
+  
+
+/**
+ * Sets the creation right of Root DLNames.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the right to create new Root DLNames in the current 
+ * list.
+ * @param iRight
+ *     TRUE if the creation is authorized, FALSE to forbid it
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetRootDLNameCreationRight (unsigned char iRight)=0;
+
+
+/**
+ * Retrieves the state of the parameter RootDLNameCreationRight.
+ * &lt;br&gt;Refer to @href CATSysSettingController for a detailled description.
+*/
+  virtual HRESULT GetRootDLNameCreationRightInfo (CATSettingInfo *oInfo)=0;
+  
+/**
+ * Locks or unlocks the parameter RootDLNameCreationRight.
+ * &lt;br&gt;Refer to @href CATSysSettingController for a detailled description.
+*/
+  virtual HRESULT SetRootDLNameCreationRightLock (unsigned char iLock)=0;
+
+
+/**
+ * Retrieves the list of the DLNames.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the list of the defined DLNames.
+ * @param oNbDLname
+ *	The number of defined DLNames.
+ * @param oTabDLName
+ *	The array of DLNames
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDLNameList ( unsigned int *oNbDLname,
+				  CATUnicodeString **&amp;oTabDLName) =0;
+
+/**
+ * Retrieves the list of the Sub-DLNames.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the list of the DLNames created in a given DLName.
+ * @param iDLName
+ *      The Father DLName. if iDLName=NULL all DLNames created at the root level
+ *      are return.
+ * @param oNbDLname
+ *	The number of defined DLNames.
+ * @param oTabDLName
+ *	The array of DLNames
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ *	&lt;br&gt;&lt;tt&gt;E_OUTOFMEMORY:&lt;/tt&gt; on allocation failure
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on other failures
+*/
+  virtual HRESULT GetDLNameSubList ( CATUnicodeString* iDLName,
+				     unsigned int *oNbDLname,
+				     CATUnicodeString **&amp;oTabDLName) =0;
+  
+/**
+ * Retrieves the mapping between a logical name and the physical path.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the mapping between a logical name and 
+ * the physical path.
+ * @param iDLName
+ *	the logical name.
+ * @param oRealNameUnix
+ *	the real physical path corresponding to the logical name on Unix.
+ * @param oRealNameNT
+ *	the real physical path corresponding to the logical name on Windows.
+ *@param iFather
+ *	if applicable the Name of the parent DLName
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDLName(const CATUnicodeString *iDLName, 
+			    CATUnicodeString **oRealNameUnix,
+			    CATUnicodeString **oRealNameNT,
+			    CATUnicodeString **oFather)=0;
+
+/**
+ * Retrieves the mapping between a logical name and the physical path.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the mapping between a logical name and 
+ * the physical path in a litteral form.
+ * @param iDLName
+ *	the logical name.
+ * @param oRealNameUnix
+ *	the real physical path corresponding to the logical name on Unix.
+ * @param oRealNameNT
+ *	the real physical path corresponding to the logical name on Windows.
+ *@param iFather
+ *	if applicable the Name of the parent DLName
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDLNameExp(const CATUnicodeString *iDLName, 
+			       CATUnicodeString **oRealNameUnix,
+			       CATUnicodeString **oRealNameNT,
+			       CATUnicodeString **oFather)=0;
+  
+
+
+/**
+ * Sets the mapping between a logical name and the physical path.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets the value of the cache maximum size in Mo
+ * @param iDLName
+ *	the logical name.
+ * @param oRealNameUnix
+ *	the real physical path corresponding to the logical name on Unix.
+ * @param oRealNameNT
+ *	the real physical path corresponding to the logical name on Windows.
+ *@param iFather
+ *	if applicable the Name of the parent DLName
+ *@param iVerifDirectory
+ *	if VerifDirectory is set the existence of the directory on the current
+ *      platform will be check.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetDLName(const CATUnicodeString *iDLName, 
+			    const CATUnicodeString *iRealNameUnix,
+			    const CATUnicodeString *iRealNameNT,
+			    const CATUnicodeString *iFather,
+			    int iVerifDirectory=0)=0;
+
+
+
+/**
+ * Retrieves the state of the for a given DLName.
+ * @param oInfo
+ *	Address of an object CATSettingInfo.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDLNameInfo (const CATUnicodeString *iDLName,
+				 CATSettingInfo* oInfo)=0;
+
+/** 
+ * Locks or unlocks the DLName.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the given DLName if the
+ * operation is allowed in the current administrated environment. In user mode 
+ * this method will always return E_FAIL.
+ * @param iLocked
+ *	the locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;0:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetDLNameLock (const CATUnicodeString *iDLName,
+				 unsigned char iLock)=0;
+
+
+
+
+/**
+ * Remove a logical name.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Remove a DLName in the current set if it is possible.
+ * @param iDLName
+ *	the logical name.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT RemoveDLName(const CATUnicodeString *iDLName)=0;
+
+/**
+ * Rename an existing DLName.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Rename a DLName in the current set if it is possible.
+ * @param iDLName
+ *	the logical name to rename.
+ * @param iNewName
+ *	the new logical name.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT RenameDLName(const CATUnicodeString *iDLName,
+			       const CATUnicodeString *iNewName)=0;
+
+
+
+  
+
+};
+
+
+
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISysCommandStatisticsSettingAtt.html">← 上一页: CATISysCommandStatisticsSettingAtt.h</a></div>
+        <div><a href="CATISysDisconnectionSettingAtt.html">下一页: CATISysDisconnectionSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

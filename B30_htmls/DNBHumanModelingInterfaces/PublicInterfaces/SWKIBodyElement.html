@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNBHumanModelingInterfaces/PublicInterfaces/SWKIBodyElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DNBHumanModelingInterfaces/PublicInterfaces/SWKIBodyElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SWKIBody.html">← 上一页: SWKIBody.h</a></div>
+        <div><a href="SWKIBodyKineo.html">下一页: SWKIBodyKineo.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+
+#ifndef _SWKIBodyElement_h
+#define _SWKIBodyElement_h
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+// *****************************************************************************
+// Framework DNBHumanModelingInterfaces
+// Copyright Safework Inc.
+// *****************************************************************************
+//  Abstract:
+//  ---------
+//
+//    SWKIBodyElement interface.
+//    This interface provides non-IDL body element services.
+//
+// *****************************************************************************
+//  Usage:
+//  ------
+//
+// *****************************************************************************
+//  Inheritance:
+//  ------------
+//
+//    CATBaseUnknown
+//
+// *****************************************************************************
+//  Main Methods:
+//  -------------
+//
+//    GetPosition
+//    GetWorldPosition
+//    GetName
+//    GetShortName
+//    GetShortNameAsString
+//    GetManikin
+//    RefreshRep
+//    RebuildRep
+//    DisableRepUpdate
+//    EnableRepUpdate
+//    IsRepUpdateEnabled
+// *****************************************************************************
+//  History
+//  -------
+//
+//  Author: Jean-Guy AUGUSTIN
+//  Date  : 00/02/28
+//  Goal  : Creation
+// *****************************************************************************
+//
+// --- System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+//
+// --- DNBHumanModelingInterfaces
+#include &quot;SWShortNames.h&quot;
+//
+// --- DNBHumanModelingInterfaces
+class SWKIManikin;
+//
+// --- Mathematics
+class CATMathAxis;
+//
+// --- System
+class CATUnicodeString;
+class CATString;
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __SWKHumanModelingItf
+#define ExportedBySWKHumanModelingItf __declspec(dllexport)
+#else
+#define ExportedBySWKHumanModelingItf __declspec(dllimport)
+#endif
+#else
+#define ExportedBySWKHumanModelingItf
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySWKHumanModelingItf IID IID_SWKIBodyElement;
+#else
+extern &quot;C&quot; const IID IID_SWKIBodyElement;
+#endif
+
+/**
+  * This interface provides non-IDL body element services.&lt;br&gt;
+  * A body element is an element entering in the constitution&lt;br&gt;
+  * of the body of the manikin.  Segments, ellipses and lines&lt;br&gt;
+  * of sight are examples of body elements.&lt;br&gt;
+  * All the common functionality related to body elements are&lt;br&gt;
+  * put in this interface. Not that the body of the manikin itself&lt;br&gt;
+  * is a body element.
+  **/
+
+class ExportedBySWKHumanModelingItf SWKIBodyElement : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+ public:
+
+	/**
+	  * @return The position of the body element with respect to the manikin&#x27;s root.&lt;br&gt;
+	  * The position returned will be as if the root of the manikin was the&lt;br&gt;
+	  * origin of the world.  To get the real position of the manikin in the world,&lt;br&gt;
+	  * please refer to method &lt;code&gt;GetWorldPosition()&lt;/code&gt;&lt;br&gt;
+	  **/
+	virtual CATMathAxis GetPosition() const = 0;
+
+	/**
+	  * @return The global position of the body element in world coordinates.
+	  **/
+	virtual CATMathAxis GetWorldPosition() const = 0;
+
+	/**
+	  * @return The full name of the body element.
+	  **/
+	virtual CATUnicodeString GetName() const = 0;
+
+	/**
+	  * @return The short name of the body element.&lt;br&gt;
+	  * Each body element can be uniquely identified by this
+	  * short name.
+	  **/
+	virtual SWShortName GetShortName() const = 0;
+
+	/**
+	  * @return The short name of the body element in a string format.&lt;br&gt;
+	  * Each body element can be uniquely identified by this
+	  * short name.
+	  **/
+	virtual CATString GetShortNameAsString() const = 0;
+
+	/**
+	  * @return The manikin owning this body element.
+	  **/
+	virtual SWKIManikin * GetManikin() const = 0;
+
+	/**
+	  * Update the graphical representation of the current body element.&lt;br&gt;
+	  * This needs to be done when the body element&#x27;s position changes&lt;br&gt;
+	  * (i.e. when a segment moves or when the position of the body changes).
+          *  2 arguments have been added:
+	  * @param piMasterCall Since RefreshRep is recursive, MasterCall==true indicates
+	  * that the call has been made from &#x27;outside&#x27;.
+	  * @param piRefSegment Since RefreshRep is sometimes called from a segment that isn&#x27;t
+	  * directly the modified segment, indicates the segment that has really changed (-1 indicates
+	  * to use this segment)
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on success, or an error code on failure.
+	  *
+	  **/
+	virtual HRESULT RefreshRep(boolean piMasterCall = TRUE, int piRefSegment = -1) = 0;
+
+	/**
+	  * Rebuild the graphical representation of the current body element.&lt;br&gt;
+	  * This needs to be done when the anthropometry changes, for example.
+	  **/
+	virtual HRESULT RebuildRep() = 0;
+
+	/**
+	  * Disable the update of the visual model.&lt;br&gt;
+	  * When this method is called, all events to update the visual model,&lt;br&gt;
+	  * via methods &lt;code&gt;RebuildRep()&lt;/code&gt; or &lt;code&gt;RefreshRep()&lt;/code&gt;,
+	  * will be ignored.
+	  *
+	  * The update can be switched back on by a call to &lt;code&gt;EnableRepUpdate()&lt;/code&gt;.
+	  **/
+	virtual void DisableRepUpdate() = 0;
+
+	/**
+	  * Enable the representation update.&lt;br&gt;
+	  * When this method is called, all events sent to update&lt;br&gt;
+	  * the visual model via methods &lt;code&gt;RebuildRep()&lt;/code&gt; or
+	  * &lt;code&gt;RefreshRep()&lt;/code&gt; will be taken into account.&lt;br&gt;
+	  * This is the default behavior when a manikin is created.&lt;br&gt;
+	  * This update process can be disabled using method &lt;code&gt;DisableRepUpdate()&lt;/code&gt;.
+	  **/
+	virtual void EnableRepUpdate() = 0;
+
+	/**
+	  * Determines whether the representation update is enabled or not.
+	  **/
+	virtual boolean IsRepUpdateEnabled() const = 0;
+};
+
+CATDeclareHandler(SWKIBodyElement, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="SWKIBody.html">← 上一页: SWKIBody.h</a></div>
+        <div><a href="SWKIBodyKineo.html">下一页: SWKIBodyKineo.h →</a></div>
+    </div>
+</body>
+</html>

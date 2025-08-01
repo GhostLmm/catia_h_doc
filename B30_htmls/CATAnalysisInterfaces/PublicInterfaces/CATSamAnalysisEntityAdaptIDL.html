@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATSamAnalysisEntityAdaptIDL.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATSamAnalysisEntityAdaptIDL.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamAnalysisContext.html">← 上一页: CATSamAnalysisContext.h</a></div>
+        <div><a href="CATSamAnalysisEntityImpl.html">下一页: CATSamAnalysisEntityImpl.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1998
+//=============================================================================
+//
+// CATSamAnalysisEntityAdaptIDL.h
+//
+//=============================================================================
+//
+// Usage Notes: this class extends AnalysisEntity feature for 
+// CATIAAnalysisEntity interface
+// 
+//=============================================================================
+// Jan. 99   Creation                       GFT
+//=============================================================================
+#ifndef CATSamAnalysisEntityAdaptIDL_H
+#define CATSamAnalysisEntityAdaptIDL_H
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U2
+  */
+
+#include &quot;CATAnalysisToolkit.h&quot;
+#include &quot;CATIABasicComponent.h&quot;
+#include &quot;CATBaseObject.h&quot;
+#include &quot;CATVariant.h&quot;
+
+class CATIABasicComponents;
+class CATIAReferences;
+class CATIAReference;
+class CATIAProduct;
+class CATIAPart;
+class CATIScriptMethodCall;
+class CATBaseDispatch;
+class CATIAConstraint;
+class CATIAAnalysisImages;
+class CATIAAnalysisLocalEntities;
+class CATIAPublication;
+class CATIAAnalysisSupports;
+
+/**
+ * Root object used to implement derived classes of CATIAAnalysisEntity.
+ * This class is required for build time consideration. You should not use it directely.
+ * &lt;br&gt;
+ * @see CATSamAnalysisEntityImpl
+ */
+class ExportedByCATAnalysisToolkit CATSamAnalysisEntityAdaptIDL : public CATBaseObject
+{
+	CATDeclareClass;
+
+	public :
+
+/**
+ * Default constructor.
+ */
+		CATSamAnalysisEntityAdaptIDL();
+/**
+ * Default destructor.
+ */
+		virtual ~CATSamAnalysisEntityAdaptIDL();
+
+/**
+ * Returns the parent of the object.
+ * See @href CATIABase#get_Parent for a complete description of this method.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ * @param oParent
+ *   The returned parent
+ */
+		virtual HRESULT __stdcall get_Parent ( CATBaseDispatch*&amp; oParent ); 
+/**
+ * Returns the type of the object.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+		HRESULT get_Type(CATBSTR &amp; oType);
+/**
+ * Returns the name of the object.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+		HRESULT get_Name(CATBSTR &amp; oName);
+/**
+ * Sets the name of the object.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+		HRESULT put_Name(const CATBSTR &amp; iNameBSTR);
+
+/**
+ * Returns the basic components collection associated with an analysis entity.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+		HRESULT get_BasicComponents(CATIABasicComponents *&amp; oComponents);
+/**
+ * Returns the list of Analysis Supports.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+		HRESULT get_AnalysisSupports(CATIAAnalysisSupports*&amp; oSupports);
+		
+/**
+ * Returns an object from its name.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ * @param IDName   The searched obect name
+ * @return    The searched object
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+    HRESULT GetItem(const CATBSTR &amp; iNameBSTR, CATBaseDispatch *&amp; oObject);
+
+ /**
+ * Returns the value corresponding to the given component.&lt;br&gt;
+ * @param iComponent  The identifier if the basic component.&lt;br&gt;
+ * @param iLabel  The label of the block containing the value.&lt;br&gt;
+ * @param iLineIndex  The line index of the value.&lt;br&gt;
+ * @param iColumnIndex  The column index of the value.&lt;br&gt;
+ * @param iLayerIndex  The layer index of the value.&lt;br&gt;
+ */
+		HRESULT GetValue(const CATBSTR&amp; iComponent, const CATBSTR &amp; iLabel,
+                		 const long iLineIndex, const long iColumnIndex, 
+                		 const long iLayerIndex,  CATVariant&amp; oValue);
+
+/**
+ * Sets the value corresponding to the given component.&lt;br&gt;
+ * @param iComponent  The identifier if the basic component.&lt;br&gt;
+ * @param iLabel  The label of the block containing the value.&lt;br&gt;
+ * @param iLineIndex  The line index of the value.&lt;br&gt;
+ * @param iColumnIndex  The column index of the value.&lt;br&gt;
+ * @param iLayerIndex  The layer index of the value.&lt;br&gt;
+ * If the the component has a single value, assign 0 to the 3 parameters.
+ *
+ */
+		HRESULT SetValue(const CATBSTR&amp; iComponent, const CATBSTR &amp; iLabel,
+                     const long iLineIndex,const long iColumnIndex,
+                     const long iLayerIndex,const CATVariant &amp; iValue);
+		
+/**
+ * Returns the reference corresponding to the given component.&lt;br&gt;
+ * @param iComponent  The identifier if the basic component.&lt;br&gt;
+ * @param iLabel  The label of the block containing the value.&lt;br&gt;
+ * @param iLineIndex  The line index of the value.&lt;br&gt;
+ * @param iColumnIndex  The column index of the value.&lt;br&gt;
+ * @param iLayerIndex  The layer index of the value.&lt;br&gt;
+ */
+    HRESULT GetReference(const CATBSTR&amp; iComponent,const CATBSTR &amp; iLabel,
+					               const long iLineIndex,const long iColumnIndex,
+                         const long iLayerIndex,CATIAReference*&amp; oValue);
+		
+/**
+ * Sets the reference corresponding to the given component.&lt;br&gt;
+ * @param iComponent  The identifier if the basic component.&lt;br&gt;
+ * @param iLabel  The label of the block containing the value.&lt;br&gt;
+ * @param iLineIndex  The line index of the value.&lt;br&gt;
+ * @param iColumnIndex  The column index of the value.&lt;br&gt;
+ * @param iLayerIndex  The layer index of the value.&lt;br&gt;
+ * If the the component has a single value, assign 0 to the 3 parameters.
+ */
+   HRESULT SetReference(const CATBSTR&amp; iComponent,const CATBSTR &amp; iLabel,
+                         const long iLineIndex,const long iColumnIndex,
+                         const long iLayerIndex,CATIAReference* iValue);
+
+/**
+  * Creates a new support and add it to the description of the Analysis Entity.
+  * @param iReference  the CATIA Reference that represent the object to linked. This identification,
+  *  may locate the instance of the object&lt;br&gt;
+  * @param iSupport  the CATIA Reference that represent the object to linked.&lt;br&gt;
+  * &lt;p&gt; All implementations should not override this default implementation.
+  */
+		HRESULT AddSupportFromReference(CATIAReference* iReference,        CATIAReference* iSupport);
+/**
+  * Creates a new support and add it to the description of the Analysis Entity.
+  * @param iPartProduct  the CATIA Product of the part.&lt;br&gt;
+  * @param iPart the CATIA Part that represent the object to linked.&lt;br&gt;
+  * &lt;p&gt; All implementations should not override this default implementation.
+  */
+		HRESULT AddSupportFromPart(CATIAProduct*        iPartProduct,      CATIAPart  *    iPart);
+/**
+  * Creates a new support and add it to the description of the Analysis Entity.
+  * @param iConstraintProduct  the CATIA Product of the Constraint.&lt;br&gt;
+  * @param iConstraint the CATIA Constraint that represent the object to linked.&lt;br&gt;
+  * &lt;p&gt; All implementations should not override this default implementation.
+  */
+		HRESULT AddSupportFromConstraint(CATIAProduct* iConstraintProduct, CATIAConstraint* iConstraint);
+/**
+  * Creates a new support and add it to the description of the Analysis Entity.
+  * @param iProduct  the CATIA Product that represent the object to linked.&lt;br&gt;
+  * @param iSupport  the CATIA Reference that represent the object to linked.&lt;br&gt;
+  * &lt;p&gt; All implementations should not override this default implementation.
+  */
+		HRESULT AddSupportFromProduct(CATIAProduct* iProduct,              CATIAReference* iSupport);
+/**
+  * Creates a new support and add it to the description of the Analysis Entity.
+  * @param iProduct  the CATIA Product that represent the object to linked.&lt;br&gt;
+  * @param iPublication  the CATIA Publication that represent the object to linked.&lt;br&gt;
+  * &lt;p&gt; All implementations should not override this default implementation.
+  */
+		HRESULT AddSupportFromPublication(CATIAProduct *iPartProduct,      CATIAPublication *iPublication);
+
+/**
+ * Returns the analysis images collection associated with an analysis entity.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisImages(CATIAAnalysisImages*&amp; oAnalysisImages);
+/**
+ * Returns the analysis local entity collection associated with an analysis entity.
+ * &lt;p&gt; All implementations should not override this default implementation.
+ */
+    HRESULT get_AnalysisLocalEntities(CATIAAnalysisLocalEntities*&amp; oAnalysisLocalEntities);
+
+	
+/**
+ * Helps the resolution mechanism of the macros generation.
+ * &lt;p&gt;&lt;b&gt;Role:&lt;/b&gt;
+ * CATIAutomationResolution must be implemented by objects that want to specify a custom
+ * access path in the Automation container-content hierarchy.
+ * @see CATIAutomationResolution 
+ */
+  virtual HRESULT GetResolution(CATIScriptMethodCall *&amp; oResolution, CATBaseDispatch * iObjectToResolve);
+
+
+	private :
+    
+    CATIABasicComponent_var GetOpBasicComponent (const CATBSTR&amp; iComponent,int &amp; oIopt);
+
+};   
+#endif      
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamAnalysisContext.html">← 上一页: CATSamAnalysisContext.h</a></div>
+        <div><a href="CATSamAnalysisEntityImpl.html">下一页: CATSamAnalysisEntityImpl.h →</a></div>
+    </div>
+</body>
+</html>

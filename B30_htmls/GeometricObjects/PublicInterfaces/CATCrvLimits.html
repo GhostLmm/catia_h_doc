@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCrvLimits.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCrvLimits.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvEvalResult.html">← 上一页: CATCrvEvalResult.h</a></div>
+        <div><a href="CATCrvParam.html">下一页: CATCrvParam.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCRVLIMITS_H
+#define CATCRVLIMITS_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATIACGMLevel.h&quot; // automatic treatment EB_2014_04_16
+//#if defined ( CATIAV5R10 )
+#include &quot;ExportedByCATCGMGeoMath.h&quot;
+/*
+#else
+#include &quot;YP00IMPL.h&quot;
+#endif  
+*/
+#include &quot;CATCrvParam.h&quot;
+#include &quot;CATParamData.h&quot;
+#include &quot;CATIsoParameter.h&quot;
+#include &quot;CATVerificationMode.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATCrvParamReference;
+class CATSurParam;
+class CATSurLimits;
+class CATMathTransformation1D;
+
+/**
+ * Class representing the limitations of a CATCurve.
+ *&lt;br&gt;The CATCrvLimits contains the two arc numbers and two local parameters
+ * on these arcs of the limiting points. 
+ *&lt;br&gt;The CATCrvLimits defines a closed interval. It can be empty (if
+ * the high limit is smaller than the low one, or if some of them 
+ * is not defined): in this case, it does not contain any point.
+ * @see CATCurve, CATCrvParam
+ */
+//#if defined ( CATIAV5R10 )
+class  ExportedByCATCGMGeoMath CATCrvLimits
+/*
+#else
+class ExportedByYP00IMPL CATCrvLimits
+#endif  
+*/
+{
+ public:
+/**
+ * Constructs an empty CATCrvLimits.
+ */
+  CATCrvLimits ();
+
+/**
+ * Constructs a CATCrvLimits from two CATCrvParams.
+ * @param iLowParam
+ * The first limitation of the curve.
+ * @param iHighParam
+ * The last limitation of the curve.
+ * @param iMode
+ * Only use with the default value.
+ */
+  CATCrvLimits (const CATCrvParam &amp; iLowParam, 
+		const CATCrvParam &amp; iHighParam,
+		CATVerificationMode iMode = CATVerify);
+
+/**
+ * @nodoc
+ * Constructs a CATCrvLimits from two CATParamDatas and a reference to
+ * a CATCurve.
+ *&lt;br&gt;If the last argument is set to &lt;tt&gt;DontVerify&lt;/tt&gt;,
+ * the two CATCrvParams are assumed to be the low one and the high one,
+ * else it creates the smallest CATCrvLimits that contains the two 
+ * CATCrvParams.
+ */
+  CATCrvLimits (const CATParamData         &amp; iLowParam, 
+		const CATParamData         &amp; iHighParam,
+		const CATCrvParamReference * iReference,
+		CATVerificationMode          iMode = CATVerify);
+
+/**
+ * @nodoc
+ * Constructs a CATCrvlimits from two global parameters and a reference
+ * to a CATCurve.
+ *&lt;br&gt;The verification of the low and high parameters is always performed.
+ */
+  CATCrvLimits (double               iLowGlobalParam, 
+		double                       iHighGlobalParam,
+		const CATCrvParamReference * iReference);
+
+/**
+ * Copy Constructor.
+ */
+  CATCrvLimits (const CATCrvLimits &amp; iCrvLimitsToCopy);
+
+//=============================================================================
+// SET AND GET THE EXTREMITIES
+//=============================================================================
+//- Read : should not be used, check before if the CrvLimits is empty
+/**
+ * @nodoc
+ * Use now the GetLow method.
+ */
+  CATCrvParam GetStartParam () const;
+/**
+ * @nodoc
+ * Use now the GetHigh method.
+ */
+  CATCrvParam GetEndParam   () const;
+
+/**
+ * Retrieves the two CATCrvParam delimiting &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioLowParam
+ * The first limitation of the curve.
+ * @param ioHighParam
+ * The last limitation of the curve.
+ */
+  void GetExtremities(CATCrvParam &amp;ioLowParam, CATCrvParam &amp;ioHighParam) const;
+
+/**
+ * Retrieves the extremities of a 1D box corresponding to the global parameters of &lt;tt&gt;this&lt;/tt&gt; 
+ * CATCrvLimits. &lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioGlobalLow
+ * The global parameter value of the first limitation of the curve.
+ * @param ioGlobalHigh
+ * The global parameter value of the last limitation of the curve.
+ */
+  void GetExtremities(double &amp;ioGlobalLow, double &amp;ioGlobalHigh) const;
+
+  /**
+ * Retrieves the extremities of a 1D box corresponding to the global parameters of &lt;tt&gt;this&lt;/tt&gt; 
+ * CATCrvLimits. &lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioLocalLow
+ * The local parameter value of the first limitation of the curve.
+ * @param ioLocalHigh
+ * The local parameter value of the last limitation of the curve.
+  * @param ioLowPartNumber
+ * The arc number of the first limitation of the curve.
+ * @param ioHighPartNumber
+ * The arc number of the last limitation of the curve.
+ */
+  void GetLocalExtremities(double &amp;ioLocalLow     , double &amp;ioLocalHigh     , 
+			   CATLONG32   &amp;ioLowPartNumber, CATLONG32   &amp;ioHighPartNumber) const;
+
+/**
+ * Retrieves the low limitation of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioLowParam
+ * The first limitation of the curve.
+ */
+  void GetLow(CATCrvParam &amp;ioLowParam) const;
+
+/**
+ * Retrieves the high CATCrvParam of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioHighParam
+ * The last limitation of the curve.
+ */
+  void GetHigh(CATCrvParam &amp;ioHighParam) const;
+
+/**
+ * @nodoc
+ */
+  void SetStartParam (const CATCrvParam &amp; Param);
+/**
+ * @nodoc
+ */
+  void SetEndParam   (const CATCrvParam &amp; Param);
+
+/**
+ * Modifies the low CATCrvParam of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iLowParam&lt;/tt&gt; is lower than &lt;tt&gt;iHighParam&lt;/tt&gt;.
+ * @param iLowParam
+ * The first limitation of the curve.
+ */ 
+  void SetLow(const CATCrvParam &amp; iLowParam);
+
+/**
+ * Modifies the high CATCrvParam of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iHighParam&lt;/tt&gt; is higher than &lt;tt&gt;iLowParam&lt;/tt&gt;.
+ * @param oHighParam
+ * The last limitation of the curve.
+ */ 
+  void SetHigh(const CATCrvParam &amp; iHighParam);
+
+
+  /**
+ * @nodoc
+ * To be used from V5R21.
+ * Modifies the parameters and the reference of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iLowParam&lt;/tt&gt; is lower than &lt;tt&gt;iHighParam&lt;/tt&gt;.
+ */
+  INLINE void SetExtremities(const CATParamData         &amp; iLowParam,
+		                     const CATParamData         &amp; iHighParam,
+		                     const CATCrvParamReference * iReference);
+
+		  /** @nodoc  */    
+  void SetExtremities(const double                 iLowParam,
+		      const double                 iHighParam,
+		      const CATCrvParamReference * iReference);
+
+#ifdef CATIACGMV5R23
+/**
+ * Modify the parameters and the reference from two CATCrvParams.
+ * If the fist CATCrvParam is greater than the second one , they will be inverted.
+ * @param iLowParam
+ * The first limitation of the curve.
+ * @param iHighParam
+ * The last limitation of the curve.
+ */
+  void SetExtremities( const CATCrvParam &amp; iLowParam, 
+                       const CATCrvParam &amp; iHighParam);
+#endif
+		      
+/**
+ * Sets &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits to an empty one.
+ */
+  INLINE void SetToEmpty();
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits is empty.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if it is not empty.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if it is empty.
+ * &lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsEmpty() const;
+
+/**
+ * Returns the distance of a parameter to the nearest point of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param iParam
+ * The parameter of the point.
+ * @return
+ * The distance between &lt;tt&gt;iParam&lt;/tt&gt; and the nearest point of &lt;tt&gt;this&lt;/tt&gt;.
+ */
+  double DistanceTo(const CATCrvParam &amp; iParam) const;
+
+
+/**
+ * @nodoc
+ * Returns a pointer to the reference of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ */ 
+  INLINE const CATCrvParamReference * GetReference() const;
+
+/**
+ * @nodoc
+ * Changes the reference of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ */
+  INLINE void SetReference(const CATCrvParamReference * iReference);
+
+//=============================================================================
+// READ THE INTERNAL LIMITS
+//=============================================================================
+
+/**
+ * Returns the global parameter of the low limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The parameter value of the first limitation.
+ */
+  double GetLowParam() const;
+
+/**
+ * Returns the global parameter of the high limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The parameter value of the last limitation.
+ */
+  double GetHighParam() const;
+
+/**
+ * Returns the arc number of the low limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The arc number of the first limitation.
+ */
+  INLINE CATLONG32 GetLowArcNumber()const ;
+
+/**
+ * Returns the arc number of the high limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The arc number of the last limitation.
+ */
+  INLINE CATLONG32 GetHighArcNumber()const ;
+
+/**
+ * Returns the local parameter of the low limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The local parameter (on the arc) of the first limitation.
+ */
+  INLINE double GetLowLocalParam() const;
+
+/**
+ * Returns the local parameter of the high limit of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @return
+ * The local parameter (on the arc) of the last limitation.
+ */
+  INLINE double GetHighLocalParam() const;
+
+//=============================================================================
+// COMPUTATIONS THAT MODIFIES THE CrvLimits
+//=============================================================================
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits by the intersection of two other one.
+ * &lt;br&gt;The result can be an empty CATCrvLimits.
+ * @param iLimits1
+ * The first limitation to operate.
+ * @param iLimits21
+ * The second limitation to operate.
+ */
+  void SetToIntersection(const CATCrvLimits &amp;iLimits1,
+			 const CATCrvLimits &amp;iLimits2);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits by the union of two other one.
+ * &lt;tt&gt;this&lt;/tt&gt; is replaced by the CATCrvLimits of low limit the lowest limit of the two CATCrvlimits and
+ * of high limit the highest limit, even the two CATCrvLimits are not 
+ * intersecting each other.
+ * @param iLimits1
+ * The first limitation to operate.
+ * @param iLimits21
+ * The second limitation to operate.
+ */
+  void SetToUnion(const CATCrvLimits &amp;iLimits1,
+		  const CATCrvLimits &amp;iLimits2);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; by a CATCrvLimits that also contains a given CATCrvParam.
+ * @param iParam
+ * The parameter to take into account.
+ */
+  void AddInside(const CATCrvParam &amp;iParam);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; by a CATCrvLimits that also contains a given global parameter.
+  * @param iGlobalParam
+ * The parameter value to take into account.
+ */
+  void AddInside(double iGlobalParam);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits by its union with another CATCrvLimits.
+ * @param iLimits
+ * The limitations to union with &lt;tt&gt;this&lt;/tt&gt;
+*/
+  void AddInside(const CATCrvLimits &amp;iLimits);
+
+//======================================================================
+// COMPUTATION WITH A CrvLimits THAT RETURNS A RESULT
+//======================================================================
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits is intersecting another one.
+ * @param iBoxToCompare
+ * The limitations to compare with &gt;tt&lt;this&lt;/tt&gt;.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if there is no intersection.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if there is an intersection (this is also the case
+ * when there is just a point in common).
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsIntersecting(const CATCrvLimits &amp;iBoxToCompare) const;
+
+/**
+ * Use preferably the signature which takes as an input argument the tolerance.
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvParam is inside a CATCrvLimits.
+ * @param iParamToCompare
+ * The parameter to take into account.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits does not contain the 
+ * CATCrvParam.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits contains the CATCrvParam.
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATCrvParam &amp;iParamToCompare) const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvParam is inside a CATCrvLimits at a given tolerance.
+ * @param iParamToCompare
+ * The parameter to take into account.
+ * @param iTol
+ * The tolerance for the test.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits does not contain the 
+ * CATCrvParam.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits contains the CATCrvParam.
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATCrvParam &amp;iParamToCompare, double iTol) const;
+
+/**
+ * Use preferably the signature which takes as an input argument the tolerance.
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvParam is inside a CATCrvLimits.
+ * @param iParamToCompare
+ * The parameter to take into account.
+ * @param iTol
+ * The tolerance for the test.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits does not contain the 
+ * CATCrvParam.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits contains the CATCrvParam.
+ * &lt;/dl&gt;
+*/
+  CATLONG32 IsContaining(const CATCrvLimits &amp;iOtherBox) const;
+
+	/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits is including another CATCrvLimits.
+ * @param iOtherBox
+ * The limitationa to take into account.
+ * @param iTol
+ * The tolerance for the test.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits is not containing 
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATCrvLimits is containing
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *&lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATCrvLimits &amp;iOtherBox, double iTol) const;
+
+  //---------------------------------------------------------------
+  // Tests if T(iBox) is included in this and calculate the 
+  // new Transfo1D if necessary
+  // Period = 0 if not periodic
+  //---------------------------------------------------------------
+	/**
+	 * @nodoc
+	 */
+  CATLONG32 IsContaining(const CATCrvLimits            &amp; iBox,
+		          CATMathTransformation1D &amp; ioTransfo1D,
+		          double                    iPeriod = 0,
+		          double                    iTol = 0   ) const;
+
+/**
+ * Retrieves the CATCrvLimits having the same relative positioning
+ * to &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits than &lt;tt&gt;iRefLim&lt;/tt&gt; in &lt;tt&gt;iRefAll&lt;/tt&gt;.
+ * @param iRefAll
+ * The reference CATCrvLimits of global parameters &lt;tt&gt;(A1,A2)&lt;/tt&gt;.
+ * @param iRefLim
+ * The compared CATCrvLimits of global parameters &lt;tt&gt;(B1,B2)&lt;/tt&gt;.
+ * @param ioResultLimit
+ * The resulting CATCrvLimits of global parameters &lt;tt&gt;(R1,R2)&lt;/tt&gt; 
+ * such that (with &lt;tt&gt;(T1,T2)&lt;/tt&gt; the global
+ * parameters of &lt;tt&gt;this&lt;/tt&gt;):&lt;br&gt;
+ *&lt;tt&gt; (R1-T1)*(A2-A1) = (B1-A1)*(T2-T1)
+ *     (R2-T1)*(A2-A1) = (B2-A1)*(T2-T1)&lt;/tt&gt; 
+ */
+  void GetEquivalentLimits(const CATCrvLimits &amp; iRefAll, 
+			   const CATCrvLimits &amp; iRefLim,
+			   CATCrvLimits       &amp; ioResultLimit) const ;
+
+/**
+ * Retrieves the global parameter having the same relative position
+ * to &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits than &lt;tt&gt;iRefParam&lt;/tt&gt; in &lt;tt&gt;iRefAll&lt;/tt&gt;.
+ * @param iRefAll
+ * The reference CATCrvLimits of global parameters &lt;tt&gt;(A1,A2)&lt;/tt&gt;.
+ * @param iRefParam
+ * The compared CATCrvParam of global parameters &lt;tt&gt;(B1,B2)&lt;/tt&gt;.
+ * @param ioResultParam
+ * The resulting CATCrvParam of global parameters &lt;tt&gt;R&lt;/tt&gt; 
+ * verifying the following equation (with &lt;tt&gt;(T1,T2)&lt;/tt&gt; the global
+ * parameters of &lt;tt&gt;this&lt;/tt&gt;):
+ *&lt;tt&gt; (R1-T1)*(A2-A1) = (B1-A1)*(T2-T1) &lt;/tt&gt; 
+ */
+  void GetEquivalentParam(const CATCrvLimits &amp; iRefAll, 
+			  const CATCrvParam  &amp; iRefParam,
+			  CATCrvParam        &amp; ioResultParam) const ;
+
+
+/**
+ * Retrieves the global parameter having the same relative position
+ * to &lt;tt&gt;this&lt;/tt&gt; CATSurLimits than iRefPart in an isoparametric curve of &lt;tt&gt;iRefAll&lt;/tt&gt;.
+ * @param iRefAll
+ * The limits of a CATSurface.
+ * @param iRefPoint
+ * The global parameter of a point on &lt;tt&gt;iRefAll&lt;/tt&gt;.
+ * @param iIsoParameter
+ * The direction of the isoparameter (IsoParameterU or 
+ * IsoParameterV). On this direction, &lt;tt&gt;iRefPoint&lt;/tt&gt; has a global
+ * parameter of value &lt;tt&gt;B&lt;/tt&gt; and the isoparameter line passing
+ * through this point has &lt;tt&gt;(A1,A2)&lt;/tt&gt; limits.
+ * @param ioResultParam
+ * The global parameter  &lt;tt&gt;R&lt;/tt&gt; verifying the following equation
+ * (with &lt;tt&gt;(T1,T2)&lt;/tt&gt; the global parameters of &lt;tt&gt;this&lt;/tt&gt;):
+ * &lt;tt&gt; (R-T1)*(A2-A1) = (B-A1)*(T2-T1) &lt;/tt&gt; 
+ */
+  void GetEquivalentParam(const CATSurLimits    &amp; iRefAll,
+			  const CATSurParam     &amp; iRefPart,
+			  const CATIsoParameter   iIsoParameter,
+			        CATCrvParam     &amp; ioResultParam   ) const; 
+  
+
+/**
+ * Retrieves the CATCrvLimits having the same relative position
+ * to &lt;tt&gt;this&lt;/tt&gt; CATSurLimits than iRefPart in an isoparametric curve of RefAll.
+ * &lt;br&gt;Same as above for the two extreme parameters of the CATCrvLimits.
+ * @param iRefAll
+ * The limits of a CATSurface.
+ * @param iRefPart
+ * The limits on &lt;tt&gt;iRefAll&lt;/tt&gt;.
+ * @param iIsoParameter
+ * The direction of the isoparameter (IsoParameterU or 
+ * IsoParameterV). On this direction, &lt;tt&gt;iRefPoint&lt;/tt&gt; has a global
+ * parameter of value &lt;tt&gt;B&lt;/tt&gt; and the isoparameter line passing
+ * through this point has &lt;tt&gt;(A1,A2)&lt;/tt&gt; limits.
+ * @param ioResultLimit
+ * The limit of extremal parameters defined in the following manner:
+ * global parameter of value &lt;tt&gt;R&lt;/tt&gt; verifying the equation
+ * (with &lt;tt&gt;(T1,T2)&lt;/tt&gt; the global parameters of &lt;tt&gt;this&lt;/tt&gt;):
+ * &lt;tt&gt; (R-T1)*(A2-A1) = (B-A1)*(T2-T1) &lt;/tt&gt; 
+ */
+  void GetEquivalentLimits(const CATSurLimits    &amp; iRefAll,
+			   const CATSurLimits    &amp; iRefPart,
+			   const CATIsoParameter   iIsoParameter,
+			         CATCrvLimits    &amp; ioResultLimit  ) const; 
+  
+  /** @nodoc */
+  void ApplyTransformation1D(const CATMathTransformation1D &amp;iTransfo1D,
+			           CATCrvLimits            &amp;oLimits   ) const;
+//=============================================================================
+// Overloaded operators
+//=============================================================================
+/**
+ * Equality operator.
+ * &lt;br&gt;&lt;pre&gt;( Lim1 == Lim2 ) &lt;=&gt; (Lim1.GetLowParam == Lim2GetLowParam) and
+ *                          (Lim1.GetHighParam == Lim2.GetHighParam) 
+ *                         &lt;/pre&gt;
+ */
+  CATLONG32 operator == (const CATCrvLimits &amp; iLimits) const;
+
+/**
+ * Inequality operator.
+ * &lt;br&gt;&lt;pre&gt;( Lim1 != Lim2 ) &lt;=&gt; (Lim1.GetLowParam != Lim2GetLowParam) or
+ *                          (Lim1.GetHighParam != Lim2.GetHighParam)
+ *                          &lt;/pre&gt;
+ */
+  CATLONG32 operator != (const CATCrvLimits &amp; iLimits) const;
+
+//=============================================================================
+// FRIENDS
+//=============================================================================
+/**
+ * @nodoc
+ */
+//#if defined ( CATIAV5R10 )
+  friend ExportedByCATCGMGeoMath ostream&amp; operator &lt;&lt; (ostream&amp; iS,
+						const CATCrvLimits &amp; iLimits);
+/*
+#else
+  friend ExportedByYP00IMPL ostream&amp; operator &lt;&lt; (ostream&amp; iS,
+						const CATCrvLimits &amp; iLimits);
+#endif  
+*/
+//=============================================================================
+// INTERNAL DATAS
+//=============================================================================
+
+protected:
+  // Extrem position on the curve
+  /** @nodoc */ 
+  double  _LowLocalParam,_HighLocalParam;
+  /** @nodoc */ 
+  CATLONG32    _LowLocalNumber,_HighLocalNumber;
+
+// Its value is 1 if the CrvLimits is empty
+  /** @nodoc */
+  CATLONG32 _IsEmpty;
+
+// Function that manages the Pamameters
+  /** @nodoc */
+  const CATCrvParamReference *_Reference;
+
+};
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+
+// Setting the extremities
+INLINE void CATCrvLimits::SetExtremities(const CATParamData &amp; LowParam,const CATParamData &amp; HighParam,const CATCrvParamReference * Reference)
+{
+  _Reference = Reference;
+  
+  _LowLocalNumber  = LowParam.PartNumber;
+  _LowLocalParam   = LowParam.LocalParam;
+  _HighLocalNumber = HighParam.PartNumber;
+  _HighLocalParam  = HighParam.LocalParam;
+  
+  _IsEmpty   = 0;
+}
+
+
+INLINE void CATCrvLimits::SetToEmpty()
+{
+  _IsEmpty=1;
+}
+INLINE CATLONG32 CATCrvLimits::IsEmpty() const
+{
+  return _IsEmpty;
+}
+
+INLINE CATLONG32 CATCrvLimits::GetLowArcNumber() const
+{
+  return _LowLocalNumber;
+}
+
+INLINE CATLONG32 CATCrvLimits::GetHighArcNumber() const
+{
+  return _HighLocalNumber;
+}
+
+INLINE double CATCrvLimits::GetLowLocalParam() const 
+{
+  return _LowLocalParam;
+}
+
+INLINE double CATCrvLimits::GetHighLocalParam() const
+{
+  return _HighLocalParam;
+}
+
+INLINE const CATCrvParamReference * CATCrvLimits::GetReference() const
+{
+  return _Reference;
+}
+
+INLINE void CATCrvLimits::SetReference(const CATCrvParamReference *Reference)
+{
+  _Reference = Reference;
+}
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvEvalResult.html">← 上一页: CATCrvEvalResult.h</a></div>
+        <div><a href="CATCrvParam.html">下一页: CATCrvParam.h →</a></div>
+    </div>
+</body>
+</html>

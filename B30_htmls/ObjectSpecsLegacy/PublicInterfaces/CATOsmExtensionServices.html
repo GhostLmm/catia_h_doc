@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectSpecsLegacy/PublicInterfaces/CATOsmExtensionServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectSpecsLegacy/PublicInterfaces/CATOsmExtensionServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATOsmCatalogAccessServices.html">← 上一页: CATOsmCatalogAccessServices.h</a></div>
+        <div><a href="CATOsmHRESULT.html">下一页: CATOsmHRESULT.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATOsmExtensionServices_H
+#define CATOsmExtensionServices_H
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+
+// CATOsmExtensionServices Global Functions
+// 
+
+#include &quot;IUnknown.h&quot;
+#include &quot;AC0SPEXT.h&quot;
+class CATListValCATUnicodeString;
+class CATUnicodeString;
+class CATDocument;
+class CATIContainer;
+class CATUuid;
+class CATBaseUnknown;
+
+/**
+ * Services to manage former extension features and user extensions.
+ * &lt;b&gt;Role&lt;/b&gt;: Class of service to activate all former extension features and retrieve user 
+ * extensions associated to a base feature defined in a CATfct catalog.
+ * If you have to manage existing documents containing former extension features you have to use the 
+ * CATActivateExtensions services to activate your extensions.
+ * Activation is not needed for new extension features created with @href CATIOsmExtendable .
+ * User extensions are automatically created and added on a base feature when it is created.
+ * This is not a part of the @href CATIOsmExtendable interface as it is not neccessary to have the base feature itself &lt;/br&gt;
+ * its type is sufficient to retrieve this informations.
+ */
+class ExportedByAC0SPEXT CATOsmExtensionServices
+{
+public:
+
+/**
+  * Uses only to activate former extension features.
+  * Activate all extensions contained in an applicative container of the specified document.This container should have been initialized.
+  * @param iDocument
+  *        The document containing the initialized applicative container
+  * @param iAppId
+  *        The name of the initialized applicative container containing the extensions to be activated
+  * @return HRESULT
+  *		S_OK
+  *			The activation succeeded &lt;br&gt;
+  *		E_FAIL
+  *			No container found or activation error &lt;br&gt;
+  */
+static HRESULT CATActivateExtensions(CATDocument* iDocument, const char *iAppId);
+
+/**
+  * Uses only to activate former extension features.
+  * Activate all extensions contained in an applicative container. This container should have been initialized.
+  * @param iAppliCont
+  *        The initialized applicative container containing the extensions to be activated
+  * @return HRESULT
+  * 	S_OK
+  *			The listing succeeded &lt;br&gt;
+  *		E_FAIL
+  *			No container found or activation error &lt;br&gt;
+  */
+static HRESULT CATActivateExtensions(CATIContainer* iAppliCont);
+
+
+/**
+  * Service to retrieve user extensions associated to a base feature and all its supertypes.
+  * &lt;b&gt;Role&lt;/b&gt;: Retrieve user extensions associated to a base feature defined in a CATfct catalog.
+  * User extensions are automatically created and added on a base feature when it is created.
+  * This is not a part of the @href CATIOsmExtendable interface as it is not neccessary to have the base feature itself &lt;/br&gt;
+  * its type is sufficient to retrieve this informations.
+  *
+  * CATOsmListUserExtensionsFromCatalog:
+  * Given the type of a base feature in a CATfct Catalog, this method will list associated extensions (directly
+  * or through its supertypes) and the associated containers
+  *  @param iBaseFeatureType
+  *		The pointer on Base Feature Type
+  *  @param pListOfExtensions
+  *		The list of extensions
+  *  @param pListOfAssociatedContainers
+  *		The list of Associated Containers
+  *  @return HRESULT
+  *		S_OK
+  *			The listing succeeded &lt;br&gt;
+  *		E_FAIL
+  *			No user extensions in catalog &lt;br&gt;
+  *		E_INVALIDARG
+  *			iBaseFeatureType is NULL &lt;br&gt;
+  *		E_UNEXPECTED
+  *			Problem in listing  user extensions
+  *
+  */
+	
+static HRESULT CATOsmListUserExtensionsFromCatalog(const CATUnicodeString *iBaseFeatureType,
+						   CATListValCATUnicodeString **pListOfExtensions,
+						   CATListValCATUnicodeString **pListOfAssociatedContainers);
+
+/**
+  * Returns the invariant identifier of an extension
+  * @param ipExtension
+  *        The extension asked its identifier
+  * @param oIdentifier
+  *        The returned identifier
+  * @param iClientId
+  *        The catalog&#x27;s client identifier that the extension comes from
+  * @return HRESULT
+  *		S_OK
+  *			Identifier returned
+  *		E_INVALIDARG
+  *			The passed in pointer is not an extension
+  *		E_ACCESSDENIED
+  *			The passed in iClientId is not the one of the extension&#x27;s catalog
+  *		E_FAIL
+  *			Non documented error
+  */
+ static HRESULT GetExtensionIdentifier(const CATBaseUnknown* ipExtension, CATUuid&amp; oIdentifier,
+					                            const CATUnicodeString&amp; iClientId);
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATOsmCatalogAccessServices.html">← 上一页: CATOsmCatalogAccessServices.h</a></div>
+        <div><a href="CATOsmHRESULT.html">下一页: CATOsmHRESULT.h →</a></div>
+    </div>
+</body>
+</html>

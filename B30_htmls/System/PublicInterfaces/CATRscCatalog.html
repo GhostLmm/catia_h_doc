@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATRscCatalog.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATRscCatalog.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATResourceError.html">← 上一页: CATResourceError.h</a></div>
+        <div><a href="CATSTGErrors.html">下一页: CATSTGErrors.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATRSCCATALOG_H
+#define CATRSCCATALOG_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+#ifdef _WINDOWS_SOURCE 
+#ifdef __NS0S1MSG
+/** @nodoc */
+#define ExportedByNS0S1MSG  __declspec(dllexport) 
+#else
+/** @nodoc */
+#define ExportedByNS0S1MSG  __declspec(dllimport) 
+#endif
+#else
+/** @nodoc */
+#define ExportedByNS0S1MSG
+#endif
+
+#include &quot;CATString.h&quot;
+class CATInterRscCatalog;
+class CATListValCATString;
+
+/**
+ * Resource catalog class. 
+ * &lt;b&gt;Role&lt;/b&gt;: Processing a resource catalog file.
+ * The resource catalog file contains keys and their corresponding values. Values are parameterized ASCII string 
+ * (see @href CATString ) which may, for example, identify resources. NLS (National Langage Support) is not supported,
+ * this class must be compared to the @href CATMsgCatalog class: the current class must be used for all non hard-coded
+ * strings which must not be translated into other languages.&lt;/br&gt;
+ * A common use of this class corresponds to the storage of resource identifications through the use of dedicated
+ * sub-keys. See for example the use of the Icon.Normal sub-key described into the @href CATImplementHeaderResources
+ * documentation.&lt;/br&gt;
+ * A resource catalog file value may be used to represent a directly resource (for example, a
+ * workbench category, i.e. the place where a given
+ * workbench appears in the menu tree). It may also be used to represent a reference to a resource (for example,
+ * for an icon, you will put the icon file name).&lt;/br&gt;
+ * The class does not support control 
+ * characters (for example \a, \n, \t).&lt;/br&gt;
+ * A value can be parameterized, ie contains parameters you
+ * value at run-time. A parameter begins with /p or /P in the value.&lt;/br&gt;
+ * Here is an example of a resource catalog file content:
+ * &lt;pre&gt;
+ * Key1 = &quot;This is a simple parameterized string.&quot;;
+ * Key2 = &quot;This parameterized string includes the parameter /P1 that
+ *             is valued by your application at run-time.&quot;;
+ * Key3 = &quot;This is a&quot;, &quot;compound &quot;, &quot;parameterized string.&quot;;&lt;/pre&gt;
+ * A resource catalog file posess the .CATRsc suffix and is retrieved from the folders specified by the
+ * CATMsgCatalogPath variable.
+ * The localized version of the resource catalog is searched first. If it does not exist,
+ * the english version is taken.&lt;/br&gt;
+ * Example:
+ * In a japanese environment, if the CATMsgCatalogPath variable is valued the following way:
+ * &lt;pre&gt;   CATMsgCatalogPath=C:\PersonalFolder;C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+ * then, CATIA search the resource catalog file into the following paths:
+ * &lt;pre&gt;   1 - C:\PersonalFolder\Japanese
+ *   2 - C:\PersonalFolder
+ *   3 - C:\Program Files\Dassault Systemes\B12\Japanese
+ *   4 - C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+ */
+
+// Catalog sample
+// --------------
+// | // This is a comment.
+// |
+// |  FirstKey=&quot;Hello /P01&quot;; // /P01 is the first parameter
+// |
+// |  SecondKey = &quot;This is a &quot;, &quot;message &quot;,
+// |               &quot;from Mars.&quot;;
+// |
+// |  AnotherKey = &quot;You can use control characters \t \n &quot;,
+// |               &quot;defined in the C++ language&quot;;
+//
+
+class ExportedByNS0S1MSG CATRscCatalog
+{
+  public:
+  // Constructors
+  // ============
+
+/**
+ * Constructs an empty resource catalog.
+ */
+     CATRscCatalog();
+
+/*
+ * Copy constructor.
+ * @param iRscCatalog
+ *   Resource catalog to copy
+ * 
+ */
+     CATRscCatalog(const CATRscCatalog &amp;iRscCatalog);
+
+     ~CATRscCatalog();
+
+/**
+ * Assignment operator.
+ * @param iRscCatalog
+ *   The resource catalog to be copied
+ * @return  
+ *   The resource catalog resulting from the assignment
+ */
+     CATRscCatalog &amp;operator =(const CATRscCatalog &amp;iRscCatalog) ;
+
+/**
+ * Loads a resource catalog by means of its name and (if desired)
+ * of a path.
+ * Don&#x27;t forget to call @href CATRscCatalog#GetError after calling this
+ * service to check potential syntax errors in the resource
+ * catalog.
+ * @param iNameOfCatalogToLoad
+ *   Name of the resource catalog to be retrieved
+ * @param iPathName
+ *   Path for searching the catalog to be retrieved
+ * @return
+ *   boolean which indicates if the catalog has been loaded.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   if the catalog is not loaded, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the catalog is loaded.
+ */
+     int LoadRscCatalog (const CATString &amp;iNameOfCatalogToLoad, 
+                         const char *iPathName = NULL);
+
+/**
+ * Returns a syntax error.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+ * Returns the first syntax error found detected in the resource 
+ * catalog during the @href CATRscCatalog#LoadRscCatalog operation.
+ * This service should be called after calling @href  
+ * CATRscCatalog#LoadRscCatalog to check potential errors.
+ * @return
+ *   String containing the error message.
+ */
+     static const CATString GetError ();
+
+/**
+ * Computes a message from the resource catalog.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Computes a message from the resource catalog using 
+ * the message key. Before calling the service,
+ * the resource catalog must have been loaded using
+ * LoadRscCatalog.  
+ * @param iRscKey
+ *   Key of the resource to be retrieved
+ * @param oRsc
+ *   The retrieved resource.
+ * @param iParams
+ *   Array giving to the method possible parameter values
+ *   which the method will integrate into the parameterized
+ *   message. 
+ *   The value count should correspond to the message parameter
+ *   count. If it is not the cases, a default behaviour
+ *   is foreseen: &quot;?&quot; characters are introduced into the
+ *   computed output resource string. 
+ *   NULL default value coresponds to no parameter values.
+ * @param iNbParams
+ *   iParams array value count.
+ *   0 default value corresponds to no parameter values.
+ * @return
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   if a problem occured, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   otherwise.
+ *   Use @href CATRscCatalog#GetError to retrieve the current error
+ */
+     int GetCatalogRsc( const CATString &amp;iRscKey  , 
+		        CATString &amp;oRsc     ,
+		        CATString *iParams = NULL ,
+		        int iNbParams = 0 ); 
+
+/**
+ * Computes a message from a given resource catalog.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Computes a message from a given resource catalog 
+ * using the message key. This service does not require 
+ * that a call to LoadRscCatalog have been made: it loads
+ * it if it not already done (this service is a static method).  
+ * @param iCatalogName
+ *   Name of the resource catalog containing the resource to be retrieved.
+ * @param iRscKey
+ *   Key of the resource to be retrieved
+ * @param oRsc
+ *   The computed output output resource string.
+ * @param iParams
+ *   Array giving to the method possible parameter values
+ *   which the method will integrate into the parameterized
+ *   message. 
+ *   The value count should correspond to the message parameter
+ *   count. If it is not the cases, a default behaviour
+ *   is foreseen: &quot;?&quot; characters are introduced into the
+ *   computed output resource string. 
+ *   NULL default value coresponds to no parameter values.
+ * @param iNbParams
+ *   iParams array parameters count.
+ * @param iDefaultRsc
+ *   Resource that the method should use in case of error.
+ * @return
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   if a problem has occured, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   otherwise.
+ *   Use GetError to retrieve the current error
+ */
+     static int BuildResource (const CATString &amp;iCatalogName,
+			       const CATString &amp;iRscKey,
+			       CATString &amp;oRsc,
+			       CATString *iParams = NULL,
+			       int iNbParams = 0,
+			       const CATString &amp;iDefaultRsc = (char*)NULL );
+
+/**
+ * Retrieves the list of keys of the catalog.
+ * @param oKeyList
+ *   Key list. 
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;NULL&lt;/tt&gt; 
+ *   to get the key count, or &lt;tt&gt;Other&lt;/tt&gt; 
+ *   to get also the keys themselves. A call with the NULL value
+ *   should be done first to get the key count and thus allocate
+ *   correctly the oKeyList list for the next call.
+ * @return
+ *    Key count.
+ */  
+     int GetCatalogKeys ( CATListValCATString *oKeyList =  NULL );
+
+/**
+ * Unloads a resource catalog by means of its name.
+ * @param iCatalogName
+ *    Name of the catalog to be unloaded.
+ * @return
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   if a problem has occured, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   otherwise.
+ */
+     static int UnloadRscCatalog ( const CATString &amp;iCatalogName );
+
+  private:
+/** @nodoc */     
+     CATInterRscCatalog *_CatalogRef;
+};
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATResourceError.html">← 上一页: CATResourceError.h</a></div>
+        <div><a href="CATSTGErrors.html">下一页: CATSTGErrors.h →</a></div>
+    </div>
+</body>
+</html>

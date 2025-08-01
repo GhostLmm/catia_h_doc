@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATEdge.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATEdge.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDynExtrapolationToolsDef.html">← 上一页: CATDynExtrapolationToolsDef.h</a></div>
+        <div><a href="CATEdgeDomain.html">下一页: CATEdgeDomain.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEdge_H
+#define CATEdge_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;CATGeoDef.h&quot;
+#include &quot;CATCell.h&quot;
+#include &quot;ListVOfLong.h&quot;
+
+class CATBody;
+
+class CATDomain;
+class CATShell;
+class CATLoop;
+
+class CATBoundaryIterator;
+class CATBoundedCellsIterator;
+
+class CATFace;
+class CATVertex;
+
+class CATEdgeCurve;
+class CATPCurve;
+class CATPointOnEdgeCurve;
+class CATCrvParam;
+class CATMathVector;
+class CATSurLimits;
+
+#include &quot;CATTopData.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMModelInterfaces IID IID_CATEdge ;
+#else
+extern &quot;C&quot; const IID IID_CATEdge ;
+#endif
+
+/**
+ * Interface representing a topological edge. 
+ * &lt;br&gt; An edge is a topological cell which geometry is an edge-curve. It 
+ * is bounded by vertices. 
+ * &lt;br&gt; Edges can be used in the following ways:
+ * &lt;ul&gt;
+ * &lt;li&gt; to bound a face (edge must be put in one of the face loops)
+ * &lt;li&gt; to bound a volume (edge must be put in one of the volume wires)
+ * &lt;li&gt; as a piece of a wire in 3D space (edge must be put in a wire, and that
+ *      wire must be directly referred by a body).
+ * &lt;/ul&gt;
+ * &lt;br&gt; In order to be valid, the vertices of the edge must be different.
+ * An edge is oriented with regards to the
+ * underlying edge-curve:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATOrientationNegative&lt;/tt&gt;&lt;dd&gt; The start
+ * vertex is the one with the larger parameter, and the end vertex is the
+ * one with the smaller parameter.
+ *     &lt;dt&gt;&lt;tt&gt;CATOrientationPositive&lt;/tt&gt;&lt;dd&gt; The start
+ * vertex is the one with the smaller parameter, and the end vertex is the
+ * one with the larger parameter.
+ *     &lt;dt&gt;&lt;tt&gt;CATOrientationUnknown&lt;/tt&gt;&lt;dd&gt; The cell orientation is not
+ * defined.&lt;/dl&gt;
+ * &lt;br&gt;A CATEdge is created with the @href CATBody#CreateCell or @href CATBody#CreateEdge methods and
+ * deleted with the @href CATICGMContainer#Remove method.
+ */ 
+class ExportedByCATGMModelInterfaces CATEdge : public CATCell
+{
+
+  CATDeclareInterface;
+
+  public :
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * Sets the geometric edge-curve of &lt;tt&gt;this&lt;/tt&gt; CATEdge. 
+ * @param iCurve
+ * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt; edge.
+ * @param iOrientation
+ * The relative orientation of &lt;tt&gt;this&lt;/tt&gt; and its geometry.
+ */
+  virtual void SetCurve( CATEdgeCurve * iCurve, CATOrientation iOrientation=CATOrientationPositive)=0;
+
+/**
+ * Returns the geometric edge-curve of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ * @param ioOrientation
+ * A pointer to the relative orientation with regards to the edge-curve.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, the orientation is not filled out.
+ * @return
+ * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ */
+  virtual CATEdgeCurve * GetCurve(CATOrientation * ioOrientation=NULL)=0;
+
+/**
+ * Returns the geometry of &lt;tt&gt;this&lt;/tt&gt; CATEdge with respect to an underlying CATFace.
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iSide
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ * @param ioOrientation
+ * The orientation of &lt;tt&gt;this&lt;/tt&gt; edge with regards to its geometry (a CATPCurve).
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this is not filled out.
+ * @param ioStartParam
+ * The start limitation of the CATPCurve, always with regards to its own 
+ * orientation: &lt;tt&gt;ioStartParam &lt; ioEndParam&lt;/tt&gt;.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this is not filled out.
+ * @param ioEndParam
+ * The end limitation of the CATPCurve.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this is not filled out.
+ * @return
+ * The pointer to the geometry as a CATPCurve.
+ */
+  virtual CATPCurve * GetGeometryOnFace(CATFace *iBoundedFace, CATSide iSide,
+					CATOrientation * ioOrientation=NULL,
+					CATCrvParam    * ioStartParam = NULL,
+					CATCrvParam    * ioEndParam   = NULL)=0;
+  
+
+/**
+ * Sets the geometry of &lt;tt&gt;this&lt;/tt&gt; CATEdge with respect to an underying face.
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iSide
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ * @param iPCurve
+ * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt; on &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ * @param iStartVertexGeometry
+ * The pointer to the geometry of the start vertex bounding &lt;tt&gt;this&lt;/tt&gt;
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this is not taken into account.
+ * @param iEndVertexGeometry
+ * The pointer to the geometry of the end vertex bounding &lt;tt&gt;this&lt;/tt&gt;
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this is not taken into account.
+ */
+  virtual void SetGeometryOnFace(CATFace  *iBoundedFace,  CATSide  iSide,
+		    CATPCurve           * iPCurve,
+		    CATPointOnEdgeCurve * iStartVertexGeometry=NULL,
+		    CATPointOnEdgeCurve * iEndVertexGeometry  =NULL) = 0;
+
+/**
+ * Returns the matter side of &lt;tt&gt;this&lt;/tt&gt; CATEdge with respect to a CATFace. 
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @return
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ */
+  virtual CATSide GetSideOnFace( CATFace *iBoundedFace ) = 0;
+
+/**
+ * Sets the matter side of &lt;tt&gt;this&lt;/tt&gt; CATEdge with respect to a CATFace.
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iSide
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ */
+  virtual void SetSideOnFace( CATFace *iBoundedFace, CATSide iSide ) = 0;
+
+/**
+ * Retrieves the CATEdge which is right after &lt;tt&gt;this&lt;/tt&gt; in its loop.
+ * @param iSideVsFace
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param oNextEdge
+ * The next edge in the loop.
+ * If the edge loop is  closed, this method skips over the 
+ * loop closure. If the
+ * loop is open, the method, applied to the end edge, returns a &lt;tt&gt;NULL&lt;/tt&gt; pointer.
+ * @param oSide
+ * The matter side of &lt;tt&gt;oNextEdge&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ */
+  virtual void GetNextInLoop( CATSide iSideVsFace, CATFace * iBoundedFace,  CATEdge ** oNextEdge, CATSide * oSide ) = 0;
+
+/**
+ * Retrieves the CATEdge which is right before &lt;tt&gt;this&lt;/tt&gt; CATEdge in its loop.
+ * @param iSideVsFace
+ * The matter side of &lt;tt&gt;this&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param oPrevEdge
+ * The previous edge in the loop.
+ * If the edge loop is  closed, this method skips over the 
+ * loop closure. If the
+ * loop is open, the method, applied to the end edge, returns a &lt;tt&gt;NULL&lt;/tt&gt; pointer.
+ * @param oSide
+ * The matter side of &lt;tt&gt;oPrevEdge&lt;/tt&gt; while bounding &lt;tt&gt;iBoundedFace&lt;/tt&gt;.
+ */
+  virtual void GetPreviousInLoop( CATSide iSideVsFace, CATFace * iBoundedFace, CATEdge ** oPrevEdge, CATSide * oSide ) = 0;
+
+/**
+ * Returns the start and end vertices of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ * &lt;br&gt;Sample: To only retrieve the start vertex:
+ * &lt;pre&gt;CATVertex * Start;
+ * PointerToAnEdge-&gt;GetVertices(&amp;Start,NULL);&lt;/pre&gt;
+ * @param oStartVertex
+ * The start vertex. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ * @param oEndVertex
+ * The end vertex. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ */
+  virtual void GetVertices( CATVertex **oStartVertex, CATVertex **oEndVertex )=0;
+
+
+/**
+ * Retrieves the start and end points on edge curve of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ * &lt;br&gt;Theses match the start and end vertices.
+ * &lt;br&gt;Sample: To only retrieve the CATPointOnEdgeCurve corresponding to the end vertex:
+ * &lt;pre&gt;CATPointOnEdgeCurve * End;
+ * PointerToAnEdge-&gt;GetVerticesPointsOnEdgeCurve(NULL,&amp;End);&lt;/pre&gt;
+ * @param oStartPoec
+ * The CATPointOnEdgeCurve corresponding to the start vertex.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ * @param oEndPoec
+ * The CATPointOnEdgeCurve corresponding to the end vertex.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+	*/
+  virtual void GetVerticesPointsOnEdgeCurve(CATPointOnEdgeCurve  ** oStartPoec, CATPointOnEdgeCurve  ** oEndPoec )=0;
+
+/**
+ * Retrieves the start and end point curve parameters of &lt;tt&gt;this&lt;/tt&gt; CATEdge. 
+ * &lt;br&gt;They match the
+ * start and end vertices (e.g. if the underlying edge-curve is reversed, the
+ * start parameter is larger than the end parameter).
+ * &lt;br&gt;Sample: To only retrieve the CATCrvParam corresponding to the end vertex:
+ * &lt;pre&gt;CATCrvParam End;
+ * PointerToAnEdge-&gt;GetVerticesParamsOnEdgeCurve(NULL,&amp;End);&lt;/pre&gt;
+ * @param oStartParam
+ * The CATCrvParam corresponding to the start vertex.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ * @param oEndParam
+ * The CATCrvParam corresponding to the end vertex.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ */
+  virtual void GetVerticesParamsOnEdgeCurve(CATCrvParam * oStartParam, CATCrvParam * oEndParam )=0;
+
+
+/**
+ * Computes the tangent vector to &lt;tt&gt;this&lt;/tt&gt; CATEdge at a given parameter.
+ * @param iParamOnEdgeCurve
+ * The parameter where to compute the tangent.
+ * @param ioTangentVector
+ * The computed vector.
+ * @param iTgtNormalization
+ * The mode of normalization.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;if &lt;tt&gt;ioTangentVector&lt;/tt&gt; must be  normalized.
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; otherwise.&lt;/dl&gt; 
+ * @return
+ * The diagnosis of the evaluation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;if vector is non-zero
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean EvalTangent( const CATCrvParam &amp; iParamOnEdgeCurve, 
+				  CATMathVector     &amp; ioTangentVector,  CATBoolean  iTgtNormalization=TRUE)=0;
+
+
+/**
+ * @nodoc
+ * @deprecated V5R11 GetLocalSharpness
+ * Computes sharpness angle of &lt;tt&gt;this&lt;/tt&gt; CATEdge at a given parameter 
+ * on the edge curve. 
+ * @param iParamOnEdgeCurve
+ * The parameter where to compute the tangent.
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param ioSharpness
+ * The sharpness related to 2 faces &lt;tt&gt;iFace1&lt;/tt&gt; and &lt;tt&gt;iFace2&lt;/tt&gt;
+ * bounded by the edge. 
+ * @param oOrientation 
+ * If no reference shell has been provided, and if the 2 faces have
+ * reversed orientations along the edge, then the first face will be used
+ * as a reference for the outer side. In this case, &lt;tt&gt;oOrientation&lt;/tt&gt; 
+ * indicates that second face has to be reversed or not.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces. If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed
+ * to belong to only one shell.
+ * @exception
+ * If the edge bounds one of the faces twice (closed faces case).
+ * An other method with matter side specification will be available soon.
+ */    
+  virtual CATAngle EvalSharpness( const CATCrvParam &amp; iParamOnEdgeCurve, 
+			 CATFace           * iFace1, CATFace           * iFace2,
+			 CATTopSharpness&amp;    ioSharpness,	 CATOrientation    * oOrientation=NULL,
+			 CATShell*           iShellOwningTheTwoFaces=NULL)=0;
+
+
+/**
+ * @nodoc
+ * @deprecated V5R11 GetGlobalSharpness
+ * Retrieves the global sharpness of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param ioSharpness
+ * The sharpness related to 2 faces &lt;tt&gt;iFace1&lt;/tt&gt; and &lt;tt&gt;iFace2&lt;/tt&gt;
+ * bounded by the edge. 
+ * @param oOrientation 
+ * If no reference shell has been provided, and if the 2 faces have
+ * reversed orientations along the edge, then the first face will be used
+ * as a reference for the outer side. In this case, &lt;tt&gt;oOrientation&lt;/tt&gt; 
+ * indicates that second face has to be reversed or not.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces. If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed
+ * to belong to only one shell.
+ * @param oDefinedSharpness
+ * The way the sharpness has been filled out (stored or computed).
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;if &lt;tt&gt;SetSharpness&lt;/tt&gt; has been previously applied.
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; geometric evaluation of sharpness.&lt;/dl&gt; 
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ * @exception
+ * If the sharpness is not constant along the edge.
+ */     
+  virtual void     EvalGlobalSharpness(CATFace *iFace1, CATFace *iFace2,
+			 CATTopSharpness  &amp; ioSharpness,
+       CATOrientation   * oOrientation=NULL,
+			 CATShell         * iShellOwningTheTwoFaces=NULL,
+       CATBoolean       * oDefinedSharpness = NULL)=0;
+       
+/**
+ * @nodoc
+ * @deprecated V5R11 SetGlobalSharpness
+ * Defines the global sharpness of &lt;tt&gt;this&lt;/tt&gt; CATEdge on the edge curve.
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iSharpness
+ * The tangential continuity.
+ * @param iConcavity
+ * The curvature.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces. If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed
+ * to belong to only one shell. 
+ */     
+  virtual void     SetSharpness(CATFace *iFace1, CATFace *iFace2,
+      const CATGeoContinuity   iSharpness,
+      const CATGeoConvexity    iConcavity = CATUnknownConvexity,
+      CATShell *iShellOwningTheTwoFaces=NULL)  = 0;
+
+
+/**
+ * Computes the sharpness angle of &lt;tt&gt;this&lt;/tt&gt; CATEdge at a given parameter 
+ * on the edge curve.
+ * @param iTopData
+ * The object defining the CATSoftwareConfiguration.  
+ * @param iParamOnEdgeCurve
+ * The parameter where to compute the tangent.
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param ioSharpness
+ * The sharpness related to 2 faces &lt;tt&gt;iFace1&lt;/tt&gt; and &lt;tt&gt;iFace2&lt;/tt&gt;
+ * bounded by the edge. 
+ * @param oOrientation 
+ * If no reference shell has been provided, and if the 2 faces have
+ * reversed orientations along the edge, then the first face will be used
+ * as a reference for the outer side. In this case, &lt;tt&gt;oOrientation&lt;/tt&gt; 
+ * indicates that second face has to be reversed or not.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed to belong to only one shell.
+ * @param iMinSharpAngle
+ * Minimum (resp. maximum) angle value in rad for which the edge
+ * is declared Sharp (resp. Smooth).
+ * @exception
+ * If the edge bounds one of the faces twice (closed faces case).
+ * An other method with matter side specification will be available soon.
+ */    
+  virtual CATAngle GetLocalSharpness(CATTopData &amp;iTopData,
+       const CATCrvParam &amp; iParamOnEdgeCurve, 
+			 CATFace           * iFace1,
+       CATFace           * iFace2,
+			 CATTopSharpness&amp;    oSharpness,
+       CATOrientation    * oOrientation = NULL,
+			 CATShell*           iShellOwningTheTwoFaces = NULL,
+       CATAngle			       iMinSharpAngle = CATTopSharpAngle) = 0;
+
+
+/**
+ * Retrieves the global sharpness of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ * @param iTopData
+ * The object defining the CATSoftwareConfiguration. 
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param ioSharpness
+ * The sharpness related to 2 faces &lt;tt&gt;iFace1&lt;/tt&gt; and &lt;tt&gt;iFace2&lt;/tt&gt;
+ * bounded by the edge. 
+ * @param oOrientation 
+ * If no reference shell has been provided, and if the 2 faces have
+ * reversed orientations along the edge, then the first face will be used
+ * as a reference for the outer side. In this case, &lt;tt&gt;oOrientation&lt;/tt&gt; 
+ * indicates that second face has to be reversed or not.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed to belong to only one shell.
+ * @param iComputeConvexity
+ * Whether the convexity is computed for Sharp edges.
+ * If FALSE, &lt;tt&gt;iShellOwningTheTwoFaces&lt;/tt&gt; can be set to NULL.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;the convexity is computed if the edge is Sharp.
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;the convexity is not computed.&lt;/dl&gt;
+ * @param iForceGeometricEvaluation
+ * If TRUE, a geometric evaluation is performed even if a value
+ * stored (with &lt;tt&gt;SetGlobalSharpness&lt;/tt&gt;) if it exists.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;&lt;/dl&gt;   
+ * @param oStoredSharpness
+ * The way the sharpness has been filled out (stored or computed).
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;if &lt;tt&gt;SetLocalSharpness&lt;/tt&gt; has been previously applied.
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; geometric evaluation of sharpness.&lt;/dl&gt; 
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not filled out.
+ * @param iMinSharpAngle
+ * Minimum (resp. maximum) angle value in rad for which the edge
+ * is declared Sharp (resp. Smooth).
+ * @exception
+ * If no geometry evaluation could be properly performed.
+ */     
+  virtual void GetGlobalSharpness(CATTopData &amp;iTopData,
+       CATFace          * iFace1,
+       CATFace          * iFace2,
+			 CATTopSharpness  &amp; oSharpness,
+       CATOrientation   * oOrientation = NULL,
+			 CATShell         * iShellOwningTheTwoFaces = NULL,
+       CATBoolean         iComputeConvexity = TRUE,
+       CATBoolean         iForceGeometricEvaluation = FALSE,
+       CATBoolean       * oStoredSharpness = NULL,
+       CATAngle			      iMinSharpAngle = CATTopSharpAngle) = 0;
+       
+/**
+ * Defines the global sharpness of &lt;tt&gt;this&lt;/tt&gt; CATEdge on the edge curve.
+ * @param iTopData
+ * The object defining the CATSoftwareConfiguration. 
+ * @param iFace1
+ * The pointer to the one face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iFace2
+ * The pointer to another face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iSharpness
+ * The tangential continuity.
+ * @param iConcavity
+ * The curvature.
+ * @param iShellOwningTheTwoFaces
+ * The pointer to a shell that owns the two faces.
+ * If &lt;tt&gt;NULL&lt;/tt&gt;, the faces are supposed to belong to only one shell.
+ * @param iMinSharpAngle
+ * Minimum (resp. maximum) angle value in rad for which the edge
+ * is declared Sharp (resp. Smooth).
+ * @param iCheckBeforeSet
+ * If TRUE, &lt;tt&gt;GetGlobalSharpness&lt;/tt&gt; is called and its result compared with &lt;tt&gt;iMinSharpAngle&lt;/tt&gt;.
+ * The sharpness is stored only if no incoherence was detected.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;&lt;/dl&gt;
+ * @param iForceGeometricEvaluation
+ * If TRUE, a geometric evaluation is performed during &lt;tt&gt;GetGlobalSharpness&lt;/tt&gt; even if a value
+ * stored (with &lt;tt&gt;SetGlobalSharpness&lt;/tt&gt;) exists.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;&lt;/dl&gt;   
+ * @return
+ * Whether the sharpness has been stored or not.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;&lt;/dl&gt;
+ */     
+  virtual CATBoolean SetGlobalSharpness(CATTopData &amp;iTopData,
+      CATFace                * iFace1,
+      CATFace                * iFace2,
+      const CATGeoContinuity   iSharpness,
+      const CATGeoConvexity    iConcavity = CATUnknownConvexity,
+      CATShell               * iShellOwningTheTwoFaces = NULL,
+      CATAngle			           iMinSharpAngle = CATTopSharpAngle,
+      CATBoolean               iCheckBeforeSet = TRUE,
+      CATBoolean               iForceGeometricEvaluation = FALSE) = 0;
+
+/**
+  * @nodoc
+  * @deprecated V5R15 @href CATDynMassProperties3D#GetLength
+  * Computes the length (between start and end vertex) of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+  * @return
+  * The computed length.
+  */
+  virtual double   CalcLength() = 0;
+
+/**
+ * Returns the 2D bounding box of &lt;tt&gt;this&lt;/tt&gt; CATEdge on the surface of the bounded face. 
+ * @param iBoundedFace
+ * The pointer to a face bounded by &lt;tt&gt;this&lt;/tt&gt;.
+ * @return
+ * The computed bounding box.
+ */
+  virtual const CATSurLimits * Get2DBoundingBox(CATFace* iBoundedFace)=0;
+
+/**
+ * Flags the edge junction status (No effect before V5R8)
+ * @param iTopData
+ * The object defining the CATSoftwareConfiguration. 
+ * @param iFlag
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CatTopUndefined&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt;CatTopJunction&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *     &lt;dt&gt;&lt;tt&gt;CatTopFunctional&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ */
+  virtual void SetJunctionStatus(CATTopData &amp;iTopData, CATTopJunctionEdgeStatus iFlag = CatTopJunction)=0;
+
+/**
+ * Reads the edge junction status. 
+ * @return
+ * The junction status of &lt;tt&gt;this&lt;/tt&gt; CATEdge.
+ */
+  virtual CATTopJunctionEdgeStatus GetJunctionStatus()=0;
+  
+  
+
+  
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;  
+
+/**
+ * @nodoc
+ * Do not use.
+ */
+  virtual void SetGeometryOnSupport( CATPCurve           * iPCurve , 
+				     CATOrientation        orientation,
+				     CATPointOnEdgeCurve * iStart,  CATPointOnEdgeCurve * iEnd) = 0;
+
+
+  /** @nodoc */ 
+  virtual  HRESULT GetBorderedFaces(CATBody *iBody, 
+                                    CATLISTP(CATCell) &amp; oFaces,
+                                    CATListOfLong     &amp; oNbOfFacesByDomain ) = 0;
+  
+};
+
+CATDeclareHandler(CATEdge,CATCell);
+
+#endif // CATEdge_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDynExtrapolationToolsDef.html">← 上一页: CATDynExtrapolationToolsDef.h</a></div>
+        <div><a href="CATEdgeDomain.html">下一页: CATEdgeDomain.h →</a></div>
+    </div>
+</body>
+</html>

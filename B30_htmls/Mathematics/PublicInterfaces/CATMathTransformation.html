@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathTransformation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathTransformation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransfoType.html">← 上一页: CATMathTransfoType.h</a></div>
+        <div><a href="CATMathTransformation1D.html">下一页: CATMathTransformation1D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathTransformation_H
+#define CATMathTransformation_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATMathematics.h&quot;
+
+#include &quot;CATMath3x3Matrix.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathLine.h&quot;
+#include &quot;CATMathPlane.h&quot;
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATMathAxis.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+
+#include &quot;CATMathDirection.h&quot;
+#include &quot;CATMathLimits.h&quot;
+#include &quot;CATErrorDef.h&quot; //HRESULT
+
+/**
+* @nodoc
+*/
+extern  ExportedByCATMathematics CATMathPoint  operator * (
+  const CATMathTransformation &amp; iTransfo,
+  const CATMathPoint &amp; iPointToTransfo);
+/**
+* @nodoc
+*/
+extern  ExportedByCATMathematics CATMathVector operator * (
+  const CATMathTransformation &amp; iTransfo,
+  const CATMathVector &amp; iVectorToTransfo);
+/**
+* @nodoc
+* @deprecated V5R20 ApplyTo
+*/
+extern  ExportedByCATMathematics CATMathLine   operator * (
+  const CATMathTransformation &amp; iTransfo,
+  const CATMathLine &amp; iLineToTransfo);
+/**
+* @nodoc
+* @deprecated V5R20 ApplyTo
+*/
+extern  ExportedByCATMathematics CATMathPlane  operator * (
+  const CATMathTransformation &amp; iTransfo,
+  const CATMathPlane &amp; iPlaneToTransfo);
+/**
+* @nodoc
+* @deprecated V5R20 ApplyTo
+*/
+extern  ExportedByCATMathematics CATMathAxis   operator * (
+  const CATMathTransformation &amp; iTransfo,
+  const CATMathAxis &amp; iAxisToTransfo);
+
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;// to suppress
+#endif
+
+/**
+* Class representing a transformation in dimension 3.
+* &lt;br&gt;It is composed of a matrix &lt;tt&gt;Matrix&lt;/tt&gt;, 
+* and of a translation &lt;tt&gt;Vector&lt;/tt&gt;.
+*&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+*    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+*        &lt;td&gt; Vector= &lt;/td&gt;&lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+*    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+*        &lt;td&gt;         &lt;/td&gt;&lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+*    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+*        &lt;td&gt;         &lt;/td&gt;&lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+*        &lt;/table&gt;&lt;/tt&gt;
+* &lt;br&gt;Apply transformations by using the &lt;tt&gt;*&lt;/tt&gt; operator.
+* &lt;br&gt;Available transformations are scaling, translation, reflection, 
+* rotation.
+*/ 
+class ExportedByCATMathematics CATMathTransformation
+{
+  
+  
+public:
+  //============================================================================
+  //- Constructors
+  //============================================================================
+  /**
+  * Constructs an Identity transformation.
+  * &lt;br&gt; &lt;tt&gt;Matrix= Identity&lt;/tt&gt;, &lt;tt&gt;Vector = (0,0,0) &lt;/tt&gt;
+  */ 
+  CATMathTransformation();
+  
+  /**
+  * Constructs a CATMathTransformation from a CATMath3x3Matrix and a CATMathVector.
+  */
+  CATMathTransformation(const CATMath3x3Matrix &amp; iMatrix,
+                        const CATMathVector &amp;iTranslation);
+  
+  /**
+  * Constructs a scaling.
+  */
+  CATMathTransformation(const CATMathPoint &amp; iCenter ,
+                        const double iScale);
+  
+  /**
+  * Constructs a translation.
+  */
+  CATMathTransformation(const CATMathVector &amp; iTranslation);
+  
+  /**
+  * Constructs a reflection from a CATMathPoint and a CATMathVector.
+  */
+  CATMathTransformation(const CATMathPoint &amp;iReflectPlaneOrigin,
+                        const CATMathVector &amp;iReflectPlaneNormal);
+  
+  /**
+  * Constructs a reflection on a plane.
+  */
+  CATMathTransformation(const CATMathPlane &amp; iReflectPlane);
+  
+  /**
+  * Constructs an affinity with respect to a plane.
+  */
+  CATMathTransformation(const CATMathPlane &amp; iPlane, const double iScale);
+  
+  /**
+  * Constructs a rotation (radians).
+  * @param iAngle
+  * The angle in radians.
+  * @param iAxis
+  * The rotation axis.
+  */
+  CATMathTransformation(const CATAngle &amp;iAngle, const CATMathLine &amp; iAxis);
+  
+  /**
+  * Constructs an affinity with respect to a given ratio for each direction of a CATMathAxis.
+  * @param iAxis
+  * The three direction of the affinity.
+  * @param iRatio
+  * Array of 3 doubles, giving the ratio in each direction.
+  */
+  CATMathTransformation(const CATMathAxis &amp; iAxis, const double iRatio[]);
+  
+
+  /**
+  * @nodoc
+  * @deprecated V5R15 Set
+  * Constructs a transformation of axis systems.
+  *&lt;br&gt;
+  * This transformation transforms, in the global axis system
+  * &lt;tt&gt;CATMathOIJK&lt;/tt&gt;, the coordinates of a point &lt;tt&gt;M&lt;/tt&gt;
+  * into the coordinates of the point &lt;tt&gt;TM&lt;/tt&gt; such that:
+  * &lt;tt&gt;M&lt;/tt&gt; and &lt;tt&gt;TM&lt;/tt&gt; have the same coordinate values
+  * in the axis &lt;tt&gt;iFromAxis&lt;/tt&gt; and &lt;tt&gt;iToAxis&lt;/tt&gt;. 
+  *&lt;br&gt;
+  * Now, for defining the transformation from &lt;tt&gt;iFromAxis&lt;/tt&gt; to &lt;tt&gt;iToAxis&lt;/tt&gt;, you have to combine
+  * two transformations, in the following way:
+  *   &lt;tt&gt; CATMathTransformation(iToAxis, CATMathOIJK) * CATMathTransformation(CATMathOIJK, iFromAxis)&lt;/tt&gt;
+  */
+  CATMathTransformation(const CATMathAxis &amp; iFromAxis, const CATMathAxis &amp; iToAxis);
+  
+  /**
+  * @nodoc
+  * @deprecated V5R15 Set
+  * Creates an interpolation of an isometry.
+  *&lt;br&gt;This can be used for simulating intermediate steps of a displacement.
+  *&lt;br&gt;Throws an error if the two transformations are not compatible.
+  * @param iFactor
+  * The ratio of the intermediate step: &lt;tt&gt;0 &lt; iFactor &lt; 1&lt;/tt&gt;.     
+  */
+  CATMathTransformation(const double iFactor, 
+                        const CATMathTransformation &amp; iFromTansfo,
+                        const CATMathTransformation &amp; iToTransfo);
+
+
+  /**
+  * Copy constructor.
+  */
+  CATMathTransformation(const CATMathTransformation &amp; iTransfoToCopy);
+  
+  /**
+  * @nodoc
+  * @deprecated V5R20 SetCoefficients
+  *Throws an error if iNbCoeff value is not 12 or 16.
+  *&lt;br&gt;Constructs a transformation from an array[] of doubles.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=12&lt;/tt&gt;, the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=16&lt;/tt&gt;, DO NOT USE- the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt;  u1  &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt;  u2      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt;  u3      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;  0  &lt;/td&gt;&lt;td&gt;  0  &lt;/td&gt;&lt;td&gt; 0   &lt;/td&gt;
+  *        &lt;td&gt;  1     &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  */
+  CATMathTransformation(const double iCoeff[], const CATLONG32 iNbCoeff = 12);
+  
+  //===========================================================================
+  //  Get/Set
+  //===========================================================================
+  /**
+  * Set an interpolation of an isometry.
+  *&lt;br&gt;This can be used for simulating intermediate steps of a displacement.
+  * @param iFactor
+  * The ratio of the intermediate step: &lt;tt&gt;0 &lt; iFactor &lt; 1&lt;/tt&gt;.     
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if the two transformations are not compatible, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT Set(const double iFactor,
+              const CATMathTransformation &amp; iFromTansfo,
+              const CATMathTransformation &amp; iToTransfo);	
+
+  /**
+  * Set an transformation of axis systems.
+  *&lt;br&gt;
+  * This transformation transforms, in the global axis system
+  * &lt;tt&gt;CATMathOIJK&lt;/tt&gt;, the coordinates of a point &lt;tt&gt;M&lt;/tt&gt;
+  * into the coordinates of the point &lt;tt&gt;TM&lt;/tt&gt; such that:
+  * &lt;tt&gt;M&lt;/tt&gt; and &lt;tt&gt;TM&lt;/tt&gt; have the same coordinate values
+  * in the axis &lt;tt&gt;iFromAxis&lt;/tt&gt; and &lt;tt&gt;iToAxis&lt;/tt&gt;. 
+  *&lt;br&gt;
+  * Now, for defining the transformation from &lt;tt&gt;iFromAxis&lt;/tt&gt; to &lt;tt&gt;iToAxis&lt;/tt&gt;, you have to combine
+  * two transformations, in the following way:
+  *   &lt;tt&gt; CATMathTransformation(iToAxis, CATMathOIJK) * CATMathTransformation(CATMathOIJK, iFromAxis)&lt;/tt&gt;
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT Set(const CATMathAxis &amp; iFromAxis,const CATMathAxis &amp; iToAxis);
+  
+  /**
+  * Set a transformation of axis systems in the global axis system CATMathOIJK.
+  * It transforms the axis &lt;tt&gt;iFromAxis&lt;/tt&gt; into the global axis system CATMathOIJK. 
+  * This transformation can be also used in the frame of a change of basis.
+  * In that case, the name is ambiguous because  
+  *&lt;br&gt;
+  * this transformation transforms the coordinates  &lt;tt&gt;P_OIJK&lt;/tt&gt;
+  * in the global axis system &lt;tt&gt;CATMathOIJK&lt;/tt&gt; of a point into its coordinates 
+  * &lt;tt&gt;P_FromAxis&lt;/tt&gt; in the axis &lt;tt&gt;iFromAxis&lt;/tt&gt;. 
+  *
+  *  &lt;tt&gt; P_FromAxis = (*this) *  P_OIJK &lt;/tt&gt;
+  *&lt;br&gt;
+  * contrary to what it was written previously.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  * This API is equivalent to CATMathTransformation(iFromAxis, CATMathOIJK)
+  */
+  HRESULT SetFromAxisToOIJK(const CATMathAxis &amp; iFromAxis);
+
+  /**
+  * Set a transformation of axis systems in the global axis system CATMathOIJK.
+  * It transforms the global axis system CATMathOIJK into the axis &lt;tt&gt;iToAxis&lt;/tt&gt;. 
+  * This transformation can be also used in the frame of a change of basis.
+  * In that case, the name is ambiguous because  
+  *&lt;br&gt;
+  * this transformation transforms the coordinates &lt;tt&gt;P_ToAxis&lt;/tt&gt;
+  * in the axis &lt;tt&gt;iToAxis&lt;/tt&gt;  of a point into its coordinates 
+  *  &lt;tt&gt;P_OIJK&lt;/tt&gt; in the global axis system &lt;tt&gt;CATMathOIJK&lt;/tt&gt;.
+  *
+  *  &lt;tt&gt; P_OIJK = (*this) *  P_ToAxis &lt;/tt&gt;
+  *&lt;br&gt;
+  * contrary to what it was written previously.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  * This API is equivalent to CATMathTransformation(CATMathOIJK, iToAxis)
+  */
+  HRESULT SetFromOIJKToAxis(const CATMathAxis &amp; iToAxis);
+
+  /**
+  * Retrieves the CATMath3x3Matrix associated with &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  */
+  void GetMatrix(CATMath3x3Matrix &amp; ioMatrix) const;
+  
+  /**
+  * Sets the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  */
+  void SetMatrix(const CATMath3x3Matrix &amp; iMatrix) ;
+
+  /**
+  * Retrieves the CATMathVector associated with &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  */
+  void GetVector(CATMathVector &amp; ioVector) const;
+  
+  /**
+  * Sets the vector of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  */
+  void SetVector(const CATMathVector &amp; iVector) ;
+  
+  /**
+  * @nodoc
+  * @deprecated V5R15 GetCoefficients
+  *Throws an error if iNbCoeff value is not 12 or 16.
+  *&lt;br&gt;Retrieves the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation in an array[] of doubles.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=12&lt;/tt&gt;, the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; oCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients are given COLUMN by COLUMN.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=16&lt;/tt&gt;, DO NOT USE - and the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; oCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt;  u1  &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt;  u2      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt;  u3      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;  0  &lt;/td&gt;&lt;td&gt;  0  &lt;/td&gt;&lt;td&gt; 0   &lt;/td&gt;
+  *        &lt;td&gt;  1     &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients are given COLUMN by COLUMN.
+  */
+  void GetCoef(double iCoeff[], const CATLONG32 iNbCoeff = 12) const;	
+
+  /**
+  *Retrieves the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation in an array[] of doubles.
+  *&lt;br&gt;If &lt;tt&gt;iNbCoeff=12&lt;/tt&gt;, the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; oCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients are given COLUMN by COLUMN.
+  *&lt;br&gt;If &lt;tt&gt;iNbCoeff=16&lt;/tt&gt;, DO NOT USE - and the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; oCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt;  u1  &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt;  u2      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt;  u3      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;  0  &lt;/td&gt;&lt;td&gt;  0  &lt;/td&gt;&lt;td&gt; 0   &lt;/td&gt;
+  *        &lt;td&gt;  1     &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients are given COLUMN by COLUMN.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if iNbCoeff value is not 12 or 16, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT GetCoefficients(double iCoeff[], const CATLONG32 iNbCoeff = 12) const;	
+  
+  /**
+  * @nodoc
+  * @deprecated V5R15 SetCoefficients
+  *Throws an error if iNbCoeff value is not 12 or 16.
+  *&lt;br&gt;Modifies the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation from an array[] of doubles.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=12&lt;/tt&gt;, the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  * &lt;br&gt;If &lt;tt&gt;iNbCoeff=16&lt;/tt&gt;, DO NOT USE - the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt;  u1  &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt;  u2      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt;  u3      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;  0  &lt;/td&gt;&lt;td&gt;  0  &lt;/td&gt;&lt;td&gt; 0   &lt;/td&gt;
+  *        &lt;td&gt;  1     &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  */
+  void SetCoef(const double iCoeff[], const CATLONG32 iNbCoeff = 12);
+
+
+  /**
+  *Modifies the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation from an array[] of doubles.
+  *&lt;br&gt;If &lt;tt&gt;iNbCoeff=12&lt;/tt&gt;, the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt; u3 &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  *&lt;br&gt;If &lt;tt&gt;iNbCoeff=16&lt;/tt&gt;, DO NOT USE - the array is:
+  *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+  *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;&lt;td&gt; a13 &lt;/td&gt;
+  *        &lt;td&gt;  u1  &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;&lt;td&gt; a23 &lt;/td&gt;
+  *        &lt;td&gt;  u2      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a31 &lt;/td&gt;&lt;td&gt; a32 &lt;/td&gt;&lt;td&gt; a33 &lt;/td&gt;
+  *        &lt;td&gt;  u3      &lt;/td&gt;&lt;/tr&gt;
+  *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;  0  &lt;/td&gt;&lt;td&gt;  0  &lt;/td&gt;&lt;td&gt; 0   &lt;/td&gt;
+  *        &lt;td&gt;  1     &lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt;
+  * and the coefficients must be given COLUMN by COLUMN.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if iNbCoeff value is not 12 or 16, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT SetCoefficients(const double iCoeff[], const CATLONG32 iNbCoeff = 12);
+  
+  /**
+  * Tests if the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is an isometry (keeps the distances).
+  * return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not an isometry.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a direct isometry.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsIsometry() const;
+  
+  /**
+  * Tests if the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is the identity (invariant).
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not the identity.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is the identity.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsIdentity() const;
+  
+  /**
+  * Tests if the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is a similitude and retrieves the scale.
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a similitude.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a similitude.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsSimilitude(double &amp; ioScale) const;
+  
+  /**
+  * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is a scaling and retrieves the Origin and 
+  * the Scale.
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a scaling.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a scaling.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsScaling(CATMathPoint &amp; ioOrigin, double &amp; ioScale) const;
+  
+  /**
+  * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is a reflection and retrieves the reflect plane.
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a reflection.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a reflection.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsReflection(CATMathPlane &amp; ioReflectPlane) const;
+    
+  /**
+  * Tests if the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is a rotation and retrieves the axis and the
+  * angle in radian.
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a rotation.
+  * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a rotation.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsRotation( CATAngle &amp; ioAngle, CATMathLine &amp; ioAxis, const double iTol = 0.) const;
+  
+  //===========================================================================
+  //  Inverse
+  //===========================================================================
+  /**
+  * @nodoc
+  * @deprecated V5R15 ComputeInverse
+  * Retrieves the inverse of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  * @return 
+  * &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is invertible, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise. 
+  * In this last case, &lt;tt&gt;oInverse&lt;/tt&gt; is not modified.
+  */
+  CATBoolean  Inverse(CATMathTransformation &amp; ioInverse) const;
+
+  /**
+  * Retrieves the inverse of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  * @return 
+  * &lt;tt&gt;S_OK&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation is invertible, &lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise. 
+  * In this last case, &lt;tt&gt;oInverse&lt;/tt&gt; is not modified.
+  */
+  HRESULT ComputeInverse(CATMathTransformation &amp; ioInverse) const;
+  
+  //===========================================================================
+  // Apply transformations
+  //===========================================================================
+  /**
+  * @nodoc
+  * @deprecated V5R21 ApplyToLine
+  * Computes the CATMathLine transformation.
+  * @param iLineToTransfo
+  *  The CATMathLine of origin 
+  * @param oLine
+  *  The transformed CATMathLine
+  * Note that it could change the length if the transformation is not an isometry.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT  ApplyTo(const CATMathLine &amp; iLineToTransfo, CATMathLine &amp; oLine);
+  
+  /**
+  * Computes the CATMathLine transformation.
+  * @param iLineToTransfo
+  *  The CATMathLine of origin 
+  * @param oLine
+  *  The transformed CATMathLine
+  * Note that it could change the length if the transformation is not an isometry.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT  ApplyToLine(const CATMathLine &amp; iLineToTransfo, CATMathLine &amp; oLine) const;
+
+  /**
+  * @nodoc
+  * @deprecated V5R21 ApplyToPlane
+  * Computes the CATMathPlane transformation.
+  * @param iPlaneToTransfo
+  *  The CATMathPlane of origin 
+  * @param oPlane
+  * The transformed planed
+  *  Note that the second direction of the transformated plane is re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT   ApplyTo (const CATMathPlane &amp; iPlaneToTransfo, CATMathPlane &amp; oPlane);
+
+  /**
+  * Computes the CATMathPlane transformation.
+  * @param iPlaneToTransfo
+  *  The CATMathPlane of origin 
+  * @param oPlane
+  * The transformed planed
+  *  Note that the second direction of the transformated plane is re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT   ApplyToPlane (const CATMathPlane &amp; iPlaneToTransfo, CATMathPlane &amp; oPlane) const;
+  
+  /**
+  * @nodoc
+  * @deprecated V5R21 ApplyToAxis
+  * Computes the CATMathAxis transformation.
+  * @param iAxisToTransfo
+  *  The CATMathAxis of origin 
+  * @param oAxis
+  * The transformed CATMathAxis
+  *  Note that the second and third directions of the transformated axis are re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT ApplyTo (const CATMathAxis &amp; iAxisToTransfo,  CATMathAxis &amp; oAxis);
+
+  /**
+  * Computes the CATMathAxis transformation.
+  * @param iAxisToTransfo
+  *  The CATMathAxis of origin 
+  * @param oAxis
+  * The transformed CATMathAxis
+  *  Note that the second and third directions of the transformated axis are re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+  HRESULT ApplyToAxis (const CATMathAxis &amp; iAxisToTransfo,  CATMathAxis &amp; oAxis) const ;
+  //===========================================================================
+  //  Overloaded operators
+  //===========================================================================
+  /**
+  * Defines the composition of two CATMathTransformations.
+  * @return
+  * The CATMathTransformation defined by:
+  * &lt;tt&gt; Matrix = iTransfo1.Matrix * iTransfo2.Matrix&lt;/tt&gt;
+  *&lt;br&gt;&lt;tt&gt; Vector = iTransfo1.Matrix * iTransfo2.Vector +iTransfo1.Vector&lt;/tt&gt; 
+  */
+  friend ExportedByCATMathematics CATMathTransformation operator * (
+    const CATMathTransformation &amp; iTransfo1,
+    const CATMathTransformation &amp; iTransfo2);
+
+  /**
+  * Defines the CATMathPoint transformation.
+  * @return
+  *  The CATMathPoint defined by: 
+  * &lt;tt&gt; iTransfo.Matrix*iPointToTransfo + iTransfo.Vector&lt;/tt&gt;
+  */
+  friend  ExportedByCATMathematics CATMathPoint  operator * (
+    const CATMathTransformation &amp; iTransfo,
+    const CATMathPoint &amp; iPointToTransfo);
+
+  /**
+  * Defines the CATMathVector transformation.
+  * @return
+  *  The CATMathVector defined by &lt;tt&gt; iTransfo.Matrix*iVectorToTransfo &lt;/tt&gt;
+  */
+  friend  ExportedByCATMathematics CATMathVector operator * (
+    const CATMathTransformation &amp; iTransfo,
+    const CATMathVector &amp; iVectorToTransfo);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 ApplyTo
+  * Defines the CATMathLine transformation.
+  * @return
+  *  The CATMathLine of origin 
+  * &lt;tt&gt; iTransfo*iLineToTransfo.Origin &lt;/tt&gt;
+  * and of direction &lt;tt&gt; iTransfo*iLineToTransfo.Direction&lt;/tt&gt;. Note that
+  * it could change the length if the transformation is not an isometry.
+  */
+  friend ExportedByCATMathematics CATMathLine   operator * (
+    const CATMathTransformation &amp; iTransfo,
+    const CATMathLine &amp; iLineToTransfo);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 ApplyTo
+  * Defines the CATMathPlane transformation.
+  * @return
+  *  The CATMathPlane of origin 
+  * &lt;tt&gt; iTransfo*iPlaneToTransfo.Origin &lt;/tt&gt;
+  * and of directions &lt;tt&gt; iTransfo*iPlaneToTransfo.FirstDirection&lt;/tt&gt; and 
+  * &lt;tt&gt; iTransfo*iPlaneToTransfo.SecondDirection&lt;/tt&gt;.
+  *  Note that the second direction of the transformated plane is
+  *  re-orthonormalized. 
+  */
+  friend  ExportedByCATMathematics CATMathPlane  operator * (
+    const CATMathTransformation &amp; iTransfo,
+    const CATMathPlane &amp; iPlaneToTransfo);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 ApplyTo
+  * Defines the CATMathAxis transformation.
+  * @return
+  *  The CATMathAxis of origin 
+  * &lt;tt&gt; iTransfo*iAxisToTransfo.Origin &lt;/tt&gt;
+  * and of directions &lt;tt&gt; iTransfo*iAxisToTransfo.FirstDirection&lt;/tt&gt;, 
+  * &lt;tt&gt; iTransfo*iAxisToTransfo.SecondDirection&lt;/tt&gt; and
+  * &lt;tt&gt; iTransfo*iAxisToTransfo.ThirdDirection&lt;/tt&gt;.
+  *  Note that the second and third directions of the transformated axis are
+  *  re-orthonormalized. 
+  */
+  friend  ExportedByCATMathematics CATMathAxis   operator * (
+    const CATMathTransformation &amp; iTransfo,
+    const CATMathAxis &amp; iAxisToTransfo);
+
+  /**
+  * @nodoc
+  * Computes the Euler angles associated to the rotation of the CATMathTransformation
+  * in radian and under the following convention :
+  * Extrinsic ZXY Euler Rotation
+  * oAngle1 rotate about Z (xyz) =&gt; (x&#x27;y&#x27;,z)
+  * oAngle2 rotate about X (x&#x27;y&#x27;,z) =&gt; (x&#x27;,y&quot;,z&#x27;)
+  * oAngle3 rotate about Y (x&#x27;,y&quot;,z&#x27;) =&gt; (x&quot;,y&quot;,z&quot;)
+  */
+  HRESULT GetEulerAngles(double &amp; oAngle1, double &amp; oAngle2, double &amp; oAngle3) const;
+
+  /**
+  * @nodoc
+  * Compute the matrix associated to the Euler angles given as input
+  * in radian and under the following convention :
+  * Extrinsic ZXY Euler Rotation
+  * iAngle1 rotate about Z (xyz) =&gt; (x&#x27;y&#x27;,z)
+  * iAngle2 rotate about X (x&#x27;y&#x27;,z) =&gt; (x&#x27;,y&quot;,z&#x27;) 
+  * iAngle3 rotate about Y (x&#x27;,y&quot;,z&#x27;) =&gt; (x&quot;,y&quot;,z&quot;)
+  */
+  HRESULT ComputeMatrixFromEulerAngles(double iAngle1, double iAngle2, double iAngle3);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20
+  * Constructs a rotation (degree).
+  */
+  CATMathTransformation(const CATMathLine &amp; iAxis, const CATAngle &amp;iAngle);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20
+  * Tests if the transformation is a rotation and retrieves the axis and the
+  * angle in degree.
+  * @return
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;        &lt;dd&gt;if it is not a rotation.
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;        &lt;dd&gt;if it is a rotation.
+  * &lt;/dl&gt;
+  */
+  CATBoolean IsRotation(CATMathLine &amp; oAxis, CATAngle &amp; oAngle) const;
+
+  /**
+  * @nodoc
+  * @deprecated V5R20
+  */
+  CATMath3x3Matrix GetMatrix() const;
+
+  /**
+  * @nodoc
+  * @deprecated V5R20
+  */
+  CATMathVector GetVector() const;
+
+  /**
+  * @nodoc
+  * @deprecated V5R15 ComputeInverse
+  * &lt;br&gt;Throws an error if the matrix is not invertible.
+  */
+  CATMathTransformation Inverse() const;
+
+  /**
+  * @nodoc
+  */
+  CATMath3x3Matrix&amp; GetDataMatrix() const;
+
+  /**
+  * @nodoc
+  */
+  CATMathVector&amp; GetDataVector() const;
+
+  /**
+  * Dumps &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation.
+  * &lt;br&gt;This writes the following lines on the ostream:
+  *    &lt;tt&gt;&lt;table width = 40&gt;
+  *&lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;td&gt; iA11 &lt;/td&gt;&lt;td&gt; iA12 &lt;/td&gt;
+  *                  &lt;td&gt; iA13 &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;
+  *&lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;td&gt; iA21 &lt;/td&gt;&lt;td&gt; iA22 &lt;/td&gt;
+  *                  &lt;td&gt; iA23 &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;
+  *&lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;td&gt; iA31 &lt;/td&gt;&lt;td&gt; iA32 &lt;/td&gt;
+  *                  &lt;td&gt; iA33 &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;
+  *&lt;tr&gt;&lt;td&gt;Translation= &lt;/td&gt;&lt;td&gt;(&lt;/td&gt;&lt;td&gt; FirstCoord,&lt;/td&gt;&lt;td&gt;SecondCoord,&lt;/td&gt;
+  *                      &lt;td&gt; ThirdCoord&lt;/td&gt;&lt;td&gt;)&lt;/td&gt;&lt;/tr&gt;
+  *        &lt;/table&gt;&lt;/tt&gt; 
+  * @param iStream  
+  * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps 
+  * on the &lt;tt&gt;cout&lt;/tt&gt; output.
+  */
+  void Dump(ostream * iStream=0L) const;
+
+  /**
+  * @nodoc
+  */
+  CATBoolean IsSimilitude() const;
+  
+   private:
+     CATMath3x3Matrix _matrix;
+     CATMathVector _vector;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransfoType.html">← 上一页: CATMathTransfoType.h</a></div>
+        <div><a href="CATMathTransformation1D.html">下一页: CATMathTransformation1D.h →</a></div>
+    </div>
+</body>
+</html>

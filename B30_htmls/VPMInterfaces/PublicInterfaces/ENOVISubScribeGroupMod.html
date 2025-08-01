@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVISubScribeGroupMod.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVISubScribeGroupMod.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIStream.html">← 上一页: ENOVIStream.h</a></div>
+        <div><a href="ENOVISubscriberEvent.html">下一页: ENOVISubscriberEvent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//COPYRIGHT DASSAULT SYSTEMES 1998
+
+#ifndef ENOVISubScribeGroupMod_H
+#define ENOVISubScribeGroupMod_H
+
+/**
+ *   @CAA2Level L1
+ *   @CAA2Usage U5
+ */
+
+
+// -- Version
+#include &quot;CATIAV5Level.h&quot;
+// -- Systeme
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;sequence_octet.h&quot;
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATICfgModification.h&quot;
+
+// -- forward declaration
+class CATICfgGroupModif_var;
+class CATICfgORExpression_var;
+class CATIConfigurableObject_var;
+class CATILinkableObject_var;
+class CATICfgEffectivity_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVISubScribeGroupMod ;
+#else
+extern &quot;C&quot; const IID IID_ENOVISubScribeGroupMod ;
+#endif
+
+
+/**
+ *  Interface to subscribe to some configuration&#x27;s events.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Class to be implemented by a client who wants to subscribe 
+ * to events raised in Configuration.
+ */
+class ExportedByGUIDVPMInterfaces ENOVISubScribeGroupMod: public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public:
+
+    /**
+	 * Event triggered before modifying behavior attribute of a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iBehavior
+	 * The value to modify.
+	 */
+    virtual HRESULT EventBehaviorBefore(CATICfgGroupModif_var &amp; iGroupMod, CATUnicodeString &amp; iBehavior)=0;
+
+    /**
+	 * Event triggered after having modified behavior attribute of a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iBehavior
+	 * The modified value.
+	 */
+    virtual HRESULT EventBehaviorAfter(CATICfgGroupModif_var &amp; iGroupMod, CATUnicodeString &amp; iBehavior)=0;
+
+    /**
+	 * Event triggered before setting OR-Expression on modifications of this GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iOrExp
+	 * The Or-Expression object.
+	 */
+    virtual HRESULT EventValueBefore(CATICfgGroupModif_var &amp; iGroupMod,CATICfgORExpression_var &amp;iOrExp)=0;
+
+    /**
+	 * Event triggered after setting OR-Expression on modifications of this GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iOrExp
+	 * The Or-Expression object.
+	 */
+    virtual HRESULT EventValueAfter(CATICfgGroupModif_var &amp; iGroupMod,CATICfgORExpression_var &amp;iOrExp)=0;
+
+    /**
+	 * Event triggered before adding a modification to a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iMod
+	 * The modification to add.
+	 */
+    virtual HRESULT EventAddModBefore(CATICfgGroupModif_var &amp; iGroupMod,CATICfgModification_var &amp;iMod)=0;
+
+    /**
+	 * Event triggered after adding a modification to a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iMod
+	 * The added modification.
+	 */
+    virtual HRESULT EventAddModAfter(CATICfgGroupModif_var &amp; iGroupMod,CATICfgModification_var &amp;iMod)=0;
+
+    /**
+	 * Event triggered before removing a modification from a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iMod
+	 * The modification to remove.
+	 */
+    virtual HRESULT EventRemoveModBefore(CATICfgGroupModif_var &amp; iGroupMod,CATICfgModification_var &amp;iMod)=0;
+
+    /**
+	 * Event triggered after removing a modification from a GroupMod.
+	 * @param iGroupMod
+	 * The GroupMod.
+	 * @param iMod
+	 * The removed modification.
+	 */
+    virtual HRESULT EventRemoveMadAfter(CATICfgGroupModif_var &amp; iGroupMod,CATICfgModification_var &amp;iMod)=0;
+
+    /**
+	 * Event triggered before a configuration&#x27;s operation is performed.
+	 * @param iOperation
+	 * The configuration&#x27;s operation to perform.
+	 * @param iCV
+	 * CV used.
+	 * @param iObj1
+	 * First Operand.
+	 * @param iObj2
+	 * Second Operand (may be none).
+	 * @param iFather
+	 * Object&#x27;s parent.
+	 */
+    virtual HRESULT EventModifyBefore(const CATICfgModification::Operation iOperation, const CATIConfigurableObject_var &amp;iCV, const CATILinkableObject_var &amp;iObj1, const CATILinkableObject_var &amp;iObj2, const CATILinkableObject_var &amp;iFather) =0;
+	
+    /**
+	 * Event triggered after a configuration&#x27;s operation is performed.
+	 * @param iOperation
+	 * The performed configuration&#x27;s operation.
+	 * @param iCV
+	 * CV used.
+	 * @param iObj1
+	 * First Operand.
+	 * @param iObj2
+	 * Second Operand (may be none).
+	 * @param iFather
+	 * Object&#x27;s parent.
+	 */
+    virtual HRESULT EventModifyAfter(const CATICfgModification::Operation iOperation, const CATIConfigurableObject_var &amp;iCV, const CATILinkableObject_var &amp;iObj1, const CATILinkableObject_var &amp;iObj2, const CATILinkableObject_var &amp;iFather) =0;
+
+    /**
+	 * Event triggered before an effectivity change.
+	 * @param iMod
+	 * The CATICfgModification on which the effectivity change occurs.
+	 * @param iName
+	 * The configuration&#x27;s domain name on which is applied iEffectivity.
+	 * @param
+	 * The effectivity applied to iMod on iName domain.
+	 */
+    virtual HRESULT EventSetValueModBefore(CATICfgModification_var &amp;iMod,const CATUnicodeString &amp;iName, const CATICfgEffectivity_var &amp;iEffectivity) =0;
+
+    /**
+	 * Event triggered after an effectivity change.
+	 * @param iMod
+	 * The CATICfgModification on which the effectivity change occurs.
+	 * @param iName
+	 * The configuration&#x27;s domain name on which is applied iEffectivity.
+	 * @param
+	 * The effectivity applied to iMod on iName domain.
+	 */
+    virtual HRESULT EventSetValueModAfter(CATICfgModification_var &amp;iMod,const CATUnicodeString &amp;iName, const CATICfgEffectivity_var &amp;iEffectivity) =0;
+
+    /**
+	 * Event triggered before an effectivity removal.
+	 * @param iMod
+	 * The CATICfgModification on which the effectivity is removed.
+	 * @param iName
+	 * The configuration&#x27;s domain name on which effectivity is removed.
+	 */
+    virtual HRESULT EventRemoveValueModBefore(CATICfgModification_var &amp;iMod,const CATUnicodeString &amp;iName) =0;
+
+    /**
+	 * Event triggered after an effectivity removal.
+	 * @param iMod
+	 * The CATICfgModification on which the effectivity is removed.
+	 * @param iName
+	 * The configuration&#x27;s domain name on which effectivity is removed.
+	 */
+    virtual HRESULT EventRemoveValueModAfter(CATICfgModification_var &amp;iMod,const CATUnicodeString &amp;iName) =0;
+
+  };
+
+  CATDeclareHandler(ENOVISubScribeGroupMod, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIStream.html">← 上一页: ENOVIStream.h</a></div>
+        <div><a href="ENOVISubscriberEvent.html">下一页: ENOVISubscriberEvent.h →</a></div>
+    </div>
+</body>
+</html>

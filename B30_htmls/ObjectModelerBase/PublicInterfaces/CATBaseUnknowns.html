@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATBaseUnknowns.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATBaseUnknowns.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATBaseUnknown_Associations.html">← 上一页: CATBaseUnknown_Associations.h</a></div>
+        <div><a href="CATBindInterface.html">下一页: CATBindInterface.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+/** @CAA2Required */
+//**********************************************************************
+//* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS *
+//* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME *
+//**********************************************************************
+
+#ifndef _CATBaseUnknowns_H
+#define _CATBaseUnknowns_H
+//
+//
+//drl: Les VarBaseUnknown sont des defines permettant de migrer
+//     les interfaces CCP de CATBaseUnknown_ptr a CATBaseUnknown_var
+//     Idem pour les ListOfVarBaseUnknown
+//     Idem pour les valeurs NULL_varBaseUnknowm
+//
+//La seule variable a definir pour tester cette migration
+#define MIGR_CCP_TO_VAR
+//
+
+#include&lt;CATBaseUnknown.h&gt;
+
+#ifndef MIGR_CCP_TO_VAR
+//            -------------------------------------------------
+//            Version CCP AVEC VarBaseUnkown=CATBaseUnknown*
+//            -------------------------------------------------
+#ifndef VarBaseUnknown
+#define VarBaseUnknown CATBaseUnknown_ptr
+#endif
+#ifndef NULL_varBaseUnknown
+#define NULL_varBaseUnknown  NULL
+#endif
+#ifndef ListOfVarBaseUnknown
+#define ListOfVarBaseUnknown CATLISTP(CATBaseUnknown)
+#endif
+
+//this includes should provide defintion for ListOfVarBaseUnknown
+#include&lt;sequence_CATBaseUnknown_ptr.h&gt;
+
+//            -------------------------------------------------
+#else
+//            -------------------------------------------------
+//            Version CCP AVEC VarBaseUnkown=CATBaseUnknown_var
+//            -------------------------------------------------
+#ifndef VarBaseUnknown
+#define VarBaseUnknown CATBaseUnknown_var
+#endif
+#ifndef NULL_varBaseUnknown
+#define NULL_varBaseUnknown  NULL_var
+#endif
+#ifndef ListOfVarBaseUnknown
+#define ListOfVarBaseUnknown CATLISTV(CATBaseUnknown_var)
+#endif
+
+//this includes should provide defintion for ListOfVarBaseUnknown
+#include&lt;CATLISTV_CATBaseUnknown.h&gt;
+//            -------------------------------------------------
+#endif
+
+#include &lt;CP0CLIP.h&gt;
+
+//Localize with IsEqual 
+ExportedByCP0CLIP
+int CATBaseUnknown_Locate(const ListOfVarBaseUnknown&amp; l, VarBaseUnknown i_obj);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATBaseUnknown_Associations.html">← 上一页: CATBaseUnknown_Associations.h</a></div>
+        <div><a href="CATBindInterface.html">下一页: CATBindInterface.h →</a></div>
+    </div>
+</body>
+</html>

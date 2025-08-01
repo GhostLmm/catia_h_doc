@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathPlane.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathPlane.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathLine2D.html">← 上一页: CATMathLine2D.h</a></div>
+        <div><a href="CATMathPoint.html">下一页: CATMathPoint.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathPlane_H
+#define CATMathPlane_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATMathematics.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CATMathLine.h&quot;
+#include &quot;CATMathDirection.h&quot;
+#include &quot;CATMathLimits.h&quot;
+
+#include &quot;CATMath3x3Matrix.h&quot;
+
+#ifdef CATIAR418 
+#include &quot;CATErrorDef.h&quot;
+#else
+#include &quot;CATMathInputError.h&quot;
+#endif
+
+class CATMathLine;
+class CATMathBox;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+class CATMathPlane;
+/** @nodoc */
+ExportedByCATMathematics int Intersect(const CATMathLine &amp; iLine,
+                                       const CATMathPlane &amp; iPlane,
+                                       double &amp; oParamOnLine, 
+                                       double &amp; oFirstParamOnPlane,
+                                       double &amp; oSecondParamOnPlane, 
+                                       double iTol=CATGetDefaultTolerance().EpsgForRelativeTest());
+/** @nodoc */
+ExportedByCATMathematics int Intersect(const CATMathPlane &amp; iPlane,
+                                       const CATMathLine &amp; iLine,
+                                       double &amp; oFirstParamOnPlane,
+                                       double &amp; oSecondParamOnPlane, 
+                                       double &amp; oParamOnLine, 
+                                       double iTol=CATGetDefaultTolerance().EpsgForRelativeTest());
+
+/** @nodoc */
+ExportedByCATMathematics int Intersect(const CATMathPlane &amp; iPlane1,
+                                       const CATMathPlane &amp;iPlane2,
+                                       CATMathLine &amp; oIntersectionLine);
+/** @nodoc */
+ExportedByCATMathematics double Distance(const CATMathPoint &amp; iPoint,
+                                         const CATMathPlane &amp; iPlane);
+/** @nodoc */
+ExportedByCATMathematics void Projection(const CATMathPoint &amp; iPoint,
+                                         const CATMathPlane &amp; iPlane,
+                                         double &amp;FirstParamOnPlane,
+                                         double &amp; SecondParamOnPLane);
+/** @nodoc */
+ExportedByCATMathematics CATMathPoint Projection(const CATMathPoint &amp; iPoint,
+                                                 const CATMathPlane &amp; iPlane);
+/** @nodoc */
+ExportedByCATMathematics ostream&amp; operator &lt;&lt; (ostream&amp; s,const CATMathPlane &amp; iPlane);
+
+
+/** 
+ * Defines the canonical plane.
+ * @param CATPlaneOIJ
+ * The XOY canonical plane. 
+ * @param CATPlaneOJK
+ * The YOZ canonical plane. 
+ * @param CATPlaneOKI
+ * The XOZ canonical plane. 
+ */
+enum CATCanonicalPlane{CATPlaneOIJ, CATPlaneOJK, CATPlaneOKI};
+
+/**
+ * Class representing a mathematical plane in 3D.
+ * &lt;br&gt;It is composed of an &lt;tt&gt;Origin&lt;/tt&gt; and of two normalized vectors
+ * &lt;tt&gt;FirstDirection&lt;/tt&gt; and &lt;tt&gt;SecondDirection&lt;/tt&gt;.  
+ */
+class ExportedByCATMathematics CATMathPlane
+{
+public:
+//============================================================================
+//- Constructor
+//============================================================================
+
+/**
+ * Constructs a plane where &lt;tt&gt;Origin=(0,0,0)&lt;/tt&gt;,
+ * &lt;tt&gt;FirstDirection=(1,0,0)&lt;/tt&gt; and &lt;tt&gt;SecondDirection=(0,1,0)&lt;/tt&gt; .
+ */
+    CATMathPlane ();
+
+/**
+* Constructs one of the three canonical plane with &lt;tt&gt;Origin=(0,0,0)&lt;/tt&gt;,
+* &lt;tt&gt;FirstDirection=(1,0,0)&lt;/tt&gt; and &lt;tt&gt;SecondDirection=(0,1,0)&lt;/tt&gt; for CATMathPlaneOIJ .
+* &lt;tt&gt;FirstDirection=(0,1,0)&lt;/tt&gt; and &lt;tt&gt;SecondDirection=(0,0,1)&lt;/tt&gt; for  CATMathPlaneOJK.
+* &lt;tt&gt;FirstDirection=(0,0,1)&lt;/tt&gt; and &lt;tt&gt;SecondDirection=(1,0,0)&lt;/tt&gt; for  CATMathPlaneOKI.
+ */
+    CATMathPlane (CATCanonicalPlane Plane);
+
+/**
+ * @nodoc
+ * @deprecated V5R15 Set
+ * Constructs a plane from a point and two vectors.
+ * &lt;br&gt;Throws an error if the input vectors are colinear.
+ * The input vectors are used to compute the normalized and orthogonal directions of
+ * the plane.
+ */
+    CATMathPlane (const CATMathPoint &amp; iOrigin,
+                  const CATMathVector &amp; iFirstDirection,
+                  const CATMathVector &amp; iSecondDirection);
+
+
+/**
+ * Constructs a plane from a point and a normal.
+ * &lt;br&gt;The normal must not be null, but this is not checked. 
+ */
+    CATMathPlane (const CATMathPoint &amp; iOrigin,
+                  const CATMathVector &amp; iNormal);
+
+/**
+ * @nodoc
+ * @deprecated V5R15 Set
+ * Constructs a plane passing through three points.
+ * &lt;br&gt;Throws an error if the three points are aligned.
+ */
+    CATMathPlane (const CATMathPoint &amp; iOrigin,
+                  const CATMathPoint &amp; iSecondPoint,
+                  const CATMathPoint &amp; iThirdPoint);
+
+/**
+ * Copy constructor.
+ */
+   CATMathPlane (const CATMathPlane &amp; iPlaneToCopy);
+
+//============================================================================
+//- Get/Set
+//============================================================================
+
+/**
+ * Constructs a plane from a point and two vectors.
+ * The input vectors are used to compute the normalized and orthogonal directions of
+ * the plane.
+ * @return 
+ * &lt;tt&gt;E_FAIL&lt;/tt&gt; if the input vectors are colinear, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+ */
+   HRESULT Set(const CATMathPoint &amp; iOrigin,
+               const CATMathVector &amp; iFirstDirection,
+               const CATMathVector &amp; iSecondDirection);
+
+/**
+ * Constructs a plane passing through three points.
+ * @return 
+ * &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three points are aligned, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+ */
+   HRESULT Set(const CATMathPoint &amp; iOrigin,
+               const CATMathPoint &amp; iSecondPoint,
+               const CATMathPoint &amp; iThirdPoint);
+
+
+/**
+ * Retrieves the orthonormalized directions of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void GetDirections (CATMathVector &amp; ioFirstDirection,
+                        CATMathVector &amp; ioSecondDirection) const;
+
+/**
+ * @nodoc
+ * @deprecated V5R15 SetVectors
+ * Modifies the directions of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ * &lt;br&gt;Throws an error if the new directions are colinear.
+ * @return 
+ * &lt;tt&gt;FALSE&lt;/tt&gt; if the new directions are colinear, &lt;tt&gt;TRUE&lt;/tt&gt; otherwise.
+ */
+    CATBoolean SetDirections (const CATMathVector &amp; iFirstDirection,
+                              const CATMathVector &amp; iSecondDirection);
+
+
+/**
+ * Modifies the directions of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ * @return 
+ * &lt;tt&gt;E_FAIL&lt;/tt&gt; if the new directions are colinear, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+ */
+    HRESULT SetVectors(const CATMathVector &amp; iFirstDirection,
+                       const CATMathVector &amp; iSecondDirection);
+
+/**
+ * Retrieves the origin of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void GetOrigin (CATMathPoint &amp; ioOrigin) const; 
+
+/**
+ * Modifies the origin of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void SetOrigin (const CATMathPoint &amp; iOrigin);
+
+/**
+ * Retrieves the first (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void GetFirstDirection (CATMathVector &amp; ioFirstDirection) const;
+
+/**
+ * Retrieves the second (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void GetSecondDirection (CATMathVector &amp; ioSecondDirection) const;
+
+/**
+ * Retrieves the (normalized) normal to &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ */
+    void GetNormal (CATMathVector &amp; ioNormal) const;
+
+/**
+ * Returns the point of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane corresponding to given parameters.
+ * @return
+ * &lt;tt&gt;ioResult=Plane.Origin + &lt;b&gt;iParam1&lt;/b&gt; * Plane.FirstDirection
+ * + &lt;b&gt;iParam2&lt;/b&gt; * Plane.SecondDirection&lt;/tt&gt;
+ */
+    void EvalPoint(const double iParam1, const double iParam2, CATMathPoint &amp; ioResult) const;
+
+/**
+ * Intersects &lt;tt&gt;this&lt;/tt&gt; CATMathPlane with a CATMathLine.
+ * @param iLine
+ *   The CATMathLine to intersect. 
+ * @param ioParamOnLine 
+ *   The parameter of the intersection on the line. 
+ * @param ioFirstParamOnThis 
+ *   The parameter of the intersection on &lt;tt&gt;this&lt;/tt&gt; CATMathPlane. 
+ * @param ioSecondParamOnThis 
+ *   The parameter of the intersection on the second direction of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane. 
+  * @param iTol 
+ *   The default tolerance. 
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;        &lt;dd&gt;if there is no intersection
+ * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;        &lt;dd&gt;if there is an intersection
+ * &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;        &lt;dd&gt;if the line is included in the plane
+ * &lt;/dl&gt;
+ */
+     int Intersect(const CATMathLine &amp; iLine,
+                   double &amp; ioParamOnLine, 
+                   double &amp; ioFirstParamOnPlane,
+                   double &amp; ioSecondParamOnPlane, 
+                   double iTol=CATGetDefaultTolerance().EpsgForRelativeTest()) const;
+
+/**
+ *  Intersects &lt;tt&gt;this&lt;/tt&gt; CATMathPlane with another one. 
+ * @param iOtherPlane 
+ *   The other CATMathPlane to intersect.
+ * @param ioIntersectionLine
+ *   The resulting CATMathLine. 
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;        &lt;dd&gt;if there is no intersection
+ * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;        &lt;dd&gt;if there is an intersection
+ * &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;        &lt;dd&gt;if they are identical
+ * &lt;/dl&gt;
+ */
+    int Intersect(const CATMathPlane &amp; iOtherPlane,
+                  CATMathLine &amp; ioIntersectionLine) const;
+
+/**
+ * Returns the distance between &lt;tt&gt;this&lt;/tt&gt; CATMathPlane and a CATMathPoint.
+ */
+    double DistanceTo(const CATMathPoint &amp; iPoint) const;
+
+/**
+ * Retrieves the projection of a CATMathPoint on a CATMathPlane.
+ * @param ioFirstParamOnPlane 
+ *   The parameter of the projection on the first direction of the plane.
+ * @param ioSecondParamOnPlane 
+ *   The parameter of the projection on second direction of the plane.  
+ */
+    void Project(const CATMathPoint &amp; iPointToProject,
+                 double &amp; ioFirstParamOnPlane,
+                 double &amp; ioSecondParamOnPLane) const;
+
+/**
+ * Returns the projection of a CATMathPoint on a CATMathPlane.
+ */
+    void Project(const CATMathPoint &amp; iPointToProject,
+                 CATMathPoint &amp; ioResult) const;
+
+//============================================================================
+//- Friend Functions
+//============================================================================
+/**
+ * @nodoc
+ * @deprecated V5R20 Intersect
+ */
+    ExportedByCATMathematics friend int Intersect(const CATMathLine &amp; iLine,
+                                                  const CATMathPlane &amp; iPlane,
+                                                  double &amp; oParamOnLine, 
+                                                  double &amp; oFirstParamOnPlane,
+                                                  double &amp; oSecondParamOnPlane, double iTol);
+    
+/**
+ * @nodoc
+ * @deprecated V5R20  Intersect
+ */
+    ExportedByCATMathematics friend int Intersect(const CATMathPlane &amp; iPlane,
+                                                  const CATMathLine &amp; iLine,
+                                                  double &amp; oFirstParamOnPlane,
+                                                  double &amp; oSecondParamOnPlane, 
+                                                  double &amp; oParamOnLine, double iTol);
+
+/**
+ * @nodoc
+ * @deprecated V5R20  Intersect
+ */
+    ExportedByCATMathematics friend int Intersect(const CATMathPlane &amp; iPlane1,
+                                                  const CATMathPlane &amp;iPlane2,
+                                                  CATMathLine &amp; oIntersectionLine);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 DistanceTo
+ */
+    ExportedByCATMathematics friend double Distance(const CATMathPoint &amp; iPoint,
+                                                    const CATMathPlane &amp; iPlane);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Project
+ */
+    ExportedByCATMathematics friend void Projection(const CATMathPoint &amp; iPoint,
+                                                    const CATMathPlane &amp; iPlane,
+                                                    double &amp;FirstParamOnPlane,
+                                                    double &amp; SecondParamOnPLane);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Project
+ */
+    ExportedByCATMathematics friend CATMathPoint Projection(const CATMathPoint &amp; iPoint,
+                                                            const CATMathPlane &amp; iPlane);
+/**
+ * @nodoc
+ * @deprecated V5R20 IsIntersecting (see CATMathBox)
+ */
+    int Cross(const CATMathBox &amp; iBox) const;
+
+
+/**
+ * @nodoc
+ * @deprecated V5R20 EvalPoint
+ * Returns the point of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane corresponding to given parameters.
+ * You should use preferably the &lt;pre&gt;EvalPoint(const double iParam1, const double iParam2, CATMathPoint &amp; ioResult&lt;/pre&gt;
+ * signature.
+ */
+    CATMathPoint EvalPoint(const double iBid1, const double iBid2) const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20 GetFirstDirection
+ * Retrieves the first (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane. 
+ * You should use preferably the &lt;pre&gt;GetFirstDirection (CATMathVector &amp; ioFirstDirection) &lt;/pre&gt; signature.
+ */
+    CATMathDirection GetFirstDirection () const;
+
+/**
+ * @deprecated V5R20 GetSecondDirection
+ * Retrieves the fisecondrst (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane. 
+ * You should use preferably the &lt;pre&gt;GetSecondDirection (CATMathVector &amp; ioFirstDirection) &lt;/pre&gt; signature.
+ */
+    CATMathDirection GetSecondDirection () const;
+
+/**
+ * @deprecated V5R20 GetOrigin
+ * Retrieves the origin of &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ * You should use preferably the &lt;pre&gt;GetOrigin (CATMathPoint &amp; ioOrigin)  &lt;/pre&gt; signature.
+ */
+    CATMathPoint GetOrigin () const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20 GetNormal
+ * Retrieves the (normalized) normal to &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ * You should use preferably the &lt;pre&gt;GetNormal (CATMathVector &amp; ioNormal)  &lt;/pre&gt; signature.
+ */
+    CATMathDirection GetNormal () const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ */
+    ExportedByCATMathematics friend ostream&amp; operator &lt;&lt; (ostream&amp; s,const CATMathPlane &amp; iPlane);
+
+/**
+ * Dumps &lt;tt&gt;this&lt;/tt&gt; CATMathPlane.
+ * &lt;br&gt;This writes the following lines on the ostream:
+ *&lt;pre&gt;
+ * Origin    = ( OriginFirstCoord    , OriginSecondCoord    , OriginThirdCoord )
+ * FirstDir  = ( FirstDirFirstCoord  , FirstDirSecondCoord  , FirstDirThirdCoord )
+ * SecondDir = ( SecondDirFirstCoord , SecondDirSecondCoord , SecondDirThirdCoord )
+ *&lt;/pre&gt;
+ * @param iStream  
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+
+//============================================================================
+//- Private data
+//============================================================================
+ private :
+   // normalized vectors
+    CATMathVector _FirstAxis, _SecondAxis;
+    CATMathPoint _Origin;
+};
+/**
+ * Defines the OIJ canonical plane.
+ */
+extern ExportedByCATMathematics const CATMathPlane CATMathOIJ;
+/**
+ * Defines the OJK canonical plane.
+ */
+extern ExportedByCATMathematics const CATMathPlane CATMathOJK;
+/**
+ * Defines the OKI canonical plane.
+ */
+extern ExportedByCATMathematics const CATMathPlane CATMathOKI;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathLine2D.html">← 上一页: CATMathLine2D.h</a></div>
+        <div><a href="CATMathPoint.html">下一页: CATMathPoint.h →</a></div>
+    </div>
+</body>
+</html>

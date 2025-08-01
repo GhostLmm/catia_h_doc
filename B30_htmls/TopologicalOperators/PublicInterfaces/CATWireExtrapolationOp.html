@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperators/PublicInterfaces/CATWireExtrapolationOp.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperators/PublicInterfaces/CATWireExtrapolationOp.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTopologicalOperators.html">← 上一页: CATTopologicalOperators.h</a></div>
+        <div><a href="Fillet.html">下一页: Fillet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATWireExtrapolationOp_h
+#define CATWireExtrapolationOp_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+
+#include &quot;CATIACGMLevel.h&quot; // automatic treatment EB_2014_04_16
+#include &quot;WireExtrapol.h&quot;
+#include &quot;CATTopOperator.h&quot;
+
+
+class CATBody;
+class CATVertex;
+class CATWireExtrapolationOpImpl;
+
+/**
+ * Class defining the extrapolation operator on a wire body.
+ * To use it:
+ *&lt;ul&gt;
+ * &lt;li&gt;Create it with the &lt;tt&gt;CATCreateWireExtrapolationOp&lt;/tt&gt; global function.
+ * &lt;li&gt;Tune it with appropriate options, using the &lt;tt&gt;SetXxx&lt;/tt&gt; methods. 
+ * &lt;li&gt;Run it
+ * &lt;li&gt;Get the resulting GetResult method. If you do not want 
+ * to keep these resulting body, use the @href CATICGMContainer#Remove method to remove them from the 
+ * geometric factory, after the operator deletion.
+ *&lt;li&gt;&lt;tt&gt;delete&lt;/tt&gt; it after use  with the usual C++ delete operator.
+ */
+class ExportedByWireExtrapol CATWireExtrapolationOp : public CATTopOperator
+{
+  CATCGMVirtualDeclareClass(CATWireExtrapolationOp);
+public:
+
+ /** @nodoc */
+  CATWireExtrapolationOp( CATBody * iBody, CATTopData * iTopData );
+
+  virtual ~CATWireExtrapolationOp();
+    
+/** 
+ * Set extrapolation length for specified vertex.
+  * @param iVertex
+  * The vertex to be extrapolated.
+  * @param iLength
+  * The extrapolation length.
+ */
+  void SetExtrapolation( CATVertex * iVertex, double iLength );
+
+ /** @nodoc */
+  void SetVersionNumber( CATLONG32 iVersionNumber );
+
+/** 
+ * Runs &lt;tt&gt;this&lt;/tt&gt; CATWireExtrapolationOp.
+ */
+  int Run();
+  
+/**
+ * Returns a pointer to the resulting CATBody of &lt;tt&gt;this&lt;/tt&gt; CATWireExtrapolationOp.
+ * &lt;br&gt; Must be called after the &lt;tt&gt;Run&lt;/tt&gt; method.
+ */
+  CATBody * GetResult();
+
+
+/**   
+ * Returns the freeze mode of &lt;tt&gt;this&lt;/tt&gt; CATWireExtrapolationOp.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is not frozen: it can be modified afterwards.
+ * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is frozen: it cannot be modified afterwards.
+ * &lt;/dl&gt;
+*/
+ 
+  short GetFreezeMode() const;
+
+  /**
+   * Modifies the freeze mode of &lt;tt&gt;this&lt;/tt&gt; CATWireExtrapolationOp.
+   *&lt;br&gt; At the operator creation, the mode is set to 1.
+   * @param iMode
+   * &lt;dl&gt;
+   * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is not frozen: it can be modified afterwards.
+   * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is frozen: it cannot be modified afterwards.
+   * &lt;/dl&gt;
+   */
+  void  SetFreezeMode(short iMode=1);
+
+
+#if  defined  (  CATIACGMV5R21  )
+	//KY1 : 10-12-2010
+public:
+	/**	@nodoc @nocgmitf */ 
+	static const  CATString  *GetDefaultOperatorId();
+#endif
+
+#if  defined  (  CATIACGMV5R21  )
+	//KY1 : 10-12-2010
+	/**	@nodoc @nocgmitf */
+	int RunOperator();
+protected:
+	/**	@nodoc */
+	//static  CATString  _OperatorId; // Voir ds CATWireExtrapolationOpImpl
+	/**	@nodoc @nocgmitf */
+	const  CATString  *GetOperatorId();
+	 /**  @nodoc @nocgmitf */
+  void   RequireDefinitionOfInputAndOutputObjects();
+#endif
+
+  private :
+    CATWireExtrapolationOpImpl  * _Implementation;
+
+};
+/**
+ * Creates a CATWireExtrapolationOp operator.
+ * @param iFactory
+ * The pointer to the geometry factory.
+ * @param iTopData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+ * @param iBodyToExtrapolate
+ * The pointer to the wire body to be extrapolated.
+ * @return
+ * The pointer to the created operator. To &lt;tt&gt;delete&lt;/tt&gt; with the usual C++ delete operator after use.
+ */
+
+ExportedByWireExtrapol CATWireExtrapolationOp * CATCreateWireExtrapolationOp( 
+                               CATGeoFactory * iFactory,
+						                   CATTopData    * iTopData,
+                               CATBody       * iBodyToExtrapolate );
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTopologicalOperators.html">← 上一页: CATTopologicalOperators.h</a></div>
+        <div><a href="Fillet.html">下一页: Fillet.h →</a></div>
+    </div>
+</body>
+</html>

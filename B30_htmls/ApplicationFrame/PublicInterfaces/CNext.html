@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CNext.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CNext.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CD0WIN.html">← 上一页: CD0WIN.h</a></div>
+        <div><a href="../../AutomationInterfaces/PublicInterfaces/AutomationItf.html">下一页: AutomationItf.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CNext_H
+#define CNext_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATInteractiveApplication.h&quot;
+
+#include &quot;CD0APPLI.h&quot;
+#include &quot;CATApplicationFrame.h&quot;
+#include &quot;CATCommandHeader.h&quot;
+#include &lt;CATListOfCATString.h&gt;
+#include &lt;CATListOfCATUnicodeString.h&gt;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATEventSubscriberTypedefs.h&quot;
+
+class CATLicenseManagerInit;
+class CATNotification;
+class CATCommand;
+
+/**
+* Class to define a new product line.
+*/
+class ExportedByCD0APPLI CNext : public CATInteractiveApplication
+{
+  CATDeclareClass;
+  
+public:
+  /** 
+   * Constructs a new product line.
+   * @param iApplicationName
+   * Name of the new product line
+   */
+  CNext(CATString iApplicationName = &quot;CATIA&quot;);
+
+  virtual ~CNext();
+  
+#ifdef _WINDOWS_SOURCE
+//  suffixe &quot;2&quot; : pour eviter &quot;surcharge&quot; des methodes de CATBaseUnknown 
+  /** @nodoc */
+  STDMETHODIMP_(ULONG) AddRef2();
+  /** @nodoc */
+  STDMETHODIMP_(ULONG) Release2();
+#endif
+  /** @nodoc */
+  void BeginApplication();
+    /** @nodoc */
+  int  EndApplication();
+    /** @nodoc */
+  void SetVisibility(int);
+    /** @nodoc */
+  int  GetVisibility();
+    /** @nodoc */
+  void StartCommand(CATCommandHeader * command,
+		    const CATUnicodeString &amp; documents);
+
+    /** @nodoc */
+  CATString GetApplicationName ();  
+
+//DBI--&gt;
+#ifdef  _WINDOWS_SOURCE
+    /** @nodoc */
+  CATBoolean	IsOleServer () const;
+#endif//_WINDOWS_SOURCE
+//&lt;--DBI
+
+  /* Begin JDU */
+#ifdef _WINDOWS_SOURCE
+	/** @nodoc
+	 * Override CATApplication default implementation of this method
+	 * to provide a root application object and make the application VBA compatible.
+	 */
+	virtual HRESULT GetVBAApplicationObject(
+			IDispatch*&amp; oAppObject,
+			CATUnicodeString&amp; oAppName,
+			CATUnicodeString&amp; oTypelibName);
+#endif // _WINDOWS_SOURCE
+
+	/** @nodoc
+	 * Position the return code which will be returned by EndApplication.
+	 * This is useful when CNext -batch -macro is launched and the
+	 * launched macro fails.
+	 */
+	void setReturnCode(int iReturnCode);
+/* End JDU */
+
+private:
+  
+	/** @nodoc
+	 * These OnIdle callbacks are related to -workbench and -e options
+	 * OnIdleAutoSaveCB runs the AutoSaveHeader (warm-start) if requested
+     *   (this must be done at first).
+	 * OnIdleNewCB runs the FileNew or FileOpen if requested
+     *   (this must be done just after auto save).
+	 * OnIdleWsCB loads he workshop and workbench,
+	 * OnIdleCB runs the commands.
+	 */
+  static void OnIdleAutoSaveCB(CATCommand * ToClient, int, CATCommand *);
+  void OnIdleAutoSave();
+  static void OnIdleNewCB     (CATCommand * ToClient, int, CATCommand *);
+  void OnIdleNew     ();
+  static void OnIdleWsCB      (CATCommand * ToClient, int, CATCommand *);
+  void OnIdleWs      ();
+  static void OnIdleCmdCB     (CATCommand * ToClient, int, CATCommand *);
+  void OnIdleCmd     ();
+  
+  void OnErrorCB(CATCallbackEvent, void *, CATNotification *,
+		 CATSubscriberData, CATCallback);
+  void ErrorPanelCB(CATCommand *, CATNotification *, CATCommandClientData);
+  
+  CATNotifPropagationMode AnalyseNotification(CATCommand *, CATNotification *);
+  int  IsOption(const char * arg, const char * option = NULL);
+  void ReadArgs(const CATString &amp; command,
+		int &amp; counter,
+		int argc,
+		CATListOfCATUnicodeString argv);
+
+  void DisplayWb (CATString wbId);
+  
+  int _Visibility; // booleen (utile sur windows only)
+
+//DBI--&gt;
+#ifdef  _WINDOWS_SOURCE
+  // TRUE si CNext est lance avec l&#x27;option /embedding
+  CATBoolean   _OleServer;
+#endif//_WINDOWS_SOURCE
+//&lt;--DBI
+
+  CATApplicationFrame * _pFrame;
+  CATListOfCATString        _commands;
+  CATListOfCATUnicodeString _args;
+  CATString _applicationName;
+  CATListOfCATUnicodeString _workbenches;
+  
+  CATLicenseManagerInit * _lminit;
+/* Begin JDU */
+  int _returnCode;
+/* End JDU */
+
+  CATString _wb, _ws;
+
+  CATBoolean _batchMode;
+  
+#ifdef _WINDOWS_SOURCE
+  int _Count;
+  int _TimerOn;      // booleen
+  void OnTimer();
+  static void TimerCallBack();
+#endif
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CD0WIN.html">← 上一页: CD0WIN.h</a></div>
+        <div><a href="../../AutomationInterfaces/PublicInterfaces/AutomationItf.html">下一页: AutomationItf.h →</a></div>
+    </div>
+</body>
+</html>

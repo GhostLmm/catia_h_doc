@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATLISTV_CATMathAxis.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATLISTV_CATMathAxis.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATLISTP_CATMathVector2Df.html">← 上一页: CATLISTP_CATMathVector2Df.h</a></div>
+        <div><a href="CATLISTV_CATMathLine.html">下一页: CATLISTV_CATMathLine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATLISTV_CATMathAxis_H
+#define CATLISTV_CATMathAxis_H
+// COPYRIGHT DASSAULT SYSTEMES  2014
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+/** 
+ * @collection CATLISTV(CATMathAxis)
+ * Collection class for objects representing a mathematical axis system in three dimensions.
+ * Only the following methods of collection classes are available:
+ * &lt;ul&gt; 
+ * &lt;li&gt;&lt;tt&gt;Append&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;InsertAt&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;Locate&lt;/tt&gt;&lt;/li&gt; 
+ * &lt;li&gt;&lt;tt&gt;NbOccur&lt;/tt&gt;&lt;/li&gt; 
+ * &lt;li&gt;&lt;tt&gt;RemoveAll&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;RemovePosition&lt;/tt&gt;&lt;/li&gt; 
+ * &lt;li&gt;&lt;tt&gt;Replace&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;ReSize&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;Size&lt;/tt&gt;&lt;/li&gt;
+ * &lt;/ul&gt;
+ * Refer to the articles dealing with collections in the encyclopedia. 
+ */
+#include &quot;CATTolerance.h&quot;
+#include &quot;YN000MAT.h&quot;
+
+#include &quot;CATLISTV_Clean.h&quot;
+
+#define CATLISTV_AppendList
+#define	CATLISTV_InsertAt
+#define CATLISTV_ReSize
+#define	CATLISTV_RemovePosition
+#define CATLISTV_Replace
+#define CATLISTV_Locate
+#define CATLISTV_NbOccur
+
+#include &quot;CATLISTV_Declare.h&quot;
+
+#include &quot;CATMathAxis.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATSysBoolean.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+/**
+ * @nodoc 
+ */
+INLINE int operator == (const CATMathAxis &amp;iAxis1, const CATMathAxis &amp;iAxis2)
+{
+	const CATTolerance &amp; nTol = CATGetDefaultTolerance();
+    double x1,y1,z1;
+    double x2, y2, z2;
+    CATMathVector dir1, dir2;
+    
+    //First Direction:
+    iAxis1.GetFirstDirection(dir1);  
+    dir1.GetCoord(x1,y1,z1);  
+    iAxis2.GetFirstDirection(dir2);
+    dir2.GetCoord(x2,y2,z2);
+
+	if ( !( fabs(x1-x2)&lt;nTol.EpsilonForRelativeTest()*(fabs(x1)+nTol.GetScale()) &amp;&amp; 
+		       fabs(y1-y2)&lt;nTol.EpsilonForRelativeTest()*(fabs(y1)+nTol.GetScale()) &amp;&amp; 
+			     fabs(z1-z2)&lt;nTol.EpsilonForRelativeTest()*(fabs(z1)+nTol.GetScale()) ) )
+    {
+        return 0;
+    }
+
+    //Second Direction:
+    iAxis1.GetSecondDirection(dir1);  
+    dir1.GetCoord(x1,y1,z1);  
+    iAxis2.GetSecondDirection(dir2);
+    dir2.GetCoord(x2,y2,z2);
+
+	if ( !( fabs(x1-x2)&lt;nTol.EpsilonForRelativeTest()*(fabs(x1)+nTol.GetScale()) &amp;&amp; 
+		       fabs(y1-y2)&lt;nTol.EpsilonForRelativeTest()*(fabs(y1)+nTol.GetScale()) &amp;&amp; 
+			     fabs(z1-z2)&lt;nTol.EpsilonForRelativeTest()*(fabs(z1)+nTol.GetScale()) ) )
+    {
+        return 0;
+    }
+
+    //Third Direction:
+    iAxis1.GetThirdDirection(dir1);  
+    dir1.GetCoord(x1,y1,z1);  
+    iAxis2.GetThirdDirection(dir2);
+    dir2.GetCoord(x2,y2,z2);
+
+	if ( !( fabs(x1-x2)&lt;nTol.EpsilonForRelativeTest()*(fabs(x1)+nTol.GetScale()) &amp;&amp; 
+		       fabs(y1-y2)&lt;nTol.EpsilonForRelativeTest()*(fabs(y1)+nTol.GetScale()) &amp;&amp; 
+			     fabs(z1-z2)&lt;nTol.EpsilonForRelativeTest()*(fabs(z1)+nTol.GetScale()) ) )
+    {
+        return 0;
+    }
+
+    //Origin:
+    CATMathPoint orig1, orig2;
+    iAxis1.GetOrigin(orig1);  
+    orig1.GetCoord(x1,y1,z1);
+    iAxis2.GetOrigin(orig2);
+    orig2.GetCoord(x2,y2,z2);
+
+	return  ( fabs(x1-x2)&lt;nTol.EpsilonForRelativeTest()*(fabs(x1)+nTol.GetScale()) &amp;&amp; 
+		       fabs(y1-y2)&lt;nTol.EpsilonForRelativeTest()*(fabs(y1)+nTol.GetScale()) &amp;&amp; 
+			     fabs(z1-z2)&lt;nTol.EpsilonForRelativeTest()*(fabs(z1)+nTol.GetScale()) ) ;
+
+}
+
+/**
+ * @nodoc 
+ */
+INLINE int operator != (const CATMathAxis &amp;iAxis1, const CATMathAxis &amp;iAxis2)
+{
+    if ( iAxis1 == iAxis2 )
+        return 0;
+    else
+        return 1;
+}
+
+#undef  CATCOLLEC_ExportedBy
+#define CATCOLLEC_ExportedBy ExportedByYN000MAT
+
+CATLISTV_DECLARE (CATMathAxis)
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATLISTP_CATMathVector2Df.html">← 上一页: CATLISTP_CATMathVector2Df.h</a></div>
+        <div><a href="CATLISTV_CATMathLine.html">下一页: CATLISTV_CATMathLine.h →</a></div>
+    </div>
+</body>
+</html>

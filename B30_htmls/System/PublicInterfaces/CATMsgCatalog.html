@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATMsgCatalog.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATMsgCatalog.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMsg.html">← 上一页: CATMsg.h</a></div>
+        <div><a href="CATMutex.html">下一页: CATMutex.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMSGCATALOG_H
+#define CATMSGCATALOG_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+#ifdef _WINDOWS_SOURCE 
+#ifdef __NS0S1MSG
+/** @nodoc */
+#define ExportedByNS0S1MSG  __declspec(dllexport) 
+#else
+/** @nodoc */
+#define ExportedByNS0S1MSG  __declspec(dllimport) 
+#endif
+#else
+/** @nodoc */
+#define ExportedByNS0S1MSG
+#endif
+
+#include &quot;CATMsg.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATErrors.h&quot;
+class CATInterMsgCatalog;
+class CATListValCATString;
+
+/**
+ * Message catalog class. 
+ * &lt;b&gt;Role&lt;/b&gt;: Processing a message catalog file.
+ * A message catalog file contains parameterized messages (see @href CATMsg ).
+ * A message is a parameterized alphanumerical
+ * string which can be used for any alphanumerical item of 
+ * information, a warning, a help or error message, and whenever you need to display any text in a
+ * dialog window, such a the caption on a push button.&lt;/br&gt;
+ * NLS (National Langage Support) is supported but, in the same way, a message catalog file should only
+ * contain strings which must be translated into other languages: otherwise, resource catalog files
+ * should be used (see @href CATRscCatalog ).&lt;/br&gt;
+ * A message catalog is built from a file that contains messages identified by a key.
+ * A message can be parameterized ie contains parameters you
+ * value at run-time. A parameter begins with /p or /P in the message text.&lt;/br&gt;
+ * The following are examples of messages:
+ * &lt;pre&gt;
+ * Message1 = &quot;This is a simple message.&quot;;
+ * Message2 = &quot;This message includes the parameter /P1 that
+ *             is valued by your application at run-time.&quot;;
+ * Message3 = &quot;This is a&quot;, &quot;compound &quot;, &quot;message.&quot;;
+ * Message4 = &quot;You can use control characters such as
+ *           \t or \n in your messages.&quot;;&lt;/pre&gt;
+ * A message catalog file posess the .CATNls suffix and is retrieved from the folders specified by the
+ * CATMsgCatalogPath variable.
+ * The localized version of the message catalog is searched first. If it does not exist,
+ * the english version is taken.&lt;/br&gt;
+ * Example:
+ * In a japanese environment, if the CATMsgCatalogPath variable is valued the following way:
+ * &lt;pre&gt;   CATMsgCatalogPath=C:\PersonalFolder;C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+ * then, CATIA search the message catalog file into the following paths:
+ * &lt;pre&gt;   1 - C:\PersonalFolder\Japanese
+ *   2 - C:\PersonalFolder
+ *   3 - C:\Program Files\Dassault Systemes\B12\Japanese
+ *   4 - C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+ * The character set for the message key characters is the following:
+ * &lt;ul&gt;
+ * &lt;li&gt;within the A - Z range&lt;/li&gt;
+ * &lt;li&gt;within the a - z range&lt;/li&gt;
+ * &lt;li&gt;within the 0 - 9 range&lt;/li&gt;
+ * &lt;li&gt;PERIOD (.) and SPACING UNDERSCORE (_) characters&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+
+// CATMsgCatalog:
+// Class for parameterized message support
+
+// This class provides services to manage message catalogs
+// A message can be parameterized. See class CATMsg.
+//
+// A catalog is a file in a human-readable form, ie you can edit it with
+// any editor.
+//
+// Catalog sample
+// --------------
+// | // This is a comment.
+// |
+// |  FirstKey=&quot;Hello /P01&quot;; // /P01 is the first parameter
+// |
+// |  SecondKey = &quot;This is a &quot;, &quot;message &quot;,
+// |               &quot;from Mars.&quot;;
+// |
+// |  AnotherKey = &quot;You can use control characters \t \n &quot;,
+// |               &quot;defined in the C++ language&quot;;
+
+class ExportedByNS0S1MSG CATMsgCatalog
+{
+  public:
+  // Constructors
+  // ============
+
+/**
+ * Constructs a message catalog. 
+ */
+     CATMsgCatalog();
+
+/** Copy constructor.&lt;/br&gt;
+ * &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+ * @href CATMsgCatalog#BuildMessage is enough.
+ * @param iMsgCatalog
+ *   The message catalog to copy
+ */
+     CATMsgCatalog(const CATMsgCatalog &amp;iMsgCatalog);
+
+  // Destructor :
+  // ============
+     ~CATMsgCatalog();
+
+/**
+ * Assignment operator.&lt;/br&gt;
+ * &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+ * @href CATMsgCatalog#BuildMessage is enough.
+ * @param iMsgCatalog
+ *   Message catalog of the right part of the equality
+ * @return 
+ *   Message catalog of the left part of the equality
+ */ 
+     CATMsgCatalog &amp;operator =(const CATMsgCatalog &amp;iMsgCatalog) ;
+
+/**
+ * Loads a message catalog.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Loads a message catalog  by means of its name and (if desired)
+ * of a path.&lt;/br&gt;
+ * &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+ * @href CATMsgCatalog#BuildMessage is enough.
+ *  @param iCatalogMessageName
+ *    Name of the message catalog file, without the .CATNls suffix
+ *  @param iPath
+ *    Absolute path where the catalog message must be searched for.&lt;/br&gt;
+ *    The localized version of the message catalog is searched first. If it does not exist,
+ *    the english version is taken.&lt;/br&gt;
+ *    Example:
+ *    In a japanese environment, if the iPath variable is valued the following way:
+ *    &lt;pre&gt;      iPath=&quot;C:\PersonalFolder;C:\Program Files\Dassault Systemes\B12&quot;&lt;/pre&gt;
+ *    then, CATIA search the message catalog file into the following paths:
+ *    &lt;pre&gt;      1 - C:\PersonalFolder\Japanese
+ *      2 - C:\PersonalFolder
+ *      3 - C:\Program Files\Dassault Systemes\B12\Japanese
+ *      4 - C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+ *  @return
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *    if the message catalog is not loaded, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *    if the message catalog is loaded.&lt;/br&gt;
+ *    If the execution gives a 0 value, debug the message catalog file using @href CATMsgCatalog#GetError .
+ */
+
+// This  method is rarely used because the methodology to use
+// for applications is CATMsgCatalog::BuildMessage . 
+// BuildMessage is encapsulated. It takes into account the 
+// following things:
+//    . if the catalog is not loaded, it does it (this 
+//      enables the calling code not to bother about the loading:
+//      it lets the managing of it to BuildMessage, the message
+//       catalog will be persent into the memory only once,
+//      whatever the count of softwares using it.
+//    . from the input message catalog identifier (CATString),
+//      the software find in its own data the message catalog
+//      ppointer, through a method that has its performances
+//      optimized: a hashtable. This technology ensures there
+//      is not any performance problem.
+// Effectively  , we remind that  two solutions exist:
+//   - calling only CATMsgCatalog::BuildMessage
+//   - calling successively:
+//        .  MyCatalog = new CATMsgCatalog()
+//        . MyCatalog-&gt;LoadMsgCatalog(nom du catalogue de messages ...)
+//        . eventuel MyCatalog-&gt;GetCatalogKeys(...)
+//                   * MyMsg = MyCatalog-&gt;GetCatalogMsg(cle ...)   
+//                              /* The MyMsg outputCATMsg is
+//                                 a parameterized message:
+//                                 the parameters are not under their value form
+//                                 at this level */
+//                   * MyMsg-&gt;GetNbParameters()
+//                   * MyMsg-&gt;BuildMessage
+//                   * delete MyMsg
+//        . MyCatalog-&gt;UnloadMsgCatalog(...)
+//        . delete MyCatalog
+// For example:
+//   . In the interactive drafting application, only
+//     the first solution is used
+//   . In the Dialog  framework also. When it computes a
+//     given message, it stores it in its own member data 
+//     (thus the message is duplicated) for future  use
+//     (remind that most  messages have no parameters). The
+//     purpose  is to factorize the possible error information
+//     detected during the file loading (this duplication is
+//     justified in any way for any performances reason).
+//
+//  Don&#x27;t forget to call CATMsgCatalog#GetError after calling this
+//  service to check potential syntax errors in the message
+//  catalog.
+     int LoadMsgCatalog (const CATString &amp;iCatalogMessageName, 
+                         const char *iPath = NULL);
+
+/** 
+ * Returns the first syntax error found.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns the first syntax error found after a call to @href CATMsgCatalog#BuildMessage
+ * or @href CATMsgCatalog#LoadMsgCatalog .&lt;br&gt;
+ * &lt;b&gt;CAUTION&lt;/b&gt;: Although this method is not static, the @href CATString returned does not depend from
+ * the @href CATMsgCatalog instance used.&lt;br&gt;
+ * See @href CATMsgCatalog#BuildMessage and @href CATMsgCatalog#LoadMsgCatalog .
+ * @return
+ *   String containing the error message.
+ */ 
+     const CATString GetError ();
+
+/**
+ * Returns a message from the message catalog.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns a message from a message catalog using the message key.&lt;/br&gt;
+ * &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+ * @href CATMsgCatalog#BuildMessage is enough.
+ *  @param iMessageKey
+ *    Key of the message to be returned
+ *  @return
+ *    The returned message. If the message is not found, or the catalog invalid,
+ *    an empty string is returned. 
+ */
+
+// If the message is not found, or the catalog invalid,use the 
+// @href CATMsgCatalog#GetError method to retrieve the exact error.
+
+     const CATMsg  GetCatalogMsg( const CATString &amp;iMessageKey ); 
+
+/**
+ * Computes an alphanumeric message string from an identified
+ * parameterized message of the catalog, given specified
+ * parameters values.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Computes a alphanumeric string from a 
+ * message from a message catalog using the catalog name, the 
+ * message key, the message parameters and (if needed) a default 
+ * NLS message.
+ * &lt;p&gt;
+ * Regarding messages, for most use, the &lt;tt&gt;GetResourceValueFromKey&lt;/tt&gt; method 
+ * of the &lt;tt&gt;CATDialog&lt;/tt&gt; class will be
+ * sufficient. We remind you also that Dialog Engine Acquisition Agents
+ * support messages without having to use any message service, just
+ * using the file and key name convention rules.
+ * &lt;p&gt;
+ * Anyway, sometimes (for combo values for example), you may need 
+ * to access to the messages from soft. You will then use this
+ * service.
+ * &lt;p&gt;
+ * The use of this service is as follows: call it at any moment
+ * you want during execution. You do not have to
+ * store the computed message for a future re-use. Effectively,
+ * this service is encapsulated. It takes into account the 
+ * following things:
+ * &lt;ul&gt;
+ * &lt;li&gt;If the catalog is not loaded, it does it (this 
+ * enables the calling code not to bother about the loading:
+ * it lets the managing of it to this service, the message
+ * catalog will be present into the memory only once,
+ * whatever the count of softwares using it.&lt;/li&gt;
+ * &lt;li&gt;Otherwise, from the input message catalog identifier 
+ * (iCatalogName parameter, see below), the method find in its 
+ * own data the message catalog pointer, among the other 
+ * message catalog already loaded, through a method that 
+ * has its performances optimized: a hashtable. This technology 
+ * ensures there isn&#x27;t any performance problem.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * The only need for an application to factorize a given
+ * message the first time it computes it (storing it for future 
+ * uses), would be to make an optimized management of exceptions 
+ * that would occur during the message catalog loading: the 
+ * purpose beeing to mention the message catalog syntax errors
+ * only once. Such applications needs seldom occur.
+ * &lt;p&gt;
+ * @param iCatalogName
+ *   Name of the catalog containing the message, without the .CATNls suffix
+ * @param iMessageKey
+ *   Key of the message to be retrieved
+ * @param iMsgParameters
+ *   Array giving to the method possible parameter values
+ *   which the method will integrate into the parameterized
+ *   message. 
+ *   The parameter value count should correspond to the message 
+ *   parameter highest index (this is not exactly the parameter count: 
+ *   the software authorizes parameter indices that are not
+ *   consecutive, which would distinguish the message 
+ *   parameters highest index from the parameter count).
+ *   If the input parameter value count is not sufficient, a default 
+ *   behaviour is foreseen: &quot;?&quot; characters are introduced into the
+ *   computed output resource string. 
+ *   NULL default value coresponds to no parameter values.
+ * @param iParamNb
+ *   Parameter value count
+ * @param iDefaultMsg
+ *   Message to be used if a problem occured while
+ *   accessing the message catalog file or the key. You may, for
+ *   example, put in this message an information about an
+ *   access problem. 
+ *   We suggest you to deliver a valid value to this parameter, so that,
+ *   if an error occurs, a valid return value be delivered by
+ *   the service. 
+ * @return
+ *   The built message. 
+ *   If the execution returns the default message, it will mean
+ *   that a problem occured while accessing the message catalog file. Debug the message catalog file
+ *   using @href CATMsgCatalog#GetError .
+ */
+     static const CATUnicodeString BuildMessage ( 
+                 const CATString &amp;iCatalogName,
+				 const CATString &amp;iMessageKey,
+				 CATUnicodeString *iMsgParameters = NULL,
+				 int iParamNb = 0,
+				 const CATUnicodeString &amp;iDefaultMsg = 
+                                                  (char *)NULL );
+/**
+ * Computes an english alphanumeric message string.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Does the same thing as @href CATMsgCatalog#BuildMessage , except that it takes the english version
+ * and not the UI language version. 
+ * &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+ * @href CATMsgCatalog#BuildMessage is enough.
+ * &lt;p&gt;
+ * @param iCatalogName
+ *   Name of the catalog containing the message
+ * @param iMessageKey
+ *   Key of the message to be retrieved
+ * @param iMsgParameters
+ *   Array giving to the method possible parameter values
+ *   which the method will integrate into the parameterized
+ *   message. 
+ * @param iParamNb
+ *   Parameter value count
+ * @param iDefaultMsg
+ *   Message to be used if a problem occured while
+ *   accessing the message catalog file or the key.
+ * @return
+ *   The built message. 
+ */
+     static const CATUnicodeString BuildEnglishMessage ( 
+                 const CATString &amp;iCatalogName,
+				 const CATString &amp;iMessageKey,
+				 CATUnicodeString *iMsgParameters = NULL,
+				 int iParamNb = 0,
+				 const CATUnicodeString &amp;iDefaultMsg = 
+                                                  (char *)NULL );
+  
+/**
+ * Get the message catalog keys.
+ * @param oKey
+ *   The key list.
+ * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: the caller must allocate the object and manage so that, in input,
+ * the oKey size be equal to zero. 
+ * @return
+ *    The message catalog key count.
+ */ 
+     int GetCatalogKeys (CATListValCATString* oKey=NULL);
+
+
+//
+// Unloads a message catalog by means of its name.
+// @param iCatalogName
+//    Name of the catalog to be unloaded.
+// @return
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+//   if the message catalog is not unloaded, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+//   otherwise.
+// 
+/** @nodoc */
+     static int UnloadMsgCatalog ( const CATString &amp;iCatalogName );
+  
+/**
+ * Substitutes a message into an internalized message catalog.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Substitutes a message into an internalized message catalog
+ * using the message key. This enable to use messages known only during execution
+ * into a CATStateCommand.
+ * &lt;p&gt;Example:&lt;/br&gt;
+ * The MyApplicativeCommand.CATNls file contains:
+ * &lt;pre&gt;     MyApplicativeCommand.MessageSink=&quot;fake message&quot;;&lt;/pre&gt;
+ * The MyApplicativeCommand::BuildGraph method will contain:
+ * &lt;pre&gt;     CATDialogState* MyState = NULL;
+ *     CATMsgCatalog ApplicativeCommandCatalogMessage;
+ *     CATString MessageKey = &quot;MessageSink&quot;;
+ *     CATUnicodeString StringOfTheMessageKnownDuringExecution = &quot;message obtained during execution&quot;;
+ *     ApplicativeCommandCatalogMessage.LoadMsgCatalog(&quot;MyApplicativeCommand&quot;);
+ *     CATMsg MessageKnownDuringExecution(StringOfTheMessageKnownDuringExecution);
+ *     ApplicativeCommandCatalogMessage.SubstituteCatalogMsg(&quot;MyApplicativeCommand.MessageSink&quot;, MessageKnownDuringExecution);
+ *     MyState = AddDialogState(MessageKey);&lt;/pre&gt;
+ * @param iMessageKey
+ *   Key of the message to substitute
+ * @param iReplacingMessage
+ *   The new message which must replace the current one
+ */
+     int  SubstituteCatalogMsg( const CATString &amp;iMessageKey,
+                                const CATMsg &amp;iReplacingMessage ); 
+
+  private:
+
+/** @nodoc */
+// Loads a message catalog.
+// &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Loads a message catalog  by means of its name and (if desired)
+// of a path.&lt;/br&gt;
+// &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+// @href CATMsgCatalog#BuildMessage is enough.
+//  @param iCatalogMessageName
+//    Name of the message catalog file, without the .CATNls suffix
+//  @param iPath
+//    Absolute path where the catalog message must be searched for.&lt;/br&gt;
+//    The localized version of the message catalog is searched first. If it does not exist,
+//    the english version is taken.&lt;/br&gt;
+//    Example:
+//    In a japanese environment, if the iPath variable is valued the following way:
+//    &lt;pre&gt;      iPath=&quot;C:\PersonalFolder;C:\Program Files\Dassault Systemes\B12&quot;&lt;/pre&gt;
+//    then, CATIA search the message catalog file into the following paths:
+//    &lt;pre&gt;      1 - C:\PersonalFolder\Japanese
+//      2 - C:\PersonalFolder
+//      3 - C:\Program Files\Dassault Systemes\B12\Japanese
+//      4 - C:\Program Files\Dassault Systemes\B12&lt;/pre&gt;
+//  @return
+//    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+//    if the message catalog is not loaded, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+//    if the message catalog is loaded.&lt;/br&gt;
+//    If the execution gives a 0 value, debug the message catalog file using @href CATMsgCatalog#GetError .
+// This  method is rarely used because the methodology to use
+// for applications is CATMsgCatalog::EnglishBuildMessage . 
+// EnglishBuildMessage is encapsulated. It takes into account the 
+// following things:
+//    . if the english catalog is not loaded, it does it (this 
+//      enables the calling code not to bother about the loading:
+//      it lets the managing of it to BuildEnglishMessage, the message
+//       catalog will be persent into the memory only once,
+//      whatever the count of softwares using it.
+//    . from the input message catalog identifier (CATString),
+//      the software find in its own data the message catalog
+//      ppointer, through a method that has its performances
+//      optimized: a hashtable. This technology ensures there
+//      is not any performance problem.
+// Effectively  , we remind that  two solutions exist:
+//   - calling only CATMsgCatalog::BuildEnglishMessage
+//   - calling successively:
+//        . MyCatalog = new CATMsgCatalog()
+//        . MyCatalog-&gt;LoadEnglishMsgCatalog(nom du catalogue de messages ...)
+//        . eventuel MyCatalog-&gt;GetCatalogKeys(...)
+//                   * MyMsg = MyCatalog-&gt;GetEnglishCatalogMsg(cle ...)   
+//                              /* The MyMsg outputCATMsg is
+//                                 a parameterized message:
+//                                 the parameters are not under their value form
+//                                 at this level */
+//                   * MyMsg-&gt;GetNbParameters()
+//                   * MyMsg-&gt;BuildMessage
+//                   * delete MyMsg
+//        . MyCatalog-&gt;UnloadMsgCatalog(...)
+//        . delete MyCatalog
+     int LoadEnglishMsgCatalog (const CATString &amp;iCatalogMessageName,const char *iPath = NULL);
+
+/** @nodoc */
+// Returns the english version of a message from the message catalog.
+// &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns a message from a message catalog using the message key.&lt;/br&gt;
+// &lt;b&gt;Caution&lt;/b&gt;: This method should rarely be used, in most cases the use of 
+// @href CATMsgCatalog#BuildEnglishMessage is enough.
+//  @param iMessageKey
+//    Key of the message to be returned
+//  @return
+//    The returned message. If the message is not found, or the catalog invalid,
+//    an empty string is returned. 
+// If the message is not found, or the catalog invalid,use the 
+// @href CATMsgCatalog#GetError method to retrieve the exact error.
+
+     const CATMsg  GetEnglishCatalogMsg( const CATString &amp;iMessageKey ); 
+/** @nodoc */
+     CATInterMsgCatalog *_CatalogRef;
+// Name of the message catalog (without the &quot;.CATNls&quot; suffix)
+/** @nodoc */
+     CATString _MsgCatalogName;
+// Tree path for message catalogs when precised through the LoadMsgCatalog method
+/** @nodoc */
+     CATUnicodeString _MsgCatalogTreePathWhenSpecified;
+};
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMsg.html">← 上一页: CATMsg.h</a></div>
+        <div><a href="CATMutex.html">下一页: CATMutex.h →</a></div>
+    </div>
+</body>
+</html>

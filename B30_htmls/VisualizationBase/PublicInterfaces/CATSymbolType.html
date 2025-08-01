@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATSymbolType.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATSymbolType.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSurfacicRep.html">← 上一页: CATSurfacicRep.h</a></div>
+        <div><a href="CATTexturePixelImage.html">下一页: CATTexturePixelImage.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef _SymbolType_H
+#define _SymbolType_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+/** Enumerate the different marker types and symbol types.
+ * &lt;b&gt;Role&lt;/b&gt;: It must be used with @href CAT2DMarkerGP, @href CAT3DMarkerGP,
+ * @href CAT2DSymbolGP, @href CAT2DArrowSymbolGP, @href CAT2DSymbolRep and
+ * @href CAT2DArrowSymbolRep. &lt;br&gt;
+ * Markers 2D/3D CROSS to FULLSQUARE2. &lt;br&gt;
+ * Symbols 2D    OPEN_ARROW to the end.&lt;br&gt;
+ * @param NOTUSED
+ * Reserved.
+ * @param CROSS
+ * Use this enum to have a cross marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param PLUS
+ * Use this enum to have a plus marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param CONCENTRIC
+ * Use this enum to have a circle marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param COINCIDENT
+ * Use this enum to have a two concentric circle marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param FULLCIRCLE
+ * Use this enum to have a full circle marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param FULLSQUARE
+ * Use this enum to have a full square marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param STAR
+ * Use this enum to have a star marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param DOT
+ * Use this enum to have a dot (3x3 pixels) marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param SMALLDOT
+ * Use this enum to have a small dot (1 pixel) marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param MISC1
+ * Use this enum to have a 45 degrees arrow marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param MISC2 
+ * Use this enum to have a 225 degrees arrow marker.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param FULLCIRCLE2
+ * Use this enum to have a full circle marker bigger than FULLCIRCLE.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param FULLSQUARE2
+ * Use this enum to have a full square marker bigger then FULLSQUARE.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D/3D markers.&lt;/b&gt;
+ * @param OPEN_ARROW
+ * Use this enum to have an unclosed arrow symbol (&gt;).&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param UNFILLED_ARROW
+ * Use this enum to have an unfilled arrow symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param BLANKED_ARROW
+ * Use this enum to have an arrow symbol. The arrow&#x27;s interior is filled with 
+ * background color.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param FILLED_ARROW
+ * Use this enum to have a filled arrow symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param UNFILLED_CIRCLE
+ * Use this enum to have an unfilled circle symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param BLANKED_CIRCLE
+ * Use this enum to have a circle symbol. The circle&#x27;s interior is filled with 
+ * background color.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param FILLED_CIRCLE
+ * Use this enum to have a filled circle symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param CROSSED_CIRCLE
+ * Use this enum to have a circle with a cross symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param BLANKED_SQUARE
+ * Use this enum to have a square symbol. The square&#x27;s interior is filled with 
+ * background color.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param FILLED_SQUARE 
+ * Use this enum to have a filled square symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param BLANKED_TRIANGLE
+ * Use this enum to have a triangle symbol. The triangle&#x27;s interior is filled 
+ * with background color.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param FILLED_TRIANGLE
+ * Use this enum to have a filled triangle symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param MANIPULATOR_SQUARE
+ * Use this enum to have a filled square symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param MANIPULATOR_DIAMOND
+ * Use this enum to have a filled diamond symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param MANIPULATOR_CIRCLE
+ * Use this enum to have a filled circle symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param MANIPULATOR_TRIANGLE
+ * Use this enum to have a filled triangle symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param DOUBLE_OPEN_ARROW
+ * Use this enum to have a double arrow symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param DOUBLE_FILLED_ARROW
+ * Use this enum to have a double filled arrow symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ * @param WAVE
+ * Use this enum to have a wave symbol.&lt;br&gt;
+ * &lt;b&gt;It must be used only for 2D symbols.&lt;/b&gt;
+ */
+
+enum CATSymbolType 
+{ 
+  NOTUSED,            
+  CROSS,             
+  PLUS,           
+  CONCENTRIC,         
+  COINCIDENT,        
+  FULLCIRCLE,         
+  FULLSQUARE,         
+  STAR,
+  DOT,
+  SMALLDOT,
+  MISC1,
+  MISC2,
+  FULLCIRCLE2,         
+  FULLSQUARE2,         
+  OPEN_ARROW,
+  UNFILLED_ARROW,
+  BLANKED_ARROW,
+  FILLED_ARROW,
+  UNFILLED_CIRCLE,
+  BLANKED_CIRCLE,
+  FILLED_CIRCLE,
+  CROSSED_CIRCLE,
+  BLANKED_SQUARE,
+  FILLED_SQUARE,
+  BLANKED_TRIANGLE,
+  FILLED_TRIANGLE,
+  MANIPULATOR_SQUARE,
+  MANIPULATOR_DIAMOND,
+  MANIPULATOR_CIRCLE,
+  MANIPULATOR_TRIANGLE,
+  DOUBLE_OPEN_ARROW,
+  WAVE,
+  DOUBLE_FILLED_ARROW
+};
+
+/** @nodoc */
+typedef CATSymbolType SymbolType ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSurfacicRep.html">← 上一页: CATSurfacicRep.h</a></div>
+        <div><a href="CATTexturePixelImage.html">下一页: CATTexturePixelImage.h →</a></div>
+    </div>
+</body>
+</html>

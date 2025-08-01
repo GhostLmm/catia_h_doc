@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCloneManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCloneManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCldUniCell.html">← 上一页: CATCldUniCell.h</a></div>
+        <div><a href="CATCompositeLaw.html">下一页: CATCompositeLaw.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef CATCloneManager_H
+#define CATCloneManager_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;YP00IMPL.h&quot;
+
+#include &quot;CATCGMOperator.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+
+#include &quot;CATMathDef.h&quot; 
+#include &quot;CATCGMJournal.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATListOfCATICGMObjects.h&quot;
+#include &quot;CATCGMStreamVersion.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATGeoFactory;
+class CATAssociation;
+class CATICGMObject;
+class CATCGMJournalList;
+class CATMapGeoToAssoc;
+class CATBody;
+class CATSoftwareConfiguration;
+class CATExtCloneManager;
+class CATExtCloneExplicitAssoc;
+
+/**
+ * Defines the mode of the clone process.
+ * @param CatCGMSingleDuplicate
+ * Only duplicates the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATCloneManager. This is the default value.
+ * This value is only applicable in the case the objects are being copied within the same container.
+ * @param CatCGMFullDuplicate
+ * Duplicates the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATCloneManager and the forward linked objects.
+ * This value for &lt;tt&gt;CATCloneManagerType&lt;/tt&gt;  should be used explicitly when full copy
+ * is desired in the case of the objects being copied within the same container.
+ * For copying objects to a different container this value is used internally
+ * regardless of the value assigned to &lt;tt&gt;CATCloneManagerType&lt;/tt&gt;. 
+ * @param CatCGMUnknownDuplicate
+ * Internal use.
+ */
+enum CATCloneManagerType {CatCGMSingleDuplicate = +1, CatCGMFullDuplicate = +100, CatCGMUnknownDuplicate = +101};
+
+/**
+ * Class representing the process of duplication of a CATICGMObject.&lt;br&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;The clone process takes the forward links into account
+ * &lt;li&gt;A CATCloneManager can process several CATICGMObjects at the same time.
+ * &lt;li&gt;A CATCloneManager has two modes of duplication:
+ *&lt;dl&gt;&lt;dt&gt;CatCGMSingleDuplicate&lt;/dt&gt;&lt;dd&gt;Only duplicates the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATCloneManager.
+ * This value is only applicable in the case the objects are being copied within the same container.
+ * &lt;dt&gt;CatCGMFullDuplicate&lt;/dt&gt;&lt;dd&gt;Duplicates the objects
+ * that are &lt;tt&gt;Add&lt;/tt&gt;ed to the CATCloneManager and the forward linked objects.
+ * This value for &lt;tt&gt;CATCloneManagerType&lt;/tt&gt;  should be used explicitly when full copy
+ * is desired in the case of the objects being copied within the same container.
+ * For copying objects to a different container this value is used internally
+ * regardless of the value assigned to &lt;tt&gt;CATCloneManagerType&lt;/tt&gt;.
+ *&lt;/dl&gt;
+ * &lt;li&gt;A CATCloneManager offers two types of methods:
+ *&lt;ul&gt;
+ * &lt;li&gt;&quot;user methods&quot; that are called by the application programmer 
+ * to clone CATICGMObjects: &lt;tt&gt;Add&lt;/tt&gt;, &lt;tt&gt;Run&lt;/tt&gt;, &lt;tt&gt;ReadImage&lt;/tt&gt;, 
+ * &lt;tt&gt;WriteReport&lt;/tt&gt;, &lt;tt&gt;GetFactory&lt;/tt&gt;
+ * &lt;li&gt;&quot;object methods&quot; that are called by the CATICGMObjects to
+ * ask for the clone of their forward linked objects. 
+ * These methods must not be normally called,
+ * except in the &lt;tt&gt;CATICGMObject::Clone&lt;/tt&gt; method, 
+ * if you intend to create your own CATICGMObject class.
+ *&lt;/ul&gt;
+ * &lt;li&gt;The objects of this class are transient and cannot be streamed
+ * &lt;/ul&gt;
+ * code sample :
+ * &lt;pre&gt;
+ * CATCloneManager MyManager(MyGeoFactory);
+ * MyManager.Add(MyCGMObject);
+ * MyManager.Run();
+ * CATICGMObject* ClonedObject=MyManager.ReadImage(MyCGMObject);
+ * MyManager.WriteReport(MyJournal, CATCGMJournal::Modification);
+ * &lt;/pre&gt;
+ */
+class ExportedByYP00IMPL CATCloneManager : public CATCGMOperator
+{
+public:
+   /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+  //***************************************************************************
+  //****** USER METHODS
+  //***************************************************************************
+
+/**
+ * Constructs a CATCloneManager.
+ * @param iFactory
+ * The pointer to the factory of the resulting objects.
+ * @param iType
+ * The type of duplication. This is relevant when copying within the same container. 
+ * CatCGMFullDuplicate is always used for copying into a different container.
+ * @param  iConfig
+ * The pointer to the configuration.Should not be &lt;tt&gt;NULL&lt;/tt&gt; in case of topological objects.
+ */
+  CATCloneManager(CATGeoFactory            *iFactory                     ,
+	                CATCloneManagerType       iType = CatCGMSingleDuplicate,
+                  CATSoftwareConfiguration *iConfig = NULL);
+
+/**
+ * Adds a CATICGMObject to clone with &lt;tt&gt;this&lt;/tt&gt; CATCloneManager.
+ *&lt;br&gt;All the added objects must belong
+ * to the same factory.
+ * @param iObjectToClone
+ * The pointer to the object to add to the CATCloneManager. 
+ * @param iWhereToPaste
+ * If not NULL, it forces the duplication of &lt;tt&gt;iObjectToClone&lt;/tt&gt; to be
+ * the object &lt;tt&gt;iWhereToPaste&lt;/tt&gt;.  
+ * This can be used to copy and paste objects from one container to another one.
+ * Notice that there is no transformation here.
+ */
+  virtual void Add(CATICGMObject * iObjectToClone    ,
+		   CATICGMObject * iWhereToPaste  = 0);
+
+/**
+ * Runs the CATCloneManager process.
+ * This method should be called only once.
+ */
+  virtual int Run();
+
+/**
+ * Returns a pointer to the CATICGMObject (called &quot;image&quot;) corresponding to the clone 
+ * by &lt;tt&gt;this&lt;/tt&gt; of a given &lt;tt&gt;iObject&lt;/tt&gt;.
+ * @param iObject
+ * The pointer to the object which the image is asked for.
+ * @return
+ * The pointer to the image if it exists. &lt;tt&gt;0&lt;/tt&gt; otherwise.
+ */
+  virtual CATICGMObject* ReadImage(CATICGMObject * iObject);
+
+/**
+ * Writes the topological journal associated with &lt;tt&gt;this&lt;/tt&gt; CATCloneManager process.
+ * &lt;br&gt;The journal follows the modifications of the topological
+ * objects.
+ * @param ioJournal
+ * The pointer to the journal to fill
+ * @param iType
+ * The type of modification to be written.
+ * The attribute to put to the face that have just been cloned.
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATCGMJournal::Creation&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;All the duplicated faces are written
+ * as created into the journal 
+ *      &lt;dt&gt;&lt;tt&gt;CATCGMJournal::Modification&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;All the duplicated faces are written
+ * as modified into the journal 
+ *	  &lt;/dl&gt;
+ * @param iAddInfo
+ * The activation of the journal info .
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;TRUE&lt;/tt&gt; for the activation, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+  virtual void WriteReport(CATCGMJournalList   * &amp;ioJournal               , 
+                           CATCGMJournal::Type    iType                   ,
+                           CATBoolean             iAddInfo = CATBoolean(1)) const;
+
+/**
+ * Writes the topological journal for one object.
+ * @param iObject
+ * The pointer to the object to follow.
+ * @param ioJournal
+ * The pointer to the journal to fill
+ * @param iType
+ * The type of modification to be written.
+ * The attribute to put to the face that have just been cloned.
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATCGMJournal::Creation&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;All the duplicated faces are written
+ * as created into the journal 
+ *      &lt;dt&gt;&lt;tt&gt;CATCGMJournal::Modification&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;All the duplicated faces are written
+ * as modified into the journal 
+ *	  &lt;/dl&gt;
+ * @param iAddInfo
+ * The activation of the journal info .
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;TRUE&lt;/tt&gt; for the activation, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+  virtual void WriteReport(CATICGMObject       *  iObject                 ,
+                           CATCGMJournalList   * &amp;ioJournal               , 
+                           CATCGMJournal::Type    iType                   ,
+                           CATBoolean             iAddInfo = CATBoolean(1)) const;
+
+  //***************************************************************************
+  //****** OBJECTS METHODS
+  //***************************************************************************
+
+/**
+ * @nodoc
+ * Processes the clone of a CATICGMObject. 
+ *&lt;br&gt; &quot;Object method&quot;: to be only called by the &lt;tt&gt;CATICGMObject::Clone&lt;/tt&gt; method.
+ * @param iObject
+ * The object to clone 
+ * @return
+ * The pointer to the duplicated object.
+ */
+  virtual CATICGMObject* ComputeImage(CATICGMObject * iObject);
+
+  virtual ~CATCloneManager();
+
+  /** @nodoc */
+  CATLONG32 OnlyBodiesInInput();
+
+  /** @nodoc */
+  CATLISTP(CATICGMObject)* GetVolatileVerticesWithSharpnessData(const CATBoolean AllocateIfNeeded = TRUE);
+
+  /** @nodoc */
+  CATBoolean AlreadyInListWithSharpnessData(CATICGMObject* ipVertex);
+
+  /** @nodoc */
+  void AddVertexWithSharpnessData(CATICGMObject* ipVertex);
+
+  /** @nodoc */
+  virtual CATSoftwareConfiguration* GetSoftwareConfiguration() const;
+
+  /** @nodoc */
+  virtual void Dump( CATCGMOutput&amp; os ) ;
+
+  /** @nodoc */
+	virtual const CATString * GetOperatorId();
+
+  /** @nodoc */
+  CATBoolean FactoryScaleIsChanging() const;
+
+  /** @nodoc */
+  void SetCATBackTargetVersion(CATCGMStreamVersion iVersion);
+
+  /** @nodoc */
+  CATCGMStreamVersion GetCATBackTargetVersion() const;
+
+protected:
+  
+  /** @nodoc */
+  CATMapGeoToAssoc * _AssocList;
+
+  /** @nodoc */
+  CATCloneManagerType _CloneType;
+  /** @nodoc */
+  short               _FactoryIsExplicit;
+  /** @nodoc */
+  short               _OnlyBodiesInInput;
+
+  /** @nodoc */
+  CATCloneManager(CATExtCloneManager    *iExtensible, CATGeoFactory         *iFactory,
+	                CATCloneManagerType    iType, CATSoftwareConfiguration *iConfig);
+
+  /** @nodoc */
+  INLINE CATExtCloneManager *GetExtCloneManager() const;
+
+  /** @nodoc */
+  CATSoftwareConfiguration *_Version;
+
+  /** @nodoc */
+  static CATString _OperatorId;
+  /** @nodoc */
+  CATExtCGMReplay *IsRecordable(short &amp; LevelOfRuntime, short &amp;VersionOfStream);
+  /** @nodoc */
+  void WriteInput(CATCGMStream  &amp; ioStream);
+  /** @nodoc */
+  void WriteOutput(CATCGMStream &amp; ioStream);
+  /** @nodoc */
+	CATBoolean ValidateOutput(CATCGMStream&amp; ioStream, CATCGMOutput&amp; os,int VersionNumber=1);
+  /** @nodoc */
+  int RunOperator();
+
+private:
+  CATAssociation * AddInternal(CATICGMObject * iObjectToClone    ,
+ 		                           CATICGMObject * iWhereToPaste  = 0);
+  void FindLinks(CATICGMObject * iIn);
+  CATLONG32 CheckLinks(CATICGMObject* iIn);
+  void AnalysisOfLinks(CATICGMObject* iIn);
+
+  friend class CATExtCloneManager;
+  friend class CATExtCloneExplicitAssoc;
+};
+
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+
+
+INLINE CATExtCloneManager *CATCloneManager::GetExtCloneManager() const
+{ return (CATExtCloneManager *) (void *) _Extensible; }
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCldUniCell.html">← 上一页: CATCldUniCell.h</a></div>
+        <div><a href="CATCompositeLaw.html">下一页: CATCompositeLaw.h →</a></div>
+    </div>
+</body>
+</html>

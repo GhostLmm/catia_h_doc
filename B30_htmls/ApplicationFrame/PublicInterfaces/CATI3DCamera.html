@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATI3DCamera.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATI3DCamera.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DCamera.html">← 上一页: CATI2DCamera.h</a></div>
+        <div><a href="CATIAfrActivateWorkbench.html">下一页: CATIAfrActivateWorkbench.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATI3DCAMERA_H
+#define CATI3DCAMERA_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+//===========================================================================
+// General Interface for 3D Viewpoint Manipulation
+//===========================================================================
+#include &quot;CD0WIN.h&quot;
+#include &quot;CATICamera.h&quot;
+
+class CATMathPoint;
+class CATMathDirection;
+#include &quot;CATMathDef.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCD0WIN IID IID_CATI3DCamera;
+#else
+extern &quot;C&quot; const IID IID_CATI3DCamera;
+#endif
+/**
+* Interface to make 3D viewpoint persistent.
+* &lt;b&gt;Role&lt;/b&gt;:
+* This interface class provides the prototype of methods to manage
+* the parameters of 3D camera. 
+* @see CATICamera , CAT3DViewpoint
+*/
+class  ExportedByCD0WIN CATI3DCamera : public CATICamera
+{
+	CATDeclareInterface;
+
+public:
+
+	// Get/Set 3D Camera data
+	// ----------------------
+	/**
+	* Returns the origin (eye position) of a 3D camera.
+	*/
+	virtual CATMathPoint      GetOrigin() =0;
+	/**
+	* Returns the sight direction of a 3D camera.
+	*/
+	virtual CATMathDirection  GetDirection() =0;
+	/**
+	* Returns the up direction of a 3D camera.
+	*/
+	virtual CATMathDirection  GetZenith() =0;
+	/**
+	* Returns the target point of a 3D camera.
+	*/
+	virtual CATMathPoint      GetTarget() =0;
+
+	/**
+	* Changes the origin of 3D camera.
+	* It results a translation of the camera.
+	* @param iOrigin
+	*    New position of the camera origin.
+	*/
+	virtual void              SetOrigin( CATMathPoint iOrigin)=0;
+	/**
+	* Changes the sight direction of a 3D camera.
+	* It results a rotation of the camera around it&#x27;s origin.
+	* @param iDirection
+	*    New sight direction of the camera.
+	*    This direction must be perpendicular to the up direction.
+	*/
+	virtual void              SetDirection( CATMathDirection iDirection)=0;
+	/**
+	* Changes the up direction of a 3D camera.
+	* It results a rotation of the camera around it&#x27;s sight direction.
+	* @param iZenith
+	*    New up direction of the camera.
+	*    This direction must be perpendicular to the sight direction.
+	*/
+	virtual void              SetZenith( CATMathDirection iZenith)=0;
+	/**
+	* Changes the target point of a 3D camera.
+	* It results a change of the camera sight direction.
+	* @param iTarget
+	*    New target point of the camera.
+	*/
+	virtual void              SetTarget( CATMathPoint iTarget)=0;
+
+	// Get/Set 3D Conic Camera data
+	// ----------------------------
+	/**
+	* Returns the view angle of a 3D conic camera.
+	* It is the half of the vertical vision field angle (in degrees).
+	* @see CATAngle
+	*/
+	virtual CATAngle  GetViewAngle() =0;
+	/**
+	* Changes the view angle of a 3D conic camera.
+	* @param iViewAngle
+	*    New view angle of the camera.
+	*    It is the half of the vertical vision field angle (in degrees).
+	* @see CATAngle
+	*/
+	virtual void      SetViewAngle( CATAngle iViewAngle)=0;
+
+	// Get/Set 3D Cylindric Camera data
+	// --------------------------------
+	/**
+	* Returns the zoom value of a 3D cylindric camera.
+	*/
+	virtual double     GetZoom() =0;
+	/**
+	* Changes the zoom value of a 3D cylindric camera.
+	* @param iZoom
+	*    New zoom value of the camera. This value must be &gt;=0
+	* Warning : Changing zoom internaly changes angle.
+	*/
+	virtual void       SetZoom( double iZoom)=0;
+
+	// Change 3D Camera Type
+	// ---------------------
+	/**
+	* Changes the type of a 3D camera.
+	* @param iCameraType
+	*    New camera type.
+	*   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+	*   &lt;li&gt;&lt;tt&gt;CAT3DConicCamera&lt;/tt&gt; for a 3D perspective projection&lt;/li&gt;
+	*   &lt;li&gt;&lt;tt&gt;CAT3DCylindricCamera&lt;/tt&gt; for a 3D parallel projection&lt;/li&gt;.
+	*   &lt;li&gt;&lt;tt&gt;CAT3DUnknownCamera&lt;/tt&gt; for any type of 3D projection&lt;/li&gt;
+	* @see CATCameraType
+	*/
+	virtual void       SetType(CATCameraType iCameraType)=0;
+};
+
+// --------------------------------------------------------------------------
+//                             Handler
+// --------------------------------------------------------------------------
+CATDeclareHandler(CATI3DCamera, CATICamera);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DCamera.html">← 上一页: CATI2DCamera.h</a></div>
+        <div><a href="CATIAfrActivateWorkbench.html">下一页: CATIAfrActivateWorkbench.h →</a></div>
+    </div>
+</body>
+</html>

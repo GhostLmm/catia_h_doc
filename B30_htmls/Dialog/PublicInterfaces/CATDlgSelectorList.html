@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog/PublicInterfaces/CATDlgSelectorList.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dialog/PublicInterfaces/CATDlgSelectorList.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgScrollBar.html">← 上一页: CATDlgScrollBar.h</a></div>
+        <div><a href="CATDlgSeparator.html">下一页: CATDlgSeparator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDLGSELECTORLIST_H
+#define CATDLGSELECTORLIST_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CATDlgControl.h&quot;
+
+class CATString;
+class CATUnicodeString;
+class l_CATDialog;
+class l_CATDlgSelectorList;
+class CATDlgContextualMenu;
+
+
+/** 
+ * Base class for lists.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * The selector list allows the end user to select one or several values among a
+ * discrete list of predefined values. The values are generally character strings.
+ * Scrollbars are added if the list is longer or wider than the list display area.
+ * The selected value(s) is (are) highlighted. The end user cannot enter values and
+ * can only select among those proposed.
+ * &lt;br&gt;
+ * Use selector list whenever you propose to the end user to select values from a predefined list.
+ */
+class ExportedByDI0PANV2 CATDlgSelectorList : public CATDlgControl
+{
+
+ public:
+
+			/** 
+			 * Constructs a CATDlgSelectorList.
+			 * @param iParent
+			 *   The parent of the selector list.
+			 * @param iObjectName
+			 *   The name of the selector list.
+			 * @param iStyle
+			 *   The style of the selector list.
+			 * The style can be :
+			 *   &lt;dl&gt;
+			 *   &lt;dt&gt;&lt;tt&gt;NULL&lt;/tt&gt;&lt;dd&gt; : if no value is passed, only a single value can be selected, 
+			 *   &lt;dt&gt;&lt;tt&gt;CATDlgLstMultisel&lt;/tt&gt;&lt;dd&gt; : several values can be selected using the Shift and Ctrl keys. 
+			 *   &lt;/dl&gt;
+			 */
+        CATDlgSelectorList( CATDialog *iParent, const CATString&amp; iObjectName, CATDlgStyle iStyle=NULL);
+
+        virtual ~CATDlgSelectorList();
+
+			/**
+			 * Returns the number of selected items.
+			 */
+        int     GetSelectCount();
+
+			/**
+			 * Returns TRUE if the given line specified by its number is selected, FALSE otherwise.
+			 * A CATBool is a short.
+			 * @param iRow
+			 * The number of the specified line.
+			 */
+        CATBool IsSelect( int iRow);
+
+			/**
+			 * Returns TRUE if the given line specified by its contents is selected, FALSE otherwise.
+			 * A CATBool is a short.
+			 * @param iString
+			 * The contents of the specified line.
+			 */
+        CATBool IsSelect( const CATUnicodeString&amp; iString);
+
+			/**
+			 * Retrieves the selected lines as an array of int.
+			 * Pay attention to properly allocate and deallocate the array.
+			 * @param oTabRow
+			 * The pointer to the returned array of int.
+			 * @param iSize
+			 * The size of the array.
+			 * @return the number of selected lines.
+			 */
+        int     GetSelect( int *oTabRow, int iSize);
+
+			/**
+			 * Retrieves the selected lines as an array of CATUnicodeString.
+			 * Pay attention to properly allocate and deallocate the array.
+			 * @param oTabString
+			 * The pointer to the returned array of CATUnicodeString.
+			 * @param iSize
+			 * The size of the array.
+			 * @return the number of selected lines.
+			 */
+        int     GetSelect( CATUnicodeString* oTabString, int iSize);
+
+			/**
+			 * Deselects all selected lines.
+			 */
+        void    ClearSelect( );
+
+			/**
+			 * Sets the selected lines from an array of int.
+			 * @param iTabRow
+			 * The pointer to the array of int representing the numbers of the lines to select.
+			 * @param iSize
+			 * The size of the array.
+			 * @param iNotify
+			 * Set this parameter to a non null value if you want the corresponding notification to be sent.
+			 * Otherwise set it to 0, so no notification will be sent. 
+			 * @return the number of selected lines.
+			 */
+        int     SetSelect( int *iTabRow, int iSize, int iNotify=1);
+
+			/**
+			 * Sets the selected lines from an array of CATUnicodeString.
+			 * @param iTabString
+			 * The pointer to the array of CATUnicodeString representing the contents of the lines to select.
+			 * @param iSize
+			 * The size of the array.
+			 * @param iNotify
+			 * Set this parameter to a non null value if you want the corresponding notification to be sent.
+			 * Otherwise set it to 0, so no notification will be sent. 
+			 * @return the number of selected lines.
+			 */
+        int     SetSelect( CATUnicodeString *iTabString, int iSize, int iNotify=1);
+
+			/**
+			 * Returns the line number of the selected line under the mouse when the end user displays the contextual menu.
+			 */
+        int     GetContextualLine();
+
+			/**
+			 * Returns the number of lines in the list.
+			 */
+        int  GetLineCount();
+
+			/**
+			 * Retrieves the contents of a line given its number.
+			 * @param oString
+			 * The returned contents of the specified line.
+			 * @param iRow
+			 * The number of the line.
+			 */
+        void GetLine( CATUnicodeString&amp; oString, int iRow);
+
+			/**
+			 * Sets or modifies the contents of a line given its number.
+                         * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method sets or modifies the contents of a 
+                         * line given its position. If the line was selected, see @href #SetSelect ,
+                         * the line is no more. 
+			 * @param iString
+			 * The contents of the specified line.
+			 * @param iIndex
+			 * The number of the line to add or modify. If iIndex is omitted or set to -1, the line is appended to the list .The first element of the list is 0;
+			 * @param iMode
+			 *   Two modes are available :
+			 *   &lt;dl&gt;
+			 *   &lt;dt&gt;&lt;tt&gt;CATDlgDataAdd&lt;/tt&gt;&lt;dd&gt; to add a line, which is the default, 
+			 *   &lt;dt&gt;&lt;tt&gt;CATDlgDataModify&lt;/tt&gt;&lt;dd&gt; to modify an existing line. 
+			 *   &lt;/dl&gt;
+			 */
+        int  SetLine( const CATUnicodeString&amp; iString, int iIndex=-1, CATULong iMode=CATDlgDataAdd );
+
+			/**
+			 * Sets or modifies the contents of one or several contigous lines given
+                         *  the number of the first line.
+                         * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method sets or modifies the contents of one or  
+                         * several contigous lines given the position of the first line. All the 
+                         * selected lines, see @href #SetSelect are no more. 
+			 * @param iString
+			 * The array of contents of the specified lines.
+			 * @param iNbLines
+			 * The number of lines to add or modify.
+			 * @param iIndex
+			 * The number of the first line to add or modify. If iIndex is omitted or set to -1, the lines are appended to the list.
+			 * @param iMode
+			 *   Two modes are available :
+			 *   &lt;dl&gt;
+			 *   &lt;dt&gt;&lt;tt&gt;CATDlgDataAdd&lt;/tt&gt;&lt;dd&gt; to add lines, which is the default, 
+			 *   &lt;dt&gt;&lt;tt&gt;CATDlgDataModify&lt;/tt&gt;&lt;dd&gt; to modify existing lines. 
+			 *   &lt;/dl&gt;
+			 */
+        int  SetLine( const CATUnicodeString *iString, int iNbLines, int iIndex=-1, CATULong iMode=CATDlgDataAdd );
+
+			/**
+			 * Deletes a line from its number.
+			 * @param iIndex
+			 * The number of the line to delete.
+			 */
+        void ClearLine( int iIndex );
+
+			/**
+			 * Deletes several lines from their numbers.
+			 * @param iRow
+			 * The array of int representing the numbers of the lines to delete.
+			 * @param iLines
+			 * The number of lines to delete.
+			 */
+        void ClearLine( int *iRow, int iLines );
+
+			/**
+			 * Deletes all lines.
+			 */
+        void ClearLine( );
+
+			/**
+			 * Returns the number of visible characters.
+			 */
+        int  GetVisibleTextWidth();
+
+			/**
+			 * Sets the number of visible characters.
+			 * @param iWidth
+			 * The number of visible characters to set.
+			 */
+        void SetVisibleTextWidth( int iWidth);
+
+			/**
+			 * Returns the visible text height.
+			 */
+        int  GetVisibleTextHeight();
+
+			/**
+			 * Sets the visible text height.
+			 * @param iHeight
+			 * The visible text height to set.
+			 */
+        void SetVisibleTextHeight( int iHeight);
+
+			/**
+			 * Returns the first visible line position.
+			 */
+        int  GetFirstLine();
+
+			/**
+			 * Sets the first visible line position.
+			 * @param iRow
+			 * The position to set for the first visible line.
+			 * @return the first visible line position.
+			 */
+        int  SetFirstLine( int iRow);
+
+			/**
+			 * Returns the first visible character position.
+			 */
+        int  GetFirstColumn();
+
+			/**
+			 * Sets the first visible character position.
+			 * @param iColumn
+			 * The position to set for the first visible character.
+			 * @return the first visible character position.
+			 */
+        int  SetFirstColumn( int iColumn);
+
+			/**
+			 * @nodoc
+			 */
+        int  GetItemRect(int, DRECT&amp;);
+
+			/**
+			 * Returns the event notification sent whenever a line is selected.
+			 * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This notification is sent when the end user select
+			 * an item of the list. So it means that the Dialog object must 
+			 * contain at least one item.
+			 */
+        CATNotification *GetListSelectNotification() const;
+
+			/**
+			 * Returns the event notification sent whenever a line is double clicked.
+			 */
+        CATNotification *GetListActivateNotification() const;
+
+			/**
+			 * @nodoc 
+			 * Returns the event notification sent whenever a list is clicked.
+			 */
+        CATNotification *GetListSingleClickNotification() const;
+
+			/**
+			 * @nodoc 
+			 * Returns the internal object.
+			 */
+        virtual l_CATDialog* GetLetterObject();
+
+			/**
+			 * @nodoc 
+			 * Resets internal object.
+			 */
+        virtual void ResetLetterObject();
+
+       /**
+        * @nodoc
+        * Requests the ClassName, IsA, and IsAKindOf methods to be created.
+        */
+        CATDeclareClass ;
+ private:
+
+			/**
+			 * @nodoc 
+			 * Address of the internal object.
+			 */
+        l_CATDlgSelectorList* _frameListChooser;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgScrollBar.html">← 上一页: CATDlgScrollBar.h</a></div>
+        <div><a href="CATDlgSeparator.html">下一页: CATDlgSeparator.h →</a></div>
+    </div>
+</body>
+</html>

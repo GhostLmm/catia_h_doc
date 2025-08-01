@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalCommands/PublicInterfaces/CATIUdfFeatureUser.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalCommands/PublicInterfaces/CATIUdfFeatureUser.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeatureSet.html">← 上一页: CATIUdfFeatureSet.h</a></div>
+        <div><a href="CATIUdfInstantiate.html">下一页: CATIUdfInstantiate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// -------------------------------------------------------------------
+// MCAD/SDS(c) Copyright Dassault Systemes 1999
+// -------------------------------------------------------------------
+#ifndef CATIUdfFeatureUser_H
+#define CATIUdfFeatureUser_H
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATUdfInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+ 
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATUdfInterfaces IID IID_CATIUdfFeatureUser ;
+#else
+extern &quot;C&quot; const IID IID_CATIUdfFeatureUser ;
+#endif
+
+//------------------------------------------------------------------
+/**
+  * Interface which enables advanced edition for UserFeature reference.
+  * &lt;b&gt;Role:&lt;/b&gt; Interface that enables edition for UserFeature reference.&lt;br&gt;
+  * This interface should be use only for modification of UserFeature reference.
+  * For instantiation, you should use &lt;b&gt; @href CATIUdfInstantiate &lt;/b&gt; interface.
+  * For instance edition, use &lt;b&gt; @href CATIUdfFeatureInstance &lt;/b&gt;.
+  */
+class ExportedByCATUdfInterfaces CATIUdfFeatureUser: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+   /**
+     * @nodoc 
+     * Read internal components.&lt;br&gt;
+     * This feature are the internal features, there are a copy of reference feature return by
+     * &lt;b&gt;CATIUdfFeature::GetReferenceComponents&lt;/b&gt;.All these feature are agregated&lt;br&gt;
+     * @param liste
+     *   liste of internal components
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT GetInternalComponents (CATLISTV(CATBaseUnknown_var)*&amp; liste) = 0;
+
+   /**
+     * @nodoc 
+     * Test if the userfeature is a black box.&lt;br&gt;
+     * If the userfeature is a black-box, you are not able to see or display its components.
+     * Default is black-box.
+     * &lt;br&gt;
+     * @param mode
+     *   1:this is a black box, 0: not a black box
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT IsBlackBox (int&amp; mode) = 0;
+
+   /**
+     * @nodoc 
+     * Modify the black box status.&lt;br&gt;
+     * If the userfeature is a black-box, you are not able to see or display its components.
+     * &lt;br&gt;
+     * @param mode
+     *   1:this is a black box, 0: not a black box
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT SetBlackBox (const int mode=1) = 0;
+
+   /**
+     * @nodoc 
+     * Allow the white box mode for user.&lt;br&gt;
+     * If the userfeature is a black-box, you are not able to see or display its components.&lt;br&gt;
+     * Only on reference, not on instance.&lt;br&gt;
+     * @param mode
+     *   1:white box is allowed, 0: always black box
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT AllowExplode (const int mode=1) = 0;
+
+   /**
+     * @nodoc 
+     * Test if white box is allowed.&lt;br&gt;
+     * If the userfeature is a black-box, you are not able to see or display its components.&lt;br&gt;
+     * Default is not allowed.&lt;br&gt;
+     * Only on reference, not on instance.&lt;br&gt;
+     * @param mode
+     *   1:white box is allowed, 0: always black box
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT IsExplodeAllowed (int&amp; mode) = 0;
+
+   /**
+     * @nodoc
+     *	  Lecture du parametres gerant les configurations
+     */
+   virtual HRESULT GetConfigurationParameter (CATISpecObject_var&amp; parmconfig) = 0;
+
+   /**
+     * @nodoc
+     *	  Nombre de configuration de sortie
+     */
+   virtual HRESULT GetConfigurationNumber (int&amp; num) = 0;
+
+   /**
+     * @nodoc
+     *	  Lecture de la configuration courante
+     *   (la numerotation va de 1 a GetConfigurationNumber)
+     */
+   virtual HRESULT GetCurrentConfiguration (int&amp; num) = 0;
+
+   /**
+     * @nodoc
+     *	  Activation de la configuration courante
+     *   (la numerotation va de 1 a GetConfigurationNumber)
+     */
+   virtual HRESULT SetCurrentConfiguration (const int num) = 0;
+
+   /**
+     * @nodoc
+     *	  Ajout d&#x27;une configuration
+     */
+   virtual HRESULT AddConfiguration (const CATUnicodeString&amp; name=&quot;&quot;) = 0;
+
+   /**
+     * @nodoc
+     *	  Suppression d&#x27;une configuration
+     *   (la numerotation va de 1 a GetConfigurationNumber)
+     */
+   virtual HRESULT RemoveConfiguration (const int num) = 0;
+
+   /**
+     * @nodoc
+     *   Nom d&#x27;une configuration
+     *   (la numerotation va de 1 a GetConfigurationNumber)
+     */
+   virtual HRESULT GetConfigurationName (const int ipos,
+                                         CATUnicodeString &amp;role) = 0;
+   /**
+     * @nodoc
+     *   Nom d&#x27;une configuration
+     *   (la numerotation va de 1 a GetConfigurationNumber)
+     */
+   virtual HRESULT SetConfigurationName (const int ipos,
+                                         const CATUnicodeString &amp;role) = 0;
+  /** 
+   * Retrieves the list of possible outputs.
+   *
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This list contains all the internal geometrical elements which
+   * can be used for the User Feature or external output result definition.&lt;br&gt;
+   *
+   * @param oInternals [out]
+   *   the list of possible outputs.
+   *
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise
+   *
+   */
+   virtual HRESULT GetPossibleOutputs (CATListValCATBaseUnknown_var*&amp; oInternals) = 0;
+
+   /**
+     * Retrieves the list of outputs.
+     * @param oInternals
+     *   The list of ouputs.
+	   * &lt;br&gt;This list containts the internal geometrical elements which have
+     * been used for the User Feature or external output result definition.&lt;br&gt;
+     * &lt;br&gt;This list contains elements which have been defined as output
+     * with the AddOuput method.&lt;br&gt;
+     * The size of the list is N.&lt;br&gt;
+     * Element 1 corresponds to the main result (User Feature result). &lt;br&gt; 
+     * Element 2..,N corresponds to the external outputs result. 
+     */
+   virtual HRESULT GetOutputs (CATListValCATBaseUnknown_var*&amp; oInternals) = 0;
+
+  /** 
+   * Creates a new external output.
+   *
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The result of the output is given by iInternal.&lt;br&gt;
+   *
+   * @param iInternal [in]
+   *   an internal element.
+   *
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise
+   *
+   */
+   virtual HRESULT AddOutput (const CATISpecObject_var&amp; iInternal) = 0;
+
+  /** 
+   * Removes an external output.
+   *
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This output was initially created using AddOutput(iInternal).
+   *
+   * @param iInternal [in]
+   *   an internal element.
+   *
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise
+   *
+   */
+   virtual HRESULT RemoveOutput(const CATISpecObject_var&amp; iInternal) = 0;
+
+  /** 
+   * Replaces the result of an output.
+   *
+   * @param iPos [in]
+   *   iPos=1 corresponds to the main result (User Feature result). &lt;br&gt; 
+   *   iPos=2..,N corresponds to the external outputs result. &lt;br&gt;
+   * @param iInternal [in]
+   *   iInternal is the internal element retrieved with GetPossibleOutputs method
+   *
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise.
+   *
+   */
+   virtual HRESULT ReplaceOutput(const int iPos,
+                                 const CATISpecObject_var&amp; iInternal) = 0;
+
+    /** 
+     * Retrieves the role of an output.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The role is the name of the output in the tree.
+     *
+     * @param iPos [in]
+     *   The parameter role &lt;br&gt;
+     *   iPos=1 corresponds to the User Feature. Always return &quot;MainResult&quot; &lt;br&gt; 
+     *   iPos=2..,N corresponds to the external outputs. &lt;br&gt;
+     * @param oRole [out]
+     *   The role of the output.
+     *
+     * @return
+     *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise
+     *
+     */
+     virtual HRESULT GetOutputRole (const int iPos,
+                                    CATUnicodeString &amp;oRole) = 0;
+ 
+  /** 
+   * Sets the role of an output
+   *
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The role is the name of the output in the tree
+   * The role of the User Feature can not be modified.
+   *
+   * @param iPos [in]
+   *   1..N. N is the size of the list retrieve with GetOutputs method
+   *   iPos=1 corresponds to the User Feature. Always fails.&lt;br&gt; 
+   *   iPos=2..,N corresponds to the external outputs. &lt;br&gt;
+   *
+   * @param iRole [in]
+   *   the role of the output.&lt;br&gt; 
+   *   The role of the User Feature can not be modified. &lt;br&gt;
+   *
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, E_FAIL otherwise
+   *
+   */
+   virtual HRESULT SetOutputRole (const int iPos,
+                                  const CATUnicodeString &amp;iRole) = 0;
+    /**
+     * @nodoc
+     * Retrieve the list of external outputs.&lt;br&gt;
+     * The external ouputs are the geometrical elements
+     * which are under the UserFeature in the tree.&lt;br&gt;
+     * The size of the list is N-1. N is the total number of outputs.&lt;br&gt;
+     * This list does not contain the main output which is the User Feature.&lt;br&gt;
+     * @param oExternalsOutput
+     *   the list of external outputs.
+     * @return
+     *   S_OK if OK else E_FAIL
+     */
+   virtual HRESULT GetExternalOutputs (CATListValCATBaseUnknown_var* &amp; oExternalsOutput) = 0;
+   
+   /**
+     * @nodoc
+     *   Choix de l&#x27;input pour l&#x27;inactive
+     *   inumoutput : numero de sortie a inactiver
+     *   ipos       : numero d&#x27;input choisi (la numerotation va de 1 a GetInputsNumber)
+     */
+   virtual HRESULT SetInactiveInput (const int inumoutput,
+                                     const int ipos) = 0;
+   /**
+     * @nodoc
+     *   Lecture de l&#x27;input pour l&#x27;inactive
+     *   inumoutput : numero de sortie a inactiver
+     *   ipos       : numero d&#x27;input choisi (la numerotation va de 1 a GetInputsNumber)
+     */
+   virtual HRESULT GetInactiveInput (const int inumoutput,
+                                     int&amp; ipos) = 0;
+   /**
+     * @nodoc
+     *   Lecture de l&#x27;input pour l&#x27;inactive
+     *   inumoutput : numero de sortie a inactiver
+     *   ipos       : numero d&#x27;input choisi (la numerotation va de 1 a GetInputsNumber)
+     */
+   virtual HRESULT GetInactiveInput (const CATISpecObject_var&amp; output,
+                                     CATISpecObject_var&amp; neutralspec) = 0;
+  
+   /**
+     * Sets the type of the user feature.
+     * @param iType
+     *   The type of the User Feature
+   */
+   virtual HRESULT SetType(const CATUnicodeString&amp; iType) = 0;
+
+  /**
+   * Gets the type of the user feature.
+   * @param oType
+   *   The type of the User Feature   
+   */
+   virtual HRESULT GetType(CATUnicodeString&amp; oType) = 0; 
+
+   /**
+     * @nodoc
+     *	  Synchronisation
+     */
+   virtual HRESULT Synchronize (const CATISpecObject_var&amp; startup) = 0;
+
+    /**
+     * @nodoc
+     *	  Synchronisation de tous les instances du document
+     */
+   virtual HRESULT SynchronizeAllInstance (CATListValCATISpecObject_var*&amp; listobj) = 0;
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler (CATIUdfFeatureUser, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeatureSet.html">← 上一页: CATIUdfFeatureSet.h</a></div>
+        <div><a href="CATIUdfInstantiate.html">下一页: CATIUdfInstantiate.h →</a></div>
+    </div>
+</body>
+</html>

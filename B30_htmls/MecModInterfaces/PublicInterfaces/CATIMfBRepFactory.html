@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMfBRepFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMfBRepFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfBRep.html">← 上一页: CATIMfBRep.h</a></div>
+        <div><a href="CATIMfBiDimResult.html">下一页: CATIMfBiDimResult.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMfBRepFactory_h
+#define CATIMfBRepFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATMfBRepDefs.h&quot;
+#include &quot;CATMfBRepInternalDefs.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+
+class CATIBRepAccess_var;
+class CATIRSur_var;
+class CATIREdge_var;
+class CATICharacteristicAxis_var;
+class CATICharacteristicExtremity_var;
+class CATICharacteristicPlanarSubElement_var;
+class CATIMfBRep_var;
+class CATIFVertex_var;
+class CATIMfVolume_var;
+class CATIMfDomain_var;
+class CATIMfFsur_var;
+class CATIMfRsur_var;
+class CATIMfFedge_var;
+class CATIMfRedge_var;
+class CATIMfFvertex_var;
+class CATIMfAxis_var;
+class CATIMfExtremity_var;
+class CATIMfPlanarSubElement_var;
+class CATIMfBRepFeature_var;
+class CATIMfPointOnEdge_var;
+class CATIMfBoundingPlane_var;
+class CATMathPoint;
+class CATNamingReference;
+class CATIMfBorderFvertex_var;
+class CATIMfWireFvertex_var;
+class CATIMfBorderRedge_var;
+class CATIMfWireRedge_var;
+class CATIBorderFVertex_var;
+class CATIWireFVertex_var;
+class CATIBorderREdge_var;
+class CATIWireREdge_var;
+class CATIFVertexAccess_var;
+class CATISpecObject_var;
+class CATIMfSuperBRepFeature_var;
+class CATIMfPropagation_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMfBRepFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIMfBRepFactory;
+#endif
+
+/**
+ * Interface to create BRep features.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * A BRep feature can be created from symbolic information:
+ * the source shape feature &lt;tt&gt;iPrint&lt;/tt&gt;, 
+ * a key word &lt;tt&gt;iKey&lt;/tt&gt; and, if needed, 
+ * a profile element &lt;tt&gt;iProfileElement&lt;/tt&gt; of a sketch.
+ * &lt;br&gt;For example, the face BRep feature associated with the lateral face of Pad.3 
+ * extruded from Line.7 is created with 
+ * &lt;tt&gt;iPrint=Pad.3&lt;/tt&gt;, 
+ * &lt;tt&gt;iKey=MfKeyExtrudedFrom&lt;/tt&gt;,
+ * &lt;tt&gt;iProfileElement=Line.7&lt;/tt&gt;.
+ * &lt;br&gt;Another example, the face BRep feature associated with the top face of Pad.6 is created with
+ * &lt;tt&gt;iPrint=Pad.6&lt;/tt&gt;,
+ * &lt;tt&gt;iKey=MfKeyTop&lt;/tt&gt;,
+ * &lt;tt&gt;iProfileElement=NULL_var&lt;/tt&gt;.
+ * &lt;br&gt;The edge BRep feature is specified with symbolic information related to its two adjacent faces.
+ * &lt;br&gt;The vertex BRep feature is specified with symbolic information related to all its adjacent faces.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Key words are:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfKeyNone&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfKeyTop&lt;/tt&gt; available for pad, pocket, rib, slot, stiffener,
+ * &lt;li&gt;&lt;tt&gt;MfKeyBottom&lt;/tt&gt; available for pad, pocket, rib, slot, stiffener,
+ * &lt;li&gt;&lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt; available for pad, pocket, rib, slot, stiffener, shaft, groove,
+ * &lt;li&gt;&lt;tt&gt;MfKeyStart&lt;/tt&gt; available for shaft, groove,
+ * &lt;li&gt;&lt;tt&gt;MfKeyEnd&lt;/tt&gt; available for shaft, groove,
+ * &lt;li&gt;&lt;tt&gt;MfKeyOutsideThickness&lt;/tt&gt; available for shell,
+ * &lt;li&gt;&lt;tt&gt;MfKeyInsideThickness&lt;/tt&gt; available for shell.&lt;/ul&gt;
+ * @example
+ * &lt;pre&gt;
+ * +-----------+-----------------------------------------------------------+
+ * ! Output    !                       Input                               !   
+ * +-----------+-----------------+------------------------+----------------+
+ * ! BRep type ! print           ! key                    !  profil        !   
+ * +===========+=================+========================+================+
+ * ! Face      ! Pad.1           ! MfKeyTop               !  NULL          !  
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Pad.1           ! MfKeyTop               !  NULL          !  
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Pad.1           ! MfKeyExtrudedFrom      !  Line.1        !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Revol.1         ! MfKeyExtrudedFrom      !  Line.1        !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Revol.1         ! MfKeyEnd               !  Line.1        !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Revol.1         ! MfKeyStart             !  Line.1        !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Sweep.1         ! MfKeyExtrudedFrom      !  Line.1        !
+ * !           ! Sweep.1         ! MfKeyExtrudedFrom      !  Line.2        !
+ * !           +-----------------+------------------------+----------------+   
+ * !           ! Fillet.1        ! MfKeyNone              !  NULL          !
+ * !           ! Edge.1          ! MfKeyNone              !  NULL          !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Draft.1         ! MfKeyNone              !  NULL          !
+ * !           ! Face.1          ! MfKeyNone              !  NULL          !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Fillet.1        ! MfKeyNone              !  NULL          !
+ * !           ! Face.1          ! MfKeyNone              !  NULL          !
+ * !           ! Face.2          ! MfKeyNone              !  NULL          !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Fillet.1        ! MfKeyNone              !  NULL          !
+ * !           ! Face.1          ! MfKeyNone              !  NULL          !
+ * !           ! Face.2          ! MfKeyNone              !  NULL          !
+ * !           ! FaceToRemove.3  ! MfKeyNone              !  NULL          !
+ * !           +-----------------+------------------------+----------------+         
+ * !           ! Shell.1         ! MfKeyNone              !  NULL          !
+ * !           ! face.1          ! MfKeyInsideThickness   !  NULL          !
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Shell.1         ! MfKeyNone              !  NULL          !
+ * !           ! face.1          ! MfKeyOutsideThickness  !  NULL          !
+ * +-----------+-----------------+------------------------+----------------+
+ * ! Edge      ! Pad.1           ! MfKeyTop               !  NULL          !  
+ * !           ! Pad.1           ! MfKeyExtrudedFrom      !  Line.1        !  
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Pad.1           ! MfKeyBottom            !  NULL          !  
+ * !           ! Pad.2           ! MfKeyExtrudedFrom      !  Line.3        !  
+ * +-----------+-----------------+------------------------+----------------+
+ * ! Vertex    ! Pad.1           ! MfKeyTop               !  NULL          !  
+ * !           ! Pad.1           ! MfKeyExtrudedFrom      !  Line.3        !  
+ * !           ! Pad.1           ! MfKeyExtrudedFrom      !  Line.4        !  
+ * !           +-----------------+------------------------+----------------+
+ * !           ! Pad.1           ! MfKeyTop               !  NULL          !  
+ * !           ! Pad.2           ! MfKeyBottom            !  NULL          !  
+ * !           ! Pad.3           ! MfKeyExtrudedFrom      !  Line.4        !  
+ * +-----------+-----------------+------------------------+----------------+
+ * &lt;/pre&gt;
+ * @see CATIFeaturize
+ *
+ */
+class ExportedByMecModItfCPP CATIMfBRepFactory : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public: 
+
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfFsur_var CreateMfFsur(const CATIRSur_var &amp;rsur,
+                                      const CATIContainer_var &amp;WorkCont=NULL_var,
+                                      const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATIRSur_var&amp;rsur,
+                                             const CATISpecObject_var &amp;feat=NULL_var,
+                                             const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                             const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfFedge_var CreateMfFedge(const CATIREdge_var &amp;redge,
+                                        const CATIContainer_var &amp;WorkCont=NULL_var,
+                                        const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfBRepFeature_var CreateMfRedge(const CATIREdge_var &amp;redge,
+                                              const CATISpecObject_var &amp;feat=NULL_var,
+                                              const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                              const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfFvertex_var CreateMfFvertex(const CATIFVertex_var &amp;vertex,
+                                            const CATIContainer_var &amp;WorkCont=NULL_var,
+                                            const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfBorderFvertex_var CreateMfBorderFvertex(const CATIBorderFVertex_var &amp;borderFVertex,
+                                                        const CATMfFeaturizeMode mode=0) = 0;
+
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfWireFvertex_var CreateMfWireFvertex(const CATIWireFVertex_var &amp;wireFVertex,
+                                                    const CATMfFeaturizeMode mode=0) = 0;
+
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfBorderRedge_var CreateMfBorderRedge(const CATIBorderREdge_var &amp;borderRedge,
+                                                    const CATISpecObject_var  &amp;feat=NULL_var,
+                                                    const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfWireRedge_var CreateMfWireRedge(const CATIWireREdge_var &amp;wireREdge,
+                                                const CATISpecObject_var &amp;feat=NULL_var,
+                                                const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfAxis_var CreateMfFAxis(const CATICharacteristicAxis_var &amp;axis ,
+                                       const CATIContainer_var &amp;WorkCont=NULL_var,
+                                       const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfAxis_var CreateMfRAxis(const CATICharacteristicAxis_var &amp;axis,
+                                       const CATIContainer_var &amp;WorkCont=NULL_var,
+                                       const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfExtremity_var CreateMfFExtremity(const CATICharacteristicExtremity_var &amp;Extremity ,
+                                                 const CATIContainer_var &amp;WorkCont=NULL_var,
+                                                 const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfExtremity_var CreateMfRExtremity(const CATICharacteristicExtremity_var &amp;Extremity ,
+                                                 const CATIContainer_var &amp;WorkCont=NULL_var,
+                                                 const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfPlanarSubElement_var CreateMfFPlanarSubElement(const CATICharacteristicPlanarSubElement_var &amp;PlanarSubEle,
+                                                               const CATIContainer_var &amp;WorkCont=NULL_var,
+                                                               const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */
+  virtual CATIMfPlanarSubElement_var CreateMfRPlanarSubElement(const CATICharacteristicPlanarSubElement_var &amp;PlanarSubEle,
+                                                               const CATIContainer_var &amp;WorkCont=NULL_var,
+                                                               const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfBRep_var CreateMfBRep(CATNamingReference *MfJournalingStructure,
+                                      const CATBaseUnknown_var &amp;Support=NULL_var) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfFsur_var CopyMfFsur(const CATIMfBRep_var &amp;brep) = 0;
+
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfRsur_var CopyMfRsur(const CATIMfBRep_var &amp;brep,
+                                    const CATBaseUnknown_var &amp;Support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfFedge_var CopyMfFedge(const CATIMfBRep_var &amp;brep) = 0;
+
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfRedge_var CopyMfRedge(const CATIMfBRep_var &amp;brep,
+                                      const CATBaseUnknown_var &amp;Support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfFvertex_var CopyMfFvertex(const CATIMfBRep_var &amp;brep) = 0;
+
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfBorderRedge_var CopyMfBorderRedge(const CATIMfBRep_var &amp;brep,
+                                                  const CATBaseUnknown_var &amp;Support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfBorderFvertex_var CopyMfBorderFvertex(const CATIMfBRep_var &amp;brep) = 0;
+
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfWireRedge_var CopyMfWireRedge(const CATIMfBRep_var &amp;brep,
+                                              const CATBaseUnknown_var &amp;Support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize with MfDuplicate.
+ */
+  virtual CATIMfWireFvertex_var CopyMfWireFvertex(const CATIMfBRep_var &amp;brep) = 0;
+  
+/**
+ * Creates a face, edge or vertex functional BRep feature from symbolic information.
+ * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;The three first list must have the same size.
+ * @param iPrint
+ * List of source shape features.
+ * @param iKeys
+ * List of key words.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyTop&lt;/tt&gt;, &lt;tt&gt;MfKeyBottom&lt;/tt&gt;, &lt;tt&gt;MfKeyStart&lt;/tt&gt;, &lt;tt&gt;MfKeyEnd&lt;/tt&gt;.
+ * @param iProfileElements
+ * List of profile elements.
+ * @param iSupport
+ * Support.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */ 
+  virtual CATIMfBRep_var CreateMfFBRep(CATLISTV(CATISpecObject_var) &amp;iPrint, 
+                                       CATListOfCATUnicodeString    &amp;iKeys,
+                                       CATLISTV(CATISpecObject_var) &amp;iProfileElements,
+                                       const CATISpecObject_var     &amp;iSupport,
+                                       const CATIContainer_var      &amp;iWorkCont=NULL_var) = 0;
+/**
+ * Creates a face, edge or vertex relimited BRep feature from symbolic information.
+ * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;The three first list must have the same size.
+ * @param iPrint
+ * List of source shape features.
+ * @param iKeys
+ * List of key words.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyTop&lt;/tt&gt;, &lt;tt&gt;MfKeyBottom&lt;/tt&gt;, &lt;tt&gt;MfKeyStart&lt;/tt&gt;, &lt;tt&gt;MfKeyEnd&lt;/tt&gt;.
+ * @param iElementsDeProfil
+ * List of profile elements.
+ * @param iSupport
+ * Support.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */
+  virtual CATIMfBRep_var CreateMfRBRep(CATLISTV(CATISpecObject_var) &amp;iPrint, 
+                                       CATListOfCATUnicodeString    &amp;iKeys,
+                                       CATLISTV(CATISpecObject_var) &amp;iElementsDeProfil,
+                                       const CATISpecObject_var     &amp;iSupport,
+                                       const CATIContainer_var      &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iPrint
+ * Source shape feature.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyTop&lt;/tt&gt;, &lt;tt&gt;MfKeyBottom&lt;/tt&gt;, &lt;tt&gt;MfKeyStart&lt;/tt&gt;, &lt;tt&gt;MfKeyEnd&lt;/tt&gt;.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iPrint,
+                                      const CATUnicodeString   &amp;iKey, 
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Source shape feature is undefined when the sketch is shared.
+ */
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;ProfileElement,
+                                      const CATIContainer_var  &amp;WorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iPrint
+ * Source shape feature.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt;.
+ * @param iProfileElement
+ * Profile element.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */  
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iPrint, 
+                                      const CATUnicodeString   &amp;iKey, 
+                                      const CATISpecObject_var &amp;iProfileElement, 
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iPrint
+ * Source shape feature (a rib or a slot) built on two sketches.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt;.
+ * @param iProfileElement1
+ * Profile element in the first sketch.
+ * @param iProfileElement2
+ * Profile element in the second sketch.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iPrint, 
+                                      const CATUnicodeString   &amp;iKey, 
+                                      const CATISpecObject_var &amp;iProfileElement1, 
+                                      const CATISpecObject_var &amp;iProfileElement2, 
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iPrint 
+ * Source shape feature: an edge fillet, a chamfer, a draft angle or a thickness.
+ * @param iMfBRep
+ * BRep feature defining the source shape feature: an edge or a face.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iFeature,
+                                      const CATIMfBRep_var     &amp;iMfBRep,
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iFeature 
+ * Source shape feature: a face-face fillet.
+ * @param iMfBRep1
+ * First face of fillet.
+ * @param iMfBRep2
+ * Second face of fillet.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */  
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iFeature,
+                                      const CATIMfBRep_var     &amp;iMfBRep1,
+                                      const CATIMfBRep_var     &amp;iMfBRep2,
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iFeature 
+ * Source shape feature: a tritangent fillet.
+ * @param iMfBRep1
+ * First face of fillet.
+ * @param iMfBRep2
+ * Second face of fillet.
+ * @param iMfBRep3
+ * Removed face of fillet.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */  
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iFeature,
+                                      const CATIMfBRep_var     &amp;iMfBRep1,
+                                      const CATIMfBRep_var     &amp;iMfBRep2,
+                                      const CATIMfBRep_var     &amp;iMfBRep3,
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize. 
+ * Creates a face functional BRep feature from symbolic information.
+ * @param iFeature
+ * Source shape feature: a shell.
+ * @param iMfBRep
+ * Face BRep feature on the solid before the shell.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyOutsideThickness&lt;/tt&gt;, &lt;tt&gt;MfKeyInsideThickness&lt;/tt&gt;.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var &amp;iFeature,
+                                      const CATIMfBRep_var     &amp;iMfBRep,
+                                      const CATUnicodeString   &amp;iKey, 
+                                      const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfFBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates an edge functional BRep feature from symbolic information.
+ * @param iPrint1 
+ * First source shape feature.
+ * @param iKey1
+ * Key word.
+ * @param iProfileElement1
+ * Profile element in the sketch of &lt;tt&gt;iPrint1&lt;/tt&gt;.
+ * @param iPrint2 
+ * Second source shape feature.
+ * @param iKey2
+ * Key word.
+ * @param iProfileElement2
+ * Profile element in the sketch of &lt;tt&gt;iPrint2&lt;/tt&gt;.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */    
+  virtual CATIMfFedge_var CreateMfFedge(const CATISpecObject_var &amp;iPrint1,
+                                        const CATUnicodeString   &amp;iKey1,
+                                        const CATISpecObject_var &amp;iProfileElement1,
+                                        const CATISpecObject_var &amp;iPrint2,
+                                        const CATUnicodeString   &amp;iKey2,
+                                        const CATISpecObject_var &amp;iProfileElement2,
+                                        const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face relimited BRep feature from symbolic information.
+ * Support is implicit.
+ * @param iPrint
+ * Source shape feature.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyTop&lt;/tt&gt;, &lt;tt&gt;MfKeyBottom&lt;/tt&gt;, &lt;tt&gt;MfKeyStart&lt;/tt&gt;, &lt;tt&gt;MfKeyEnd&lt;/tt&gt;.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iPrint,
+                                             const CATUnicodeString   &amp;iKey,
+                                             const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Source shape feature is undefined when the sketch is shared.
+ * OLD METHOD, DO NOT USE
+ * Use instead : 
+ * virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iPrint, 
+ *                                            const CATUnicodeString   &amp;iKey,
+ *                                            const CATISpecObject_var &amp;iProfileElement,
+ *                                            const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+ */  
+  virtual CATIMfRsur_var CreateMfRsur(const CATISpecObject_var &amp;iProfileElement,
+                                      const CATIContainer_var  &amp;iWorkCont) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face relimited BRep feature from symbolic information.
+ * Support is implicit.
+ * @param iPrint
+ * Source shape feature.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt;.
+ * @param iProfileElement
+ * Profile element.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */  
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iPrint, 
+                                             const CATUnicodeString   &amp;iKey,
+                                             const CATISpecObject_var &amp;iProfileElement,
+                                             const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face relimited BRep feature from symbolic information.
+ * Support is implicit.
+ * @param iPrint 
+ * Source shape feature: an edge fillet, a chamfer, a draft angle or a thickness.
+ * @param iMfBRep
+ * BRep feature defining the source shape feature: an edge or a face.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iFeature,
+                                             const CATIMfBRep_var     &amp;iMfBRep,
+                                             const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates an edge relimited BRep feature from symbolic information.
+ * Support is implicit.
+ * @param iPrint1 
+ * First source shape feature.
+ * @param iKey1
+ * Key word.
+ * @param iProfileElement1
+ * Profile element in the sketch of &lt;tt&gt;iPrint1&lt;/tt&gt;.
+ * @param iPrint2 
+ * Second source shape feature.
+ * @param iKey2
+ * Key word.
+ * @param iProfileElement2
+ * Profile element in the sketch of &lt;tt&gt;iPrint2&lt;/tt&gt;.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */ 
+  virtual CATIMfBRepFeature_var CreateMfRedge(const CATISpecObject_var &amp;iPrint1,
+                                              const CATUnicodeString   &amp;iKey1,
+                                              const CATISpecObject_var &amp;iProfileElement1,
+                                              const CATISpecObject_var &amp;iPrint2,
+                                              const CATUnicodeString   &amp;iKey2,
+                                              const CATISpecObject_var &amp;iProfileElement2,
+                                              const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face relimited BRep feature from symbolic information.
+ * Support is an input parameter.
+ * @param iPrint
+ * Source shape feature.
+ * @param iKey
+ * Key word.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt;.
+ * @param iProfileElement
+ * Profile element.
+ * @param iSupport
+ * Support.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */ 
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iPrint,
+                                             const CATUnicodeString   &amp;iKey,
+                                             const CATISpecObject_var &amp;iProfileElement,
+                                             const CATISpecObject_var &amp;iSupport,
+                                             const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates a face relimited BRep feature from symbolic information.
+ * Support is an input parameter.
+ * @param iPrint 
+ * Source shape feature: an edge fillet, a chamfer, a draft angle or a thickness.
+ * @param iMfBRep
+ * BRep feature defining the source shape feature: an edge or a face.
+ * @param iSupport
+ * Support.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */    
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATISpecObject_var &amp;iFeature,
+                                             const CATIMfBRep_var     &amp;iMfBRep,
+                                             const CATISpecObject_var &amp;iSupport,
+                                             const CATIContainer_var  &amp;iWorkCont) = 0;
+/**
+ * @nodoc
+ * Deprecated: use CreateMfRBRep method or GetBReps of CATIMfGeometryAccess and FeaturizeR of CATIFeaturize.
+ * Creates an edge relimited BRep feature from symbolic information.
+ * Support is an input parameter.
+ * @param iPrint1 
+ * First source shape feature.
+ * @param iKey1
+ * Key word.
+ * @param iProfileElement1
+ * Profile element in the sketch of &lt;tt&gt;iPrint1&lt;/tt&gt;.
+ * @param iPrint2 
+ * Second source shape feature.
+ * @param iKey2
+ * Key word.
+ * @param iProfileElement2
+ * Profile element in the sketch of &lt;tt&gt;iPrint2&lt;/tt&gt;.
+ * @param iSupport
+ * Support.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfBRepFeature_var CreateMfRedge(const CATISpecObject_var &amp;iPrint1,
+                                              const CATUnicodeString   &amp;iKey1,
+                                              const CATISpecObject_var &amp;iProfileElement1,
+                                              const CATISpecObject_var &amp;iPrint2,
+                                              const CATUnicodeString   &amp;iKey2,
+                                              const CATISpecObject_var &amp;iProfileElement2,
+                                              const CATISpecObject_var &amp;iSupport,
+                                              const CATIContainer_var  &amp;iWorkCont) = 0;
+/**
+ * @nodoc
+ * Old method.
+ */  
+  virtual CATIMfFsur_var CreateMfFsur(const CATISpecObject_var Print, 
+                                      const CATUnicodeString   Key, 
+                                      const CATUnicodeString   AliasDProfileElement, 
+                                      const CATIContainer_var  WorkCont) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfVolume_var CreateMfVolume (const CATUnicodeString   &amp;etiquette,
+                                             const CATISpecObject_var &amp;feat,
+                                             const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                             const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfDomain_var CreateMfDomain (const CATUnicodeString   &amp;etiquette,
+                                             const CATISpecObject_var &amp;feat,
+                                             const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                             const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfFsur_var CreateMfFsur(const CATUnicodeString   &amp;etiquette,
+                                      const CATISpecObject_var &amp;feat,
+                                      const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                      const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfBRepFeature_var CreateMfRsur(const CATUnicodeString   &amp;etiquette,
+                                             const CATISpecObject_var &amp;feat,
+                                             const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                             const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfFedge_var CreateMfFedge(const CATUnicodeString   &amp;etiquette,
+                                        const CATISpecObject_var &amp;feat,
+                                        const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                        const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfBRepFeature_var CreateMfRedge (const CATUnicodeString   &amp;etiquette,
+                                               const CATISpecObject_var &amp;feat,
+                                               const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                               const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfFvertex_var CreateMfFvertex(const CATUnicodeString   &amp;etiquette,
+                                            const CATISpecObject_var &amp;feat,
+                                            const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                            const CATMfFeaturizeMode mode=0) = 0;
+  
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfBorderRedge_var CreateMfBorderRedge (const CATUnicodeString   &amp;etiquette,
+                                                     const CATISpecObject_var &amp;feat,
+                                                     const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                                     const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfBorderFvertex_var CreateMfBorderFvertex (const CATUnicodeString   &amp;etiquette,
+                                                         const CATISpecObject_var &amp;feat,
+                                                         const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                                         const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfWireRedge_var CreateMfWireRedge (const CATUnicodeString   &amp;etiquette,
+                                                 const CATISpecObject_var &amp;feat,
+                                                 const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                                 const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfWireFvertex_var CreateMfWireFvertex (const CATUnicodeString   &amp;etiquette,
+                                                     const CATISpecObject_var &amp;feat,
+                                                     const CATIContainer_var  &amp;WorkCont=NULL_var,
+                                                     const CATMfFeaturizeMode mode=0) = 0;
+/**
+ * @nodoc
+ * Next version.
+ */
+//  virtual CATIMfRedge_var CopyMfIntersectionRedge(const CATIMfRedge_var&amp; brep,
+//                                                  const CATBaseUnknown_var &amp;Support) = 0;
+/**
+ * Creates a point on edge BRep feature.
+ * @param iEdge
+ * Edge BRep feature.
+ * @param iRatio
+ * Ratio.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfPointOnEdge_var CreateMfPointOnEdge(const CATISpecObject_var&amp; iEdge, 
+                                                    const double              iRatio, 
+                                                    const CATIContainer_var&amp;  iWorkCont=NULL_var) = 0;
+/**
+ * Creates a point on edge BRep feature.
+ * @param iEdge
+ * Edge BRep feature.
+ * @param iPoint
+ * Point.
+ * @param iWorkCont
+ * BRep feature is created in &lt;tt&gt;iWorkCont&lt;/tt&gt; container.
+ */   
+  virtual CATIMfPointOnEdge_var CreateMfPointOnEdge(const CATISpecObject_var &amp;iEdge, 
+                                                    const CATMathPoint       &amp;iPoint, 
+                                                    const CATIContainer_var  &amp;iWorkCont=NULL_var) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */  
+  virtual CATIMfPointOnEdge_var CreateMfPointOnEdge(const CATNamingReference* iNamingReference, 
+                                                    const CATBaseUnknown_var&amp; iSupport=NULL_var) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */ 
+  virtual CATIMfBoundingPlane_var CreateMfBoundingPlane(const CATISpecObject_var &amp;Feature, 
+                                                        const CATUnicodeString   &amp;Type, 
+                                                        const CATIContainer_var  &amp;WorkCont) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ */
+  virtual CATIMfSuperBRepFeature_var CreateMfSuperBRepFeature(const CATIMfBRep_var&amp;        brep,
+                                                              const CATIMfPropagation_var&amp; Propagation) = 0;
+/**
+ * @nodoc
+ * Internal use.
+ * CATMfSuperBRepType = MfWithoutSecoursInit | MfWithAutomaticSecoursInits | MfWithAutomaticSecondaryInits| MfMonoBody | MfMultiBody
+ * 
+ * MfWithAutomaticSecoursInits: &quot;help inits&quot; are computed from BRep resolution and propagation at creation time.
+ * 
+ * MfWithAutomaticSecondaryInits: Automatic use of &quot;help inits&quot; in case of first init vanish.
+ *
+ * MfMonoBody: only one scope on the BRep feature, resolution returns all the cells.
+ *  
+ * MfMultiBody: one resolution scope on the BRep feature, one resolution scope with propagation on the super BRep feature.
+ * 
+ * CATIMfBRep: simple resolution.
+ * 
+ * CATIMfSuperBRep: simple resolution.    
+ */
+  virtual CATIMfSuperBRepFeature_var CreateMfSuperBRepFeature(const CATIMfBRep_var         &amp;brep,
+                                                              const CATIMfPropagation_var  &amp;Propagation,
+                                                              const CATMfSuperBRepType  SuperBReptype) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfVolume_var CreateMfVolume(const CATIBRepAccess_var &amp;vol,
+                                      const CATMfFeaturizeMode mode,
+                                      const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfDomain_var CreateMfDomain(const CATIBRepAccess_var &amp;dom,
+                                      const CATMfFeaturizeMode mode,
+                                      const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfFsur_var CreateMfFsur(const CATIBRepAccess_var &amp;rsur,
+                                      const CATMfFeaturizeMode mode,
+                                      const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfRsur_var CreateMfRsur(const CATIBRepAccess_var &amp;rsur,
+                                      const CATMfFeaturizeMode mode,
+                                      const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfFedge_var CreateMfFedge(const CATIBRepAccess_var &amp;redge,
+                                        const CATMfFeaturizeMode mode,
+                                        const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfRedge_var CreateMfRedge(const CATIBRepAccess_var &amp;redge,
+                                        const CATMfFeaturizeMode mode,
+                                        const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfFvertex_var CreateMfFvertex(const CATIBRepAccess_var &amp;vertex,
+                                            const CATMfFeaturizeMode mode,
+                                            const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfBorderFvertex_var CreateMfBorderFvertex(const CATIBRepAccess_var &amp;borderFVertex,
+                                                        const CATMfFeaturizeMode mode,
+                                                        const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfWireFvertex_var CreateMfWireFvertex(const CATIBRepAccess_var &amp;wireFVertex,
+                                                    const CATMfFeaturizeMode mode,
+                                                    const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfBorderRedge_var CreateMfBorderRedge(const CATIBRepAccess_var &amp;borderRedge,
+                                                    const CATMfFeaturizeMode mode,
+                                                    const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfWireRedge_var CreateMfWireRedge(const CATIBRepAccess_var  &amp;wireREdge,
+                                                const CATMfFeaturizeMode mode,
+                                                const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfAxis_var CreateMfFAxis(const CATIBRepAccess_var &amp;axis ,
+                                       const CATMfFeaturizeMode mode,
+                                       const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfAxis_var CreateMfRAxis(const CATIBRepAccess_var &amp;axis,
+                                       const CATMfFeaturizeMode mode,
+                                       const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfExtremity_var CreateMfFExtremity(const CATIBRepAccess_var &amp;Extremity ,
+                                                 const CATMfFeaturizeMode mode,
+                                                 const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfExtremity_var CreateMfRExtremity(const CATIBRepAccess_var &amp;Extremity ,
+                                                 const CATMfFeaturizeMode mode,
+                                                 const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfPlanarSubElement_var CreateMfFPlanarSubElement(const CATIBRepAccess_var &amp;PlanarSubElement ,
+                                                               const CATMfFeaturizeMode mode,
+                                                               const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. Use CATIFeaturize.
+ */
+  virtual CATIMfPlanarSubElement_var CreateMfRPlanarSubElement(const CATIBRepAccess_var &amp;PlanarSubElement ,
+                                                               const CATMfFeaturizeMode mode,
+                                                               const CATBaseUnknown_var &amp;support) = 0;
+/**
+ * @nodoc
+ * Internal use. 
+ */
+  virtual CATIMfPointOnEdge_var CreateMfPointOnEdge(const CATISpecObject_var&amp; Edge, 
+                                                   const CATIFVertexAccess_var&amp; vertex)  = 0;
+/**
+ * Creates an intersection edge BRep Feature.
+ * @param iSelectingObject
+ * The possible values are: &lt;ul&gt;
+ * &lt;li&gt; NULL_var for an empty intersection edge which afterwards must be set with appropriate attributes using @href CATIMfIntersectionEdge services.&lt;/li&gt;
+ * &lt;li&gt; a selecting object corresponding to an edge, and this kind of creation is then equivalent to @href CATIFeaturize#FeaturizeR.&lt;/li&gt;&lt;/ul&gt;
+ * @param imode
+ * Featurization mode, which should be, at least:&lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeIntersection&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeC1Intersection&lt;/tt&gt;&lt;/li&gt; 
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeC1Intersection|MfFeaturizeSubElement&lt;/tt&gt;&lt;/li&gt;&lt;/ul&gt;
+ * @param isupport
+ * The explicit support, e.g. the feature of resolution
+ * @return
+ * The @href CATIMfIntersectionEdge BRep Feature.
+ */
+  virtual CATIMfBRep_var CreateMfIntersectionEdge(const CATIBRepAccess_var&amp; iSelectingObject,
+                                                  const CATMfFeaturizeMode imode,
+                                                  const CATBaseUnknown_var &amp;isupport)=0;
+/**
+ * @nodoc
+ * Internal use. 
+ */
+  virtual CATIMfBRep_var CreateMfInitialEdge(const CATIBRepAccess_var&amp; redge,
+                                             const CATMfFeaturizeMode mode,
+                                             const CATBaseUnknown_var &amp;support)=0;
+};
+
+CATDeclareHandler (CATIMfBRepFactory, CATBaseUnknown); 
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfBRep.html">← 上一页: CATIMfBRep.h</a></div>
+        <div><a href="CATIMfBiDimResult.html">下一页: CATIMfBiDimResult.h →</a></div>
+    </div>
+</body>
+</html>

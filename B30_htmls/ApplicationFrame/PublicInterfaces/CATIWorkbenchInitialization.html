@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATIWorkbenchInitialization.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATIWorkbenchInitialization.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkbenchAddin.html">← 上一页: CATIWorkbenchAddin.h</a></div>
+        <div><a href="CATIWorkbenchTransition.html">下一页: CATIWorkbenchTransition.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIWorkbenchInitialization_h
+#define CATIWorkbenchInitialization_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+
+#include &lt;CD0FRAME.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCD0FRAME IID IID_CATIWorkbenchInitialization;
+#else
+extern &quot;C&quot; const IID IID_CATIWorkbenchInitialization;
+#endif
+/**
+ * Interface to do some initializations before starting a workbench. 
+ * &lt;b&gt;Role&lt;/b&gt;:
+ *   This interface is called whenever the given workbench becomes the current one.
+ *   &lt;br&gt;
+ *   You implement it using an extension of a late type made of the workbench identifier
+ *   suffixed by &lt;b&gt;_init&lt;/b&gt;, such as &lt;tt&gt;MyWorkbench_init&lt;/tt&gt; for 
+ *   the MyWorkbench workbench.
+ *   &lt;br&gt;&lt;br&gt;This interface contains a method @href #Init called when the workbench 
+ *    becomes the current one, and a method @href #Dispose called when this workbench 
+ *    is exited.
+ *   &lt;br&gt;Suppose you launch the workbench A and after the B. The sequence of calls is:
+ *   &lt;ul&gt;
+ *   &lt;li&gt;Launch A&lt;/li&gt;
+ *   &lt;li&gt;workbenchA &lt;tt&gt;Init&lt;/tt&gt; is called &lt;/li&gt;
+ *   &lt;br&gt;You are in the workbench A
+ *   &lt;li&gt;Launch B&lt;/li&gt;
+ *   &lt;li&gt;workbenchA &lt;tt&gt;Dispose&lt;/tt&gt; is called &lt;/li&gt;
+ *   &lt;li&gt;workbenchB &lt;tt&gt;Init&lt;/tt&gt; is called &lt;/li&gt;
+ *   &lt;br&gt;You are in the workbench B
+ *   &lt;/ul&gt;
+ *   &lt;b&gt;Caution&lt;/b&gt;  
+ *   &lt;br&gt;&lt;b&gt;Any command of a workbench is accessible from any other workbench of
+ *   the same workshop.&lt;/b&gt;
+ *   &lt;br&gt;You have two means to launch a command which is initially defined in an
+ *    another workbench:
+ *    &lt;ul&gt;
+ *    &lt;li&gt;Thanks to the Power Input&lt;/li&gt;
+ *    &lt;li&gt;Thanks to the Tools/Customize command, you can drag/drop a command in 
+ *     any toolbar or menu&lt;/li&gt;
+ *    &lt;/ul&gt;
+ *    So a command must not expect that the method &lt;tt&gt;Init&lt;/tt&gt; of its 
+ *    original workbench has been executed when the command is launched.
+ *    &lt;br&gt;This interface must thus be used to do visualization effets, such as create 
+ *    a viewer, change the visualization mode, but never create data in the model.
+*/
+class ExportedByCD0FRAME CATIWorkbenchInitialization : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+  
+	/** 
+	 * Method called when the workbench becomes the current one.
+	 */
+  virtual void Init () = 0;
+	/** 
+	 * Method called when the workbench is exited.
+	 */
+  virtual void Dispose () = 0;
+
+};
+/** @nodoc */
+CATDeclareHandler(CATIWorkbenchInitialization, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkbenchAddin.html">← 上一页: CATIWorkbenchAddin.h</a></div>
+        <div><a href="CATIWorkbenchTransition.html">下一页: CATIWorkbenchTransition.h →</a></div>
+    </div>
+</body>
+</html>

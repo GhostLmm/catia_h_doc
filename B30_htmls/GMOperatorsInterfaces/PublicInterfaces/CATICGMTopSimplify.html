@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopSimplify.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopSimplify.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopSimilarCurve.html">← 上一页: CATICGMTopSimilarCurve.h</a></div>
+        <div><a href="CATICGMTopSkin.html">下一页: CATICGMTopSkin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopSimplify_h_
+#define CATICGMTopSimplify_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+*/
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+
+class CATBody;
+class CATGeoFactory;
+class CATTopData;
+class CATLISTP(CATCell);
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopSimplify;
+
+/**
+* Class representing the operator that &quot;simplifies&quot; a body or a part of a body.
+* &lt;br&gt;
+* The simplification operation consists in removing the cells which are not needed 
+* for a consistent body topology. 
+* &lt;br&gt;
+* This operation applies to 3D, 2D and 1D bodies:
+* &lt;ul&gt;
+* &lt;li&gt;In a solid made up of several cells of CATVolume type, volumes can be merged. The faces between the volumes
+* to be simplified are then removed while some faces and edges are merged.
+* &lt;li&gt;In a skin made up of several cells of CATFace type, faces can be merged. The edges between the faces
+* to be simplified are then removed while some edges are merged.
+* &lt;li&gt;In a wire made up of several cells of CATEdge type, edges can be merged.
+* The vertices between the edges to be simplified are then removed. 
+* &lt;/ul&gt;
+* The simplification is achieved as far as the geometric modeler rules are satisfied, for example, the C2 continuity
+* criteria must be fulfilled all over the faces to be simplified on a skin.
+* &lt;br&gt;The CATICGMTopSimplify operator follows the global frame of the topological operators
+* and satisfies the smart mechanism: the
+* input bodies are not modified. A new resulting body is created, 
+* possibly sharing data with the input bodies.
+*&lt;ul&gt;
+* &lt;li&gt;A CATICGMTopSimplify operator is created with the &lt;tt&gt;CATCGMCreateTopSimplify&lt;/tt&gt; global function.
+* It must be directly released with the &lt;tt&gt;Release&lt;/tt&gt; method after use. 
+* It is not streamable. 
+*&lt;li&gt;The computation is done by the &lt;tt&gt;Run&lt;/tt&gt; function. 
+*&lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometric container, after the operator deletion.
+*&lt;/ul&gt;
+*&lt;ul&gt;
+* &lt;li&gt;Volumes , faces or edges can be simplified.
+* &lt;li&gt;During the simplification, new cells are created to replace several adjacent cells 
+* linked to the same or equivalent geometry. For example, if a skin made up of two faces
+* relying on the same surface is simplified, a new face replacing the two initial faces is created
+* &lt;li&gt;The simplification can only be done between adjacent cells of the same domain
+* &lt;li&gt;The simplification of edges bordering faces can only be achieved from a 3D or 2D body whose 
+* volumes or faces have already been simplified. This case is unlikely to happen as
+* the simplication process operates for the cells of all dimensions in a body.
+* &lt;li&gt;To specify which part of the body is to be simplified, you can use either &lt;tt&gt;SetCellsToRemove&lt;/tt&gt; or
+* &lt;tt&gt;SetCellsToSimplify&lt;/tt&gt;. However these methods are mutually exclusive. For example, to simplify 
+* a solid, you must define either the faces to be removed or the volumes to be simplified.
+* &lt;li&gt;To enhance performance, it is strongly recommended to use the &lt;tt&gt;SetCellsToSimplify&lt;/tt&gt; 
+* method, if you want to simplify only some cells and not the whole body.
+*&lt;/ul&gt;
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMTopSimplify: public CATICGMTopOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopSimplify();
+
+  /**
+  * Defines the cells to simplify.
+  * @param iCellsToSimplify
+  * The list of cells to simplify. This restricts the simplification to these cells only.
+  * This method can not be called together with the &lt;tt&gt;SetCellsToRemove&lt;/tt&gt; method.
+  */
+  virtual void SetCellsToSimplify(CATLISTP(CATCell) &amp;iCellsToSimplify) = 0;
+
+  /**
+  * Defines the cells to remove during simplification.
+  * @param iCellsToRemove
+  * The list of cells to remove. This restricts the simplification to the cells bounded
+  * to these cells only.
+  * This method can not be called together with the &lt;tt&gt;SetCellsToSimplify&lt;/tt&gt; method.
+  */
+  virtual void SetCellsToRemove(CATLISTP(CATCell) &amp;iCellsToRemove) = 0;
+
+  /**
+   * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+   */
+  virtual int Run() = 0;
+
+  /**
+  * Returns a pointer to the resulting body.
+  * &lt;br&gt; Must be called after the &lt;tt&gt;Run&lt;/tt&gt; method only once. A second call returns a &lt;tt&gt;NULL&lt;/tt&gt;
+  * pointer.
+  * @return
+  * The pointer to the resulting body. Use @href CATICGMContainer#Remove if you do not want to keep it.
+  */
+  virtual CATBody *GetResult() = 0;
+
+  /**
+  * Defines the state of the resulting body.
+  * @param iMode
+  * The state of the resulting body. 
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is not frozen: it can be modified afterwards.
+  * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The resulting CATBody is frozen: it cannot be modified afterwards.
+  * &lt;/dl&gt;
+  */
+  virtual void SetFreezeMode(short iMode = 1) = 0;
+
+  /**
+  * Turns on tolerant simplification.
+  * The tolerance is specified as a multplier of the model resolution and is used solely
+  * to compare the closeness of two surfaces.  Edge gaps may exceed this tolerance, but may
+  * not be larger than 100 * model resolution.
+  * Currently only simplification of basic canonical surfaces (Planes, Cylinders, Cones, 
+  * Spheres and Tori) are supported.
+  * @param iRelativeTolerance
+  * The value by which to multiply the model resolution.  The permissible values range from 1e-9 to 100.
+  */
+  virtual void EnableTolerantSimplification(double iRelativeTolerance) = 0;
+
+  #ifdef CATIACGMR418CAA
+  /**
+  * Enables the maximum simplification regime. In some scenarious better simplification may 
+  * be achieved at the expense of a slight performance degradation of the operator. 
+  */
+  virtual void EnableMaximalSimplification() = 0;
+  #endif
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopSimplify(); // -&gt; delete can&#x27;t be called
+};
+
+/**
+ * Creates a CATICGMTopSimplify operator.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+ * @param iBodyToSimplify
+ * The pointer to the body to simplify.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMTopSimplify *CATCGMCreateTopSimplify(
+  CATGeoFactory *iFactory,
+  CATTopData *iData,
+  CATBody *iBodyToSimplify);
+
+#endif /* CATICGMTopSimplify_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopSimilarCurve.html">← 上一页: CATICGMTopSimilarCurve.h</a></div>
+        <div><a href="CATICGMTopSkin.html">下一页: CATICGMTopSkin.h →</a></div>
+    </div>
+</body>
+</html>

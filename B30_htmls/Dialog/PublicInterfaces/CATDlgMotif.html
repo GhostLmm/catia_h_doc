@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog/PublicInterfaces/CATDlgMotif.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dialog/PublicInterfaces/CATDlgMotif.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgMenuItem.html">← 上一页: CATDlgMenuItem.h</a></div>
+        <div><a href="CATDlgMultiList.html">下一页: CATDlgMultiList.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDLGMOTIF_H
+#define CATDLGMOTIF_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * @deprecated CXR28 CATDlgBlackBox
+ *
+ * CATDlgMotif class is now deprecated and must be replaced by CATDlgBlackBox itself
+ * To keep using GetXtAppContext/GetXtDisplay, you must refer to CATDlgXToolkit
+ */
+
+#include &quot;CATDlgBlackBox.h&quot;
+
+#ifdef DRIVER_MOTIF
+
+#include &lt;Xm/Xm.h&gt;
+
+/** 
+ * Class specific to Unix platforms, neutral window providing some interoperability capability with non V5 Dialog objects.
+ * &lt;br&gt;
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * Creates an empty frame without any border.
+ * &lt;br&gt;
+ * It is targeted for very specific usages. Most application developers do not have to deal with this object.
+ */
+
+class ExportedByDI0PANV2 CATDlgMotif : public CATDlgBlackBox
+{
+
+ public:
+
+       /** 
+        * Constructs a CATDlgWindows.
+        * @param iParent
+        *   The parent of the object
+        * @param iObjectName
+        *   The name of the object
+        * @param iStyle
+        *   The style of the object.
+        */ 
+        CATDlgMotif( CATDialog *iParent, const CATString&amp; iObjectName, CATDlgStyle iStyle=NULL);
+        virtual ~CATDlgMotif();
+
+       /** 
+        * Gets XToolkit application context.
+        */ 
+        XtAppContext GetXtAppContext();
+
+       /** 
+        * Gets XToolkit display.
+        */ 
+        Display*     GetXtDisplay();
+
+       /** 
+        * Gets instance of the Motif underlying window.
+        */ 
+        Widget       GetFatherWidget();
+
+       /**
+        * Returns internal object. Internal use only.
+        */
+        virtual l_CATDialog* GetLetterObject();
+
+       /**
+        * Resets internal object. Internal use only.
+        */
+        virtual void ResetLetterObject();
+
+        CATDeclareClass ;
+};
+#endif
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgMenuItem.html">← 上一页: CATDlgMenuItem.h</a></div>
+        <div><a href="CATDlgMultiList.html">下一页: CATDlgMultiList.h →</a></div>
+    </div>
+</body>
+</html>

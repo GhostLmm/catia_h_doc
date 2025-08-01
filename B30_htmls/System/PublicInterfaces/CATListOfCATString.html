@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATListOfCATString.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATListOfCATString.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATLib.html">← 上一页: CATLib.h</a></div>
+        <div><a href="CATListOfCATUnicodeString.html">下一页: CATListOfCATUnicodeString.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef	CATListOfCATString_h
+#define	CATListOfCATString_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CO0LSTST.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATCollecRoot.h&quot;
+#include &quot;CATListPV.h&quot;
+
+class CATString;
+
+/**
+ * Class to implement a mutable list of CATString.
+ * &lt;b&gt;Role&lt;/b&gt;: The purpose of this class is to let C++ classes easily pass and
+ * receive lists of &lt;tt&gt;CATString&lt;/tt&gt;. The class handles all the low-level
+ * memory allocation tasks such as reallocating the list once it capacity has
+ * been exceeded. It also provides high level operations such as sorting,
+ * comparison, etc... The first element has index 1.
+ * &lt;br&gt;Use the type @href CATListOfCATString
+ */
+class ExportedByCO0LSTST CATListValCATString : public CATCollecRoot {                        
+	public:                                                      
+		/**
+		 * Constructs an empty list of &lt;tt&gt;CATStrings&lt;/tt&gt;.
+		 */
+		CATListValCATString ();                                           
+
+		/**
+		 * Constructs an empty list of &lt;tt&gt;CATStrings&lt;/tt&gt; with a specified initial capacity.
+		 * @param iInitAlloc
+		 * The default capacity of the list.
+		 */
+		CATListValCATString ( int iInitAlloc );
+		
+		/** @nodoc */
+		CATListValCATString ( int iInitAlloc, int iExtensAlloc );         
+
+		/**
+		 * Copy constructor.
+		 * @param iCopy
+		 * The list to copy.
+		 */
+		CATListValCATString ( const CATListValCATString&amp; iCopy );
+
+		/**
+		 * Constructs a list and initializes it with a C++ &lt;tt&gt;CATString&lt;/tt&gt; array.
+		 * @param iArray
+		 * A C++ array &lt;tt&gt;CATStrings&lt;/tt&gt; used to initialize the list.
+		 * @param iSize
+		 * The size of the C++ array of &lt;tt&gt;CATStrings&lt;/tt&gt; used to initialize the list.
+		 */
+		CATListValCATString ( CATString*  iArray, int iSize );
+
+		/**
+		 * Constructs a list and initializes it with a C++ pointer to &lt;tt&gt;CATString&lt;/tt&gt; array.
+		 * @param iArray
+		 * A C++ array of pointers to &lt;tt&gt;CATStrings&lt;/tt&gt; used to initialize the list.
+		 * @param iSize
+		 * The size of the C++ array of &lt;tt&gt;CATStrings&lt;/tt&gt; used to initialize the list.
+		 */
+		CATListValCATString ( CATString** iArray, int iSize );             
+
+		/**
+		 * Destructor.
+		 */
+		~CATListValCATString ();                                          
+                                                    
+		/**
+		 * Assignment operator. 
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Overwrites the content of the list with 
+		 * another list.
+		 * @param iCopy
+		 * The assigned list.
+		 */
+		CATListValCATString&amp; operator= ( const CATListValCATString&amp; iCopy );    
+                                                    
+		/**
+		 * Appends a &lt;tt&gt;CATString&lt;/tt&gt; to the list.
+		 * @param iAdd
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; to append.
+		 */
+		void Append ( const CATString&amp; iAdd );
+
+		/**
+		 * Appends the content of a &lt;tt&gt;CATString&lt;/tt&gt; list.
+		 * @param iConcat
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; list to append.
+		 */
+		void Append ( const CATListValCATString&amp; iConcat );                              
+                                                    
+		                                       
+		/**
+		 * Inserts a &lt;tt&gt;CATString&lt;/tt&gt; after the specified index.
+		 * @param iIndex
+		 * The index of the element.
+		 * @param iAdd
+		 * The element to insert.
+		 */
+		void InsertAfter  ( int iIndex, const CATString&amp; iAdd );
+
+		/**
+		 * Inserts a &lt;tt&gt;CATString&lt;/tt&gt; before the specified index.
+		 * @param iIndex
+		 * The index of the element.
+		 * @param iAdd
+		 * The element to insert.
+		 */
+		void InsertBefore ( int iIndex, const CATString&amp; iAdd );
+
+		/** @nodoc */
+		void InsertAt     ( int iIndex, const CATString&amp; iAdd );
+                                                    
+		/**
+		 * Returns the size of the list. 
+		 * @return the size of the list.
+		 */
+		int Size () const ;
+		
+		/**
+		 * Forces the size of the list to an arbitrary size. 
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: If &lt;tt&gt;iSize&lt;/tt&gt; is
+		 * larger than the current size, the newly allocated slots contain
+		 * &lt;tt&gt;iFiller&lt;/tt&gt;.
+		 * @param iSize
+		 * The desired size.
+		 * @param iFiller
+		 * A &lt;tt&gt;CATString&lt;/tt&gt; used to fill newly allocated slots.
+		 */
+		void Size ( int iSize, const CATString* iFiller = NULL );                                        
+                                                    
+		/**
+		 * Subscripting operator.
+		 * @param iIndex
+		 * The index of the element.
+		 * @return 
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; at index &lt;tt&gt;iIndex&lt;/tt&gt;.
+		 */
+		CATString&amp; operator[] ( int iIndex );                                 
+
+		/**
+		 * Subscripting operator.
+		 * @param iIndex
+		 * The index of the element.
+		 * @return 
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; at index &lt;tt&gt;iIndex&lt;/tt&gt;.
+		 */
+		const CATString&amp; operator[] ( int iIndex ) const;                     
+                                                    
+		/**
+		 * Finds the first occurrence of a &lt;tt&gt;CATString&lt;/tt&gt; from a given index.
+		 * @param iLocate
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; to locate.
+		 * @param iIndex
+		 * The index at which the search is to begin.
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The index of the located &lt;tt&gt;CATString&lt;/tt&gt;, 
+		 * or &lt;tt&gt;0&lt;/tt&gt; if the list does not contain
+		 * the specified &lt;tt&gt;CATString&lt;/tt&gt;.
+		 */
+		int Locate ( const CATString&amp; iLocate, int iIndex = 1 ) const ;                                     
+                                                    
+		/**
+		 * Removes all the elements from the list.
+		 * @param iMH
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Specifies whether the list capacity should 
+		 * be shrunk to 0 (&lt;tt&gt;CATCollec::ReleaseAllocation&lt;/tt&gt;) or not
+		 * (&lt;tt&gt;CATCollec::KeepAllocation&lt;/tt&gt;).
+		 */
+		void RemoveAll ( CATCollec::MemoryHandling iMH              
+				  = CATCollec::ReleaseAllocation );         
+
+		/**
+		 * Removes the first occurrence of a &lt;tt&gt;CATString&lt;/tt&gt; from the list.
+		 * @param iRemove
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; to remove.
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The index of the removed &lt;tt&gt;CATString&lt;/tt&gt;, 
+		 * or &lt;tt&gt;0&lt;/tt&gt; if the list does not contain
+		 * the specified &lt;tt&gt;CATString&lt;/tt&gt;.
+		 */
+		int RemoveValue ( const CATString&amp; iRemove );
+
+		/**
+		 * Removes all the values specifed in &lt;tt&gt;iSubstract&lt;/tt&gt; from the list.
+		 * @param iSubstract
+		 * A list of &lt;tt&gt;CATStrings&lt;/tt&gt; to remove.
+		 * @return 
+		 * The count of &lt;tt&gt;CATStrings&lt;/tt&gt; removed from the list.
+		 */
+		int Remove ( const CATListValCATString&amp; iSubstract );
+
+		/**
+		 * Removes the &lt;tt&gt;CATString&lt;/tt&gt; located at a given index.
+		 * @param iIndex
+		 * The list index of the &lt;tt&gt;CATString&lt;/tt&gt; to remove.
+		 */
+		void RemovePosition ( int iIndex );
+
+		/**
+		 * Removes all the duplicate occurrences of a &lt;tt&gt;CATString&lt;/tt&gt; from the list and
+		 * appends them to another list.
+		 * @param ioExtract
+		 * A list to which duplicate &lt;tt&gt;CATStrings&lt;/tt&gt; are appended.
+		 */
+		void RemoveDuplicates ( CATListValCATString&amp; ioExtract );
+
+		/**
+		 * Removes all the duplicate occurrences of a &lt;tt&gt;CATString&lt;/tt&gt; from the list.
+		 * @return 
+		 * The count of duplicate &lt;tt&gt;CATStrings&lt;/tt&gt; removed from the list.
+		 */
+		int RemoveDuplicates ();
+                                                    
+		/**
+		 * Equality operator. 
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Two lists are equal if they contain the same
+		 * elements in the same lexicographic order.
+		 * @param iLV
+		 * The list to test for equality
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the two lists are equal, 
+		 * &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator == ( const CATListValCATString&amp; iLV ) const ;
+
+		/**
+		 * Inequality operator.
+		 * @param iLV
+		 * The list to test for inequality
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the two lists are not equal, 
+		 * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+		 */
+		int operator != ( const CATListValCATString&amp; iLV ) const ;
+
+		/**
+		 * Less than or equal to operator.
+		 * @param iLV
+		 * The list to compare the receiver to.
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the receiver is less than or 
+		 * equal to &lt;tt&gt;iLV&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator &lt;= ( const CATListValCATString&amp; iLV ) const ;
+
+		/**
+		 * Greater than or equal to operator.
+		 * @param iLV
+		 * The list to compare the receiver to.
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the receiver is greater than 
+		 * or equal to &lt;tt&gt;iLV&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator &gt;= ( const CATListValCATString&amp; iLV ) const ;
+
+		/**
+		 * Less than operator.
+		 * @param iLV
+		 * The list to compare the receiver to.
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the receiver is less than 
+		 * &lt;tt&gt;iLV&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator &lt;  ( const CATListValCATString&amp; iLV ) const ;
+
+		/**
+		 * Greater than operator.
+		 * @param iLV
+		 * The list to compare the receiver to.
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the receiver is greater than 
+		 * &lt;tt&gt;iLV&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator &gt;  ( const CATListValCATString&amp; iLV ) const ;                                  
+                                                    
+		/**
+		 * Compares two lists of &lt;tt&gt;CATStrings&lt;/tt&gt;. 
+		 * @param iLV1
+		 * the first list of &lt;tt&gt;CATStrings&lt;/tt&gt;.
+		 * @param iLV2
+		 * the second list of &lt;tt&gt;CATStrings&lt;/tt&gt;.
+		 * @param iPFCompare
+		 * A pointer to a function which compares two &lt;tt&gt;CATStrings&lt;/tt&gt; and
+		 * returns -1, 0 or 1 depending on the order of the strings.
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; if the lists are equal,
+		 * &lt;tt&gt;-1&lt;/tt&gt; if the first list is smaller than the second list
+		 * (smaller means that the first list contains less elements than the second
+		 * list or that &lt;tt&gt;iRC1[i] &amp;lt; iRC2[i]&lt;/tt&gt; for the first i where
+		 * &lt;tt&gt;iRC1[i] != iRC2[i]&lt;/tt&gt; and &lt; is a lexicographic comparison
+		 * of two strings), or &lt;tt&gt;1&lt;/tt&gt; otherwise.
+		 */
+		static int Compare ( const CATListValCATString&amp; iLV1,      
+			 const CATListValCATString&amp; iLV2,      
+			 int (*iPFCompare)( CATString*, CATString* ) );                             
+                                                    
+		/**
+		 * Replaces an element at a specified index with another &lt;tt&gt;CATString&lt;/tt&gt; value. 
+		 * @param iIndex
+		 * index of the element to replace.
+		 * @param iReplace
+		 * The new &lt;tt&gt;CATString&lt;/tt&gt; value.
+		 */
+		void Replace ( int iIndex, const CATString&amp; iReplace );
+
+		/**
+		 * Swaps two list elements. 
+		 * @param iIndex1
+		 * index of the first element to swap.
+		 * @param iIndex2
+		 * index of the second element to swap.
+		 */
+		void Swap ( int iIndex1, int iIndex2 );
+
+		/**
+		 * Sorts the list using the quicksort algorithm.
+		 * @param iPFCompare
+		 * A pointer to a function which compares two &lt;tt&gt;CATStrings&lt;/tt&gt; and
+		 * returns -1, 0 or 1 depending on the order of the strings.
+		 */
+		void QuickSort ( int (*iPFCompare)( CATString*, CATString* ) );                                
+                                                    
+		/**
+		 * Fills a C++ array of &lt;tt&gt;CATStrings&lt;/tt&gt; with elements from the list.
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The array has to have the same size as the list.
+		 * @param ioArray
+		 * The C++ array to fill.
+		 */
+		void Array ( CATString*  ioArray ) const ;
+
+		/**
+		 * Fills a C++ array of pointers to &lt;tt&gt;CATStrings&lt;/tt&gt; with elements from the list.
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The array has to have the same size as the list.
+		 * @param ioArray
+		 * The C++ array to fill.
+		 */
+		void Array ( CATString** ioArray ) const ;
+
+		/**
+		 * Counts the occurrences of a &lt;tt&gt;CATString&lt;/tt&gt; in the list.
+		 * @param iTest
+		 * The &lt;tt&gt;CATString&lt;/tt&gt; for which the occurrences are to be counted.
+		 * @return
+		 * The count of occurrences of the &lt;tt&gt;CATString&lt;/tt&gt; in the list.
+		 */
+		int NbOccur ( const CATString&amp; iTest );
+
+		/**
+		 * Computes the intersection of two lists.
+		 * @param iL1
+		 * The first list.
+		 * @param iL2
+		 * The second list.
+		 * @param ioResult
+		 * A list to which elements in the intersection are appended.
+		 */
+		static void Intersection ( const CATListValCATString&amp; iL1, 
+						   const CATListValCATString&amp; iL2,
+						   CATListValCATString&amp; ioResult );                                      
+
+	private:                                                     
+		/** @nodoc */
+		CATListPV _Lval;                                            
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATLib.html">← 上一页: CATLib.h</a></div>
+        <div><a href="CATListOfCATUnicodeString.html">下一页: CATListOfCATUnicodeString.h →</a></div>
+    </div>
+</body>
+</html>

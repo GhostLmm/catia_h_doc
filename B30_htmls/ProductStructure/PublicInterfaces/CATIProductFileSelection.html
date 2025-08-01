@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductStructure/PublicInterfaces/CATIProductFileSelection.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ProductStructure/PublicInterfaces/CATIProductFileSelection.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIProduct.html">← 上一页: CATIProduct.h</a></div>
+        <div><a href="CATIProductInSession.html">下一页: CATIProductInSession.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIProductFileSelection_h
+#define CATIProductFileSelection_h
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U4 CATPrdCommonFileSelection
+  */
+
+#include &quot;AS0STARTUP.h&quot;
+#include &quot;CATIProductSelection.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+extern ExportedByAS0STARTUP IID IID_CATIProductFileSelection ;
+
+/**
+ * Interface to define allowed kinds of files to be imported in a product.
+ * &lt;b&gt;Role:&lt;/b&gt; Each implementation is able to process selected files of a specific type.
+ * A default behaviour is provided in class CATPrdCommonFileSelection.
+ * Concerns file environment only.
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CANNOT be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page.
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ * @see CATIProductSelection, CATPrdCommonFileSelection
+*/
+
+class ExportedByAS0STARTUP CATIProductFileSelection : public CATIProductSelection 
+{
+	CATDeclareInterface;
+	
+  public:
+
+	/**
+	 * @nodoc internal.  
+	 * Gets extensions to recognise in ProductStructure import&#x27;s panel.
+	 * &lt;b&gt;Note:&lt;/b&gt; Don&#x27;t overload this method here. You have to define 
+	 * that list by using CATPrdCommonFileSelection.
+	 * @see CATPrdCommonFileSelection
+	 * @param ioListOfTypes
+	 *        Append specific types to current list( build the list if necessary ).
+	 */
+	virtual HRESULT GetRecognizedPathExtensions( CATListOfCATUnicodeString *&amp; ioListOfTypes ) = 0;
+
+
+	/**
+	 * @nodoc internal.  
+	 * Gives access to buffered paths of selected files.
+	 * &lt;b&gt;Note:&lt;/b&gt; Don&#x27;t overload this method here. It&#x27;s done in CATPrdCommonFileSelection. 
+	 */
+	virtual HRESULT GetCurrentFiles( CATListOfCATUnicodeString *&amp; oListOfPaths ) = 0;
+
+	/**
+     * @nodoc internal.
+     * Bufferizes paths of files which can be processed.
+	 * KeepRecognizedFiles method needs two coherent lists in input
+	 * and must return coherent lists composed of unrecognized types and
+	 * related paths.
+	 * &lt;b&gt;Note:&lt;/b&gt; Don&#x27;t overload this method here. It&#x27;s done in CATPrdCommonFileSelection. 
+	 */
+	virtual HRESULT KeepRecognizedFiles( CATListOfCATUnicodeString *&amp; ioListOfPaths,
+	                                     CATListOfCATUnicodeString *&amp; ioListOfPathExtensions ) = 0;
+	/**
+     * @nodoc internal.
+	 * Release selected paths.
+	 * &lt;b&gt;Note:&lt;/b&gt; Don&#x27;t overload this method here. It&#x27;s done in CATPrdCommonFileSelection.
+	 */
+	virtual HRESULT UnkeepAll() = 0;
+
+};
+
+CATDeclareHandler(CATIProductFileSelection,CATIProductSelection);
+	
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIProduct.html">← 上一页: CATIProduct.h</a></div>
+        <div><a href="CATIProductInSession.html">下一页: CATIProductInSession.h →</a></div>
+    </div>
+</body>
+</html>

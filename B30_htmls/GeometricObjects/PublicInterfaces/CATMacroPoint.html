@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATMacroPoint.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATMacroPoint.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMProcTaskManagerCGM.html">← 上一页: CATMProcTaskManagerCGM.h</a></div>
+        <div><a href="CATMathNurbsMultiForm.html">下一页: CATMathNurbsMultiForm.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMacroPoint_h
+#define CATMacroPoint_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATPoint.h&quot;
+class CATGeometry ;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATMacroPoint ;
+#else
+extern &quot;C&quot; const IID IID_CATMacroPoint ;
+#endif
+
+  //CAA_Exposed CATIGemMacroPoint
+/**
+ * Interface representing a set geometric points to be considered as one point.
+ *&lt;br&gt;The CATMacroPoint is created through the &lt;tt&gt;CreateMacroPoint&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method.
+ */
+class ExportedByCATGMGeometricInterfaces CATMacroPoint : public CATPoint
+{
+  CATDeclareInterface;
+
+  public :
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  //CAA_Exposed
+/**
+ * Scans the points included into &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint.
+ * @param iCurrentSubElement
+ * A pointer to a point of &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint.
+ *&lt;br&gt; Use the NULL pointer to have the first point.
+ * @return
+ * A pointer to the next point. &lt;tt&gt;NULL&lt;/tt&gt; when &lt;tt&gt;iCurrentSubElement&lt;/tt&gt;
+ * is the last point.
+ */
+  virtual CATPoint* Next ( CATPoint *iCurrentSubElement ) = 0 ;
+
+    //CAA_Exposed
+/**
+ * Scans the points of &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint lying on a given geometric support.
+ * @param iCurrentSubElement
+ * A pointer to a point of &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint.
+ *&lt;br&gt; Use the NULL pointer to have the first point.
+ * @param iSupport
+ * A pointer to the geometry to which the points must be related.
+ * @return
+ * A pointer to the next point. &lt;tt&gt;NULL&lt;/tt&gt; when &lt;tt&gt;iCurrentSubElement&lt;/tt&gt;
+ * is the last point.
+ */
+  virtual CATPoint* Next ( CATPoint *iCurrentSubElement,CATGeometry* iSupport ) = 0 ;
+
+    //CAA_Exposed
+/**
+ * Adds a new CATPoint into &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint.
+ * @param iNewSubElement
+ * A pointer to the new point to add. If this point already is inside &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint,
+ * it is nor included again.
+ * @return
+ * &lt;tt&gt;iNewSubElement&lt;/tt&gt;.
+ */
+  virtual CATPoint* Append ( const CATPoint* iNewSubElement ) = 0 ;
+
+    //CAA_Exposed
+/**
+ * Removes a CATPoint from &lt;tt&gt; CATMacroPoint&lt;/tt&gt;.
+ * A pointer to the point to remove.
+ */
+  virtual void Remove ( CATPoint* iSubElement ) = 0 ;
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+  * @nodoc
+  * Tests whether a point is included into &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint.
+  * @param iSubElement
+  * A pointer to a point.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;iSubElement&lt;/tt&gt; is included into &lt;tt&gt;this&lt;/tt&gt; CATMacroPoint, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual CATBoolean IsContaining(const CATPoint* iSubElement) const = 0;
+
+};
+
+CATDeclareHandler(CATMacroPoint,CATPoint);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMProcTaskManagerCGM.html">← 上一页: CATMProcTaskManagerCGM.h</a></div>
+        <div><a href="CATMathNurbsMultiForm.html">下一页: CATMathNurbsMultiForm.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATDimSystemDefinition.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATDimSystemDefinition.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDimDefinition.html">← 上一页: CATDimDefinition.h</a></div>
+        <div><a href="CATDraftingInterfaces.html">下一页: CATDraftingInterfaces.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2007
+//===================================================================
+#ifndef CATDimSystemDefinition_H
+#define CATDimSystemDefinition_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+
+#include&quot;CATErrorDef.h&quot;
+#include&quot;CATBooleanDef.h&quot;
+#include&quot;CATDrwDimSystemType.h&quot;
+#include&quot;CATDrwSystOffsetMode.h&quot;
+#include&quot;CATDrwSystValueAlignment.h&quot;
+#include&quot;DraftingItfCPP.h&quot;
+
+/** 
+* Class to initialize basic informations necessary to the dimension system creation.
+* To create a dimension system see @href CATIDrwAnnotationFactory#CreateDimSystem .
+*/
+
+class ExportedByDraftingItfCPP CATDimSystemDefinition 
+{
+public:
+   /**
+   *  Constructor operator.
+   */
+   CATDimSystemDefinition();
+   /**
+   *  Copy Constructor operator.
+   */
+   CATDimSystemDefinition(const CATDimSystemDefinition&amp;);
+   /**
+   *  Destructor operator.
+   */
+   ~CATDimSystemDefinition();
+
+   /**
+   *  Assignment operator.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Assignment operator.
+   */
+   CATDimSystemDefinition&amp; operator = (const CATDimSystemDefinition&amp;);
+
+   /**
+   *  Dimensions system type.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Define the type of the dimensions system.
+   * @param SystemType
+   *  @see CATDrwDimSystemType
+   */
+   CATDrwDimSystemType SystemType;
+
+   /**
+   * Sets the offset mode.  
+   * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt; Stacked dimension system only.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To define the offset mode to apply to dimension lines line-up.
+   *  @see CATDrwSystOffsetMode
+   */
+   HRESULT SetOffsetMode(const CATDrwSystOffsetMode iOffsetMode);
+   /**
+   * Gets the offset mode.  
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To retrieve the offset mode to apply to dimension lines line-up.
+   *  @see CATDrwSystOffsetMode
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_FALSE : Method correctly executed.
+   * &lt;br&gt;The returned value is the default value initialized by the constructor. this value was not overloaded..
+   */
+   const HRESULT GetOffsetMode(CATDrwSystOffsetMode&amp; oOffsetMode);
+
+   /**
+   *  Sets offset between dimension lines.
+   *  &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt; Available if OffsetMode is set to constant.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: to define the eventual offset between dimension lines
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Value out of range.
+   */
+   HRESULT SetValueOffset(const double iValueOffset);
+   /**
+   *  Gets offset between dimension lines.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: to retrieve the eventual offset between dimension lines
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_FALSE : Method correctly executed.
+   * &lt;br&gt;The returned value is the default value initialized by the constructor. this value was not overloaded..
+   */
+   const HRESULT GetValueOffset(double&amp; oValueOffset);
+
+   /**
+   * Sets the value alignment mode.
+   *  &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt; Stacked dimension system only.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To define the alignment mode to apply to dimension value.
+   *  @see CATDrwSystOffsetMode
+   */
+   HRESULT SetValueAlignmentMode(const CATDrwSystValueAlignment iAlignmentMode);
+   /**
+   * Gets the value alignment mode.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To retrieve the alignment mode to apply to dimension value.
+   *  @see CATDrwSystOffsetMode
+   */
+   const HRESULT GetValueAlignmentMode(CATDrwSystValueAlignment&amp; oAlignmentMode);
+
+   /**
+   *  Sets offset to assign to dimension values.
+   *  &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt; Available only if OffsetMode is set to OnRefLineSide or OppToRefLineSide
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: to define the offset of dimension values
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Value out of range.
+   */
+   HRESULT SetValueAlignmentOffset(const double iValueAlignment);
+   /**
+   *  Gets offset to assign to dimension values.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: to retrieve the offset of dimension values
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_FALSE : Method correctly executed.
+   * &lt;br&gt;The returned value is the default value initialized by the constructor. this value was not overloaded..
+   */
+   const HRESULT GetValueAlignmentOffset(double&amp; oValueAlignment);
+
+   /**
+   *  Manages the automatically funnel mode.
+   *  &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: If this mode is activated, a funnel will be automatically added when dimension value
+   *  is too large to be contained between extension lines
+   */
+   HRESULT SetAutoFunnelMode(const CATBoolean iAutoFunnel);
+   /**
+   *  Gets the automatically funnel mode.
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_FALSE : Method correctly executed.
+   * &lt;br&gt;The returned value is the default value initialized by the constructor. this value was not overloaded..
+   */
+   const HRESULT GetAutoFunnelMode(CATBoolean&amp; oAutoFunnel);
+
+private:
+
+   CATDrwSystOffsetMode _OffsetMode;
+   double _Offset;
+   CATDrwSystValueAlignment _ValueAlignmentMode;
+   double _ValueAlignmentOffset;
+   CATBoolean _AutoFunnel;
+
+   CATBoolean _OffsetModeDefined;
+   CATBoolean _OffsetDefined;
+   CATBoolean _ValueAlignmentModeDefined;
+   CATBoolean _ValueAlignmentOffsetDefined;
+   CATBoolean _AutoFunnelDefined;
+};
+
+
+# endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDimDefinition.html">← 上一页: CATDimDefinition.h</a></div>
+        <div><a href="CATDraftingInterfaces.html">下一页: CATDraftingInterfaces.h →</a></div>
+    </div>
+</body>
+</html>

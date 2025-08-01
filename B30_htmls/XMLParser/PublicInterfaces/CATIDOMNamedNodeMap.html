@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATIDOMNamedNodeMap.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATIDOMNamedNodeMap.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMImplementation.html">← 上一页: CATIDOMImplementation.h</a></div>
+        <div><a href="CATIDOMNode.html">下一页: CATIDOMNode.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIDOMNamedNodeMap_h
+#define CATIDOMNamedNodeMap_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+class CATIDOMNode_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATIDOMNamedNodeMap;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATIDOMNamedNodeMap ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface used to represent collections of nodes that can be accessed by name.
+ * Note that @href CATIDOMNamedNodeMap does not inherit from @href CATIDOMNodeList ; 
+ * &lt;code&gt;CATIDOMNamedNodeMap&lt;/code&gt;s are not maintained in any particular order. 
+ * Objects contained in an object implementing @href CATIDOMNamedNodeMap may 
+ * also be accessed by an ordinal index, but this is simply to allow 
+ * convenient enumeration of the contents of a @href CATIDOMNamedNodeMap, 
+ * and does not imply that the DOM specifies an order to these Nodes. 
+ * &lt;p&gt;@href CATIDOMNamedNodeMap objects in the DOM are live.
+ */
+class ExportedByXMLParserItf CATIDOMNamedNodeMap : public CATBaseUnknown {
+	CATDeclareInterface;
+
+	public:
+
+		/**
+		 * Retrieves the number of nodes in this map.
+		 * The range of valid child node indices 
+		 * is &lt;code&gt;0&lt;/code&gt; to &lt;code&gt;oLength - 1&lt;/code&gt; inclusive. 
+		 *
+		 * @param oLength
+		 * The retrieved number of nodes in this map.
+		 */
+		virtual HRESULT GetLength(
+			int&amp; oLength) = 0;
+		
+		/**
+		 * Retrieves a node specified by name.
+		 *
+		 * @param iName
+		 * The name of a node to retrieve.
+		 * @param oNamedItem
+		 * A @href CATIDOMNode (of any type) with the specified 
+		 *   name, or &lt;code&gt;NULL_var&lt;/code&gt; if it does not identify 
+		 *   any node in this map.
+		 *
+		 * @see CATIDOMNode, CATIDOMNode#GetNodeName
+		 */
+		virtual HRESULT GetNamedItem(
+			const CATUnicodeString&amp; iName, 
+			CATIDOMNode_var&amp; oNamedItem) = 0;
+		
+		/**
+		 * Adds a node using its &lt;code&gt;nodeName&lt;/code&gt; attribute.
+		 * If a node with that name is already present in this map, 
+		 * it is replaced by the new one.
+		 * &lt;br&gt;As the &lt;code&gt;nodeName&lt;/code&gt; attribute is used to derive the name 
+		 * which the node must be stored under, multiple nodes of certain types 
+		 * (those that have a &quot;special&quot; string value) cannot be stored as the 
+		 * names would clash. This is seen as preferable to allowing nodes to be 
+		 * aliased.
+		 *
+		 * @param iNodeToStore
+		 * The node to store in this map. The node will later be 
+		 *   accessible using the return value of its @href CATIDOMNode#GetNodeName method.
+		 * @param oOldNode
+		 * If the new @href CATIDOMNode replaces an existing node, oOldNode is set to the 
+		 *   replaced @href CATIDOMNode, otherwise it is set to &lt;code&gt;NULL_var&lt;/code&gt;.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2204&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;WRONG_DOCUMENT_ERR: Raised if &lt;code&gt;iNodeToStore&lt;/code&gt; was created from a 
+		 *   different document than the one that created this map.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2210&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INUSE_ATTRIBUTE_ERR: Raised if &lt;code&gt;iNodeToStore&lt;/code&gt; is an 
+		 *   @href CATIDOMAttr that is already an attribute of another 
+		 *   @href CATIDOMElement object. The DOM user must explicitly clone 
+		 *   @href CATIDOMAttr nodes to re-use them in other elements.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMNode
+		 */
+		virtual HRESULT SetNamedItem(
+			const CATIDOMNode_var&amp; iNodeToStore,
+			CATIDOMNode_var&amp; oOldNode) = 0;
+		
+		/**
+		 * Removes a node specified by name. 
+		 * When this map contains the attributes 
+		 * attached to an element, if the removed attribute is known to have a 
+		 * default value, an attribute immediately appears containing the 
+		 * default value as well as the corresponding namespace URI, local name, 
+		 * and prefix when applicable.
+		 *
+		 * @param iName
+		 * The name of the node to remove.
+		 * @param oNamedItem
+		 * The node removed from this map if a node with such a name exists.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2208&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NOT_FOUND_ERR: Raised if there is no node named &lt;code&gt;iName&lt;/code&gt; in 
+		 *   this map.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMNode, CATIDOMNode#GetNodeName
+		 */
+		virtual HRESULT RemoveNamedItem(
+			const CATUnicodeString&amp; iName, 
+			CATIDOMNode_var&amp; oNamedItem) = 0;
+		
+		/**
+		 * Retrieves the &lt;code&gt;index&lt;/code&gt;th item in the map.
+		 * If &lt;code&gt;index&lt;/code&gt; is greater than or equal to the number of nodes in this map, 
+		 * this returns &lt;code&gt;NULL_var&lt;/code&gt;.
+		 *
+		 * @param iIndex
+		 * Index into this map.
+		 * @param oItem
+		 * The node at the &lt;code&gt;index&lt;/code&gt;th position in the map, or 
+		 *   &lt;code&gt;NULL_var&lt;/code&gt; if that is not a valid index.
+		 *
+		 * @see CATIDOMNode
+		 */
+		virtual HRESULT Item(
+			int iIndex, 
+			CATIDOMNode_var&amp; oItem) = 0;
+		
+		/**
+		 * Retrieves a node specified by local name and namespace URI.
+		 *
+		 * @param iNamespaceURI
+		 * The namespace URI of the node to retrieve. 
+		 * When it is an empty string, this method behaves like @href #GetNamedItem.
+		 * @param iLocalName
+		 * The local name of the node to retrieve.
+		 * @param oItem
+		 * A @href CATIDOMNode (of any type) with the specified
+		 *    name, or &lt;code&gt;NULL_var&lt;/code&gt; if the specified name did not
+		 *    identify any node in the map.
+		 *
+		 * @see CATIDOMNode
+		 */
+		virtual HRESULT GetNamedItemNS(
+			const CATUnicodeString&amp; iNamespaceURI, 
+			const CATUnicodeString&amp; iLocalName, 
+			CATIDOMNode_var&amp; oItem)  = 0;
+		
+		/**
+		 * Adds a node using its namespace URI and local name. 
+		 * If a node with that namespace URI and that 
+		 * local name is already present in this map, it is replaced by the new 
+		 * one.
+		 *
+		 * @param iNamedItemNS
+		 * The node to store in this map. The node will later be 
+		 *   accessible using the return value of its @href CATIDOMNode#GetNamespaceURI and 
+		 *   @href CATIDOMNode#GetLocalName methods.
+		 * @param oOldNode
+		 * If the new @href CATIDOMNode replaces an existing node, oOldNode is set to the 
+		 *   replaced @href CATIDOMNode, otherwise to &lt;code&gt;NULL_var&lt;/code&gt;.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2204&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;WRONG_DOCUMENT_ERR: Raised if &lt;code&gt;iNamedItemNS&lt;/code&gt; was created from a 
+		 *   different document than the one that created this map.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2210&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INUSE_ATTRIBUTE_ERR: Raised if &lt;code&gt;iNodeToStore&lt;/code&gt; is a 
+		 *   @href CATIDOMAttr that is already an attribute of another 
+		 *   @href CATIDOMElement object. The DOM user must explicitly clone 
+		 *   @href CATIDOMAttr nodes to re-use them in other elements.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMNode, CATIDOMNode#GetNamespaceURI, CATIDOMNode#GetLocalName
+		 */
+		virtual HRESULT SetNamedItemNS(
+			const CATIDOMNode_var&amp; iNamedItemNS,
+			CATIDOMNode_var&amp; oOldNode) = 0;
+		
+		/**
+		 * Removes a node specified by local name and namespace URI. 
+		 * A removed attribute may be known to have a default value when this map contains 
+		 * the attributes attached to an element, as returned by the attributes 
+		 * attribute of the @href CATIDOMNode interface. If so, an attribute 
+		 * immediately appears containing the default value as well as the 
+		 * corresponding namespace URI, local name, and prefix when applicable.
+		 *
+		 * @param iNamespaceURI
+		 * The namespace URI of the node to remove.
+		 * @param iLocalName
+		 * The local name of the node to remove.
+		 * @param oRemovedNode
+		 * The node removed from this map if a node with such a local 
+		 *   name and namespace URI exists.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2208&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NOT_FOUND_ERR: Raised if there is no node named &lt;code&gt;iNamespaceURI&lt;/code&gt;
+		 *   and &lt;code&gt;iLocalName&lt;/code&gt; in this map.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMNode, CATIDOMNode#GetNamespaceURI, CATIDOMNode#GetLocalName
+		 */
+		virtual HRESULT RemoveNamedItemNS(
+			const CATUnicodeString&amp; iNamespaceURI, 
+			const CATUnicodeString&amp; iLocalName, 
+			CATIDOMNode_var&amp; oRemovedNode) = 0;
+			
+};
+
+CATDeclareHandler(CATIDOMNamedNodeMap, CATBaseUnknown);
+
+#endif // CATIDOMNamedNodeMap_h
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMImplementation.html">← 上一页: CATIDOMImplementation.h</a></div>
+        <div><a href="CATIDOMNode.html">下一页: CATIDOMNode.h →</a></div>
+    </div>
+</body>
+</html>

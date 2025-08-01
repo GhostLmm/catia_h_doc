@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENOVaultClientCPP/PublicInterfaces/ENOVIVaultUserSession.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ENOVaultClientCPP/PublicInterfaces/ENOVIVaultUserSession.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIVaultSessionFactory.html">← 上一页: ENOVIVaultSessionFactory.h</a></div>
+        <div><a href="ENOVIVaultUserSessionColl.html">下一页: ENOVIVaultUserSessionColl.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#include &quot;ENOVIVaultClientAPP.h&quot;
+
+#ifndef _ENOVIVaultUserSession_h
+#define _ENOVIVaultUserSession_h
+
+// =================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2000
+// =================================================================
+// VPM (c) Copyright Dassault Systemes 2000
+// -----------------------------------------------------------------
+//
+// Contents: ENOVIVaultUserSession, process client side.
+//
+// =================================================================
+
+/**
+ *  @CAA2Level L1
+ *  @CAA2Usage U1
+ */ 
+
+//-----------------------------------------------------------------------------
+// INCLUDES:
+//-----------------------------------------------------------------------------
+
+#include &quot;CATTypUtilit.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+#include &quot;SEQUENCE_octetColl.h&quot;
+#include &quot;ENOVIVaultDocument.h&quot;
+#include &quot;ENOVIVaultDocumentColl.h&quot;
+#include &quot;VaultCacheInfo.h&quot;
+#include &quot;VaultCacheInfoColl.h&quot;
+#include &quot;ENOVIVaultError.h&quot;
+
+
+class ENOVIVaultSession;
+class ENOVIVaultResultSet;
+class ENOVIVaultReadIterator;
+class VSUserSessionRMI;
+class CATHttpClient;
+
+//-----------------------------------------------------------------------------
+// CLASS: ENOVIVaultUserSession
+//-----------------------------------------------------------------------------
+
+/**
+ * This class represents a connection to a given Vault server. 
+ * &lt;b&gt;role&lt;/b&gt;: This class manages the connection to a given Vault server. It enables to create and delete documents
+ * @version   V5R8
+ */
+
+class  ExportedByENOVIVaultClientAPP  ENOVIVaultUserSession
+{
+friend class ENOVIVaultSession;
+friend class ENOVIVaultDocument;
+
+public :
+
+/**
+ * @nodoc
+ */
+   ENOVIVaultUserSession();
+
+/**
+ * @nodoc
+ */
+   ENOVIVaultUserSession(const ENOVIVaultSession  * ipFatherSession,
+                         const CATUnicodeString   &amp; isvVaultAliasName,
+                         const SEQUENCE_octet     &amp; ibvContextOId,
+                         const CATUnicodeString   &amp; isvReadENOVIVaultName,
+                         const CATUnicodeString   &amp; isvReadENOVIVaultHostName,
+                         const int                  invReadENOVIVaultListenerPort,
+                               VSUserSessionRMI   * ipReadVSUserSessionRMI,
+                         const CATUnicodeString   &amp; isvWriteENOVIVaultName,
+                         const CATUnicodeString   &amp; isvWriteENOVIVaultHostName,
+                         const int                  invWriteENOVIVaultListenerPort,
+                               VSUserSessionRMI   * ipWriteVSUserSessionRMI);
+
+
+
+//
+// Documents managment methods
+//
+public :
+/**
+ * @nodoc
+ * Creates a new document.
+ * @param iDocOId [in] - Document Object Identifier.
+ * @param iName [in] - Document name.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iDescription&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iDescription [in] - Description of the document content.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iDescription&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iMimeType [in] - Document mime type.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iMimeType&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalName [in] - Document original name.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalName&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalPath [in] - Document original path.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalPath&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalHost [in] - Document original host.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalHost&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param oppDocument [out] - newly created vault document.
+ * @param oVaultError [out] - Details about the error.
+ */
+HRESULT createDocument ( SEQUENCE_octet      &amp; iDocOId,
+                         CATUnicodeString    &amp; iName,
+                         CATUnicodeString    &amp; iDescription,
+                         CATUnicodeString    &amp; iMimeType,
+                         CATUnicodeString    &amp; iOriginalName,
+                         CATUnicodeString    &amp; iOriginalPath,
+                         CATUnicodeString    &amp; iOriginalHost,
+                         ENOVIVaultDocument ** oppDocument,
+                         ENOVIVaultError     &amp; oVaultError);
+
+
+/**
+ * Creates a new document.
+ * @param iName [in] - Document name.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iDescription&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iDescription [in] - Description of the document content.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iDescription&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iMimeType [in] - Document mime type.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iMimeType&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalName [in] - Document original name.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalName&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalPath [in] - Document original path.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalPath&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param iOriginalHost [in] - Document original host.
+ *     &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: &lt;tt&gt;iOriginalHost&lt;/tt&gt; may be set to &quot;&quot;.
+ * @param oppDocument [out] - newly created vault document.
+ * @param oVaultError [out] - Details about the error.
+ */
+HRESULT createDocument ( CATUnicodeString    &amp; iName,
+                         CATUnicodeString    &amp; iDescription,
+                         CATUnicodeString    &amp; iMimeType,
+                         CATUnicodeString    &amp; iOriginalName,
+                         CATUnicodeString    &amp; iOriginalPath,
+                         CATUnicodeString    &amp; iOriginalHost,
+                         ENOVIVaultDocument ** oppDocument,
+                         ENOVIVaultError     &amp; oVaultError);
+
+/**
+ * Removes the supplied document.
+ * Beware to reset iDocument pointer to NULL after method use because&lt;br&gt;
+ * this method delete the pointed document object.
+ * @param ipDocument [in] - pointer on the document to remove.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT removeDocument (const ENOVIVaultDocument * ipDocument,
+			                        ENOVIVaultError    &amp; oVaultError);
+
+/**
+ * Unbinds a document.
+ * Deletes the @href ENOVIVaultDocument object on the client. Does not remove the actual document on the server.
+ * @param iURL [in] - Document to unbind.
+ * @param iDocument [in] - @href ENOVIVaultDocument object to remove.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT unBindDocument (const ENOVIVaultDocument * ipDocument,
+			                        ENOVIVaultError    &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ * Removes the supplied document proxy from the document proxy collection.
+ * @param ipDocument [in] - pointer on the document to remove.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT removeDocProxyFromColl (const ENOVIVaultDocument * ipDocument,
+			                                ENOVIVaultError    &amp; oVaultError);
+
+
+/**
+ * Supplies the Document content pertainning to the &lt;code&gt;iUUD&lt;/code&gt; parameter.
+ * @param iOIdDoc [in] - vault document identifier (OID).
+ * @param oppDocument [out] - ENOVIVaultDocument object.
+ *     &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: &lt;tt&gt;oppDocument&lt;/tt&gt; parameter must only be dealocated using the @href #unBindDocument method.
+ * @param oDocContent [out] - Document content.
+ *     &lt;br&gt;&lt;b&gt;You are supposed to delete oDocContent object after user.&lt;/b&gt;
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT getDocContent(const SEQUENCE_octet       &amp; iOIdDoc,
+                               ENOVIVaultDocument  ** oppDocument,
+                               SEQUENCE_octet       &amp; oDocContent,
+                               ENOVIVaultError      &amp; oVaultError);
+
+/**
+ * @nodoc
+ * ****************** CAUTION: INTERNAL USE ONLY *******************************
+ */
+   HRESULT getDocContent(const SEQUENCE_octet       &amp; iOIdDoc,
+	                     const CATBoolean           &amp; iNotMutableDoc,
+                               ENOVIVaultDocument  ** oppDocument,
+                               SEQUENCE_octet       &amp; oDocContent,
+                               ENOVIVaultError      &amp; oVaultError);
+
+
+
+/**
+ * @nodoc
+ * Supplies the Document pertainning to the &lt;code&gt;iUUD&lt;/code&gt; parameter in open read mode.
+ * @param iOIdDoc [in] - vault document identifier (OID).
+ * @param oppDocument [out] - ENOVIVaultDocument object.
+ *     &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: &lt;tt&gt;oppDocument&lt;/tt&gt; parameter must only be dealocated using the @href #unBindDocument method.
+ * @param oVaultError [out] - Details about the error.
+ * @since V5R14SP3
+ */
+   HRESULT getDocOpenRead(const SEQUENCE_octet       &amp; iOIdDoc,
+                                ENOVIVaultDocument  ** oppDocument,
+                                ENOVIVaultError      &amp; oVaultError);
+
+/**
+ * @nodoc
+ * ****************** CAUTION: INTERNAL USE ONLY *******************************
+ */
+   HRESULT getDocOpenRead(const SEQUENCE_octet       &amp; iOIdDoc,
+	                      const CATBoolean           &amp; iNotMutableDoc,
+                                ENOVIVaultDocument  ** oppDocument,
+                                ENOVIVaultError      &amp; oVaultError);
+
+/**
+ * Retrieves the document on ENOVIVault server pertainning to the supplied Id.
+ * @param iDocumentIdentifier [in] - vault document identifier (OID).
+ * @param oDocument [out] - vault document.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT getDocument  (const SEQUENCE_octet      &amp; iDocumentIdentifier,
+                               ENOVIVaultDocument ** oDocument,
+                               ENOVIVaultError     &amp; oVaultError);
+
+/**
+ * @nodoc
+ * ****************** CAUTION: INTERNAL USE ONLY *******************************
+ */
+   HRESULT getDocument  (const SEQUENCE_octet      &amp; iDocumentIdentifier,
+	                     const CATBoolean           &amp; iNotMutableDoc,
+                               ENOVIVaultDocument ** oDocument,
+                               ENOVIVaultError     &amp; oVaultError);
+
+
+/**
+ * Retrieves a documents collection on ENOVIVault server pertainning to the supplied Id collection.
+ * @param iDocumentIdentifierColl [in] - vault document identifier collection.
+ * @param oDocumentColl [out] - vault documents collection.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT getDocuments (const SEQUENCE_octetColl     &amp; iDocumentIdentifierColl,
+                               ENOVIVaultReadIterator &amp; oDocumentColl,
+                               ENOVIVaultError        &amp; oVaultError) const;
+
+/**
+ * @nodoc
+ * Retrieves all documents.
+ * @param invFetchSize [in] - gives to Vault Server a hint as to the number of document to be fetched.
+ * @param oppDocResultSet [out] - vault document result set.
+ * @param oVaultError [out] - Details about the error.
+ * @param ibvAddDocToColl [in] - specifies if documents should be added to collection or not.
+ */
+   HRESULT getDocuments (int                      invFetchSize,
+                         ENOVIVaultResultSet   ** oppDocResultSet,
+                         ENOVIVaultError        &amp; oVaultError,
+                         CATBoolean               ibvAddDocToColl = TRUE);
+
+/**
+ * @nodoc
+ * Retrieves the documents collection of ENOVIVault documents already loaded from ENOVIVault server.
+ * @param oDocumentColl [out] - vault documents collection.
+ * @param oVaultError [out] - Details about the error.
+ */
+/*
+   HRESULT getDocumentColl (ENOVIVaultDocumentColl ** oDocumentColl,
+			    ENOVIVaultError         &amp; oVaultError) ;
+
+*/
+
+
+/**
+ * Supplies the ENOVIVaultUserSession Object Identifier.
+ * @param oUserSessionOId [out] - ENOVIVaultUserSession Object Identifier.
+ */
+   HRESULT getOId(SEQUENCE_octet &amp; oUserSessionOId) const;
+
+
+/**
+ * Supplies the CATlet context Object Identifier.
+ * @param oCATCtxtOId [out] - CATlet context Object Identifier.
+ */
+   HRESULT getCATCtxtOId(SEQUENCE_octet &amp; oCATCtxtOId) const;
+
+
+/**
+ * Supplies the ENOVIVaultUserSession name.
+ * @param oName [out] - ENOVIVaultUserSession name.
+ */
+   HRESULT getName(CATUnicodeString &amp; oName) const;
+
+
+/**
+ * Supplies the ENOVIVault Server alias name.
+ * @param oName [out] - ENOVIVault Server alias name.
+ */
+   HRESULT getVaultAliasName (CATUnicodeString &amp; oName) const;
+
+/**
+ * Supplies the father ENOVIVaultSession object.
+ * @param oENOVIVaultSession [out] - double pointer on the father ENOVIVaultSession.
+ */
+   HRESULT getFatherVaultSession(ENOVIVaultSession ** oENOVIVaultSession) const;
+
+/**
+ * Supplies the current Vault Server timestamp.
+ * @param oCurrentTimestamp [out] - remote Vault Server current timestamp.
+ * @param oVaultError [out] - Details about the error.
+ */
+   HRESULT getCurrentTimestamp(CATUnicodeString &amp; oCurrentTimestamp,
+                               ENOVIVaultError  &amp; ve) const;
+
+public :
+/**
+ * @nodoc
+ */
+   ~ENOVIVaultUserSession();
+/**
+ * @nodoc
+ * Abort all the work done in the current UserSession and do not reinit&lt;br&gt;
+ * the UserSession after that.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT close(ENOVIVaultError &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ * Abort in database (Rollback) all the work done in the current UserSession and reinit&lt;br&gt;
+ * the UserSession after that.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT abort(ENOVIVaultError &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ * Undo the Current command if it exist. Do not start a new one.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT undo(ENOVIVaultError &amp; oVaultError);
+
+
+//
+// Low level transaction managment methods
+//
+
+/**
+ * @nodoc
+ * Prepare all the work done during the UserSession (execute orders on database but no commit).
+ * @return S_OK, E_FAIL
+ */
+   HRESULT prepare(ENOVIVaultError &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ * unPrepare all the work done during the UserSession (rollback orders on database but no commit).
+ * @return S_OK, E_FAIL
+ */
+   HRESULT unPrepare(ENOVIVaultError &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ * Commit all the work done during the UserSession (a commit is done on database).
+ * @return S_OK, E_FAIL
+ */
+   HRESULT commit(ENOVIVaultError &amp; oVaultError);
+
+//
+// Attributes access
+//
+public :
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server name for Read.&lt;br&gt;
+ * @param oName [out] - ENOVIVault Server name for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadVaultName (CATUnicodeString &amp; oName) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server HostName for Read.&lt;br&gt;
+ * @param oHostName [out] - ENOVIVault Server HostName for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadVaultHostName (CATUnicodeString &amp; oHostName) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server listener port for Read.&lt;br&gt;
+ * @param oPortNumber [out] - ENOVIVault Server listener port for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadVaultListenerPort (int &amp; oPortNumber) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server persistency mode for Read.&lt;br&gt;
+ * @param oMode [out] - ENOVIVault Server persistency mode for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadPersistencyMode (CATUnicodeString &amp; oMode) const;
+
+
+/**
+ * @nodoc
+ * Supplies the collection of supported Read file transfert protocols.&lt;br&gt;
+ * @param oProtocols [out] - collection of Read file transfert protocols.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadSupportedProtocols (CATListOfCATUnicodeString &amp; oProtocols) const;
+
+/**
+ * @nodoc
+ */
+   HRESULT getHTTPServerHost (CATUnicodeString &amp; oHTTPServerHost,
+                              ENOVIVaultError  &amp; oVaultError);
+
+/**
+ * @nodoc
+ */
+   HRESULT getHTTPServerPort (CATUnicodeString &amp; oHTTPServerPort,
+                              ENOVIVaultError  &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Supplies the current Read file transfert protocol.&lt;br&gt;
+ * @param oProtocol [out] - Current Read file transfert protocol.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getReadProtocol (CATUnicodeString &amp; oProtocol,
+                            ENOVIVaultError  &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Supplies the current Write file transfert protocol.&lt;br&gt;
+ * @param oProtocol [out] - Current Write file transfert protocol.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWriteProtocol (CATUnicodeString &amp; oProtocol,
+                             ENOVIVaultError  &amp; oVaultError);
+
+
+/**
+ * @nodoc
+ */
+   HRESULT getReadVSUserSessionRMI(VSUserSessionRMI ** oppReadVSUserSessionRMI);
+   
+/**
+ * @nodoc
+ */
+   HRESULT getWriteVSUserSessionRMI(VSUserSessionRMI ** oppWriteVSUserSessionRMI);
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server name for Write.&lt;br&gt;
+ * @param oName [out] - ENOVIVault Server name for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWriteVaultName (CATUnicodeString &amp; oName) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server HostName for Write.&lt;br&gt;
+ * @param oHostName [out] - ENOVIVault Server HostName for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWriteVaultHostName (CATUnicodeString &amp; oHostName) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server listener port for Write.&lt;br&gt;
+ * @param oPortNumber [out] - ENOVIVault Server listener port for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWriteVaultListenerPort (int &amp; oPortNumber) const;
+
+
+/**
+ * @nodoc
+ * Supplies the ENOVIVault Server persistency mode for Write.&lt;br&gt;
+ * @param oMode [out] - ENOVIVault Server persistency mode for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWritePersistencyMode (CATUnicodeString &amp; oMode) const;
+
+
+/**
+ * @nodoc
+ * Supplies the collection of supported Write file transfert protocols.&lt;br&gt;
+ * @param oProtocols [out] - collection of Write file transfert protocols.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getWriteSupportedProtocols (CATListOfCATUnicodeString &amp; oProtocols) const;
+
+
+/**
+ * @nodoc
+ * Set the father ENOVIVaultSession.
+ * @param ipENOVIVaultSession [in] - pointer on the father ENOVIVaultSession.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setFatherVaultSession(ENOVIVaultSession * ipENOVIVaultSession);
+
+/**
+ * @nodoc
+ * Set the ENOVIVaultUserSession Object Identifier.
+ * @param iUserSessionOId [in] - ENOVIVaultUserSession Object Identifier.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setOId(const SEQUENCE_octet &amp; iUserSessionOId);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVaultUserSession name.
+ * @param iName [in] - ENOVIVaultUserSession name.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setName(const CATUnicodeString &amp; iName);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server alias name.&lt;br&gt;
+ * @param iName [in] - ENOVIVault Server alias name.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setVaultAliasName (const CATUnicodeString &amp; iName);
+   
+/**
+ * @nodoc
+ */
+   HRESULT setReadVSUserSessionRMI(VSUserSessionRMI  * ipReadVSUserSessionRMI);
+   
+/**
+ * @nodoc
+ */
+   HRESULT setWriteVSUserSessionRMI(VSUserSessionRMI * ipWriteVSUserSessionRMI);
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server name for Read.&lt;br&gt;
+ * @param iName [in] - ENOVIVault Server name for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setReadVaultName (const CATUnicodeString &amp; iName);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server HostName for Read.&lt;br&gt;
+ * @param iHostName [in] - ENOVIVault Server HostName for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setReadVaultHostName (const CATUnicodeString &amp; iHostName);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server listener port for Read.&lt;br&gt;
+ * @param iPortNumber [in] - ENOVIVault Server listener port for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setReadVaultListenerPort (const int &amp; iPortNumber);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server persistency mode for Read.&lt;br&gt;
+ * @param iMode [in] - ENOVIVault Server persistency mode for Read.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setReadPersistencyMode (const CATUnicodeString &amp; iMode);
+
+
+/**
+ * @nodoc
+ * Set the collection of supported Read file transfert protocols.&lt;br&gt;
+ * @param iProtocols [in] - collection of Read file transfert protocols.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setReadProtocol (const CATUnicodeString &amp; iProtocol);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server name for Write.&lt;br&gt;
+ * @param iName [in] - ENOVIVault Server name for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setWriteVaultName (const CATUnicodeString &amp; iName);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server HostName for Write.&lt;br&gt;
+ * @param iHostName [in] - ENOVIVault Server HostName for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setWriteVaultHostName (const CATUnicodeString &amp; oHostName);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server listener port for Write.&lt;br&gt;
+ * @param iPortNumber [in] - ENOVIVault Server listener port for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setWriteVaultListenerPort (const int &amp; iPortNumber);
+
+
+/**
+ * @nodoc
+ * Set the ENOVIVault Server persistency mode for Write.&lt;br&gt;
+ * @param iMode [in] - ENOVIVault Server persistency mode for Write.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setWritePersistencyMode (const CATUnicodeString &amp; iMode);
+
+
+/**
+ * @nodoc
+ * Set the collection of supported Write file transfert protocols.&lt;br&gt;
+ * @param iProtocols [in] - collection of Write file transfert protocols.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT setWriteProtocol (const CATUnicodeString &amp; iProtocol);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+    HRESULT getUpdatedDocs(const CATUnicodeString        &amp; iTimestamp,
+                                 ENOVIVaultReadIterator *&amp; opDocumentColl,
+                                 CATUnicodeString        &amp; oTimestamp,
+                                 ENOVIVaultError         &amp; oVaultError);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+    HRESULT getUpdatedDocs(const SEQUENCE_octetColl      &amp; iDocumentIdentifierColl,
+                           const CATUnicodeString        &amp; iTimestamp,
+                                 ENOVIVaultReadIterator *&amp; opDocumentColl,
+                                 CATUnicodeString        &amp; oTimestamp,
+                                 ENOVIVaultError         &amp; oVaultError);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+    HRESULT getDeletedDocs(const CATUnicodeString        &amp; iTimestamp,
+                                 ENOVIVaultReadIterator *&amp; opDocumentColl,
+                                 CATUnicodeString        &amp; oTimestamp,
+                                 ENOVIVaultError         &amp; oVaultError);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+   HRESULT getDocsCacheInfo(const SEQUENCE_octetColl     &amp; iDocumentIdentifierColl,
+                                  VaultCacheInfoColl     &amp; oVaultCacheInfoColl,
+                                  ENOVIVaultError        &amp; oVaultError);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+    HRESULT restoreReadCnx(ENOVIVaultError &amp; oVaultError);
+
+/**
+ * @nodoc
+ * @return S_OK, E_FAIL
+ */
+    HRESULT restoreWriteCnx(ENOVIVaultError &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Test the Vault User Session by creating, committing and reading &lt;br&gt;
+ * a document in the Vault Server
+ * @return S_OK, E_FAIL
+ */
+   HRESULT test(ENOVIVaultError &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Test the Vault User Session by creating, committing, reading and removing &lt;br&gt;
+ * a document in the Vault Server
+ * @return S_OK, E_FAIL
+ */
+   HRESULT VTest(ENOVIVaultError &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Marks the physical documents specifed by the URL collection as been protected from deletion.
+ * @param iDocOIdColl [in] - ENOVIVaultDocument object identifier collection to mark.
+ * @param iFrozeId [in] - froze identifier.
+ * @param oVaultError [out] - Details about the error.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT frozeDocImg(const SEQUENCE_octetColl  &amp; iDocOIdColl,
+                       const SEQUENCE_octet      &amp; iFrozeId,
+                             ENOVIVaultError     &amp; oVaultError);
+
+/**
+ * @nodoc
+ * Unmarks the physical documents specifed by the URL collection as been protected from deletion.
+ * @param iDocOIdColl [in] - ENOVIVaultDocument object identifier collection to unmark.
+ * @param iFrozeId [in] - froze identifier.
+ * @param oVaultError [out] - Details about the error.
+ * @return S_OK, E_FAIL
+ */
+   HRESULT unfrozeDocImg(const SEQUENCE_octetColl  &amp; iDocOIdColl,
+                         const SEQUENCE_octet      &amp; iFrozeId,
+                               ENOVIVaultError     &amp; oVaultError);
+
+
+  protected :
+  SEQUENCE_octet             _OId;
+  SEQUENCE_octet             _CATCtxtOId;
+  ENOVIVaultSession        * _FatherSession;
+  CATUnicodeString           _UserSessionName;
+  CATUnicodeString           _VaultAliasName;
+
+  CATUnicodeString           _ReadVaultName;
+  CATUnicodeString           _ReadVaultHostName;
+   int                       _ReadVaultListenerPort;
+  CATUnicodeString           _ReadPersistencyMode;
+  VSUserSessionRMI         * _ReadRMI;
+  
+  CATUnicodeString           _WriteVaultName;
+  CATUnicodeString           _WriteVaultHostName;
+  int                        _WriteVaultListenerPort;
+  CATUnicodeString           _WritePersistencyMode;
+  VSUserSessionRMI         * _WriteRMI;
+  
+  CATListOfCATUnicodeString  _ReadSupportedProtocols;
+  CATListOfCATUnicodeString  _WriteSupportedProtocols;
+   
+  CATUnicodeString           _ReadProtocol;
+  CATUnicodeString           _WriteProtocol;
+  
+  CATHttpClient            * _CATHttpClient;
+   
+  ENOVIVaultDocumentColl     _VaultDocumentColl;
+  
+  public :
+  
+/**
+ * @nodoc
+ */
+  CATBoolean                 _IsInRestoreReadCnx;
+  
+/**
+ * @nodoc
+ */
+  CATBoolean                 _IsInRestoreWriteCnx;
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIVaultSessionFactory.html">← 上一页: ENOVIVaultSessionFactory.h</a></div>
+        <div><a href="ENOVIVaultUserSessionColl.html">下一页: ENOVIVaultUserSessionColl.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAACATIAApplicationFrm.edu/CAACafSearch.m/LocalInterfaces/CAACafSearchCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAACATIAApplicationFrm.edu/CAACafSearch.m/LocalInterfaces/CAACafSearchCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAACafLaunchNextQueryNotification.html">← 上一页: CAACafLaunchNextQueryNotification.h</a></div>
+        <div><a href="CAACafSearchDlg.html">下一页: CAACafSearchDlg.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAACafSearchCmd_h
+#define CAACafSearchCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  State command which creates some queries and displayes a dialog box
+//  to choose a criterion and a context and enables the end user to launch the query.
+//
+//  Illustrates:
+//
+//     - Creation of a State command
+//     - Use of a Search AI
+//     - Use of a CATPanelState
+//
+//  Usage:
+//
+//     Select a criterion and a context in the dialog box and then launch the query.
+//
+//
+//===========================================================================
+
+// DialogEngine Framework
+#include &quot;CATStateCommand.h&quot;  //Needed to derive from CATStateCommand
+
+// DialogEngine Framework 
+class CATDialogAgent ;        //Dialog agent 
+
+// InteractiveInterfaces Framework 
+class CATIIniSearchEngine ;   
+class CATIIniSearchContext;
+class CATIIniSearchServices;
+
+// Visualization Framework 
+class CATPSO ;
+
+// System Framework
+#include &quot;CATListOfCATUnicodeString.h&quot; 
+
+// Local Framework
+class CAACafSearchDlg ; 
+
+
+class CAACafSearchCmd : public CATStateCommand
+{
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAACafSearchCmd.CATNls  
+  // 
+
+  CmdDeclareResource(CAACafSearchCmd,CATStateCommand);
+
+  public :
+
+    // Manages the lifecyle of the command.
+    //
+    CAACafSearchCmd();
+    virtual ~CAACafSearchCmd();  
+
+    // Activate
+    // --------
+    // Called when the command selector gives the focus to this command. 
+    // Two cases can happen:
+    //  -The command starts from the beginning.
+    //  -The command restarts at the state that was current when a shared command 
+    //   took the focus from it.
+    //
+    // These two cases can be distinguished thanks to the notification type.
+    //
+    CATStatusChangeRC Activate   (CATCommand * iCmd,CATNotification * iNotif);
+
+    // Cancel
+    // --------
+    // Called when the command selector gives the focus to an exclusive command,
+    // or if this command completes. In this latter case, the focus is given to 
+    // the default command (usually Select). 
+    // You should not take care of the command destruction. This is done
+    // by the dialog state command engine.
+    // 
+    // If the end user selects this command again, it is recreated. 
+    //
+    CATStatusChangeRC Cancel     (CATCommand * iCmd,CATNotification * iNotif);
+
+    // Deactivate
+    // ----------
+    // Called when the command selector freezes this command to give
+    // the focus to a shared command. When the shared command completes, this
+    // frozen command will be reactivated from its current state. 
+    //  
+    CATStatusChangeRC Desactivate(CATCommand * iCmd,CATNotification * iNotif);
+
+    // BuildGraph
+    // -----------
+    // Implements the statechart. 
+    // It is called once, even if the command is in repeat mode
+    //
+    //
+    virtual void BuildGraph() ;
+
+    // LaunchQuery
+    // -----------
+    // The query is launched in taken account of the current criterion and
+    // the current context. The count of found element is displayed in 
+    // a dialog box editor, and the elements are set in the PSO 
+    //
+    CATBoolean  LaunchQuery (void * iDummy);
+
+
+    // GetCriteriaText
+    // --------------
+    // This method is called by the dialog box to retrieve the text of each criterion
+    // to display in the combo.
+    //
+    HRESULT GetCriteriaText(CATListOfCATUnicodeString ** oCriteriaTextList);
+
+  private :
+
+    // Init
+    // --------------
+    // This method is called in the class constructor. It builds the 
+    // search components: the search engine , the services and context components, and
+    // calls the CreateCriteria method.
+    // 
+    void Init();
+
+    // CreateCriteria
+    // --------------
+    // This method is called by the Init method to build all the criteria. Each
+    // criterion is created and deleted just after to have kept its text. Thanks to this text
+    // the criteria will be re-created to be launch.
+    //
+    HRESULT CreateCriteria();
+
+
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAACafSearchCmd(const CAACafSearchCmd &amp;iObjectToCopy);
+
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAACafSearchCmd &amp; operator = (const CAACafSearchCmd &amp;iObjectToCopy);
+
+  private :
+    // Dialog box to display the criteria and its result
+    CAACafSearchDlg                * _pSearchDlg;
+
+    // Dialog agent to be inform that the Launch button has been selected
+    CATDialogAgent                 * _daSearchDlg ; 
+ 
+    // Interfaces on the components created in the Init method
+    CATIIniSearchEngine            * _pIniSearchEngineOnCurrentEngine ;
+    CATIIniSearchContext           * _pIniSearchContextOnCurrentContext ;
+    CATIIniSearchServices          * _pIniSearchServices ;
+    
+    // The list of all the queries created in the CreateQueries method
+    CATListOfCATUnicodeString      * _pCriterionTextList ;
+
+    // The result is pre-highlighted 
+    CATPSO                         * _pPso ;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAACafLaunchNextQueryNotification.html">← 上一页: CAACafLaunchNextQueryNotification.h</a></div>
+        <div><a href="CAACafSearchDlg.html">下一页: CAACafSearchDlg.h →</a></div>
+    </div>
+</body>
+</html>

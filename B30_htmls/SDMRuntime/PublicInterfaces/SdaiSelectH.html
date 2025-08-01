@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDMRuntime/PublicInterfaces/SdaiSelectH.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SDMRuntime/PublicInterfaces/SdaiSelectH.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SdaiSelHeaderMacro.html">← 上一页: SdaiSelHeaderMacro.h</a></div>
+        <div><a href="SdaiSelectType.html">下一页: SdaiSelectType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1994
+//=============================================================================
+//
+// SdaiSelectH:
+//  takes a value of type SELECT
+//   (SDAI -- C++ Language Binding)
+//=============================================================================
+// Usage Notes:
+//  can be constructed from a SdaiAttr or via SdaiSelectType::CreateSelect
+//=============================================================================
+// Schema EXPRESS :
+//
+//	ENTITY select_value
+//
+//		value	: primitive ;		(* valeur associee a l&#x27;attribut *)
+//		type	: named_type ;		(* type de la valeur *)
+//
+//      END_ENTITY ;
+//
+// ------------------------------------------------------------------------------------------------
+// References :
+//      Definition de la norme SDAI ISO 10303-22, paragraphe 8.4.8, p. 39
+//      Binding C++ de la norme SDAI ISO 10303-22, paragraphe D.4.2.4, p. 303 et 304
+//  
+//=============================================================================
+// Mar. 1994   Creation                                   C. Vandaele
+// Dec. 1996   Modification                               B. Marx
+//=============================================================================
+
+#ifndef SdaiSelectH_H
+#define SdaiSelectH_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &lt;KS0SIMPL.h&gt;
+#include &lt;SdaiMacro.h&gt;
+#include &quot;SdaiPrimitiveH.h&quot;
+
+class SdaiString ;
+class SdaiBoolean ;
+class SdaiLogical ;
+class SdaiNamedType ;
+class CATSdaiSelectH ;
+
+//-----------------------------------------------------------------------------
+/** Class representing a value of type SELECT. */
+class ExportedByKS0SIMPL SdaiSelectH
+{
+  public:
+
+    //------
+    // &#x27;tors
+    //------
+    /** @nodoc */
+    SdaiSelectH(); // not typed
+	
+	/** @nodoc */
+    SdaiSelectH (SdaiAttrH, const SdaiPrimitiveH&amp;);
+	
+	/** @nodoc */
+    SdaiSelectH(const SdaiSelectH&amp;);
+
+    // Note : to create a select with a type use
+    //        SdaiSelectType::CreateSelect
+    //     or SdaiSelectH (SdaiAttrH)
+
+    virtual ~SdaiSelectH();
+
+    //------------------
+    // validity
+    //------------------
+    /** @nodoc */
+    const SdaiBoolean&amp; exists ()	const ;
+
+    // ----------------------------------------------------------------------------------------
+    // R.A.Z
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	void  nullify () ;
+
+    // ----------------------------------------------------------------------------------------
+    // conversion to primitiveH
+    // ----------------------------------------------------------------------------------------
+	/**
+    * Converts a SdaiSelect into an SdaiPrimitive
+    */
+	const SdaiPrimitiveH&amp; getValue()	const ;
+	
+    // ----------------------------------------------------------------------------------------
+    // assignment to a PrimitiveH
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	SdaiSelectH&amp; set (const SdaiPrimitiveH&amp;) ;
+
+    // ----------------------------------------------------------------------------------------
+    // TypeName of contained object
+    // ----------------------------------------------------------------------------------------
+	/**
+    * Gets the underlying type name of a SdaiSelect
+    */
+	const SdaiString&amp;  UnderlyingTypeName ()  const ;
+
+    // ----------------------------------------------------------------------------------------
+    // Type of contained object
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	SdaiNamedTypeH   UnderlyingType ()  const ;
+    
+    // in case of two equivalent underlying types, solve ambiguity
+    /** @nodoc */
+	void SetUnderlyingType (SdaiNamedTypeH underType) ;
+
+    // ----------------------------------------------------------------------------------------
+    // IsKindOf (not in the norm)
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	const SdaiBoolean&amp;   IsKindOf( const SdaiString&amp; iTypeName )  const;
+    /** @nodoc */
+	static const SdaiString &amp; LeType();
+	
+    // ----------------------------------------------------------------------------------------
+    // dump (STEP) of a SELECT
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	void  DumpSelectValue ( ostream&amp; ) const  ;
+	
+    // ----------------------------------------------------------------------------------------
+    // type SELECT (not in the norm)
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	SdaiSelectTypeH  GetSelectType() const ;
+    /** @nodoc */
+	void SetSelectType(const SdaiSelectTypeH&amp;);
+    /** @nodoc */
+	const SdaiString&amp;  GetSelectTypeName() const  ;
+	
+    // ----------------------------------------------------------------------------------------
+    // (un)equality operators (not in the norm)
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	const SdaiLogical&amp;  operator==(const SdaiSelectH&amp; ) const;
+    /** @nodoc */
+	const SdaiLogical&amp;  operator!=(const SdaiSelectH&amp; ) const;
+	
+
+    // ----------------------------------------------------------------------------------------
+    // copy operator (not in the norm)
+    // ----------------------------------------------------------------------------------------
+    /** @nodoc */
+	SdaiSelectH&amp; operator= (const SdaiSelectH&amp; );
+
+private:
+    // private : help to compute underlying type
+    static
+    SdaiNamedTypeH  ComputeUnderlyingType (const SdaiPrimitiveH&amp; iVal, SdaiSelectTypeH iType);
+	
+
+  protected:
+    // ----------------------------------------------------------------------------------------
+    // data
+    // ---------------------------------------------------------------------------------------
+    //CATSdaiSelectH*  _SelectH ;
+    /** @nodoc */
+	SdaiPrimitiveH   _value  ;
+    /** @nodoc */
+	SdaiSelectTypeH  _seltype  ;
+    /** @nodoc */
+	SdaiNamedTypeH _undertype ; // selected type
+
+
+};
+
+// ----------------------------------------------------------------------------------------
+// fonction externe permettant de retrouver le nom d&#x27;un objet de type SdaiSelectH
+// ---------------------------------------------------------------------------------------- 
+/** @nodoc */
+ExportedByKS0SIMPL extern const SdaiString &amp;	TypeName(SdaiSelectH&amp;);
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="SdaiSelHeaderMacro.html">← 上一页: SdaiSelHeaderMacro.h</a></div>
+        <div><a href="SdaiSelectType.html">下一页: SdaiSelectType.h →</a></div>
+    </div>
+</body>
+</html>

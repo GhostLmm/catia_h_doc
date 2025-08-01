@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCldBody.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCldBody.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCldAttribute.html">← 上一页: CATCldAttribute.h</a></div>
+        <div><a href="CATCldCell.html">下一页: CATCldCell.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//==============================================================================================================
+// COPYRIGHT DASSAULT SYSTEMES PROVENCE 1999
+//==============================================================================================================
+// CATCldBody
+//==============================================================================================================
+// Creation: JLH - ??-Oct-1999
+// 24-03-2014 CGMOFF+CGMPRJ
+//==============================================================================================================
+
+#ifndef CATCldBody_H
+#define CATCldBody_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */ 
+
+#include &quot;CATCldGenEntity.h&quot;
+
+#include &quot;CATListOfCATCldCells.h&quot;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCldBody ;
+#else
+extern &quot;C&quot; const IID IID_CATCldBody ;
+#endif
+
+/**
+ * Interface for the CloudEditor entity &lt;tt&gt;CATCldBody&lt;/tt&gt;.&lt;br&gt;
+ * @see CATCldGenEntity
+ */
+class ExportedByCATGMGeometricInterfaces CATCldBody : public CATCldGenEntity
+{
+  CATDeclareInterface ;
+
+public:
+
+//==============================================================================================================
+// CATCldBody characteristics.
+//==============================================================================================================
+
+  /**
+   * Gets the &lt;i&gt;CharacteristicDistance&lt;/i&gt; which is an estimation of the max
+   * of the min distances between points.&lt;br&gt;
+   * It defines the neighbourhood : for each point of the &lt;tt&gt;CATCldBody&lt;/tt&gt;, there is
+   * at least one point lying at a distance less than the &lt;i&gt;CharacteristicDistance&lt;/i&gt;.
+   */
+  virtual double GetCharacteristicDistance () const = 0 ;
+
+  /**
+   * Sets the &lt;i&gt;CharacteristicDistance&lt;/i&gt; which is an estimation of the max
+   * of the min distances between points.&lt;br&gt;
+   * It defines the neighbourhood : for each point of the &lt;tt&gt;CATCldBody&lt;/tt&gt;, there is
+   * at least one point lying at a distance less than the &lt;i&gt;CharacteristicDistance&lt;/i&gt;.
+   */
+  virtual void SetCharacteristicDistance (const double iDistance) = 0 ;
+
+//==============================================================================================================
+// Points.
+//==============================================================================================================
+
+  /**
+   * Adds a point into the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * @param iCoords
+   * The coordinates of the point to add.
+   * @param oIndex
+   * The index of the added point in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   */
+  virtual void AddPoint (const float iCoords[3],
+                         int &amp;oIndex) = 0 ;
+
+  /**
+   * Adds a point into the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * @param iCoords
+   * The coordinates of the point to add.
+   * @param oIndex
+   * The index of the added point in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   */
+  virtual void AddPoint (const double iCoords[3],
+                         int &amp;oIndex) = 0 ;
+
+  /**
+   * Adds &lt;tt&gt;iNbPoints&lt;/tt&gt; points into the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * @param iCoords
+   * The coordinates of the points to add.
+   * @param ioIndexes
+   * The indexes of the added points in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   * &lt;b&gt;CAUTION:&lt;/b&gt;&lt;br&gt;
+   * If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.
+   */
+  virtual void AddPoints (const int     iNbPoints,
+                          const float*  iCoords,
+                          int*         &amp;ioIndexes) = 0 ;
+
+  /**
+   * Adds &lt;tt&gt;iNbPoints&lt;/tt&gt; points into the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * @param iCoords
+   * The coordinates of the points to add.
+   * @param ioIndexes
+   * The indexes of the added points in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   * &lt;b&gt;CAUTION:&lt;/b&gt;&lt;br&gt;
+   * If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.
+   */
+  virtual void AddPoints (const int      iNbPoints,
+                          const double*  iCoords,
+                          int*          &amp;ioIndexes) = 0 ;
+
+//==============================================================================================================
+// Sub-elements management
+//==============================================================================================================
+
+  /**
+   * Inserts a &lt;tt&gt;CATCldBody&lt;/tt&gt;.&lt;br&gt;
+   * If the given &lt;tt&gt;CATCldBody&lt;/tt&gt; references the same &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; than the considered
+   * &lt;tt&gt;CATCldBody&lt;/tt&gt;, there is a simple insertion, otherwise the given &lt;tt&gt;CATCldBody&lt;/tt&gt; is copied and
+   * the methods returns the copy.
+   */
+  virtual CATCldBody* AddBody (const CATCldBody* iBody) = 0 ;
+
+  /**
+   * Inserts a &lt;tt&gt;CATCldCell&lt;/tt&gt;.&lt;br&gt;
+   * If the given &lt;tt&gt;CATCldCell&lt;/tt&gt; references the same &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; than the considered
+   * &lt;tt&gt;CATCldBody&lt;/tt&gt;, there is a simple insertion, otherwise the given &lt;tt&gt;CATCldCell&lt;/tt&gt; is copied and
+   * the methods returns the copy.
+   */
+  virtual CATCldCell* AddCell (const CATCldCell* iCell) = 0 ;
+
+  /**
+   * Removes a &lt;tt&gt;CATCldCell&lt;/tt&gt; from the considered &lt;tt&gt;CATCldBody&lt;/tt&gt;.
+   */
+  virtual void RemoveCell (const CATCldCell* iCell) = 0 ;
+
+  /**
+   * Returns the list of the cells of a given type in the &lt;tt&gt;CATCldBody&lt;/tt&gt;.&lt;br&gt;
+   * Each cell will occur only once in the result list.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The list will be cleared by the method before use.&lt;br&gt;
+   * Let be a &lt;tt&gt;CATCldBody B&lt;/tt&gt; composed of a &lt;tt&gt;CATCldCloud C&lt;/tt&gt;, a &lt;tt&gt;CATCldScan S1&lt;/tt&gt;
+   * and a &lt;tt&gt;CATCldSetOfScans SoS&lt;/tt&gt; which references &lt;tt&gt;S1&lt;/tt&gt; and an other
+   * &lt;tt&gt;CATCldScan S2&lt;/tt&gt;.&lt;pre&gt;
+   *             +-----+
+   *             |  B  |
+   *             +--+--+
+   *                |
+   *    +-------+---+-----------+
+   *    |       |               |
+   * +--+--+ +--+--+         +--+--+
+   * |  C  | | S1  |         | SoS |
+   * +-----+ +-----+         +--+--+
+   *                            |
+   *                    +-------+-------+
+   *                    |               |
+   *                 +--+--+         +--+--+
+   *                 | S1  |         | S2  |
+   *                 +-----+         +--+--+
+   * &lt;/pre&gt;
+   * We will have the following results :&lt;br&gt;&lt;pre&gt;
+   *                  | CATCldCellType | CATCldUniCellType | CATCldMultiCellType
+   * -----------------+----------------+-------------------+--------------------
+   * FirstLevel TRUE  | (C,S1,SoS)     | (C,S1)            | (SoS)
+   * FirstLevel FALSE | (C,S1,SoS,S2)  | (C,S1,S2)         | (SoS)
+   * &lt;/pre&gt;
+   */
+  virtual void GetAllCells (CATLISTP(CATCldCell)   &amp;ioCells,
+                            const CATGeometricType  iType = CATCldCellType,
+                            const CATBoolean        iFirstLevel = TRUE) const = 0 ;
+
+  /**
+   * Initializes an iterator on the cells of a given type in the &lt;tt&gt;CATCldBody&lt;/tt&gt;.&lt;br&gt;
+   * &lt;br&gt;
+   * Hereafter an example of programming such an iterator : &lt;pre&gt;
+   *    for (Cloud.Init(...) ; Cloud.More() ; Cloud.Next()) {
+   *      CATCldCell* Cell = Cloud.GetCell() ;
+   *      ...
+   *    }
+   * &lt;/pre&gt;
+   */
+  virtual void Init (const CATGeometricType iType = CATCldCellType) const = 0 ;
+
+  /**
+   * Tests if there is still a cell pointed by the iterator.&lt;br&gt;
+   */
+  virtual CATBoolean More () const = 0 ;
+
+  /**
+   * Does the next cell verifying the iterator criteria to be pointed by the iterator.
+   */
+  virtual void Next () const = 0 ;
+
+  /**
+   * Gets the current cell pointed by the iterator.
+   */
+  virtual CATCldCell* GetCell () const = 0 ;
+
+//==============================================================================================================
+// CNext methods
+//==============================================================================================================
+
+///**
+// * Freezes the contents of the body.&lt;br&gt; Further modifications of this
+// * body will imply that all modified elements will be copied first,
+// * thus keeping the current body state unmodified.
+// */
+//virtual void Freeze () = 0 ;
+
+} ;
+
+CATDeclareHandler (CATCldBody, CATCldGenEntity) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCldAttribute.html">← 上一页: CATCldAttribute.h</a></div>
+        <div><a href="CATCldCell.html">下一页: CATCldCell.h →</a></div>
+    </div>
+</body>
+</html>

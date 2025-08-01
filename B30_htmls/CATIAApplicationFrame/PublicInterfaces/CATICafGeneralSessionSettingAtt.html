@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAApplicationFrame/PublicInterfaces/CATICafGeneralSessionSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAApplicationFrame/PublicInterfaces/CATICafGeneralSessionSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICafDocumentationSettingAtt.html">← 上一页: CATICafDocumentationSettingAtt.h</a></div>
+        <div><a href="CATICafSearchSettingAtt.html">下一页: CATICafSearchSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICafGeneralSessionSettingAtt_H
+#define CATICafGeneralSessionSettingAtt_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// COPYRIGHT Dassault Systemes 2004
+
+#include &quot;CD0NTOG.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATGenConferencing.h&quot;
+#include &quot;CATGenDataSave.h&quot;
+#include &quot;CATGenUIStyle.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCD0NTOG IID IID_CATICafGeneralSessionSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_CATICafGeneralSessionSettingAtt ;
+#endif
+
+class CATSettingInfo;
+
+
+/**
+ * Interface to the General setting controller.
+ * &lt;b&gt;Role&lt;/b&gt;: The General setting controller is dedicated to manage some 
+ * of the setting parameters displayed in the General property page.
+ */
+class ExportedByCD0NTOG CATICafGeneralSessionSettingAtt: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    //----------------------------------------
+    //  User Interface Style setting attribute
+    //----------------------------------------
+
+    /**
+     * Retrieves the User Interface Style setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The User Interface Style setting attribute manages the look of the user interface
+     * @param ioUIStyle [inout]
+     *   The User Interface Style setting attribute value
+     * @return
+     *   S_OK if the User Interface Style setting attribute value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetUIStyle(CATGenUIStyle&amp; ioUIStyle) = 0;
+
+    /**
+     * Sets the User Interface Style setting attribute value.
+     * @param iUIStyle [in]
+     *   The User Interface Style setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;br&gt;&lt;tt&gt;UIStyleP1&lt;/tt&gt;: look is P1
+     *   &lt;br&gt;&lt;tt&gt;UIStyleP2&lt;/tt&gt;: look is P2
+     *   &lt;br&gt;&lt;tt&gt;UIStyleP3&lt;/tt&gt;: look is P3
+     * @return
+     *   S_OK if the User Interface Style setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetUIStyle(const CATGenUIStyle&amp; iUIStyle) = 0;
+
+    /**
+     * Retrieves the User Interface Style setting attribute information object.
+     * @param ioInfo [inout]
+     *   The User Interface Style setting attribute information object
+     * @return 
+     *   S_OK if the User Interface Style setting attribute information
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetUIStyleInfo(CATSettingInfo * ioInfo) = 0;
+
+    /**
+     * Locks or unlocks the User Interface Style setting attribute.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the User Interface Style setting attribute if the
+     * operation is allowed in the current administrated environment. In user mode 
+     * this method will always return E_FAIL.
+     * @param iLocked [in]
+     *   A flag to indicate whether the User Interface Style setting attribute
+     *   should be locked.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to lock
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to unlock
+     * @return
+     *   S_OK if the User Interface Style setting attribute
+     *   is successfully locked or unlocked, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetUIStyleLock(unsigned char iLocked) = 0;
+
+
+
+    //----------------------------
+    // Auto Save setting attribute
+    //----------------------------
+
+    /**
+     * Retrieves the Auto Save setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Auto Save setting attribute manages the automatic backup of the documents
+     * @param ioAutoSave [inout]
+     *   The Auto Save setting attribute value
+     * @return
+     *   S_OK if the Auto Save setting attribute value is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetAutoSave(CATGenDataSave&amp; ioAutoSave) = 0;
+
+    /**
+     * Sets the Auto Save setting attribute value.
+     * @param iAutoSave [in]
+     *   The Auto Save setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;br&gt;&lt;tt&gt;NoAutoBackup&lt;/tt&gt;: No automatic backup
+     *   &lt;br&gt;&lt;tt&gt;AutoBackupEvery&lt;/tt&gt;: Automatic backup every...
+     *   &lt;br&gt;&lt;tt&gt;IncrBackup&lt;/tt&gt;: Incremental backup
+     * @return
+     *   S_OK if the Auto Save setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetAutoSave(const CATGenDataSave&amp; iAutoSave) = 0;
+
+    /**
+     * Retrieves the Auto Save setting attribute information object.
+     * @param ioInfo [inout]
+     *   The Auto Save setting attribute information object
+     * @return 
+     *   S_OK if the Auto Save setting attribute information
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetAutoSaveInfo(CATSettingInfo * ioInfo) = 0;
+
+    /**
+     * Locks or unlocks the Auto Save parameter.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the Auto Save setting attribute if the
+     * operation is allowed in the current administrated environment. In user mode 
+     * this method will always return E_FAIL.
+     * @param iLocked [in]
+     *   A flag to indicate whether the Auto Save setting attribute
+     *   should be locked.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to lock
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to unlock
+     * @return
+     *   S_OK if the Auto Save setting attribute is successfully locked or unlocked, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetAutoSaveLock(unsigned char iLocked) = 0;
+
+  
+
+    //---------------------------------
+    // Save Frequency setting attribute
+    //---------------------------------
+
+    /**
+     * Retrieves the Save Frequency setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Save Frequency setting attribute manages the frequency of the documents backup
+     * @param ioTimeRoll [inout]
+     *   The Save Frequency setting attribute value
+     * @return
+     *   S_OK if the Save Frequency setting attribute value is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetTimeRoll(int&amp; ioTimeRoll) = 0;
+
+    /**
+     * Sets the Save Frequency setting attribute value.
+     * @param iTimeRoll [in]
+     *   The Save Frequency setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;br&gt;&lt;tt&gt;NoAutoBackup&lt;/tt&gt;: No automatic backup
+     *   &lt;br&gt;&lt;tt&gt;AutoBackupEvery&lt;/tt&gt;: Automatic backup every...
+     *   &lt;br&gt;&lt;tt&gt;IncrBackup&lt;/tt&gt;: Incremental backup
+     * @return
+     *   S_OK if the Save Frequency setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetTimeRoll(const int&amp; iTimeRoll) = 0;
+  
+
+
+    //---------------------------------------
+    // Referenced Documents setting attribute
+    //---------------------------------------
+
+    /**
+     * Retrieves the Referenced Documents setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Referenced Documents setting attribute manages the loading of the documents pointed by another document
+     * @param ioRefDoc [inout]
+     *   The Referenced Documents setting attribute value
+     * @return
+     *   S_OK if the Referenced Documents setting attribute value is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetRefDoc(CATBoolean&amp; ioRefDoc) = 0;
+
+    /**
+     * Sets the Referenced Documents setting attribute value.
+     * @param iRefDoc [in]
+     *   The Referenced Documents setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to enable the loading of referenced documents
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to disable the loadinf of referenced documents
+     * @return
+     *   S_OK if the Referenced Documents setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetRefDoc(const CATBoolean&amp; iRefDoc) = 0;
+
+    /**
+     * Retrieves the Referenced Documents setting attribute information object.
+     * @param ioInfo [inout]
+     *   The Referenced Documents setting attribute information object
+     * @return 
+     *   S_OK if the Referenced Documents setting attribute information
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetRefDocInfo(CATSettingInfo * ioInfo) = 0;
+
+    /**
+     * Locks or unlocks the Referenced Documents parameter.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the Referenced Documents setting attribute if the
+     * operation is allowed in the current administrated environment. In user mode 
+     * this method will always return E_FAIL.
+     * @param iLocked [in]
+     *   A flag to indicate whether the Referenced Documents setting attribute
+     *   should be locked.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to lock
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to unlock
+     * @return
+     *   S_OK if the Referenced Documents setting attribute is successfully locked or unlocked, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetRefDocLock(unsigned char iLocked) = 0;
+
+
+    //-------------------------------
+    // Conferencing setting attribute
+    //-------------------------------
+    /**
+     * Retrieves the Conference driver setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Conference driver setting attribute manages the choice of the means of communication between processes
+     * This property is &lt;font color=&quot;red&quot;&gt;not available on UNIX&lt;/font&gt;
+     * @param ioConferencing [inout]
+     *   The Conference driver setting attribute value
+     * @return
+     *   S_OK if the Conference driver setting attribute value is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetConferencing(CATGenConferencing&amp; ioConferencing) = 0;
+
+    /**
+     * Sets the Conference driver setting attribute value.
+     * @param iConferencing [in]
+     *   The Conference driver setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;br&gt;&lt;tt&gt;NetMeeting&lt;/tt&gt;: Microsoft Windows NetMeeting
+     *   &lt;br&gt;&lt;tt&gt;Backbone&lt;/tt&gt;: Backbone
+     * @return
+     *   S_OK if the Conference driver setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetConferencing(const CATGenConferencing&amp; iConferencing) = 0;
+
+    /**
+     * Retrieves the Conference driver setting attribute information object.
+     * @param ioInfo [inout]
+     *   The Conferencing setting attribute information object
+     * @return 
+     *   S_OK if the Conference driver setting attribute information
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetConferencingInfo(CATSettingInfo * ioInfo) = 0;
+
+    /**
+     * Locks or unlocks the Conference driver parameter.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the Conference driver setting attribute if the
+     * operation is allowed in the current administrated environment. In user mode 
+     * this method will always return E_FAIL.
+     * @param iLocked [in]
+     *   A flag to indicate whether the Conference driver setting attribute
+     *   should be locked.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to lock
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to unlock
+     * @return
+     *   S_OK if the Conference driver setting attribute is successfully locked or unlocked, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetConferencingLock(unsigned char iLocked) = 0;
+
+
+    //------------------------------
+    // Drag &amp; Drop setting attribute
+    //------------------------------
+
+    /**
+     * Retrieves the Drag &amp; Drop setting attribute value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Drag &amp; Drop setting attribute manages the possibility of dragging and dropping in the viewers (for copying, pasting or cutting purpose only)
+     * @param ioDragDrop [inout]
+     *   The Drag &amp; Drop setting attribute value
+     * @return
+     *   S_OK if the Drag &amp; Drop setting attribute value is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetDragDrop(CATBoolean&amp; ioDragDrop) = 0;
+
+    /**
+     * Sets the Drag &amp; Drop setting attribute value.
+     * @param iDragDrop [in]
+     *   The Drag &amp; Drop setting attribute value.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to enable the Drag &amp; Drop
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to disable the Drag &amp; Drop
+     * @return
+     *   S_OK if the Drag &amp; Drop setting attribute value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetDragDrop(const CATBoolean&amp; iDragDrop) = 0;
+
+    /**
+     * Retrieves the Drag &amp; Drop setting attribute information object.
+     * @param ioInfo [inout]
+     *   The Drag &amp; Drop setting attribute information object
+     * @return 
+     *   S_OK if the Drag &amp; Drop setting attribute information
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+     virtual HRESULT GetDragDropInfo(CATSettingInfo * ioInfo) = 0;
+
+    /**
+     * Locks or unlocks the Drag &amp; Drop parameter.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Locks or unlocks the Drag &amp; Drop setting attribute if the
+     * operation is allowed in the current administrated environment. In user mode 
+     * this method will always return E_FAIL.
+     * @param iLocked [in]
+     *   A flag to indicate whether the Drag &amp; Drop setting attribute
+     *   should be locked.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *     &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt; to lock
+     *     &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; to unlock
+     * @return
+     *   S_OK if the Drag &amp; Drop setting attribute is successfully locked or unlocked, and E_FAIL otherwise   
+     */
+     virtual HRESULT SetDragDropLock(unsigned char iLocked) = 0;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICafDocumentationSettingAtt.html">← 上一页: CATICafDocumentationSettingAtt.h</a></div>
+        <div><a href="CATICafSearchSettingAtt.html">下一页: CATICafSearchSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

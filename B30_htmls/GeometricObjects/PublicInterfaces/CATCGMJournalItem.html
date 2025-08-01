@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCGMJournalItem.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCGMJournalItem.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMJournalInfo.html">← 上一页: CATCGMJournalInfo.h</a></div>
+        <div><a href="CATCGMJournalList.html">下一页: CATCGMJournalList.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMJournalItem_h_
+#define CATCGMJournalItem_h_
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;YP00IMPL.h&quot;
+#include &quot;CATCGMJournal.h&quot;
+#include &quot;CATListOfCATGeometries.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+#include &quot;CATDataType.h&quot;
+
+class CATCGMJournalInfo;
+
+/**
+ * Class defining a single line in the journal.
+ * &lt;br&gt;
+ * The journal items are created when you report new events inside the
+ * journal list (@href CATCGMJournalList#Report, @href CATCGMJournalList#ReportUnspecModify).
+ * Do not directly use the item journal constructor. The journal
+ * items are deleted with the journal list in which they are imbedded, except if you have directly
+ * created an item, without inserting it inside a journal list.
+ * The journal information is also deleted with the journal it informs.
+ */
+class ExportedByYP00IMPL CATCGMJournalItem : public CATCGMJournal
+{
+public:
+/** 
+ * Constructs a journal item.
+ * &lt;br&gt; Do not directly construct an item by this constructor, use 
+ * the  @href CATCGMJournalList#Report methods to create an item inside a list.
+ */
+  CATCGMJournalItem(CATCGMJournalList          * iList,
+                   CATCGMJournal::Type           iType,
+                   const CATLISTP(CATGeometry) &amp; iBefore,
+                   const CATLISTP(CATGeometry) &amp; iAfter,
+                   CATCGMJournalInfo           * iInfo = NULL);
+
+/** 
+ * Constructs a &lt;tt&gt;Keep&lt;/tt&gt; or &lt;tt&gt;Deletion&lt;/tt&gt; journal item .
+ * &lt;br&gt; Do not directly construct an item by this constructor, use 
+ * the  @href CATCGMJournalList#Report methods to create an item inside a list.
+ */
+  CATCGMJournalItem(CATCGMJournalList * iList,
+                    CATCGMJournal::Type iType,
+                    CATGeometry       * iObject,
+                    CATCGMJournalInfo * info = NULL);
+  
+  
+  virtual ~CATCGMJournalItem();
+  /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+/**
+ * Returns the type of &lt;tt&gt;this&lt;/tt&gt; journal item.
+ * @return
+ * The type of the item.
+ */
+  virtual CATCGMJournal::Type GetType() const;
+
+/** 
+ *  Casts &lt;tt&gt;this&lt;/tt&gt; into a journal item.
+ * @return
+ * The casted pointer.
+ */
+  virtual CATCGMJournalItem * CastToReportItem();
+  
+/** @nodoc */
+  virtual void Dump(ostream &amp; ioStream, int iIndent = 0);
+
+/**
+ * @nodoc
+ * Dumps the content of &lt;tt&gt;this&lt;/tt&gt; journal item.
+ * @param iWhereToWrite
+ * The output to write the journal item.
+ * @param iIndent
+ * The number of blanks before writing of the item.
+ */
+  virtual void Dump(CATCGMOutput &amp; ioWhereToWrite, int iIndent = 0);
+
+/** @nodoc */
+  void DumpTags(ostream &amp; ioStream, const CATLISTP(CATGeometry) &amp; iGeometry) const;
+
+/** @nodoc */
+  void DumpTags(CATCGMOutput &amp; ioWhereToWrite,
+                const CATLISTP(CATGeometry) &amp; iGeometry) const;
+
+
+/** 
+ * Returns the associated information with &lt;tt&gt;this&lt;/tt&gt; journal item.
+ * @return
+ * A pointer to the associated information.
+ */
+  const CATCGMJournalInfo * GetAssociatedInfo() const;
+
+/**
+ * Replaces the information associated with &lt;tt&gt;this&lt;/tt&gt; journal item.
+ * @param iNewInfo
+ * A pointer to the new information. 
+ */
+  void SetAssociatedInfo(const CATCGMJournalInfo * iNewInfo);
+
+/** 
+ * Retrieves the list of construction objects for a creation item.
+ * @return
+ * A pointer to the list of objects that lead to the creation of another one.
+ */
+  const CATLISTP(CATGeometry) * GetConstructionObjects() const;
+
+/** 
+ * Retrieves a pointer to the created object for a creation item.
+ * @return
+ * A pointer to the created object.
+ */
+  CATGeometry * GetConstructedObject() const;
+  
+/** 
+ * Returns the list of objects before a modification or an absorption.
+ * @return
+ * A pointer to the list of objects before a modification or an absorption.
+ */
+  const CATLISTP(CATGeometry) * GetOldObjects() const;
+
+/** 
+ * Returns the list of objects after a modification or an absorption.
+ * @return
+ * A pointer to the list of objects after a modification or an absorption.
+ */
+  const CATLISTP(CATGeometry) * GetNewObjects() const;
+  
+/** 
+ * Returns the kept object (Keep item).
+ * @return
+ * A pointer to the kept object.
+ */
+  CATGeometry * GetKeptObject() const;
+  
+/** 
+ * Returns the deleted objects (Deletion item).
+ * @return
+ * A pointer to the list of deleted objects.
+ */
+  const CATLISTP(CATGeometry) * GetDeletedObjects() const;
+ 
+/** 
+ * Returns the copied object (for a copy/nocopy item).
+ * @return
+ * A pointer to the copied object.
+ */
+  CATGeometry * GetCopiedObject() const;
+  
+/**
+ * Returns the resulting object (for a copy/nocopy item).
+ * @return
+ * A pointer to the resulting object.
+ */
+  CATGeometry * GetCopiedIntoObject() const;
+
+/** 
+ *  Returns the initial objects (all item types).
+ * @param ioBefore
+ * The list of the objects before the operation described by &lt;tt&gt;this&lt;/tt&gt; item.
+ */
+  void GetFirstObjs(CATLISTP(CATGeometry) &amp; ioBefore) const;
+
+/** 
+ *  Returns the resulting objects (all item types).
+ * @param ioAfter
+ * The list of the objects after the operation described by &lt;tt&gt;this&lt;/tt&gt; item.
+ */
+  void GetLastObjs(CATLISTP(CATGeometry) &amp; ioAfter) const;
+
+/** 
+ * Automatically reports the attributes pointed by the objects before the operation on the 
+ * objects after the operation.
+ * &lt;br&gt;Not available for a creation item.
+ * @param iAttr
+ * The type of attribute to report. If the objects before the operation point an attribute of this
+ * type, the attribute will also be shared by the objects after modification.
+ */
+  void MakeAttributesFollow(const CATCGMAttrId * iAttribute);
+
+/** 
+ * Discards a list of objects from the topological journal. 
+ * This method is to be used with caution. Only objects 
+ * which are not required by the backtracking mechanism can be discarded.
+ * If not used properly, this method can lead to an invalid journal.
+ * @param iToSimplify
+ * The list of objects to be discarded from the journal.
+ * @return
+ * 0 if the objects can be removed - otherwise 1
+ */
+  int ForgetObjects(const CATLISTP(CATGeometry) &amp; iObjects);
+/** 
+ * @nodoc
+ * Internal use.
+ */
+  void ForgetConstructionObjects();
+/** 
+ * @nodoc
+ * Internal use.
+ */
+  void ChangeType(CATCGMJournal::Type);
+
+/** @nodoc */
+  CATCGMJournal * DuplicateItem(CATCGMJournalList * iReport) const;
+
+/**
+ * @nodoc
+ * Internal use.
+ */
+  CATULONG32  GetDebugIdentifier();
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  virtual void  Stream  (CATCGMStream &amp;os);
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  static CATCGMJournalItem *UnStream(CATCGMJournalList * iList, CATGeoFactory *iFactory, CATCGMStream &amp;iStr);
+#ifdef CATIACGMR216Code
+	/**
+	* @nodoc @nocgmitf
+	* True Stream management
+	*/
+  static CATCGMJournalItem *UnStream(CATCGMJournalList * iList, CATGeoFactory *iFactoryForFirst
+                                                              , CATGeoFactory *iFactoryForLast, CATCGMStream &amp;iStr);
+#endif
+	/**
+	* @nodoc
+	* Deletion management for Generic Naming
+	*/
+	void SetKeptForGN();
+
+	/**
+	* @nodoc
+	* Deletion management for Generic Naming
+	*/
+	int	IsKeptForGN() const;
+
+protected:
+/**
+ * Copy constructor.
+ */
+  CATCGMJournalItem(const CATCGMJournalItem &amp; iToCopy);
+
+/**
+ * Affectation operator.
+ */
+  CATCGMJournalItem &amp; operator = (const CATCGMJournalItem &amp; iToCopy);
+
+  friend class ExportedByYP00IMPL CATCGMJournalList;
+
+/** @nodoc */
+  virtual CATCGMJournal * Duplicate(CATCGMJournalList * iReport, int iCopyNext = 1) const;
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  virtual void _UnStream(CATCGMStream &amp; os);
+
+
+  int CheckCellTypes(CATLISTP(CATGeometry) &amp;iListOfBadGeometry, int iWithTraces = 0);
+
+
+private:
+
+
+  /** @nodoc */
+  // un bloc de 32 bits ...
+  struct
+  {
+    // Generic Naming needs to know about deletion events.
+    // But these events should not be taken into account by CATTopCheckJournal
+    // Journal tassing will set the following member to TRUE
+    unsigned            _KeptForGN : 1;
+    CATCGMJournal::Type _Type      :31; 
+  } _DataItem;
+
+  CATLISTP(CATGeometry) _FirstElements;
+  CATLISTP(CATGeometry) _LastElements;
+  CATCGMJournalInfo*    _pAssocInfo;
+
+  CATULONG32          _SessionId ;
+  static CATULONG32   _SessionBorn ;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMJournalInfo.html">← 上一页: CATCGMJournalInfo.h</a></div>
+        <div><a href="CATCGMJournalList.html">下一页: CATCGMJournalList.h →</a></div>
+    </div>
+</body>
+</html>

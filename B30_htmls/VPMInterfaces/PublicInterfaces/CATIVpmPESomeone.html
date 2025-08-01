@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmPESomeone.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmPESomeone.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmPERole.html">← 上一页: CATIVpmPERole.h</a></div>
+        <div><a href="CATIVpmPSExpandStruct.html">下一页: CATIVpmPSExpandStruct.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1997
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+//=============================================================================
+//
+// CATIVpmPESomeone:
+//	Someone class Interface.
+//	It is the basic class for person/organization/role management.
+//
+//=============================================================================
+// Usage Notes:
+//
+//=============================================================================
+// Jan 97   Creation                                   J.Poitreau
+//=============================================================================
+//
+#ifndef CATIVpmPESomeone_H_
+#define CATIVpmPESomeone_H_
+
+#include &quot;CATBaseUnknown.h&quot;				// ObjModBase/AD0XXBAS
+#include &quot;CATUnicodeString.h&quot;				// International/NS0S3STR
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATIContainer.h&quot;
+
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIVpmPESomeone ;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmPESomeone ;
+#endif
+
+
+
+class CATIVpmPESomeone_var;
+class CATIVpmPEPerson_var;
+
+/**
+ * The most basic &lt;u&gt;VPM People/Organization&lt;/u&gt; interface.
+ * &lt;br&gt;
+ * This class is used to manage &lt;i&gt;Person, Organization&lt;/i&gt; or &lt;i&gt;Role&lt;/i&gt;
+ * @see VPMInterfaces.CATIVpmPEPerson
+ * @see VPMInterfaces.CATIVpmPEOrganization
+ * @see VPMInterfaces.CATIVpmPERole
+**/
+class ExportedByGUIDVPMInterfaces CATIVpmPESomeone : public CATBaseUnknown   
+{
+// RTTI functions
+    CATDeclareInterface;
+
+  public:
+/**
+ * Returns the &lt;i&gt;Someone&lt;/i&gt; &lt;b&gt;id&lt;/b&gt;
+**/
+    virtual CATUnicodeString GetId() = 0;
+
+/**
+ * Returns the logical name for implementation (name of the working form)
+ * &lt;br&gt;In this case, &quot;AGPO&quot; (for Access Group / People /Organization)
+**/
+    virtual CATUnicodeString            GetImplementationName() = 0;
+
+/**
+ * Get &lt;b&gt;parent&lt;/b&gt; object as a &lt;i&gt;Someone&lt;/i&gt; object.
+ * &lt;br&gt;Depending on the kind of object I am, returned object differs:
+ * &lt;ul&gt;
+ * &lt;li&gt; &lt;pre&gt;&lt;u&gt;person&lt;/u&gt;      &lt;/pre&gt; returns &lt;i&gt;organization&lt;/i&gt;
+ * &lt;li&gt; &lt;pre&gt;&lt;u&gt;organization&lt;/u&gt;&lt;/pre&gt; returns &lt;i&gt;organization&lt;/i&gt; (or NULL)
+ * &lt;li&gt; &lt;pre&gt;&lt;u&gt;role&lt;/u&gt;        &lt;/pre&gt; returns &lt;i&gt;role&lt;/i&gt; (or NULL)
+ * &lt;/ul&gt;
+**/
+    virtual CATIVpmPESomeone_var        GetParent() = 0;
+    virtual CATIContainer_var		GetContainer() = 0;
+};
+
+
+CATDeclareHandler(CATIVpmPESomeone,CATBaseUnknown);
+
+
+#endif // CATIVpmPESomeone_H_
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmPERole.html">← 上一页: CATIVpmPERole.h</a></div>
+        <div><a href="CATIVpmPSExpandStruct.html">下一页: CATIVpmPSExpandStruct.h →</a></div>
+    </div>
+</body>
+</html>

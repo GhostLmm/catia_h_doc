@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVLightQueryResult.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVLightQueryResult.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIUpdateEvent.html">← 上一页: ENOVIUpdateEvent.h</a></div>
+        <div><a href="ENOVPageBound.html">下一页: ENOVPageBound.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// --------------------------------------------------------------
+// VPM (c) Copyright Dassault Systemes 2011                           
+// --------------------------------------------------------------
+// Responsable : JDV                                                 
+// --------------------------------------------------------------
+// Header      : ENOVLightQueryResult.h                                      
+// --------------------------------------------------------------
+// Content     : Result structure for Light Query
+// --------------------------------------------------------------
+// History     :                                                          
+// Creation    : 2011/05/25 &gt; JDV                                          
+// --------------------------------------------------------------
+
+/** 
+  * @CAA2Level L1
+  * @CAA2Usage U3
+ */
+
+#ifndef ENOVLightQueryResult_H
+#define ENOVLightQueryResult_H
+
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;ENOVQObjectIdentity.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;sequence_CORBAAny.h&quot;
+class CATUnicodeString;
+
+
+/** 
+  * Attribute type in the results.
+ */
+
+enum  ENOVLQType
+{
+   LQ_INDEX,
+   LQ_BOOLEAN,
+   LQ_INTEGER,
+   LQ_REAL,
+   LQ_STRING,
+   LQ_BINARY,
+   LQ_DATE,
+   LQ_OBJECT,
+   LQ_AGGR_BOOLEAN,
+   LQ_AGGR_INTEGER,
+   LQ_AGGR_REAL,
+   LQ_AGGR_STRING,
+   LQ_AGGR_BINARY,
+   LQ_AGGR_DATE,
+   LQ_AGGR_OBJECT                   
+};
+
+
+/** 
+  * Class containing the results of a Light Query. The structure contains the identifiers of the objects results of the query,
+  * as well as the attribute values of those objects.
+  * &lt;b&gt;Role&lt;/b&gt;: This class gives access to the results of a Light Query.
+ */
+
+class ExportedByGUIDVPMInterfaces ENOVLightQueryResult
+{
+
+   public :
+
+      /** 
+        * Destructor of the class. This destructor must be called at the end of the process to free the memory
+        * taken by the data.
+       */
+
+      virtual ~ENOVLightQueryResult();
+
+
+      /** 
+        * Gets the number of objects result of the query.
+        * @param oCount : Number of objects.
+        * @returns : S_OK if everything went fine
+        *            E_FAIL if there is an error.
+       */
+
+      virtual HRESULT getReturnCount( int &amp; oCount ) = 0;
+
+
+      /** 
+        * Gets the identifiers of the selected rows (objects) result of the query.
+        * @param iIndexes     : List of row numbers for which to get the identifiers. If this list is empty, then
+        *                       the identifiers of all rows are returned.
+        * @param oIdentifiers : List of identifiers.
+        * @returns : S_OK if everything went fine
+        *            E_FAIL if there is an error.
+       */
+
+      virtual HRESULT getIdentifiers( const CATListOfInt &amp; iIndexes, CATListOfENOVQObjectIdentity &amp; oIdentifiers ) = 0;
+
+
+      /** 
+        * Gets the attribute values of one specific row (object) result of the query, for a list of attributes.
+        * @param iIndex           : Row number for which to get the attribute values.
+        * @param ioAttributeNames : List of attribute names. This list must be a subset of the attributes given in the
+        *                           Select Clause. If this list is empty, all the attributes are taken.
+        * @param oValues          : Values of the attributes.
+        * @param oIsSet           : Flag to know if an attribute is set or not. It can have 3 values :
+        *                           1 if the attribute is set.
+        *                           0 if the attribute is not set. In that case, the corresponding value in oValues is empty.
+        *                           -1 if the object itself doesn&#x27;t exist. See the CAA use case for an example.
+        * @returns : S_OK if everything went fine
+        *            E_FAIL if there is an error.
+       */
+
+      virtual HRESULT getAttributesValues( const int &amp; iIndex,	CATListOfCATUnicodeString &amp; ioAttributeNames,
+ 				                      _SEQUENCE_CORBAAny &amp; oValues, CATListOfInt &amp; oIsSet ) = 0;
+
+
+      /** 
+        * Gets the values of one specific attribute for all rows (objects) result of the query.
+        * @param iAttributeName : Attribute for which to get the values.
+        * @param oValues        : Values of the attribute for all the rows.
+        * @param oIsSet         : Flag to know if an attribute is set or not. It can have 3 values :
+        *                         1 if the attribute is set.
+        *                         0 if the attribute is not set. In that case, the corresponding value in oValues is empty.
+        *                         -1 if the object itself doesn&#x27;t exist. See the CAA use case for an example.
+        * @returns : S_OK if everything went fine
+        *            E_FAIL if there is an error.
+       */
+
+      virtual HRESULT getAllValuesForAttribute( const CATUnicodeString &amp; iAttributeName, _SEQUENCE_CORBAAny &amp; oValues, CATListOfInt &amp; oIsSet ) = 0;
+
+
+      /** 
+        * Gets the available attribute names in the results and their type.
+        * @param oAttributeNames : List of attribute names for which the value is available in the result.
+        * @param oTypes          : Type of the attribute.
+        * @returns : S_OK if everything went fine
+        *            E_FAIL if there is an error.
+       */
+
+      virtual HRESULT getAttributesNames( CATListOfCATUnicodeString &amp; oAttributeNames, CATListOfInt &amp; oTypes ) = 0;
+
+};
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIUpdateEvent.html">← 上一页: ENOVIUpdateEvent.h</a></div>
+        <div><a href="ENOVPageBound.html">下一页: ENOVPageBound.h →</a></div>
+    </div>
+</body>
+</html>

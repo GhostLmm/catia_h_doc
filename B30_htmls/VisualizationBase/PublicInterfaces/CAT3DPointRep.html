@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DPointRep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DPointRep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DPlanarFaceGP.html">← 上一页: CAT3DPlanarFaceGP.h</a></div>
+        <div><a href="CAT3DPolylineGP.html">下一页: CAT3DPolylineGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DPointRep_H
+#define CAT3DPointRep_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CAT3DRep.h&quot;
+#include &quot;CAT3DMarkerGP.h&quot;
+#include &quot;CATMathPointf.h&quot;
+#include &quot;CATViz.h&quot;
+
+/**
+ * Class to create the representation of a point.
+ * &lt;b&gt;Role&lt;/b&gt;: This class is used to represent a point. Different symbols are available.
+ * 
+ */
+class ExportedByCATViz CAT3DPointRep : public CAT3DRep
+{
+ friend class CATMarshallable3DPointRep;
+ friend class CATDmuStream3DPointRep;
+ friend class CATVrmlMaker3DPointRep;
+ friend class CATVrml2Maker3DPointRep;
+ CATDeclareClass;
+
+ public:
+
+  virtual ~CAT3DPointRep();
+#ifdef CATIAV5R26  
+  /** Constructs the representation of a point. */
+  static CAT3DPointRep* CreateRep(); 
+
+  /** Constructs the representation of a point.
+   * @param iCoordinates
+   * The point to be represented.
+   * @param iSymbol
+   * The symbol used to visualize the point.
+   */
+  static CAT3DPointRep* CreateRep(const CATMathPointf &amp; iPoint,
+                                  CATSymbolType         iSymbol = CROSS);
+#endif
+  /** Constructs the representation of a point. */
+  CAT3DPointRep (); 
+
+  /** Constructs the representation of a point.
+   * @param iCoordinates
+   * The point to be represented.
+   * @param iSymbol
+   * The symbol used to visualize the point.
+   */
+  CAT3DPointRep (const CATMathPointf &amp; iPoint,
+                 CATSymbolType            iSymbol = CROSS);
+
+  /** @nodoc : deprecated constructor. */
+  CAT3DPointRep (CATModelIdentificator &amp; iModelId,
+                 void     * iController);
+  
+  /** @nodoc : deprecated constructor. */
+  CAT3DPointRep (const CATMathPointf   &amp; iPoint,
+                 CATSymbolType              iSymbol,
+                 CATModelIdentificator &amp; iModelId,
+                 void     * iController = NULL);
+
+  /** Returns the coordinates of the point. */
+  CATMathPointf GetPoint() const;
+
+  /** Modifies the coordinates of the representation of a point.
+   * @param iPoint
+   * The new coordinates of the point.
+   */
+  void Modify (const CATMathPointf &amp; iPoint);
+
+  /** Modifies the symbol of the represented of a point.
+   * @param iSymbol
+   * The new symbol to be used.
+   */
+  void SetSymbol (CATSymbolType iSymbol);
+
+  /** @nodoc */
+  virtual void DrawShading (CATRender &amp; iRender, int iInside);
+
+ protected:
+
+  /* @nodoc */
+  void BuildPoint (const CATMathPointf &amp;point, CATSymbolType symbol);
+
+  // data
+  CAT3DMarkerGP *_geometrie;
+};
+
+#endif // CAT3DPointRep_H
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DPlanarFaceGP.html">← 上一页: CAT3DPlanarFaceGP.h</a></div>
+        <div><a href="CAT3DPolylineGP.html">下一页: CAT3DPolylineGP.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNBHumanModelingInterfaces/PublicInterfaces/SWKI3DVisu.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DNBHumanModelingInterfaces/PublicInterfaces/SWKI3DVisu.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SWKEnums.html">← 上一页: SWKEnums.h</a></div>
+        <div><a href="SWKIAnthro.html">下一页: SWKIAnthro.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+#ifndef _SWKI3DVisu_h
+#define _SWKI3DVisu_h
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+// *****************************************************************************
+// Framework DNBHumanModelingInterfaces
+// Copyright Safework (2000) Inc.
+// *****************************************************************************
+//  Abstract:
+//  ---------
+//       SWKI3DVisu interface.
+//       This interface offers miscellaneous visualization
+//       services for displayable objects.
+// *****************************************************************************
+//  Usage:
+//  ------
+//
+// *****************************************************************************
+//  Inheritance:
+//  ------------
+//
+//    CATBaseUnknown
+//
+// *****************************************************************************
+//  Main Methods:
+//  -------------
+//
+//    SetDisplayFlag
+//    GetDisplayFlag
+// *****************************************************************************
+//  History
+//  -------
+//
+//  Author: Jean-Guy AUGUSTIN
+//  Date  : 27/03/00
+//  Goal  : Creation
+// *****************************************************************************
+
+// --- System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+//
+// --- DNBHumanModeling
+class SWKSegmentMappingOperator;
+//
+// --- Visualization
+class CAT3DViewpoint;
+class CATGraphicMaterial;
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __SWKHumanModelingItf
+#define ExportedBySWKHumanModelingItf __declspec(dllexport)
+#else
+#define ExportedBySWKHumanModelingItf __declspec(dllimport)
+#endif
+#else
+#define ExportedBySWKHumanModelingItf
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySWKHumanModelingItf IID IID_SWKI3DVisu;
+#else
+extern &quot;C&quot; const IID IID_SWKI3DVisu;
+#endif
+
+#define SWK_SEGMENTS                   0x00001
+#define SWK_ELLIPSES                   0x00002
+#define SWK_MESHES                     0x00004
+#define SWK_CENTER_OF_GRAVITY          0x00008
+
+#define SWK_LINES_OF_SIGHT             (0x00010|0x00020|0x00040)
+#define SWK_CENTRAL_CONES              (0x00080|0x00100|0x00200)
+#define SWK_PERIPH_CONES               (0x00400|0x00800|0x01000)
+#define SWK_BLIND_CONES                (0x02000|0x04000|0x08000)
+
+#define SWK_SPHERICAL_CONES            0x10000
+#define SWK_CONES_WITH_BOUNDING_SPHERE 0x20000
+#define SWK_REFERENTIAL                0x40000
+#define SWK_BALANCE                    0x80000
+
+/**
+  *   This interface offers miscellaneous visualization
+  *   services. Manikins and segments adhere to this
+  *   interface.
+  **/
+
+class ExportedBySWKHumanModelingItf SWKI3DVisu : public CATBaseUnknown
+{
+    CATDeclareInterface;
+
+ public:
+
+    /**
+      * Set the display flag. This flag informs a displayable object whether or not
+      * to display segments, ellipses, meshes, center of gravity, lines
+      * of sight and  vision cones.
+      *
+      * @param piFlag The display flag, which is made of the
+      * concatenation of the several display constants. If a
+      * given element appears in the display flag, then that
+      * element will be displayed.
+      *
+      * @sample
+      * The following example displays the segments and ellipses
+      * of the manikin:
+      * &lt;code&gt;
+      *  SWKIManikin * myManikin = [...];
+      *  SWKI3DVisu * visu = NULL;
+      *  myManikin-&gt;QueryInterface(SWKI3DVisu::ClassId(), (void**) &amp;visu);
+      *  visu-&gt;SetDisplayFlag(SWK_SEGMENTS|SWK_ELLIPSES);
+      *  visu-&gt;Release();
+      * &lt;/code&gt;
+      **/
+    virtual HRESULT SetDisplayFlag(int piFlag, boolean piNeedRefreshRep = TRUE) = 0;
+
+    /**
+      * Return the current display flag.
+      **/
+    virtual int GetDisplayFlag() const = 0;
+};
+
+CATDeclareHandler(SWKI3DVisu, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="SWKEnums.html">← 上一页: SWKEnums.h</a></div>
+        <div><a href="SWKIAnthro.html">下一页: SWKIAnthro.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmLightNavigationServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmLightNavigationServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmLightExpandObject.html">← 上一页: CATIVpmLightExpandObject.h</a></div>
+        <div><a href="CATIVpmLightQueryManager.html">下一页: CATIVpmLightQueryManager.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// --------------------------------------------------------------
+// VPM (c) Copyright Dassault Systemes 2013
+// --------------------------------------------------------------
+// Responsable : JDV/HXH/PPN                               
+// --------------------------------------------------------------
+// Header      : CATIVpmLightNavigationServices.h                                      
+// --------------------------------------------------------------
+// Content     : Navigation services on Doc to Doc objects
+// --------------------------------------------------------------
+// History     :                                                          
+// Creation    : 2013/04/01 &gt; HXH                                          
+// --------------------------------------------------------------
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+
+#ifndef CATIVpmLightNavigationServices_H_
+#define CATIVpmLightNavigationServices_H_
+
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATListOfCATIVpmLightExpandObject.h&quot;
+class ENOVQObjectIdentity;
+
+class CATUnicodeString;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIVpmLightNavigationServices;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmLightNavigationServices;
+#endif
+
+
+
+/** Interface to the VPM factory manager for navigation services on objects.
+  * &lt;b&gt;Role&lt;/b&gt;: This interface runs light queries and does not load any object in memory.   
+ */
+
+class ExportedByGUIDVPMInterfaces CATIVpmLightNavigationServices : public CATBaseUnknown   
+{
+   CATDeclareInterface;
+
+ 
+
+   public :
+		/** Helper method to get the UUID from the ENOVQObjectIdentity
+  	      * iQueryResult: The inputObject ID.
+  	      * oLink:		  UUID of input object.
+		*/
+		virtual HRESULT GetUUIDFromObjectIdentity(const ENOVQObjectIdentity *iQueryResult, SEQUENCE(octet) &amp;oLink) = 0;
+		/**
+		   * to retrieve a list of DR from a list of PV.
+		   * The navigation can be done on Representation links only, on Documentation links only, or on both ( representation links is &quot;including&quot; the exposition link)
+		   * @iListOfPVUUID: The input list of Part Version UUIDs
+		   * @iSelectClause: Input select clause with attributes on Doc Revision and Doc Master
+		   *  here we only support the standard attributes of this 2 Tables, as defined in DOCDIR
+		   * iDocCriteria: value in { LEX_Representation,LEX_Documentation, LEX_Document)
+		   *   refer to VPMInterfaces/PublicInterfaces/CATIVpmLightExpandObject.h
+		   * @oDRLightObjects: The output list of Doc Revision/Doc Master as Light Objects
+		   *
+		   * Attention: this code only queries on the database
+		  */
+		virtual HRESULT GetConnectedDocuments (
+		const CATLISTV(_SEQUENCE_octet) &amp; iListOfPVUUIDs, 
+		const CATListOfCATUnicodeString &amp; iSelectClause, 
+		DocumentCriteria iDocCriteria,
+		CATListOfCATIVpmLightExpandObject * &amp;oDRLightObjects ) = 0;
+
+	  /**
+        * This is to inverser navigation on Represetation/Documentation link to retrieve  a list of PV from a list of Document revision.
+		* The navigation will be done on Representation/Documentation links only.
+        * @iListOfDRUUID : The input list of Documents Revisions UUIDs
+        * @iSelectClause : Input select clause with attributes on PartVersion and PartMaster
+        * @iDocCriteria  : value in { LEX_Representation,LEX_Documentation, LEX_Document)
+        * @oRefLightObjects  : The output list of Part Versions/PRC as Light expand objects.
+        *
+        * Attention: this code only runs on the database
+        * Attention: This code only applies A Posteriori security
+       */
+
+      virtual HRESULT whereUsedParts_Light( const CATLISTV(_SEQUENCE_octet) &amp; iListOfDRUUIDs, 
+											const CATListOfCATUnicodeString &amp; iSelectClause, 
+											DocumentCriteria iDocCriteria,
+											CATListOfCATIVpmLightExpandObject * &amp;oRefLightObjects) = 0;
+
+
+
+
+	/**
+	  *
+	  * explore the links between documents in ENOVIA in order to enumerate documents impacting the input
+	  * ( it corresponds to all the content of a BlackBox in CATIA meaning), including data on associated PartVersion
+	  *
+	  * @param iRootDocUuid 
+	  * the uuid of Document Revision corresponding to the CATproduct root of th BlackBox (typically the doc seen in expand result)
+	  * 
+	  * @param iSelectClauseOnDoc
+	  * the attributes required on DR/DM ( eg the one we put in CATIA proxy for document)
+	  * 
+	  * @param iSelectClauseOnRef 
+	  * the attributes required on PV/PM ( eg the one we put in CATIA proxy for reference)
+	  * 
+	  * @param oLightObjects
+	  * the exhaustive results of doc/PV/PRC implied in navigation IN LEX format.
+	  * 
+	  * @param iRecusively
+	  * To specify the level of explore. Valid values are 
+	  * iRecusively = 0 // to specify one level only.
+	  * iRecusively = 1 // to explore all level.
+	  * 
+
+	  * @return S_OK in case of success
+	  *         E_FAIL in case of error
+	  * 
+	  * Attention: this code only runs on the database
+	 */
+
+	virtual HRESULT ExploreDocumentLinks  (
+	  const SEQUENCE(octet) &amp; iRootDocUuid, 
+	  const CATListOfCATUnicodeString &amp; iSelectClauseOnDoc,
+	  const CATListOfCATUnicodeString &amp; iSelectClauseOnRef, 
+	  CATListOfCATIVpmLightExpandObject * &amp;oLightObjects, 
+	  int iRecusively )=0;
+
+
+};
+
+CATDeclareHandler( CATIVpmLightNavigationServices, CATBaseUnknown );
+
+#endif
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmLightExpandObject.html">← 上一页: CATIVpmLightExpandObject.h</a></div>
+        <div><a href="CATIVpmLightQueryManager.html">下一页: CATIVpmLightQueryManager.h →</a></div>
+    </div>
+</body>
+</html>

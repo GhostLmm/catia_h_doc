@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATCGMInternalError.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATCGMInternalError.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMInputError.html">← 上一页: CATCGMInputError.h</a></div>
+        <div><a href="CATCGMInterruptDef.html">下一页: CATCGMInterruptDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMInternalError_h
+#define CATCGMInternalError_h
+/** @CAA2Required */
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+#include &quot;CATMathematics.h&quot;
+#include &quot;CATInternalError.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+
+class CATCGMInputError;
+
+class ExportedByCATMathematics CATCGMInternalError : public CATInternalError
+{
+ public:
+   
+   /** @nodoc */
+   virtual void Throw (const char *loc, int line, void *ptr_to_delete = NULL);
+   
+   /** @nodoc */
+   CATDeclareClass;   
+   
+   /** @nodoc */
+   CATCGMInternalError(const CATCGMInternalError &amp;iError);	
+
+   /** @nodoc */
+   CATCGMInternalError(CATErrorId id);	
+   CATCGMInternalError(CATErrorId id, const char *msgId, const char *catalog = NULL);
+   CATCGMInternalError( const char *msgId, const char *catalog ); 
+
+   /** @nodoc  */
+   virtual ~CATCGMInternalError();
+   
+   /** @nodoc */
+   CATCGMNewClassArrayDeclare;
+
+   /** @nodoc */
+   void DefineCGMErrParams(const CATCGMInternalError &amp;iError);	
+
+   /** @nodoc */
+   void DefineCGMErrParams(const CATCGMInputError &amp;iError);	
+
+   friend class CATCGMInputError;
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMInputError.html">← 上一页: CATCGMInputError.h</a></div>
+        <div><a href="CATCGMInterruptDef.html">下一页: CATCGMInterruptDef.h →</a></div>
+    </div>
+</body>
+</html>

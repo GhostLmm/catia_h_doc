@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgSpecExpression.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgSpecExpression.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgSpecCategory.html">← 上一页: CATICfgSpecCategory.h</a></div>
+        <div><a href="CATICfgSpecInclusion.html">下一页: CATICfgSpecInclusion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+#ifndef CATICfgSpecExpression_h
+#define CATICfgSpecExpression_h
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATICfgSpecification.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATICfgSimpleSpecification.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgSpecExpression ;
+#else
+extern &quot;C&quot; const IID IID_CATICfgSpecExpression ;
+#endif
+
+class CATUnicodeString ;
+class CATICfgORExpression_var;
+
+/**
+ * Interface for Specification Expression.
+ */
+class ExportedByGUIDVPMInterfaces CATICfgSpecExpression : public CATICfgSpecification {
+	CATDeclareInterface;
+public:
+
+	/**
+	 * Gets the name of a Specification Expression.
+	 * @param oName
+	 *     A @href CATUnicodeString for the name
+	 */
+        virtual HRESULT  GetName(CATUnicodeString &amp;oName)  = 0 ;
+
+	/**
+	 * Gets the description of a Specification Expression.
+	 * @param oDescription
+	 *     A @href CATUnicodeString for the description
+	 */
+        virtual HRESULT  GetDescription(CATUnicodeString &amp;oDescription)  =0;
+
+	/**
+	 * Sets the description of a Specification Expression.
+	 * @param iDescription
+	 *     A @href CATUnicodeString containing the description
+	 */
+	virtual HRESULT SetDescription(const CATUnicodeString &amp;iDescription)=0;
+
+	/**
+	 * Gets the value of a Specification Expression.
+	 * @param oOrExp
+	 *     A @href CATICfgORExpression for the value
+	 */
+        virtual HRESULT  GetValue(CATICfgORExpression_var &amp;oOrExp)  = 0 ;
+
+	/**
+	 * Sets the value of a Specification Expression.
+	 * @param iOrExp
+	 *     A @href CATICfgORExpression
+	 */
+        virtual HRESULT  SetValue(CATICfgORExpression_var &amp;iOrExp)  = 0 ;
+
+	/**
+	 * Attaches a Specification Expression to a Configured Object.
+	 * @param iObjectUUID
+	 *      The UUID of a configured object
+	 */
+        virtual HRESULT Attach(SEQUENCE(octet) &amp;iObjectUUID) = 0;
+
+	/**
+	 * Detaches a Specification Expression from a Configured Object.
+	 * @param iObjectUUID
+	 *      The UUID of a configured object
+	 */
+        virtual HRESULT  Detach(SEQUENCE(octet) &amp;iConfigurableUID) = 0;
+
+	/**
+	 * Gets the list of Configured Objects on which a Spec Expression is attached to.
+	 * @param oUUIDList
+	 *      The list of configured objects currently attached
+	 */
+        virtual HRESULT GetUIDList(SEQUENCE(CORBAAny)&amp; oUUIDList)  = 0;
+  
+	/**
+	 * Checks whether the value is true or not depending on a list of Simple Specifications.
+	 * (@see #SetValue)
+	 * @param iList
+	 *     The list of @href CATICfgSimpleSpecification to be checked.
+	 * @return
+	 *    &lt;ul&gt;&lt;li&gt;S_OK - True&lt;/li&gt;
+	 *        &lt;li&gt;S_FALSE - False &lt;/li&gt;
+	 *    &lt;/ul&gt;
+	 */
+        virtual HRESULT Solve (CATListValCATICfgSimpleSpecification_var &amp;iList)  =0;
+
+	/**
+	 * Deletes the Specification Expression.
+	 */
+        virtual HRESULT Delete() = 0;  
+    
+};
+//-----------------------------------------------------------------
+// Handler definition 
+//-----------------------------------------------------------------
+CATDeclareHandler(CATICfgSpecExpression, CATICfgSpecification);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgSpecCategory.html">← 上一页: CATICfgSpecCategory.h</a></div>
+        <div><a href="CATICfgSpecInclusion.html">下一页: CATICfgSpecInclusion.h →</a></div>
+    </div>
+</body>
+</html>

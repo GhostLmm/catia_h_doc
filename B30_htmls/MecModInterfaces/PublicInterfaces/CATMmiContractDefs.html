@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATMmiContractDefs.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATMmiContractDefs.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMfViewDefs.html">← 上一页: CATMfViewDefs.h</a></div>
+        <div><a href="CATMmrGraphicPropertiesModes.html">下一页: CATMmrGraphicPropertiesModes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMmiContractDefs_h
+#define CATMmiContractDefs_h
+// COPYRIGHT DASSAULT SYSTEMES 2008
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//------------------------------------------------------------------ 
+/**
+*
+* Types used to specify if the BRep feature need to take into account relimitations. 
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This enum used to specify options for the relimitationd of BRep feature. ( @href CATIMmiUseMfBRep )&lt;br&gt;
+* Default value is Relimited.
+* @param CATMmrRelimited
+* Takes into account relimitations.
+* This option should be used when the boundaries of the selected cell 
+* are important. 
+* @param CATMmrFunctional 
+* Refers to the initial shape.
+* Useful when the application does not take into account relimitations.
+* This option should be used when the boundaries of the selected cell 
+* are not important.
+*
+*	
+*/
+enum CATMmrLimitationType {CATMmrRelimited=0, CATMmrFunctional, CATMmrDefaultLimitationType};
+
+//------------------------------------------------------------------ 
+/**
+*
+* Types used to specify the geometry dimension of BRep feature. 
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This enum used to specify options for the geometry dimension of BRep feature. ( @href CATIMmiUseMfBRep )&lt;br&gt;
+* @param CATMmiVertex
+* The geometry pointed is a vertex. 
+* @param CATMmiEdge 
+* The geometry pointed is an edge. 
+* @param CATMmiFace 
+* The geometry pointed is a face. 
+* @param CATMmiVolume 
+* The geometry pointed is a volume. 
+* @param CATMmiDimUnknown 
+* Returned value for error/particular cases  
+*
+*///----------------------------------------------------------------
+enum CATMmiDimension { CATMmiVertex=0, CATMmiEdge=1, CATMmiFace=2, CATMmiVolume=3, CATMmiDimUnknown=-1 };
+
+//------------------------------------------------------------------ 
+/**
+*
+* Types used to specify the geometry position of BRep feature. 
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This enum used to specify options for the geometry position of BRep feature. ( @href CATIMmiUseMfBRep )&lt;br&gt;
+* @param CATMmiInternal
+* The geometry pointed is internal. An edge between two faces for example. 
+* @param CATMmiBorder 
+* The geometry pointed is the border of another one. An edge bording 
+* one face only, for example. 
+* @param CATMmiFree 
+* The geometry pointed is isolated. An edge part of a wire, for example.  
+* @param CATMmiDimTypeUnknown 
+* Returned value for error/particular cases  
+*
+*///----------------------------------------------------------------
+enum CATMmiDimensionType { CATMmiInternal=1, CATMmiBorder=2, CATMmiFree=3, CATMmiDimTypeUnknown=0 };
+
+//------------------------------------------------------------------ 
+/**
+*
+* Types used to specify Support of BRep feature. 
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This enum used to specify options for the support used in BRep feature. ( @href CATIMmiUseMfBRep )&lt;br&gt;
+* @param CATMmrSupport 
+* use for BRep Feature where the support will be automaticaly found.
+* @param CATMmrNoSupport
+* the Support of the BRep Feature is not definitive and will be asked before any resolution.
+* @param CATMmrColorsAndAttributes
+* for BRep Feature used to colorise or add attribute. 
+*
+*///----------------------------------------------------------------
+enum CATMmrSupportType { CATMmrSupport=0, CATMmrNoSupport=1 , CATMmrColorsAndAttributes=2 };
+
+/*------- Enum describing the Type of Fond level ---------
+*
+* Determines if the pointed cells must share or not the same geometry when solving the Brep feature.
+* this is usefull for some application like FTA
+*
+* @param CATMmrMonoFond
+* The different cells of the body of the BRep feature must share the same geometry.
+*
+* @param CATMmrMultiFond
+* The different cells of the body of the BRep feature could not share the same geometry.
+*/
+enum CATMmrFondType {CATMmrMonoFond=0, CATMmrMultiFond=1, CATMmrUnknownFond=2};
+
+#endif 
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMfViewDefs.html">← 上一页: CATMfViewDefs.h</a></div>
+        <div><a href="CATMmrGraphicPropertiesModes.html">下一页: CATMmrGraphicPropertiesModes.h →</a></div>
+    </div>
+</body>
+</html>

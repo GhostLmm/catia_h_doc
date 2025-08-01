@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAACompositesItf/PublicInterfaces/CATICciGridNode.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAACompositesItf/PublicInterfaces/CATICciGridNode.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICciGridElemRefGroup.html">← 上一页: CATICciGridElemRefGroup.h</a></div>
+        <div><a href="CATICciGridPanel.html">下一页: CATICciGridPanel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2010
+//===================================================================
+//
+// CATICciGridNode.h
+//		Interface to manage a composites grid
+//
+//===================================================================
+//
+// Usage notes:
+//
+//===================================================================
+
+#ifndef CATICciGridNode_H
+#define CATICciGridNode_H
+
+/**
+* @CAA2Level L0
+* @CAA2Usage U0
+*/
+
+#include &quot;CAACompositesItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATLISTV_CATICciGridElemRef.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCAACompositesItf IID IID_CATICciGridNode;
+#else
+extern &quot;C&quot; const IID IID_CATICciGridNode ;
+#endif
+
+
+//------------------------------------------------------------------
+
+/**
+* Interface representing a composites grid.
+* &lt;b&gt;Role&lt;/b&gt;: Allows to manage a Grid feature.
+*/
+class ExportedByCAACompositesItf CATICciGridNode: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+	
+	/**
+	* Returns the node coordinates.
+	* @param oXCoord
+	*    The X coordinate of the node.
+	* @param oYCoord
+	*    The Y coordinate of the node.
+	* @param oZCoord
+	*    The Z coordinate of the node.
+	*/
+	virtual HRESULT GetNodeCoordinates(double &amp; oXCoord, double &amp; oYCoord, double &amp; oZCoord) = 0;
+
+	/**
+	* Returns the reference elements that correspond to the node and the position of the node on each element.
+	* @param oElemRefList
+	*    The list of reference elements that intersect at the node. Each element of the list responds to @href CATICciGridElemRef interface.
+	* @param oDistanceList
+	*    The list of positions of the node along each reference element.
+	*/
+	virtual HRESULT GetReferenceElements(CATLISTV(CATICciGridElemRef_var) &amp; oElemRefList, CATListOfDouble &amp; oDistanceList) = 0;
+	
+	/**
+	* @deprecated V5R26
+	* Use @see #GetReferenceElements overloaded method instead.
+    * Returns the reference elements that correspond to the node and the position of the node on each element.
+	* @param oElemRefList
+	*    The list of reference elements that intersect at the node. Each element of the list responds to @href CATICciGridElemRef interface.
+	* @param oDistanceList
+	*    The list of positions of the node along each reference element.
+	*/
+	virtual HRESULT GetReferenceElements(CATLISTV(CATISpecObject_var) &amp; oElemRefList, CATListOfDouble &amp; oDistanceList) = 0;
+};
+
+CATDeclareHandler(CATICciGridNode, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICciGridElemRefGroup.html">← 上一页: CATICciGridElemRefGroup.h</a></div>
+        <div><a href="CATICciGridPanel.html">下一页: CATICciGridPanel.h →</a></div>
+    </div>
+</body>
+</html>

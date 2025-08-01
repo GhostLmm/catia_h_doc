@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DBoundingGP.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DBoundingGP.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DBagRep.html">← 上一页: CAT3DBagRep.h</a></div>
+        <div><a href="CAT3DBoundingSphere.html">下一页: CAT3DBoundingSphere.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DBoundingGP_H
+#define CAT3DBoundingGP_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//******************************************************************************
+//  Inheritance:
+//  ------------
+//                CAT3DBoundingGP
+//                  CATGraphicPrimitive
+//                    CATBaseUnknown (SYSTEM framework)
+//
+//******************************************************************************
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATGraphicPrimitive.h&quot;
+#include &quot;CATVizMacForMetaClass.h&quot;
+
+class CATStreamer;
+class CATVizVertexBuffer;
+
+/**
+ * Class to create a graphic primitive which geometry is enclosed
+ * in a bounding element.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ *    The box can either be an Axis Aligned Bounding Box
+ *    (AABB) or an Object Bounding Box (OBB).
+ *     - The AABB is aligned on the 3D axis system and so, of easy use with the GP coordinates 
+ *       system, that can be obtained by reading the Representation tree.
+ *     - The OBB is the best bounding box enclosing an object, and it is built
+ *       through the use of the convex hull of the GP.
+ *
+ *    Presently, the box is computed in the GP axis coordinate system
+ *    and is an AABB.
+ *
+ *    We although store a Bounding Sphere. Box and sphere are separately
+ *    computed and have no common parameters, but are both enclosing the GP&#x27;s
+ *    geometry.
+ *
+ *    Don&#x27;t worry about how to build it... The GP that inherits from this GP
+ *    have to update the box included in this object, with the provided methods.
+ *    As for the children, we have a provided method to retrieve tesselation
+ *    parameters. This method will only be efficient in the subclasses that
+ *    have overloaded it.
+ *
+ */
+class ExportedByCATViz CAT3DBoundingGP : public CATGraphicPrimitive
+{
+  friend class CATMarshallable3DBoundingGP;
+  CATDeclareClass;
+  CATVizDeclareClass;
+  
+public:
+    
+  /**
+   * Constructs a boxed graphic primitive.
+   */
+  CAT3DBoundingGP (void);
+  
+
+  /**
+   * @nodoc
+   */
+  virtual void Stream(CATStreamer&amp; oStr,int iSaveType=0);
+
+  /**
+   * @nodoc
+   */
+  virtual void UnStream(CATStreamer&amp; str);
+
+
+
+
+
+  /**
+   * Gets the box center coordinates.
+   * @return
+   *   returns the array containing the box center coordinates.
+   *   This array size is equal to three.
+   */
+  inline float *GetBoxCenter     (void);
+
+  /**
+   * Gets the X,Y,Z half box spans.
+   * @return
+   *   returns the array containing the half box
+   *   spans coordinates. Its size is equal to three.
+   */
+  inline float *GetBoxDimensions (void);
+
+  /**
+   * Sets the box center coordinates.
+   * @param iNewCenter
+   *   Array containing the new center coordinates: XYZ.
+   *   Its size is equal to three.
+   */
+  inline void   SetBoxCenter     (float * iNewCenter);
+  
+  /**
+   * Sets the X,Y,Z half box spans.
+   * @param iNewDimensions
+   *   Array containing the half box spans new coordinates.
+   *   Its size is equal to three.
+   */
+  inline void   SetBoxDimensions (float * iNewDimensions);
+    
+    
+  /**
+   * Gets the bounding sphere center coordinates.
+   * @return
+   *   returns a 3 fields array containing the sphere center coordinates.
+   */
+  inline float *GetSphereCenter (void);
+
+  /**
+   * Gets the bounding sphere radius.
+   */
+  inline float  GetSphereRadius (void);
+
+  /**
+   * Sets the bounding sphere center.
+   * @param iNewCenter
+   *   3 fields array containing the sphere center coordinates. 
+   */
+  inline void   SetSphereCenter (float * iNewCenter);
+
+  /**
+   * Sets the bounding sphere radius.
+   * @param iNewRadius
+   *   The new bounding sphere radius. 
+   */
+  inline void   SetSphereRadius (float iNewRadius);
+    
+    
+  /**
+   * Box and sphere computation method prototype.
+   */
+  virtual void ComputeBox (void);
+    
+    
+  /**
+   * Retrieves the tesselation information from the 3D bounding GP.&lt;br&gt;
+   * &lt;b&gt;Role&lt;/b&gt;: As this method is designed to return values on its
+   * parameters, it has to be called like this :&lt;br&gt;
+   * &lt;tt&gt;&lt;pre&gt;
+   * int allocate;
+   * float * vertices;
+   * ...
+   * Get(&amp;allocate, &amp;vertices, ...);
+   * &lt;/pre&gt;&lt;/tt&gt;&lt;br&gt;
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: Get() only
+   *    retrieves references on stored data.
+   * @param oVertices
+   *    Retrieves an array made of face vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the 3D bounding GP vertices number.
+   * @param oVerticesArraySize
+   *    Retrieves the size, in floats, of the &lt;tt&gt;oVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   *    If information on vertices is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   * @param oNormals
+   *    Retrieves an array made of normals coordinates. It is organized as &lt;tt&gt;oVertices&lt;/tt&gt; : one vertex has exactly
+   *    one normal at the same field entry.
+   * @param oNormalsArraySize
+   *    Retrieves The size, in floats, of the &lt;tt&gt;oNormal&lt;/tt&gt; array. Equal to three times the number
+   *    of normals.
+   *    If information on normals is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   * @param oTriangleIndices
+   *    Retrieves the array used to store the single triangles vertices. Each of its field represents
+   *    a vertex index, in the &lt;tt&gt;oVertices&lt;/tt&gt; array.
+   *    As,  we find, in the &lt;tt&gt;*oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    So, the first three indices of the *oTriangleIndices array, are the indices of the 3D bounding GP first
+   *    single triangle three vertices.
+   *    &lt;pre&gt;
+   *
+   *                 -----------------       
+   *                |*oTriangleIndices |
+   *                 -----------------
+   *                |       i00       |   }
+   *                |       i01       |   } triangle 0 defined by index i00, i01 and i02
+   *                |       i02       |   }
+   *                |        .        |
+   *                |        .        |
+   *                |       ij0       |   }
+   *                |       ij1       |   } triangle j defined by index ij0, ij1 and ij2. 
+   *                |       ij2       |   }
+   *                |        .        |
+   *                |        .        |
+   *                 -----------------
+   *
+   *   &lt;/pre&gt;
+   *    For example, index ij0 enables access to the 3D bounding GP j-th single triangle first vertex,
+   *    which coordinates are X = *oVertices[ij0], Y = *oVertices[ij0+1] and Z = *oVertices[ij0+2], and
+   *    which normal has coordinates Nx = *oNormals[ij0], Ny = *oNormals[ij0+1] and Nz = *oNormals[ij0+2].
+   * @param oNbTriangle
+   *    Retrieves the number of single triangles in the 3D bounding GP. 
+   * @param oTriangleStripIndices
+   *    Retrieves the array used to store the 3D bounding GP triangles strips vertices. Each field contains a
+   *    vertex index, belonging to one of the strips, in the oVertices array.  As, we find, in the
+   *    &lt;tt&gt;oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | oTriangleStripIndices |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle strip defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle strip j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the 3D bounding GP j-th strip first vertex 
+   *    wich coordinates are X = *oVertices[ij0], Y = *oVertices[ij0 + 1] and Z = *oVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = *oNormals[ij0], Ny = *oNormals[ij0 + 1] and Nz = *oNormals[ij0 + 2].
+   * @param oNbTriangleStrip
+   *    Retrieves the number of 3D bounding GP triangles strips.
+   * @param oNbVertexPerTriangleStrip
+   *    Retrieves an array containing the number of vertices for each 3D bounding GP triangles strip.
+   *    The size of this array is equal to &lt;tt&gt;*oNbTriangleStrip&lt;/tt&gt;. For example, the first strip
+   *    is made with &lt;tt&gt;*oNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               |*oNbVertexPerTriangleStrip|
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle strips(*oNbTriangleStrip)
+   *               |             nm           |   nm = number of vertices of the m-th strip. (*oNbVertexPerTriangleStrip[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param oTriangleFanIndices
+   *    Retrieves the array used to store the 3D bounding GP triangles fans vertices. Each field contains a
+   *    vertex index, belonging to one of the fans, in the &lt;tt&gt;oVertices&lt;/tt&gt; array.  As, we find, in the
+   *    &lt;tt&gt;oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | *oTriangleFanIndices  |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle fan defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle fan j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the 3D bounding GP j-th fan first vertex
+   *    wich coordinates are X = *oVertices[ij0], Y = *oVertices[ij0 + 1] and Z = *oVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = *oNormals[ij0], Ny = *oNormals[ij0 + 1] and Nz = *oNormals[ij0 + 2].
+   *    Each ij0, j in [0, jn], represents the j-th fan center.
+   * @param oNbTriangleFan
+   *    Retrieves the number of 3D bounding GP triangles fans.
+   * @param oNbVertexPerTriangleFan
+   *    Retrieves the array containing the number of vertices for each 3D bouning GP triangles fan.
+   *    The size of this array is equal to &lt;tt&gt;*oNbTriangleFan&lt;/tt&gt;. For example, the first fan
+   *    is made with &lt;tt&gt;*oNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               | *oNbVertexPerTriangleFan |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle fans(*oNbTriangleFan)
+   *               |             nm           |   nm = number of vertices of the m-th fan. (*oNbVertexPerTriangleFan[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   *
+   */
+  virtual void Get (int    * oAllocate,
+                    float ** oVertices,
+                    int    * oVerticesArraySize,
+                    float ** oNormals,
+                    int    * oNormalsArraySize,
+                    int   ** oTriangleIndices,
+                    int    * oNbTriangle,
+                    int   ** oTriangleStripIndices,
+                    int    * oNbTriangleStrip,
+                    int   ** oNbVertexPerTriangleStrip,
+                    int   ** oTriangleFanIndices,
+                    int    * oNbTriangleFan,
+                    int   ** oNbVertexPerTriangleFan); 
+
+  /**
+   * Retrieves 3D bounding GP vertices.&lt;br&gt;
+   * &lt;b&gt;Role&lt;/b&gt;: As this method is designed to return values on its
+   * parameters, it must be called like this :&lt;br&gt;
+   * &lt;tt&gt;&lt;pre&gt;
+   * int allocate;
+   * float * vertices;
+   * ...
+   * GetVertices(&amp;allocate, &amp;vertices, ...);
+   * &lt;/pre&gt;&lt;/tt&gt;&lt;br&gt;
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: &lt;tt&gt;GetVertices&lt;/tt&gt; only
+   *    retrieves references on stored data.
+   * @param oVertices
+   *    Retrieves an array made of 3D bounding GP vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the 3D bounding GP vertices number.
+   * @param oVerticesArraySize
+   *    Retrieves the size, in floats, of the &lt;tt&gt;oVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   *    If information on vertices is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   */
+  virtual void GetVertices (int    * oAllocate,
+                            float ** oVertices,
+                            int    * oVerticesArraySize);
+
+  /**
+   * Retrieves the 3D bounding GP surfacic mesh parameters.
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: GetUV() only
+   *    retrieves references on stored data.
+   * @param oUV
+   *    Retrieves the UV array. Each vertex has an associated UV couple.
+   * @param oUVArraySize
+   *    Retrieves the size of the UV array. 
+   *    Equals 0 if the mesh is shared with another element or if the array is NULL, two times the number
+   *    of vertices elsewhere. 
+   */
+  virtual void GetUV       (int    * oAllocate,
+                            float ** oUV,
+                            int    * oUVArraySize);
+
+  /**
+   * Clears tesselation data  by deallocating memory.
+   * The following parameters description does not explain in detail
+   * each of them. It is only an overview of these parameters regarding to
+   * the &lt;tt&gt;Clear&lt;/tt&gt; method.
+   * The full description can be found in the @href CAT3DBoundingGP#Get method comments.
+   * @param iAllocate
+   *   Flag to specify whether the data you are passing on were
+   *   allocated by this 3D bounding GP or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were allocated by this 3D bounding GP and must be deallocated&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were not allocated by this 3D bounding GP and nothing is done&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   * @param iVertices
+   *   Array of 3D bounding GP vertices coordinates.
+   * @param iVerticesArraySize
+   *   Size of &lt;tt&gt;iVertices&lt;/tt&gt; array. If equal to zero, &lt;tt&gt;iVertices&lt;/tt&gt; is not deleted.
+   * @param iNormals
+   *   Array of 3D bounding GP normals coordinates.
+   * @param iNormalsArraySize
+   *   Size of &lt;tt&gt;iNormals&lt;/tt&gt; array. If equal to zero, &lt;tt&gt;iNormals&lt;/tt&gt; is not deleted.
+   * @param iTriangleIndices
+   *   Array of 3D bounding GP single triangles vertices coordinates.
+   * @param iNbTriangle
+   *   The number of single triangles in the 3D bounding GP. If equal to zero, &lt;tt&gt;iTriangleIndices&lt;/tt&gt;
+   *   is not deleted.
+   * @param iTriangleStripIndices
+   *   Array of 3D bounding GP strips triangles vertices coordinates.
+   * @param iNbTriangleStrip
+   *   The number of triangles strips in the 3D bounding GP. If equal to zero, &lt;tt&gt;iTriangleStripIndices&lt;/tt&gt; and
+   *   &lt;tt&gt;iNbVertexPerTriangleStrip&lt;/tt&gt; are not deleted.
+   * @param iNbVertexPerTriangleStrip
+   *   Array containing the number of vertices for each 3D bounding GP triangles strip. 
+   * @param iTriangleFanIndices
+   *   Array of 3D bounding GP fans triangles vertices coordinates.
+   * @param iNbTriangleFan
+   *   The number of triangles fans in the 3D bounding GP. If equal to zero, &lt;tt&gt;iTriangleFanIndices&lt;/tt&gt; and
+   *   &lt;tt&gt;iNbVertexPerTriangleFan&lt;/tt&gt; are not deleted.
+   * @param iNbVertexPerTriangleFan
+   *   Array containing the number of vertices for each 3D bounding GP triangles fan. 
+   */
+   void Clear (int    * iAllocate,
+		         float ** iVertices,
+		         int    * iVerticesArraySize,
+		         float ** iNormals,
+		         int    * iNormalsArraySize,
+		         int   ** iTriangleIndices,
+		         int    * iNbTriangle,
+		         int   ** iTriangleStripIndices,
+		         int    * iNbTriangleStrip,
+		         int   ** iNbVertexPerTriangleStrip,
+		         int   ** iTriangleFanIndices,
+		         int    * iNbTriangleFan,
+		         int   ** iNbVertexPerTriangleFan);
+
+  /**
+   * Clears vertices data structure by deallocating memory.
+   * The following parameters description does not explain in detail
+   * each of them. It is only an overview of these parameters regarding to
+   * the &lt;tt&gt;ClearVertices&lt;/tt&gt; method.
+   * The full description can be found in the @href CAT3DBoundingGP#GetVertices method comments.
+   * @param iAllocate
+   *   Flag to specify whether the data you are passing on were
+   *   allocated by this 3D bounding GP or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were allocated by this 3D bounding GP and must be deallocated&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were not allocated by this 3D bounding GP and nothing is done&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   * @param iVertices
+   *   Array of 3D bounding GP vertices coordinates.
+   * @param iVerticesArraySize
+   *   Size of &lt;tt&gt;iVertices&lt;/tt&gt; array. If equal to zero, &lt;tt&gt;iVertices&lt;/tt&gt; is not deleted.
+   */
+    void ClearVertices (int    * iAllocate,
+			float ** iVertices,
+			int    * iVerticesArraySize);
+    
+  /**
+   * Clears surfacic mesh parameters data structure by deallocating memory.
+   * The following parameters description does not explain in detail
+   * each of them. It is only an overview of these parameters regarding to
+   * the &lt;tt&gt;ClearUV&lt;/tt&gt; method.
+   * The full description can be found in the @href CAT3DBoundingGP#GetUV method comments.
+   * @param iAllocate
+   *   Flag to specify whether the data you are passing on were
+   *   allocated by this 3D bounding GP or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were allocated by this 3D bounding GP and must be deallocated&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;passed data were not allocated by this 3D bounding GP and nothing is done&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   * @param iUV
+   *    UV array. Each vertex has an associated UV couple.
+   * @param iUVArraySize
+   *    UV array size. If equal to 0, &lt;tt&gt;iUVArray&lt;/tt&gt; is not deleted.
+   */
+    void ClearUV (int    * iAllocate,
+   		  float ** iUV,
+   		  int    * iUVArraySize);
+    
+  /**
+   * Tests whether the 3D bounding GP is owner of its vertices informations.
+   * @return
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;The 3D bounding GP is owner of its vertices informations&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;The 3D bounding GP is not owner of its vertices informations&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   */
+    virtual int HasVertices (void);
+
+  /**
+   * Tests whether the 3D bounding GP is owner of its normals informations.
+   * @return
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;The 3D bounding GP is owner of its normals informations&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;The 3D bounding GP is not owner of its normals informations&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   */
+    virtual int HasNormals  (void);
+    
+    
+  /**
+   * @deprecated V5R14.
+   * In favor of GetTextureCoordinates (float ** oTextureCoord, int * oDimension).
+   * Retrieves the texture coordinates.
+   * This method must be used like this:
+   * &lt;br&gt;&lt;tt&gt;&lt;pre&gt;
+   * float * textureCoord;
+   * GetTextureCoord(&amp;textureCoord);
+   * &lt;br&gt;&lt;/pre&gt;&lt;/tt&gt;
+   * @param oTextureCoord
+   *    Retrieves the array of texture coordinates.
+   *    Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   */
+    virtual void GetTextureCoordinates     (float ** oTextureCoord);
+
+  /**
+   * Retrieves the texture coordinates.
+   * This method must be used like this:
+   * &lt;br&gt;&lt;tt&gt;&lt;pre&gt;
+   * float * textureCoord;
+   * GetTextureCoord(&amp;textureCoord);
+   * &lt;br&gt;&lt;/pre&gt;&lt;/tt&gt;
+   * @param oTextureCoord
+   *    Retrieves the array of texture coordinates.
+   *    Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   * @param oDimension
+   *    Retrieve the number of coordinates per vertex.
+   */
+    virtual void GetTextureCoordinates     (float ** oTextureCoord, int * oDimension);
+
+  /**
+   * Sets the texture coordinates.
+   * If the 3D bounding GP shares its vertices, it also shares its
+   * texture coordinates.
+   * @param iTextureCoord
+   *    Array of texture coordinates. Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   *    Because vertex and normal information is being sorted at the 3D bounding GP
+   *    creation, texture coordinates are to be generated with the tessellation
+   *    parameters that are retrieved after the 3D bounding GP creation (ie with
+   *    properly translated indices). Nevertheless, a mapping operator can be
+   *    applied at anytime, when the 3D bounding GP is the owner of it&#x27;s vertex data.
+   *    If computed before the 3D bounding GP creation, texture coordinates can be given
+   *    at the construction method. In this case, coordinates order is
+   *    rearranged in parallel with vertices coordinates.
+   * @param iTextureFormat
+   *    iTextureFormat is the number of fields associated to one vertex in the &lt;tt&gt;iTextureCoord&lt;/tt&gt; array.
+   *    It is also the number of texture coordinates associated to each vertex.
+   *    Indeed, each vertex has associated coordinates in the texture map. The
+   *    number of coordinates depends on the map dimension: the texture map
+   *    may be in 1D, 2D or 3D. 
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;1&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a one dimension map. Each vertex has a single associated texture coordinate&lt;/dd&gt;
+   *      &lt;dt&gt;2&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a two-dimension map. Each vertex has two associated texture coordinates&lt;/dd&gt;
+   *      &lt;dt&gt;3&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a three-dimension map. Each vertex has three associated texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *    If data is shared, the format for the given texture coordinates must be three.
+   */  
+    virtual void SetTextureCoordinates     (float * iTextureCoord, int iTextureFormat);
+
+  /**
+   * @nodoc
+   *    ComputeTextureCoordinates: Textures coordinates can&#x27;t be computed if
+   *    the 3D bounding GP doesn&#x27;t hold it&#x27;s vertices.
+   */
+    virtual void ComputeTextureCoordinates (const CATMappingOperator &amp; iMappingOperator);
+    
+    
+  /**
+   * Draws the 3D bounding GP.
+   * @param iRender
+   *   The render through which the 3D bounding GP is drawn.
+   */
+    virtual void Draw (CATRender &amp;);
+    
+  /**
+   * @nodoc
+   */
+  virtual int DetailCulling(CATRender *render);
+    
+  /**
+   * @nodoc
+   */
+  virtual void SetVertexBuffer(CATVizVertexBuffer *iVB);
+    
+  /**
+   * @nodoc
+   */
+  virtual CATVizVertexBuffer * GetVertexBuffer();
+    
+  protected:
+    
+    
+    // Destruction:
+    // ------------
+    
+    virtual ~CAT3DBoundingGP (void);
+    
+    
+    // Box parameters:
+    // ---------------
+    //   The box dimensions are expressed from the center position.
+    
+    float _box_center[3];
+    float _box_dim[3];
+    
+    
+    // Sphere parameters:
+    // ------------------
+    
+    float _sphere_center[3];
+    float _sphere_radius;
+    
+  private:
+    
+};
+
+
+
+
+//******************************************************************************
+//*** INLINED METHODS: *********************************************************
+//******************************************************************************
+
+
+inline float *CAT3DBoundingGP::GetBoxCenter (void)
+{
+  return _box_center;
+}
+
+
+inline float *CAT3DBoundingGP::GetBoxDimensions (void)
+{
+  return _box_dim;
+}
+
+
+inline void CAT3DBoundingGP::SetBoxCenter (float *new_center)
+{
+  _box_center[0]=new_center[0];
+  _box_center[1]=new_center[1];
+  _box_center[2]=new_center[2];
+}
+
+
+inline void CAT3DBoundingGP::SetBoxDimensions (float *new_dimensions)
+{
+  _box_dim[0]=new_dimensions[0];
+  _box_dim[1]=new_dimensions[1];
+  _box_dim[2]=new_dimensions[2];
+}
+
+
+inline float *CAT3DBoundingGP::GetSphereCenter (void)
+{
+  return _sphere_center;
+}
+
+
+inline float CAT3DBoundingGP::GetSphereRadius (void)
+{
+  return _sphere_radius;
+}
+
+
+inline void CAT3DBoundingGP::SetSphereCenter (float *new_center)
+{
+  _sphere_center[0]=new_center[0];
+  _sphere_center[1]=new_center[1];
+  _sphere_center[2]=new_center[2];
+}
+
+
+inline void CAT3DBoundingGP::SetSphereRadius (float new_radius)
+{
+  _sphere_radius=new_radius;
+}
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DBagRep.html">← 上一页: CAT3DBagRep.h</a></div>
+        <div><a href="CAT3DBoundingSphere.html">下一页: CAT3DBoundingSphere.h →</a></div>
+    </div>
+</body>
+</html>

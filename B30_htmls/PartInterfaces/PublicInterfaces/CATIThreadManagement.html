@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIThreadManagement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIThreadManagement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIThread.html">← 上一页: CATIThread.h</a></div>
+        <div><a href="CATITrim.html">下一页: CATITrim.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIThreadManagement_H
+#define CATIThreadManagement_H
+// COPYRIGHT DASSAULT SYSTEMES 2014
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+#include &lt;PartItf.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+
+class CATISpecObject_var;
+class CATICkeParm_var;
+class CATUnicodeString;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIThreadManagement;
+#else
+extern &quot;C&quot; const IID IID_CATIThreadManagement;
+#endif
+
+/**
+* Class to manage &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature.
+* &lt;b&gt;Role&lt;/b&gt;: Class CATIThreadManagement inherits from CATBaseUnknown. 
+* Methods defined below are specifics to &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature. 
+* They manage Thread Standard and Thread Description for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; 
+* feature.
+* @see CATBaseUnknown
+*/
+class ExportedByPartItf CATIThreadManagement : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public: 
+
+ 	/**
+	* Sets Thread Description for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* @param iThreadDescription
+	*		 Thread Description to be set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* In addition of setting Thread Description, this method also sets Thread Diameter and Thread Pitch linked to Thread Description on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* In case of &#x27;Threaded Hole&#x27; feature, if hole is not threaded or thread standards are not set on Hole then this method returns E_FAIL.
+	* In case of &#x27;Thread&#x27; feature, if Thread Standard is not set on &#x27;Thread&#x27; feature then this method returns E_FAIL.
+	**/
+	virtual HRESULT SetThreadDescription(CATUnicodeString&amp;  iThreadDescription)				= 0;
+
+	/*
+	* Method for retrieving name of Thread Description for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	*		@param oThreadDescription
+	*					 Retrieved name of Thread Description of &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* In case of &#x27;Threaded Hole&#x27; feature, if the hole is not threaded or if no Thread Standard has been set on the threaded Hole, this method returns E_FAIL.
+	* In case of &#x27;Thread&#x27; feature, if no Thread Standard has been set on the thread, this method returns E_FAIL.
+	*	If thread standards with no description are set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature, this method returns empty string.
+	*/
+	virtual HRESULT GetThreadDescription(CATUnicodeString &amp; oThreadDescription)				= 0;
+
+	/*
+	* Method for retrieving Thread Description Parameter for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* @param oThreadDescription
+	*				 Retrieved Thread Description Parameter of &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* In case of &#x27;Threaded Hole&#x27; feature, if the hole is not threaded or if no Thread Standard has been set on the threaded Hole, this method returns E_FAIL. 
+	* In case of &#x27;Thread&#x27; feature, if no Thread Standard has been set on the thread, this method returns E_FAIL.
+	* If thread standards with no description are set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature, this method returns NULL Thread Description parameter.
+	*/
+	virtual HRESULT GetThreadDescription (CATICkeParm_var &amp; oThreadDescription)				= 0;
+
+	/*
+	* Method for retrieving name of Thread Standard for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+  * @param ostrThreadStandard
+	*		 Retrieved name of Thread Standard for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* If the hole is not threaded, this method returns E_FAIL.
+	* If no thread standards have been set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature, then this method returns empty string.
+	*/
+	virtual HRESULT GetThreadStandard (CATUnicodeString&amp; ostrThreadStandard) 					= 0;
+
+	/*
+	* Method for setting Thread Standards for &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* @param istrThreadStandard
+	*				 Name of desired Thread Standard, which is to be set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* Only those Thread Standard existing at the location, as specified by environment variable CATCollectionStandard, can be set on &#x27;Threaded Hole&#x27; or &#x27;Thread&#x27; feature 
+	* If hole is not threaded, this method returns E_FAIL.
+	* If &#x27;No Standard&#x27; is to be set as thread standard then pass empty string as input to this method.
+	*/
+	virtual HRESULT SetThreadStandard (CATUnicodeString&amp; istrThreadStandard)   =0;
+
+
+};
+
+CATDeclareHandler(CATIThreadManagement, CATBaseUnknown);
+
+#endif // CATIThreadManagement_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIThread.html">← 上一页: CATIThread.h</a></div>
+        <div><a href="CATITrim.html">下一页: CATITrim.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATPointOnEdgeCurve.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATPointOnEdgeCurve.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPointOnCurve.html">← 上一页: CATPointOnCurve.h</a></div>
+        <div><a href="CATPointOnSurface.html">下一页: CATPointOnSurface.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPointOnEdgeCurve_h
+#define CATPointOnEdgeCurve_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+#include &quot;CATPointOnCurve.h&quot;
+#include &quot;CATListOfCATPCurves.h&quot;
+#include &quot;CATListOfCATCrvParams.h&quot;
+
+class CATEdgeCurve ;
+class CATCurve ;
+class CATCrvParam ;
+class CATCX_CHECKUP;
+class CATPointOnEdgeCurve;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATPointOnEdgeCurve ;
+#else
+extern &quot;C&quot; const IID IID_CATPointOnEdgeCurve ;
+#endif
+
+  //CAA_Exposed CATIGemPOEC
+/**
+ * Interface defining a point lying on a CATEdgeCurve.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A CATPointOnEdgeCurve knows how to map its parameter into the parameter on
+ * each curve of the edge curve, even if these parameters have not been already specified.
+ * &lt;br&gt;A CATPointOnEdgeCurve is defined with an underlying CATEdgeCurve and
+ * a list of parameters on the CATCurves of the CATEdgeCurve. 
+ * The parameters can be not specified for some curves. They remain implicit
+ * and are evaluated through the &lt;tt&gt;GetEquivalentPoint&lt;/tt&gt; method of the
+ *&lt;tt&gt;CATEdgeCurve&lt;/tt&gt; interface.
+ *&lt;br&gt;A CATPointOnEdgeCurve is created through the &lt;tt&gt;CreatePointOnEdgeCurve&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method.
+ */
+class ExportedByCATGMGeometricInterfaces CATPointOnEdgeCurve : public CATPointOnCurve
+{
+  CATDeclareInterface;
+
+public:
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+
+   //CAA_Exposed
+/**
+ * Replaces all the characteristics of &lt;tt&gt;this&lt;/tt&gt; CATPointOnEdgeCurve.
+ * @param iNbOfSpecs
+ * The number of parameters to specify.
+ * @param iSpecCurves[]
+ * The array of the pointers to curves of &lt;tt&gt;iSupport&lt;/tt&gt;.
+ * @param iSpecParams[]
+ * The array of the corresponding parameters.
+ * @param iSupport
+ * The underlying CATEdgeCurve.
+ */
+  virtual void Set ( const CATLONG32 iNbOfSpecs, 
+		     const CATCurve* iSpecCurves[],
+		     const CATCrvParam iSpecParams[],
+		     const CATEdgeCurve* iSupport ) = 0 ;
+
+	/** @nodoc */
+  virtual void CheckPointOnEdgeCurve(double iTol=0., CATCX_CHECKUP* report=0) const=0;
+
+	    //CAA_Exposed
+/**
+ * Adds a parameter specification on a CATCurve of a CATEdgeCurve.
+ *&lt;br&gt;This method replaces the parameter if it was already defined on this CATCurve.
+ * @param iCurveInsideEdgeCurve
+ * A pointer to a curve of the CATEdgeCurve.
+ * @param iNewParam
+ * The new parameter on &lt;tt&gt;iCurveInsideEdgeCurve&lt;/tt&gt;.
+ */
+  virtual void SetParamOn (const CATCurve* iCurveInsideEdgeCurve, 
+			   const CATCrvParam &amp; iNewParam            ) = 0 ;
+
+    //CAA_Exposed
+/**
+ * Returns the number of specified parameters in &lt;tt&gt;this&lt;/tt&gt; CATPointOnEdgeCurve.
+ * @return
+ * The number of parameters.
+ */
+  virtual CATLONG32 GetSpecsCount () const = 0 ;
+
+    //CAA_Exposed
+/**
+ * Retrieves the specified parameter and its associated CATCurve of &lt;tt&gt;this&lt;/tt&gt; CATPointOnEdgeCurve.
+ * @param iSpecIndex
+ * The index (beginning at 0) of a specified parameter on &lt;tt&gt;this&lt;/tt&gt; CATPointOnEdgeCurve.
+ * @param ioSpecCurves
+ * A pointer to the corresponding curve.
+ * @param ioSpecParam
+ * The corresponding parameter.
+ */
+  virtual void GetSpec ( CATLONG32   iSpecIndex,
+			 const CATCurve* &amp; ioSpecCurves,
+			 CATCrvParam     &amp; ioSpecParams   ) const = 0 ;
+
+    //CAA_Exposed
+/**
+ * Retrieves the parameter of &lt;tt&gt;this&lt;/tt&gt; CATPointOnEdgeCurve related to a given curve inside the CATEdgeCurve.
+ *&lt;br&gt; If the parameter was not specified on this CATCurve, the method
+ * computes the equivalent parameter.
+ * @param iCurveInsideEdgeCurve
+ * A pointer to a curve of the CATEdgeCurve.
+ * @param ioParamOnCurve
+ * The corresponding parameter.
+ * @return
+ * The computation type of the parameter
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * 1 if the parameter was already specified, 0 otherwise (use of @href CATCurve#GetEquivalentParam ).
+ */
+  virtual CATBoolean GetParamOn( const CATCurve* iCurveInsideEdgeCurve, CATCrvParam &amp; ioParamOnCurve ) const = 0 ;
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+/** @nodoc */
+  virtual CATCrvParam GetParamOn( const CATCurve* iCurveInsideEdgeCurve ) const = 0 ;
+
+};
+
+CATDeclareHandler(CATPointOnEdgeCurve,CATPointOnCurve);
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPointOnCurve.html">← 上一页: CATPointOnCurve.h</a></div>
+        <div><a href="CATPointOnSurface.html">下一页: CATPointOnSurface.h →</a></div>
+    </div>
+</body>
+</html>

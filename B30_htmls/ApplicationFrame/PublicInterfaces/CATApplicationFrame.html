@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATApplicationFrame.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATApplicationFrame.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAfrWorkbenchServices.html">← 上一页: CATAfrWorkbenchServices.h</a></div>
+        <div><a href="CATBatchFrame.html">下一页: CATBatchFrame.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATApplicationFrame_H
+#define CATApplicationFrame_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CD0FRAME.h&quot;
+#include &quot;CATEventSubscriber.h&quot;
+#include &quot;CATCommand.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATDialog;
+class CATDlgBox;
+class CATDlgWindow;
+class CATDlgFrame;
+
+class l_CATApplicationFrame;
+class CATInteractiveApplication;
+class CATString;
+class CATUnicodeString;
+
+/** @nodoc */
+typedef unsigned long CATULong;
+
+/**
+* @nodoc
+* Old name.
+*/
+#define GetApplicationFrame GetFrame
+
+/**
+* Class representing the application main window model.
+* &lt;b&gt;Role&lt;/b&gt;: An application frame is a specialized window which
+* allows to start commands and perform standard interactions. The 
+* &lt;tt&gt;CATApplicationFrame&lt;/tt&gt; class corresponds to the model of 
+* this window. The &lt;tt&gt;CATApplicationFrame&lt;/tt&gt; class is also able
+* to create workshops and workbenches since workshop and workbench 
+* factories are defined as its data extensions.
+*/
+class ExportedByCD0FRAME CATApplicationFrame: public CATEventSubscriber
+{
+    CATDeclareClass;
+    
+public:
+    
+    /** @nodoc */
+    CATApplicationFrame(CATInteractiveApplication *,
+        const CATString &amp; declarationSet);
+    virtual ~CATApplicationFrame();
+    
+    /**  
+    * Retrieves a pointer to the application frame.
+    * @return 
+    *   The application frame pointer.
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+    *   returned value.
+    */
+    static CATApplicationFrame * GetFrame();
+    
+    /** 
+     * Type of message to displays in the status bar.
+     * @param Information
+     *  Simple text.
+     * @param Prompt
+     *  Internal usage.
+     * @param MultiDocumentPrompt
+     *  Internal usage.
+     * @param ShortPrompt
+     *  Internal usage.
+     * @param LogMessage
+     *  Internal usage.
+     */
+    enum MessageType {Information, Prompt, MultiDocumentPrompt, ShortPrompt, LogMessage};
+    
+    /**
+    * Displays a message in the status bar.
+    * @param iMessageType
+    *   The message type.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The parameter must
+    *   be set to &lt;tt&gt;CATApplicationFrame::Information&lt;/tt&gt;.
+    * @param iMessage
+    *   The message.
+    */
+    void SetMessage(MessageType iMessageType, 
+        const CATUnicodeString &amp; iMessage);
+    
+        /** 
+        * @nodoc
+        * Displays text in the keyboard area field.
+    */  
+//    void SetKeyboardText(const CATUnicodeString &amp;);
+    
+    /** 
+    * @nodoc
+    * Displays the keyboard area.
+    */
+    void ShowKeyboard();
+    
+    /**
+    * @nodoc
+    * Removes the keyboard area from display.
+    */
+    void HideKeyboard();
+    
+    
+    /**
+    * @nodoc
+    * Look for an existing Container (WS,WB,Cont) with the name &quot;containerName&quot;,
+    * and set its immersive attribute. Call FillViews.
+    * So far, only implemented for a palette
+    * &quot;scale&quot; defines the container visual size with respect to the icons pixel size.
+    */
+    void CreateImmersiveContainer(const CATString&amp; containerName,float scale=1);
+    
+    /**
+    * @nodoc
+    * Look for an existing Container (WS,WB,Cont) with the name &quot;containerName&quot; within the immersive tree
+    * and destroy it as well as all the immersive accesses that do not lead anymore to a CATCmdStarter.
+    * So far, only implemented for a palette
+    */
+    void DestroyImmersiveContainer(const CATString&amp; containerName);
+    
+    /**
+    * Displays a toolbar.
+    * @param iPaletteName
+    *  The name of the toolbar to set visible. This name is third argument of the
+    * @href NewAccess macro. 
+    *  &lt;pre&gt;
+    *  NewAccess(CATCmdContainer, pMyTlb, iPaletteName);
+    * &lt;/pre&gt;
+    */
+    void ShowPalette(const CATString &amp; iPaletteName);
+    
+    /**
+    * Hides a toolbar.
+    * @param iPaletteName
+    *  The name of the toolbar to set invisible. This name is third argument of the
+    * @href NewAccess macro. 
+    *  &lt;pre&gt;
+    *  NewAccess(CATCmdContainer, pMyTlb, iPaletteName);
+    * &lt;/pre&gt;
+    */
+    void HidePalette(const CATString &amp; iPaletteName);
+    
+    /** @nodoc */  
+    void SetVisibility(CATULong nState);
+    
+    /**
+    * Changes the cursor mouse into a busy cursor.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to indicate that
+    * your application is busy. This method calls the
+    * &lt;tt&gt;SetBusyCursor&lt;/tt&gt; method of the @href CATInteractiveApplication class.
+    */
+    static void SetBusyCursor() ;
+    
+    /** 
+    * Returns the main window.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method returns:
+    *  &lt;ul&gt;
+    *    &lt;li&gt;If no document is open: the only one &lt;tt&gt;CATApplicationDocument&lt;/tt&gt; instance. The
+    *        instance that you retrieve also with the @href #GetApplicationDocument method&lt;/li&gt;
+    *    &lt;li&gt;Otherwise: a dialog object dedicated to the current @href CATFrmEditor. This dialog 
+    *      object is an invisible dialog object which contains all the dialog objects related to 
+    *        the document: all its windows and all its dialog boxes. Thanks to this object, 
+    *         the application can hide/deactivate all the dialog objects when the document
+    *         loses the focus.&lt;/li&gt;
+    *  &lt;/ul&gt;
+    * It enables you mainly to find a parent for your dialog box:
+    *  &lt;ul&gt;
+    *  &lt;li&gt;If you create a dialog box which is document&#x27;s independent, use the 
+    *  @href #GetApplicationDocument method; your dialog box will be always visible. For
+    *   example, if you create a dialog box inside a command launched from the General workshop 
+    *   addin ( @href CATIAfrGeneralWksAddin ) you will use the &lt;tt&gt;GetApplicationDocument&lt;/tt&gt; method&lt;/li&gt;
+    * &lt;li&gt;If you create a dialog box which is in relationship with a document, use this
+    *     method. In generally, the commands associated with a document use this method.&lt;/li&gt;
+    * &lt;/ul&gt;
+    * @return
+    *    A dialog object.  
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+    *   returned value.
+    */    
+    CATDlgWindow * GetMainWindow();
+    
+    /** @nodoc */  
+    void CreateMainWindow(CATInteractiveApplication *);
+    
+    /**  
+     * Returns the application document.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method returns the document of the application. Refer to the
+     * @href #GetMainWindow method for its usage.
+     * @return
+     *   The application document.
+     *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+     *   returned value.
+     *
+     */  
+    CATDlgWindow * GetApplicationDocument();
+    
+    /** 
+    * @nodoc
+    * To add components to the permanent dialog area.
+    */    
+    CATDialog * GetPermanentDialogArea();
+    
+    /** 
+    * @nodoc 
+    * Returns a parent component for a viewer inside the frame.
+    */
+    CATDlgBox * GetViewerFrame();
+    
+    /** 
+    * @nodoc
+    * Get a pointer to the current viewer.
+    */
+    CATDialog * GetViewer();
+    
+    /** 
+    * @nodoc
+    * Attach a viewer at the proper position inside the frame.
+    */  
+    void SetViewer(CATDialog * viewer);
+    
+    /**
+    * Returns the internal name of the current workshop.
+	 * @return a CATString
+    */
+    CATString GetCurrentWorkshop();
+    
+    /**
+    * Returns the internal name of the current workbench.
+	 * @return a CATString
+    */
+    CATString GetCurrentWorkbench();
+    
+    /** 
+    * @nodoc
+    * Changes the current workshop.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: ApplicationFrame internal use only.
+    * Use @href CATFrmEditor#SetActivePath instead.
+    */
+    void SetCurrentWorkshop  (const CATString &amp; name);
+    
+    /** 
+    * @nodoc
+    * Discards the current workshop.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: ApplicationFrame internal use only.
+    */
+    void UnsetCurrentWorkshop();
+    
+    /** @nodoc */
+    HRESULT SetApplicationName (CATUnicodeString &amp; iString);
+    /** @nodoc */
+    HRESULT GetApplicationName (CATUnicodeString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetCopyrightInfo (CATUnicodeString &amp; iString);
+    /** @nodoc */
+    HRESULT GetCopyrightInfo (CATUnicodeString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetReleaseName (CATUnicodeString &amp; iString);
+    /** @nodoc */
+    HRESULT GetReleaseName (CATUnicodeString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetSplashScreen (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetSplashScreen (CATString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetApplicationIcon (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetApplicationIcon (CATString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetDocURLMappingFile (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetDocURLMappingFile (CATString &amp; oString, 
+                                  char *iKey=&quot;DocumentMap.Name&quot;);
+    /** @nodoc */
+    HRESULT GetDocURLUserMappingFile (CATString &amp; oString, 
+                                      char *iKey=&quot;DocumentMap.Name&quot;);
+    
+    /** @nodoc */
+    HRESULT SetDocAccessDir (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetDocAccessDir (CATString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetApplicationLogo (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetApplicationLogo (CATString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetBackgroundImage (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetBackgroundImage (CATString &amp; oString);
+    
+    /** @nodoc */  
+    HRESULT SetDialogBoxBottom (CATString &amp; iString);
+    /** @nodoc */
+    HRESULT GetDialogBoxBottom (CATString &amp; oString);
+    
+    /** 
+    * @nodoc 
+    * Display blocked panels ?
+    */
+    int  GetDisplayAlertsMode();
+    /** @nodoc */
+    void SetDisplayAlertsMode(int);
+    
+    /** 
+    * @nodoc
+    * Quits the application.
+    */
+    void Destroy();
+    
+    /**
+    * @nodoc
+    * Returns the access under construction name.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Manage the name of the access under 
+    * construction for the headers to be assigned to the 
+    * right access.
+    */
+    const CATString &amp; GetAccessUnderConstruction();
+    /** @nodoc */
+    void SetAccessUnderConstruction(const CATString &amp; Access);
+
+    /**
+    * @nodoc
+    * Retrieves the Callback manager which sends the CATAfrAccessChangedNotification
+    */
+    CATCallbackManager *GetDispatcher();	
+    
+    
+ private:
+     
+     enum CATDialogBitmap {RightBottomCornerBackground,
+         RightBottomCornerBackgroundP1,
+         RightBottomCornerBackgroundP2IX,
+         RightBottomCornerBackgroundP1IX,
+         ClientMDIBackgroundNT,
+         ClientMDIBackgroundIX,
+         DialogBackgroundP2,
+         DialogBackground};
+     CATInteractiveApplication *_appli;
+     
+     l_CATApplicationFrame * _letter;
+     
+     CATUnicodeString _ApplicationName;
+     CATUnicodeString _CopyrightInfo;
+     CATUnicodeString _ReleaseName;
+     CATString _ApplicationResourceFile;
+     CATString _SplashScreen;
+     CATString _ApplicationIcon;
+     CATString _DocURLMappingFile;
+     CATString _DocURLUserMappingFile;
+     CATString _DocAccessDir;
+     
+     CATString _ApplicationLogo;
+     CATString _BackgroundImage;
+     CATString _DialogBoxBottom;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAfrWorkbenchServices.html">← 上一页: CATAfrWorkbenchServices.h</a></div>
+        <div><a href="CATBatchFrame.html">下一页: CATBatchFrame.h →</a></div>
+    </div>
+</body>
+</html>

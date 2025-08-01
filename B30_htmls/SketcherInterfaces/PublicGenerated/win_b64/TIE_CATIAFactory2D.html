@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketcherInterfaces/PublicGenerated/win_b64/TIE_CATIAFactory2D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SketcherInterfaces/PublicGenerated/win_b64/TIE_CATIAFactory2D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIAEllipse2D.html">← 上一页: TIE_CATIAEllipse2D.h</a></div>
+        <div><a href="TIE_CATIAGeometricElement.html">下一页: TIE_CATIAGeometricElement.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIAFactory2D
+#define __TIE_CATIAFactory2D
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATExitJournal.h&quot;
+#include &quot;CATIAFactory2D.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIAFactory2D */
+#define declare_TIE_CATIAFactory2D(classe) \
+ \
+ \
+class TIECATIAFactory2D##classe : public CATIAFactory2D \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIAFactory2D, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT __stdcall CreatePoint(double iX, double iY, CATIAPoint2D *&amp; oNewPoint); \
+      virtual HRESULT __stdcall CreateControlPoint(double iX, double iY, CATIAControlPoint2D *&amp; oNewPoint); \
+      virtual HRESULT __stdcall CreateLine(double iX1, double iY1, double iX2, double iY2, CATIALine2D *&amp; oNewLine); \
+      virtual HRESULT __stdcall CreateLineFromVector(double iX1, double iY1, double iUX, double iUY, CATIALine2D *&amp; oNewLine); \
+      virtual HRESULT __stdcall CreateClosedCircle(double iCenterX, double iCenterY, double iRadius, CATIACircle2D *&amp; oNewCircle); \
+      virtual HRESULT __stdcall CreateCircle(double iCenterX, double iCenterY, double iRadius, double iStartParam, double iEndParam, CATIACircle2D *&amp; oNewCircle); \
+      virtual HRESULT __stdcall CreateClosedEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, CATIAEllipse2D *&amp; oNewEllipse); \
+      virtual HRESULT __stdcall CreateEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, double iStartParam, double iEndParam, CATIAEllipse2D *&amp; oNewEllipse); \
+      virtual HRESULT __stdcall CreateSpline(const CATSafeArrayVariant &amp; iPoles, CATIASpline2D *&amp; oNewSpline); \
+      virtual HRESULT __stdcall CreateProjections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions); \
+      virtual HRESULT __stdcall CreateIntersections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions); \
+      virtual HRESULT __stdcall CreateProjection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution); \
+      virtual HRESULT __stdcall CreateIntersection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution); \
+      virtual HRESULT __stdcall CreateParabola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iFocalDistance, CATIAParabola2D *&amp; oParabola); \
+      virtual HRESULT __stdcall CreateHyperbola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iMajorRadius, double iMinorRadius, CATIAHyperbola2D *&amp; oHyperbola); \
+      virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+      virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+      virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+      virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+      virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+};
+
+
+
+#define ENVTIEdeclare_CATIAFactory2D(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT __stdcall CreatePoint(double iX, double iY, CATIAPoint2D *&amp; oNewPoint); \
+virtual HRESULT __stdcall CreateControlPoint(double iX, double iY, CATIAControlPoint2D *&amp; oNewPoint); \
+virtual HRESULT __stdcall CreateLine(double iX1, double iY1, double iX2, double iY2, CATIALine2D *&amp; oNewLine); \
+virtual HRESULT __stdcall CreateLineFromVector(double iX1, double iY1, double iUX, double iUY, CATIALine2D *&amp; oNewLine); \
+virtual HRESULT __stdcall CreateClosedCircle(double iCenterX, double iCenterY, double iRadius, CATIACircle2D *&amp; oNewCircle); \
+virtual HRESULT __stdcall CreateCircle(double iCenterX, double iCenterY, double iRadius, double iStartParam, double iEndParam, CATIACircle2D *&amp; oNewCircle); \
+virtual HRESULT __stdcall CreateClosedEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, CATIAEllipse2D *&amp; oNewEllipse); \
+virtual HRESULT __stdcall CreateEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, double iStartParam, double iEndParam, CATIAEllipse2D *&amp; oNewEllipse); \
+virtual HRESULT __stdcall CreateSpline(const CATSafeArrayVariant &amp; iPoles, CATIASpline2D *&amp; oNewSpline); \
+virtual HRESULT __stdcall CreateProjections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions); \
+virtual HRESULT __stdcall CreateIntersections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions); \
+virtual HRESULT __stdcall CreateProjection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution); \
+virtual HRESULT __stdcall CreateIntersection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution); \
+virtual HRESULT __stdcall CreateParabola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iFocalDistance, CATIAParabola2D *&amp; oParabola); \
+virtual HRESULT __stdcall CreateHyperbola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iMajorRadius, double iMinorRadius, CATIAHyperbola2D *&amp; oHyperbola); \
+virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+
+
+#define ENVTIEdefine_CATIAFactory2D(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT __stdcall  ENVTIEName::CreatePoint(double iX, double iY, CATIAPoint2D *&amp; oNewPoint) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreatePoint(iX,iY,oNewPoint)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateControlPoint(double iX, double iY, CATIAControlPoint2D *&amp; oNewPoint) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateControlPoint(iX,iY,oNewPoint)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateLine(double iX1, double iY1, double iX2, double iY2, CATIALine2D *&amp; oNewLine) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateLine(iX1,iY1,iX2,iY2,oNewLine)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateLineFromVector(double iX1, double iY1, double iUX, double iUY, CATIALine2D *&amp; oNewLine) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateLineFromVector(iX1,iY1,iUX,iUY,oNewLine)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateClosedCircle(double iCenterX, double iCenterY, double iRadius, CATIACircle2D *&amp; oNewCircle) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateClosedCircle(iCenterX,iCenterY,iRadius,oNewCircle)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateCircle(double iCenterX, double iCenterY, double iRadius, double iStartParam, double iEndParam, CATIACircle2D *&amp; oNewCircle) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateCircle(iCenterX,iCenterY,iRadius,iStartParam,iEndParam,oNewCircle)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateClosedEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, CATIAEllipse2D *&amp; oNewEllipse) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateClosedEllipse(iCenterX,iCenterY,iMajorX,iMajorY,iMajorRadius,iMinorRadius,oNewEllipse)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, double iStartParam, double iEndParam, CATIAEllipse2D *&amp; oNewEllipse) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateEllipse(iCenterX,iCenterY,iMajorX,iMajorY,iMajorRadius,iMinorRadius,iStartParam,iEndParam,oNewEllipse)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateSpline(const CATSafeArrayVariant &amp; iPoles, CATIASpline2D *&amp; oNewSpline) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateSpline(iPoles,oNewSpline)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateProjections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateProjections(iGeometry,oSolutions)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateIntersections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateIntersections(iGeometry,oSolutions)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateProjection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateProjection(iGeometry,oFirstSolution)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateIntersection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateIntersection(iGeometry,oFirstSolution)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateParabola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iFocalDistance, CATIAParabola2D *&amp; oParabola) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateParabola(iCenterX,iCenterY,iAxisX,iAxisY,iFocalDistance,oParabola)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateHyperbola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iMajorRadius, double iMinorRadius, CATIAHyperbola2D *&amp; oHyperbola) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)CreateHyperbola(iCenterX,iCenterY,iAxisX,iAxisY,iMajorRadius,iMinorRadius,oHyperbola)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)get_Application(oApplication)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)get_Parent(oParent)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)get_Name(oNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)put_Name(iNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+return (ENVTIECALL(CATIAFactory2D,ENVTIETypeLetter,ENVTIELetter)GetItem(IDName,RealObj)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIAFactory2D(classe)    TIECATIAFactory2D##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIAFactory2D(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIAFactory2D, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIAFactory2D, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIAFactory2D, classe, 2) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIAFactory2D, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIAFactory2D, classe) \
+ \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreatePoint(double iX, double iY, CATIAPoint2D *&amp; oNewPoint) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,1,&amp;_Trac2,&amp;iX,&amp;iY,&amp;oNewPoint); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreatePoint(iX,iY,oNewPoint); \
+   ExitAfterCall(this,1,_Trac2,&amp;_ret_arg,&amp;iX,&amp;iY,&amp;oNewPoint); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateControlPoint(double iX, double iY, CATIAControlPoint2D *&amp; oNewPoint) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,2,&amp;_Trac2,&amp;iX,&amp;iY,&amp;oNewPoint); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateControlPoint(iX,iY,oNewPoint); \
+   ExitAfterCall(this,2,_Trac2,&amp;_ret_arg,&amp;iX,&amp;iY,&amp;oNewPoint); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateLine(double iX1, double iY1, double iX2, double iY2, CATIALine2D *&amp; oNewLine) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,3,&amp;_Trac2,&amp;iX1,&amp;iY1,&amp;iX2,&amp;iY2,&amp;oNewLine); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateLine(iX1,iY1,iX2,iY2,oNewLine); \
+   ExitAfterCall(this,3,_Trac2,&amp;_ret_arg,&amp;iX1,&amp;iY1,&amp;iX2,&amp;iY2,&amp;oNewLine); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateLineFromVector(double iX1, double iY1, double iUX, double iUY, CATIALine2D *&amp; oNewLine) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,4,&amp;_Trac2,&amp;iX1,&amp;iY1,&amp;iUX,&amp;iUY,&amp;oNewLine); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateLineFromVector(iX1,iY1,iUX,iUY,oNewLine); \
+   ExitAfterCall(this,4,_Trac2,&amp;_ret_arg,&amp;iX1,&amp;iY1,&amp;iUX,&amp;iUY,&amp;oNewLine); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateClosedCircle(double iCenterX, double iCenterY, double iRadius, CATIACircle2D *&amp; oNewCircle) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,5,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iRadius,&amp;oNewCircle); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateClosedCircle(iCenterX,iCenterY,iRadius,oNewCircle); \
+   ExitAfterCall(this,5,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iRadius,&amp;oNewCircle); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateCircle(double iCenterX, double iCenterY, double iRadius, double iStartParam, double iEndParam, CATIACircle2D *&amp; oNewCircle) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,6,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iRadius,&amp;iStartParam,&amp;iEndParam,&amp;oNewCircle); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateCircle(iCenterX,iCenterY,iRadius,iStartParam,iEndParam,oNewCircle); \
+   ExitAfterCall(this,6,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iRadius,&amp;iStartParam,&amp;iEndParam,&amp;oNewCircle); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateClosedEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, CATIAEllipse2D *&amp; oNewEllipse) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,7,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iMajorX,&amp;iMajorY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;oNewEllipse); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateClosedEllipse(iCenterX,iCenterY,iMajorX,iMajorY,iMajorRadius,iMinorRadius,oNewEllipse); \
+   ExitAfterCall(this,7,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iMajorX,&amp;iMajorY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;oNewEllipse); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateEllipse(double iCenterX, double iCenterY, double iMajorX, double iMajorY, double iMajorRadius, double iMinorRadius, double iStartParam, double iEndParam, CATIAEllipse2D *&amp; oNewEllipse) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,8,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iMajorX,&amp;iMajorY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;iStartParam,&amp;iEndParam,&amp;oNewEllipse); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateEllipse(iCenterX,iCenterY,iMajorX,iMajorY,iMajorRadius,iMinorRadius,iStartParam,iEndParam,oNewEllipse); \
+   ExitAfterCall(this,8,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iMajorX,&amp;iMajorY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;iStartParam,&amp;iEndParam,&amp;oNewEllipse); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateSpline(const CATSafeArrayVariant &amp; iPoles, CATIASpline2D *&amp; oNewSpline) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,9,&amp;_Trac2,&amp;iPoles,&amp;oNewSpline); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateSpline(iPoles,oNewSpline); \
+   ExitAfterCall(this,9,_Trac2,&amp;_ret_arg,&amp;iPoles,&amp;oNewSpline); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateProjections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,10,&amp;_Trac2,&amp;iGeometry,&amp;oSolutions); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateProjections(iGeometry,oSolutions); \
+   ExitAfterCall(this,10,_Trac2,&amp;_ret_arg,&amp;iGeometry,&amp;oSolutions); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateIntersections(CATIAReference * iGeometry, CATIAGeometricElements *&amp; oSolutions) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,11,&amp;_Trac2,&amp;iGeometry,&amp;oSolutions); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateIntersections(iGeometry,oSolutions); \
+   ExitAfterCall(this,11,_Trac2,&amp;_ret_arg,&amp;iGeometry,&amp;oSolutions); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateProjection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,12,&amp;_Trac2,&amp;iGeometry,&amp;oFirstSolution); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateProjection(iGeometry,oFirstSolution); \
+   ExitAfterCall(this,12,_Trac2,&amp;_ret_arg,&amp;iGeometry,&amp;oFirstSolution); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateIntersection(CATIAReference * iGeometry, CATIAGeometry2D *&amp; oFirstSolution) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,13,&amp;_Trac2,&amp;iGeometry,&amp;oFirstSolution); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateIntersection(iGeometry,oFirstSolution); \
+   ExitAfterCall(this,13,_Trac2,&amp;_ret_arg,&amp;iGeometry,&amp;oFirstSolution); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateParabola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iFocalDistance, CATIAParabola2D *&amp; oParabola) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,14,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iAxisX,&amp;iAxisY,&amp;iFocalDistance,&amp;oParabola); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateParabola(iCenterX,iCenterY,iAxisX,iAxisY,iFocalDistance,oParabola); \
+   ExitAfterCall(this,14,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iAxisX,&amp;iAxisY,&amp;iFocalDistance,&amp;oParabola); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAFactory2D##classe::CreateHyperbola(double iCenterX, double iCenterY, double iAxisX, double iAxisY, double iMajorRadius, double iMinorRadius, CATIAHyperbola2D *&amp; oHyperbola) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,15,&amp;_Trac2,&amp;iCenterX,&amp;iCenterY,&amp;iAxisX,&amp;iAxisY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;oHyperbola); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateHyperbola(iCenterX,iCenterY,iAxisX,iAxisY,iMajorRadius,iMinorRadius,oHyperbola); \
+   ExitAfterCall(this,15,_Trac2,&amp;_ret_arg,&amp;iCenterX,&amp;iCenterY,&amp;iAxisX,&amp;iAxisY,&amp;iMajorRadius,&amp;iMinorRadius,&amp;oHyperbola); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAFactory2D##classe::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,16,&amp;_Trac2,&amp;oApplication); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Application(oApplication); \
+   ExitAfterCall(this,16,_Trac2,&amp;_ret_arg,&amp;oApplication); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAFactory2D##classe::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,17,&amp;_Trac2,&amp;oParent); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Parent(oParent); \
+   ExitAfterCall(this,17,_Trac2,&amp;_ret_arg,&amp;oParent); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAFactory2D##classe::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,18,&amp;_Trac2,&amp;oNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Name(oNameBSTR); \
+   ExitAfterCall(this,18,_Trac2,&amp;_ret_arg,&amp;oNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAFactory2D##classe::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,19,&amp;_Trac2,&amp;iNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;put_Name(iNameBSTR); \
+   ExitAfterCall(this,19,_Trac2,&amp;_ret_arg,&amp;iNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAFactory2D##classe::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,20,&amp;_Trac2,&amp;IDName,&amp;RealObj); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetItem(IDName,RealObj); \
+   ExitAfterCall(this,20,_Trac2,&amp;_ret_arg,&amp;IDName,&amp;RealObj); \
+   return(_ret_arg); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIAFactory2D(classe) \
+ \
+ \
+declare_TIE_CATIAFactory2D(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIAFactory2D##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIAFactory2D,&quot;CATIAFactory2D&quot;,CATIAFactory2D::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIAFactory2D(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIAFactory2D, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIAFactory2D##classe(classe::MetaObject(),CATIAFactory2D::MetaObject(),(void *)CreateTIECATIAFactory2D##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIAFactory2D(classe) \
+ \
+ \
+declare_TIE_CATIAFactory2D(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIAFactory2D##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIAFactory2D,&quot;CATIAFactory2D&quot;,CATIAFactory2D::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIAFactory2D(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIAFactory2D, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIAFactory2D##classe(classe::MetaObject(),CATIAFactory2D::MetaObject(),(void *)CreateTIECATIAFactory2D##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIAFactory2D(classe) TIE_CATIAFactory2D(classe)
+#else
+#define BOA_CATIAFactory2D(classe) CATImplementBOA(CATIAFactory2D, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIAEllipse2D.html">← 上一页: TIE_CATIAEllipse2D.h</a></div>
+        <div><a href="TIE_CATIAGeometricElement.html">下一页: TIE_CATIAGeometricElement.h →</a></div>
+    </div>
+</body>
+</html>

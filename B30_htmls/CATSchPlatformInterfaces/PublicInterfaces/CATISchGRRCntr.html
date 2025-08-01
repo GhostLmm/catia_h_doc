@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRRCntr.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRRCntr.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchGRR.html">← 上一页: CATISchGRR.h</a></div>
+        <div><a href="CATISchGRRComp.html">下一页: CATISchGRRComp.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchGRRCntr_H
+#define CATISchGRRCntr_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+
+// CATSchPlatformInterfaces
+
+#include &quot;CATSchGeneralEnum.h&quot;
+
+class CATISchGRR;
+
+extern &quot;C&quot; const IID IID_CATISchGRRCntr ;
+
+/**
+ * Interface to manage the representation of Schematic connector
+ * graphic objects.
+ * &lt;b&gt;Role&lt;/b&gt;: To modify or query a connector&#x27;s symbol 
+ * or graphic representation.
+ */
+class CATISchGRRCntr : public IUnknown
+{
+  public:  
+  
+  /**
+  * Set the symbol or graphics used to represent a connector.
+  * @param iGRRSymbol
+  *   The graphical primitive (detail) to be used as the connector&#x27;s symbol.
+  *   iGRRSymbol can be NULL if iESymbolType is a point or point/vector.
+  * @param iESymbolType
+  *   Connector symbol type such as: point, point/vector,
+  *   OnOffSheet, LineBoundary.
+  *   @see CATSchCntrSymbolType
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetSymbol (CATISchGRR *iGRRSymbol,
+    CATSchCntrSymbolType iESymbolType) = 0;
+
+  /**
+  * Remove the graphical primitive used as the connector&#x27;s symbol.
+  * The default connector&#x27;s symbol type will be set to point.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT RemoveSymbol () = 0;
+
+  /**
+  * Get the graphical primitive of a connector.
+  * @param oGRR
+  *   The graphical primitive (ditto) used to represent a connector.
+  * @param oESymbolType
+  *   Connector symbol type such as: point, point/vector,
+  *   OnOffSheet, LineBoundary.
+  *   @see CATSchCntrSymbolType
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetSymbol (CATISchGRR **oGRR,
+    CATSchCntrSymbolType *oESymbolType) = 0;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchGRR.html">← 上一页: CATISchGRR.h</a></div>
+        <div><a href="CATISchGRRComp.html">下一页: CATISchGRRComp.h →</a></div>
+    </div>
+</body>
+</html>

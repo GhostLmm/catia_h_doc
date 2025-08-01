@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftHatchingPattern.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftHatchingPattern.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftGenViewFactory.html">← 上一页: CATIDftGenViewFactory.h</a></div>
+        <div><a href="CATIDftLeader.html">下一页: CATIDftLeader.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+
+#ifndef CATIDftHatchingPattern_H
+#define CATIDftHatchingPattern_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATDraftingInterfaces.h&quot;
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATMacForIUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+// Drafting
+class CATIDftHatchingPattern;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftHatchingPattern ;
+#else
+extern &quot;C&quot;  const IID IID_CATIDftHatchingPattern ;
+#endif
+
+
+/**
+*
+* Manage a hatching pattern.
+*
+**/
+
+class ExportedByDraftingItfCPP CATIDftHatchingPattern : public IUnknown
+{
+
+public:
+
+   /**
+   * Get the offset between the sheet origin and the first hatching line of the defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param oOffset
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */ 
+   virtual HRESULT GetOffset (const int iHatching, double *oOffset)  const = 0;
+  
+   /**
+   * Set the offset between the sheet origin and the first hatching line.
+   * @param oOffset
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */ 
+   virtual HRESULT SetOffset (const double iOffset) = 0;
+     
+     
+   /**
+   * Set the angle of hatching lines based on axis x (degre).
+   * @param iAngle
+   * Angle of the hatching
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetAngle (const double iAngle) = 0;
+     
+ 
+   /**
+   * Set the distance between 2 consecutive lines of the hatching element.
+   * @param iPitch
+   * The pitch value
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetPitch (const double iPitch) = 0;
+ 
+
+   /**
+   * Set the texture number of the lines of the hatching element.
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetTexture (const int iTexture) = 0;
+ 
+
+   /**
+   * Set the thickness of the lines of the hatching element.
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetThikness (const int iThikness) = 0;
+ 
+
+   /**
+   * Set the color number of the lines of the hatching element.
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */ 
+   virtual HRESULT SetColor (const int iColor) = 0;
+ 
+
+   /**
+   * Set a new Hatching element to the current one.
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetHatching (CATIDftHatchingPattern *iHatching) = 0;
+ 
+
+   /**
+   * Get the angle of lines based on axis x (degre), for a defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param oAngle
+   * Angle of the lines.
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetAngle (const int iHatching, double * oAngle) = 0;
+ 
+
+   /**
+   * Get the distance between 2 consecutive lines of a defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetPitch (const int iHatching, double * oPitch) = 0;
+
+   
+   /**
+   * Get the texture number of a defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetTexture (const int iHatching, int * oTexture) = 0;
+
+
+   
+   /**
+   * Get the thickness number of a defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetThikness (const int iHatching, int * oThikness) = 0;
+
+
+   
+   /**
+   * Get the color number of a defined hatching element.
+   * @param iHatching (from 0 to oHatchingNb-1)
+   * @param 
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetColor (const int iHatching, int * oColor) = 0;	
+
+   
+   /**
+   * Get the number of hatching elements.
+   * @param oHatchingNb
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetNbHatching (int * oHatchingNb) = 0;	
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftGenViewFactory.html">← 上一页: CATIDftGenViewFactory.h</a></div>
+        <div><a href="CATIDftLeader.html">下一页: CATIDftLeader.h →</a></div>
+    </div>
+</body>
+</html>

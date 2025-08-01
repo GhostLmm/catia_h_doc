@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteractiveInterfaces/PublicInterfaces/CATIIniSearchContext.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InteractiveInterfaces/PublicInterfaces/CATIIniSearchContext.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniSearchCombinationCriterion.html">← 上一页: CATIIniSearchCombinationCriterion.h</a></div>
+        <div><a href="CATIIniSearchCriterion.html">下一页: CATIIniSearchCriterion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=============================================================================
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#ifndef CATIIniSearchContext_H
+#define CATIIniSearchContext_H
+
+#include &quot;CATInteractiveInterfaces.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+class CATPathElement;
+
+// Global Unique IDentifier defined in .cpp 
+extern ExportedByCATInteractiveInterfaces IID IID_CATIIniSearchContext;
+
+/** 
+ * Class to define in which context the objects will be looked for.
+ * &lt;b&gt;Role&lt;/b&gt;: A Search context defines the granularity with which
+ * objects will be looked for. Refer to the @href #Scope enumeration
+ * for further details.
+ * &lt;br&gt;A context applies to a @href CATIIniSearchCriterion, since it defines
+ * the set of objects (usually represented in the specification tree) that 
+ * will be confronted with the criterion.
+ * &lt;br&gt;Refer to the &quot;Search Overview&quot; technical article for further details.
+ */
+class ExportedByCATInteractiveInterfaces CATIIniSearchContext : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+	/**
+   * Contexts value for a Search procedure.
+   * &lt;br&gt;The following contexts are allowed:
+   * @param Everywhere
+   *    To look for objects located anywhere in the document.
+   * @param InUIActiveObject
+   *    To look for objects located between the current UIActive object (called current
+   *    top object) and the next UIActivable objects located below this top object
+   *    (called current bottom objects). Those objects are also included in the Search process.
+   *    &lt;br&gt;In a Part document, in a Part Design context, this
+   *    context will consider all the objects from the top of the specification
+   *    tree, to the sketches (included). But it would not take into account
+   *    the elements of each sketch.
+   * @param FromUIActiveObjectToBottom
+   *    To look for objects located from the current top object (included in the Search
+   *    process), to the very bottom of the specification tree for the current top object&#x27;s branch.
+   *    &lt;br&gt;In a Product document, in a Part Design context, this
+   *    context will consider all the objects from the current Part object to 
+   *    its constitutive sketches, and all their elements.
+   * @param FromSelection
+   *    To look for objects located in the current set of objects of the editor ( @href CATCSO ), 
+   *    as well as other objects located underneath in the specification tree.
+   *    &lt;br&gt;For example, let us consider a Part document where a hole object 
+   *    and a pad object are selected. The Search process will confront the hole,
+   *    the pad, their sketches, and constitutive elements to the criterion.
+   * @param OnSameLevel
+   *    To look for objects located on the same specification tree level as a 
+   *    reference object.
+   *    &lt;br&gt;This reference object is excluded from the search result.
+   *    &lt;br&gt;It is only possible to define this scope through the @href #SetScope method.
+   *    When doing so, the second argument of the method must be provided.
+   *    &lt;br&gt;In addition, there is no possible print out of this scope&#x27;s NLS or 
+   *    TransFormat value.
+   * @param VisibleOnScreen
+   *    To look for objects visible (fully or not) in the current active window.
+   *    &lt;br&gt;This context wont take into account elements not activated, not represented
+   *    (features used to build other features that appear in the specification tree but
+   *    not in 3D), not in the current active filter, not in the current mask... and when
+   *    the 2D mode will be activated elements not in the active plane will be excluded from
+   *    the search result too.
+   *    &lt;br&gt;Caution: do not use this scope in a batch, the result would be unpredictable.
+   * &lt;br&gt;&lt;br&gt;The default scope, i.e. if no setup is made, is &lt;tt&gt;InUIActiveObject&lt;/tt&gt;
+   */
+  enum Scope{Everywhere,
+             InUIActiveObject,
+             FromUIActiveObjectToBottom,
+             FromSelection,
+             OnSameLevel,
+             VisibleOnScreen};
+
+  /** Sets the scope from the dedicated enumeration.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methods sets the scope through 
+   * an enumeration value.
+   * &lt;br&gt;&lt;br&gt;
+   * @param iScope
+   *    The scope value.
+   * @param iReferenceObjectPath
+   *    &lt;li&gt;If the chosen scope is &lt;tt&gt;OnSameLevel&lt;/tt&gt;, this argument is &lt;b&gt;mandatory&lt;/b&gt;. 
+   *    &lt;br&gt;It defines the reference object for the scope: on the same level as this reference object.&lt;/li&gt;
+   *    &lt;li&gt;If the chosen scope is &lt;tt&gt;InUIActiveObject&lt;/tt&gt;, or &lt;tt&gt;FromUIActiveObjectToBottom&lt;/tt&gt;,
+   *    this argument is optional.
+   *    &lt;br&gt;It enables the user to define an object implementing the @href CATIUIActivate,
+   *    from which the search will start. It is especially useful when the search should
+   *    start from an UIActivable object that is not the current UIActiveObject.&lt;/li&gt;
+   *    &lt;li&gt;In all the other case, this argument &lt;b&gt;must&lt;/b&gt; be omitted.&lt;/li&gt; 
+   * @return
+   *    S_OK if the scope has successfully been set up.
+   *    E_FAIL otherwise
+   */
+  virtual HRESULT SetScope(CATIIniSearchContext::Scope iScope, 
+                           CATPathElement* iReferenceObjectPath=NULL) = 0;
+
+  /** Sets the scope from a string.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the scope through a CATUnicodeString
+   * refering to either an NLS or a TransFormat context.
+   * &lt;br&gt;&lt;br&gt;
+   * @param iStringScope
+   *    The scope under an NLS or TransFormat format.
+   *    &lt;li&gt;
+   *    Here are different complete NLS queries that can be obtained 
+   *    through the Edit/Search user interface, with an English session. 
+   *    Those pieces of information are session&#x27;s language dependent. 
+   *    Here under the matching between enumeration and string-format
+   *    context is explained:
+   *    &lt;ul&gt;&lt;li&gt;&lt;tt&gt;Everywhere&lt;/tt&gt;: in &lt;tt&gt;Name=Johnny,all&lt;/tt&gt; the context is &lt;b&gt;all&lt;/b&gt;.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;InUIActiveObject&lt;/tt&gt;: in &lt;tt&gt;Name=Johnny,in&lt;/tt&gt; the context is &lt;b&gt;in&lt;/b&gt;.
+   *    In the &lt;tt&gt;Name=Johnny&lt;/tt&gt; query, there is no context. So the default one is assumed 
+   *    to be here.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;FromUIActiveObjectToBottom&lt;/tt&gt;: in &lt;tt&gt;Name=Johnny,from&lt;/tt&gt; the context is &lt;b&gt;from&lt;/b&gt;.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;FromSelection&lt;/tt&gt;: in &lt;tt&gt;Name=Johnny,sel&lt;/tt&gt; the context is &lt;b&gt;sel&lt;/b&gt;.&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+   *    &lt;li&gt;Here under the matching between enumeration and 
+   *    Transformat context is explained:
+   *    &lt;ul&gt;&lt;li&gt;&lt;tt&gt;Everywhere&lt;/tt&gt;: the Transformat context is &lt;b&gt;all&lt;/b&gt;.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;InUIActiveObject&lt;/tt&gt;: the Transformat context is &lt;b&gt;in&lt;/b&gt;.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;FromUIActiveObjectToBottom&lt;/tt&gt;: : the Transformat context is &lt;b&gt;from&lt;/b&gt;.&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;FromSelection&lt;/tt&gt;: : the Transformat context is &lt;b&gt;sel&lt;/b&gt;.&lt;/li&gt;&lt;/ul&gt;
+   *    &lt;/li&gt;
+   * @return
+   *    &lt;ul&gt;&lt;li&gt;S_OK if the scope has successfully been set up.&lt;/li&gt;
+   *    &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;&lt;/ul&gt;
+   */
+  virtual HRESULT SetScopeFromString(const CATUnicodeString&amp; iStringScope) = 0;
+
+  /** Retrieves the scope in the NLS format.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methods retrieves the scope under an NLS format string,
+   *  whatever the way it has been set up.
+   * &lt;br&gt;&lt;br&gt;
+   * @param oNLSScope
+   *    The returned scope under an NLS format.
+   * @return
+   *    S_OK if the scope has successfully been set up.
+   *    E_FAIL otherwise
+   */
+  virtual HRESULT GetNLSScope(CATUnicodeString&amp; oNLSScope) = 0;
+
+  /** Retrieves the scope in the TransFormat format.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the scope under a TransFormat format string,
+   * whatever the way it has been set up.
+   * &lt;br&gt;&lt;br&gt;
+   * @param oTFScope
+   *    The returned scope under an TransFormat format.
+   * @return
+   *    S_OK if the scope has successfully been set up.
+   *    E_FAIL otherwise
+   */
+  virtual HRESULT GetTransFormatScope(CATUnicodeString&amp; oTFScope) = 0;
+
+  /** Retrieves the enumeration value scope.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the enumeration corresponding
+   *  to the scope, whatever the way it has been set up.
+   * &lt;br&gt;&lt;br&gt;
+   * @param oScope
+   *    The returned scope under the enumeration format.
+   * @return
+   *    S_OK if the scope has successfully been set up.
+   *    E_FAIL otherwise
+   */
+  virtual HRESULT GetScope(CATIIniSearchContext::Scope &amp;oScope) = 0;
+
+  /** Retrieves the reference object.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the path of the reference object
+   * used when the scope has been set up through the 2-argument @href #SetScope
+   * method.
+   * &lt;br&gt;&lt;br&gt;
+   * @param oReferenceObjectPath
+   *    The path of the reference object. (The value cannot be null)
+   * @return
+   *    S_OK if the scope has successfully been set up.
+   *    E_FAIL otherwise
+   */
+  virtual HRESULT GetReferenceObjectPath(CATPathElement *&amp;oReferenceObjectPath) = 0;
+}; 
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIIniSearchCombinationCriterion.html">← 上一页: CATIIniSearchCombinationCriterion.h</a></div>
+        <div><a href="CATIIniSearchCriterion.html">下一页: CATIIniSearchCriterion.h →</a></div>
+    </div>
+</body>
+</html>

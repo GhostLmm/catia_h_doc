@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftTextRange.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftTextRange.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftTextProperties.html">← 上一页: CATIDftTextProperties.h</a></div>
+        <div><a href="CATIDftView.html">下一页: CATIDftView.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDftTextRange_H
+#define CATIDftTextRange_H
+//==============================================================================
+//                                   CATIA - Version 5
+//	COPYRIGHT DASSAULT SYSTEMES 2002
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+//==============================================================================
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATIDftTextProperties;
+
+//#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftTextRange ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftTextRange ;
+#endif
+
+
+/**
+* Manage texts by selection in this text.
+*/
+class ExportedByDraftingItfCPP CATIDftTextRange : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+
+  /**
+  * Get the start index of the text range.
+  * @param oStart 
+  *   the start index of the text range.
+  */
+  virtual HRESULT GetStart (int *oStart)=0;
+
+  /**
+  * Get the number of character of the text range.
+  * @param oLength 
+  *   the text range length.
+  */
+  virtual HRESULT GetLength (int *oLength)=0;
+
+  /**
+  * Modify the current text range with a new string.
+  * @param iStg 
+  *   Text to insert/replace.&lt;BR&gt;
+  *   If the selection is a cursor, the text will be inserted.&lt;BR&gt;
+  *   If not the slection will be replaced.
+  */
+  virtual HRESULT SetString(const wchar_t *iStg) = 0;
+  
+  /**
+  * Get the text of the current selection.
+  * @param ostg
+  *   The returned text
+  */
+  virtual HRESULT GetString(wchar_t **oStg) = 0;
+
+  /**
+  * @nodoc
+  * Used to insert a string at the begining of the text range.
+  * @param iStg
+  *   The string to ba added
+  * @param oTextRange
+  *   the new text range
+  */
+  virtual HRESULT InsertBefore(const wchar_t *iStg) = 0;
+
+
+  /**
+  * @nodoc
+  * Used to insert a string at the end of the text range.
+  * @param iStg
+  *   The string to ba added
+  * @param oTextRange
+  *   the new text range
+  */
+  virtual HRESULT InsertAfter(const wchar_t *iStg) = 0;
+
+
+  /**
+  * @nodoc
+  * Used to find a string in the text range.
+  * @param iStg
+  *   The string to be found
+  * @param oTextRange
+  *   the text range if founded
+  * @param iAfter
+  *   The first index
+  * @param iMatchCase
+  *   Match case 
+  * @param iWholeWords
+  *   Whole words
+  */
+  virtual HRESULT Find(const wchar_t *iStg, CATIDftTextRange **oTextRange,
+                        int iAfter = 0, const CATBoolean iMatchCase  = FALSE,
+                        const CATBoolean iWholeWords = FALSE) = 0;
+
+  /**
+  * Returns a Properties interface on the text range.
+  * &lt;BR&gt;Equivalent to &lt;i&gt; a standard QueryInterface on the text range &lt;/i&gt; 
+  * @param oTextProperties
+  * The pointer on the asked interface. Can be NULL if the adhesion doesn&#x27;t exists.
+  */
+  virtual HRESULT GetTextProperties (CATIDftTextProperties **TextProperties) = 0;
+
+  /**
+  * @nodoc
+  * Returns a text range from the actual range.
+  * @param iStart,iEnd  
+  *   
+  * @param TextRange
+  *   The pointer on the new range
+  */
+  virtual HRESULT GetTextRange (CATIDftTextRange **TextRange, int iStart, int iEnd ) = 0;
+
+  /**
+  * @nodoc
+  * Manage semantic link
+  * @param iStart  
+  *   first impacted character
+  * @param iObj  
+  *   linked obj
+  */
+  virtual HRESULT InsertVariable (IUnknown *Variable) = 0;
+
+  /**
+  * @nodoc
+  * Manage semantic link
+  * @param iObj
+  *   Variable to find, if NULL find all variable
+  * @param oNbVariable
+  *   Number of positions
+  * @param oVariableList
+  *   List of positions
+  */
+  virtual HRESULT GetVariablePositions(IUnknown *iObj, int *oNbVariable, 
+                                       int **oVariableList) = 0;
+
+  /**
+  * @deprecated V5R17 use CATIDftTextRange::InsertSymbol
+  * Manage symbol.
+  * @param iSymbol  
+  *   symbol 
+  * @param iStart
+  *   location 
+  * @param iEnd
+  *   location
+  * @param iFont  
+  *   Font name to use for this symbol. Default CATIASymbols.
+  */
+  virtual HRESULT InsertSymbol(const wchar_t *iSymbol, int iStart, int iEnd, 
+                               wchar_t *iFont=NULL) = 0;
+
+  /**
+  * Manage symbol.
+  * @param iSymbolName
+  *   symbol name as described in Standard
+  * @param iStart
+  *   location 
+  * @param iEnd
+  *   location
+  */
+  virtual HRESULT InsertSymbol(const CATUnicodeString &amp; iSymbolName, int iStart) = 0;
+};
+CATDeclareHandler(CATIDftTextRange, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftTextProperties.html">← 上一页: CATIDftTextProperties.h</a></div>
+        <div><a href="CATIDftView.html">下一页: CATIDftView.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectSpecsLegacy/PublicInterfaces/CATOsmCatalogAccessServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectSpecsLegacy/PublicInterfaces/CATOsmCatalogAccessServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATListPtrCATSpecPointing.html">← 上一页: CATListPtrCATSpecPointing.h</a></div>
+        <div><a href="CATOsmExtensionServices.html">下一页: CATOsmExtensionServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef __CATOsmCatalogAccessServices_h__
+#define __CATOsmCatalogAccessServices_h__
+
+
+// COPYRIGHT DASSAULT SYSTEMES 2012  
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+// ObjectSpecsModeler forwards and headers.
+#include &quot;AC0SPBAS.h&quot; // ExportedByAC0SPBAS
+
+// Other forwards and headers.
+class CATUnicodeString;
+class CATIContainer;
+#include &quot;IUnknown.h&quot; // HRESULT
+#include &quot;CATBoolean.h&quot; // CATBoolean
+
+
+/**
+ * Class grouping Feature Modeler services related to Catalog access.
+ * &lt;b&gt;Role&lt;/b&gt;: This class allows to manage links between container and StartUp Catalogs.&lt;br&gt;
+ * &lt;b&gt;Note&lt;/b&gt;: It can be useful to remove from a document useless persistent links to StartUp Catalogs due to the use of @href AccessCatalog method, 
+ * which is now deprecated. &lt;br&gt;
+ * When opening a document holding a link to a StartUp Catalog, a warning message will be raised if this Catalog is not found. This warning
+ * will appear even if there is no Feature instances in the document.
+ *
+ * &lt;ul&gt;
+ * &lt;li&gt; All methods taking startup late types as argument, such as @href CATICatalog#RetrieveSU or @href CATIOsmExtendable#AddExtension, actually use 
+ * the links between the container and StartUp Catalogs to find the startup in Catalogs. &lt;br&gt; 
+ * Note that the more catalogs are linked to a container, the less efficient the search is. &lt;/li&gt;
+ *
+ * &lt;li&gt; These links are useless for StartUp Catalogs saved after release CXR18. In later releases, there is indeed a new mecanism allowing to 
+ * find startups in a more efficient way. &lt;br&gt;
+ * This mecanism is implemented by @href CATOsmSUHandler class and it is recommended to use it, giving the catalog name as input argument to 
+ * the @href CATOsmSUHandler constructor for maximum efficiency. &lt;/li&gt;
+ *
+ * &lt;li&gt; The patterns @href AccessCatalog / @href CATICatalog#RetrieveSU / @href CATISpecObject#Instanciate, and @href AccessCatalog / 
+ * @href CATIOsmExtendable#AddExtension must be replaced by @href CATOsmSUHandler#Instanciate and @href CATIOsmExtendable#AddExtension methods. &lt;/li&gt;
+ * &lt;/ul&gt;
+ * @see CATOsmSUHandler, CATICatalog, CATIOsmExtendable .
+ */
+class ExportedByAC0SPBAS CATOsmCatalogAccessServices
+{
+public :
+
+  /**
+   * Links a StartUp Catalog to a container.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method creates a link between the StartUp Catalog and the container, provided the right client identifier is supplied.
+   * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;:
+   *   A container can be linked to several StartUp Catalogs.&lt;br&gt;
+   *   After its creation, the link will persist in the document until the method @href #UnlinkCatalogFromContainer is called. It means that the 
+   *   link will still exists even if there is no Feature instances in the document.&lt;br&gt;
+   *   The only way to remove the link is to call the method @href #UnlinkCatalogFromContainer .
+   * @param iCatalogName [in]
+   *   The name of the StartUp Catalog, with its extension.
+   * @param iClientId [in]
+   *   The client identifier of the StartUp Catalog.
+   * @param ipiContainer [in]
+   *   A container to which the StartUp Catalog will be linked. 
+   * @param iIID [in]
+   *   The interface identifier for which a pointer is requested.
+   * @param oPtr [out, CATBaseUnknown#Release]
+   *   The address where the returned pointer to the interface is located.
+   * @return 
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog has been successfully linked to the container.&lt;/dd&gt;
+   *     &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog is not a CAA catalog.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_POINTER&lt;/dt&gt;
+   *     &lt;dd&gt;The input container or the output pointer is null, or both.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;The client identifier is not valid.&lt;/dd&gt;
+   *     &lt;dt&gt;E_UNEXPECTED&lt;/dt&gt;
+   *     &lt;dd&gt;There is no current session.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  static HRESULT LinkCatalogToContainer(const CATUnicodeString &amp; iCatalogName, const CATUnicodeString &amp; iClientId, CATIContainer * ipiContainer,  const IID &amp; iIID, void ** oPtr);
+
+  /**
+   * Unlinks a StartUp Catalog from a container.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method removes the link between the StartUp Catalog and the container if any, provided the right client identifier is supplied.
+   * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;: This method must be used to remove the link created by the method @href #LinkCatalogToContainer .
+   * @param iCatalogName [in]
+   *   The name of the Fetaure Catalog, with its extension.
+   * @param iClientId [in]
+   *   The client identifier of the StartUp Catalog.
+   * @param ipiContainer [in]
+   *   A container to which the StartUp Catalog is linked. 
+   * @return 
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog has been successfully linked to the container.&lt;/dd&gt;
+   *     &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog is not a CAA catalog.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_POINTER&lt;/dt&gt;
+   *     &lt;dd&gt;The input container is null.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;The client identifier is not valid.&lt;/dd&gt;
+   *     &lt;dt&gt;E_UNEXPECTED&lt;/dt&gt;
+   *     &lt;dd&gt;There is no current session.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  static HRESULT UnlinkCatalogFromContainer(const CATUnicodeString &amp; iCatalogName, const CATUnicodeString &amp; iClientId, CATIContainer * ipiContainer);
+
+  /**
+   * Checks if a StartUp Catalog is linked to a container.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method checks if there is a link between the StartUp Catalog and the container.
+   * @param iCatalogName [in]
+   *   The name of the StartUp Catalog, with its extension.
+   * @param iClientId [in]
+   *   The client identifier of the StartUp Catalog.
+   * @param ipiContainer [in]
+   *   An input container. 
+   * @param oIsLinked [out]
+   *   A (caller provided) boolean value in which the result will be stored.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;TRUE&lt;/tt&gt;: if the StartUp Catalog is linked with the container.&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;FALSE&lt;/tt&gt;: if the StartUp Catalog is not linked with the container.&lt;/li&gt;&lt;/ul&gt;
+   *   &lt;br&gt;If the method fails &lt;tt&gt;oIsLinked&lt;/tt&gt; is not modified, it is otherwise overwritten with the retrieved value.
+   * @return 
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog is linked to the container.&lt;/dd&gt;
+   *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog is not linked to the container.&lt;/dd&gt;
+   *     &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+   *     &lt;dd&gt;The catalog is not a CAA catalog.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_POINTER&lt;/dt&gt;
+   *     &lt;dd&gt;The input container is null.&lt;/dd&gt; 
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;The client identifier is not valid.&lt;/dd&gt;
+   *     &lt;dt&gt;E_UNEXPECTED&lt;/dt&gt;
+   *     &lt;dd&gt;There is no current session.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  static HRESULT IsCatalogLinkedToContainer(const CATUnicodeString &amp; iCatalogName, const CATUnicodeString &amp; iClientId, CATIContainer * ipiContainer, CATBoolean &amp; oIsLinked);
+
+};
+
+#endif // __CATOsmCatalogAccessServices_h__
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATListPtrCATSpecPointing.html">← 上一页: CATListPtrCATSpecPointing.h</a></div>
+        <div><a href="CATOsmExtensionServices.html">下一页: CATOsmExtensionServices.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwSubText.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwSubText.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwSubString.html">← 上一页: CATIDrwSubString.h</a></div>
+        <div><a href="CATIDrwText.html">下一页: CATIDrwText.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwSubText_H
+#define CATIDrwSubText_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATIDrwTextStyle.h&quot;
+#include &quot;CATIDrwAnnFrame.h&quot;
+class CATICkeParm_var;
+class CATICkeRelation_var;
+
+  /**
+  * @nodoc
+  */
+#define GetTextResult  0
+  /**
+  * @nodoc
+  */
+#define GetTextFormula 1
+  /**
+  * @nodoc
+  */
+#define GetLittFormula 2
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwSubText ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwSubText ;
+#endif
+
+/**
+* Interface on subtexts of CATIDrwSimpleText objects.
+* @see CATIDrwSimpleText
+*/
+class ExportedByDraftingItfCPP CATIDrwSubText : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  
+public:
+  
+  /**
+  * Returns the text of the subtext.
+  * @param ReadMode
+  * &lt;br&gt; 
+  *   Value can be  :
+  *   &lt;br&gt;&lt;tt&gt;GetTextResult - &lt;/tt&gt;The text is the resulting text (symbol are unichar, 
+  *      variables are calculated. example : &#x27;angle is 47o&#x27;
+  *   &lt;br&gt;&lt;tt&gt;GetTextFormula - &lt;/tt&gt;The text is like the one which appears in the dialog box.
+  *      example : &#x27;Angle is &lt;\LitteralPath\...\Value&gt;&lt;\SYMBOLNAME\&gt;&#x27;
+  *   &lt;br&gt;&lt;tt&gt;GetLittFormula - &lt;/tt&gt;The text is like a litteral formula.
+  *      example : &#x27;&quot;Angle is&quot;+\LitteralPath\...\Value+&quot;&lt;\SYMBOLNAME\&gt;&quot;&#x27;
+  */
+  virtual CATUnicodeString GetText (int ReadMode=GetTextResult ) = 0;
+  /**
+  * Modifies the text.
+  * &lt;br&gt;The text must be in the TextFormula mode, like this : &#x27;Angle is &lt;\LitteralPath\...\Value&gt;&lt;\SYMBOLNAME\&gt;&#x27;.
+  */
+  virtual void SetText (const CATUnicodeString &amp;Text) = 0;
+  
+  /**
+  * @nodoc
+  */
+  virtual CATICkeParm_var GetLitteralText () = 0;
+  /**
+  * @nodoc
+  */
+  virtual void SetLitteralText (CATICkeParm_var LittSubText) = 0;
+  
+  /**
+  * @nodoc
+  */
+  virtual CATICkeRelation_var GetLitteralFormula () = 0;
+  /**
+  * @nodoc
+  */
+  virtual void SetLitteralFormula (CATICkeRelation_var LittFormul) = 0;
+  
+  /**
+  * @nodoc
+  */
+  virtual CATIDrwTextStyle_var GetTextStyle () = 0;
+  /**
+  * @nodoc
+  */
+  virtual void SetTextStyle (CATIDrwTextStyle_var TextStyle) = 0;
+  
+  /**
+  * @nodoc
+  */
+  virtual CATIDrwAnnFrame_var GetFrame () = 0; 
+  /**
+  * @nodoc
+  */
+  virtual void SetFrame (CATIDrwAnnFrame_var TextFrame) = 0; 
+  
+  /**
+  * @nodoc
+  */
+  virtual int GetScoring () = 0; 
+  /**
+  * @nodoc
+  */
+  virtual void SetScoring (int TextScoring) = 0; 
+  
+};
+CATDeclareHandler(CATIDrwSubText, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwSubString.html">← 上一页: CATIDrwSubString.h</a></div>
+        <div><a href="CATIDrwText.html">下一页: CATIDrwText.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgUserRepresentation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgUserRepresentation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgUserOppositeHandMachiningOptions.html">← 上一页: CATIMfgUserOppositeHandMachiningOptions.h</a></div>
+        <div><a href="CATIMfgUserReverseMachiningConditions.html">下一页: CATIMfgUserReverseMachiningConditions.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMfgUserRepresentation_H
+#define CATIMfgUserRepresentation_H
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES  1998
+//=============================================================================
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+// module
+#include &quot;MfgItfEnv.h&quot;
+
+// inheritance
+#include &quot;CATBaseUnknown.h&quot;
+
+
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATIDocId.h&quot;
+
+// OLE iid
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByMfgItfEnv IID_CATIMfgUserRepresentation ;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgUserRepresentation ;
+#endif
+
+/**   
+ * Interface dedicated to objects representation management.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface offers services to manage mainly the user representation.&lt;br&gt;
+ */
+
+class ExportedByMfgItfEnv CATIMfgUserRepresentation : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+  public:
+/**
+ *	Sets the User Representation Associated to the Object.
+ *	@param iPathName The complete absolute path name to the External Object
+ */
+	  virtual HRESULT SetRepresentation (const CATUnicodeString &amp;iPathName)=0;
+/**
+ *	Sets the User Representation Associated to the Object.
+ *	@param iDoc The CATIDocId of the External Document
+ */
+	  virtual HRESULT SetRepresentation (CATIDocId *iDoc)=0;
+/**
+ *	Retrieves the User Representation Associated to the Object.
+ *	@param oPathName The complete absolute path name to the External Object
+ */
+	  virtual HRESULT GetRepresentation (CATUnicodeString &amp;oPathName)=0;
+/**
+ *	Retrieves the User Representation Associated to the Object.
+ *	@param iDoc The CATIDocId of the External Object
+ */
+	  virtual HRESULT GetRepresentation (CATIDocId *&amp;iDoc)=0;
+/**
+ *	Removes the User Representation Associated to the Object.
+ */
+	  virtual HRESULT UnsetRepresentation ()=0;
+
+};
+
+CATDeclareHandler(CATIMfgUserRepresentation, CATBaseUnknown) ;
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgUserOppositeHandMachiningOptions.html">← 上一页: CATIMfgUserOppositeHandMachiningOptions.h</a></div>
+        <div><a href="CATIMfgUserReverseMachiningConditions.html">下一页: CATIMfgUserReverseMachiningConditions.h →</a></div>
+    </div>
+</body>
+</html>

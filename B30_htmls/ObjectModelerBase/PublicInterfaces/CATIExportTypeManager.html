@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATIExportTypeManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATIExportTypeManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIEditor.html">← 上一页: CATIEditor.h</a></div>
+        <div><a href="CATIGenericFactory.html">下一页: CATIGenericFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIExportTypeManager_H
+#define CATIExportTypeManager_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U5
+*/
+
+#include &quot;AD0XXBAS.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CosDataObject.h&quot;
+#include &quot;CATStreamArea.h&quot;
+
+class CATDocument;
+
+extern ExportedByAD0XXBAS IID IID_CATIExportTypeManager ;
+/**
+* Interface to export a given format to an another one.
+* &lt;br&gt;&lt;b&gt;Usage&lt;/b&gt; : to be able to save an existing document
+* in a specific format, you have to :
+* &lt;br&gt;1. add a new declaration in your dictionary: 
+* &lt;b&gt;DocumentType_MyFormat  CATIExportTypeManager  libXXX&lt;/b&gt;
+* For example, if you want to save a CATProduct document to a &quot;MyFormat&quot;
+* format, you would declare &lt;b&gt;CATProduct_MyFormat&lt;/b&gt; in the dictionary.
+* The new dictionary declaration will cause &quot;MyFormat&quot; to appear in the list of
+* document types in the File/SaveAs panel.
+* &lt;br&gt;2. implement the ExportData method of CATIExportTypeManager in order to
+* specify the way the &quot;MyFormat&quot;-type document is to be saved.
+*/
+class ExportedByAD0XXBAS CATIExportTypeManager: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+	/**
+	* Defines how to export data of a given document.
+	* &lt;br&gt;&lt;b&gt; Role: &lt;/b&gt; Will be called at SaveAs .
+	* @param iDoc
+	*        The given document to be saved.
+	* @param iPath
+	*        The path describing the storage area where data is to be exported.
+	* &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this path is the one selected in 
+	* File / SaveAs box dialog.
+	*/
+	virtual HRESULT ExportData ( CATDocument *iDoc, CATUnicodeString iPath ) = 0;
+
+	/**
+	* Defines how to export data from a given area.
+	* @param iToExportPath
+	*        Tje path of the document from which data is to be exported.
+	* @param iExportedPath
+	*        The path describing the storage area where data is to be exported.
+	*/
+	virtual HRESULT ExportData (CATUnicodeString iToExportPath , CATUnicodeString iExportedPath ) = 0;
+
+
+
+};
+
+
+CATDeclareHandler( CATIExportTypeManager, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIEditor.html">← 上一页: CATIEditor.h</a></div>
+        <div><a href="CATIGenericFactory.html">下一页: CATIGenericFactory.h →</a></div>
+    </div>
+</body>
+</html>

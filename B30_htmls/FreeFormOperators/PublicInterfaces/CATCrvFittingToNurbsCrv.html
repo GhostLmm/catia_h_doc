@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeFormOperators/PublicInterfaces/CATCrvFittingToNurbsCrv.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FreeFormOperators/PublicInterfaces/CATCrvFittingToNurbsCrv.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvDegreeModification.html">← 上一页: CATCrvDegreeModification.h</a></div>
+        <div><a href="CATFrFSmoothing.html">下一页: CATFrFSmoothing.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCrvFittingToNurbsCrv_H
+#define CATCrvFittingToNurbsCrv_H
+
+// COPYRIGHT DASSAULT SYSTEMES  2001
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+class CATNurbsCurve;
+class CATPNurbs;
+class CATFrFNurbsMultiForm;
+class CATCrvParam;
+class CATCrvLimits;
+class CATSoftwareConfiguration;
+
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CATFreeFormDef.h&quot;
+#include &quot;CreateCrvFittingToNurbsCrv.h&quot;
+#include &quot;FrFOpeCrv.h&quot;
+#include &quot;CATCGMOperator.h&quot;
+
+/**
+ * Class defining a geometric operator that computes a (possibly approximated) NURBS representation of a CATCurve.
+ * &lt;br&gt;If a curve has no corresponding NURBS representation, the operator uses a fitting operation to
+ * compute the best approximating NURBS representation. Hence, a maximum deviation must be given as input of 
+ * the operator. 
+ * &lt;ul&gt;
+ * &lt;li&gt;An input CATNurbsCurve or CATPNurbs is directly output: 
+ * the &lt;tt&gt;GetResult&lt;/tt&gt; method outputs the same pointer.
+ * &lt;li&gt;By default, a CATPCurve is retrieved as a CATPNurbs. To force the creation of the corresponding CATNurbsCurve,
+ * use the @href CATCrvFittingToNurbsCrv#Set3DCurveCreation method.
+ * &lt;li&gt;Some canonic curves/pcurves will be transformed into rational 
+ * CATNurbsCurve/CATPNurbs. However, setting &lt;tt&gt;iRationalAllowed = 0&lt;/tt&gt; at the operator creation 
+ * or using the @href CATCrvFittingToNurbsCrv#SetRationalAllowed method, 
+ * will force the fitting into a non rational curve (default is &lt;tt&gt;iRationalAllowed = 1&lt;/tt&gt;).
+ * &lt;li&gt;The CATEdgeCurve is converted according to the types of its inside curves.
+ * &lt;/ul&gt;
+ * The CATCrvFittingToNurbsCrv operator follows the global frame of the geometric operators: 
+ *&lt;ul&gt;
+ * &lt;li&gt;A CATCrvFittingToNurbsCrv operator is created with the &lt;tt&gt;CATCreateCrvFittingToNurbsCrv&lt;/tt&gt; global function 
+ * and must be directly deleted with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator after use.
+ * It is is not streamable. 
+ *&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+ *&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;Getxxx&lt;/tt&gt; methods. 
+ * If a curve does not need to be converted because it already is of the required type, the same pointer 
+ * is returned. In this case, using the @href CATICGMContainer#Remove method on the result curve
+ * will remove the input curve, because they are the same.
+ *&lt;/ul&gt;
+ */
+class ExportedByFrFOpeCrv CATCrvFittingToNurbsCrv : public CATCGMOperator
+{
+  CATCGMVirtualDeclareClass(CATCrvFittingToNurbsCrv);
+
+public:
+  virtual ~CATCrvFittingToNurbsCrv();
+
+
+protected:
+  /** 
+   * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode. 
+   */
+  virtual int RunOperator()=0;
+
+public:
+  /**
+   * Imposes the conversion of a CATPCurve in a (3D) CATNurbsCurve.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * &lt;br&gt;By default (if this method is not called), a CATPCurve is transformed into a CATPNurbs.
+   */
+  virtual void Set3DCurveCreation()=0;
+ 
+  /**
+   * Defines whether the result NURBS representation can be rational.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iAllowRational
+   * &lt;tt&gt;1&lt;/tt&gt; if the result curve can be rational (default value when the method is not called), 
+   * &lt;tt&gt;0&lt;/tt&gt; if the result curve must not be rational.
+   */
+  virtual void SetRationalAllowed(CATLONG32 iAllowRational)=0;
+
+  /**
+   * @nodoc
+   * @deprecated
+   * DO NOT USE -- USE MAX DEGREE
+   * @param iDegree
+   * The degree value. 
+   */
+  virtual void SetDegree(CATLONG32 iDegree)=0;
+
+  /**
+   * @nodoc
+   * @deprecated
+   * DO NOT USE -- SPECIFY LIMITS IN CONSTRUCTOR
+   * Defines the maximum limits to take into account on the input curve.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxLimits
+   * The maximum limits.
+   */
+  virtual void SetMaxLimits(const CATCrvLimits &amp;iMaxLimits)=0;
+
+  /**
+   * Declares that the result NURBS must not be periodic.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   */
+  virtual void ForbidPeriodicity()= 0;
+ 
+  /**
+   * Declares that the result curve must have the same parameterization than the input curve to fit.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   */
+  virtual void ImposeSameParametrization()=0;
+
+  /**
+   * @nodoc
+   * Defines the maximum deviation between the input curve and the result curve.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxDeviation
+   * The maximum deviation value.
+   */
+  virtual void SetMaxDeviation(double iMaxDeviation)=0;
+ 
+  /**
+   * Defines the minimal length of an internal arc of the result curve.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iInternalMinLength
+   * The minimum length value.
+   */
+  virtual void SetInternalMinLength(double iInternalMinLength)=0;
+
+  /**
+   * Defines the maximum degree of the result NURBS representation.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxDegree
+   * The degree maximum value. 
+   */ 
+  virtual void SetMaxDegree(CATLONG32 iMaxDegree)=0;
+
+  /**
+   * Defines the maximum number of arcs of the result curve. 
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxArcs
+   * The maximum number of arcs. If &lt;tt&gt;SetMaxDegree&lt;/tt&gt; and &lt;tt&gt;SetMaxArcs&lt;/tt&gt; are both used, 
+   * the operator tries to get as few arcs as possible, even with a larger number of arcs with
+   * &lt;tt&gt;MaxDegree&lt;/tt&gt;.
+   */
+  virtual void SetMaxArcs(CATLONG32 iMaxArcs)=0;
+ 
+  /** @nodoc 
+   * Operator does not try to do an exact conversion but calls directly fitting operation 
+   * to compute the best approximating NURBS representation.
+   */
+  virtual void ForceFitting()=0;
+
+   /**
+   * Defines the knot vector to be used for the conversion. 
+   * @param iKnotVector
+   * The knot vector.
+   */
+  virtual void ImposeKnotVector(const CATKnotVector *iKnotVector)=0;
+
+ /**
+  * Returns the maximum deviation computed for the result curve.
+  * &lt;br&gt; To call after the operator ran.
+  * @return
+  * The maximum deviation value.
+  */
+  virtual double GetMaxDeviation()=0;
+ 
+ /**
+   * Returns whether the transformation between the input and output curves is exact.
+   * &lt;br&gt; To call after the operator ran.
+   * @return
+   * &lt;tt&gt;1&lt;/tt&gt; if the transformation is exact, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+   */
+  virtual CATLONG32 IsExactTransformation()=0;
+
+ /**
+  * Maps a parameter on the initial curve to the corresponding parameter on the computed NURBS representation.
+  * &lt;br&gt; To call after the operator ran.
+  * @param iParamOnCurve
+  * The parameter on the initial curve.
+  * @return
+  * The parameter on the computed NURBS representation.
+  */
+  virtual CATCrvParam ComputeNewParameter(const CATCrvParam &amp;iParamOnCurve)= 0;
+
+// ................................
+//  --&gt; 2D Results (PNurbs) 
+// ................................
+/**
+ * Returns the result CATPNurbs.
+ * @return
+ * The pointer to the created CATPNurbs. Use the @href CATICGMContainer#Remove if you do not want
+ * to keep it in the geometric factory.
+ */
+  virtual CATPNurbs *GetPNurbs() =0;
+//
+// ................................
+//  --&gt; 3D Results (Nurbs curves) 
+// ................................
+/**
+ * Returns the result CATNurbsCurve.
+ * @return
+ * The pointer to the created CATNurbsCurve. Use the @href CATICGMContainer#Remove if you do not want
+ * to keep it in the geometric factory.
+ */
+  virtual CATNurbsCurve *GetNurbsCurve() =0;
+//
+// ............................................
+//  --&gt; MultiForm Results (2D or 3D MultiForm) 
+// ............................................
+/** 
+ * @nodoc
+ *  Getting the CATFrFNurbsMultiForm result (with Active Split inside 
+ *  curve (to convert) limits.
+ */
+  virtual CATFrFNurbsMultiForm *GetNurbsMultiForm() =0;
+
+  /** @nodoc 
+   *  Getting the CATFrFNurbsMultiForm result without using curve limits. 
+   */
+  virtual CATFrFNurbsMultiForm *GetUntrimmedNurbsMultiForm() =0;
+
+  /**
+   * @nodoc
+   * Sets the continuity constraint at the extremities of the curve.
+   * @param iSideContinuity
+   * The continuity constraint.
+   * &lt;tt&gt;CATFrFTangentCont&lt;/tt&gt; : Tangent continuity. 
+   * &lt;tt&gt;CATFrFCurvatureCont&lt;/tt&gt; : Curvature continuity.
+   */
+  virtual void SetSideContinuity(CATFrFContinuity iSideContinuity) = 0;
+
+   /** @nodoc 
+   * For debug purpose.
+   * @param iPrint
+   * &lt;tt&gt;0&lt;/tt&gt; : No traces. 
+   * &lt;tt&gt;1&lt;/tt&gt; : dumps results in output traces.
+   */
+  virtual int CheckResult(int iPrint = 0) = 0;
+
+  /** @nodoc 
+   * Different computation and smoothing methods.
+   * @param iKindOfFit
+   * The computation method.
+   * &lt;tt&gt;0&lt;/tt&gt; : V5 smoothing.
+   * &lt;tt&gt;1&lt;/tt&gt; : V4 smoothing.
+   * &lt;tt&gt;4&lt;/tt&gt; : default.
+   * &lt;tt&gt;5&lt;/tt&gt; 
+   * &lt;tt&gt;6&lt;/tt&gt;  
+   */
+   //  0 -&gt; Lissage V5 (defaut) , 1 -&gt; Lissage V4 , 2 -&gt; Lissage GlobDef , 3-&gt; Lissage CleverInterpol , 4 -&gt; Lissage DSP
+  virtual void SetKindOfFit(int iKindOfFit) = 0;
+  
+  /** @nodoc 
+   * Do not use (same as ImposeSameParametrization())
+   */
+  virtual void ImposeSameParametrization(CATCrvLimits * NewLimits)=0;//THIS METHOD WILL DISAPPEAR
+
+  /** @nodoc 
+   * Same as SetMaxDegree but does not minimize the number of arcs.
+   * @param iMaxDegree
+   * The degree maximum value. 
+   */
+  virtual void SetMaxDegreeForExactTransformation(CATLONG32 iMaxDegreeForExactTransformation) = 0;
+
+  /** @nodoc 
+   * Set type of internal continuity.
+   * @param iInternalContinuity
+   * &lt;tt&gt;1&lt;/tt&gt; : tangent continuity.
+   * &lt;tt&gt;2&lt;/tt&gt; : curvature continuity (default)
+   */
+  virtual void SetInternalContinuity(int iInternalContinuity) = 0;
+
+  /**
+   *@nodoc
+     * Concerns deviation calculation method in the cas of 2D result.
+   */
+  virtual void SetDeviationComputationIn3D() = 0;
+
+
+protected:
+
+  CATCrvFittingToNurbsCrv(CATGeoFactory *iFactory);
+
+private:
+  CATCrvFittingToNurbsCrv(const CATCrvFittingToNurbsCrv &amp;);
+  void operator = (const CATCrvFittingToNurbsCrv &amp;);
+
+};
+
+
+/**
+ * @deprecated V5R21 CATCreateCrvFittingToNurbsCrv(CATGeoFactory  *, CATSoftwareConfiguration * ,
+ * Creates the geometric operator that computes a (possibly approximated) NURBS representation of a CATCurve.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iCurve
+ * The pointer to the curve to convert.
+ * @param iLimits
+ * The maximum limits to take into account on the input curve.
+ * @param iMaxDeviation
+ * The maximum deviation between the input and result curves.
+ * @param iRationalAllowed
+ * &lt;tt&gt;1&lt;/tt&gt; if the result curve can be rational, 
+ * &lt;tt&gt;0&lt;/tt&gt; if the result curve must not be rational.
+ * @param iMode
+ * The mode of use.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator afer use.
+ * @see CATCrvFittingToNurbsCrv
+ */
+ExportedByFrFOpeCrv
+CATCrvFittingToNurbsCrv*  CATCreateCrvFittingToNurbsCrv(CATGeoFactory  *iFactory,
+                                                        const CATCurve *iCurve,
+                                                        const CATCrvLimits &amp;iLimits,
+                                                        double          iMaxDeviation,
+                                                        CATLONG32       iRationalAllowed = 1,
+                                                        CATSkillValue   iMode = BASIC);
+
+/**
+ * Creates the geometric operator that computes a (possibly approximated) NURBS representation of a CATCurve.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iSoftwareConfiguration
+ * The pointer to the software configuration
+ * @param iCurve
+ * The pointer to the curve to convert.
+ * The curve&#x27;s length must be bigger than the maximum deviation.
+ * @param iLimits
+ * The maximum limits to take into account on the input curve.
+ * @param iMaxDeviation
+ * The maximum deviation between the input and result curves.
+ * @param iRationalAllowed
+ * &lt;tt&gt;1&lt;/tt&gt; if the result curve can be rational, 
+ * &lt;tt&gt;0&lt;/tt&gt; if the result curve must not be rational.
+ * @param iMode
+ * The mode of use.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator afer use.
+ * @see CATCrvFittingToNurbsCrv
+ */
+ExportedByFrFOpeCrv
+CATCrvFittingToNurbsCrv*  CATCreateCrvFittingToNurbsCrv(      CATGeoFactory            * iFactory,
+                                                              CATSoftwareConfiguration * iSoftwareConfiguration,
+                                                        const CATCurve                 * iCurve,
+                                                        const CATCrvLimits             &amp; iLimits,
+                                                              double                     iMaxDeviation,
+                                                              CATLONG32                  iRationalAllowed = 1,
+                                                              CATSkillValue              iMode            = BASIC);
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvDegreeModification.html">← 上一页: CATCrvDegreeModification.h</a></div>
+        <div><a href="CATFrFSmoothing.html">下一页: CATFrFSmoothing.h →</a></div>
+    </div>
+</body>
+</html>

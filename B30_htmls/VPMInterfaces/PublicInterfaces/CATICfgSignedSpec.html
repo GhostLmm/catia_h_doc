@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgSignedSpec.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgSignedSpec.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgProgramLnk.html">← 上一页: CATICfgProgramLnk.h</a></div>
+        <div><a href="CATICfgSimpleSpecification.html">下一页: CATICfgSimpleSpecification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICfgSignedSpec_h_
+#define CATICfgSignedSpec_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3 
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+
+class CATICfgSignedSpec_var;
+class CATICfgSimpleSpecification_var;
+class CATListValCATICfgSignedSpec_var;
+class CATListValCATICfgNormalValue_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgSignedSpec;
+#else
+extern &quot;C&quot; const IID IID_CATICfgSignedSpec;
+#endif
+
+/**
+ * Class to manage operations on Signed Specifications.
+ * &lt;b&gt;Role&lt;/b&gt;: A Signed Specification is composed of a simple specification
+ * and a sign, giving the information of which of these two assertions is true:
+ * (Spec) or (!Spec).
+ * A Signed Spec is used in the context of Configuration.
+ * It serves to give an effectivity to a part Instance, the same way ranges or dates do.
+ * @see CATICfgEffectivity
+ */
+
+class ExportedByGUIDVPMInterfaces CATICfgSignedSpec : public CATBaseUnknown {
+
+CATDeclareInterface;
+	
+    public:
+
+ /**
+ * Get sign of a Signed Spec.
+ * @return
+ *    An integer.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1 counts for positive sign. Any other value counts for negative sign.
+ */
+
+    virtual int  GetSign() const = 0;
+/**
+ * Set sign of a Signed Spec.
+ * @param i
+ *    Sign to set.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1 counts for positive sign. Any other value counts for negative sign.
+ */ 
+   virtual void SetSign(const int i) = 0;
+
+/**
+ * Get Simple Specification composing Signed Specification.
+ * @param oSpec
+ *    The simple Specification retrieved.
+ */  
+  virtual void GetSpec (CATICfgSimpleSpecification_var &amp;oSpec) const = 0;
+
+/**
+ * Get Simple Specification composing Signed Specification.
+ * @param iSpec
+ *   The simple Specification to set. 
+ */ 
+   virtual void SetSpec(const CATICfgSimpleSpecification_var&amp; iSpec) = 0;
+
+
+ /**
+ * Get Signed Spec&#x27;s Name.
+ * @param oName
+ *  Signed Spec&#x27;Name, given alone. 
+ */
+    virtual  HRESULT GetName(CATUnicodeString &amp;oName) const = 0 ;
+/**
+ * Get full Signed Spec&#x27;s Name.
+ * @param oName
+ *  Signed Spec&#x27;Name, given with the format &quot;CategoryName.SpecName&quot;. 
+ */
+    // Returns name of Simple with format CategoryName.SpecName 
+    virtual HRESULT  GetFullName(CATUnicodeString &amp;oName) const = 0 ;
+
+/**
+ * Get a string representing the Signed Spec in XML format.
+ * @param oEncodedString
+ *   XML string retrieved.
+ */
+    virtual HRESULT GetAsXmlString(CATUnicodeString &amp;  oEncodedString) = 0;
+
+/**
+ * Comparaison between two Signed Specs.
+ * @return
+ * An integer.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 0 means EQUAL. 1 means DIFFERENT.
+ * @param iSignedSpec
+ *   Signed Spec to compare with &quot;this&quot;.
+ */
+    virtual int CompareSignedSpec(const CATICfgSignedSpec_var &amp;iSignedSpec)  = 0;
+
+/**
+ * Search Signed Spec in List of Signed Spec.
+ * @return
+ * An integer.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 0 means EQUAL. 1 means DIFFERENT.
+ * @param iSignedSpec
+ *   Signed Spec to search.
+ */
+    virtual int SearchInList (const CATListValCATICfgSignedSpec_var &amp;iList) = 0 ;
+
+/**
+ * Duplicate a Signed Spec.
+ * @param oSpec 
+ *    The copy of the Signed Spec.
+ */
+	 virtual HRESULT CopyMe(CATICfgSignedSpec_var &amp;oSpec) = 0;
+
+/**
+ * Dump informations on Signed spec to STDOUT.
+ */
+    virtual void Dump() const = 0;
+
+
+/**
+ * String rep.
+ */
+    virtual CATUnicodeString GetAsString() const = 0;
+
+/**
+ * Find if a SignedSpec matches at least one criteria.
+ * @return
+ *        S_OK : The SignedSpec matches one criteria
+ *        S_FALSE : The SignedSpec matches no criteria
+ *        E_FAIL : Error
+ * @param iList
+ *    List of criteria.
+ */  
+    virtual HRESULT IsTrue(const CATListValCATICfgNormalValue_var &amp; iList) const = 0;
+};
+
+CATDeclareHandler(CATICfgSignedSpec, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgProgramLnk.html">← 上一页: CATICfgProgramLnk.h</a></div>
+        <div><a href="CATICfgSimpleSpecification.html">下一页: CATICfgSimpleSpecification.h →</a></div>
+    </div>
+</body>
+</html>

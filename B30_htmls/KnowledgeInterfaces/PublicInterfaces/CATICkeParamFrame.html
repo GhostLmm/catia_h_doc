@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATICkeParamFrame.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATICkeParamFrame.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeOleSheet.html">← 上一页: CATICkeOleSheet.h</a></div>
+        <div><a href="CATICkeParameterSet.html">下一页: CATICkeParameterSet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICkeParamFrame_h
+#define CATICkeParamFrame_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/** 
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// module declaration
+#include &quot;KnowledgeItf.h&quot;
+
+// inherited from
+#include &quot;CATBaseUnknown.h&quot;
+
+// Forward declaration
+#include &quot;CATICkeRelationForwards.h&quot;
+class CATDlgFrame;
+class CATDialog;
+
+// interfaces used
+#include &quot;CATIParmPublisher.h&quot;
+//#include &quot;CATISpecObject.h&quot;
+
+// OLE iid
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByKnowledgeItf IID_CATICkeParamFrame;
+#else
+extern &quot;C&quot; const IID IID_CATICkeParamFrame;
+#endif
+
+/**   
+ * Interface to create an editor from a parameter (persistant or volatile).
+ * &lt;b&gt;Role&lt;/b&gt;: From this interface you&#x27;ll get an editor of the parameter that you will integrate in a complex dialog.
+ * &lt;br&gt;It can be used on feature literals or C++ values.&lt;br&gt;
+ * This frame will offer a way to show a parameter value or to modify it.&lt;br&gt;
+ *  &lt;li&gt; All informations are available on the parameter&lt;/li&gt;
+ *  &lt;li&gt; if the parameter is ReadOnly, or with a Visibility equal to false or&lt;/li&gt;
+ *  is valuated by a relation, the frame sensitivity will be false&lt;br&gt;
+ *=============================================================================&lt;br&gt;
+ * Depending on the type of the parameter, the frame will contain an editor, a combo&lt;br&gt; 
+ * (for enumere parameters), or a spinner&lt;br&gt;
+ *&lt;br&gt;
+ * The frame style is used to detail the frame look :&lt;br&gt;
+ *   &lt;li&gt; CATCkeNoLabel / CATCkeLabel : indicates if you want to have a label before your editor&lt;/li&gt;
+ *   &lt;li&gt; CATCkeWithSpinner : to have a spinner and not an editor on real parameters&lt;/li&gt;
+ *   &lt;li&gt; CATCkeNoRename : not to have the rename command available on contextual menu&lt;/li&gt;
+ *   &lt;li&gt; CATCkeNoFormula : not to have the Edit formula command available on contextual menu&lt;/li&gt;
+ *   method is triggered on the CATDlgFrame.&lt;br&gt;
+ *&lt;br&gt;
+ * To customise the NLS, all you have to know is the ressources structure&lt;br&gt;
+ * The returned CATDlgFrame is a frame named &quot;ParamFrame&quot;&lt;br&gt;
+ * The children of this frame are :   &lt;br&gt;
+ *   &lt;li&gt;if CATCkeLabel option is chosen, the name of the label is &quot;Label&quot;, and its value defaults to &quot;Label&quot;,
+ *       if not given by NLS tag &quot;ParamFrame.EnglobingFrame.IntermediateFrame.Label.Title&quot; .&lt;/li&gt;
+ *   &lt;li&gt;if CATCkeWithSpinner option is chosen, the name of the editor is &quot;Spinner&quot; .&lt;/li&gt;
+ *   &lt;li&gt;if it is a combo, its name is &quot;Combo&quot;&lt;/li&gt;
+ *   &lt;li&gt;if not, it&#x27;s an editor whose name is &quot;Value&quot;&lt;/li&gt;
+ *&lt;br&gt;
+ * If the last argument is different from &quot;&quot;, then the name of the CATDlgFrame will&lt;br&gt;
+ * be the name in argument instead of &quot;ParamFrame&quot; &lt;br&gt;   
+ *&lt;br&gt;
+ *=============================================================================&lt;br&gt;
+ * Usage Note &lt;br&gt;
+ *  //  Imagine you have a parameter p &lt;br&gt;
+ *  CATICkeParm_var p = ...;&lt;br&gt;
+ *  // and a CATDialog d&lt;br&gt;
+ *  CATDialog *d = ...&lt;br&gt;
+ *  &lt;br&gt;
+ *  // QI on CATICkeParamFrame &lt;br&gt;
+ *  CATICkeParamFrame_var pf = p;&lt;br&gt;
+ *&lt;br&gt;
+ *  // Get the frame (spinner, No formulas, and no label&lt;br&gt;
+ *  CATDlgFrame *fr = pf-&gt;GetInPanelEdition (NULL_var,d,CATCkeNoLabel | CATCkeNoFormula | CATCkeNoRename | CATCkeWithSpinner);&lt;br&gt;
+ *&lt;br&gt;
+ * @see CATICkeParm
+ */
+//-----------------------------------------------------------------------------
+class ExportedByKnowledgeItf CATICkeParamFrame : public CATBaseUnknown
+{
+
+  CATDeclareInterface;
+
+public :
+
+  /**
+   * Creates a frame-editor linked to a literal to include in your panel.
+   * 
+   * @param iRroot the place where formulas will be added (can be NULL_var if no formulas) 
+   * @param iFather the father CATDialog object
+   * @param iStyle  the frame style 
+   * @param iLabelName if &lt;&gt; from &quot;&quot;, it&#x27;s the name (CATString) of the frame
+   * @return a frame containing the editor associated to the literal
+   */
+  virtual CATDlgFrame * GetInPanelEdition (const CATIParmPublisher_var  &amp;iRoot,
+					   CATDialog           *iFather,
+					   CATCkeFrameStyle     iStyle = CATCkeLabel,
+					   const CATUnicodeString       &amp;iLabelName = &quot;&quot;) = 0;
+
+}; 
+
+CATDeclareHandler(CATICkeParamFrame,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeOleSheet.html">← 上一页: CATICkeOleSheet.h</a></div>
+        <div><a href="CATICkeParameterSet.html">下一页: CATICkeParameterSet.h →</a></div>
+    </div>
+</body>
+</html>

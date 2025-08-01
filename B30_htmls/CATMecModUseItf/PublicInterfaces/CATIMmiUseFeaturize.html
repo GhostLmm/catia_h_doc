@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATMecModUseItf/PublicInterfaces/CATIMmiUseFeaturize.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATMecModUseItf/PublicInterfaces/CATIMmiUseFeaturize.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMmiUseFVertexAccess.html">← 上一页: CATIMmiUseFVertexAccess.h</a></div>
+        <div><a href="CATIMmiUseGeometricalElement.html">下一页: CATIMmiUseGeometricalElement.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2009
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIMmiUseFeaturize_H
+#define CATIMmiUseFeaturize_H
+
+#include &quot;CATMecModUseItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMfBRepDefs.h&quot;
+#include &quot;CATMmiContractDefs.h&quot;
+
+class CATIMmiUseMfBRep_var;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATMecModUseItf IID IID_CATIMmiUseFeaturize;
+#else
+extern &quot;C&quot; const IID IID_CATIMmiUseFeaturize ;
+#endif
+
+/**
+ * Interface to create a BRep feature from a selecting object or to duplicate a BRep feature.
+ * &lt;b&gt;Role&lt;/b&gt;: All methods of this interface work with the following set of attribute:
+ * &lt;ul&gt;&lt;li&gt;If a method is called on a selecting object, it creates a BRep feature.
+ * &lt;li&gt;If a method is called on a BRep feature, it returns the BRep feature itself or
+ * a copy of this BRep feature, depending on the &lt;tt&gt;iMode&lt;/tt&gt; parameter.&lt;/ul&gt;
+ *
+ * Duplication of the BRep feature is controlled by the following values:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfNoDuplicateFeature&lt;/tt&gt;, which is the default value, and 
+ * &lt;li&gt;&lt;tt&gt;MfDuplicateFeature&lt;/tt&gt;.&lt;/ul&gt;
+ *
+ * There are 2 ways to define the support, either through a mode, or a support:
+ * &lt;ul&gt;&lt;li&gt;Support definition of the BRep feature is also controlled by the following &lt;tt&gt;iMode&lt;/tt&gt; values:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfInitialFeatureSupport&lt;/tt&gt;, which is the default value for functional BRep features, 
+ * &lt;li&gt;&lt;tt&gt;MfSelectingFeatureSupport&lt;/tt&gt;, which is the default value for relimited BRep features, and 
+ * &lt;li&gt;&lt;tt&gt;MfLastFeatureSupport&lt;/tt&gt;.&lt;/ul&gt;
+ *
+ * &lt;li&gt;On the other hand, a &lt;tt&gt;CATIMmiMechanicalFeature&lt;/tt&gt; can be specified as the support of the BRep feature.
+ * &lt;ul&gt;&lt;li&gt;The functional BRep feature points to this specified object. &lt;li&gt;The relimited BRep feature points to 
+ * the &lt;tt&gt;ResultOUT&lt;/tt&gt; of this specified object.&lt;/ul&gt;
+ *
+ * &lt;br&gt;When the specified support is a &lt;tt&gt;ResultOUT&lt;/tt&gt;, 
+ * the BRep feature points to the attribute that contains this &lt;tt&gt;ResultOUT&lt;/tt&gt;.
+ * 
+ * &lt;br&gt;Some Part Design features such as fillet or draft angle have a special behavior. 
+ * The support becomes the &lt;tt&gt;ResultIN&lt;/tt&gt; of the design feature in order to manage 
+ * delete, deactive, reorder, cut and paste.
+ *
+ * The specified support also can be a spec attribute that holds a feature.&lt;/ul&gt;
+ *
+ * &lt;br&gt;The &lt;tt&gt;iMode&lt;/tt&gt; value &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfTemporaryBody&lt;/tt&gt;, which is the default value,
+ * creates a BRep feature 
+ * that is a handle on a shape feature. Such a BRep feature requires the shape feature to provide 
+ * its own geometrical description.
+ * &lt;li&gt;&lt;tt&gt;MfPermanentBody&lt;/tt&gt; creates an independant BRep feature that behaves like a
+ * curve or surface feature. Such a feature can be used as an input to other operators.&lt;/ul&gt;
+ *
+ * &lt;br&gt;These values can be combined together according to the following syntax:
+ * &lt;tt&gt;CATMfFeaturizeMode iMode = MfNoDuplicateFeature | MfPermanentBody | MfLastFeatureSupport;&lt;/tt&gt;.
+ *
+ * &lt;br&gt;Anyway, the application has to aggregate the BRep feature in the structure so that 
+ * it is involved in data management processes: delete, cut, copy, paste, update.
+ */
+class ExportedByCATMecModUseItf CATIMmiUseFeaturize: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+ /**
+ * Creates a BRep feature. 
+ * @param oBRepFeature [out] 
+ * The created &lt;tt&gt;CATIMmiUseMfBRep&lt;/tt&gt; feature.
+ * @param iType [in] 
+ * The type of relimitation. If CATMmrDefaultLimitationType, the type of relimitation will be taken from the featurized object.
+ * @return
+ *   &lt;dl&gt;
+ *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;The feature is successfully created.
+ *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;An error occured.
+ *   &lt;/dl&gt;
+ */
+  virtual HRESULT Featurize(CATIMmiUseMfBRep_var&amp; oBRepFeature,CATMmrLimitationType iType = CATMmrDefaultLimitationType) = 0;
+
+ /**
+ * Creates a BRep feature. 
+ * @param oBRepFeature [out] 
+ * The created &lt;tt&gt;CATIMmiUseMfBRep&lt;/tt&gt; feature.
+ * @param iMode
+ * The creation mode.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfNoDuplicateFeature&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfDuplicateFeature&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfInitialFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfSelectingFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfLastFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfTemporaryBody&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfPermanentBody&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeIntersection&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeC1Intersection&lt;/tt&gt;.&lt;/ul&gt;
+ * @param iType [in] 
+ * The type of relimitation. . If CATMmrDefaultLimitationType, the type of relimitation will be taken from the featurized object. 
+ * @return
+ *   &lt;dl&gt;
+ *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;The feature is successfully created.
+ *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;An error occured.
+ *   &lt;/dl&gt;
+ */
+
+  virtual HRESULT Featurize(CATIMmiUseMfBRep_var&amp; oBRepFeature,const CATMfFeaturizeMode iMode,CATMmrLimitationType iType = CATMmrDefaultLimitationType) = 0;
+
+ /**
+ * Creates a BRep feature. 
+ * @param oBRepFeature [out] 
+ * The created &lt;tt&gt;CATIMmiUseMfBRep&lt;/tt&gt; feature.
+ * @param iSupport
+ * The explicit support.
+ * @return
+ *   &lt;dl&gt;
+ *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;The feature is successfully created.
+ *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;An error occured.
+ *   &lt;/dl&gt;
+ */
+  virtual HRESULT Featurize(CATIMmiUseMfBRep_var&amp; oBRepFeature, const CATBaseUnknown_var &amp;iSupport) = 0 ;
+  
+ /**
+ * Creates a BRep feature. 
+ * @param oBRepFeature [out] 
+ * The created &lt;tt&gt;CATIMmiUseMfBRep&lt;/tt&gt; feature.
+ * @param iMode
+ * The creation mode.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;MfNoDuplicateFeature&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfDuplicateFeature&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfInitialFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfSelectingFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfLastFeatureSupport&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfTemporaryBody&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfPermanentBody&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeIntersection&lt;/tt&gt;,
+ * &lt;li&gt;&lt;tt&gt;MfFeaturizeC1Intersection&lt;/tt&gt;.&lt;/ul&gt;
+ * @param iSupport
+ * The explicit support.
+ * @return
+ *   &lt;dl&gt;
+ *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;The feature is successfully created.
+ *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;An error occured.
+ *   &lt;/dl&gt;
+ */
+  virtual HRESULT Featurize(CATIMmiUseMfBRep_var&amp; oBRepFeature, const CATMfFeaturizeMode iMode, const CATBaseUnknown_var &amp;iSupport = NULL_var) = 0;
+};
+CATDeclareHandler (CATIMmiUseFeaturize, CATBaseUnknown); 
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMmiUseFVertexAccess.html">← 上一页: CATIMmiUseFVertexAccess.h</a></div>
+        <div><a href="CATIMmiUseGeometricalElement.html">下一页: CATIMmiUseGeometricalElement.h →</a></div>
+    </div>
+</body>
+</html>

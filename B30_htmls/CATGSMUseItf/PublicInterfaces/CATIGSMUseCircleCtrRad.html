@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseCircleCtrRad.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseCircleCtrRad.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseCircleCtrPt.html">← 上一页: CATIGSMUseCircleCtrPt.h</a></div>
+        <div><a href="CATIGSMUseCircleTritangent.html">下一页: CATIGSMUseCircleTritangent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUseCircleCtrRad_H
+#define CATIGSMUseCircleCtrRad_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIGSMUseDirection.h&quot;
+
+class CATMathDirection;
+class CATICkeParm_var; 
+class CATIMmiMechanicalFeature_var; 
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUseCircleCtrRad;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseCircleCtrRad;
+#endif
+/**
+ * Interface to circle feature defined by a center and a radius.  
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the circle feature created by using 
+ * its center and a radius.
+ * @see CATIGSMUseFactory#CreateCircle
+ */
+class ExportedByCATGSMUseItf CATIGSMUseCircleCtrRad : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+ /**
+  * Gets the circle center.
+  *   @param oCenter
+  *      center point
+  */
+ virtual HRESULT GetCenter(CATIMmiMechanicalFeature_var&amp; oCenter) = 0;
+
+ /**
+  * Sets the circle center.
+  *   @param iCenter
+  *      center point
+  */
+ virtual HRESULT SetCenter(const CATIMmiMechanicalFeature_var iCenter) = 0;
+
+ /**
+  * Gets the support surface.
+  *   @param oSupport 
+  *      the support surface
+  */
+ virtual HRESULT GetSupport(CATIMmiMechanicalFeature_var&amp; oSupport) = 0;
+
+ /**
+  * Sets the support surface.
+  *   @param iSupport
+  *      the support surface
+  */
+ virtual HRESULT SetSupport(const CATIMmiMechanicalFeature_var iSupport) = 0;
+
+ /**
+  * Gets the circle radius. 
+  * &lt;br&gt;Note: Succeeds only if DiameterMode is set to FALSE
+  *   @param oRadius 
+  *      radius positive value
+  */
+ virtual HRESULT GetRadius(CATICkeParm_var&amp; oRadius) = 0;
+
+ /**
+  * Sets DiameterMode to FALSE and then sets the radius.
+  *   @param iRadius 
+  *      radius 
+  */
+ virtual HRESULT SetRadius(const CATICkeParm_var iRadius) = 0;
+
+ /**
+ * Gets the diameter of the circle. 
+ * &lt;br&gt;Note: Succeeds only if DiameterMode is set to TRUE
+ *   @param ohDiameter
+ *      diameter
+ */
+ virtual HRESULT GetDiameter(CATICkeParm_var &amp; ohDiameter) = 0;
+ 
+ /**
+ * Sets DiameterMode to TRUE and then sets the diameter.
+ *   @param ihDiameter
+ *      diameter
+ */
+ virtual HRESULT SetDiameter(const CATICkeParm_var ihDiameter) = 0;
+ 
+ /**
+ * Gets DiameterMode. 
+ * &lt;br&gt;DiameterMode = FALSE implies radius (default), 
+ * &lt;br&gt;DiameterMode = TRUE implies diameter
+ *   @param oDiameterMode
+ *      Diameter Mode
+ */
+ virtual HRESULT GetDiameterMode(CATBoolean &amp; oDiameterMode) = 0;
+ 
+ /**
+ * Sets DiameterMode. 
+ * &lt;br&gt;DiameterMode = FALSE implies radius (default), 
+ * &lt;br&gt;DiameterMode = TRUE implies diameter. 
+ * &lt;br&gt;Note: When DiameterMode is changed, Radius/Diameter value,
+ * which is stored will not be modified.
+ *   @param iDiameterMode
+ *      Diameter Mode
+ */
+ virtual HRESULT SetDiameterMode (const CATBoolean iDiameterMode) = 0;
+
+ /**
+  * Sets the circle on the surface (Geodesic mode).
+  */
+ virtual HRESULT SetGeodesic() = 0;
+
+ /**
+  * Inactivates geodesic circle. 
+  * &lt;br&gt;Note: The circle becomes euclidean, and the surface is used to compute the circle axis.
+  */
+ virtual HRESULT UnsetGeodesic() = 0;
+
+ /**
+  * Queries whether the circle is geodesic or not.
+  *   @param oGeodesic 
+  *      geodesic flag  (TRUE) 
+  */
+ virtual HRESULT IsGeodesic(CATBoolean &amp; oGeodesic) = 0;
+  /**
+    * Gets the first direction.
+    * &lt;br&gt;
+    * The direction is used as angle reference.
+    *   @param oElem
+    *      first direction 
+    * @see CATIGSMUseDirection
+    */
+ virtual    HRESULT GetFirstDirection(CATIGSMUseDirection_var &amp; oElem) = 0;
+
+  /**
+    * Sets the first direction.
+    * &lt;br&gt;
+    * The direction is used as angle reference.
+    *   @param iElem
+    *      first direction 
+    * @see CATIGSMUseDirection
+    */
+ virtual    HRESULT SetFirstDirection(const CATIGSMUseDirection_var iElem) = 0;
+
+ /**
+  * Gets the second direction on the plane to compute the point (for stability).
+  * &lt;br&gt;This direction has to be kept perpendicular to the first direction
+  *   @param oDir
+  *      second direction
+  *      @see CATMathDirection 
+  */
+ virtual HRESULT GetSecondDirection(CATMathDirection&amp; oDir) = 0;
+
+ /**
+  * Sets the second direction on the plane to compute the point (for stability).
+  * &lt;br&gt;This direction has to be kept perpendicular to the first direction
+  *   @param iDir
+  *      second direction
+  *      @see CATMathDirection 
+  */
+ virtual HRESULT SetSecondDirection(const CATMathDirection &amp; iDir) = 0;
+ };
+CATDeclareHandler (CATIGSMUseCircleCtrRad, CATBaseUnknown);
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseCircleCtrPt.html">← 上一页: CATIGSMUseCircleCtrPt.h</a></div>
+        <div><a href="CATIGSMUseCircleTritangent.html">下一页: CATIGSMUseCircleTritangent.h →</a></div>
+    </div>
+</body>
+</html>

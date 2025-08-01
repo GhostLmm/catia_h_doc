@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPDMBaseInterfaces/PublicInterfaces/CATEnoAttrMappingEnumDef.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPDMBaseInterfaces/PublicInterfaces/CATEnoAttrMappingEnumDef.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIPDMUnixNTMapping.html">← 上一页: TIE_CATIPDMUnixNTMapping.h</a></div>
+        <div><a href="CATIAttrMappingAction.html">下一页: CATIAttrMappingAction.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2003
+//===================================================================
+//
+// CATEnoAttrMappingEnumDef.h
+// Header definition of CATEnoAttrMappingEnumDef
+//
+//===================================================================
+//
+// Usage notes: This class includes all the enum definitiones required for 
+//              Attribute Mapping between CATIA and ENOVIA
+//
+//===================================================================
+//
+//  May 2003  Creation                                    AIH
+//===================================================================
+
+#ifndef CATEnoAttrMappingEnuDef_H
+#define CATEnoAttrMappingEnuDef_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+class CATEnoAttrMappingEnumDef
+{
+public:
+  
+  // ENOVIA entities involved
+  enum ENOVIASubEntities 
+  {
+    PM,
+    PV,
+    II,
+    DM,
+    DV
+  };
+
+  // Possible action on attributes (such binary mask are possible)
+  enum AttributeActions
+  {
+    visible  = 0x1,
+    editable = 0x2
+  };
+
+  // Possible type of the atributes
+  enum AttributeTypes
+  {
+    INT,
+    DOUBLE,
+    TEXT,
+    BOOLEAN
+    // + more 
+  };
+
+  enum EntityTypes 
+  {
+    PART,   // In the LCA sense, hence product component or part in CX
+    DOCUMENT
+  };
+
+  // The value of domain is got from 
+  //  1. A0416498 - New member for No Domain
+  //  2./ User Exit
+  //  3./ Attribute of part/document
+  //  4./ Fixed Value
+  enum DefinitionType 
+  {
+    NoDomainDefined   = -1,     ///// A0416498 - New member as SAVE is KO
+    UE,                   
+    AttrValue,
+    FixedVal
+  };
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIPDMUnixNTMapping.html">← 上一页: TIE_CATIPDMUnixNTMapping.h</a></div>
+        <div><a href="CATIAttrMappingAction.html">下一页: CATIAttrMappingAction.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPMultipleMotion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPMultipleMotion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgTPModification.html">← 上一页: CATIMfgTPModification.h</a></div>
+        <div><a href="CATIMfgTPMultipleMotionNurbs.html">下一页: CATIMfgTPMultipleMotionNurbs.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  2001
+//=============================================================================
+#ifndef CATIMfgTPMultipleMotion_H
+#define CATIMfgTPMultipleMotion_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATIMfgToolMotion.h&quot;
+#include &quot;CATErrorDef.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgTPMultipleMotion;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgTPMultipleMotion;
+#endif
+
+/**
+* Interface for management of tool motions inside tool path model.
+* A CATIMfgTPMultipleMotion must be the child of a @href CATIMfgCompoundTraject object.&lt;br&gt;
+* A CATIMfgTPMultipleMotion object is a tool path object in which it is possible to store several subtrajects.&lt;br&gt;
+* A subtraject can describe, either a set of linear motions (&quot;Polyline&quot;), either a circular motion (&quot;Circle Arc&quot;),
+*  either a &quot;PP Command&quot; (NC Command which is evaluated from syntax described in PP Table),
+*  either a &quot;User Syntax&quot; (which is generated as it is in APT file),
+*  either an helical motion (&quot;Helix&quot;).&lt;br&gt;
+* To model cutter profile data, you must use @href CATIMfgTPMultipleMotionWithProfileData object.&lt;br&gt;
+* A CATIMfgTPMultipleMotion object can have nurbs data to retrieve with @href CATIMfgTPMultipleMotionNurbs interface. &lt;br&gt;
+*
+* @see CATIMfgToolPathFactory
+* @see CATIMfgCompoundTraject
+*/
+
+class ExportedByMfgItfEnv CATIMfgTPMultipleMotion : public CATIMfgToolMotion
+{
+  CATDeclareInterface ;
+  
+  public :
+/**
+*   Add a subtraject describing a &quot;Polyline&quot; (set of linear motions).&lt;br&gt;
+*   @param iTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param iX,iY,iZ
+*     The coordinates of tip points
+**/
+	  virtual CATBoolean AddPolyline			   (const CATUnicodeString&amp; iTrajectType,
+													const CATUnicodeString&amp; iFeedrateType,
+													const CATListOfDouble&amp; iX,
+													const CATListOfDouble&amp; iY,
+													const CATListOfDouble&amp; iZ) = 0;	
+/**
+*   Add a subtraject describing a &quot;Circle Arc&quot; (circular motion).&lt;br&gt;
+*   @param iTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param iX,iY,iZ
+*     The coordinates of tip points (discretization of the circle arc)
+*   @param iNormale
+*     The oriented normal to the plane containing the circle arc
+*   @param iCenter
+*     The center of the circle arc
+*    @param iRadius
+*     The radius of the circle arc.
+**/
+      virtual CATBoolean AddCircleArc			   (const CATUnicodeString&amp; iTrajectType,
+													const CATUnicodeString&amp; iFeedrateType,
+													const CATListOfDouble&amp;  iX,
+													const CATListOfDouble&amp;  iY,
+													const CATListOfDouble&amp;  iZ,
+													const CATMathVector&amp;    iNormal,
+												    const CATMathPoint&amp;     iCenter,
+												          double            iRadius)  = 0 ;
+/**
+*   Add a subtraject describing a &quot;PP command&quot;.&lt;br&gt;
+*   A PP Syntax is a &quot;NC Command&quot; described in PP Table and evaluated from it during generation of APT file.
+*   @param iPPCommand
+*      The name of &quot;NC Command&quot;
+*   @param iSequenceNumber
+*      The number of sequence in the PP Table
+**/
+	  virtual CATBoolean AddPPCommand             (const CATUnicodeString&amp; iPPCommand,
+		                                           int SequenceNumber = 1) = 0;
+/**
+*   Add a subtraject describing a &quot;user syntax&quot;.&lt;br&gt;
+*   A user syntax is a string generated as it is in APT file.
+*   @param iUserSyntax
+*      The user syntax
+**/
+	  virtual CATBoolean AddUserSyntax            (const CATUnicodeString&amp; iUserSyntax) = 0;	  
+/**
+*   Add contact points in the last subtraject.&lt;br&gt;
+*   The last subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iX,iY,iZ
+*     The coordinates of contact points
+*/     
+	  virtual CATBoolean AddContactPoints         (const CATListOfDouble&amp; iX,
+												   const CATListOfDouble&amp; iY,
+												   const CATListOfDouble&amp; iZ) = 0;
+/**
+*   Add contact normals in the last subtraject.&lt;br&gt;
+*   The last subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iX,iY,iZ
+*     The coordinates of contact normals
+*/     
+      virtual CATBoolean AddContactNormals        (const CATListOfDouble&amp; iX,
+												   const CATListOfDouble&amp; iY,
+												   const CATListOfDouble&amp; iZ) = 0;
+/**
+*   Add tool axis in the last subtraject (to describe a 5 axis motion).&lt;br&gt;
+*   The last subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iX,iY,iZ
+*     The coordinates of tool axis
+*/     
+      virtual CATBoolean AddToolAxis              (const CATListOfDouble&amp; iX,
+												   const CATListOfDouble&amp; iY,
+												   const CATListOfDouble&amp; iZ) = 0;
+/**
+*   Save datas relative to the current object in the model.&lt;br&gt;
+*   THIS SERVICE MUST BE CALLED AT THE END OF CREATION AND STORAGE OF SUBTRAJECTS IN THE MULTIPLE MOTION.
+*/  
+	  virtual CATBoolean SaveDatas                () = 0;
+
+/**
+*   Type of subtraject that can exist in a multiple motion object.&lt;br&gt;
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;Polyline : subtraject describing a &quot;polyline&quot; (Set of linear motions)&lt;/li&gt;
+*      &lt;li&gt;Circle : subtraject describing a &quot;circle arc&quot; (circular motion)  &lt;/li&gt;
+*      &lt;li&gt;PPCommand : subtraject describing a &quot;PP command&quot; &lt;/li&gt;
+*      &lt;li&gt;UserSyntax : subtraject describing a &quot;user syntax&quot; &lt;/li&gt;
+*      &lt;li&gt;Helix : subtraject describing an &quot;Helix&quot; (helical motion) &lt;/li&gt;
+*      &lt;/ul&gt;
+*/  
+      enum SubTrajectType {PolyLine=0, Circle=1, PPCommand=2, UserSyntax=3, Helix=4};
+/**
+*   Gets type of a subtraject.&lt;br&gt;
+*   @param iSubTraject
+*     The number of the subtraject
+*   @param oSubTraject
+*     The type of the subtraject
+*/  	  
+	  virtual CATBoolean GetSubTrajectType        (int iSubTraject,
+												   SubTrajectType&amp; oSubTrajectType) = 0;
+
+/**
+*   Gets characteristics of a subtraject describing a &quot;circle arc&quot; (circular motion).&lt;br&gt;
+*   @param iSubTraject
+*     The number of subtraject
+*   @param oNormal
+*     The oriented normal to the plane containing the circle arc
+*   @param oCenter
+*     The center of the circle arc
+*   @param oRadius
+*     The radius of the circle arc.
+*   @param oAngle
+*     The angle described by the circle arc.
+*   @param oStartTangent
+*     The tangent vector to the circle at its start point    
+*/  
+	  virtual CATBoolean GetCircleCharacteristics (int iSubTraject,
+												   CATMathVector&amp; oNormal,
+												   CATMathPoint&amp;  oCenter,
+												   double&amp;        oRadius,
+												   CATAngle&amp;      oAngle,
+												   CATMathVector&amp; oStartTangent) = 0;
+
+/**
+*   Gets characteristics of a subtraject describing a &quot;PP command&quot;.&lt;br&gt;
+*   @param iSubTraject
+*     The number of subtraject
+*   @param oPPCommand
+*      The name of &quot;NC Command&quot;
+*   @param oSequenceNumber
+*      The number of sequence in the PP Table
+*   
+*/  
+	  virtual CATBoolean GetPPCommandCharacteristics  (int               iSubTraject,
+		                                               CATUnicodeString&amp; oPPCommandName,
+		                                               int&amp;              oSequenceNumber) = 0;
+
+/**
+*   Evaluates syntax relative to a subtraject describing a &quot;PP command&quot;.&lt;br&gt;
+*   @param iSubTraject
+*     The number of subtraject
+*   @param oSyntax
+*	 The value of syntax 
+**/
+  virtual CATBoolean GetCommandEvaluation (int iSubTraject,CATListValCATUnicodeString&amp; oSyntax) =0 ;
+
+
+/**
+*   Gets characteristics of a subtraject describing a &quot;user syntax&quot;.&lt;br&gt;
+*   @param iSubTraject
+*     The number of subtraject
+*   @param oUserSyntax
+*      The user syntax
+*   
+*/ 	  
+	  virtual CATBoolean GetUserSyntaxCharacteristics (int               iSubTraject,
+		                                               CATUnicodeString&amp; oUserSyntax) = 0;
+/**
+*   Sets a local feedrate on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iFeedrate
+*	   The local feedrate
+*   @param iSubTraject
+*	   The number of subtraject
+**/
+      virtual CATBoolean SetSpecificFeedrate (CATIMfgToolPathFeedrate_var&amp; iFeedrate,
+		                                      int iSubTraject=1) =0 ;
+/**
+*   Retrieves local feedrate on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param oFeedrate 
+*	The local feedrate
+*   @param iSubTraject
+*	   The number of subtraject
+*   @return
+*    Return code.
+*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*   &lt;ul&gt;
+*   &lt;li&gt;TRUE: a local feedrate has been found &lt;/li&gt;
+*   &lt;li&gt;FALSE: no local feedrate has been found&lt;/li&gt;
+*   &lt;/ul&gt;
+**/
+      virtual CATBoolean GetSpecificFeedrate (CATIMfgToolPathFeedrate_var&amp; oFeedrate,
+		  int iSubTraject=1) =0 ;
+/**
+*   Sets a local spindle on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iSpindle
+*	   The local spindle
+*   @param iSubTraject
+*	   The number of subtraject
+**/
+      virtual CATBoolean SetSpecificSpindle  (CATIMfgToolPathSpindle_var&amp; iSpindle,
+											  int                         iSubTraject=1) =0 ;
+/**
+*   Retrieves local spindle on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param oSpindle
+*	The local spindle
+*   @param iSubTraject
+*	   The number of subtraject
+*   @return
+*    Return code.
+*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*   &lt;ul&gt;
+*   &lt;li&gt;TRUE: a local spindle has been found &lt;/li&gt;
+*   &lt;li&gt;FALSE: no local spindle has been found&lt;/li&gt;
+*   &lt;/ul&gt;
+**/
+      virtual CATBoolean GetSpecificSpindle  (CATIMfgToolPathSpindle_var&amp; oSpindle,
+											  int                         iSubTraject=1) =0 ;
+/**
+*   Sets a local tool axis on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iSpindle
+*	   The local tool axis
+*   @param iSubTraject
+*	   The number of subtraject
+**/
+      virtual CATBoolean SetSpecificToolAxis (CATIMfgToolPathToolAxis_var&amp; iToolAxis,
+											  int                         iSubTraject=1) =0 ;
+/**
+*   Retrieves local tool axis on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param oToolAxis
+*	The local tool axis
+*   @param iSubTraject
+*	   The number of subtraject
+*   @return
+*    Return code.
+*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*   &lt;ul&gt;
+*   &lt;li&gt;TRUE: a local tool axis has been found &lt;/li&gt;
+*   &lt;li&gt;FALSE: no local tool axis has been found&lt;/li&gt;
+*   &lt;/ul&gt;
+**/
+      virtual CATBoolean GetSpecificToolAxis (CATIMfgToolPathToolAxis_var&amp; oToolAxis,
+											  int                          iSubTraject=1) =0 ;
+/**
+*   Sets a local tool corrector number on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param iCorrectorNumber
+*      The tool corrector number value
+*   @param iSubTraject
+*	   The number of subtraject
+**/
+      virtual CATBoolean SetSpecificCorrectorNumber (int iCorrectorNumber,int iSubTraject) =0 ;
+/**
+*   Inverts the way of rotation of the spindle on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+**/
+	  virtual CATBoolean SetSpindleInverseRotationWay (int iSubTraject) = 0;
+/**
+*   Sets the normal way of rotation for the spindle on a subtraject (according to the right/left way of rotation for the tool).&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+**/
+	  virtual CATBoolean SetSpindleNormalRotationWay (int iSubTraject) = 0;
+/**
+*   Retrieves the way of rotation for the spindle on a subtraject.&lt;br&gt;
+*   The subtraject must be a &quot;Polyline&quot;, a &quot;Circle Arc&quot; or an &quot;Helix&quot;.
+*   @param oRotationWay
+*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*   &lt;ul&gt;
+*   &lt;li&gt;oRotationWay = 1 : normal way of rotation of the spindle (according the right/left way of rotation for the tool)&lt;/li&gt;
+*   &lt;li&gt;oRotationWay = 2 : inverted way of rotation &lt;/li&gt;
+*   &lt;/ul&gt;
+*   @param iSubTraject
+*	   The number of subtraject
+**/
+	  virtual CATBoolean GetSpindleRotationWay (int&amp; oRotationWay,int iSubTraject) = 0;
+/**
+*     Retrieves the total number of &#x27;PQR&#x27; vectors stored in the MultipleMotion.
+*   @param oNumber
+* 	   The number of &#x27;PQR&#x27; vectors
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt; 0 : no &#x27;PQR&#x27; vector in the multiple motion object &lt;/li&gt;
+*      &lt;li&gt; &gt;0 : at least one subtraject contains a &#x27;PQR&#x27; vector &lt;/li&gt;
+*      &lt;/ul&gt;
+*/  
+	  virtual CATBoolean GetTotalNumberOfPQRDatas (int&amp; oNumber) = 0;
+/**
+*     Retrieves the number of &#x27;PQR&#x27; vectors for a subtraject.
+*   @param iSubTraject
+* 	   The index of subtraject
+*   @param oNumber
+* 	   The number of &#x27;PQR&#x27; vectors
+*/     
+	  virtual CATBoolean GetNumberOfPQRDatas (int iSubTraject,
+											  int&amp; oNumber) = 0;
+/**
+*     Retrieves the coordinates of &#x27;PQR&#x27; vectors for a subtraject.
+*   @param iSubTraject
+* 	   The index of subtraject
+*   @param oP,oQ,oR
+* 	   The lists of coordinates of &#x27;PQR&#x27; vectors
+*/      
+	  virtual CATBoolean GetPQRDatas (int iSubTraject,
+									  CATListOfDouble&amp;  oP,
+									  CATListOfDouble&amp;  oQ,
+									  CATListOfDouble&amp;  oR) = 0;
+/**
+*     Retrieves the coordinates of one &#x27;PQR&#x27; vector for a subtraject.
+*   @param iSubTraject
+* 	   The index of subtraject
+*   @param iIndex
+*      The index of point in the subtraject
+*   @param oP,oQ,oR
+* 	   The coordinates of one &#x27;PQR&#x27; vector
+*/  
+	  virtual CATBoolean GetPQRData (int iSubMotion,
+								     int iIndex,
+								     double&amp;  oP,
+								     double&amp;  oQ,
+								     double&amp;  oR) = 0;
+
+/**
+*   Edition status for each point of the object.&lt;br&gt;
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;None         : point has not edited&lt;/li&gt;
+*      &lt;li&gt;Modified     : point has been modified&lt;/li&gt;
+*      &lt;li&gt;Inserted     : point has been inserted &lt;/li&gt;
+*      &lt;li&gt;RemovedAfter : at least one point has been removed after the current one &lt;/li&gt;
+*      &lt;/ul&gt;
+*/  
+      enum EditionStatus {TP_None=0, Modified=1, Inserted=2, RemovedAfter=3};
+
+/**
+*     Retrieves the edition status for a point of the tool path.
+*     @param iNumber
+* 	      The number of the point
+*     @param oEditionStatus
+*         The edition status of the point
+*/  
+	  virtual CATBoolean GetEditionStatus (int                                     iNumber,
+		                                   CATIMfgTPMultipleMotion::EditionStatus  &amp;oEditionStatus) = 0;
+
+
+/**
+*     Sets the edition status for a point of the tool path.
+*     @param iNumber
+* 	      The number of the point
+*     @param iEditionStatus
+*         The edition status of the point
+*/  
+	  virtual CATBoolean SetEditionStatus (int                                      iNumber,
+		                                   CATIMfgTPMultipleMotion::EditionStatus   iEditionStatus) = 0;
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean AddPolyline			   (const CATUnicodeString&amp; iTrajectType,
+													const CATUnicodeString&amp; iFeedrateType,
+													double X,double Y,double Z) = 0;
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean AddTipPointInLastPolyline      (double X,double Y,double Z) = 0;
+/**
+* @nodoc
+*/     
+      virtual CATBoolean AddContactPointInLastPolyline  (double X,double Y,double Z) = 0;
+/**
+* @nodoc
+*/     
+      virtual CATBoolean AddContactNormalInLastPolyline (double X,double Y,double Z) = 0;
+/**
+* @nodoc
+*/     
+      virtual CATBoolean AddToolAxisInLastPolyline      (double X,double Y,double Z) = 0;
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean GetPointsStorageMode         (int&amp; imode) = 0;
+/**
+* @nodoc
+*/     	  
+	  virtual CATBoolean TransferPointsToExternalFile (const CATUnicodeString&amp; Path) = 0;
+/**
+* @nodoc
+*/     	  
+	  virtual CATBoolean TransferPointsFromExternalFile () = 0;
+	  
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean SetTipPoint (int iNumber,double iX,double iY,double iZ) = 0;
+	  
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean SetContactPoint (int iNumber,double iX,double iY,double iZ) = 0;
+	  
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean SetContactNormal (int iNumber,double iX,double iY,double iZ) = 0;
+	  
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean SetToolAxisPoint (int iNumber,double iX,double iY,double iZ) = 0;
+/**
+* @nodoc
+*/     	  
+	  virtual CATBoolean ClearContactPoints () =0 ;
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean ClearContactNormals () = 0;
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean ClearToolAxis () = 0;
+/**
+* Quick access to coordinates in the case of a packed tool path.&lt;br&gt;
+* To avoid possible performance problems (especially when coordinates
+* of points are not read in a growing order), you should call this method 
+* before to access points (with GetTipPoint, etc ..).
+* If you call this method, you have to call &quot;EndReadExternalFile&quot;
+* at the end of the session to free memory (when you do not need anymore to
+* access coordinates).
+*/     	  
+	  virtual CATBoolean StartReadExternalFile () = 0;
+/**
+* This method has to be used if &quot;StartReadExternalFile&quot; has been used.
+*/     
+	  virtual CATBoolean EndReadExternalFile () = 0;
+/**
+* @nodoc
+*/     	  
+	  virtual HRESULT CheckExternalFile () = 0;	  
+/**
+* @nodoc
+*/     
+	  virtual CATBoolean SetApproximativeNumberOfDatas (int NumberOfTipPoints,
+		  int NumberOfContactPoints,
+		  int NumberOfContactNormals,
+		  int NumberOfToolAxis,
+		  int NumberOfSubTrajects,
+		  int NumberOfCircles,
+		  int NumberOfPPCommands,
+		  int NumberOfUserSyntax) = 0;
+
+/**
+* @nodoc
+*/   
+	  virtual CATBoolean DeleteDatas                   () = 0;
+
+/**
+* @nodoc
+*/   
+	  virtual CATBoolean Optimize                      () = 0;
+
+/**
+* @nodoc
+*/   
+	  virtual CATBoolean RemoveExternalFile            () = 0;
+
+/**
+* @nodoc
+*/   	  
+	  virtual CATBoolean SetLocalFeedrate (int    iSubTraject,
+										   int    iLocalFeedrate)=0;
+
+/**
+* @nodoc
+*/  
+	  virtual CATBoolean AddPQRDatas (int                     iSubMotion,
+									  const CATListOfDouble&amp;  iP,
+									  const CATListOfDouble&amp;  iQ,
+									  const CATListOfDouble&amp;  iR) = 0;
+
+/**
+* @nodoc
+*/  
+	  virtual CATBoolean GetTipPointsAndToolAxis (int iFirstPoint,int iLastPoint,
+		                                          CATListOfDouble&amp; oListeX, CATListOfDouble&amp; oListeY, CATListOfDouble&amp; oListeZ,
+												  CATListOfDouble&amp; oListeAX,CATListOfDouble&amp; oListeAY,CATListOfDouble&amp; oListeAZ) = 0;
+/**
+* @nodoc
+*/  
+	  virtual CATBoolean GetCompoundTraject (CATBaseUnknown_var&amp; oCompound) = 0;
+
+/**
+* @nodoc
+*/  
+      virtual CATBoolean GetLocalCharacteristics (int iPoint1,
+												  int iPoint2,
+												  double&amp; oMillingTime,
+				                                  double&amp; oTotalTime,
+				                                  long&amp; oNumberOfLinearMotions,
+				                                  long&amp; oNumberOfCircularMotions) =0 ;
+	  
+/**
+* @nodoc
+*/  
+	  virtual HRESULT InsertPPCommand(int iblock, const CATUnicodeString&amp; iPPCommandName, int iSequenceNumber, const CATISpecObject_var &amp; ihSynchronisation  ) =0;
+
+/**
+* @nodoc
+*/  
+	  virtual HRESULT RemovePPCommand(int iblock) =0;
+/**
+* @nodoc
+*/ 
+	  virtual HRESULT RemovePPCommandWithSpecObj(const CATISpecObject_var&amp; ihSynchronisation) =0;
+/**
+* @nodoc
+*/  
+	  virtual HRESULT GetSpecObjectOfPPCommand( int iblock, CATISpecObject_var &amp; ohSynchronisation ) =0;
+
+/**
+* @nodoc
+*/  
+	  virtual HRESULT InsertUserSyntax(int iblock, const CATUnicodeString&amp; iUserSyntax) =0;
+
+/**
+* @nodoc
+*/  
+	  virtual HRESULT RemoveUserSyntax(int iblock) =0;
+
+/**
+*   Add a subtraject describing a &quot;Helix&quot; (helical motion).&lt;br&gt;
+*   @param iTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;li&gt;&quot;TPApproachTrajectAlongSection&quot; : approach traject along section&lt; /li&gt;
+*      &lt;li&gt;&quot;TPLinkingTrajectAlongSection&quot; : linking traject along section &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTrajectAlongSection&quot; : retract traject along section &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;li&gt;&quot;TPAirCuttingFeedrate&quot; : air cutting feedrate
+*      &lt;/ul&gt;
+*   @param iX
+*     The X coordinate of tip points (discretization of the helix)
+*   @param iY
+*     The Y coordinate of tip points (discretization of the helix)
+*   @param iZ
+*     The Z coordinate of tip points (discretization of the helix)
+*   @param iAxis
+*     The oriented axis of the helix
+*   @param iCenter
+*     The center of the helix
+*    @param iRadius
+*     The radius of the helix
+*    @param iStartTangent
+*     The oriented tangent to the helix at the start point
+*    @param iPitch
+*     The pitch of the helix
+**/
+      virtual HRESULT AddHelix			   (const CATUnicodeString&amp; iTrajectType,
+												const CATUnicodeString&amp; iFeedrateType,
+												const CATListOfDouble&amp;  iX,
+												const CATListOfDouble&amp;  iY,
+												const CATListOfDouble&amp;  iZ,
+												const CATMathVector&amp;    iAxis,
+											    const CATMathPoint&amp;     iCenter,
+											          double            iRadius,
+												const CATMathVector&amp;    iStartTangent,
+													  double            iPitch)  = 0 ;
+
+/**
+*   Gets characteristics of a subtraject describing a &quot;helix&quot; (helical motion).&lt;br&gt;
+*   @param iSubTraject
+*     The number of subtraject
+*   @param oAxis
+*     The oriented axis of the helix
+*   @param oCenter
+*     The center of the helix
+*   @param oRadius
+*     The radius of the helix
+*   @param oStartTangent
+*     The tangent vector to the helix at its start point    
+*   @param oPitch
+*     The pitch of the helix    
+*/  
+	  virtual HRESULT GetHelixCharacteristics (int iSubTraject,
+												   CATMathVector&amp; oAxis,
+												   CATMathPoint&amp;  oCenter,
+												   double&amp;        oRadius,
+												   CATMathVector&amp; oStartTangent,
+												   double&amp;        oPitch) = 0;
+
+};
+
+CATDeclareHandler(CATIMfgTPMultipleMotion, CATIMfgToolMotion);
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgTPModification.html">← 上一页: CATIMfgTPModification.h</a></div>
+        <div><a href="CATIMfgTPMultipleMotionNurbs.html">下一页: CATIMfgTPMultipleMotionNurbs.h →</a></div>
+    </div>
+</body>
+</html>

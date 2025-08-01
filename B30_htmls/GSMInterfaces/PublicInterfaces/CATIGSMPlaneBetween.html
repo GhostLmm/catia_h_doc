@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMPlaneBetween.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMPlaneBetween.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMPlaneAngle.html">← 上一页: CATIGSMPlaneAngle.h</a></div>
+        <div><a href="CATIGSMPlaneEquation.html">下一页: CATIGSMPlaneEquation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMPlaneBetween_H
+#define CATIGSMPlaneBetween_H
+// 
+// COPYRIGHT DASSAULT SYSTEMES 2017
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATGSMOrientation.h&quot;
+#include &quot;CATISpecObject.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID IID_CATIGSMPlaneBetween;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMPlaneBetween;
+#endif
+/**
+ * Interface to Plane Between feature. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the plane feature created between two planes or planar surfaces
+ */
+class ExportedByCATGitInterfaces CATIGSMPlaneBetween : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+ /**
+ * Gets the first input plane or planar surface.
+ * @param oElem1
+ * first input element
+ */
+ virtual HRESULT GetFirstElement(CATISpecObject_var&amp; oElem1) = 0;
+
+ /**
+ * Sets the first input plane or planar surface.
+ * @param iElem1
+ * first input element
+ */
+ virtual HRESULT SetFirstElement(const CATISpecObject_var&amp; iElem1) = 0;
+
+
+ /**
+ * Gets the second input plane or planar surface.
+ * @param oElem2
+ * second input element
+ */
+ virtual HRESULT GetSecondElement(CATISpecObject_var&amp; oElem2) = 0;
+ 
+ /**
+ * Sets the second input plane or planar surface.
+ * @param iElem2
+ * second input element
+ */
+ virtual HRESULT SetSecondElement(const CATISpecObject_var&amp; iElem2) = 0;
+
+
+ /**
+  * Gets the Ratio.
+  * @Param oRatio
+  * This is the ratio in which distance or angle between two input elements is divided by Plane Between feature
+  * If Ratio is equal to NULL_var, the extremity defined by Orientation parameter is taken
+  */
+ virtual HRESULT GetRatio(CATICkeParm_var&amp; oRatio) = 0;
+
+ /**
+  * Sets the Ratio.
+  * @Param iRatio
+  * This is the ratio in which distance or angle between two input elements is divided by Plane Between feature
+  * If Ratio is equal to NULL_var, the extremity defined by Orientation parameter is taken
+  */
+ virtual HRESULT SetRatio(const CATICkeParm_var&amp; iRatio) = 0; 
+
+
+ /**
+  * Gets the orientation.
+  * @Param oOrientation 
+  * Orientation = CATGSMInvertOrientation means that distance or angle is measured from the second element
+  */
+ virtual HRESULT GetOrientation(CATGSMOrientation&amp; oOrientation) = 0;
+ 
+ /**
+  * Sets the orientation.
+  * @Param iOrientation 
+  * Orientation = CATGSMInvertOrientation means that distance or angle is measured from the second element
+  */
+ virtual HRESULT SetOrientation(const CATGSMOrientation&amp; iOrientation) = 0;
+
+};
+
+CATDeclareHandler (CATIGSMPlaneBetween, CATBaseUnknown);
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMPlaneAngle.html">← 上一页: CATIGSMPlaneAngle.h</a></div>
+        <div><a href="CATIGSMPlaneEquation.html">下一页: CATIGSMPlaneEquation.h →</a></div>
+    </div>
+</body>
+</html>

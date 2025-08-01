@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathGrid.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathGrid.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathExtendableSet.html">← 上一页: CATMathExtendableSet.h</a></div>
+        <div><a href="CATMathGridOfPoints.html">下一页: CATMathGridOfPoints.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathGrid_h
+#define CATMathGrid_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;YN000MAT.h&quot;
+#include &quot;CATMathExtendableSet.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+//class CATMathMxNFullMatrix;
+class CATMathSetOf3DObjects;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+/**
+ * Class handling the allocation of grids of CATMathGridOfPoints
+ * and CATMathGridOfVectors.
+ *&lt;br&gt;The size is defined by a number of rows &lt;tt&gt;NbRows&lt;/tt&gt; and a 
+ * number of columns &lt;tt&gt;NbColumns&lt;/tt&gt; of elements of 3 doubles.
+ *&lt;br&gt;The &lt;tt&gt;SetNumberOfElements&lt;/tt&gt; method enlarges the memory if
+ * needed, while the &lt;tt&gt;Compress&lt;/tt&gt; inherited method releases the free 
+ * unused memory.
+ */
+class ExportedByYN000MAT CATMathGrid : public CATMathExtendableSet
+{
+  friend class CATMathMxNMatrix;
+ protected: 
+/**
+ * Constructs an empty CATMathGrid with 0 row and 0 column.
+ */
+  CATMathGrid();
+
+/**
+ * @nodoc
+ * @deprecated V5R20 SetNumberOfGridElements
+ * Constructs from the number of lines and rows.
+ */
+  CATMathGrid(CATLONG32 iNbRows, CATLONG32 iNbColumns);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 ExtractSubGrid
+ * Constructs by extracting a smaller grid from another one.
+ */
+  CATMathGrid(const CATMathGrid &amp; iSourceGrid,
+	                     CATLONG32 iStartRow   , CATLONG32 iEndRow,
+	                     CATLONG32 iStartColumn, CATLONG32 iEndColumn);
+
+  /**
+  * Extracting a smaller grid from another one.
+  */
+  HRESULT ExtractSubGrid(const CATMathGrid &amp; iSourceGrid,
+	                                          CATLONG32 iStartRow   , CATLONG32 iEndRow,
+	                                          CATLONG32 iStartColumn, CATLONG32 iEndColumn);
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 ConvertFrom3DSet
+  * Constructs from a CATMathSetOf3DObjects, assuming it is ordered column 
+  * after column.
+  */
+  CATMathGrid(const CATMathSetOf3DObjects  &amp; iSourceSet,
+	                     CATLONG32 iNbRows, 
+	                     CATLONG32 iNbColumns );
+
+/**
+ * Constructs from a CATMathSetOf3DObjects, assuming it is ordered column 
+ * after column.
+ */
+HRESULT ConvertFrom3DSet(const CATMathSetOf3DObjects  &amp; iSourceSet,
+	                                                CATLONG32 iNbRows, 
+	                                                CATLONG32 iNbColumns );
+
+/**
+ * Copy constructor.
+ */
+  CATMathGrid(const CATMathGrid &amp;iGridToCopy);
+
+ public:
+/**
+ * Defines the affectation operator.
+ */
+  const CATMathGrid &amp; operator = (const CATMathGrid &amp; iGridToCopy); 
+
+/**
+ * Destructor.
+ */
+  virtual ~CATMathGrid();
+
+  //---------------------------------------------------------------------------
+  //- Set and get methods.
+  //---------------------------------------------------------------------------
+
+/**
+ * @nodoc
+ * @deprecated V5R20 SetNumberOfGridElements
+ * Modifies the dimension of a CATMathGrid.
+ *&lt;br&gt;Re-allocates the memory if necessary.
+ */
+  virtual void SetNumberOfElements(CATLONG32 iNbRows, CATLONG32 iNbColumns);
+
+/**
+ * Modifies the dimension of a CATMathGrid.
+ *&lt;br&gt;Re-allocates the memory if necessary.
+ * @Return E_FAIL if the given data are not positive, S_OK otherwise.
+ */
+virtual HRESULT SetNumberOfGridElements(CATLONG32 iNbRows, CATLONG32 iNbColumns);
+
+/**
+ * Returns the number of rows of a CATMathGrid.
+ */
+  INLINE CATLONG32 GetNumberOfRows()    const;
+
+/**
+ * Returns the number of columns of a CATMathGrid.
+ */
+  INLINE CATLONG32 GetNumberOfColumns() const;
+
+
+  //**************************************************************************/
+  // The two following methods should disappear :
+  // use preferently the two previous (the difference is the &#x27;s&#x27; at the end).
+/**
+ * @nodoc
+ * @deprecated V5R20 GetNumberOfRows.
+ */
+  CATLONG32 GetNumberOfRow() const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20 GetNumberOfColumns
+ */
+  CATLONG32 GetNumberOfColumn() const;
+  //**************************************************************************/
+
+
+/**
+ * @nodoc
+ * Dumps a CATMathGrid.
+ * &lt;br&gt;This writes the following lines on the ostream if &lt;tt&gt;iLevel = 1&lt;/tt&gt;:
+ *&lt;pre&gt;
+ *   Set(1,1) = ( FirstCoord_11 , SecondCoord_11 , ThirdCoord_11 )
+ *   Set(1,2) = ( FirstCoord_12 , SecondCoord_12 , ThirdCoord_12 )
+ *   ...
+ *   Set(1,n) = ( FirstCoord_1n , SecondCoord_1n , ThirdCoord_1n )
+ *   Set(2,1) = ( FirstCoord_21 , SecondCoord_21 , ThirdCoord_21 )
+ *   ...
+ *   Set(m,n) = ( FirstCoord_mn , SecondCoord_mn , ThirdCoord_mn )&lt;/pre&gt;
+ * Only outputs the number of rows and columns if &lt;tt&gt;iLevel = 0&lt;/tt&gt;.
+ * @param iStream  
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps 
+ * on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ * @param iDebugLevel
+ * The debug level.
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; 
+ * for writing the number of lines and columns.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; 
+ * for writing the coordinates of the objects.&lt;/dl&gt;
+ */
+  virtual void Dump(CATLONG32 iDepth=0, ostream * iStream = 0L) const;
+  
+  //---------------------------------------------------------------------------
+  // Methods that moves the elements of a grid
+  //---------------------------------------------------------------------------
+
+/**
+ * @nodoc
+ * @deprecated V5R20 CopyGrid
+ * Copies a smaller grid into a subgrid of a larger one.
+ * &lt;br&gt;Throws an error if the dimensions between the grids are not consistent.
+ */
+  void CopyIntoGrid(const CATMathGrid &amp; iSmallerGrid,
+		                         CATLONG32 iStartRow, CATLONG32 iColStartColumn);
+
+/**
+ * Copies a smaller grid into a subgrid of a larger one.
+ * @return E_FAIL  if the dimensions between the grids are not compatible.
+ */
+  HRESULT CopyGrid(const CATMathGrid &amp; iSmallerGrid,
+		                             CATLONG32 iStartRow, CATLONG32 iColStartColumn);
+
+/**
+ * Exchanges the rows and columns.
+ */
+  void TransposeGrid() ;
+
+/**
+ * Vertical reverse of the grid.
+ *&lt;br&gt; The last column becomes the first one, and so one.
+ */
+  void ReverseColumnsOfGrid();
+
+/**
+ * Horizontal reverse of the grid.
+ *&lt;br&gt; The last row becomes the first one, and so one.
+ */
+  void ReverseRowsOfGrid();
+
+/**
+ * @nodoc
+ * @deprecated V5R20 ResizeTheGrid
+ * Changes the number of rows and columns, without changing the total number of
+ * elements.
+ *&lt;br&gt; If &lt;tt&gt; NbRows * NbColumns&lt;/tt&gt; does not remain constant, an exception
+ * is arised.
+ * &lt;br&gt;Throws an error if at least one of the given data is negative.
+ */
+  void ResizeGrid(CATLONG32 iCountRows, CATLONG32 iCountColumns);
+
+  /**
+ * Changes the number of rows and columns, without changing the total number of
+ * elements.
+ *&lt;br&gt; If &lt;tt&gt; NbRows * NbColumns&lt;/tt&gt; does not remain constant, an exception
+ * is arised.
+  * &lt;br&gt;Return E_FAIL if at least one of the given data is negative, S_OK otherwise.
+ */
+  HRESULT ResizeTheGrid(CATLONG32 iCountRows, CATLONG32 iCountColumns);
+
+ protected:
+  //---------------------------------------------------------------------------
+  //- Internal data.
+  //---------------------------------------------------------------------------
+  // Dimensions of the grid.
+  CATLONG32 _CountRows, _CountColumns;
+
+  // Size of a row (in double) : should be the number of columns time 3.
+  CATLONG32 _SizeRow;
+};
+
+//-----------------------------------------------------------------------------
+//- INLINE Implementations.
+//-----------------------------------------------------------------------------
+INLINE CATLONG32 CATMathGrid::GetNumberOfColumns() const
+{ return _CountColumns; }
+
+INLINE CATLONG32 CATMathGrid::GetNumberOfRows() const
+{ return _CountRows; }
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathExtendableSet.html">← 上一页: CATMathExtendableSet.h</a></div>
+        <div><a href="CATMathGridOfPoints.html">下一页: CATMathGridOfPoints.h →</a></div>
+    </div>
+</body>
+</html>

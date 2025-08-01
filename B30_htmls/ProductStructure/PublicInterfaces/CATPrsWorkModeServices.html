@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductStructure/PublicInterfaces/CATPrsWorkModeServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ProductStructure/PublicInterfaces/CATPrsWorkModeServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPrsContextualLinkServices.html">← 上一页: CATPrsContextualLinkServices.h</a></div>
+        <div><a href="../../SDMRuntime/PublicInterfaces/CATListOfSdaiAppInstance.html">下一页: CATListOfSdaiAppInstance.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  CATPrsWorkModeServices_H  
+#define  CATPrsWorkModeServices_H
+
+// COPYRIGHT Dassault Systemes 2008
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;AS0STARTUP.h&quot;
+  
+class CATIProduct_var;
+  
+/**
+ * Class to retrieve and assign a work mode of/on a Product.
+ * &lt;b&gt;Role:&lt;/b&gt; The work mode is a loading mode which can vary according to the 
+ * selective loading context.
+ */  
+  
+class  ExportedByAS0STARTUP CATPrsWorkModeServices  
+{
+  public:
+
+    /**
+    * Role of this enumeration type.
+    *
+    * @param WM_VISUALIZATION
+    *     The Visualization work mode, also named AuthoringVisu mode.
+    * @param WM_PRODUCT
+    *     The Product work mode.
+    * @param WM_BREP
+    *     The BRep mode, also named Linkable bmode.
+    * @param WM_DESIGN
+    *     The Design mode, also named Edit mode.
+    *
+    */
+    enum WorkMode
+    {
+      WM_VISUALIZATION,
+      WM_PRODUCT,
+      WM_BREP,
+      WM_DESIGN
+    };
+    
+  /** 
+    * Retrieves the work mode of the Product.
+    *
+    * @param iProduct [in]
+    *   The current Product.
+    * @param oCurrentMode [out]
+    *   The returned mode.
+    *
+    * @return
+    *   &lt;code&gt;S_OK&lt;/code&gt; the work mode is successfully retrieved. &lt;br&gt;
+    *   &lt;code&gt;E_FAIL&lt;/code&gt; no suitable work mode was retrieved on iProduct.    
+    */
+    static HRESULT GetWorkMode(const CATIProduct_var&amp; iProduct,WorkMode&amp; oCurrentMode);
+    
+  /** 
+    * Defines the work mode of the Product.
+    *
+    * @param iProduct [in]
+    *   The current Product.
+    * @param iNewMode [in]
+    *   The desired mode.
+    *
+    * @return
+    *   &lt;code&gt;S_OK&lt;/code&gt; the work mode is successfully affected. &lt;br&gt;
+    *   &lt;code&gt;E_FAIL&lt;/code&gt; the work mode is not successfully affected.
+    */
+    static HRESULT SetWorkMode(const CATIProduct_var&amp; iProduct,WorkMode iNewMode);
+    
+  private:  
+    CATPrsWorkModeServices();  
+    ~CATPrsWorkModeServices();     
+};  
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPrsContextualLinkServices.html">← 上一页: CATPrsContextualLinkServices.h</a></div>
+        <div><a href="../../SDMRuntime/PublicInterfaces/CATListOfSdaiAppInstance.html">下一页: CATListOfSdaiAppInstance.h →</a></div>
+    </div>
+</body>
+</html>

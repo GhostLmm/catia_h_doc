@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwTextStyle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwTextStyle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwTextProperties.html">← 上一页: CATIDrwTextProperties.h</a></div>
+        <div><a href="CATIDrwThread.html">下一页: CATIDrwThread.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwTextStyle_H
+#define CATIDrwTextStyle_H
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+class CATGraphicAttributeSet;
+class CATISpecObject;
+class CATUnicodeString;
+class CATIDrwDimFrame_var;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwTextStyle ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwTextStyle ;
+#endif
+
+class ExportedByDraftingItfCPP CATIDrwTextStyle : public CATBaseUnknown
+{
+  CATDeclareInterface;
+   
+   public:
+
+   virtual CATUnicodeString GetPoliceName () =0;
+   virtual void SetPoliceName (CATUnicodeString &amp;PoliceName) =0;
+
+   virtual void GetPoliceParameters (int &amp;FixedFontMode,int &amp;ChasseMode) = 0;
+   virtual void SetPoliceParameters (int FixedFontMode,int ChasseMode) = 0;
+   
+   virtual unsigned int GetColor () = 0;
+   virtual void GetColor (int &amp;R,int &amp;G, int &amp;B) = 0;
+   virtual void SetColor (int R,int G,int B) = 0;
+   
+   virtual void GetCharacterParameters (double &amp;Height,double &amp;Width,
+					int &amp;CharSizeLock, double &amp;Slant,
+					double &amp;Spacing) = 0;
+   virtual void SetCharacterParameters (double Height,double Width,
+					int CharSizeLock, double Slant,
+					double Spacing) = 0;
+   
+   virtual boolean GetBold () = 0;
+   virtual void SetBold (boolean iBold) = 0;
+
+   virtual boolean GetItalic () = 0;
+   virtual void SetItalic (boolean iItalic) = 0;
+
+};
+CATDeclareHandler(CATIDrwTextStyle, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwTextProperties.html">← 上一页: CATIDrwTextProperties.h</a></div>
+        <div><a href="CATIDrwThread.html">下一页: CATIDrwThread.h →</a></div>
+    </div>
+</body>
+</html>

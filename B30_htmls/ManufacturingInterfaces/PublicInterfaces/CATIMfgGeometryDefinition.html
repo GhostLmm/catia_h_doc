@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgGeometryDefinition.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgGeometryDefinition.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgGeometryAnalyser.html">← 上一页: CATIMfgGeometryAnalyser.h</a></div>
+        <div><a href="CATIMfgGeometryFactory.html">下一页: CATIMfgGeometryFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===================================================================
+// COPYRIGHT Dassault Systemes 2012
+//===================================================================
+
+#ifndef CATIMfgGeometryDefinition_H
+#define CATIMfgGeometryDefinition_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATString.h&quot;
+
+
+extern ExportedByMfgItfEnv  IID IID_CATIMfgGeometryDefinition ;
+
+/**
+* Interface dedicated to geometry definition.
+*
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This interface offers service to set or get the geometries.&lt;br&gt;
+* &lt;p&gt;
+* The methods are consider geometries from the given type.
+* This iType parameter corresponds to a key word ending the wanted interface. (CATIM3xiType, CATIMfgiType or CATIiType)
+* For example iType = &quot;Parts&quot; to consider the parts geometries (for CATIMfgParts)
+* iType = &quot;Checks&quot; to consider the checks geometries (for CATIMfgChecks)
+* iType = &quot;MultiAxisPart&quot; to consider the parts geometries for multi-axis operation
+* iType = &quot;FirstGuideLine&quot;
+* iType = &quot;FirstStopLine&quot;
+* iType = &quot;SecondGuideLine&quot;
+* iType = &quot;SecondStopLine&quot;
+* iType = &quot;AuxGuidingCurves&quot;
+* iType = &quot;FirstRelimitingElement&quot;
+* iType = &quot;SecondRelimitingElement&quot;
+* iType = &quot;MultiAxisRefPoint&quot;
+* iType = &quot;MultiAxisStartElement&quot;
+* iType = &quot;MultiAxisEndElement&quot;
+* iType = &quot;GuidingCurves&quot;
+* iType = &quot;Drives&quot;
+* iType = &quot;RoughStock&quot;
+* iType = &quot;PartBottom&quot;
+* iType = &quot;RelimitingFace&quot;
+* iType = &quot;RelimitingPlane&quot;
+* iType = &quot;EndingPoint&quot;
+* iType = &quot;StartingPoint&quot;
+* iType = &quot;Island&quot;
+* iType = &quot;SetupStocks&quot; to consider the stock of the PO
+* iType = &quot;SetupDesigns&quot; to consider the design part of the PO
+*/
+class ExportedByMfgItfEnv CATIMfgGeometryDefinition : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+public:
+
+	/**
+	* Adds a geometry.
+	* @param iType		
+	*		Type of the geometry to add.
+	* @param iReference	
+	*		Geometry to add.
+	* @param iProduct		
+	*		Product to whech belongs the geometry to add.
+	* @param iVerify		
+	*		&lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The parameter can be
+	*		&lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;   &lt;dd&gt;Add the geometry without any checks. (default value)
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;   &lt;dd&gt;Add the geometry only if it is not already in the geometries list.
+	*     &lt;/dl&gt;
+	* @param iPostion		
+	*		Position at which add the geometry in the geometries list. (default value = 0)
+	*/
+	virtual HRESULT AddGeometry(const CATString &amp; iType, const CATBaseUnknown_var&amp; iReference, const CATBaseUnknown_var&amp; iProduct, int iVerify = 0, int iPosition=0) = 0;
+
+	/**
+	* Remove geometries of the given type.
+	* @param iType		
+	*		Type of the geometries to remove.
+	*/
+	virtual HRESULT RemoveGeometries(const CATString &amp; iType) = 0;
+
+};
+
+CATDeclareHandler(CATIMfgGeometryDefinition, CATBaseUnknown);
+
+//-----------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgGeometryAnalyser.html">← 上一页: CATIMfgGeometryAnalyser.h</a></div>
+        <div><a href="CATIMfgGeometryFactory.html">下一页: CATIMfgGeometryFactory.h →</a></div>
+    </div>
+</body>
+</html>

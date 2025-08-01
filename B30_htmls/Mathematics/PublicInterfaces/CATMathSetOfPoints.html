@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathSetOfPoints.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathSetOfPoints.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSetOfLongs.html">← 上一页: CATMathSetOfLongs.h</a></div>
+        <div><a href="CATMathSetOfVectors.html">下一页: CATMathSetOfVectors.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathSetOfPoints_h
+#define CATMathSetOfPoints_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;YN000MAT.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATMathSetOf3DObjects.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATMathPoint.h&quot;
+
+class CATMathVector;
+/**
+ * Class representing a set of CATMathPoints.
+ *&lt;br&gt;The size is defined by a number of CATMathPoints
+ *&lt;tt&gt;NbPoints&lt;/tt&gt;. The index of the first CATMathPoint is &lt;tt&gt;0&lt;/tt&gt;.
+ *&lt;br&gt;The &lt;tt&gt;SetNumberOfPoints&lt;/tt&gt; method enlarges the memory if
+ * needed, while the &lt;tt&gt;Compress&lt;/tt&gt; inherited method releases the free 
+ * unused memory.
+ */
+class ExportedByYN000MAT CATMathSetOfPoints : public CATMathSetOf3DObjects
+{
+ public:
+/**
+ * Constructs an empty CATMathSetOfPoints with no point.
+ */
+  CATMathSetOfPoints();
+
+/**
+ * @nodoc
+ * @deprecated V5R20 SetPointNumber
+ * Constructs a CATMathSetOfPoints of a given size.
+ *&lt;br&gt;The memory is allocated, but the values of the points are not initialized.
+ * Use &lt;tt&gt;SetPoint&lt;/tt&gt; to initialize them.
+ */
+  CATMathSetOfPoints(CATLONG32 iNbPoints);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Set
+ * Constructs from an array of CATMathPoints.
+ */ 
+  CATMathSetOfPoints(CATLONG32 iNbPoints, const CATMathPoint iPointsToCopy[]);
+
+/**
+ * Copy constructor.
+ */
+  CATMathSetOfPoints(const CATMathSetOfPoints &amp; iSetToCopy);
+
+/**
+ * Destructor.
+ */
+  ~CATMathSetOfPoints();
+
+  //---------------------------------------------------------------------------
+  //- Setting and getting the points.
+  //---------------------------------------------------------------------------
+
+ /**
+ * Constructs from an array of CATMathPoints.
+ */ 
+  HRESULT Set(CATLONG32 iNbPoints, const CATMathPoint iPointsToCopy[]);
+
+
+/**
+ * Returns the number of points of &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints.
+ */
+  CATLONG32 GetNumberOfPoints() const;
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 SetPointNumber
+  * Allocates the memory for &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints.
+  */
+  void SetNumberOfPoints(CATLONG32 iCountPoints);  
+
+/**
+  * Allocates the memory for &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints.
+  * @return E_FAIL if the given data is not positive, S_OK otherwise.
+  */
+  HRESULT SetPointNumber(CATLONG32 iCountPoints);  
+
+/**
+ * Returns the CATMathPoint locating at a given row and column.
+ *&lt;br&gt;The index &lt;tt&gt;iIndexPoint&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ *&lt;br&gt;Use preferently the second method signature if you want to avoid an
+ * useless constructor.
+ */
+  CATMathPoint   GetPoint(CATLONG32  iIndexPoint) const;
+
+/**
+ * Retrieves the CATMathPoint locating at a index.
+ *&lt;br&gt;The index &lt;tt&gt;iIndexPoint&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ */
+  void GetPoint(CATLONG32 iIndexPoint, CATMathPoint &amp;ioPoint);
+  
+/**
+ * Returns the array of CATMathPoints.
+ *&lt;br&gt;Note that the returned array is used by the CATMathSetOfPoints and
+ * must not be deleted.
+ */
+  CATMathPoint * GetPoints() const;
+
+/**
+ * Initializes the values of a CATMathPoint in the CATMathSetOfPoints.
+ * &lt;br&gt;The index &lt;tt&gt;iIndexPoint&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ */
+  void SetPoint(const CATMathPoint &amp; iPoint, CATLONG32 iIndex);
+
+/**
+ * @nodoc
+ * Use now the former signature of this method.
+ */
+  void SetPoint(double , double , double , CATLONG32 );
+
+  
+//
+//- Distance and SquareDistance between a set of points and a point
+//
+/** 
+ * Returns the distance between a CATMathPoint and 
+ * &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints.
+ * @param iP
+ * The point to which the distance is computed.
+ * @param ioIndex
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of a point of &lt;tt&gt;this&lt;/tt&gt;
+ * to which the distance is minimum.
+ */
+  double       DistanceTo (const CATMathPoint &amp; iP, CATLONG32 &amp; ioIndex) const ;
+
+/** 
+ * Returns the square distance between a CATMathPoint and 
+ * &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints.
+ * @param iP
+ * The point to which the distance is computed.
+ * @param ioIndex
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of the point of &lt;tt&gt;this&lt;/tt&gt;
+ * to which the distance is minimum.
+ */
+  double SquareDistanceTo (const CATMathPoint &amp; iP, CATLONG32 &amp; ioIndex) const ;
+
+//
+//- Distance and SquareDistance between two sets of points
+//
+/** 
+ * Returns the distance between  
+ * &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints and another CATMathSetOfPoints.
+ * @param iSetOfPoints2
+ * The other set of points.
+ * @param ioIndex1
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of the point of &lt;tt&gt;this&lt;/tt&gt;
+ * to which the distance is minimum.
+ * @param ioIndex2
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of the point of &lt;tt&gt;iSetOfPoints2&lt;/tt&gt;
+ * to which the distance is minimum.
+ */
+  double DistanceTo(const CATMathSetOfPoints * iSetOfPoints2,
+                          CATLONG32          &amp; ioIndex1     ,
+                          CATLONG32          &amp; ioIndex2     ) const;
+
+/** 
+ * Returns the square distance between  
+ * &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfPoints and another CATMathSetOfPoints.
+ * @param iSetOfPoints2
+ * The other set of points.
+ * @param ioIndex1
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of the point of &lt;tt&gt;this&lt;/tt&gt;
+ * to which the distance is minimum.
+ * @param ioIndex2
+ * The index (beginning at &lt;tt&gt;0&lt;/tt&gt;) of the point of &lt;tt&gt;iSetOfPoints2&lt;/tt&gt;
+ * to which the distance is minimum.
+ */
+  double SquareDistanceTo(const CATMathSetOfPoints * iSetOfPoints2,
+                                CATLONG32          &amp; ioIndex1     ,
+                                CATLONG32          &amp; ioIndex2     ) const;
+
+/**
+ * Defines the type of space generated by a set of points.
+ * @param POINT
+ * All the points are at the same position.
+ * @param LINE
+ * The points are aligned on a line.
+ * @param PLANE
+ * The points are lying on a plane.
+ * @param SPACE
+ * The points represent the space .
+ */
+  enum AffineSpace { POINT, LINE, PLANE, SPACE };
+
+/**
+ * @nodoc
+ * @deprecated V5R20 ComputeAffineSupport
+ * Throws an error if an error occurs
+ * Returns the type of the mean affine sub-space generated by &lt;tt&gt;this&lt;/tt&gt; set of points.
+ * Note that it does not return the type of the affine space of the smallest dimension passing through 
+ * the points. The SPACE type is returned in very specific cases. The LINE and POINT types
+ * are returned in cases of degeneracy. In a general case, the PLANE type is returned and 
+ * this is the mean plane which is calculated.
+ * &lt;br&gt;
+ *  @param oAffineSpace
+ * The type of space generated by the set of points. According to it, different types
+ * of data are computed:
+ * &lt;dl&gt;
+ *  &lt;dt&gt;POINT &lt;/dt&gt; &lt;dd&gt; Only the oOrigin is valued.
+ *  &lt;dt&gt;LINE  &lt;/dt&gt; &lt;dd&gt; The oOrigin and the oVector1 are valuated.
+ *  &lt;dt&gt;PLANE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the first two vectors are
+ *          valuated.
+ *  &lt;dt&gt;SPACE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the three vectors are valuated.
+ * &lt;/dl&gt;
+ *  
+ */
+  void GetAffineSpace    ( const CATTolerance&amp;                     iTolObject   ,
+                                 CATMathPoint                    &amp; oOrigin      ,
+                                 CATMathVector                   &amp; oVector1     ,
+                                 CATMathVector                   &amp; oVector2     ,
+                                 CATMathVector                   &amp; oVector3     ,
+                                 CATMathSetOfPoints::AffineSpace &amp; oAffineSpace );
+/**
+ * @nodoc
+ * @deprecated V5R15 GetAffineSpace above, ComputeAffineSupport
+ */
+  void GetAffineSpace    (       CATMathPoint                    &amp; oOrigin      ,
+                                 CATMathVector                   &amp; oVector1     ,
+                                 CATMathVector                   &amp; oVector2     ,
+                                 CATMathVector                   &amp; oVector3     ,
+                                 CATMathSetOfPoints::AffineSpace &amp; oAffineSpace );
+
+/**
+ * @nodoc
+ * @deprecated V5R15 ComputeAffineSupport
+ * Throws an error if an error occurs
+ * Returns the type of the mean affine sub-space generated by &lt;tt&gt;this&lt;/tt&gt; set of points.
+ * Note that it does not return the type of the affine space of the smallest dimension passing through 
+ * the points. The SPACE type is returned in very specific cases. The LINE and POINT types
+ * are returned in cases of degeneracy. In a general case, the PLANE type is returned and 
+ * this is the mean plane which is calculated.
+ * &lt;br&gt;
+ *  @param oAffineSpace
+ * The type of space generated by the set of points. According to it, different types
+ * of data are computed:
+ * &lt;dl&gt;
+ *  &lt;dt&gt;POINT &lt;/dt&gt; &lt;dd&gt; Only the oOrigin is valued.
+ *  &lt;dt&gt;LINE  &lt;/dt&gt; &lt;dd&gt; The oOrigin and the oVector1 are valuated.
+ *  &lt;dt&gt;PLANE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the first two vectors are valuated.
+ *  &lt;dt&gt;SPACE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the three vectors are valuated.
+ * &lt;/dl&gt;
+ *  @param iTol
+ *  geometrical tolerance to decide if the set of points are in the affine support
+ *  @param iWeights
+ *  array of weights of the Points in the Set used to compute an inertial matrix and the centre of mass.
+ *  if not NULL (if NULL, all weigths are taken equal to 1.0)
+ */
+
+  void ComputeAffineSpace     ( const CATTolerance&amp;                     iTolObject   ,
+                                      double                            iTol         ,
+                                      double                          * iWeights     ,
+                                      CATMathPoint                    &amp; oOrigin      ,
+                                      CATMathVector                   &amp; oVector1     ,
+                                      CATMathVector                   &amp; oVector2     ,
+                                      CATMathVector                   &amp; oVector3     ,
+                                      CATMathSetOfPoints::AffineSpace &amp; oAffineSpace ,
+                                      double                          &amp; oDistance    );
+
+/**
+ * @nodoc
+ * @deprecated V5R15 ComputeAffineSupport (ComputeAffineSpace above XScale compliant)
+ */
+  void ComputeAffineSpace           ( CATMathPoint                    &amp; oOrigin      ,
+                                      CATMathVector                   &amp; oVector1     ,
+                                      CATMathVector                   &amp; oVector2     ,
+                                      CATMathVector                   &amp; oVector3     ,
+                                      CATMathSetOfPoints::AffineSpace &amp; oAffineSpace ,
+                                      double                          &amp; oDistance    ,
+                                      double                            iTol         ,
+                                      double                          * iWeights     = NULL);
+
+/**
+ * Returns the type of the mean affine sub-space generated by &lt;tt&gt;this&lt;/tt&gt; set of points.
+ * Note that it does not return the type of the affine space of the smallest dimension passing through 
+ * the points. The SPACE type is returned in very specific cases. The LINE and POINT types
+ * are returned in cases of degeneracy. In a general case, the PLANE type is returned and 
+ * this is the mean plane which is calculated.
+ * &lt;br&gt;
+ *  @param oAffineSpace
+ * The type of space generated by the set of points. According to it, different types
+ * of data are computed:
+ * &lt;dl&gt;
+ *  &lt;dt&gt;POINT &lt;/dt&gt; &lt;dd&gt; Only the oOrigin is valued.
+ *  &lt;dt&gt;LINE  &lt;/dt&gt; &lt;dd&gt; The oOrigin and the oVector1 are valuated.
+ *  &lt;dt&gt;PLANE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the first two vectors are valuated.
+ *  &lt;dt&gt;SPACE &lt;/dt&gt; &lt;dd&gt; The oOrigin and the three vectors are valuated.
+ * &lt;/dl&gt;
+ *  @param iTol
+ *  geometrical tolerance to decide if the set of points are in the affine support
+ *  @param iWeights
+ *  array of weights of the Points in the Set used to compute an inertial matrix and the centre of mass.
+ *  if not NULL (if NULL, all weigths are taken equal to 1.0)
+ * @return 
+ * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs , &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+ */
+  HRESULT ComputeAffineSupport( const CATTolerance&amp;                     iTolObject   ,
+                                      double                            iTol         ,
+                                      double                          * iWeights     ,
+                                      CATMathPoint                    &amp; oOrigin      ,
+                                      CATMathVector                   &amp; oVector1     ,
+                                      CATMathVector                   &amp; oVector2     ,
+                                      CATMathVector                   &amp; oVector3     ,
+                                      CATMathSetOfPoints::AffineSpace &amp; oAffineSpace ,
+                                      double                          &amp; oDistance    );
+/**
+ * @nodoc
+ * @deprecated V5R15 ComputeAffineSupport above
+ */
+  HRESULT ComputeAffineSupport( CATMathPoint                    &amp; oOrigin      ,
+                                CATMathVector                   &amp; oVector1     ,
+                                CATMathVector                   &amp; oVector2     ,
+                                CATMathVector                   &amp; oVector3     ,
+                                CATMathSetOfPoints::AffineSpace &amp; oAffineSpace ,
+                                double                          &amp; oDistance    ,
+                                double                            iTol         ,
+                                double                          * weights      = NULL);
+};
+
+INLINE CATLONG32 CATMathSetOfPoints::GetNumberOfPoints() const
+{
+  return _CountDatas;
+}
+
+INLINE HRESULT CATMathSetOfPoints::SetPointNumber(CATLONG32 iCountPoints)
+{
+    HRESULT IsOK = SetNumberOf3DElements(iCountPoints);
+   return IsOK;
+}
+
+
+//typedef CATMathSetOfPoints setpt;
+
+#include &quot;CATMathAbstractSetOfPoints.h&quot;
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSetOfLongs.html">← 上一页: CATMathSetOfLongs.h</a></div>
+        <div><a href="CATMathSetOfVectors.html">下一页: CATMathSetOfVectors.h →</a></div>
+    </div>
+</body>
+</html>

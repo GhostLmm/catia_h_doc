@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIChamfer.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIChamfer.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCreateCATIPrtUIFactory.html">← 上一页: CATCreateCATIPrtUIFactory.h</a></div>
+        <div><a href="CATICircPatt.html">下一页: CATICircPatt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIChamfer_H
+#define CATIChamfer_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIShape.h&gt;
+#include &lt;CATPrtEnum.h&gt;
+#include &lt;CATLISTV_CATISpecObject.h&gt;
+#include &quot;CATISpecObject.h&quot;
+
+#include &quot;CATBoolean.h&quot;
+
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIChamfer;
+#else
+extern &quot;C&quot; const IID IID_CATIChamfer;
+#endif
+
+/**
+* Interface to represent the chamfer shape.
+* &lt;b&gt;Role&lt;/b&gt;: A chamfer is made up of a list of elements to be chamfered,
+* such as edges or faces, is defined with a pair of parameters,
+* such as two lengthes, or a length and an angle.
+*/
+class ExportedByPartItf CATIChamfer : public CATIShape
+{
+	CATDeclareInterface;
+
+public:
+	/**
+	* Sets the first value of the chamfer.
+	* @param iLength1 
+	* This is the first length value if the chamfer is defined with two lengthes,
+	* or if the chamfer is defined with a length and an angle.
+	* This is ChordalLength if the chamfer is defined with Chordal length and an angle.
+	* This is Height if the chamfer is defined with Height and an angle.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The first length value must be greater 
+	* than 0 but not equal to 0.
+	*/
+	virtual void ModifyLength1(double iLength1) = 0;
+
+	/**
+	* Sets the second length value or the angle value of the chamfer.
+	* @param iLength2 
+	* This is the second length value if the chamfer is defined with two lengthes,
+	* or the angle value if the chamfer is defined with a length and an angle.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The second length value must be greater 
+	* than 0 but not equal to 0 and the angle value must be greater than 0 
+	* but not equal to 0 and smaller than 90 but not equal to 90.
+	*/
+	virtual void ModifyLength2(double iLength2) = 0;
+
+	/**
+	* Sets the propagation mode of the elements to be chamfered.
+	* @param iPropagation 
+	* The propagation mode specifies the edges taken into account when chamfering.
+	* &lt;br&gt;The propagation can be performed in two ways:
+	* &lt;br&gt;&lt;b&gt;Tangency&lt;/b&gt;:CATIA continues chamfering beyond the selected edge 
+	* until it encounters an edge that is non continuous in tangency.
+	* &lt;br&gt;&lt;b&gt;Minimal&lt;/b&gt;: the propagation is done up to the first natural relimitation
+	* by the geometry.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferPropagation propagation mode can be set
+	* to &lt;tt&gt;_TANGENCY&lt;/tt&gt; or &lt;tt&gt;_MINIMAL&lt;/tt&gt;.
+	*/
+	virtual void ModifyPropagation(CATPrtChamferPropagation iPropagation) = 0;
+
+	/**
+	* Sets the chamfer parameter mode.
+	* @param iParameterMode 
+	* The chamfer parameter mode specifies both parameters required 
+	* to define the chamfer: two lengthes (Length1/Length2) or 
+	* a length and an angle (Length1/Angle).
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferMode parameter mode can be set
+	* to &lt;tt&gt;LENGTH&lt;/tt&gt; or &lt;tt&gt;LENGTH_ANGLE&lt;/tt&gt;.
+	*/
+	virtual void ModifyMode (CATPrtChamferMode iParameterMode) = 0;
+
+	/**
+	* Sets the chamfer orientation.
+	* @param iReferenceFace 
+	* The first length, or the single length, depending on the way the
+	* chamfer is defined, is measured on the reference face from the
+	* edge to chamfer. 
+	* &lt;br&gt;This reference face is either the face selected or the face
+	* determined by CATIA if the edge to be chamfered was selected.
+	* &lt;br&gt;The chamfer orientation defines whether to keep the face selected or determined 
+	* by CATIA as the chamfer reference face.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferReferenceFace orientation can be set
+	* to &lt;tt&gt;NO_REVERSE&lt;/tt&gt; (the chamfer reference face is the face selected or determined
+	* by CATIA) or &lt;tt&gt;REVERSE&lt;/tt&gt; (the chamfer reference face is the other face).
+	*/
+	virtual void ModifyReferenceFace (CATPrtChamferReferenceFace iReferenceFace) = 0;
+
+	/**
+	* Adds elements to be chamfered.
+	* @param iObjectList
+	* Specifies the list of sharp edges or faces be chamfered.
+	* &lt;br&gt;The CATISpecObject_var should be a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature 
+	* created with CATIMmiBRepFactory. 
+	* This edge or face should not be already used in the chamfer.
+	* This edge or face should belong to the same mechanical body.
+	*/
+	virtual void AddObject(CATLISTV(CATISpecObject_var) iObjectList) = 0;
+
+	/**
+	* Removes elements from those to be chamfered.
+	* @param iObjectList
+	* Specifies the list of edges or faces to be removed.
+	* The CATISpecObject_var should be a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature . 
+	* This edge or face should belong to the chamfer.
+	*/
+	virtual void RemoveObject(CATLISTV(CATISpecObject_var) iObjectList) = 0;
+
+	/**
+	* Returns the first value of the chamfer.
+	* This is the first length value if the chamfer is defined with two lengthes,
+	* or if the chamfer is defined with a length and an angle.
+	* This returns ChordalLength if the chamfer is defined with Chordal length and an angle.
+	* This returns Height if the chamfer is defined with Height and an angle.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The first length value must be greater 
+	* than 0 but not equal to 0.
+	*/
+	virtual double GetLength1() const = 0;
+
+	/** @nodoc */
+	virtual CATICkeParm_var GetLength1Parm() const= 0;
+
+	/**
+	* Returns the second length value or the angle value of the chamfer.
+	* This is the second length value if the chamfer is defined with two lengthes,
+	* or the angle value if the chamfer is defined with other modes.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The second length value must be greater 
+	* than 0 but not equal to 0 and the angle value must be greater than 0 
+	* but not equal to 0 and smaller than 90 but not equal to 90.
+	*/
+	virtual double GetLength2() const = 0;
+
+	/** @nodoc */
+	virtual CATICkeParm_var GetLength2Parm() const= 0;
+
+	/** @nodoc */
+	virtual CATICkeParm_var GetAngleParm() const= 0;
+
+	/**
+	* Returns the propagation mode of the elements to be chamfered.
+	* The propagation mode specifies the edges taken into account when chamfering.
+	* &lt;br&gt;The propagation can be performed in two ways:
+	* &lt;br&gt;&lt;b&gt;Tangency&lt;/b&gt;:CATIA continues chamfering beyond the selected edge 
+	* until it encounters an edge that is non continuous in tangency.
+	* &lt;br&gt;&lt;b&gt;Minimal&lt;/b&gt;: the propagation is done up to the first natural relimitation
+	* by the geometry.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferPropagation propagation mode can be set
+	* to &lt;tt&gt;_TANGENCY&lt;/tt&gt; or &lt;tt&gt;_MINIMAL&lt;/tt&gt;.
+	*/
+	virtual CATPrtChamferPropagation GetPropagation() const = 0;
+
+	/**
+	* Returns the chamfer parameter mode.
+	* &lt;br&gt;The chamfer parameter mode specifies both parameters required 
+	* to define the chamfer: two lengthes (Length1/Length2) or 
+	* a length and an angle (Length1/Angle).
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferMode parameter mode can be set
+	* to &lt;tt&gt;LENGTH&lt;/tt&gt; or &lt;tt&gt;LENGTH_ANGLE&lt;/tt&gt;.
+	*/
+	virtual CATPrtChamferMode GetMode() const= 0;
+
+	/**
+	* Returns the chamfer orientation.
+	* &lt;br&gt;The first length, or the single length, depending on the way the
+	* chamfer is defined, is measured on the reference face from the
+	* edge to chamfer. 
+	* &lt;br&gt;This reference face is either the face selected or the face
+	* determined by CATIA if the edge to be chamfered was selected.
+	* &lt;br&gt;The chamfer orientation defines whether to keep the face selected or determined 
+	* by CATIA as the chamfer reference face.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtChamferReferenceFace orientation can be set
+	* to &lt;tt&gt;NO_REVERSE&lt;/tt&gt; (the chamfer reference face is the face selected or determined
+	* by CATIA) or &lt;tt&gt;REVERSE&lt;/tt&gt; (the chamfer reference face is the other face).
+	*/
+	virtual CATPrtChamferReferenceFace GetReferenceFace() const= 0;
+
+	/**
+	* Returns the list of chamfered edges or faces.
+	* The CATISpecObject_var is a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature. 
+	*/
+	virtual CATLISTV(CATISpecObject_var) * GetObject() const = 0;
+
+	/** @nodoc */
+	virtual void GetObjectandOrientation (CATLISTV(CATISpecObject_var)&amp; oObjectList ,CATListOfInt&amp; oOrientationList) const = 0;
+
+	/**
+	* Returns the context of the chamfer (0 for PartDesign, 1 for Surfaces, 4 for Volumes and 5 for Functional).
+	*/
+	virtual void GetContext (int &amp;oContext) = 0;
+
+	/**
+	* Sets the context of the chamfer (0 for PartDesign, 1 for Surfaces, 4 for Volumes and 5 for Functional).
+	*/
+	virtual void SetContext (int &amp;iContext) = 0;
+
+	/**
+	* Sets the TrimSupportMode of the chamfer.
+	*/
+	virtual HRESULT ModifyTrimSupportMode(CATPrtTrimSupportMode iTrimSupportMode) = 0;
+
+	/**
+	* Returns the TrimSupportMode of the chamfer.
+	*/
+	virtual HRESULT GetTrimSupportMode(CATPrtTrimSupportMode &amp;oTrimSupportMode) = 0;
+
+	/**
+	* Sets the Extremities of the chamfer.
+	*/
+	virtual HRESULT ModifyExtremities(CATPrtChamferExtremities iExtremities) = 0;
+
+	/**
+	* Returns the Extremities of the chamfer.
+	*/
+	virtual HRESULT GetExtremities(CATPrtChamferExtremities &amp;oExtremities) = 0;
+
+	/**
+	* Sets the Support of the chamfer.
+	*/
+	virtual HRESULT ModifySupport(CATBaseUnknown_var ihsupport) = 0;
+
+	/**
+	* Returns the Support of the chamfer.
+	*/
+	virtual HRESULT GetSupport(CATBaseUnknown_var &amp;ohsupport) = 0;
+
+	/**
+	* Set the SymmetricalExtent button status.
+	*/
+	virtual HRESULT ModifySymmetricalExtent(const CATBoolean &amp;iSym) = 0;  
+
+	/**
+	* Returns the SymmetricalExtent button status.
+	*/
+	virtual HRESULT GetSymmetricalExtent(CATBoolean &amp;oSym) = 0; 
+
+	/**
+	* Sets the CornerCapMode of the chamfer.
+	*/
+	virtual HRESULT ModifyCornerCapMode(const CATBoolean &amp;iCornerCap) = 0;
+
+	/**
+	* Returns the CornerCapMode of the chamfer.
+	*/
+	virtual HRESULT GetCornerCapMode(CATBoolean &amp;OCornerCap) = 0; 
+
+  /** 
+   *Adds a hold curve.
+   */
+  virtual HRESULT AddHoldCurve(const CATISpecObject_var &amp;ihSpec) = 0;
+
+  /** 
+   * Retrieves the hold curves list.
+   */
+  virtual HRESULT GetHoldCurve(CATLISTV(CATISpecObject_var)&amp; oObjectList) = 0;
+
+  /** 
+   * Removes a hold curve.
+   */
+  virtual HRESULT RemoveHoldCurve(const CATISpecObject_var &amp;ihSpec) = 0;
+
+	/** @nodoc */
+	virtual HRESULT GetChordalLengthParm(CATICkeParm_var &amp;oChordalLength) const = 0;
+
+	/** @nodoc */
+	virtual HRESULT GetHeightParm(CATICkeParm_var &amp;oHeight)  const = 0;	
+
+};
+
+CATDeclareHandler (CATIChamfer, CATIShape); 
+
+#endif // CATIChamfer_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCreateCATIPrtUIFactory.html">← 上一页: CATCreateCATIPrtUIFactory.h</a></div>
+        <div><a href="CATICircPatt.html">下一页: CATICircPatt.h →</a></div>
+    </div>
+</body>
+</html>

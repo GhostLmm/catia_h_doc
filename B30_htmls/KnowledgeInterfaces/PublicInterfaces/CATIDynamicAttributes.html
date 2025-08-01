@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATIDynamicAttributes.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATIDynamicAttributes.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDesignTable.html">← 上一页: CATIDesignTable.h</a></div>
+        <div><a href="CATIEnumere.html">下一页: CATIEnumere.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDynamicAttributes_h
+#define CATIDynamicAttributes_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/** 
+* @CAA2Level L0
+* @CAA2Usage U3
+*/
+
+// inherited class 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+// used interfaces
+#include &quot;CATIValue.h&quot;
+#include &quot;CATIType.h&quot;
+
+// load module and forwards declarations
+#include &quot;CATLifSpecs.h&quot;
+#include &quot;CATIForwardsDecl.h&quot;
+
+// OLE IID
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByCATLifSpecs IID_CATIDynamicAttributes;
+#else
+extern &quot;C&quot; const IID IID_CATIDynamicAttributes;
+#endif
+
+
+/**   
+ * Interface to add dynamic attributes to objects.
+ * &lt;b&gt;Role&lt;/b&gt;: You can add persistant attributes on an object implementing this interface.&lt;br&gt;
+ * The attributes that are added, have a name, a type and a value.&lt;br&gt;
+ * You can remove the attributes afterwards or rename them.&lt;br&gt;
+ * You must implement this interface if you want to support this behaviour.&lt;br&gt;
+ * This interface is used in KnowledgeAdvisor to interactively add attributes on objects.&lt;br&gt;
+ * Watch Out: if you implement this interface on an object, you should also implement
+ * CATIInstance.&lt;br&gt;
+ * This interface returns the list of attributes on a specific object, and if an attribute
+ * is added through CATIDynamicAttributes, it should be returned in CATIInstance.&lt;br&gt;
+ * At last, this interfaces allows a user to add the support of a type to the object.&lt;br&gt;
+ * The meaning of that is that a given object that implements this interface can be seen
+ * as belonging to a new type.&lt;br&gt;
+ * For example, if I add a Diameter and a Depth to an object, I may want to see it
+ * as a Hole.
+ * Watch out: You should also implement CATIInstance on this object&lt;br&gt;
+ * CATIInstance returns the list of types supported by this object.&lt;br&gt;
+ * If a type is added on the object, it should be seen through CATIInstance.
+ * In LiteralFeatures framework, you can find CATCkeInstanceAdapter which is an 
+ * adapter of those interfaces on feature objects. (see also CATCkeBasicAdapter which is the light ancestor (no attribute data) of CATCkeInstanceAdapter).
+ * @see CATIInstance
+ * @see CATIType
+ * @see CATIValue
+ * @see CATIInstance
+ */
+class ExportedByCATLifSpecs CATIDynamicAttributes : public CATBaseUnknown
+{
+public :
+
+	/**
+	 *	Description: Use this method to dynamically add an attribute to an instance.
+   	 *  @param iKey: the name of the attribute which will be used by the GetValue method of CATIInstance to retrieve the attribute on the instance.
+	 *  @param iType: the type of the attribute which is being added.
+	 *  @param iValue: the value of the attribute which is being added
+	 */
+	virtual HRESULT Add( const CATUnicodeString&amp; iKey, const CATIType_var&amp; iType, const CATIValue_var&amp; iValue, boolean iIsComponent ) = 0;
+
+	/**
+	 *	Description: Removes an attribute from its name.
+   	 *  @param iKey: the name of the attribute.
+	 */
+	virtual HRESULT Remove( const CATUnicodeString&amp; iKey ) = 0;
+
+	/**
+	 *	Description: Renames an attribute.
+   	 *  @param iOldKey: the old name of the attribute.
+	 *  @param iNewKey: the new name of the attribute.
+	 */
+	virtual HRESULT Rename( const CATUnicodeString&amp; iOldKey, const CATUnicodeString&amp; iNewKey ) = 0;
+
+	/**
+	 *	Description: Add the support of a type.
+   	 *  @param iTypeAdded: type added.
+	 */
+	virtual HRESULT AddTypeSupport ( const CATIType_var &amp;iTypeAdded) = 0;
+
+	/**
+	 *	Description: Remove the support of a type.
+   	 *  @param iTypeRemoved: type added.
+	 */
+	virtual HRESULT RemoveTypeSupport ( const CATIType_var &amp;iTypeRemoved) = 0;
+
+
+private:
+  CATDeclareInterface;
+}; 
+
+CATDeclareHandler(CATIDynamicAttributes, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDesignTable.html">← 上一页: CATIDesignTable.h</a></div>
+        <div><a href="CATIEnumere.html">下一页: CATIEnumere.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAACATIAApplicationFrm.edu/CAACafUseToolsOptions.m/LocalInterfaces/CAACafCircleWindowCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAACATIAApplicationFrm.edu/CAACafUseToolsOptions.m/LocalInterfaces/CAACafCircleWindowCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../CAACafSpecTree.m/LocalInterfaces/CAACafCollapseExpandCmd.html">← 上一页: CAACafCollapseExpandCmd.h</a></div>
+        <div><a href="CAAECafVisuEllipse.html">下一页: CAAECafVisuEllipse.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAACafCircleWindowCmd_h
+#define CAACafCircleWindowCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+//===========================================================================
+//  Abstract of the sample:
+//  ----------------------
+//
+//  Application using a new document (CAAGeometry) with its own workshop and 
+//  commands.
+//     
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Command which displays the discretization of a circle in taking account
+//  of parameters defined in the Element Tools Options page. 
+//
+//  Illustrates:
+//     - creating a simple command derived from CATDlgDialog
+//     - using 2D Viewer
+//     - Subscribing to callback events form setting controller
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//           CATDlgDialog (Dialog Framework)    
+//              CATDialog   (Dialog Framework)
+//                  CATCommand  (System Framework)
+//                      CATBaseUnknown (System Framework)
+//
+//===========================================================================
+
+// Dialog Framework
+#include &quot;CATDlgDialog.h&quot;     // Needed to derive from CATDlgDialog
+
+// System Framework
+#include &quot;CATEventSubscriber.h&quot; // to receice callback
+
+//Visualization Framework
+class CAT2DViewer ;     // to visualize the circle
+class CAT2DBagRep;      // to content the circle
+class CAT2DCustomRep; 
+
+//Visualization Framework
+class CATFrmEditor;
+
+class CAACafCircleWindowCmd : public CATDlgDialog
+{
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAACafCircleWindowCmd.CATNls 
+  //    
+  DeclareResource(CAACafCircleWindowCmd, CATDlgDialog);
+  
+  public :
+    
+    // Constructor
+    // -----------
+    // Creates the dialog widgets
+    //
+    CAACafCircleWindowCmd();
+
+    virtual ~CAACafCircleWindowCmd();  
+	
+  private : 
+ 
+    //
+    // ClickClose
+    // ----------
+    // The end user clicks Close.
+    // 
+    void ClickClose(CATCommand              *iPublishingCommand, 
+                    CATNotification         *iNotification, 
+                    CATCommandClientData     iUsefulData);
+
+    // DisplayCircleCB
+    // ---------------
+    // It&#x27;a callback to react when a commit is done
+    //
+    void DisplayCircleCB  (CATCallbackEvent  iEvent,
+                           void             *ipublisher,
+                           CATNotification  *iNotification,
+                           CATSubscriberData iUsefulData,
+                           CATCallback       iCallBack );
+    // DisplayCircle
+    // ---------------------
+    //
+    HRESULT DisplayCircle();
+
+    // EditorClose
+    // -----------
+    // Enable the destruction of the command when the editor is closed
+    // and the command is always active.
+
+    void EditorClose          (CATCallbackEvent  iEvent,
+                           void             *iFrom,
+                           CATNotification  *iNotification,
+                           CATSubscriberData iData,
+                           CATCallback       iCallBack );
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAACafCircleWindowCmd(const CAACafCircleWindowCmd &amp;iObjectToCopy);
+
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAACafCircleWindowCmd &amp; operator = (const CAACafCircleWindowCmd &amp;iObjectToCopy);
+
+  private : 
+
+    CAT2DViewer * _p2DViewer ;
+
+    CAT2DBagRep * _pTheModelToDisplay ;
+
+    CAT2DCustomRep * _pCircleRep ;
+
+    CATBaseUnknown * _pIBUController ;
+
+    // To delete the command when the editor launching it is closed
+    CATFrmEditor      * _pEditor ;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../CAACafSpecTree.m/LocalInterfaces/CAACafCollapseExpandCmd.html">← 上一页: CAACafCollapseExpandCmd.h</a></div>
+        <div><a href="CAAECafVisuEllipse.html">下一页: CAAECafVisuEllipse.h →</a></div>
+    </div>
+</body>
+</html>

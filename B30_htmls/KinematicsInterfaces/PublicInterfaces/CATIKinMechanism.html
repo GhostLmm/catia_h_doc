@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinematicsInterfaces/PublicInterfaces/CATIKinMechanism.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KinematicsInterfaces/PublicInterfaces/CATIKinMechanism.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIKinJoint.html">← 上一页: CATIKinJoint.h</a></div>
+        <div><a href="CATIKinMechanismFactory.html">下一页: CATIKinMechanismFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIKinMechanism_H
+#define CATIKinMechanism_H
+//
+// COPYRIGHT DASSAULT SYSTEMES 2000
+//===================================================================
+// 
+// CATIKinMechanism.h
+//   This interface allows to get and set kinematics mechanism&#x27;s information.
+//
+//===================================================================
+//
+// Organization : dg/rddfl/mps/mam
+//
+// 09/12/03 :  UpdateAllJoints() method exposition - RKN
+//===================================================================
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;KinematicsItf.h&quot;
+#include &quot;CATKinDefs.h&quot;
+#include &quot;CATInterfaceObject.h&quot;
+#include &quot;CATListOfCATBaseUnknown.h&quot;
+
+class CATIKinJoint;
+class CATIKinCmd;
+class CATIProduct;
+class CATICkeParm;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByKinematicsItf IID IID_CATIKinMechanism;
+#else
+extern &quot;C&quot; const IID IID_CATIKinMechanism;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface to get and set mechanism&#x27;s information.
+ * &lt;b&gt;Role&lt;/b&gt;: A mechanism has a name and is composed of Joints, Commands and a fixed part.
+ * The state of the mechanism is represented by the values of its commands.
+ * The methods provided by this interface allow to access this information.
+ */
+
+class ExportedByKinematicsItf CATIKinMechanism : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+
+    /** 
+     * Creates a new joint in a mechanism.
+     * @param iJointType
+     *    The type of joint to create (the basic types are defined in CATKinDefs).
+     * @param iConnectorList
+     * &lt;table&gt; 
+     *    The list of elements on which the joint is created. The list of input elements connectors except for Rigid joint, which must be products. &lt;br&gt;
+     *    Here is the table of elements you have to give for each type of joint : &lt;br&gt;
+     *    e.g.: &quot;Line (1)&quot; means that the geometry type must be a line and must belong to the 1st product.&lt;br&gt;
+     * &lt;/table&gt; 
+     * &lt;table border&gt; 
+     * &lt;tr&gt; &lt;th&gt; Type &lt;/th&gt; &lt;th&gt; Element 1 &lt;/th&gt; &lt;th&gt; Element 2 &lt;/th&gt; &lt;th&gt; Element 3 &lt;/th&gt; &lt;th&gt; Element 4 &lt;/th&gt; &lt;th&gt; Element 5 &lt;/th&gt; &lt;th&gt; Element 6 &lt;/th&gt; &lt;th&gt; Element 7 &lt;/th&gt; &lt;th&gt; Element 8 &lt;/th&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Prismatic &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt;&lt;/tr&gt; 
+     * &lt;tr&gt; &lt;td&gt; Revolute &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Rigid &lt;/td&gt; &lt;td&gt; Product (1) &lt;/td&gt; &lt;td&gt; Product (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Spherical &lt;/td&gt; &lt;td&gt; Point (1) &lt;/td&gt; &lt;td&gt; Point (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Point Curve &lt;/td&gt; &lt;td&gt; Point (1) &lt;/td&gt; &lt;td&gt; Curve (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Slide Curve &lt;/td&gt; &lt;td&gt; Curve (1) &lt;/td&gt; &lt;td&gt; Curve (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Roll Curve &lt;/td&gt; &lt;td&gt; Curve (1) &lt;/td&gt; &lt;td&gt; Curve (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Cylindrical &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Screw &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Universal &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Line (1 or 2), optional &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; CV Joint &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Point-Surface &lt;/td&gt; &lt;td&gt; Point (1) &lt;/td&gt; &lt;td&gt; Surface (2) &lt;/td&gt; &lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Planar Surface &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt; &lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Gear Joint &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Rack Joint &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;tr&gt; &lt;td&gt; Cable Joint &lt;/td&gt; &lt;td&gt; Line (1) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (1) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt; &lt;td&gt; Line (2) &lt;/td&gt; &lt;td&gt; Line (3) &lt;/td&gt; &lt;td&gt; Plane (2) &lt;/td&gt; &lt;td&gt; Plane (3) &lt;/td&gt;&lt;/tr&gt;
+     * &lt;/table&gt; 
+     * &lt;b&gt;Notes :&lt;/b&gt;&lt;br&gt;
+     * &lt;dir&gt;
+     * &lt;li&gt;for Prismatic Joint : Plane 1 must contain Line 1 and Plane 2 must contain Line 2
+     * &lt;li&gt;for Revolute Joint : Line 1 must be normal to Plane 1 and Line 2 must be normal to Plane2
+     * &lt;li&gt;for Universal Joint : Connector 3 is the cross-pin axis. It must belong to product 1 or 2 and must be orthogonal to Line (1) or Line (2). &lt;b&gt;it is optional.&lt;/b&gt;
+     * &lt;li&gt;for CV Joint : the angle between Line (1) and Line (2) must be the same as the angle between Line (2) and Line (3)
+     * &lt;li&gt;for Gear Joint : it is seen as a Revolute joint between Product 1 and Product 3, and a Revolute joint between Product 2 and Product 3
+     * &lt;li&gt;for Rack Joint : it is seen as a Prismatic joint between Product 1 and Product 3, and a Revolute Joint between Product 2 and Product 3
+     * &lt;li&gt;for Cable Joint : it is seen as a Prismatic joint between Product 1 and Product 3, and a Prismatic Joint between Product 2 and Product 3
+     * &lt;/dir&gt;
+     * @param iCreateConstraints
+     *    The boolean to set to TRUE if you want to create the associated assembly constraints
+     *    and FALSE if not.
+     * @param oJoint
+     *    The created joint.
+     * @see CATLISTP(CATBaseUnknown), CATIKinJoint
+     */
+
+    virtual HRESULT __stdcall AddJoint (const char* iJointType,
+                                        CATLISTP(CATBaseUnknown)* iConnectorList,
+                                        boolean iCreateConstraints,
+                                        CATIKinJoint** oJoint) const=0;
+
+    /** 
+     * Returns the list of joints of the mechanism.
+     * @param oJointList
+     *    The list of joints (allocated by the method).
+     * @see CATLISTP(CATBaseUnknown)
+     */
+    virtual HRESULT __stdcall GetJointList (CATLISTP(CATBaseUnknown)** oJointList) const=0;
+
+    /** 
+     * Sets a new fixed product on mechanism.
+     * @param iFixedProduct
+     *    The fixed product. 
+     *    &lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; if iFixedProduct is NULL, the Fixed Product is unset.
+     * @param iCreateFixConstraint
+     *    The boolean to set to TRUE if you want to create the associated assembly fix constraint
+     *    and FALSE if not.
+     * @see CATIProduct
+     */
+    virtual HRESULT __stdcall SetFixedProduct (CATIProduct* iFixedProduct,
+                                               boolean iCreateFixConstraint) const=0;
+
+    /** 
+     * Returns the fixed product of the mechanism.
+     * @param oFixedProduct
+     *    The fixed product.
+     * @see CATIProduct
+     */
+    virtual HRESULT  __stdcall GetFixedProduct (CATIProduct** oFixedProduct) const=0;
+
+    /** 
+     * Returns the list of the products involved in the mechanism.
+     * @param oProductList
+     *    The list of products (allocated by the method).
+     * @see CATLISTP(CATBaseUnknown)
+     */
+    virtual HRESULT __stdcall GetProductList (CATLISTP(CATBaseUnknown)** oProductList) const=0;
+
+    /** 
+     * Creates a new command in a mechanism.
+     * @param iJoint
+     *    The joint supporting the command.
+     * @param iCmdType
+     *    The type of the command to create (the basic types are defined in CATKinDefs).
+     * @param oCmd
+     *    The created command.
+     * @see CATIKinJoint, CATIKinCmd
+     */
+    virtual HRESULT __stdcall AddCommand (CATIKinJoint* iJoint,
+                                          const char* iCmdType,
+                                          CATIKinCmd** oCmd) const=0;
+
+    /**
+     * Returns the list of commands of the mechanism.
+     * @param oCmdList
+     *    The list of commands (allocated by the method).
+     * @see CATLISTP(CATBaseUnknown)
+     */
+    virtual HRESULT __stdcall GetCmdList (CATLISTP(CATBaseUnknown)** oCmdlist) const=0;
+
+    /** 
+     * Returns the status of a mechanism.
+     * @param oDOFWithoutCmd
+     *    The degree of freedom without any command
+     * @param oDOFWithCmd
+     *    The degree of freedom with commands
+     * @param oSimulationReady
+     *    The boolean returning TRUE if the mechanism can be simulated and FALSE if not
+     */
+    virtual HRESULT __stdcall GetStatus (int* oDOFWithoutCmd,
+                                         int* oDOFWithCmd,
+                                         boolean *oSimulationReady) const=0;
+
+    /** 
+     * Returns the values of each command of the mechanism.
+     * @param oSize
+     *    The size of the list.
+     * @param oCmdValues
+     *    The list of values (allocated by the method).
+     */
+    virtual HRESULT __stdcall GetCmdValues (int* oSize, double** oCmdValues) const=0;
+
+    /** 
+     * Sets the values of each command of the mechanism and performs a solve with these values.
+     * &lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; to get the motion (displacement) of each product, use GetProductMotion
+     * @param iSize
+     *    The size of the list.
+     * @param iCmdValues
+     *    The list of values.
+     */
+    virtual HRESULT __stdcall SetCmdValues (int iSize, double* iCmdValues) const=0;
+
+    /** 
+     * Resets the values of each command of the mechanism to their initial position.
+     * &lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; to get the displacements of each product, use GetProductDisplacement
+     */
+    virtual HRESULT __stdcall ResetCmdValues () const=0;
+
+    /** 
+     * Gets the motion of one product after calling a Set or ResetCmdValues.
+     * &lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; the motion returned is always relative to the initial position
+     * @param iProduct
+     *    The product for which you want to know the motion
+     * @param oMotion
+     *    The motion of the product. The 12 double vector (allocated by the method) is set as following :
+     * &lt;dir&gt;
+     *  &lt;li&gt;Position 0 to 2  : the first column of the rotation matrix
+     *  &lt;li&gt;Position 3 to 5  : the second column of the rotation matrix
+     *  &lt;li&gt;Position 6 to 8 :  the third column of the rotation matrix
+     *  &lt;li&gt;Position 9 to 11 : the tranlsation vector
+     * &lt;/dir&gt;
+     */
+    virtual HRESULT __stdcall GetProductMotion (CATIProduct* iProduct,
+                                                double** oMotion) const=0;
+
+
+    /** Returns the time parameter of the mechanism.
+     * @param oTimeParameter
+     *    The time parameter.
+     * @see CATICkeParm
+     */
+    virtual HRESULT  __stdcall GetTimeParameter (CATICkeParm** oTimeParameter) const=0;
+
+
+    /** 
+     * Sets the values of the time parameter of the mechanism and performs a solve with these value (only if mechanism can be simulated with laws).
+     * &lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; to get the motion (displacement) of each product, use GetProductMotion
+     * @param iTimeParameter
+     *    The time parameter.
+     */
+    virtual HRESULT __stdcall SetTimeParameter (double iTimeParameter) const=0;
+
+    /** 
+     * Removes a joint in the mechanism .
+     * @param iJoint
+     *    The Joint to remove.
+     */
+    virtual HRESULT __stdcall RemoveJoint (CATIKinJoint * iJoint) const=0;
+
+    /** 
+     * Removes a command in the mechanism .
+     * @param iCommand
+     *    The Command to remove.
+     */
+    virtual HRESULT __stdcall RemoveCommand (CATIKinCmd * iCmd) const=0;
+
+    /** 
+     * Update all the mechanism joints.
+     */
+    virtual HRESULT __stdcall UpdateAllJoints () = 0;
+
+    /** 
+     * Reaches the command values in given number of steps and updates the visualization after each step.
+     * @param iSize
+     *    Number of commands in a mechanism
+     * @param iCmdValues
+     *    Array of target command values (position to achieve)
+     * @param inbSteps
+     *    Number of steps in witch the target command value is to be reached.  
+     * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;
+     *  &lt;dl&gt; &lt;dt&gt; inbSteps greater than 0 &lt;/dt&gt; &lt;dd&gt; Number of step must be greater than zero.
+     * @param oStepReached
+     *    Number of steps reached successfully. This values is equal to iSize if this method does not fail.
+     */
+    virtual HRESULT __stdcall SetCmdValuesWithMultiSteps (int     iSize, 
+                                                          double* iCmdValues, 
+                                                          int     inbSteps, 
+                                                          int     &amp;oStepReached)const= 0;
+
+ /**
+   * Sets the command value to zero for the given command without disturbing part positions.
+   * @param iCommand
+   *    The command to reset to zero
+   */
+  virtual HRESULT __stdcall ResetCmdValueToZero (CATIKinCmd * iCmd) const=0;
+
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIKinJoint.html">← 上一页: CATIKinJoint.h</a></div>
+        <div><a href="CATIKinMechanismFactory.html">下一页: CATIKinMechanismFactory.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATINamingContext.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATINamingContext.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATILinkableObject.html">← 上一页: CATILinkableObject.h</a></div>
+        <div><a href="CATINewDuplicate.html">下一页: CATINewDuplicate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/** @CAA2Required */
+//**********************************************************************
+//* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS *
+//* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME *
+//**********************************************************************
+
+#ifndef CATINamingContext_h
+#define CATINamingContext_h
+
+#include &quot;stringDef.h&quot;
+#include &quot;booleanDef.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;sequence_CATBaseUnknown_ptr.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CosLinkable.h&quot;
+#include &quot;CATDataType.h&quot;
+
+// ==================================================================================
+//    Usage :
+//        Services for objects naming and objects recover in context.
+//
+//        GetObject_B  -&gt; Recover an object relatively named to the context
+//                        by the &quot;binaryName&quot;
+//
+//
+//        GetRelativeName_B    -&gt; returns the relativeName to the context of &quot;object&quot;.  
+//                        &quot;context&quot; is a string to help self to localize &quot;object&quot; in it.
+//                        returns a null sequence if object cannot be named
+//                        contextually to self
+//
+//        CreateIndex  -&gt; create an index on all linkable objects contextual to self
+//                        to fasten the resolution
+//                        returns TRUE in case of success, FALSE in other cases
+//        UnsetIndex   -&gt; unset the index previously created.
+//
+// ==================================================================================
+class CATIBindParameters ;
+
+
+#include &quot;AD0XXBAS.h&quot;
+extern ExportedByAD0XXBAS IID IID_CATINamingContext ;
+
+class ExportedByAD0XXBAS CATINamingContext : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  virtual CATBaseUnknown* GetObject (char * const name, 
+				     CATIBindParameters*	params,
+				     const CATIdent interfaceID)=0 ;
+
+  virtual CATBaseUnknown* GetObject_B (const SEQUENCE(octet)&amp; binaryName, 
+				       CATIBindParameters* params,
+				       const CATIdent interfaceID)=0 ;
+
+  virtual SEQUENCE(CATBaseUnknown_ptr) ListNamedObjects (
+					 const CATIdent interfaceID)=0 ;
+
+  virtual CATLONG32 ListNamedObjectsHere (const CATIdent interfaceID,
+				     SEQUENCE(CATBaseUnknown_ptr)&amp; here)=0;
+
+  virtual SEQUENCE(octet) GetRelativeName_B   ( const CATBaseUnknown_var&amp; object 
+				               ,const CATUnicodeString&amp; context) = 0;
+  
+  virtual boolean  CreateIndex () = 0;
+  
+  virtual boolean  UnsetIndex  () = 0;
+  
+};
+
+// --------------------------------------------------------------------------
+//                             Handler
+// --------------------------------------------------------------------------
+
+CATDeclareHandler( CATINamingContext, CATBaseUnknown ) ;
+
+//
+// WARNING :
+// Some Naming Contexts can not list their named objects.
+// In that case the returned sequence is empty.
+//
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATILinkableObject.html">← 上一页: CATILinkableObject.h</a></div>
+        <div><a href="CATINewDuplicate.html">下一页: CATINewDuplicate.h →</a></div>
+    </div>
+</body>
+</html>

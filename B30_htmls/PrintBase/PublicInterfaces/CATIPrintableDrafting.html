@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintBase/PublicInterfaces/CATIPrintableDrafting.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PrintBase/PublicInterfaces/CATIPrintableDrafting.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrintable.html">← 上一页: CATIPrintable.h</a></div>
+        <div><a href="CATIPrintables.html">下一页: CATIPrintables.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPRINTABLEDRAFTING_H
+#define CATIPRINTABLEDRAFTING_H
+/**
+ * @quickReview PCD 02:06:10
+ * @fullreview NSI PCD 01:07:02
+ */
+
+// COPYRIGHT DASSAULT SYSTEMES 2001
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#include &quot;CATPrintBase.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATPrintBase IID IID_CATIPrintableDrafting;
+#else
+extern &quot;C&quot; const IID IID_CATIPrintableDrafting;
+#endif
+
+#include &quot;CATUnicodeString.h&quot;
+class CATPrintImage;
+
+/**
+ * Interface for printable objects.
+ */
+class ExportedByCATPrintBase CATIPrintableDrafting : public CATBaseUnknown
+{
+    CATDeclareInterface;
+
+public:
+
+/**
+ * Creates a CATPrintImage from the printable object.
+ * @param iClipToSheet
+ *   The state of the ClipToSheet button.
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; The created image corresponds to the whole drafting document.
+ * &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; The created image is restricted to the sheet size. Any object outside the sheet is discarded.
+ * &lt;dt&gt; &lt;tt&gt;2&lt;/tt&gt;  &lt;dd&gt; The created image is restricted to the defined print drafting area.
+ * &lt;/dl&gt;
+ * @return 
+ *   The image created.
+ */
+    virtual CATPrintImage* CreatePrintableImage( int iClipToSheet = 1 ) = 0;
+
+/**
+ * Clean the printable object environment.
+ * @return 
+ *   S_OK upon successful execution.
+*/
+    virtual HRESULT CleanPrintableImage( void ) = 0;
+
+/**
+ * Gets print image name.
+ * @param oImageName
+ *   The image name. 
+ * @return 
+ *   S_OK upon successful execution.
+ */
+    virtual HRESULT GetImageName( CATUnicodeString&amp; oImageName ) = 0;
+
+/**
+ * Gets print image size.
+ * @param oX
+ *   The x image position.
+ * @param oY
+ *   The y image position.
+ * @param oWidth
+ *   The width image.
+ * @param oHeight
+ *   The height image.
+ * @return 
+ *   S_OK upon successful execution.
+ */
+    virtual HRESULT GetImageSize( float&amp; oX, float&amp; oY, float&amp; oWidth, float&amp; oHeight ) = 0;
+
+/**
+ * Retrieves a 2D print area defined on a sheet. Fills a table allocated by the caller.
+ * Also communicates the activation state of the printing area.
+ * @param &lt;tt&gt;double * oAreaData&lt;/tt&gt;
+ * [out] A four double table describing the parameter of the area box:
+ * &lt;dl&gt;
+ * &lt;dt&gt; oAreaData[0] as the low x coordinate of the area.
+ * &lt;dt&gt; oAreaData[1] as the low y coordinate of the area.
+ * &lt;dt&gt; oAreaData[2] as the width of the area.
+ * &lt;dt&gt; oAreaData[3] as the heigth of the area.
+ * &lt;dt&gt; All the values in the table are given in mm.
+ * &lt;/dl&gt;
+ * @return
+ * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; A print area is defined on the sheet and it is currently activated. The data were successfully retrieved.
+ * &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; A print area is defined on the sheet and it is currently de-activated. The data were successfully retrieved.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No print area is defined on this sheet.
+ * &lt;/dl&gt;
+ */
+    virtual HRESULT GetPrintArea( double * oAreaData ) = 0;
+};
+
+CATDeclareHandler(CATIPrintableDrafting, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrintable.html">← 上一页: CATIPrintable.h</a></div>
+        <div><a href="CATIPrintables.html">下一页: CATIPrintables.h →</a></div>
+    </div>
+</body>
+</html>

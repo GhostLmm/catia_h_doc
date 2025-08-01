@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectSpecsLegacy/PublicInterfaces/CATSpecReplaceExt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectSpecsLegacy/PublicInterfaces/CATSpecReplaceExt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSpecPointing.html">← 上一页: CATSpecPointing.h</a></div>
+        <div><a href="CATSystemOleContentFormat.html">下一页: CATSystemOleContentFormat.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef __CATSpecReplaceExt_h__
+#define __CATSpecReplaceExt_h__
+
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+#include &quot;AC0SPBAS.h&quot;
+class CATListPtrIID;
+
+#include &quot;CATIReplace.h&quot;
+class CATUnicodeString;
+
+/**
+ * Base class to give implementation for CATIReplace.
+ * &lt;b&gt;usage:&lt;/b&gt; Only IsElementValidForReplace method needs to be overloaded.
+ * To subscribe to replace, this object also has to implement CATIAttrBehavior.
+ *
+ * @see CATIReplace, CATIAttrBehavior
+ */
+class ExportedByAC0SPBAS CATSpecReplaceExt : public CATIReplace
+{
+  CATDeclareClass;
+
+public:
+  
+  /**
+   * Constructs a CATSpecReplaceExt.	
+   */
+  CATSpecReplaceExt();
+  virtual ~CATSpecReplaceExt();
+  
+  /**
+   * Determine wether the candidate element is allowed to replace the existing one.
+   * @param iAttributeName
+   *        name of attribute which value has to be replace.
+   * @param iElement
+   *        candidate element for replace.
+   * @param oMessage
+   *        explains returned HRESULT.
+   *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *         &lt;br&gt;&lt;tt&gt;&quot;No adhesion to CATIAttrBehavior&quot;&lt;/tt&gt; if this doesn&#x27;t implement CATIAttrBehavior.
+   *         then rc is &lt;tt&gt; E_NOTIMPL &lt;/tt&gt;.
+   *        &lt;br&gt;&lt;tt&gt; &quot;Element is invalid &quot;&lt;/tt&gt; if element is invalid for replace, 
+   *         then rc is &lt;tt&gt; E_FAILED &lt;/tt&gt;.
+   * @param oElementValidity
+   * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: 
+   *     &lt;tt&gt; 0 if element is not valid &lt;/tt&gt;,
+   *     &lt;br&gt;&lt;tt&gt; 1 if element is valid &lt;/tt&gt;.
+   * @param iOldValue
+   *        position of the feature to replace if the attribute is a list.
+   * @return HRESULT
+   * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: 
+   *     &lt;tt&gt;  S_OK   &lt;/tt&gt;,
+   *     &lt;tt&gt;  E_FAIL  &lt;/tt&gt;,
+   *     &lt;tt&gt;  E_NOTIMPL &lt;/tt&gt;
+   */
+  virtual HRESULT IsElementValidForReplace(const CATUnicodeString &amp; iAttributeName, const CATBaseUnknown_var&amp; iElement,CATUnicodeString&amp; oMessage, int&amp; oElementValidity, const CATBaseUnknown_var&amp; iOldValue=NULL_var);
+
+  
+  /**
+   * Valuates a given attribute with an other object.
+   * @param iAttributeName
+   *        name of the attribute which value has to be replace.
+   * @param iElement
+   *        candidate element for replace.
+   * @param iOldValue
+   *        position of the feature to replace if the attribute is a list.
+   * @return HRESULT
+   * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: 
+   *     &lt;tt&gt;  S_OK   &lt;/tt&gt;,
+   *     &lt;tt&gt;  E_FAIL  &lt;/tt&gt;,
+   *     &lt;tt&gt;  E_NOTIMPL &lt;/tt&gt;
+   */
+  virtual HRESULT Replace(const CATUnicodeString &amp; iAttributeName, CATBaseUnknown_var&amp; new_element, const CATBaseUnknown_var&amp; old_value=NULL_var );
+
+protected:
+
+ /**
+  * Method to describe expected behavior on object valuating an attribute.
+  * Returns, for a given attribute, the expected behavior of its valuating objects.
+  * &lt;b&gt; Usage: &lt;/b&gt; 
+  * &lt;pre&gt;Output values must be valuated as follows :
+  *   oBehaviorArray = new CATListPtrIID[2];
+  *   oBehaviorArraySize = 2;
+  *   // Way #1.
+  *   CATListPtrIID subList (3);
+  *   subList[1] = &amp;IID_CATIHello;
+  *   subList[2] = &amp;IID_CATIBonjour;
+  *   subList[3] = &amp;IID_CATIBuenosDias;
+  *   oBehaviorArray[0] = subList;
+  *   // Way #2.
+  *   oBehaviorArray[1].Append(&amp;IID_CATIAufwiedersehen);
+  *   oBehaviorArray[1].Append(&amp;IID_CATIArrivederci);
+  * &lt;/pre&gt;
+  * &lt;pre&gt;To sum up: result = [ { CATIHello, CATIBonjour, CATIBuenosDias },
+  *                       { CATIAufwiedersehen, CATIArrivederci } ]
+  * &lt;/pre&gt;
+  * &lt;p&gt;The result will be translated as 
+  * ( CATIHello AND CATIBonjour AND CATIBuenosDias ) OR ( CATIAufwiedersehen AND CATIArrivederci ).&lt;/p&gt;
+  * @param iAttrName
+  *   name of the concerned attribute.
+  * @param oBehaviorArray
+  *   Array of lists of interfaces in the CATListPtrIID[] format.
+  *   &lt;br&gt;This list is a combination of interfaces that must be implemented by any object valuating the attribute.
+  * @param oBehaviorSize
+  *   The size of the array of lists of interfaces in the CATListPtrIID[] format.
+  */
+  virtual HRESULT GetRequestedBehavior(const CATUnicodeString &amp; iAttributeName, CATListPtrIID ** oBehaviorArray, int * oBehaviorSize);
+
+private:
+  CATSpecReplaceExt(const CATSpecReplaceExt &amp;); // Not implemented.
+  CATSpecReplaceExt &amp; operator=(const CATSpecReplaceExt &amp;); // Not implemented.
+};
+ 
+
+#endif // __CATSpecReplaceExt.h__
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSpecPointing.html">← 上一页: CATSpecPointing.h</a></div>
+        <div><a href="CATSystemOleContentFormat.html">下一页: CATSystemOleContentFormat.h →</a></div>
+    </div>
+</body>
+</html>

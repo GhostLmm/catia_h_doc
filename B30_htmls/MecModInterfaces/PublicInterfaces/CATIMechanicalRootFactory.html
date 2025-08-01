@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMechanicalRootFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMechanicalRootFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMechanicalProperties.html">← 上一页: CATIMechanicalProperties.h</a></div>
+        <div><a href="CATIMechanicalTool.html">下一页: CATIMechanicalTool.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMechanicalRootFactory_h
+#define CATIMechanicalRootFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATIMechanicalTool.h&quot;
+#include &quot;CATIPrtPart.h&quot;
+//#include &quot;CATIProduct.h&quot; 
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBoolean.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMechanicalRootFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIMechanicalRootFactory;
+#endif
+
+
+/**
+ * Interface to create mechanical bodies.
+ * &lt;b&gt;Role&lt;/b&gt;:This interface enables you to create MechanicalTool and 
+ * GSMTool features, both are mechanical features included into a Part document.
+ * &lt;ul&gt;
+ * &lt;li&gt;The &lt;b&gt;MechanicalTool&lt;/b&gt; feature&lt;/li&gt;
+ * &lt;p&gt;It is a solid body which is always aggregated by the MechanicalPart feature 
+ * (@href CATIPrtPart ). The &quot;&lt;tt&gt;PartBody&lt;/tt&gt;&quot; and all the &quot;&lt;tt&gt;Body&lt;/tt&gt;&quot; in the specification tree 
+ *  are MechanicalTool features. The two @href #CreatePRTTool methods enable you to create 
+ *  a MechanicalTool feature.&lt;/p&gt;
+ * &lt;li&gt;The &lt;b&gt;GSMTool&lt;/b&gt; feature &lt;/li&gt;
+ * &lt;p&gt;It is a surfacic body. Since V5R13, there are two types of GSMTool:&lt;/p&gt;
+ *  &lt;ul&gt;
+ *    &lt;li&gt;&lt;b&gt;Geometrical Set&lt;/b&gt;, the previous Open_Body&lt;/li&gt;
+ *     &lt;p&gt;Such a surfacic body can be aggregated by the MechanicalPart feature, 
+ *      a MechanicalTool feature, and a Geometrical Set feature. The @href CATIGSMTool#GetType 
+ *      method returns &lt;tt&gt;0&lt;/tt&gt;. The @href #CreateGeometricalSet method enables you to create 
+ *  a Geometrical Set feature.&lt;/p&gt;
+ *    &lt;li&gt;&lt;b&gt;Ordered Geometrical Set&lt;/b&gt;, a V5R13 novelty &lt;/li&gt;
+ *     &lt;p&gt;Such a surfacic body can be aggregated by the MechanicalPart feature, 
+ *      and  only an Ordered Geometrical Set feature. The @href CATIGSMTool#GetType 
+ *      method returns &lt;tt&gt;1&lt;/tt&gt;. The @href #CreateOrderedGeometricalSet method enables you to create 
+ *  an Ordered Geometrical Set feature.&lt;/p&gt;
+ *     &lt;p&gt;&lt;/p&gt;
+ *   &lt;/ul&gt;
+ * &lt;/ul&gt;
+ * Any method that tries to create a body disrespecting aggregation rules or the private status of the destination body will throw an exception.
+ * For example creating a MechanicalTool inside a MechanicalTool is not allowed. Likewise, creating a GSMTool inside a private
+ * GSMTool is not allowed. Refer to @href CATIGSMTool#SetPrivate or @href CATIGSMTool#IsPrivate methods.&lt;br&gt; &lt;br&gt;
+ * This interface is implemented by the specification container of the Part Document 
+ * that you retrieve by two means:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATIContainerOfDocument#GetSpecContainer &lt;/li&gt;
+ * &lt;li&gt;@href CATInit#GetRootContainer &lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+class ExportedByMecModItfCPP CATIMechanicalRootFactory: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+
+/**
+ * @nodoc.
+ */ 
+   virtual CATIMechanicalTool_var CreateMechanicalTool(const CATUnicodeString&amp; UserName ) = 0;
+
+/**
+ * @nodoc. 
+ */ 
+   virtual CATIPrtPart_var CreateMechanicalPart(const CATUnicodeString&amp; UserName = NULL_string,
+                                                CATBoolean TestExistence = TRUE) = 0;
+												
+/**
+ * Creates a MechanicalTool.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a MechanicalTool feature at the last 
+ * position inside the MechanicalPart feature (iDestination).
+ * @param iUserName
+ *  The user name of the MechanicalTool to be created.   If the string is empty, the name 
+ *  will be automatically computed. It is the concatenation of the NLS name of the 
+ * MechanicalTool feature and a number.
+ * @param iDestination
+ *  The unique possibility is the MechanicalPart feature of the Part Document. 
+ *  You retrieve this feature by 
+ * using  the @href CATIPrtContainer#GetPart method.
+ * @return
+ *  The created MechanicalTool .
+ */ 
+   virtual CATISpecObject_var CreatePRTTool(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination) = 0 ;
+
+/**
+ * Creates a MechanicalTool at a given position.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a MechanicalTool feature at a given 
+ * position inside the MechanicalPart feature (iDestination). 
+ * @param iUserName
+ *  The user name of the MechanicalTool created. If the string is empty, the name 
+ *  will be automatically computed. It is the concatenation of the NLS name of the 
+ * MechanicalTool feature and a number.
+ *  
+ * @param iDestination
+ *  The unique possibility is the MechanicalPart feature of the Part Document. 
+ *  You retrieve this feature by 
+ *  using  the @href CATIPrtContainer#GetPart method.
+ * @param iPosition
+ *   The position inside iDestination:
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;n = 0&lt;/b&gt;: the MechanicalTool is created at the last position &lt;/li&gt;
+ *   &lt;li&gt;&lt;b&gt;n &gt; 0&lt;/b&gt; or &lt;b&gt;n &lt;= iDestination size&lt;/b&gt;: the position of the MechanicalTool is equal to n+1 &lt;/li&gt;
+ *   &lt;li&gt;Otherwise: the MechanicalTool is not created&lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *  The created MechanicalTool.
+ */ 
+   virtual CATISpecObject_var CreatePRTTool(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination, 
+                                            int iPosition ) = 0 ;
+
+/**
+ * @nodoc
+ * Use CreateGeometricalSet. 
+ * Creates a GSMTool.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a GSMTool feature. The position of this new feature
+ * depends on the iDestination parameter:
+ * &lt;ul&gt;
+ * &lt;li&gt;It is the MechanicalPart feature&lt;/li&gt;
+ * &lt;br&gt;The new GSMTool feature is set at the last position inside the MechanicalPart feature
+ * &lt;li&gt;It is a GSMTool or a MechanicalTool feature&lt;/li&gt;
+ * &lt;br&gt;The new GSMTool feature is set after this feature. iDestination and the new feature have
+ * the same father.
+ * &lt;/ul&gt;
+ * @param iUserName
+ *  The user name of the GSMTool feature to be created.
+ * @param iDestination
+ * It can be:
+ * &lt;ul&gt;
+ * &lt;li&gt;The MechanicalPart feature. You retrieve this feature by 
+ *  using  the @href CATIPrtContainer#GetPart method.&lt;/li&gt;
+ * &lt;li&gt;a GSMTool feature&lt;/li&gt;
+ * &lt;li&gt;a MechanicalTool feature&lt;/li&gt;
+ * &lt;/ul&gt;
+ * @return
+ *  The created GSMTool .
+ */ 
+   virtual CATISpecObject_var CreateGSMTool(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination) = 0 ; 
+
+
+/**
+ * @nodoc
+ * Use CreateGeometricalSet. 
+ * Creates a GSMTool at a given position.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a GSMTool feature inside iDestination at the given position.
+ * @param iUserName
+ *  The user name of the GSMTool created.
+ * @param iDestination
+ *  The feature in which the returned GSMTool is created.It can be:
+ * &lt;ul&gt;
+ * &lt;li&gt;The MechanicalPart feature. You retrieve this feature by 
+ *  using  the @href CATIPrtContainer#GetPart method.&lt;/li&gt;
+ * &lt;li&gt;a GSMTool feature&lt;/li&gt;
+ * &lt;li&gt;a MechanicalTool feature&lt;/li&gt;
+ * &lt;/ul&gt;
+ * @param iPosition
+ *   The position inside iDestination:
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;n = 0&lt;/b&gt;: the GSMTool is created at the last position &lt;/li&gt;
+ *   &lt;li&gt;&lt;b&gt;n &gt; 0&lt;/b&gt; or &lt;b&gt;n &lt;= iDestination size&lt;/b&gt;: the position of the GSMTool is equal to n+1 &lt;/li&gt;
+ *   &lt;li&gt;Otherwise: the GSMTool is not created&lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *  The created GSMTool .
+ */ 
+   virtual CATISpecObject_var CreateGSMTool(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination,
+                                            int iPosition) = 0 ;
+   
+/**
+ * @nodoc
+ */
+   virtual HRESULT CreateToolBox(const CATUnicodeString&amp; iUserName,
+                                 const CATISpecObject_var&amp; ToolBox_father,
+                                 CATISpecObject_var&amp; ToolBox) = 0;
+
+
+/**
+ * Creates a Geometrical Set.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a Geometrical Set feature. It implements the
+ * @href CATIMmiNonOrderedGeometricalSet interface.
+ * @param iUserName
+ *  The user name of the created Geometrical Set. If the string is empty, the name 
+ *  will be automatically computed. It is the concatenation of the NLS name of the 
+ * Geometrical Set feature and a number.
+ * @param iDestination
+ * Depending on the &lt;tt&gt;iPosition&lt;/tt&gt; value, &lt;tt&gt;iDestination&lt;/tt&gt; can be either the 
+ *  feature aggregating the new Geometrical Set or the feature just before the new
+ * Geometrical Set.
+ * &lt;ul&gt;
+ * &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is an aggregating feature, it can be&lt;/li&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;The MechanicalPart feature. You retrieve this feature by 
+ * using  the @href CATIPrtContainer#GetPart method.&lt;/li&gt;
+ * &lt;li&gt;A Geometrical Set feature&lt;/li&gt;
+ * &lt;li&gt;A MechanicalTool feature&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; represents the feature just before the new Geometrical Set,
+ * it can be any Mechanical feature (except the MechanicalPart)&lt;/li&gt;
+ * &lt;/ul&gt;
+ * @param oGeomSet
+ *  The created Geometrical Set.
+ * @param iPosition
+ *   The position of the new Geometrical Set into the aggregating feature.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;&lt;tt&gt;iPosition&lt;/tt&gt; = -1 &lt;/b&gt;(the default value)
+ *   &lt;p&gt;&lt;/p&gt;
+ *     &lt;ul&gt;
+ *        &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is the MechanicalPart feature&lt;/li&gt;
+ *         &lt;p&gt;The new Geometrical Set feature is set at the last position inside the
+ *            MechanicalPart feature&lt;/p&gt;
+ *      &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is a Geometrical Set or a MechanicalTool feature&lt;/li&gt;
+ *         &lt;p&gt;The new Geometrical Set feature is set after this feature. 
+ *             &lt;tt&gt;iDestination&lt;/tt&gt; and the new feature have the same father &lt;/p&gt;             
+ *     &lt;/ul&gt;
+ *   &lt;li&gt;&lt;b&gt; 0 &lt;= &lt;tt&gt;iPosition&lt;/tt&gt;&lt;= &lt;tt&gt;iDestination&lt;/tt&gt; size&lt;/b&gt;&lt;/li&gt;
+ *   &lt;p&gt;The new Geometrical Set is created into &lt;tt&gt;iDestination&lt;/tt&gt;:&lt;/p&gt; 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;&lt;tt&gt;iPosition&lt;/tt&gt; = 0&lt;/b&gt;: At the last position inside &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ *   &lt;li&gt;&lt;b&gt;Otherwise&lt;/b&gt;: 
+ *       At the &lt;tt&gt;iPosition&lt;/tt&gt;+1 position inside &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ *                 
+ *    &lt;p&gt;&lt;/p&gt;
+ *    &lt;/ul&gt;
+ *   &lt;li&gt;&lt;b&gt;Otherwise&lt;/b&gt;: the Geometrical Set is not created&lt;/li&gt;
+ *   &lt;/ul&gt;
+ *
+ */ 
+   virtual HRESULT CreateGeometricalSet(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination,
+                                            CATISpecObject_var  &amp; oGeomSet,
+                                            int iPosition=-1 ) = 0 ;
+
+ /**
+ * Creates an Ordered Geometrical Set.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates an Ordered Geometrical Set feature. It implements the
+ * @href CATIMmiOrderedGeometricalSet interface.
+ * @param iUserName
+ *  The user name of the created Ordered Geometrical Set. If the string is empty, the name 
+ *  will be automatically computed. It is the concatenation of the NLS name of the 
+ * Ordered Geometrical Set feature and a number.
+ * @param iDestination
+ * Depending on the &lt;tt&gt;iPosition&lt;/tt&gt; value, &lt;tt&gt;iDestination&lt;/tt&gt; can be either the 
+ *  feature aggregating the new Ordered Geometrical Set or the feature just before the new
+ * Ordered Geometrical Set.
+ * &lt;ul&gt;
+ * &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is an aggregating feature, it can be&lt;/li&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;The MechanicalPart feature. You retrieve this feature by 
+ * using  the @href CATIPrtContainer#GetPart method.&lt;/li&gt;
+ * &lt;li&gt;An Ordered Geometrical Set feature&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; represents the feature just before the new Ordered Geometrical Set,
+ * it can be any Mechanical feature (except the MechanicalPart)&lt;/li&gt;
+ * &lt;/ul&gt;
+ * @param oOrderedGeomSet
+ *  The created Ordered Geometrical Set.
+ * @param iPosition
+ *   The position of the new Ordered Geometrical Set into the aggregating feature.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;&lt;tt&gt;iPosition&lt;/tt&gt; = -1 &lt;/b&gt;(the default value)
+ *   &lt;p&gt;&lt;/p&gt;
+ *     &lt;ul&gt;
+ *        &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is the MechanicalPart feature&lt;/li&gt;
+ *         &lt;p&gt;The new Ordered Geometrical Set feature is set at the last position inside the
+ *            MechanicalPart feature&lt;/p&gt;
+ *      &lt;li&gt;If &lt;tt&gt;iDestination&lt;/tt&gt; is an Ordered Geometrical Set&lt;/li&gt;
+ *         &lt;p&gt;The new Ordered Geometrical Set feature is set after this feature. 
+ *             &lt;tt&gt;iDestination&lt;/tt&gt; and the new feature have the same father &lt;/p&gt;             
+ *     &lt;/ul&gt;
+ *   &lt;li&gt;&lt;b&gt; 0 &lt;= &lt;tt&gt;iPosition&lt;/tt&gt;&lt;= &lt;tt&gt;iDestination&lt;/tt&gt; size&lt;/b&gt;&lt;/li&gt;
+ *   &lt;p&gt;The new Ordered Geometrical Set is created into &lt;tt&gt;iDestination&lt;/tt&gt;:&lt;/p&gt; 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;&lt;tt&gt;iPosition&lt;/tt&gt; = 0&lt;/b&gt;: At the last position inside &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ *   &lt;li&gt;&lt;b&gt;Otherwise&lt;/b&gt;: 
+ *       At the &lt;tt&gt;iPosition&lt;/tt&gt;+1 position inside &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ *                 
+ *    &lt;p&gt;&lt;/p&gt;
+ *    &lt;/ul&gt;
+ *   &lt;li&gt;&lt;b&gt;Otherwise&lt;/b&gt;: the Ordered Geometrical Set is not created&lt;/li&gt;
+ *   &lt;/ul&gt;
+ */ 
+   virtual HRESULT CreateOrderedGeometricalSet(const CATUnicodeString&amp; iUserName, 
+                                            const CATISpecObject_var&amp; iDestination,
+                                            CATISpecObject_var &amp; oOrderedGeomSet,
+                                            int iPosition=-1 ) = 0 ;
+   
+};
+
+CATDeclareHandler(CATIMechanicalRootFactory, CATBaseUnknown);
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMechanicalProperties.html">← 上一页: CATIMechanicalProperties.h</a></div>
+        <div><a href="CATIMechanicalTool.html">下一页: CATIMechanicalTool.h →</a></div>
+    </div>
+</body>
+</html>

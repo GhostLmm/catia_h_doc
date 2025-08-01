@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATDelegateInstanciationAdapter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATDelegateInstanciationAdapter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCkeListOfInterface.html">← 上一页: CATCkeListOfInterface.h</a></div>
+        <div><a href="CATGlobalFunctions.html">下一页: CATGlobalFunctions.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDelegateInstanciationAdapter_H
+#define CATDelegateInstanciationAdapter_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/** 
+* @CAA2Level L1
+* @CAA2Usage U2
+*/
+
+// Export Module 
+#include &quot;CATLifSpecs.h&quot;
+
+// inherit from
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIForwardsDecl.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATIDelegateInstanciation.h&quot;
+
+class CATInstanciationContext;
+
+/**   
+ * CAA2 Adapter to CATIDelegateInstanciation Interface.
+ * &lt;b&gt;Role&lt;/b&gt;: This class must be derived to implement  extension to CATIDelegateInstanciation.&lt;br&gt;
+ * CATIDelegateInstanciation is the interface used by Knowledgeware to instanciate objects.&lt;br&gt;
+ * @see CATIDelegateInstanciation
+ */
+class ExportedByCATLifSpecs CATDelegateInstanciationAdapter : public CATIDelegateInstanciation
+{
+public:
+
+   /** 
+    * Constructs the extension.
+    */ 
+    CATDelegateInstanciationAdapter();
+
+   /** 
+    * Deletes the extension.
+    */ 
+    virtual ~CATDelegateInstanciationAdapter();
+
+	/**
+	 * Creates an instance oInstanciated, of type typeName,
+	 * in owner iOwner, and named iKey.
+	 * default implementation returns E_FAIL.
+	 */
+	virtual HRESULT Instanciate( const CATIInstance_var &amp; iOwner, const CATUnicodeString &amp; iKey, const CATUnicodeString &amp; typeName, CATIInstance_var &amp; oInstanciated ) ;
+
+	/**
+	 * Creates an instance oInstanciated, of type typeName,
+	 * in owner iOwner, and named iKey.
+	 * default implementation calls Instanciate method.
+	 */
+	virtual HRESULT InstanciateObject( const CATIInstance_var&amp; iOwner, const CATUnicodeString&amp; iKey, const CATUnicodeString&amp; typeName, CATIInstance_var&amp; oInstanciated,const CATInstanciationContext *iContext ) ;
+ 
+ 
+private:
+ 
+  /**
+   * @nodoc
+   */
+   CATDelegateInstanciationAdapter(const CATDelegateInstanciationAdapter&amp;);
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCkeListOfInterface.html">← 上一页: CATCkeListOfInterface.h</a></div>
+        <div><a href="CATGlobalFunctions.html">下一页: CATGlobalFunctions.h →</a></div>
+    </div>
+</body>
+</html>

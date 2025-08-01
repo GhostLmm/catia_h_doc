@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketcherInterfaces/PublicInterfaces/CATI2DConstraintFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SketcherInterfaces/PublicInterfaces/CATI2DConstraintFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DConstraintAnalysis.html">← 上一页: CATI2DConstraintAnalysis.h</a></div>
+        <div><a href="CATI2DCstDiagnostic.html">下一页: CATI2DCstDiagnostic.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATI2DConstraintFactory_h
+#define CATI2DConstraintFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CAT2DCstType.h&quot;
+#include &quot;CATSketcherInterfaces.h&quot;
+
+class CATISpecObject_var;
+class CATIContainer_var;
+class CATListValCATBaseUnknown_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSketcherInterfaces IID IID_CATI2DConstraintFactory;
+#else
+extern &quot;C&quot; const IID IID_CATI2DConstraintFactory;
+#endif
+
+class ExportedByCATSketcherInterfaces CATI2DConstraintFactory : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  /**
+   * Creates a constraint.
+   * @param &lt;tt&gt;iElem1&lt;/tt&gt;
+   * [in] Address of the first geometrical element.
+   * @param &lt;tt&gt;iSelPt1&lt;/tt&gt;
+   * [in] If the geometry is a curve, pass the 2D selection coordinates of the curve
+   * expressed according to the sketch system of reference.
+	 * Else, pass NULL.
+	 * (This entry serves as the initialization point of the resolution. If no information is passed, 
+   * the system will evaluate one automatically. However, the returned solution (location where the 
+   * constraint on the curve will be solved) can be unexpected for the user).
+   * @param &lt;tt&gt;iElem2&lt;/tt&gt;
+   * [in] Address of the second geometrical element. 
+   * Pass NULL if necessary (e.g. for a length constraint, only iElem1 should be valuated).
+   * @param &lt;tt&gt;iSelPt2&lt;/tt&gt;
+   * [in] If the geometry is a curve, pass the 2D selection coordinates of the curve
+   * expressed according to the sketch system of reference.
+	 * Else, pass NULL.
+	 * (This entry serves as the initialization point of the resolution. If no information is passed, 
+   * the system will evaluate one automatically. However, the returned solution (location where the 
+   * constraint on the curve will be solved) can be unexpected for the user).
+   * @param &lt;tt&gt;iElem3&lt;/tt&gt;
+   * [in] Address of the third geometrical element. 
+   * Pass NULL if necessary.
+   * @param &lt;tt&gt;iSelPt3&lt;/tt&gt;
+   * [in] If the geometry is a curve, pass the 2D selection coordinates of the curve
+   * expressed according to the sketch system of reference.
+	 * Else, pass NULL.
+	 * (This entry serves as the initialization point of the resolution. If no information is passed, 
+   * the system will evaluate one automatically. However, the returned solution (location where the 
+   * constraint on the curve will be solved) can be unexpected for the user).
+   * @param &lt;tt&gt;iDirection&lt;/tt&gt;
+   * [in] Address of a geometrical element of the line type to create an oriented dimension.
+   * (e.g. vertical if the V direction of the sketch absolute axis is passed, or horizontal if the 
+   * H direction is passed).
+   * @param &lt;tt&gt;iCstType&lt;/tt&gt;
+   * [in] Type of the constraint to create.
+   * @param &lt;tt&gt;iDriven&lt;/tt&gt;
+   * [in] The default value 0 corresponds to a driving dimension. If &lt;&gt; 0, if will be a measured 
+   * dimension (reference constraint).
+   * @param &lt;tt&gt;iEvaluation&lt;/tt&gt;
+   * [in] The default value 1 implies a solver evaluation after the constraint is created. 
+   * If several constraints must be created successively, you can run explicitly a final evaluation by 
+   * setting the value to 0.
+   * @returns a handler on the created constraint.
+   */
+  virtual CATISpecObject_var CreateConstraint(CATBaseUnknown *iElem1, const double *iSelPt1,
+                                              CATBaseUnknown *iElem2, const double *iSelPt2,
+                                              CATBaseUnknown *iElem3, const double *iSelPt3,
+                                              CATBaseUnknown *iDirection,
+                                              const CAT2DCstType iCstType,
+                                              const int iDriven=0,const int iEvaluation=1) = 0;
+
+  /**
+   * @nodoc
+   */
+  virtual CATISpecObject_var CreateConstraint(CATBaseUnknown *iElem1, const double *iSelPt1,
+                                              CATBaseUnknown *iElem2, const double *iSelPt2,
+                                              CATBaseUnknown *iElem3, const double *iSelPt3,
+                                              CATBaseUnknown *iDirection,
+                                              const CATIContainer_var&amp; iContainer, 
+                                              const CAT2DCstType iCstType, 
+                                              const int driven=0,const int evaluation=1) = 0;
+
+  /**
+   * @nodoc
+   */
+  virtual CATISpecObject_var CreateConstraint(CATListValCATBaseUnknown_var iElem1, const double *iSelPt1,
+                                              CATListValCATBaseUnknown_var iElem2, const double *iSelPt2,
+                                              const CAT2DCstType iCstType, 
+                                              const int driven=0,const int evaluation=1) = 0;
+};
+
+CATDeclareHandler(CATI2DConstraintFactory,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DConstraintAnalysis.html">← 上一页: CATI2DConstraintAnalysis.h</a></div>
+        <div><a href="CATI2DCstDiagnostic.html">下一页: CATI2DCstDiagnostic.h →</a></div>
+    </div>
+</body>
+</html>

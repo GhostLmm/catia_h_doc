@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSNInteroperability/PublicInterfaces/CATVPMServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PSNInteroperability/PublicInterfaces/CATVPMServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVPMExecService.html">← 上一页: CATVPMExecService.h</a></div>
+        <div><a href="../../PartDesignDataImport/PublicInterfaces/CATExtIExchangeOutputDocument.html">下一页: CATExtIExchangeOutputDocument.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATVPMServices__H
+#define CATVPMServices__H
+
+// COPYRIGHT DASSAULT SYSTEMES  2005
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CATPinServices.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+class CATDocument;
+class CATUnicodeString;
+class CATIDocId;
+
+
+
+/**
+  * Class for VPM document services.
+  * &lt;b&gt;Role:&lt;/b&gt;This class delivers services to be used with ENOVIAvpm
+  *&lt;ul&gt;
+  * &lt;li&gt; @href CATVPMServices#SetPDMProperties : Set the PDM properties of a document.
+  * &lt;li&gt; @href CATPDMServices#SaveAsInVPM : SaveAs of a document in VPM database.
+  *&lt;/ul&gt;
+  */
+
+
+class ExportedByCATPinServices CATVPMServices
+{
+  public:
+
+  enum VaultMode
+  {
+    PermanentBlackBox   = 1,
+    VolatileExposed    = 4
+  };
+
+  enum Env
+  {
+    File=0,
+    VPM1=1
+  };
+
+  enum SaveAsMode
+  {
+    ReplaceByTarget=0,
+    KeepModified=1,
+    ReloadFromSource=2
+  };
+
+/**
+* Set the PDM properties of a document for ENOVIAvpm V4.
+*
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method sets the PDM properties for ENOVIAvpm V4 of a document loaded in session.
+* It sets the environment type and the exposition mode of a document.
+* This method is intended to be used on a filebase document that will be saved in ENOVIAvpm V4.
+* This method has the same effect as the &quot;Set PDM Properties&quot; interactive CATIA menu.
+*&lt;br&gt; 
+* The &lt;tt&gt;VPM1&lt;/tt&gt; environment is dedicated to ENOVIAvpm V4. 
+* For this environment, two expositions modes are available as &lt;tt&gt;VaultMode&lt;/tt&gt;:
+*   &lt;sl&gt;
+*     &lt;li&gt;the Publications Exposed mode (&lt;tt&gt;PermanentBlackBox&lt;/tt&gt;) &lt;/li&gt;
+*     &lt;li&gt;the Structure Exploded mode (&lt;tt&gt;VolatileExposed&lt;/tt&gt;)&lt;/li&gt;
+*   &lt;/sl&gt;
+*&lt;p&gt;
+* The rules for setting the environment type and the exposition mode of a document are:
+* &lt;ul&gt;
+* &lt;li&gt;if VaultMode is set to &lt;tt&gt;PermanentBlackBox&lt;/tt&gt;, 
+*           the exposition mode is propagated to the children of the structure in session &lt;/li&gt;
+* &lt;li&gt;if VaultMode is set to &lt;tt&gt;VolatileExposed&lt;/tt&gt;, 
+*           the exposition mode is not propagated to the children &lt;/li&gt;
+* &lt;li&gt;it is not possible to set &lt;tt&gt;VolatileExposed&lt;/tt&gt; on a document if this document has already a 
+*         pointing document in Publication Exposed mode &lt;/li&gt;
+* &lt;li&gt;if the document comes from ENOVIAvpm V4 database:
+*   &lt;ul&gt;
+*     &lt;li&gt;its PDM exposition mode can&#x27;t be modified &lt;/li&gt;
+*     &lt;li&gt;its PDM environment can&#x27;t be changed to File &lt;/li&gt;
+*   &lt;/ul&gt;
+* &lt;/ul&gt;
+* &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;Only CATProduct type document supports the Structure Exploded mode.
+**
+*&lt;p&gt;If needed, your Imakefile.mk should include the module: &lt;b&gt;&lt;b&gt;CATPinServices&lt;/b&gt;&lt;/b&gt; &lt;/p&gt;
+*&lt;p&gt;
+* @param iDoc
+*    the document on which we set the PDM properties
+* @param iDocEnv
+*    the environment type to set to the document:
+*     &lt;sl&gt;
+*     &lt;li&gt;&lt;tt&gt;File&lt;/tt&gt; for filebased environment&lt;/li&gt;
+*     &lt;li&gt;&lt;tt&gt;VPM1&lt;/tt&gt; for ENOVIAvpm V4 environment&lt;/li&gt;
+*     &lt;/sl&gt;
+* @param iVaultMode
+*    the exposition mode for &lt;tt&gt;VPM1&lt;/tt&gt; environment only:
+*     &lt;sl&gt;
+*     &lt;li&gt;&lt;tt&gt;PermanentBlackBox&lt;/tt&gt; for Publications Exposed&lt;/li&gt;
+*     &lt;li&gt;&lt;tt&gt;VolatileExposed&lt;/tt&gt; for Structure Exploded &lt;/li&gt;
+*     &lt;/sl&gt; 
+*
+* @return
+*   &lt;ul&gt;
+*   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: The PDM properties has been successfuly set&lt;/li&gt; 
+*   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: incompatible input parameters&lt;/li&gt; 
+*   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: the method failed&lt;/li&gt; 
+*   &lt;/ul&gt;
+*/
+ static HRESULT SetPDMProperties (CATDocument *iDoc, Env iDocEnv, VaultMode iVaultMode);
+
+
+/**
+* SaveAs of a document in ENOVIAvpm V4 .
+*
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method allows save an ENOVIAvpm V4 document loaded in session by replacing 
+* an existing document in the ENOVIAvpm V4 database.
+* This method has the same effect as the &quot;Extract&amp;Save&quot; menu in ENOVIAvpm V4 client application. 
+* It proposes three similar modes for save: 
+*     &lt;sl&gt;
+*	  &lt;li&gt;&quot;Replace by target&quot; : this mode creates a new document in VPM and 
+*        replaces the modified document in the session by the new one. 
+*        All links are rerouted to the new document.
+*   &lt;li&gt;&quot;Keep Modified&quot; : this mode creates a new document in VPM and 
+*        keeps all the modification in the original part in the CATIA Session&lt;/li&gt;
+*   &lt;li&gt;&quot;Reload From Source&quot; : this mode creates a new document in VPM and 
+*        replaces the modified document in the session by the original version in the database.
+*        All links pointing to the replaced document will be rerouted if possible.
+*        If not, the corresponding links are broken.
+*     &lt;/sl&gt;
+*&lt;p&gt; If ENOVIAvpm application is VX0SERV : the commit in database is not done.  
+*&lt;p&gt; If ENOVIAvpm application is VX0VPM : the commit in database is done.  
+*&lt;p&gt;If needed, your Imakefile.mk should include the module: &lt;b&gt;&lt;b&gt;CATPinServices&lt;/b&gt;&lt;/b&gt; &lt;/p&gt;
+*&lt;p&gt;
+* @param iDoc
+*    the document to save
+*
+* @param iCoid
+*    the Coid of the document to overwrite (Hexadecimal 16 crc long)
+*
+* @param iCompid
+*    the Compid of the document to overwrite (Hexadecimal 16 crc long)
+*
+* @param iCatenv
+*    the VPM environment name of the document (8 crc long)
+*&lt;br&gt;For instance: &lt;tt&gt;&quot;VPMENV  &quot;&lt;/tt&gt;
+*
+* @param iCatab
+*    the VPM DOCUMENT table name (18 crc long)
+*&lt;br&gt;For instance: &lt;tt&gt;&quot;DOCUMENT          &quot;&lt;/tt&gt;
+*
+* @param iCnxString
+*    &lt;i&gt;(optional)&lt;/i&gt; The connection string of the entity in VPM.
+*
+* &lt;br&gt;
+* @param iSaveMode
+*     &lt;sl&gt;
+*     &lt;li&gt;&lt;tt&gt;ReplaceByTarget&lt;/tt&gt; Replace &lt;/li&gt;
+*     &lt;li&gt;&lt;tt&gt;KeepModified&lt;/tt&gt; Keep Modified &lt;/li&gt;
+*     &lt;li&gt;&lt;tt&gt;ReloadFromSource&lt;/tt&gt; Reload original version &lt;/li&gt;
+*     &lt;/sl&gt;
+*
+* @return
+*   &lt;ul&gt;
+*   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: The SaveAs has been successfuly executed&lt;/li&gt; 
+*   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: the method failed&lt;/li&gt; 
+*   &lt;li&gt;&lt;tt&gt;E_INVALIDARG&lt;/tt&gt;: one of the input arguments is incorrect&lt;/li&gt; 
+*   &lt;/ul&gt;
+*/
+
+ static HRESULT SaveAsInVPM (CATDocument *iDoc,
+                             const CATUnicodeString &amp;iCoid,
+                             const CATUnicodeString &amp;iCompid,
+                             const CATUnicodeString &amp;iCatenv,
+                             const CATUnicodeString &amp;iCatab,
+                             const CATUnicodeString &amp;iCnxString,
+                             SaveAsMode iSaveMode);
+
+
+};
+
+#endif
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVPMExecService.html">← 上一页: CATVPMExecService.h</a></div>
+        <div><a href="../../PartDesignDataImport/PublicInterfaces/CATExtIExchangeOutputDocument.html">下一页: CATExtIExchangeOutputDocument.h →</a></div>
+    </div>
+</body>
+</html>

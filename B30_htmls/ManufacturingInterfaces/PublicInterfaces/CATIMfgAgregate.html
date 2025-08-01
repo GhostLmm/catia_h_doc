@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgAgregate.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgAgregate.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgActivityWorkpiecePosition.html">← 上一页: CATIMfgActivityWorkpiecePosition.h</a></div>
+        <div><a href="CATIMfgApplicativeWorkbench.html">下一页: CATIMfgApplicativeWorkbench.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  1997
+//=============================================================================
+
+#ifndef CATIMfgAgregate_H
+#define CATIMfgAgregate_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgAgregate;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgAgregate;
+#endif
+
+/**
+* Interface to manage manufacturing aggregate.&lt;br&gt;
+* The aggregate contains many elements that can be sorted according to their types.&lt;br&gt;
+* The type of the elements is the name of an interface that all these elements implement.&lt;br&gt;
+*/
+
+class ExportedByMfgItfEnv CATIMfgAgregate : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+public:
+
+  /**
+  * Returns the count of elements of a given type in the aggregate.
+  * @param intfName
+  *      The name of an interface describing the type of the elements 
+  * @return
+  *      The number of elements of the given type
+  */
+  virtual long                GetNumberOfElements  (CATClassId intfName=0) = 0;
+
+  /**
+  * Returns list of the elements of a given type in the aggregate.
+  * @param intfName
+  *      The name of an interface describing the type of the elements 
+  * @return
+  *      The list of the elements of the given type
+  */
+  virtual CATListValCATBaseUnknown_var* GetAllElements (CATClassId intfName=0) = 0;
+
+  /**
+  * Returns the element of a given type and for a given position in the aggregate.
+  * @param iPosition 
+  *        The position of the element in the agregate
+  * @param intfName 
+  *        The name of an interface describing the type of the elements 
+  * @return
+  *      The element of the given type and the given position in the aggregate
+  */
+  virtual CATBaseUnknown_var  GetElement           (long iPosition, CATClassId intfName=0) = 0;
+
+  /**
+  * Adds an element in the aggregate.
+  * @param iMember
+  *     The element to add
+  * @param iNotify  
+  *       The flag to indicate whether an event is sent. 
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual void                AddElement           (const CATBaseUnknown_var&amp; iMember, int iNotify=1) = 0;
+
+  /**
+  * Removes an element in the aggregate.
+  * @param iMember
+  *     The element to remove
+  * @param iNotify  
+  *       The flag to indicate whether an event is sent.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual void                RemoveElement        (const CATBaseUnknown_var&amp; iMember, int iNotify=1) = 0;
+
+  /**
+  * Removes all elements in the aggregate.
+  * @param iNotify
+  *       The flag to indicate whether an event is sent. 
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual void                RemoveAll            (int iNotify=1) = 0;
+
+  /**
+  * Moves an element in the aggregate. 
+  * @param iMember 
+  *     The element to move in the aggregate
+  * @param iNewPosition 
+  *     The new position of the element in the aggregate
+  * @param iNotify  
+  *       The flag to indicate whether an event is sent.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual void                ChangePosition       (const CATBaseUnknown_var&amp; iMember, int iNewPosition, int iNotify=1) = 0;
+
+  /**
+  * Sets the first element in the aggregate as current element.
+  */
+  virtual void                Beginning            () = 0;
+
+  /**
+  * Sets the last element in the aggregate as current element.
+  */
+  virtual void                End                  () = 0;
+
+  /**
+  * Sets the next element of a given type in the aggregate as current element.
+  * @param intfName 
+  *        The name of an interface describing the type of the elements  
+  * @return
+  *         The position of the element in the aggregate.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 0 : no next element in the aggregate
+  *  &lt;li&gt; other value : position of the next element in the aggregate&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual int                 Next                 (CATClassId intfName=0) = 0;
+
+  /**
+  * Sets the previous element of a given type in the aggregate as current element.
+  * @param intfName 
+  *        The name of an interface describing the type of the elements  
+  * @return
+  *        The position of the element in the aggregate.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 0 : no previous element in the aggregate
+  *  &lt;li&gt; other value : position of the previous element in the aggregate&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual int                 Previous             (CATClassId intfName=0) = 0;
+
+  /**
+  * Returns the current element in the aggregate.
+  */
+  virtual CATBaseUnknown_var  GetCurrent           () = 0;
+
+  /**
+  * Set an element as the current element in the aggregate.
+  * @param iMember 
+  *          The element to set as current element
+  * @return
+  *          The position of the element in the aggregate.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 0 : element not found in the aggregate
+  *  &lt;li&gt; other value : position of the element in the aggregate&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual int		          SetCurrent           (const CATBaseUnknown_var&amp; iMember) = 0;
+
+  /**
+  * Inserts an element before the current element in the aggregate. 
+  * @param iMember 
+  *       The element to insert 
+  * @param iNotify  
+  *       The flag to indicate whether an event is sent.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  * @return
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 0 : insertion has failed
+  *  &lt;li&gt; other value : position of the inserted element in the aggregate&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual int		      InsertBefore         (const CATBaseUnknown_var&amp; iMember, int iNotify=1) = 0;
+
+  /**
+  * Inserts an element after the current element in the aggregate. 
+  * @param iMember 
+  *       The element to insert 
+  * @param iNotify  
+  *       The flag to indicate whether an event is sent.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 1 : an event is sent to notify the change&lt;/li&gt;
+  *  &lt;li&gt; other value : no event sent&lt;/li&gt;
+  *  &lt;/ul&gt;
+  * @return
+  *  The position of the element in the aggregate.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;ul&gt;
+  *  &lt;li&gt; = 0 : insertion has failed
+  *  &lt;li&gt; other value : position of the inserted element in the aggregate&lt;/li&gt;
+  *  &lt;/ul&gt;
+  */
+  virtual int		      InsertAfter          (const CATBaseUnknown_var&amp; iMember, int iNotify=1) = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATUnicodeString GetName() = 0;
+
+};
+
+CATDeclareHandler( CATIMfgAgregate, CATBaseUnknown) ;
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgActivityWorkpiecePosition.html">← 上一页: CATIMfgActivityWorkpiecePosition.h</a></div>
+        <div><a href="CATIMfgApplicativeWorkbench.html">下一页: CATIMfgApplicativeWorkbench.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATISAXEntityResolver.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATISAXEntityResolver.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXDocumentHandler.html">← 上一页: CATISAXDocumentHandler.h</a></div>
+        <div><a href="CATISAXErrorHandler.html">下一页: CATISAXErrorHandler.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#ifndef CATISAXEntityResolver_h
+#define CATISAXEntityResolver_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+class CATISAXInputSource_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATISAXEntityResolver;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATISAXEntityResolver ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface for resolving entities.
+ *
+ * &lt;p&gt;If a SAX application needs to implement customized handling
+ * for external entities, it must implement this interface and
+ * register an instance with the SAX parser using 
+ * the parser @href CATISAXParser#SetEntityResolver method @href .&lt;/p&gt;
+ *
+ * &lt;p&gt;The parser will then allow the application to intercept any
+ * external entities (including the external DTD subset and external
+ * parameter entities, if any) before including them.&lt;/p&gt;
+ *
+ * &lt;p&gt;Many SAX applications will not need to implement this interface,
+ * but it will be especially useful for applications that build
+ * XML documents from databases or other specialised input sources,
+ * or for applications that use URI types other than URLs.&lt;/p&gt;
+ *
+ * &lt;p&gt;The following resolver would provide the application
+ * with a special character stream for the entity with the system
+ * identifier &quot;http://www.myhost.com/today&quot;:&lt;/p&gt;
+ *
+ *&lt;pre&gt;
+ *
+ * #include &quot;CATISAXEntityResolver.h&quot;
+ * #include &quot;CATISAXInputSource.h&quot;
+ *	
+ * class MyResolver : public CATBaseUnknown {
+ *     public:
+ *         HRESULT ResolveEntity (
+ *             const CATUnicodeString &amp; iPublicId, 
+ *             const CATUnicodeString &amp; iSystemId, 
+ *             CATISAXInputSource *&amp; oInputSource);
+ *         ...
+ * };
+ * 
+ * // Declaration of the class as a CNext implementation class.
+ * CATImplementClass( MyResolver, Implementation, CATBaseUnknown, CATnull );
+ * 
+ * // Implement the CATISAXEntityResolver interface.
+ * #include &quot;TIE_CATISAXEntityResolver.h&quot;
+ * TIE_CATISAXEntityResolver( MyResolver );
+ * 
+ * 
+ * HRESULT MyResolver::ResolveEntity (
+ *     const CATUnicodeString &amp; iPublicId, 
+ *     const CATUnicodeString &amp; iSystemId, 
+ *     CATISAXInputSource *&amp; oInputSource) {
+ * 
+ *     HRESULT hr = E_FAIL;
+ *     oInputSource = NULL;
+ *     if (iSystemId == &quot;http://www.myhost.com/today&quot;) {
+ *         hr = CATISAXInputSourceFactory::CreateURLInputSource(iSystemId, oInputSource);
+ *     }
+ *     return hr;
+ * }
+ *
+ *&lt;/pre&gt;
+ *
+ * &lt;p&gt;The application can also use this interface to redirect system
+ * identifiers to local URIs or to look up replacements in a catalog
+ * (possibly by using the public identifier).&lt;/p&gt;
+ *
+ * &lt;p&gt;The @href CATSAXHandlerBase class implements the default behaviour for
+ * this interface, which is simply always to return &lt;tt&gt;NULL&lt;/tt&gt; (to request
+ * that the parser use the default system identifier).&lt;/p&gt;
+ *
+ * @see CATISAXInputSource, CATSAXHandlerBase, CATISAXParser#SetEntityResolver
+ */
+class ExportedByXMLParserItf CATISAXEntityResolver: public CATBaseUnknown {
+	CATDeclareInterface;
+	
+	public:
+		
+		/**
+		 * Allows the application to resolve external entities.
+		 *
+		 * &lt;p&gt;The @href CATISAXParser will call this method before opening any external
+		 * entity except the top-level document entity (including the
+		 * external DTD subset, external entities referenced within the
+		 * DTD, and external entities referenced within the document
+		 * element): the application may request that the parser resolve
+		 * the entity itself, that it use an alternative URI, or that it
+		 * use an entirely different input source.&lt;/p&gt;
+		 *
+		 * &lt;p&gt;Application writers can use this method to redirect external
+		 * system identifiers to secure and/or local URIs, to look up
+		 * public identifiers in a catalogue, or to read an entity from a
+		 * database or other input source (including, for example, a dialog
+		 * box).&lt;/p&gt;
+		 *
+		 * &lt;p&gt;If the system identifier is a URL, the SAX parser must
+		 * resolve it fully before reporting it to the application.&lt;/p&gt;
+		 *
+		 * @param iPublicId 
+		 * The public identifier of the external entity being referenced 
+		 * (can be an empty @href CATUnicodeString if no public identifier was given).
+		 * @param iSystemId 
+		 * The system identifier of the external entity being referenced.
+		 * @param oInputSource
+		 * An InputSource object describing the new input source,
+		 *         or &lt;tt&gt;NULL&lt;/tt&gt; to request that the parser open a regular
+		 *         URI connection to the system identifier.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXIOException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2001&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an I/O error occurs, possibly the result of creating a new @href CATISAXInputSource
+		 * the method can raise this error.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATISAXInputSource
+		 */
+		virtual HRESULT ResolveEntity(
+			const CATUnicodeString &amp; iPublicId, 
+			const CATUnicodeString &amp; iSystemId, 
+			CATISAXInputSource_var&amp; oInputSource) = 0;
+	
+};
+CATDeclareHandler(CATISAXEntityResolver, CATBaseUnknown);
+
+
+#endif // CATISAXEntityResolver_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXDocumentHandler.html">← 上一页: CATISAXDocumentHandler.h</a></div>
+        <div><a href="CATISAXErrorHandler.html">下一页: CATISAXErrorHandler.h →</a></div>
+    </div>
+</body>
+</html>

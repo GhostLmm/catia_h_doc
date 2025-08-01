@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImageAgent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImageAgent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamImage.html">← 上一页: CATISamImage.h</a></div>
+        <div><a href="CATISamImageAttributes.html">下一页: CATISamImageAttributes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamImageAgent_H
+#define CATISamImageAgent_H
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+//
+// CATISamImageAgent : interface designed to manage &quot;images&quot; animation
+//
+//=============================================================================
+// Octobre 2001 Creation
+//=============================================================================
+
+/**
+  * @CAA2Level L0
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATSamVisuUUID.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISamImageAgent;
+
+/**
+ * Analysis Images animation agent.
+ * &lt;b&gt;Role: Provides services to animate &lt;/b&gt; Analysis &lt;i&gt;Images&lt;/i&gt;.
+ */ 
+
+enum CATSamAnimationMode
+{
+  /* Interpolated frames mode */
+  CATSamAnimationMode_Interpolation,
+  /* Multi-occurrences frames mode, recompute limits for each frame */
+  CATSamAnimationMode_MultiOccurrences,
+  /* Memorized multi-occurrences frames mode, compute limits for all frames before start animation */
+  CATSamAnimationMode_MultiOccurrencesBufferized
+};
+
+class ExportedByCATSamVisuUUID CATISamImageAgent : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+  
+  /**
+    * To be called before start animation
+    */
+  virtual HRESULT Init (  ) = 0;
+
+  /**
+    * To be called at end of animation, to restore the image in its initial state
+    */
+  virtual HRESULT Clean (  ) = 0;
+
+  /**
+    * Return the number of frames animation
+    * @param oNbFrames
+    * In case of interpolation mode, will return the interpolation fluidity
+    * In case of multi-occurences mode, it will return the number of occurrences
+    */
+  virtual HRESULT GetNbFrames ( int &amp; oNbFrames ) = 0;
+
+  /**
+    * Set the current animation frame
+    * @param iCurrentFrame
+    * The current frame to display
+    */
+  virtual HRESULT SetCurrentFrame ( const int iCurrentFrame ) = 0;
+
+  /**
+    * Set the animation mode
+    * @param iMode
+    * Animation mode specifies the mode of animation, by interpolation or by multi-occurrences
+    */
+  virtual HRESULT SetMode ( const CATSamAnimationMode iMode ) = 0;
+
+  /**
+    * Set the interpolation fluidity
+    * @param iFluidity
+    * This will correpond to the number of frames in case of interpolation animation
+    */
+  virtual HRESULT SetInterpolationFluidity ( const int iFluidity ) = 0;
+
+  /**
+    * Display the the animation frame
+    */
+  virtual HRESULT Apply ( ) = 0;
+};
+
+CATDeclareHandler(CATISamImageAgent, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamImage.html">← 上一页: CATISamImage.h</a></div>
+        <div><a href="CATISamImageAttributes.html">下一页: CATISamImageAttributes.h →</a></div>
+    </div>
+</body>
+</html>

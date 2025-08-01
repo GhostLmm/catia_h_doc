@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIBRepAccess.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIBRepAccess.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI3DGeometricalElement.html">← 上一页: CATI3DGeometricalElement.h</a></div>
+        <div><a href="CATIBasicTool.html">下一页: CATIBasicTool.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIBRepAccess_h
+#define CATIBRepAccess_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATMfBRepDefs.h&quot;
+#include &quot;CATMfBRepInternalDefs.h&quot;
+#include &quot;CATILinkableObject.h&quot;
+
+//#include &quot;CATISpecObject.h&quot;
+#include &quot;CATIGeometricalElement.h&quot; // A migrer sur CATISpecObject ---&gt; Attention impact Compil !! signature CATIRSur.h(59) et CATIREdge.h(64) a changer plus clients qui ont oublie de faire l&#x27;include
+
+#include &quot;CATLISTP_Declare.h&quot;
+
+#include &quot;CATListOfCATIBRepAccess.h&quot;
+
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATCORBABoolean.h&quot;
+#include &quot;MecModItfCPP.h&quot;
+
+class CATListPtrCATBrpObject;
+class CATListPtrCATBrpScope;
+
+class CATUnicodeString;
+class CATISpecObject_var;
+class CATCell_var;
+#if defined(CATIAV5R25) || defined(CATIAR417)
+class CATTopology_var;
+#endif
+class CATBody_var;
+class CATBrpObject;
+class CATBrpScope;
+class CATReportSelect;
+class CATNamingReference;
+class CATIBRepAccess_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIBRepAccess;
+#else
+extern &quot;C&quot; const IID IID_CATIBRepAccess;
+#endif
+
+/**
+* Interface to manage a selecting object.
+* The selecting objects:
+* &lt;br&gt; @ref CATIRSur, @ref CATIBorderREdge, @ref CATIWireREdge and @ref CATIBorderFVertex
+* are directely named in the generic naming graph.
+* &lt;br&gt;The selecting objects:
+* @ref CATIREdge @ref CATIFVertex and @ref CATIWireFVertex
+* are identified by a list of objects in the generic naming graph.
+* @see CATIMfBRepFactory, CATIFeaturize, CATIMfProcReport
+*/
+class ExportedByMecModItfCPP CATIBRepAccess: public CATILinkableObject
+{
+  CATDeclareInterface;
+
+public: 
+
+  /**
+  * Creates the extended label.
+  * @param iFeature
+  * Support feature.
+  * @param iBRepType
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;MfRelimited&lt;/tt&gt;, &lt;tt&gt;MfFunctional&lt;/tt&gt;.
+  * @exception @href CATError
+  */
+  virtual CATUnicodeString GetMechanicalExtendedLabel(const CATISpecObject_var &amp;iFeature, 
+    const CATMfBRepType iBRepType) const= 0; 
+
+  /**
+  * Reads the object validity status.
+  * @return
+  * Returns True if the selecting object is correctly named by the generic naming.
+  */
+  virtual CATBoolean IsValid() const = 0; 
+
+  /**
+  * Reads the object validity.
+  * @return
+  * Returns True if the selecting object is correctly named by the generic naming.
+  */
+  virtual CATBoolean GetValidity() const = 0;
+
+  /**
+  * Reads the selecting object type.
+  * @return
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfRVolume&lt;/tt&gt;,
+  * &lt;tt&gt;MfRSur&lt;/tt&gt;,
+  * &lt;tt&gt;MfREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfBorderREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfBorderFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfWireREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfWireFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfAxis&lt;/tt&gt;,
+  * &lt;tt&gt;MfExtremity&lt;/tt&gt;,
+  * &lt;tt&gt;MfPlanarSubElement&lt;/tt&gt;,
+  * &lt;tt&gt;MfUnknownElementType&lt;/tt&gt;
+  * @exception @href CATError
+  */
+  virtual CATMfBRepAccessElementType GetBRepElementType() = 0;   
+
+  /**
+  * Reads the selecting object type status.
+  * @param iType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfRVolume&lt;/tt&gt;,
+  * &lt;tt&gt;MfRSur&lt;/tt&gt;,
+  * &lt;tt&gt;MfREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfBorderREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfBorderFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfWireREdge&lt;/tt&gt;,
+  * &lt;tt&gt;MfWireFVertex&lt;/tt&gt;,
+  * &lt;tt&gt;MfAxis&lt;/tt&gt;,
+  * &lt;tt&gt;MfExtremity&lt;/tt&gt;,
+  * &lt;tt&gt;MfPlanarSubElement&lt;/tt&gt;,
+  * &lt;tt&gt;MfUnknownElementType&lt;/tt&gt;
+  * @return
+  * Returns 1 if &lt;tt&gt;iType&lt;/tt&gt; is the correct type, 0 if &lt;tt&gt;iType&lt;/tt&gt; is not.
+  * @exception @href CATError
+  */
+  virtual int IsABRep(const CATMfBRepAccessElementType iType) = 0; 
+
+  /**
+  * Returns the feature that generated the selecting object.
+  * This feature is the oldest according to the history of the mechanical part, and takes connexity into account.
+  * &lt;br&gt;If this feature is a &lt;tt&gt;ResultOUT&lt;/tt&gt;, it is not displayed in the specification tree.
+  * @exception @href CATError
+  */
+  virtual CATISpecObject_var GetLastFeature() const = 0;
+
+  /**
+  * Returns the youngest feature according to the history of the mechanical part, that generated the selecting object.
+  * &lt;br&gt;If this feature is a &lt;tt&gt;ResultOUT&lt;/tt&gt;, it is not displayed in the specification tree.
+  * @exception @href CATError
+  */
+  virtual CATISpecObject_var GetInitialFeature() const = 0; 
+
+  /**
+  * Returns the visible feature that generated the selecting object.
+  * Returns the youngest feature according to the history of the mechanical part, 
+  * that generated the selecting object and that is displayed in the specification tree.
+  * @exception @href CATError
+  */
+  virtual CATISpecObject_var  GetInitialMasterFeature() const = 0;  
+
+  /**
+  * Returns the oldest feature, according to the history of the mechanical part, that generated the selecting object.
+  * Searching strategy starts from the current feature of the part and goes back in time through the part history
+  * according to the input parameter. This is an advanced method.
+  *
+  * @param iSearchType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * 
+  * &lt;br&gt;With &lt;tt&gt;MfModification&lt;/tt&gt;, the returned feature is the oldest one that generated the selecting object.
+  * The search stops at a mirror, draft angle or thickness feature, even if the source feature is younger. 
+  * For example, the returned feature is the thickness if the selecting object is the thicked lateral face of a pad.
+  * This is the default strategy of the previous methods.
+  * 
+  * &lt;br&gt;With &lt;tt&gt;MfCovering&lt;/tt&gt;, the search goes beyond mirror, draft angle and thickness.
+  * For example, the returned feature is the pad if the selecting object is a thicked lateral face of the pad.
+  * 
+  * &lt;br&gt;With &lt;tt&gt;MfGeneration&lt;/tt&gt;, the returned feature is searched through mirror, draft angle, thickness 
+  * and up to the highest root. 
+  * For example, if the selecting object is the thicked lateral face of the pad, 
+  * the returned feature is the curve in the sketch of the pad from which the lateral face is built.
+  * @exception @href CATError
+  */
+
+  virtual CATISpecObject_var GetInitialFeature(const CATMfNodeReportType iSearchType) const = 0;
+
+  /**
+  * Returns the feature containing the selected object.
+  * &lt;br&gt;If this feature is a &lt;tt&gt;ResultOUT&lt;/tt&gt;, it is not displayed in the specification tree.
+  * @exception @href CATError
+  */
+  virtual CATISpecObject_var GetSelectingFeature() const = 0;
+
+  /**
+  * Returns the parent feature of the feature containing the selected object. 
+  * This feature is displayed in the specification tree.
+  * @exception @href CATError
+  */
+  virtual CATISpecObject_var GetSelectingMasterFeature()  const = 0;
+
+  /**
+  * Returns the selected cell.
+  */
+  virtual CATCell_var GetSelectingCell() const =0;
+
+  /**
+  * Returns the body that contains the selected cell.
+  * @exception @href CATError
+  */
+  virtual CATBody_var GetSelectingBody() const =0;
+
+  /**
+  * Returns the low topological dimension of the domain that contains the selected cell.
+  * @return
+  * Returns 1 for a wire, 2 for a shell, 3 for a lump, -1 if the dimension cannot be computed.
+  * @exception @href CATError
+  */
+  virtual short GetSelectingLowDimension() const = 0 ;
+
+  /**
+  * Returns the high topological dimension of the domain that contains the selected cell.
+  * @return
+  * Returns 1 for a wire, 2 for a shell, 3 for a lump, -1 if the dimension cannot be computed.
+  * @exception @href CATError
+  */
+  virtual short GetSelectingHighDimension() const = 0;
+
+  /**
+  * Returns the children of the selecting object in the generic naming graph.
+  * @param iFeature
+  * Search is performed at the &lt;tt&gt;iFeature&lt;/tt&gt; level; in the whole generic naming graph if &lt;tt&gt;iFeature&lt;/tt&gt; is NULL.
+  * @param iType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfModification&lt;/tt&gt;, 
+  * &lt;tt&gt;MfCovering&lt;/tt&gt;, 
+  * &lt;tt&gt;MfGeneration&lt;/tt&gt; specifies the search strategy.
+  * @exception @href CATError
+  */
+  virtual CATLISTP(CATIBRepAccess) UnGroup (const CATISpecObject_var &amp;iInFeature = NULL_var,
+    const CATMfNodeReportType iType = MfModification) const = 0;
+
+  /**
+  * Returns the grandparents of the selecting object.
+  * @param iFeature
+  * Search in performed in the &lt;tt&gt;iFeature&lt;/tt&gt; body, in the whole generic naming graph if &lt;tt&gt;iFeature&lt;/tt&gt; is NULL.
+  * @param iType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfModification&lt;/tt&gt;, 
+  * &lt;tt&gt;MfCovering&lt;/tt&gt;, 
+  * &lt;tt&gt;MfGeneration&lt;/tt&gt; specifies the search strategy.
+  * @exception @href CATError
+  */
+  virtual CATLISTP(CATIBRepAccess) GetAncestors(const CATISpecObject_var &amp;iFeature = NULL_var,
+    const CATMfNodeReportType iType = MfModification) const = 0;
+
+  /**
+  * Returns the selecting objects with the same topological dimension.
+  * All these selecting objects have the same label, they cannot be distinguished from each other.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps()= 0;
+
+  /**
+  * Returns selecting objects with the same topological dimension.
+  * All these selecting objects have the same label, they cannot be distinguished from each other.
+  * @param iFeature
+  * Search is performed in the body associated with &lt;tt&gt;iFeature&lt;/tt&gt;. 
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps(const CATISpecObject_var &amp;iFeature,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * Returns selecting objects according to a specified dimension.
+  * @param iDim
+  * Topological dimension of search objects.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps(const int iDim)= 0;
+
+  /**
+  * Returns selecting objects according to a specified dimension.
+  * @param iFeature
+  * Search is performed in the body associated with &lt;tt&gt;iFeature&lt;/tt&gt;.
+  * @param iDim
+  * Topological dimension of search objects.
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps(const CATISpecObject_var &amp;iFeature,
+    const int iDim,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * Returns the connectivity of a selecting object.
+  * &lt;br&gt;The selecting object is not connected when the underlying geometry is made of more than one piece.
+  * In this case several selecting objects have the same label.
+  * &lt;br&gt;The selecting object is connected when the underlying geometry is made of exactly one piece.
+  * @return
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfNoConnex&lt;/tt&gt; when it is not connected, &lt;tt&gt;MfConnex&lt;/tt&gt; when it is connected, 
+  * &lt;tt&gt;MfUnknownConnexity&lt;/tt&gt; when the connectivity status is unknown.
+  * @exception @href CATError
+  */
+  virtual CATMfConnexityType GetConnexity()= 0;
+
+  /**
+  * Returns the connectivity of a selecting object.
+  * &lt;br&gt;The selecting object is not connected when the underlying geometry is made of more than one piece.
+  * In this case several selecting objects have the same label.
+  * &lt;br&gt;The selecting object is connected when the underlying geometry is made of exactly one piece.
+  * @param iFeature
+  * Search is performed in the body associated with &lt;tt&gt;iFeature&lt;/tt&gt;. 
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  * @return
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfNoConnex&lt;/tt&gt; when it is not connected, &lt;tt&gt;MfConnex&lt;/tt&gt; when it is connected, 
+  * &lt;tt&gt;MfUnknownConnexity&lt;/tt&gt; when the connectivity status is unknown.
+  * @exception @href CATError
+  */
+  virtual CATMfConnexityType GetConnexity(const CATISpecObject_var &amp;iFeature,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * Returns the topological dimension of a selecting object.
+  * @return
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * 0 for a vertex, 1 for an edge or 2 for a face.
+  * @exception @href CATError
+  */
+  virtual int GetDimension() const = 0;
+
+  /**
+  * Returns the infinite property of a selecting object.
+  * @return
+  * The infinity mode of &lt;tt&gt;this&lt;/tt&gt;.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;TRUE&lt;/tt&gt;, if &lt;tt&gt;this&lt;/tt&gt; must be considered as infinite, 
+  * &lt;tt&gt;FALSE&lt;/tt&gt; if it is finite (default mode).
+  * @exception @href CATError
+  */
+  virtual CATBoolean IsInfinite() =0;
+
+  /**
+  * Returns 1 if the the selecting object can be solved in the body of the &lt;tt&gt;ResultOUT&lt;/tt&gt; of iFeature object.
+  * @param iFeature
+  * Solving is performed in the body of the &lt;tt&gt;ResultOUT&lt;/tt&gt; of &lt;tt&gt;iFeature&lt;/tt&gt; object.
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  */
+  virtual int IsSolvable(const CATISpecObject_var &amp;iFeature,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * Returns the cells associated with the selecting object.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells() = 0;
+
+  /**
+  * Returns the cells associated with the children nodes of the selecting object.
+  * @param iFeature
+  * Search is performed in the body associated with iFeature. 
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells(const CATISpecObject_var &amp;iFeature,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * Returns the cells with a specified dimension and associated with the selecting object.
+  * @param iDim
+  * 0 for vertices, 1 for edges or 2 for faces. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells(const int iDim)= 0;
+
+  /**
+  * Returns the cells with a specified dimension and associated with the selecting object.
+  * @param iFeature
+  * Search is performed in the bidy associated with &lt;tt&gt;iFeature&lt;/tt&gt;. 
+  * @param iDim
+  * 0 for vertices, 1 for edges or 2 for faces. 
+  * @param iBRepType
+  * either MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells(const CATISpecObject_var &amp;iFeature,
+    const int iDim,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * Returns the associated faces followed by the generic naming graph.
+  *
+  * @param oCardList
+  * 
+  * If the selecting object is a @href CATIMmiUseVolumeAccess then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of faces.
+
+  * If the selecting object is a @href CATIRSur  then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of faces.
+  * 
+  * &lt;br&gt;If the selecting object is a @href CATIREdge then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of adjacent left faces and
+  * &lt;tt&gt;oCardList[2]&lt;/tt&gt; is the number of adjacent right faces.
+  * 
+  * &lt;br&gt;If the selecting object is a @href CATIFVertex then &lt;tt&gt;oCardList[i]&lt;/tt&gt; is the number of faces 
+  * adjacent to the vertex, faces that are trimmed pieces of the same initial face.
+  *
+  * &lt;br&gt;If the selecting object is a @href CATIBorderREdge then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of faces 
+  * adjacent to the edge. 
+  * All these faces are located on the same side of the edge in case of the selecting object is a border edge.
+  ** @return
+  * Returns an empty list if the selecting object is a 
+  * @href CATIBorderFVertex, a @href CATIWireREdge or a @href CATIWireFVertex
+  * since they never have any adjacent faces.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) ResolveFaces(CATListOfInt&amp; oCardList) = 0 ;
+
+  /**
+  * Returns the faces associated to a selecting object.
+  * @param iFeature
+  * Search is performed in the body associated with iFeature. 
+  * @param oCardList
+  * If the selecting object is a @href CATIRSur then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of faces.
+  * 
+  * &lt;br&gt;If the selecting object is a @href CATIREdge then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of adjacent left faces and
+  * &lt;tt&gt;oCardList[2]&lt;/tt&gt; is the number of adjacent right faces.
+  * 
+  * &lt;br&gt;If the selecting object is a @href CATIFVertex then &lt;tt&gt;oCardList[i]&lt;/tt&gt; is the number of faces 
+  * adjacent to the vertex, faces that are trimmed pieces of the same initial face.
+  *
+  * &lt;br&gt;If the selecting object is a @href CATIBorderREdge then &lt;tt&gt;oCardList[1]&lt;/tt&gt; is the number of faces 
+  * adjacent to the edge. 
+  * All these faces are located on the same side of the edge in case of the selecting object is a border edge.
+  *
+  * @param iBRepType
+  * Specify the way the serach is to be processed.
+  * MfFunctional to get all the elements with same underlying geometry or MfDefaultBRepType can be specified according to the needs.
+  * @return
+  * Returns an empty list if the selecting object is a 
+  * @href CATIBorderFVertex, a @href CATIWireREdge or a @href CATIWireFVertex
+  * since they never have any adjacent faces.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATBaseUnknown_var) ResolveFaces(const CATISpecObject_var &amp;iFeature,
+    CATListOfInt&amp; oCardList,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * Returns the Geometry associated to a selecting object.
+  * @param oGeometries
+  * Geometrical elements associated with the selecting object. 
+  * @exception @href CATError
+  */
+  virtual int GetGeometries(CATLISTV(CATBaseUnknown_var) &amp;oGeometries) =0;
+
+  /**
+  * Returns the cells associated with the selecting object.
+  * @param iFeature
+  * Search is performed in the body associated with iFeature. 
+  * @param oGeometries
+  * Geometrical elements associated with the selecting object. 
+  * @exception @href CATError
+  */   
+  virtual int GetGeometries(const CATISpecObject_var &amp;iFeature,CATLISTV(CATBaseUnknown_var) &amp;oGeometries) =0; 
+
+  /**
+  * Returns the body created with cells followed in the generic naming graph.
+  * @exception @href CATError
+  */
+  virtual CATBody_var CreateBody()=0;
+
+  /**
+  * Creates the body created with cells associated with the selecting object.
+  * @param iFeature
+  * Search is performed in the body associated with iFeature. 
+  * @exception @href CATError
+  */   
+  virtual CATBody_var CreateBody(const CATISpecObject_var &amp;iFeature,const CATMfBRepType iBRepType = MfDefaultBRepType)=0;
+
+  /**
+  * Analyses if the selecting object involves a specified feature.
+  * If the specified feature is deleted, the selecting object becomes invalid.
+  * @param iFeature
+  * Design feature. 
+  * @exception @href CATError
+  */ 
+  virtual int IsImpactedBy(const CATISpecObject_var &amp;iFeature) const = 0; 
+
+  /**
+  * Analyses if the selecting object involves a specified feature.
+  * If the specified feature is deleted, the selecting object becomes invalid.
+  * @param iFeature
+  * Design feature.
+  * @param iBRepType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfFunctional&lt;/tt&gt;, &lt;tt&gt;MfRelimited&lt;/tt&gt; is the default value if &lt;tt&gt;iBRepType&lt;/tt&gt; parameter is not specified. 
+  * @exception @href CATError
+  */
+  virtual int IsImpactedBy(const CATISpecObject_var &amp;iFeature,
+    const CATMfBRepType iBRepType) const = 0;
+
+  /**
+  * Returns the features involved in the selecting object definition.
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATISpecObject_var) GetNecessaryFeatures() const =0;
+
+  /**
+  * Returns the features involved in the selecting object definition.
+  * @param iBRepType
+  * &lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;MfFunctional&lt;/tt&gt;, &lt;tt&gt;MfRelimited&lt;/tt&gt; is the default value if &lt;tt&gt;iBRepType&lt;/tt&gt; parameter is not specified. 
+  * @exception @href CATError
+  */
+  virtual CATLISTV(CATISpecObject_var) GetNecessaryFeatures(const CATMfBRepType iBRepType) const =0;
+
+  /**
+  * Returns 1 if the selecting objects are same.
+  * @param iBrep
+  * Selecting object to be compared.
+  */
+  virtual int IsSame(const CATIBRepAccess_var &amp;iBrep) const = 0; 
+
+  /**
+  * Returns 1 if the labels of selecting objects are same.
+  * @param iBrep
+  * Selecting object to be compared.
+  * @param iBRepType
+  * BRep type.
+  */
+  virtual int IsSameLabel(const CATIBRepAccess_var &amp;iBrep,
+    const CATMfBRepType iBRepType = MfDefaultBRepType) const = 0; 
+
+
+
+  /**
+  * @nodoc 
+  * Internal use only.
+  */
+  /**
+  * @nodoc
+  */
+  virtual CATUnicodeString GetEtiquette() const = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATUnicodeString GetEtiquette(const CATMfBRepType iBRepType) const = 0;
+
+  /**
+  * @nodoc 
+  */  
+  virtual int GetAncestorsFeatures(CATLISTV(CATISpecObject_var) &amp;oSpecs) const = 0;
+
+  /**
+  * @nodoc 
+  */
+  virtual int GetAncestorsFeatures(const CATMfSearchFathersOrSons iSearch,CATLISTV(CATISpecObject_var) &amp;iSpecs) const = 0; 
+
+  /**
+  * @nodoc 
+  */
+  virtual int GetAncestorsFeatures(const CATMfNodeReportType iType,const CATMfSearchFathersOrSons iSearch,CATLISTV(CATISpecObject_var) &amp;oSpecs) const = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual CATBrpScope *GetSelectingScope() const =0;
+
+  /**
+  * @nodoc 
+  */
+  virtual int AddDelegateGeometry() const= 0;
+  /**
+  * @nodoc 
+  */
+  virtual int AddDelegateGeometry(const CATCell_var &amp;iCell) const= 0;
+  /**
+  * @nodoc 
+  */
+  virtual int RemoveDelegateGeometry() const= 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual CATLISTP(CATIBRepAccess) UnGroup (const CATISpecObject_var &amp;iInScope,const CATMfNodeReportType iType,const CATMfGNNavigMode navigMode) const = 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual CATLISTP(CATIBRepAccess) GetAncestors(const CATISpecObject_var &amp;iInScope,const CATMfNodeReportType iType,const CATMfGNNavigMode navigMode) const = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBRepNodes() = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBRepNodes(CATBrpScope *iInScope,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBRepNodes(const CATISpecObject_var &amp;iInScope,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps(CATBrpScope *iInScope,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetBReps(CATBrpScope *iScope,
+    const int iDim,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATMfConnexityType GetConnexity(CATBrpScope *iScope,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells(CATBrpScope* iScope,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) GetCells(CATBrpScope *iScope,
+    const int iDim,const CATMfBRepType iBRepType = MfDefaultBRepType)= 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTV(CATBaseUnknown_var) ResolveFaces(CATBrpScope *iScope,
+    CATListOfInt &amp;oCardList,const CATMfBRepType iBRepType = MfDefaultBRepType) = 0 ;
+
+  /**
+  * @nodoc 
+  */  
+  virtual int GetGeometries(const CATISpecObject_var &amp;ScopeAccess,const CATMfBRepType iBRepType,CATLISTV(CATBaseUnknown_var) &amp;oGeometries) =0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual int GetGeometries(CATBrpScope *scope,const CATMfBRepType iBRepType,CATLISTV(CATBaseUnknown_var) &amp;oGeometries)=0;
+
+  /**
+  * @nodoc 
+  */
+  virtual CATBody_var CreateBody(CATBrpScope *scope,const CATMfBRepType iBRepType = MfDefaultBRepType)=0;        
+
+  /**
+  * @nodoc 
+  */ 
+  virtual HRESULT CreateBRepAccessForSymbolicLink(const CATMfFeaturizeMode iMode,const CATUnicodeString &amp;iViewName,CATIBRepAccess_var &amp; oBRepAccess) = 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual CATMfFeaturizeMode GetSymbolicLinkResolveMode() const = 0;
+
+  /**
+  * @nodoc 
+  */  
+  virtual CATBoolean WithSymbolicLinkResolveMode(const CATMfFeaturizeMode iMode) const = 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual void SetSymbolicLinkResolveView(const CATUnicodeString &amp;iNameVue) = 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual void GetSymbolicLinkResolveView(CATUnicodeString &amp;oViewName) const = 0;
+
+  /**
+  * @nodoc 
+  */ 
+  virtual CATBoolean InSymbolicLinkResolveView(const CATUnicodeString &amp;iViewName) const = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATNamingReference* GetNamingReference() const = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual CATNamingReference* GetNamingReference(const CATMfBRepType iBRepType,
+    const CATMfTypeNamingReference iNamingReferenceType) const = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual CATBrpScope* GetCreatingScope() const = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATBrpObject* GetNode() const = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATLISTP(CATBrpObject) GetNodes() = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual int IsInScope(CATBrpScope *iScope) const = 0; 
+
+  /**
+  * @nodoc
+  */
+  virtual int IsInScope(const CATISpecObject_var &amp;iFeature) const = 0; 
+
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+
+
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void InitBRep() = 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void InitBRep(const CATCell_var &amp;iSelectingCell,
+    CATReportSelect *iSelector,
+    CATBrpScope *iSelectingScope, 
+    const CATMfBRepAccessElementType iType,const CATMfBRepSelectInitMode iInitMode = MfInitMode_RW) = 0; /**
+                                                                                                         * @nodoc 
+                                                                                                         * Deleted in next version
+                                                                                                         */ 
+  virtual CATUnicodeString GetExtendedLabel(const CATISpecObject_var &amp;iFeature,
+    const CATMfBRepType iBRepType) const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */ 
+  virtual void CreateExtendedLabel(unsigned int iDiezele,const CATMfBRepType iBRepTypeUser,
+    CATUnicodeString &amp;oLabel) const =0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual CATISpecObject_var GetSpecLabel(const CATISpecObject_var &amp;iFeature,
+    const CATMfBRepType iBRepType) const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual CATISpecObject_var GetSpecLabel(const CATMfBRepType iBRepType) const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual CATISpecObject_var GetSpecLabel() const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual CATReportSelect* GetSelector()= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual CATReportSelect* GetSelector(const CATMfBRepType iBRepType)= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void SetSelector(CATReportSelect* iSelector)= 0; 
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void DeleteSelector(CATReportSelect* iSelector) const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual   void CreateMechanicalExtendedLabel(unsigned int iDiezele,
+    const CATMfBRepType iBRepType,
+    CATUnicodeString &amp;oLabel) const= 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void SetValidity(CATBoolean validity) = 0;
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */
+  virtual void SetSelectingScope(CATBrpScope *scope)=0;
+
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */ 
+  virtual int IsFeaturizableAndSolvable(const CATMfBRepType &amp;iBRepTypeUser,const CATBaseUnknown_var &amp;iSupport,const CATMfFeaturizeMode iMode,const CATISpecObject_var &amp;iFeat)= 0;
+  /**
+  * @nodoc
+  * Deleted in next version
+  */
+  virtual CATLISTP(CATBrpScope) GetCreatingScopes() = 0; 
+
+  /**
+  * @nodoc 
+  * Deleted in next version
+  */ 
+  virtual void SetSymbolicLinkResolveMode(const CATMfFeaturizeMode iMode) = 0;
+
+#if defined(CATIAV5R25) || defined(CATIAR417)
+  /**
+  * Returns the selected topology.
+  */
+  virtual CATTopology_var GetSelectingTopology() const = 0;
+#endif
+
+};
+
+CATDeclareHandler( CATIBRepAccess, CATILinkableObject) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI3DGeometricalElement.html">← 上一页: CATI3DGeometricalElement.h</a></div>
+        <div><a href="CATIBasicTool.html">下一页: CATIBasicTool.h →</a></div>
+    </div>
+</body>
+</html>

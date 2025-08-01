@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAATPSInterfaces.edu/CAATpiAccessGeometry.m/LocalInterfaces/CAATpiAccessGeometryCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAATPSInterfaces.edu/CAATpiAccessGeometry.m/LocalInterfaces/CAATpiAccessGeometryCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../../CAASystem.edu/PublicInterfaces/CAASysSprocketFactory.html">← 上一页: CAASysSprocketFactory.h</a></div>
+        <div><a href="CAATpiAccessGeometryWnd.html">下一页: CAATpiAccessGeometryWnd.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+//=============================================================================
+//  Abstract of the sample:
+//  ----------------------
+//   
+//  Interactive command
+//
+//    Command to select a 3D annotation and then retrieve and highlight the 
+//    geometry on which annotation is applied. The topological composition 
+//    (faces and edges count) of the geometry is displayed in a panel.
+//    A cloud of point is displayed on the faces. An arrow that indicate the
+//    outside material side is also displayed.
+//
+//  Illustrates:
+//
+//    Using TPS (Technological Product Specifications) and Mechanical Modeler
+//    interfaces to retrieve the geometry of a 3D Annotation. 
+//    The main APIs used here  are CATITPS, CATITTRS, CATIRGE and
+//    CATIRGETopology.
+//
+//=============================================================================
+//  Usage:
+//  ------
+//
+//  Build the fw containing that command and create run time view.
+//  Start CATIA V5
+//  Menu Start + Mechanical Design + Functional Tolerancing &amp; Annotation
+//  Menu : View + Toolbar + CAA Samples to make the toolbar appear.
+//  &quot;Access Geometry&quot; command can be launched from the toolbar.
+//
+//  Notice that the toolbar CAA Samples is also available in the following 
+//  workbenches :
+//   Mechanical Design + Product Fonctionnal Tolerancing &amp; Annotations
+//   DPM Powertrain + Process Tolerancing &amp; Annotations
+//
+//=============================================================================
+
+#ifndef CAATpiAccessGeometryCmd_H
+#define CAATpiAccessGeometryCmd_H
+
+#include &quot;CATStateCommand.h&quot;
+
+class CATCommand;
+class CATNotification;
+class CATPathElementAgent;
+class CATDialogAgent;
+class CAATpiAccessGeometryWnd;
+class CATITTRS;
+class CATIRGE;
+class CATHSO;
+class CATPathElement;
+class CATModelForRep3D;
+class CATFace;
+class CAT3DBagRep;
+class CAT3DCustomRep;
+class CATIRGETopology;
+class CATMathPoint;
+class CATMathDirection;
+class CATMathTransformation;
+class CAT4x4Matrix;
+
+//-----------------------------------------------------------------------------
+class CAATpiAccessGeometryCmd : public CATStateCommand
+{
+  CmdDeclareResource (CAATpiAccessGeometryCmd, CATStateCommand)
+
+  public:
+
+    CAATpiAccessGeometryCmd ();
+    virtual ~CAATpiAccessGeometryCmd ();
+
+    virtual void BuildGraph ();
+    virtual CATStatusChangeRC Cancel (CATCommand * ipCmd,
+                                      CATNotification * ipNotif);
+
+    boolean OnAnnotationSelected (void * ipData);
+
+  private:
+    // must not be implemented for command
+    CAATpiAccessGeometryCmd (CAATpiAccessGeometryCmd &amp;);
+    CAATpiAccessGeometryCmd&amp; operator=(CAATpiAccessGeometryCmd&amp;);
+
+    HRESULT AnalyseTTRS (CATITTRS * ipiTTRS,
+                         CATHSO * ipHSO,             // for highlighting 
+                         CATPathElement * ipPathTPS,
+                         int &amp; oTTRSNodeCount,       // for composition dump
+                         int &amp; oTTRSSupportCount,
+                         int &amp; oRGECount,
+                         int &amp; oFaceCount,
+                         int &amp; oEdgeCount,
+                         int &amp; oVertexCount,
+                         CAT3DBagRep * iopRep);
+
+    HRESULT AnalyseRGE (CATIRGE * ipiRGE, 
+                        CATHSO * ipHSO,             // for highlighting 
+                        CATPathElement * ipPathTPS,
+                        int &amp; oRGECount,            // for composition dump
+                        int &amp; oFaceCount,
+                        int &amp; oEdgeCount,
+                        int &amp; oVertexCount,
+                        CAT3DBagRep * iopRep);
+
+
+    HRESULT SpecialTreatementForPathWithSeveralLeaf(CATPathElement * ipPathRGE,
+                                                    CATHSO * ipHSO);
+
+    HRESULT AddTTRSGeometryOnRepresentation (CATITTRS * ipiTTRS,
+                                             CATPathElement * ipPathTPS,
+                                             CAT3DBagRep * iopRep);
+    HRESULT CreatePointAndNormalRepresentationOnFace (
+                                                  CATFace * ipFace,
+                                                  CATIRGETopology * ipiRGETopo,
+                                                  CATPathElement * ipPathTPS,
+                                                  CAT3DBagRep * iopRep);
+
+    HRESULT CreateGraphicalPrimitives (CAT3DCustomRep * iopPointsAndNormalsRep,
+                                       CATMathPoint &amp; iPointOnSurface,
+                                       CATMathDirection &amp; iOusideMaterialDir);
+    HRESULT  GetMatrixFromTransfo (CATMathTransformation &amp; iTransfo,
+                                   CAT4x4Matrix &amp;oMatrix);
+
+    CATPathElementAgent     * _pSelectionAgent;
+    CATDialogAgent          * _pClosePanelAgent;
+    CAATpiAccessGeometryWnd * _pPanel;
+
+    CATModelForRep3D        * _pModelObjectForAdditionalRep;
+    CATBoolean                _bDisplay3DGrid;
+    CATBoolean                _bDisplayTTRSRep;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../../CAASystem.edu/PublicInterfaces/CAASysSprocketFactory.html">← 上一页: CAASysSprocketFactory.h</a></div>
+        <div><a href="CAATpiAccessGeometryWnd.html">下一页: CAATpiAccessGeometryWnd.h →</a></div>
+    </div>
+</body>
+</html>

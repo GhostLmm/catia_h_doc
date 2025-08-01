@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCBoardBase/PublicInterfaces/CATIACbdUserImportIDF.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PCBoardBase/PublicInterfaces/CATIACbdUserImportIDF.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCbdUserImportAdapter.html">← 上一页: CATCbdUserImportAdapter.h</a></div>
+        <div><a href="PCBItfCPP.html">下一页: PCBItfCPP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIACbdUserImportIDF_H
+#define CATIACbdUserImportIDF_H
+ // COPYRIGHT DASSAULT SYSTEMES 2013
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U4 CATCbdUserImportAdapter
+*/
+ 
+
+#include &quot;PCBItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATDlgProgress;
+ #ifndef LOCAL_DEFINITION_FOR_IID
+ extern ExportedByPCBItfCPP IID IID_CATIACbdUserImportIDF;
+ #else
+  extern &quot;C&quot; const IID IID_CATIACbdUserImportIDF;
+ #endif
+
+/**
+  * Interface to implement by late type CATCbdSoftwareOpeness.
+  * &lt;b&gt;Role:&lt;/b&gt; If this interface is implemented by using this late type, 
+  * the main import box of Circuit Board Design is modified as following :
+  * &lt;br&gt;
+  * a path has to be selected for exporting the report test file of the import
+  * &lt;br&gt;
+  * a choice for importing or not IDF 3.0 ++ features 
+  * &lt;br&gt;
+  * a selection of thickness for the copper holes.
+  *&lt;br&gt;
+  * &lt;b&gt;Important notice&lt;/b&gt;: Using the @href CATCbdUserImportAdapter as a base class
+  * when implementing &lt;tt&gt;CATIACbdUserImportIDF&lt;/tt&gt; is mandatory. 
+  * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface can be implemented
+  * using the BOA (Basic Object Adapter).
+  * To know more about the BOA, refer to the CAA Encyclopedia home page. 
+  * Click Middleware at the bottom left, then click the Object Modeler tab page.
+  * Several articles deal with the BOA.&lt;/p&gt;
+  */
+
+
+class ExportedByPCBItfCPP CATIACbdUserImportIDF: public CATBaseUnknown
+{
+CATDeclareInterface;
+
+public:
+
+ /**
+   * Check if the license of the partner is activated on the current installation.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+   * this method is called by the CBD import code. 
+   * &lt;br&gt;
+   * If the return value is S_OK , the new 
+   * section in the dialog box is displayed and activated. 
+   * &lt;br&gt;
+   * If the return value is E_FAIL, the new new 
+   * section in the dialog box is displayed and deactivated. 
+   * &lt;br&gt;
+   * @return
+   *   S_OK or E_FAIL
+   */
+
+	virtual HRESULT IsLicenseAvailable () = 0 ;
+
+
+ /**
+   * Import an IDF file using the implementation of the partner. 
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; The import IDF can be provided by a partner supporting IDF 3.0 + features. 
+   * @param iRootProduct
+   *  The root product of the current opened document
+   * @param iBoardReference
+   *  The current Board reference . Only valuated in mode Import in context. 
+   * @param iPathFile
+   * path of the IDF file to import
+   * @param iPathLib 
+   * path of  the library file to import (can be empty) 
+   * @param iCatalogPath 
+   *  path of  the catalog file where the components are stored potentially (can be empty) 
+   * @param iWithCatalog
+   * true if the catalog option is checked 
+   * @param icataloginReadWrite
+   * true if the catalog is in readWrite mode 
+   * @param iCsvPath
+   * path of the csv file (can be empty) 
+   * @param iWithCsvFile
+   * true if the csv file option is checked 
+   * @param DrillHoles
+   * true is the DrillHoles option is checked
+   * @param	iImportCopperAndLayer
+   * true if the import of the IDF 3.0+ features option is checked
+   * @param iHoleCopperThickness,
+   * The thickness of the copper holes  in USI unit.
+   * @param iImportOutputPath
+   * the path if the output import Report
+   * @return
+   *   S_OK or E_FAIL
+   */
+
+	virtual HRESULT ImportFile(
+		  	const CATBaseUnknown_var &amp; iRootProduct,
+			const CATBaseUnknown_var &amp;iBoardReference,
+			const CATUnicodeString &amp; iPathFile,
+			const CATUnicodeString &amp;iPathLib,
+			const CATUnicodeString &amp; iCatalogPath,
+			boolean iWithCatalog ,
+			boolean icataloginReadWrite,
+			const CATUnicodeString &amp;iCsvPath,
+			boolean iWithCsvFile,
+			boolean DrillHoles,
+			boolean iImportCopperAndLayer,
+			double iHoleCopperThickness ,
+			const CATUnicodeString iImportOutputPath) = 0;
+
+
+	/**
+	 * Set the progression bar object
+	 * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; this method allows giving a pointer on the  progression bar object displayed in the Import IDF dialog box.
+	 * &lt;br&gt;
+	 * The partner will be able to manage the range and steps of the  progression bar. 
+	 * &lt;br&gt;
+	 * @param iptrProgressBar
+     *  The root product of the current opened document
+	 * @return
+     *   S_OK or E_FAIL
+	*/
+	virtual HRESULT SetProgressionBar(CATDlgProgress * iptrProgressBar) = 0 ;
+			
+
+};
+
+//-----------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCbdUserImportAdapter.html">← 上一页: CATCbdUserImportAdapter.h</a></div>
+        <div><a href="PCBItfCPP.html">下一页: PCBItfCPP.h →</a></div>
+    </div>
+</body>
+</html>

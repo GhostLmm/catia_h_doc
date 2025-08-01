@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATFrFNurbsMultiForm.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATFrFNurbsMultiForm.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATForeignSurfaceData.html">← 上一页: CATForeignSurfaceData.h</a></div>
+        <div><a href="CATGeoDef.html">下一页: CATGeoDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATFrFNurbsMultiForm_H
+#define CATFrFNurbsMultiForm_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2009
+/** @CAA2Required */
+/*---------------------------------------------------------------------*/
+/* DON&#x27;T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS  */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPPEAR AT ANY TIME */
+/*---------------------------------------------------------------------*/
+//
+// COPYRIGHT DASSAULT SYSTEMES 1997
+//==========================================================================
+//
+// CATFrFNurbsMultiForm:
+// Inherit from CATMathNurbsMultiForm.
+// Mathematical class of monoparametric NURBS.
+// The CATFrFNurbsMultiForm is a set of forms (each form being equivalent to
+// a monoparametric NURBS) with the same knot vector.
+// It can be used for free NURBS (Dimension = 3) or for NURBS on a non specified
+// support (Dimension = 2).
+// This class allows working on non C2 NURBS because of its mathematical
+// definition. It can also be regarded as an advanced NURBS library.
+//
+// For more details on Basic Operators/Constructor for NurbsMultiForm see CATMathNurbsMultiForm.h
+//
+// Constructors  :     - Basic Constructors
+//                     - Constructor  by Concatenation of NurbsMultiForms
+//                     - Constructors with NurbsCurve(s)
+//                     - Constructor  with a NurbsSurface
+//                     - Constructor  with a NurbsBipar
+//                     - Constructor  with points and derivatives
+//                     - Constructor  with equations for each arc
+//
+// Basic methods :     - AddForms
+//                     - InvertForms
+//
+// Advanced methods :  - CheckContinuity
+//                     - MakeContinuity
+//                     - ParametricExtend
+//                     - OptimiseContinuities
+//                     - OptimiseDegree
+//                     - ChangeKnotVector
+//                     - Desextrapol
+//
+// Geometric methods : - InterpolToNurbsSurface
+//                     - ConvertToC2NurbsCurves
+//                     - ConvertToC2PNurbs
+//
+// Transfert methods : - Break
+//                     - CATTransfertCnCurve
+//                     - ContinuityCn
+//                     - CreateCurve
+//                     - Split
+//
+// Debug methods :     - VisuPoles
+//
+//==========================================================================
+//      /97 DHN Creation
+//      /98 RLA Transfert - Interfaces
+// 05/04/12 NLD Smart indentation
+//              Time/Space stable constructors numbering in consistency with implementation
+//              Add Init(), Init09(), Init13(), Init15(), Init17(), Init25()
+//              Add CATFrFNurbsMultiFormConstructor_27 (real copy constructor; old one is a fake one)
+//              Add destructor
+//              default values CATSqrtEpsg replaced by CATGetDefaultTolerance().LargeEpsgForLengthTest()
+//              (same value in standard scale, detected by XScale dynamic check tools at other scales)
+// 22/04/15 NLD Link comments from deprecated constructors to modern constructors
+//              constructors reordering: deprecated ones at the end
+// 28/04/15 NLD ParametricExtend() now returns a diagnostic
+// 27/05/16 JSX Add a BasicOptimiseContinuities_Private Methode for basic OptimiseContinuity
+//==========================================================================
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;YP00IMPL.h&quot;
+
+#include &quot;CATMathDiagnostic.h&quot;
+
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathSetOfPoints.h&quot;
+#include &quot;CATMathLimits.h&quot;
+
+#include &quot;CATMathNurbsMultiForm.h&quot;
+#include &quot;CATKnotVector.h&quot;
+
+#include &quot;CATCurve.h&quot;
+#include &quot;CATNurbsCurve.h&quot;
+#include &quot;CATPNurbs.h&quot;
+#include &quot;CATNurbsSurface.h&quot;
+#include &quot;CATSurLimits.h&quot;
+#include &quot;CATCrvLimits.h&quot;
+
+#include &quot;CATGeoFactory.h&quot;
+
+#include &quot;CATTolerance.h&quot;
+
+class CATMathNurbsBipar;
+class CATFrFNurbsBipar;
+class CATSoftwareConfiguration;
+ 
+// Class describing a set of forms, each form being equivalent to
+// a monoparametric NURBS. All the forms have the same knot vector.
+// This class can be used to describe 3D or 2D Nurbs.
+// DS internal developers can use this class to manage non-C2 Nurbs but
+// CAA developers are required to use the public Nurbs toolkit (CATICGMMathNurbsCurveTools.h
+// and CATICGMMathNurbsSurfaceTools).
+//
+class ExportedByYP00IMPL CATFrFNurbsMultiForm : public CATMathNurbsMultiForm
+{
+  public :
+
+    //
+    //-------------------  Basic Methods -------------------
+    //
+    //               (Nota: CATFrFNurbsMultiFormConstructor_* is a stable numbering in implementation file,
+    //                NEVER to be changed; may also be useful under XRef tool; NLD040412)
+    //
+    //                                                               CATFrFNurbsMultiFormConstructor_01
+    /**
+    * @nodoc
+    * Default constructor
+    */
+    CATFrFNurbsMultiForm();
+
+
+    //                                                               CATFrFNurbsMultiFormConstructor_19
+    /**
+    *  @nodoc
+    *  Constructs a CATFrFNurbsMultiForm.
+    *  @param iConfig
+    *  The software configuration.
+    *  @param iSetOfPoints
+    *  The array of set of points. There is one set of points per form.
+    *  @param iIsRational
+    *  &lt;b&gt;Legal values&lt;/b&gt;:
+    *  &lt;dl&gt;
+    *  &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt;if it is not rational.
+    *  &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt;if it is rational.
+    *  &lt;/dl&gt;
+    *  @param iKnotVector
+    *  The knot vector for all the forms.
+    *  @param iDimension
+    *  The dimension. To create a &quot;P&quot; multiform, the dimension  must be set to 2 but the CATMathSetOfPoints in 
+    *  input must be specified as set of 3D points (the third coordinate to be set to 0.)
+    *  @param iNumberOfForms
+    *  The number of forms.
+    *  @param iweights
+    *  The weight array. If each form has n control points, the weight array contains the n 
+    *  weights of the first form, then the n weights of the second form, and so on...
+    *  @param iTolObject
+    *  The tolerance.
+    */
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathSetOfPoints      **  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iIsRational          ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const double                   *  iWeights             = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_17
+    //  constructor from control points and knot vector (ne plus utiliser)
+    /**
+    * @nodoc
+    * Do not use.
+    */
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iIsRational          ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const double                   *  iWeights             = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+
+    //                                                               CATFrFNurbsMultiFormConstructor_15
+    //  constructor (bezier form)
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iNumberOfCPsByForm   ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_09
+    //  Constructor with equations for each arc
+    //  --&gt; Result is a C0 uniform multiform
+    //  PolCoef is the array of the polynomial coefficients
+    //  If the dimension is D, and the number of Arcs is N, and
+    //  the Degree is d, PolCoef will be :
+    //  (d+1) coefficients for the first dimension and for the first arc then
+    //  (d+1) coefficients for the second dimension and for the first arc ...
+    //  (d+1) coefficients for the Dth dimension and for the first arc then
+    //  (d+1) coefficients for the first dimension and for the second arc then
+    //  (d+1) coefficients for the second dimension and for the second arc ...
+    //  (d+1) coefficients for the Dth dimension and for the second arc then...
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATLONG32                 &amp; iNbArcs              ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iDegree              ,
+                          const double                   *  PolCoef              ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_21
+    //  constructor from a CATFrFNurbsBipar
+    //  iDir=1 : direction U
+    //  iDir=2 : direction V
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathNurbsBipar        *  iMathNurbsBipar      ,
+                          const CATLONG32                 &amp; iDir                 ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+
+                         );
+
+    //------------------------------------------------------------
+    //  destructor
+    virtual ~CATFrFNurbsMultiForm();
+
+    //------------------------------------------------------------
+    // Operator &#x27;=&#x27; (overloaded)
+    CATFrFNurbsMultiForm &amp; operator = (const CATFrFNurbsMultiForm &amp;iNurbsMultiForm);
+
+    //------------------------------------------------------------
+    //                                                               CATFrFNurbsMultiFormConstructor_26
+    //  Copy constructor (This is the old fake copy constructor; NLD050412)
+    CATFrFNurbsMultiForm              (const CATMathNurbsMultiForm &amp; ToCopy);
+
+
+    //------------------------------------------------------------
+    //                                                               CATFrFNurbsMultiFormConstructor_27
+    //  Copy constructor (This is the real copy constructor; new one added NLD050412)
+    CATFrFNurbsMultiForm              (const CATFrFNurbsMultiForm &amp; ToCopy);
+
+
+    //------------------------------------------------------------
+    // AddForms (concatenation with another CATFrFNurbsMultiForm having
+    // the same knot vector)
+    void AddForms                     (const CATMathNurbsMultiForm &amp;);
+
+    //------------------------------------------------------------
+    // Reverse the order of the forms
+    void InvertForms();
+
+    //
+    //------------------- Advanced Constructors -------------------
+    //
+
+    //                                                               CATFrFNurbsMultiFormConstructor_07
+    //
+    //  Constructor from points and their derivatives.
+    //  Each point is an arc limit of the multiform.
+    //  Works only for degree 3 and 5. In case of degree 3, iSndDer
+    //  must be a NULL pointer.
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATMathSetOfPointsND     *  iPoints              ,
+                          const CATMathSetOfPointsND     *  iFstDer              ,
+                          const CATMathSetOfPointsND     *  iSndDer              = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+
+    //                                                               CATFrFNurbsMultiFormConstructor_11
+    //  constructor from a curve and its limits 
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATCurve                 *  iCurve               ,
+                          const CATCrvLimits             *  iCrvLim              = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_13
+    //  constructor from a set of homogenised nurbs curves
+    //  (nurbs curves with the same knot vector)
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATNurbsCurve           **  iCurve               ,
+                          const CATLONG32                 &amp; iNbOfCurves          ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_23
+    //  constructor from a CATNurbsSurface and its limits 
+    //  iDir=1 : direction U
+    //  iDir=2 : direction V
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATLONG32                 &amp; iDir                 ,
+                          const CATNurbsSurface          *  iSurface             ,
+                          const CATSurLimits             *  iSurLimits           = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_04
+    //  constructor (by concatenation of n multiforms)
+    //  -&gt; the degrees are homogenized and the knot vectors are
+    //     concatenated. 
+    //  -&gt; if one of the nurbs multiform to concatenate is rational,
+    //     the constructed one is also rational.
+    //  -&gt; MultiForm must have the same number of forms
+    //  -&gt; It is possible to specify a tolerance for the concatenation used
+    //     to check the distance between two multiforms to concatenate. If
+    //     this distance is greater than the tolerance, the concatenation is
+    //     impossible (error). In the other case, there can be a deformation
+    //     (less than the given tolerance) in order to get C0.
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathNurbsMultiForm   **  iTabOfNurbsMultiForms,
+                          const CATLONG32                 &amp; iNbOfNurbsMultiForms ,
+                                double                      Tolerance            = CATGetDefaultTolerance().LargeEpsgForLengthTest(),
+                                CATLONG32                   G1Concatenation      = 0,
+                          const CATTolerance &amp; iTolObject                        = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_05
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATFrFNurbsMultiForm    **  iTabOfNurbsMultiForms,
+                          const CATLONG32                 &amp; iNbOfNurbsMultiForms ,
+                                double                      Tolerance            = CATGetDefaultTolerance().LargeEpsgForLengthTest(),
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_25
+    //  constructor (extract)
+    CATFrFNurbsMultiForm (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathNurbsMultiForm     &amp; iMathNurbsMultiForm  ,
+                                CATLONG32                   isid                 ,
+                                CATLONG32                   isens                ,
+                                CATLONG32                   iExtractOrder        = 1,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //
+    //------------------- Advanced Methods (NURBS Library) -------------------
+    //
+    // Check Continuity
+    // Check if a given knot of a multiform is or could be C1 or C2 in a given
+    // tolerance of deformation.
+    // The method returns the computed continuity.
+    //
+    CATLONG32 Check_Cn   (const double                    &amp; Tol_deform           ,
+                          const CATLONG32                 &amp; iKnotIndex           ,
+                          const CATLONG32                 &amp; iContinuity          );
+
+    // Check Continuity
+    // Check if the whole multiform is or could be C1 or C2 in a given
+    // tolerance of deformation.
+    // The method gives the number NCut of discontinuities (nor C1 neither C2).
+    // The array oIcut gives the indices of the knots where the discontinuities
+    // were found.
+    //
+    void  Check_Global_Cn(const double                    &amp; Tol_deform           ,
+                          const CATLONG32                 &amp; iContinuity          ,
+                                CATLONG32                 &amp; oNcut                ,
+                                CATLONG32                *&amp; oIcut                );
+
+    // Make Continuity
+    // Check if a given knot of a multiform is or could be in a given
+    // tolerance of deformation C1 or C2.
+    // The method returns the computed continuity.
+    //
+    void   Make_Cn       (const double                    &amp; Tol_deform           ,
+                          const CATLONG32                 &amp; iKnotIndex           ,
+                          const CATLONG32                 &amp; iContinuity          );
+
+    // NormalReparametrisationForC1
+    // This method changes the parametrisation of a C0 multiform in order
+    // to make possible C1, the parametric length of the multiform also
+    // becomes equivalent with its geometric length (ds/du near 1.)
+    //
+    void NormalReparametrisationForC1
+                         (      CATLONG32                   IsAlreadyC1          = 0);
+
+    // Optimise Continuities
+    // (cf &quot;Data Reduction Strategy for Splines&quot; by Lyche and Morken)
+    // This method optimises the multiplicities of the different knots
+    // (A knot value can be removed) in the given tolerance. If OnlyCnMode
+    // value is set to n&gt;0, the computation for a given knot value will be
+    // stopped when Cn continuity is reached. The user can also specify some
+    // knot values with non modifiable multiplicities (Unoptimised knots).
+    //
+    // return ratio of deviation that has been done
+    double OptimiseContinuities
+                         (const double                    &amp; iTolerance           ,
+                                CATLONG32                   iOnlyCnMode          = 0,
+                                CATLONG32                   iNbOfUnoptimised     = 0,
+                                CATLONG32                *  iUnoptimisedKnotsIndices = NULL,
+                                CATLONG32                   iMode                = 0); // iMode set to 0 for the old mode, 1 otherwise
+
+    // Optimise Degree
+    // This method optimises the degree of the multiform in the given tole-
+    // rance, the output degree will be greater than or equal to the given
+    // min degree.
+    // The deviation is returned.
+    double OptimiseDegree(const double                    &amp; iTolerance           ,
+                                CATLONG32                   iMinDegree           = 1);
+  
+    // Parametric Extension
+    // This method extends the parametric domain of validity of the NURBS.
+    // The new NURBS has the same parametrisation and oversets the old
+    // geometry. The knot extremity and its new knot value are given as
+    // inputs of the methods. So iKnotRank value can only be 1 or the last
+    // knot number.
+    //
+    CATMathDiagnostic  ParametricExtend(const CATLONG32   &amp; iKnotRank            ,
+                                        const double      &amp; iNewKnotValue        );
+
+    // ChangeKnotVector
+    // This method change the knot vector of the Nurbs while trying
+    // to keep the shape of the original curve. This is done by minimizing
+    // the L2 norm of the curve&#x27;s derivate.
+    //  WARNING : this method could lead to important deviation.
+    //  ioContinuityLeft and ioContinuityRight possible values are 0,1,2.
+    //  Default value is 0 which implie C0 continuity.
+    //  If you impose some continuities at ends of the multiform,
+    //  be aware of the number of freedom degree of your result
+    //  KnotVector : NewNumberOfCPs &gt;= ioContinuityLeft + ioContinuityRight + 2
+    //  WARNING : if there is not enough freedom degree, nothing will be done.
+    void ChangeKnotVector(const CATKnotVector            *  iNewKV               ,
+                                CATLONG32                   iContinuityLeft      = 0,
+                                CATLONG32                   iContinuityRight     = 0);
+
+    // Desextrapol
+    // If the IndexOffset is not null and the multiform is limited,
+    // this method trims the multiform according to the current limits and 
+    // sets the IndexOffset to null.
+    // else does nothing.
+    void Desextrapol     (                                                       );
+
+
+    // 
+    //--------------- Creation or Modification of Geometry -------------------
+    // 
+    // Create or modify a Nurbs Surface with a MultiForm and a KnotVector.
+    // This method is based on Hermitt interpolation. Note that if a NULL
+    // pointer is given for the knot vector, the parametrisation is 
+    // automaticaly computed. The result is a C2 nurbs surface.
+    CATNurbsSurface *InterpolToNurbsSurface
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATKnotVector            *  iLongitudinalKV      ,
+                                CATNurbsSurface          *  iNurbsSur            = NULL);
+
+    CATNurbsSurface *InterpolToNurbsSurface
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATKnotVector            *  iLongitudinalKV      ,
+                             // double *tf,double *tl,
+                                CATMathSetOfPointsND     *                       ,
+                                CATNurbsSurface          *  iNurbsSur            = NULL);
+
+    // Like the previous one but the result is a quintic nurbs
+    CATNurbsSurface *QuinticInterpolToNurbsSurface
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATMathSetOfPointsND     *&amp; W                    ,       // Points
+                                CATMathSetOfPointsND     *&amp; T                    ,       // Tangentes
+                                CATMathSetOfPointsND     *&amp; C                    ,       // Derive Secondes
+                                CATNurbsSurface          *  iNurbsSur            = NULL,
+                                int                         DimOfPoint           = 3   , // =3 (ou 4 si le poids est  interpoler)
+                                int                      *  iCont                = NULL  // Continuite du vecteur nodal de la nurbs  construire
+                         );
+    // Modifies a curve by extrapolation of its data.
+    // Warning : the equations of the curve are not computed (they are
+    // not supposed to change during the extrapolation).
+    void ExtrapolANurbsCurve(   CATNurbsCurve            *  NurbsToExtrapol      );
+
+    // Modifies a PCurve by extrapolation of its data.
+    // Warning : the equations of the curve are not computed (they are
+    // not supposed to change during the extrapolation).
+    void ExtrapolAPNurbs (      CATPNurbs                *  NurbsToExtrapol      );
+
+    // Create a set of Nurbs Curves with a MultiForm (if just one form).
+    // All the curves here created are at least C2 everywhere.
+    // It is possible to define a tolerance of miinimal 3D size for
+    // the geometric elements created.
+    CATNurbsCurve **ConvertToC2NurbsCurves
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATLONG32                 &amp; oNbCurves            ,
+                                double                      iTol                 = 0.0
+                         );
+    // Create a set of Nurbs Curves with a MultiForm
+    // All the curves here created are at least C2 everywhere.
+    // It is possible to define a tolerance of miinimal 3D size for
+    // the geometric elements created.
+    // The option of repametrisation allows to adjust the global 
+    //  normal parametrisation between two consecutive non-C2 knots
+    //(these portions are frequently independantly exploded )
+    // iModeReparam =CatAutomaticReparameterization force the new parametrisation
+    // The allocated size of oNonC2KnotIndexes  can be NbKnots -2
+    // (NULL pointer if NbKnots =2)
+    // The significant elements in output is for i=0 ; i&lt;oNbCurves-1
+     CATNurbsCurve **ConvertToC2NurbsCurves
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATLONG32                 &amp; oNbCurves            ,
+                                CATLONG32                *  oNonC2KnotIndexes    ,
+                          const CATParameterizationOption   iParameterizationOption = CatKeepParameterization,
+                                double                      iTol                 = 0.0);
+
+    // Create a set of PNurbs with a MultiForm (if just one form)
+    // All the curves here created are at least C2 everywhere.
+    // It is possible to define a tolerance of miinimal 3D size for
+    // the geometric elements created.
+    CATPNurbs **ConvertToC2PNurbs
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATSurface               *                       ,
+                                CATLONG32                 &amp; oNbCurves            ,
+                                double                      iTol                 = 0.0
+                         );
+
+    // Create a set of PNurbs with a MultiForm (if just one form)
+    // All the curves here created are at least C2 everywhere.
+    // It is possible to define a tolerance of miinimal 3D size for
+    // the geometric elements created.
+    // The option of repametrisation allows to adjust the global
+    //  normal parametrisation between two consecutive non-C2 knots
+    // (these portions are frequently independantly exploded)
+    // iParameterizationOption =CatAutomaticReparameterization force the new parameterization
+    // The allocated size of oNonC2KnotIndexes  can be NbKnots -2
+    // (NULL pointer if NbKnots =2)
+    // The significant elements in output is for i = 0; i &lt; (oNbCurves - 1)
+    CATPNurbs **ConvertToC2PNurbs
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATSurface               *                       ,
+                                CATLONG32                 &amp; oNbCurves            ,
+                                CATLONG32                *  oNonC2KnotIndexes    ,
+                          const CATParameterizationOption   iParameterizationOption = CatKeepParameterization,
+                                double                      iTol                 = 0.0);
+
+    //  Cut the initial multiform into to a given continuous sub-multiform.
+    //  multiformes[iF] will be the iF multiform.
+    CATLONG32 ConvertToContinuousNurbsMultiFormes
+                         (      CATLONG32                   expectedContinuity   ,
+                                CATLONG32                 &amp; nbContinuousMultiForms,
+                                CATFrFNurbsMultiForm    **&amp; continuousMultiforms ,
+                                CATFrFNurbsBipar         *  bipar                = NULL,
+                                CATLONG32                   option               = 0);
+                                                              // We can no more modify this class since it has been declared CAA2 ,
+                                                              // because of a nodoc method from CATLiss.
+                                                              // lire au lieu de &quot;isNearlyContinuous&quot; l&#x27;argument &quot;option&quot;
+                                                              // Things should change in CXR11.
+                                                              // As long as we must guarante this interface stability.
+                                                              // here is the way we proceed :
+                                                              // - the unit number indicated the kind of continuity we expect :
+                                                              //    * 0 if we want analytical continuity,
+                                                              //    * 1 if we accept want to apply the &quot;C1-MixteMode&quot;,
+                                                              //    * 2 if we accept G-continuity according to numerical criteria
+                                                              //    * 3 if we accept C-continuity according to numerical criteria
+                                                              // - the ten-number indicates if we want to cut closed geometry.
+                                                              //    * 0 if we do not cut closed geometry,
+                                                              //    * 1 if we cut closed geometry.
+                                                              // -----------------------------------------------------------------
+                                                              // Mais non Pierre (53.1FIXPARTPRG),
+                                                              // avec CAA2 non Level1 on peut faire ce qu&#x27;on veut dans la classe
+                                                              //   NLD050412
+                                                              // -----------------------------------------------------------------
+
+    // rlad
+    //
+    //--------------- Transfert methods -------------------
+    //
+    // recherche rapide de discontinuites inferieures a iCont
+    void      ContinuityCn
+                         (      CATLONG32                 &amp; iCont                ,
+                                CATLONG32                 &amp; oNcut                ,
+                                CATLONG32                *&amp; oIcut                );
+
+    // decoupage de la multiforme sur noeuds avec bloc lim
+    void      Break      (      CATLONG32                 &amp; iNcut                ,
+                                CATLONG32                *  iIcut                ,
+                                double                    &amp; iStartParm           ,
+                                double                    &amp; iEndParm             ,
+                                CATFrFNurbsMultiForm    **  oCutcrv              ,
+                          const CATTolerance              &amp; itol                 );
+
+
+    // creation d&#x27;une CATNurbsCurv a partir d&#x27;une multiforme
+    void      CreateCurve(      CATGeoFactory            *  iFactory             ,
+                                CATNurbsCurve            *&amp; oCATCrv              );
+
+    // decoupage sur les discontinuites inferieures a iCont
+    void      CATTransfertCnCurve
+                         (      CATGeoFactory            *  iFactory             ,
+                                CATLONG32                 &amp; iCont                ,
+                                double                    &amp; iStartPar            ,
+                                double                    &amp; iEndPar              ,
+                                CATLONG32                 &amp; oNcrv                ,
+                                CATNurbsCurve           **&amp; oCATCrv              ,
+                          const CATTolerance              &amp; itol                 );
+    // rlaf
+
+
+    //
+    //--------------- Debug methods -------------------
+    //
+    // visu pour debug
+    // dans les 2 dernieres methodes, au 1er appel, les variables
+    // (sauf la factory!) doivent etre initialisees a 0
+    void VisuPoles       (      CATGeoFactory            *  iFactory             );
+    void VisuPoles       (      CATGeoFactory            *  iFactory             ,
+                                CATCartesianPoint       **&amp; VisuPt               ,
+                                CATLONG32                 &amp; NbVisuPt             );
+
+    // Visu de tous les poles et leur liens,
+    void VisuPoles       (      CATGeoFactory            *  iFactory             ,
+                                CATCartesianPoint       **&amp; ioVisuPt             ,
+                                CATLONG32                 &amp; ioNbVisuPt           ,
+                                CATLine                 **&amp; ioVisuLine           ,
+                                CATLONG32                 &amp; ioNbVisuLine         );
+
+    //
+    //------------------- Deprecated Constructors -----------------
+    //
+    //                                                               CATFrFNurbsMultiFormConstructor_18
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration     (CATFrFNurbsMultiFormConstructor_19)).
+    */
+    CATFrFNurbsMultiForm (const CATMathSetOfPoints      **  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iIsRational          ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const double                   *  iWeights             = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_16
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_17)
+    */
+    CATFrFNurbsMultiForm (const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iIsRational          ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const double                   *  iWeights             = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+
+    //                                                               CATFrFNurbsMultiFormConstructor_14
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_15)
+    */
+    CATFrFNurbsMultiForm (const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iNumberOfCPsByForm   ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_08
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_09)
+    */
+    CATFrFNurbsMultiForm (const CATLONG32                 &amp; iNbArcs              ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iDegree              ,
+                          const double                   *  PolCoef              ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                        );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_20
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_21)
+    */
+    CATFrFNurbsMultiForm (const CATMathNurbsBipar        *  iMathNurbsBipar      ,
+                          const CATLONG32                 &amp; iDir                 ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_06
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_07)
+    */
+    CATFrFNurbsMultiForm (const CATKnotVector            *  iKnotVector          ,
+                          const CATMathSetOfPointsND     *  iPoints              ,
+                          const CATMathSetOfPointsND     *  iFstDer              ,
+                          const CATMathSetOfPointsND     *  iSndDer              = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+
+    //                                                               CATFrFNurbsMultiFormConstructor_10
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_11)
+    */
+    CATFrFNurbsMultiForm (const CATCurve                 *  iCurve               ,
+                          const CATCrvLimits             *  iCrvLim              = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_12
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_13)
+    */
+    CATFrFNurbsMultiForm (const CATNurbsCurve           **  iCurve               ,
+                          const CATLONG32                 &amp; iNbOfCurves          ,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_22
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_23)
+    */
+    CATFrFNurbsMultiForm (const CATLONG32                 &amp; iDir                 ,
+                          const CATNurbsSurface          *  iSurface             ,
+                          const CATSurLimits             *  iSurLimits           = NULL,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_02
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_04)
+    */
+    CATFrFNurbsMultiForm (const CATMathNurbsMultiForm   **  iTabOfNurbsMultiForms,
+                          const CATLONG32                 &amp; iNbOfNurbsMultiForms ,
+                                double                      Tolerance            = CATGetDefaultTolerance().LargeEpsgForLengthTest(),
+                                CATLONG32                   G1Concatenation      = 0,
+                          const CATTolerance &amp; iTolObject = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_03
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_05)
+    */
+    CATFrFNurbsMultiForm (const CATFrFNurbsMultiForm    **  iTabOfNurbsMultiForms,
+                          const CATLONG32                 &amp; iNbOfNurbsMultiForms ,
+                                double                      Tolerance            = CATGetDefaultTolerance().LargeEpsgForLengthTest(), 
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+    //                                                               CATFrFNurbsMultiFormConstructor_24
+    /**
+    * @nodoc
+    * Do not use (use constructor with CATSoftwareConfiguration)(see CATFrFNurbsMultiFormConstructor_25)
+    */
+    CATFrFNurbsMultiForm (const CATMathNurbsMultiForm     &amp; iMathNurbsMultiForm  ,
+                                CATLONG32                   isid                 ,
+                                CATLONG32                   isens                ,
+                                CATLONG32                   iExtractOrder        = 1,
+                          const CATTolerance              &amp; iTolObject           = CATGetDefaultTolerance()
+                         );
+
+
+//----POUR RAISON DE COMPATIBILITE--------------------
+//----PRIERE DE MIGRER VERS LES NOUVELLES INTERFACES--
+//NE PLUS UTILISER - NE PLUS UTILISER - NE PLUS UTILISER
+//NE PLUS UTILISER - NE PLUS UTILISER - NE PLUS UTILISER
+  // Explode
+  CATFrFNurbsMultiForm **Explode
+                        (const  double                   *  iBrkKnotVal          ,
+                         const  CATLONG32                 &amp; iNbOfBrkKnotVal      )
+    {
+     return ((CATFrFNurbsMultiForm **)(CATMathNurbsMultiForm::Explode(iBrkKnotVal,
+                                                                      iNbOfBrkKnotVal)
+                                      ));
+    };
+
+  private :
+
+  void Concatenate      (const CATMathNurbsMultiForm    **  iTabOfNurbsMultiForms,
+                               CATLONG32                    iNbOfNurbsMultiForms ,
+                               double                       Tolerance            ,/* = CATGetDefaultTolerance().LargeEpsgForLengthTest() */
+                               CATLONG32                    G1Concatenation      = 0,
+                         const CATTolerance               &amp; iTolObject           = CATGetDefaultTolerance()
+                        );
+
+
+  // **** Common and mandatory initialization point and breakpoint **** NLD050412
+  void Init();
+
+  void Init09            (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATLONG32                 &amp; iNbArcs              ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iDegree              ,
+                          const double                   *  PolCoef              ,
+                          const CATTolerance              &amp; iTolObject
+                         );
+
+
+  void Init13            (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATNurbsCurve           **  iCurve               ,
+                          const CATLONG32                 &amp; iNbOfCurves          ,
+                          const CATTolerance              &amp; iTolObject
+                         );
+
+  void Init15            (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iNumberOfCPsByForm   ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const CATTolerance              &amp; iTolObject
+                         );
+  void Init17            (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathSetOfPoints       *  iSetOfPoints         ,
+                          const CATLONG32                 &amp; iIsRational          ,
+                          const CATKnotVector            *  iKnotVector          ,
+                          const CATLONG32                 &amp; iDimension           ,
+                          const CATLONG32                 &amp; iNumberOfForms       ,
+                          const double                   *  iWeights             ,
+                          const CATTolerance              &amp; iTolObject
+                         );
+
+  void Init25            (      CATSoftwareConfiguration *  iConfig              ,
+                          const CATMathNurbsMultiForm     &amp; iMathNurbsMultiForm  ,
+                                CATLONG32                   isid                 ,
+                                CATLONG32                   isens                ,
+                                CATLONG32                   iExtractOrder        ,
+                          const CATTolerance              &amp; iTolObject
+                         );
+
+  // *** &quot;Basic&quot; mode of OptimiseContinuities. Does not use an operator  JSX240616
+  double BasicOptimiseContinuities_Private
+                         (const double                    &amp; iTolerance           ,
+                                CATLONG32                   iOnlyCnMode          = 0,
+                                CATLONG32                   iNbOfUnoptimised     = 0,
+                                CATLONG32                *  iUnoptimisedKnotsIndices = NULL,
+                                CATLONG32                   iModeVersion         = 0
+                         );
+
+};
+
+//-----------------------------------------------------------------------------
+//              Ajout de CATFrFNurbsMultiFormFreeLastUnConstructedObject(). NLD190607
+//              To be called in case of exception thrown in constructor
+//-----------------------------------------------------------------------------
+extern &quot;C&quot; ExportedByYP00IMPL void CATFrFNurbsMultiFormFreeLastUnConstructedObject() ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATForeignSurfaceData.html">← 上一页: CATForeignSurfaceData.h</a></div>
+        <div><a href="CATGeoDef.html">下一页: CATGeoDef.h →</a></div>
+    </div>
+</body>
+</html>

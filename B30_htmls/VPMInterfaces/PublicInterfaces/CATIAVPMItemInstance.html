@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIAVPMItemInstance.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIAVPMItemInstance.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIAVPMIIProductSpecification.html">← 上一页: CATIAVPMIIProductSpecification.h</a></div>
+        <div><a href="CATIAVPMObject.html">下一页: CATIAVPMObject.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// -*-C++-*-
+
+#ifndef CATIAVPMItemInstance_h
+#define CATIAVPMItemInstance_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+ 
+// =================================================================
+// Includes
+// =================================================================
+// System
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATIAVPMObject.h&quot;
+#include &quot;CATCORBABoolean.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+// =================================================================
+// Forward classes declaration
+// =================================================================
+class CATIAVPMProductRootClass;
+class CATIAVPMProductSpecification;
+class CATIAVPMProductComponent;
+class CATIAVPMPartVersion;
+class CATIAVPMPartVersion_var;
+class CATIAVPMTechRelation;
+class CATIAVPMTechInstance;
+class CATIAVPMAssemblyRelation;
+class CATIAVPMAssemblyRelation_var;
+class CATIAVPMItemInstance_var;
+class CATMathTransformation;
+class CATICfgFilter;
+class CATIVpmFactoryObject;
+class CATIAVPMTechInstance_var;
+class CATIAVPMProductSpecification_var;
+class CATIVpmPSDMUFilter_var;
+// #include &quot;CATLISTV_Declare.h&quot;
+// class CATLISTV(CATIAVPMItemInstance_var);
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIAVPMItemInstance;
+#else
+extern &quot;C&quot; const IID IID_CATIAVPMItemInstance;
+#endif
+
+//------------------------------------------------------------------
+/**
+ * Interface to create and manage Item Instance.
+ */
+
+class ExportedByGUIDVPMInterfaces CATIAVPMItemInstance : public CATBaseUnknown //CATIAVPMObject
+{
+    /** @nodoc */
+    CATDeclareInterface;
+
+    public:
+    //
+    // =======================================================
+    // Method(s) 
+    // =======================================================
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   IsRoot(boolean &amp; IsRoot)=0;
+
+/**
+ * @nodoc
+ */
+    // deprecated: use version with DMUFilter parameter
+    virtual HRESULT   IsLeaf(CATICfgFilter *CfgFilter,
+			     boolean &amp; IsLeaf)=0;
+
+/**
+ * @nodoc
+ */
+    // deprecated: use version with DMUFilter parameter
+    virtual HRESULT   IsNode(CATICfgFilter *CfgFilter,
+			     boolean &amp; IsNode)=0;
+
+/**
+ * @nodoc
+ */
+    // deprecated: use version with DMUFilter parameter
+    virtual HRESULT   IsOrphan(CATICfgFilter *CfgFilter,
+			       boolean &amp; IsOrphan)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ParentProductRootClass(CATIAVPMProductRootClass *&amp; ProductRootClass)=0;
+
+/**
+ * Retrieves Part Version of an Item Instance.
+ * @param PartVersion
+ *   The Part Version.
+ */
+    virtual HRESULT   get_PartVersion(CATIAVPMPartVersion *&amp; PartVersion)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_PartVersion(CATIAVPMPartVersion *PartVersion)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ProductSpecification(CATIAVPMProductSpecification *&amp; ProductSpecification)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_ProductSpecification(CATIAVPMProductSpecification *ProductSpecification)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   AggregateTechInstance(const CATBSTR &amp; InstanceID,
+					    CATIAVPMTechInstance *&amp; TechInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_TechInstance(long index,
+				       CATIAVPMTechInstance *&amp; TechInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_TechInstanceCount(long &amp; NbItems)=0;
+
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_ItemInstanceFromPV(CATIAVPMPartVersion *PartVersion,
+					     const CATBSTR &amp; ItemId,
+					     CATMathTransformation *matrix,
+					     CATIAVPMItemInstance *&amp; ItemInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_ItemInstanceFromPS(CATIAVPMProductSpecification *ProductSpecification,
+					     const CATBSTR &amp; ItemId,
+					     CATMathTransformation *matrix,
+					     CATIAVPMItemInstance *&amp; ItemInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ParentItemInstance(CATIAVPMItemInstance *&amp; ItemInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_ProductComponent(CATIAVPMProductComponent *ProductComponent)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   RemoveProductComponent(CATIAVPMProductComponent *ProductComponent)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ProductComponentCount(long &amp; NbItems)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ProductComponent(long index,
+					   CATIAVPMProductComponent *&amp; ProductComponent)=0;
+
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   IsSubstitute(boolean &amp; oIsSubstitue) const =0 ;
+
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   CreateSymetricalItemInstance(CATMathTransformation *matrix,
+						   CATIAVPMItemInstance *&amp; SymetricalItemInstance)=0;
+
+/**
+ * @nodoc
+ */
+    //NGS: Do not use. Will be moved to CATIPrivateVPMItemInstance soon.
+    virtual HRESULT   get_Relation(long index,
+				   CATBSTR &amp; Description,
+				   CATIAVPMItemInstance *&amp; ItemInstanceAttached,
+				   CATIAVPMItemInstance *&amp; ItemInstance,
+				   CATMathTransformation *&amp; matrix)=0;
+
+/**
+ * @nodoc
+ */
+    //NGS: Do not use. Will be moved to CATIPrivateVPMItemInstance soon.
+    virtual HRESULT   get_RelationCount(long &amp; NbItems)=0;
+
+
+/**
+ * @nodoc
+ */
+    //NGS: Do not use. Will be moved to CATIPrivateVPMItemInstance soon.
+    virtual HRESULT   get_AttachedRelation(long index,
+					   CATBSTR &amp; Description,
+					   CATIVpmFactoryObject *&amp; Relation,
+					   CATIAVPMItemInstance *&amp; ItemInstanceParent,
+					   CATIAVPMItemInstance *&amp; ItemInstanceChild,
+					   CATMathTransformation *&amp; matrix)=0;
+
+/**
+ * @nodoc
+ */
+    //NGS: Do not use. Will be moved to CATIPrivateVPMItemInstance soon.
+    virtual HRESULT   get_AttachedRelationCount(long &amp; NbItems)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_Matrix(CATMathTransformation *matrix, boolean iUseConfig=TRUE)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_Matrix(CATMathTransformation *&amp; matrix)=0;
+
+/**
+ * @nodoc
+ */
+    // deprecated: use version with DMUFilter parameter
+    virtual HRESULT   get_NearItemInstances(double Clearance,
+					    CATLISTV(CATBaseUnknown_var) &amp; ListItemInstance)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_AssemblyRelation(CATIAVPMAssemblyRelation *&amp; AssemblyRelation, int ActivatedOnly=1)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_Reference(CATIAVPMObject *&amp; Reference)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ParentTechRelation(long index,
+					     CATIAVPMTechRelation *&amp; TechRelation)=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   get_ParentTechRelationCount(long &amp; NbItems)=0;
+
+
+
+
+    // =======================================================
+    // 20-Mar-2001: Umesh, INCAT Systems
+    // Added method implementations for retrieving Reference
+    // Item Instance.
+    // Methods for getting the Reference of an Item Instance
+    // Has_PV_AsReference()   -To know whether Item Instance
+    //                         has Product Version as a 
+    //                         Reference
+    // Has_PS_AsReference()   -To know whether Item Instance
+    //                         has Product Specification as 
+    //                         a Reference
+    // =======================================================
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   Has_PV_AsReference()=0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT   Has_PS_AsReference()=0;
+
+
+// MTM - 09/10/2001 - For Standard Part Management:
+//   gives the discrete quantity of current Object
+/** 
+ * @nodoc
+ */
+    virtual HRESULT   get_DiscreteQuantity(long &amp;value)=0;
+
+// MTM - 09/10/2001 - For Standard Part Management:
+//   modifies the discrete quantity of current Object (in configured mode)
+/**
+ * @nodoc
+ */
+    virtual HRESULT   put_DiscreteQuantity(const long &amp;value, 
+                                           CATIAVPMItemInstance *&amp; oItemInstance)=0;
+
+
+    //+NGS,15-May-2002: Granular import method for PMA.
+/**
+ * @nodoc
+ */
+    virtual HRESULT put_SingleItemInstanceFromAR(const CATIAVPMAssemblyRelation_var &amp; hAssemblyRelation,
+						 const CATBaseUnknown_var &amp; hRef,
+						 CATIAVPMItemInstance_var &amp;hItemInstance )=0;
+
+
+// RDR 18-Dec-2002 Have to keep old methods signatures
+/**
+* @nodoc
+* Deprecated DO NOT USE.
+*/
+virtual HRESULT   AggregateSubstituteItemInstance(const CATBSTR &amp; Description,
+																							CATIAVPMObject *ObjectFrom,
+																							const CATBSTR &amp; InstanceID,
+																							CATMathTransformation *matrix,
+																							CATIAVPMItemInstance *&amp; ItemInstance)=0;
+
+/**
+* @nodoc
+* Deprecated DO NOT USE.
+*/
+virtual HRESULT   get_Substitute(long index,
+																CATBSTR &amp; Description,
+																CATIAVPMItemInstance *&amp; ItemInstance)=0;
+
+
+/**
+* @nodoc
+* Deprecated DO NOT USE.
+*/
+virtual HRESULT   get_SubstituteCount(long &amp; NbItems)=0;
+
+
+/**
+* @nodoc
+* Deprecated DO NOT USE.
+*/
+
+virtual HRESULT   Substitute(long NbItems)=0;
+
+
+/**
+* @nodoc
+* Deprecated DO NOT USE.
+*/
+ virtual HRESULT   get_SubstituteBase(CATBSTR &amp; Description,
+	                                   CATIAVPMItemInstance *&amp; ItemInstance)=0;
+ 
+
+//+RDR 07-Oct-2002 Substitutes are back
+/**
+* @nodoc
+* Creates a substitute Item Instance.
+* @param ihSubstituteRef Part Version/ProductSpec substitue reference .
+* of the substitute.
+* @param ohIISubs the created substitute item instance.
+*/
+virtual HRESULT   AggregateSubstituteItemInstance(
+									const CATIAVPMObject_var &amp; ihSubstituteRef, 
+									CATIAVPMItemInstance_var &amp; ohIISubs)=0;
+
+/**
+* @nodoc
+* Returns the list of know substitutes for
+* this item instance.
+* @param oLIISubs
+*/
+
+virtual HRESULT	get_SubstitutesList(CATLISTV(CATBaseUnknown_var) &amp; oLIISubs)=0;
+
+/**
+* @nodoc
+* Gives the substitute base Item Instance.
+*/
+virtual HRESULT   get_SubstituteBase(CATIAVPMItemInstance_var &amp; ohItemInstance) const =0;
+
+
+
+/**
+ * @nodoc
+ * 07-Oct-2002 +RDR
+ * Methods using CATBSTR must be replaced and deprecated
+ */
+    virtual HRESULT   AggregateTechInstance(const CATUnicodeString &amp; InstanceID,
+					    CATIAVPMTechInstance_var&amp; TechInstance)=0;
+
+/**
+ * @nodoc
+ * 07-Oct-2002 +RDR
+ * Methods using CATBSTR must be replaced and deprecated
+ */
+    virtual HRESULT   put_ItemInstanceFromPV(CATIAVPMPartVersion_var&amp; PartVersion,
+					     const CATUnicodeString &amp; ItemId,
+					     CATMathTransformation *matrix,
+					     CATIAVPMItemInstance_var&amp; ItemInstance)=0;
+
+/**
+ * @nodoc
+ * 07-Oct-2002 +RDR
+ * Methods using CATBSTR must be replaced and deprecated
+ */
+ virtual HRESULT   put_ItemInstanceFromPS(CATIAVPMProductSpecification_var&amp; ProductSpecification,
+					     const CATUnicodeString &amp; ItemId,
+					     CATMathTransformation *matrix,
+					     CATIAVPMItemInstance_var&amp; ItemInstance)=0;
+
+ 
+    /**
+     * @nodoc
+     */
+    // method without explicit DMUFilter must be replaced and deprecated.
+    virtual HRESULT IsLeaf(
+        boolean&amp; IsLeaf,
+        const CATIVpmPSDMUFilter_var&amp; hDMUFilter) = 0;
+
+    /**
+     * @nodoc
+     */
+    // method without explicit DMUFilter must be replaced and deprecated.
+    virtual HRESULT IsNode(
+        boolean&amp; IsNode,
+        const CATIVpmPSDMUFilter_var&amp; hDMUFilter) = 0;
+
+    /**
+     * @nodoc
+     */
+    // method without explicit DMUFilter must be replaced and deprecated.
+    virtual HRESULT IsOrphan(
+        boolean&amp; IsOrphan,
+        const CATIVpmPSDMUFilter_var&amp; hDMUFilter) = 0;
+
+    /**
+     * @nodoc
+     */
+    // method without explicit DMUFilter must be replaced and deprecated.
+    virtual HRESULT get_NearItemInstances(
+        double Clearance,
+        CATLISTV(CATBaseUnknown_var)&amp; ListItemInstance,
+        const CATIVpmPSDMUFilter_var&amp; hDMUFilter) = 0;
+        
+    /**
+     * @nodoc
+     */
+    virtual HRESULT   get_OverwritePosition(boolean &amp; oOvwPosFlag)=0;
+    /**
+     * @nodoc
+     */
+    virtual HRESULT   put_OverwritePosition(const boolean &amp; iOvwPosFlag)=0;
+
+};
+//-----------------------------------------------------------------
+// Handler definition
+//-----------------------------------------------------------------
+/** @nodoc */
+CATDeclareHandler(CATIAVPMItemInstance, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIAVPMIIProductSpecification.html">← 上一页: CATIAVPMIIProductSpecification.h</a></div>
+        <div><a href="CATIAVPMObject.html">下一页: CATIAVPMObject.h →</a></div>
+    </div>
+</body>
+</html>

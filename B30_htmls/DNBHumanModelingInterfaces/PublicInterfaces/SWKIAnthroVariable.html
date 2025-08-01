@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNBHumanModelingInterfaces/PublicInterfaces/SWKIAnthroVariable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DNBHumanModelingInterfaces/PublicInterfaces/SWKIAnthroVariable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SWKIAnthro.html">← 上一页: SWKIAnthro.h</a></div>
+        <div><a href="SWKIBody.html">下一页: SWKIBody.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+
+#ifndef _SWKIAnthroVariable_h
+#define _SWKIAnthroVariable_h
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+// *****************************************************************************
+// Framework DNBHumanModelingInterfaces
+// Copyright Safework Inc.
+// *****************************************************************************
+//  Abstract:
+//  ---------
+//
+//    SWKIAnthroVariable interface.
+//    This interface offers services related to an anthropometric variable.
+//
+// *****************************************************************************
+//  Usage:
+//  ------
+//
+// *****************************************************************************
+//  Inheritance:
+//  ------------
+//
+//    SWKIManikinPart
+//
+// *****************************************************************************
+//  Main Methods:
+//  -------------
+//
+//    Init
+//    GetOwner
+//    GetManikin
+//    SetManagementToAutomatic
+//    SetManagementToUser
+//    IsAutomatic
+//    GetLiteralParameter
+//    GetReferenceNumber
+//    GetAcronym
+//    GetName
+//    GetValue
+//    GetValueAsPercentile
+//    SetUserValue
+//    SetUserValueFromPercentile
+//    GetMean
+//    GetStdDev
+//    GetCorrelationValue
+//    GetMinValue
+//    GetMaxValue
+//    GetAnchorPointPosture
+//    GetAnchorPointSide
+//    GetFirstAnchorPointTranslation
+//    GetSecondAnchorPointTranslation
+//    GetBodyPart
+//    GetFirstAnchorPoint
+//    GetSecondAnchorPoint
+//    IsACircumference
+//    IsAHeight
+//    IsALength
+//    IsABreadth
+//    IsADepth
+//    IsAMass
+//    HasAGraphicalRep
+//    GetCircEllipse
+//    GetArrowRep
+// *****************************************************************************
+//  History
+//  -------
+//
+//  Author: Jean-Guy AUGUSTIN
+//  Date  : 00/03/01
+//  Goal  : Creation
+// *****************************************************************************
+//
+// --- DNBHumanModelingInterfaces
+#include &quot;SWKIManikinPart.h&quot;
+#include &quot;SWKPostureSpec.h&quot;
+//
+// --- DNBHumanModeling
+#include &quot;SWShortNames.h&quot;
+//
+// --- System
+#include &quot;CATBooleanDef.h&quot;
+//
+// --- DNBHumanModeling
+class SWAnthroVariable;
+//
+// --- DNBHumanModelingInterfaces
+class SWKIAnthro;
+class SWKIArrowRepresentation;
+class SWKIManikin;
+//
+// --- LiteralFeatures
+class CATICkeParm;
+//
+// --- Mathematics
+class CATMathPoint;
+class CATMathVector;
+//
+// --- System
+class CATString;
+class CATUnicodeString;
+
+#ifndef SW_ANTHRO_FLAGS_DEFINED
+#	define SW_ANTHRO_FLAGS_DEFINED
+
+/* Sex of manikin */
+#ifndef SW_ANTHRO_SEX_FEMALE
+#	define SW_ANTHRO_SEX_FEMALE		0x0	/* female */
+#endif
+
+#ifndef SW_ANTHRO_SEX_MALE
+#	define SW_ANTHRO_SEX_MALE		0x1	/* male */
+#endif
+
+/* Variable value type */
+#ifndef SW_ANTHRO_VAR_VALUE
+#	define SW_ANTHRO_VAR_VALUE		0x0	/* Real-world format */
+#endif
+
+#ifndef SW_ANTHRO_VAR_PERC
+#	define SW_ANTHRO_VAR_PERC		0x1	/* Percentile format */
+#endif
+
+/* Variable management */
+#ifndef SW_ANTHRO_VAR_SYSTEM
+#	define SW_ANTHRO_VAR_SYSTEM		0x0	/* The variable is managed by the system */
+#endif
+
+#ifndef SW_ANTHRO_VAR_USER
+#	define SW_ANTHRO_VAR_USER		0x1	/* The variable is user set */
+#endif
+
+/* The side under which the anchor points are best viewed */
+enum SWSideSpec
+{
+	SWSideSpecNone  = 0,
+	SWSideSpecFront = 1,
+	SWSideSpecBack  = 2,
+	SWSideSpecRight = 3
+};
+
+/* The body part on which the anthro variable is measured */
+enum SWAnthroPart
+{
+	SWAnthroPartNone = 0,
+	SWAnthroPartBody = 1,
+	SWAnthroPartHead = 2,
+	SWAnthroPartTorso = 3,
+	SWAnthroPartArm = 4,
+	SWAnthroPartHand = 5,
+	SWAnthroPartLeg = 6,
+	SWAnthroPartFoot = 7
+};
+
+#endif  /* SW_ANTHRO_FLAGS_DEFINED */
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __SWKHumanModelingItf
+#define ExportedBySWKHumanModelingItf __declspec(dllexport)
+#else
+#define ExportedBySWKHumanModelingItf __declspec(dllimport)
+#endif
+#else
+#define ExportedBySWKHumanModelingItf
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySWKHumanModelingItf IID IID_SWKIAnthroVariable;
+#else
+extern &quot;C&quot; const IID IID_SWKIAnthroVariable;
+#endif
+
+/**
+  *  This interface offers services related to an anthropometric variable.&lt;br&gt;
+  *  Each anthropometric variable represents a body dimension on the manikin.&lt;br&gt;
+  *  The anthropometric variable can be managed by the system (in which case&lt;br&gt;
+  *  they are said to be &lt;i&gt;automatic&lt;/i&gt; variables) or by the user (in which case&lt;br&gt;
+  *  they are said to be &lt;i&gt;user&lt;/i&gt; variables).
+  **/
+
+class ExportedBySWKHumanModelingItf SWKIAnthroVariable : public SWKIManikinPart
+{
+	CATDeclareInterface;
+
+  public:
+
+	/**
+	  * Initialize the internal anthropometric variable.&lt;br&gt;
+	  * &lt;strong&gt;This method is to be used by the system only&lt;/strong&gt;.
+	  **/
+	virtual HRESULT Init(SWAnthroVariable * piInternalAnthroVariable) = 0;
+
+	/**
+	  * Return the pointer to the anthropometry which owns this variable.
+	  **/
+	virtual SWKIAnthro * GetOwner() = 0;
+
+	/**
+	  * Return the pointer to the manikin which owns this variable.
+	  **/
+	virtual SWKIManikin * GetManikin() = 0;
+
+	/**
+	  * Return the acronym of the variable.&lt;br&gt;
+	  * The acronym is an abbreviation of the name of&lt;br&gt;
+	  * the variable that uniquely identifies the variables&lt;br&gt;
+	  * The reference number also uniquely identifies an&lt;br&gt;
+	  * anthropometric variable&lt;br&gt;
+	  * (see method &lt;code&gt;GetReferenceNumber()&lt;/code&gt;).
+	  **/
+	virtual CATString GetAcronym() const = 0;
+
+	/** 
+	  * Return the reference number of the variable,&lt;br&gt;
+	  * in a &lt;strong&gt;US Army Natick&lt;/strong&gt; sense&lt;br&gt;
+	  * (e.g. 2 for us2, 100 for us100, etc.).
+	  * Each variable has a unique reference number and a&lt;br&gt;
+	  * uniqe acronym.
+	  **/
+	virtual unsigned GetReferenceNumber() const = 0;
+
+	/**
+	  * Return the full name of this anthropometric variable.
+	  * See document &quot;&lt;i&gt;Managing SWManikin Databases&lt;/i&gt;&quot; for more
+	  * information.
+	  **/
+	virtual CATUnicodeString GetName() const = 0;
+
+	/**
+	  * Return the value of this anthropometric variable.&lt;br&gt;
+	  * The value returned is in kilograms if the variable&lt;br&gt;
+	  * is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;),&lt;br&gt;
+	  * and in centimeters otherwise.
+	  **/
+	virtual double GetValue() const = 0;
+
+	/** 
+	  * Return a number between 0 and 100, representing the percentile&lt;br&gt;
+	  * corresponding to the variable&#x27;s current value.
+	  **/
+	virtual double GetValueAsPercentile() const = 0;
+
+	/** 
+	  * Set the management of this variable to user.&lt;br&gt;
+	  * After the call to this method, the variable&#x27;s&lt;br&gt;
+	  * value will not be changed, until the variable&lt;br&gt;
+	  * is changed again by the user or reset to system.
+	  **/
+	virtual void SetManagementToUser() = 0;
+
+	/** 
+	  * Set the management of this variable to system.&lt;br&gt;
+	  * After the call to this method, the variable&#x27;s&lt;br&gt;
+	  * value will be updated by the system whenever&lt;br&gt;
+	  * the anthropometry is updated.
+	  **/
+	virtual void SetManagementToAutomatic() = 0;
+
+	/** 
+	  * Reset the management of this variable to system.&lt;br&gt;
+	  * After the call to this method, the variable&#x27;s&lt;br&gt;
+	  * value will be updated by the system whenever&lt;br&gt;
+	  * the anthropometry is updated. The diffrence between 
+	  * this function and about is not to rebuild everything.
+	  **/
+	virtual void ResetManagementType() = 0;
+
+	/** 
+	  * Query the management of this variable.
+	  *
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if the variable is managed by the system,
+	  * &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;FALSE&lt;/font&gt;&lt;/strong&gt; otherwise.
+	  **/
+	virtual boolean IsAutomatic() const = 0;
+
+	/**
+	  * Return the litereal feature that is associated to
+	  * this anthropometric variable.&lt;br&gt;
+	  * &lt;br&gt;
+	  * This literal parameter is bound to the anthropometric&lt;br&gt;
+	  * variable, and has the same type as the anthropometric&lt;br&gt;
+	  * variable.  It can be used the present the anthropometric&lt;br&gt;
+	  * variable in the user interface of an application.&lt;br&gt;
+	  * The literal &lt;strong&gt;is always synchronized with&lt;br&gt;
+	  * its associated variable&lt;/strong&gt;; that is when this&lt;br&gt;
+	  * literal is changed, the underlying anthropometric variable&lt;br&gt;
+	  * is updated, and vice versa.&lt;br&gt;
+	  **/
+	virtual CATICkeParm * GetLiteralParameter() = 0;
+
+	/**
+	  * Set the value of the variable.
+	  *
+	  * @param piValue The new value to give the variable.&lt;br&gt;
+	  * This value must be expressed in kilograms (kg)&lt;br&gt;
+	  * if the variable is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;)&lt;br&gt;
+	  * or in cenitmeters (cm) otherwise.&lt;br&gt;
+	  * The value given to the variable must be within&lt;br&gt;
+	  * the statistical limits (which are provided by&lt;br&gt;
+	  * the methods &lt;code&gt;GetMinValue()&lt;/code&gt; and &lt;code&gt;GetMaxValue()&lt;/code&gt;),&lt;br&gt;
+	  * unless the interpolation of the anthropometry&lt;br&gt;
+	  * has been disabled (cf. &lt;code&gt;SWKIAnthro::SetInterpolationMethod()&lt;/code&gt;).&lt;br&gt;
+	  * &lt;br&gt;
+	  * &lt;br&gt;
+	  * If it is the case, then any positive value will be&lt;br&gt;
+	  * accepted, &lt;strong&gt;even if the value is not realistic.&lt;/strong&gt;&lt;br&gt;
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on succes, &lt;code&gt;S_FALSE&lt;/code&gt;
+	  * if the value entered is rejected.
+	  **/
+	virtual HRESULT SetUserValue(double piValue) = 0;
+
+	/**
+	  * Set the value of the variable, in a percentile format.
+	  *
+	  * @param piPercentileValue The percentile value that
+	  * the real value of the variable will reflect. That
+	  * paramter&#x27;s value must lie in the range [0.0, 100.0].
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on success, &lt;code&gt;E_INVALIDARG&lt;/code&gt;
+	  * if the value has been rejected.
+	  **/
+	virtual HRESULT SetUserValueFromPercentile(double piPercentileValue) = 0;
+
+	/**
+	  * @return The mean of the variable.&lt;br&gt;
+	  * The value returned is in kilograms if the variable&lt;br&gt;
+	  * is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;),&lt;br&gt;
+	  * and in centimeters otherwise.
+	  **/
+	virtual double GetMean() const = 0;
+
+	/**
+	  * @return The Standard Deviation of the variable.&lt;br&gt;
+	  * The value returned is in kilograms if the variable&lt;br&gt;
+	  * is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;),&lt;br&gt;
+	  * and in centimeters otherwise.
+	  **/
+	virtual double GetStdDev() const = 0;
+
+	/**
+	  * Return the correlation value with the variable at index piVarNb.
+	  *
+	  * @param piVariableIndex The variable number with which the correlation
+	  * should be retrieved.
+	  *
+	  * @return The correlation value with the variable &lt;code&gt;piVarNb&lt;/code&gt;, or
+	  * &lt;code&gt;0.0&lt;/code&gt; if the variable is not found.
+	  **/
+	virtual double GetCorrelationValue(unsigned piVariableIndex) const = 0;
+
+	/**
+	  * @return The minimum variable that the variable can take,&lt;br&gt;
+	  * according to the statistics.&lt;br&gt;
+	  * The value returned is in kilograms if the variable&lt;br&gt;
+	  * is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;),&lt;br&gt;
+	  * and in centimeters otherwise.
+	  **/
+	virtual double GetMinValue() const = 0;
+
+	/**
+	  * @return The maximum variable that the variable can take,&lt;br&gt;
+	  * according to the statistics.&lt;br&gt;
+	  * The value returned is in kilograms if the variable&lt;br&gt;
+	  * is a mass (cf. method &lt;code&gt;IsAMass()&lt;/code&gt;),&lt;br&gt;
+	  * and in centimeters otherwise.
+	  **/
+	virtual double GetMaxValue() const = 0;
+
+	/**
+	  * @return The posture that goes with the anchor points on that
+	  * variable.
+	  **/
+	virtual SWKPostureSpec GetAnchorPointPosture() const = 0;
+
+	/**
+	  * @return The side under which the anchor points on that
+	  * variable are best viewed.
+	  **/
+	virtual SWSideSpec GetAnchorPointSide() const = 0;
+
+	/**
+	  * @return The translation vector that has to be applied to the first
+	  * anchor point for visualization pruposes.
+	  **/
+	virtual CATMathVector GetFirstAnchorPointTranslation() const = 0;
+
+	/**
+	  * @return The translation vector that has to be applied to the second
+	  * anchor point for visualization pruposes.
+	  **/
+	virtual CATMathVector GetSecondAnchorPointTranslation() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a circumference.
+	  **/
+	virtual boolean IsACircumference() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a height.
+	  **/
+	virtual boolean IsAHeight() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a length.
+	  **/
+	virtual boolean IsALength() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a breadth.
+	  **/
+	virtual boolean IsABreadth() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a depth.
+	  **/
+	virtual boolean IsADepth() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable is a mass.
+	  **/
+	virtual boolean IsAMass() const = 0;
+
+	/**
+	  * @return &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;
+	  * if this variable has a graphical representation.
+	  **/
+	virtual boolean HasAGraphicalRep() const = 0;
+
+	/**
+	  * @return The body part that anthro variable is measured on.
+	  **/
+	virtual SWAnthroPart GetBodyPart() const = 0;
+
+
+	/* Body site to attach the variable */
+
+	/**
+	  * @return The first anchor point for variable mesurement.&lt;br&gt;
+	  * If one would want to measure this anthropometric variable&lt;br&gt;
+	  * (which is a body dimension) on a real manikin, then this&lt;br&gt;
+	  * point would be the first point to attach the ruler.
+	  **/
+	virtual CATMathPoint GetFirstAnchorPoint() const = 0;
+
+	/**
+	  * @return The second anchor point for variable mesurement.&lt;br&gt;
+	  * If one would want to measure this anthropometric variable&lt;br&gt;
+	  * (which is a body dimension) on a real manikin, then this&lt;br&gt;
+	  * point would be the second point to attach the ruler.
+	  **/
+	virtual CATMathPoint GetSecondAnchorPoint() const = 0;
+
+	/**
+	  * @return The short name of the ellipse which that variable&lt;br&gt;
+	  * goes around.  This method returns a valid ellipse value&lt;br&gt;
+	  * only if it is a circumference (i.e. if mehod &lt;code&gt;IsACircumference()&lt;/code&gt;&lt;br&gt;
+	  * returned &lt;strong&gt;&lt;font color=&quot;blue&quot;&gt;TRUE&lt;/font&gt;&lt;/strong&gt;).
+	  * If the variable is not a circumference, the method will return&lt;br&gt;
+	  * &lt;code&gt;SWNoShortName&lt;/code&gt;.
+	  **/
+	virtual SWShortName GetCircEllipse() const = 0;
+
+	/**
+	  * @return The arrow representting the anthropometric variable, or&lt;br&gt;
+	  * &lt;code&gt;NULL&lt;/code&gt;, if the variable has no graphical representation.
+	  **/
+	virtual SWKIArrowRepresentation * GetArrowRep() = 0;
+};
+
+CATDeclareHandler(SWKIAnthroVariable, SWKIManikinPart);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="SWKIAnthro.html">← 上一页: SWKIAnthro.h</a></div>
+        <div><a href="SWKIBody.html">下一页: SWKIBody.h →</a></div>
+    </div>
+</body>
+</html>

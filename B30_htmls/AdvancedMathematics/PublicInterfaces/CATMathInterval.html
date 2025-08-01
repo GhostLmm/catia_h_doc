@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvancedMathematics/PublicInterfaces/CATMathInterval.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AdvancedMathematics/PublicInterfaces/CATMathInterval.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathFunctionXYType.html">← 上一页: CATMathFunctionXYType.h</a></div>
+        <div><a href="CATMathInterval2D.html">下一页: CATMathInterval2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMATHINTERVAL_H
+#define CATMATHINTERVAL_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+
+// (DS ONLY. temporary) Detection/traitement des intervalles vides dans operateurs || et &amp;&amp;
+// #define CATMATHINTERVAL_ThrowIfInvalid_TestOnlyNLD180516 &quot;********* TEST ONLY NE PAS LIVRER ACTIF ********&quot;
+// #define CATMATHINTERVAL_FixIfInvalid_TestOnlyNLD180516   &quot;********* TEST ONLY NE PAS LIVRER ACTIF ********&quot;
+
+   #ifdef CATMATHINTERVAL_ThrowIfInvalid_TestOnlyNLD180516
+    #define CATMATHINTERVAL_DetectInvalid
+   #endif
+   #ifdef CATMATHINTERVAL_FixIfInvalid_TestOnlyNLD180516
+    #define CATMATHINTERVAL_DetectInvalid
+   #endif
+
+
+
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+#include &quot;YN000FUN.h&quot;
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATMathLimits.h&quot;
+#include &quot;CATMathInline.h&quot;
+#include &quot;CATThrowForNullPointer.h&quot;
+
+/**
+ * Class representing a closed bounded interval of R. 
+ * &lt;br&gt;A CATMathInterval is the set of the reals &lt;tt&gt;x&lt;/tt&gt; lying between two 
+ * real bounds &lt;tt&gt;Low&lt;/tt&gt; and &lt;tt&gt;High&lt;/tt&gt;: &lt;tt&gt;Low &lt;= x &lt;= High&lt;/tt&gt;.
+ * If &lt;tt&gt;Low &gt; High&lt;/tt&gt;, the interval is empty.
+ */
+class ExportedByYN000FUN CATMathInterval
+{
+ public:
+
+/**
+ * Constructs a CATMathInterval with &lt;tt&gt; Low = High = 0&lt;/tt&gt;.
+ */
+   INLINE CATMathInterval ();
+
+/**
+ * Constructs a CATMathInterval.
+ * &lt;br&gt; If &lt;tt&gt;iLow &gt; iHigh&lt;/tt&gt;, the interval is empty.
+ */
+   INLINE CATMathInterval (const double &amp; iLow, const double &amp; iHigh);
+  
+   
+/**
+ * Copy Constructor.
+ */
+   INLINE CATMathInterval (const CATMathInterval &amp; iToCopy);
+  
+//
+//------------------Get/Set methods
+//
+/**
+ * Returns the low limitation of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @return
+ * The low limitation.
+ */
+  INLINE double GetMin() const;
+
+/**
+ * Returns the high limitation of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @return
+ * The high limitation.
+ */
+  INLINE double GetMax() const;
+
+/**
+ * Modifies the low limitation of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @param iNewLow
+ * The new value of the low limitation.
+ */
+  INLINE void SetMin(const double &amp; iNewLow);
+
+/**
+ * Modifies the high limitation of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @param iNewHigh
+ * The new value of the high limitation.
+ */
+  INLINE void SetMax(const double &amp; iNewHigh);
+//
+//------------------Main characteristics#
+//
+/**
+ * Returns the center  of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @return
+ * The center (&lt;tt&gt;(High + Low)*0.5&lt;/tt&gt;).
+ */
+  INLINE double Center() const;
+
+/**
+ * Returns the width  of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @return
+ * The width (&lt;tt&gt;(High - Low)&lt;/tt&gt;).
+ */
+  INLINE double Width() const;
+
+/**
+ * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathInterval is empty.
+ * @return
+ *  The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;Low &gt; High&lt;/tt&gt;,
+ * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+ */
+  INLINE CATLONG32    IsEmpty() const;
+
+/**
+ * Tests the relative position of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval with regards
+ * to &lt;tt&gt;0&lt;/tt&gt;.
+ * @return
+ *  The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &gt; 0&lt;/tt&gt; or the interval is empty.
+ *     &lt;dt&gt;&lt;tt&gt;-1&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &lt; 0&lt;/tt&gt; and the interval is not empty.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; otherwise. In this case, &lt;tt&gt;0&lt;/tt&gt; belongs to
+ * the interval, which is not empty&lt;/dl&gt; 
+ */
+  CATLONG32    Sign() const;
+
+/**
+ * Returns the norm of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * &lt;br&gt; This norm may be negative if the interval is empty.
+ * @return
+ *  The norm.
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;High&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &gt; 0&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;-Low&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;High &lt; 0&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;High&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;High &gt;= -Low&lt;/tt&gt;(and the interval
+ * is not empty)
+ *     &lt;dt&gt;&lt;tt&gt;-Low&lt;/tt&gt;&lt;dd&gt; &lt;tt&gt;High &lt; -Low&lt;/tt&gt;(and the interval
+ * is not empty)&lt;/dl&gt; 
+ * @return
+ * The norm.
+ */
+#ifdef CATIACGMV5R21
+  INLINE double Norm() const;
+#else
+  double Norm() const;
+#endif
+
+/**
+ * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathInterval is included into an other one.
+ * @param iOther
+ * The other interval.
+ * @return
+ *  The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;this&lt;/tt&gt; is included.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; otherwise&lt;/dl&gt;.
+ * &lt;br&gt; An empty interval is always included into another one, 
+ * except if this other one is empty too. 
+ */
+  CATLONG32  IsIncludedIn(const CATMathInterval &amp; iOther) const;
+
+/**
+ * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathInterval is included into an other one
+ * at a given absolute tolerance.
+ * @param iOther
+ * The other interval
+ * @param iTol
+ * The tolerance at which the tests is run.
+ * @return
+ *  The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;this&lt;/tt&gt; is included.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; otherwise&lt;/dl&gt;.
+ * &lt;br&gt; An empty interval is always included into another one, 
+ * except if this other one is empty too. 
+ */
+  CATLONG32  IsIncludedIn(const CATMathInterval &amp; iOther, const double iTol) const;
+
+/**
+ * Return the distance between &lt;tt&gt;this&lt;/tt&gt; CATMathInterval and a point.
+ * @param iPoint
+ * The value to which the distance is computed.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; if the point is included into &lt;tt&gt;this&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;iPoint-High&lt;/tt&gt;&lt;dd&gt; if the point does not belong to &lt;tt&gt;this&lt;/tt&gt;
+ * and &lt;tt&gt; iPoint &gt;= High&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;Low-iPoint&lt;/tt&gt;&lt;dd&gt; if the point does not belong to &lt;tt&gt;this&lt;/tt&gt;
+ * and &lt;tt&gt;Low&gt;=iPoint&lt;/tt&gt;
+ *&lt;/dl&gt;.
+ * @return
+ The distance.
+ */
+#ifdef CATIACGMV5R21
+  INLINE double DistanceTo(const double &amp; iPoint) const;
+#else
+  double DistanceTo(const double &amp; iPoint) const;
+#endif
+
+/**
+ * Translates a point to locate it at &lt;tt&gt;this&lt;/tt&gt; CATMathInterval point 
+ * such that the distance between these two points
+ * is a multiple of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval width.&lt;br&gt;
+ * This is useful in case of periodic functions to find the parameter of the
+ * fundamental interval corresponding to a given point.
+ * @param ioToTranslate
+ * The point to translate (in input), and the resulting one (in output).
+ */
+  void PeriodicResidue(double &amp; ioToTranslate);
+
+/**
+ * Tests whether a point belongs to &lt;tt&gt;this&lt;/tt&gt; CATMathInterval 
+ * after a given number of translation of length + or -&lt;tt&gt;iPeriod+iTolerance&lt;/tt&gt;.
+ * &lt;br&gt;
+ * The difference with the preceding method, is that &lt;tt&gt;iPeriod&lt;/tt&gt;
+ * is greater than the width of the CATMathInterval (the CATMathInterval
+ * may be seen as a trimmed interval of the &lt;/tt&gt;[0,iPeriod]&lt;/tt&gt; one.)
+ * @param iPoint
+ * The tested point.
+ * @param iPeriod
+ * A value greater than the with of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval.
+ * @param iTol
+ * The tolerance at which the tests is run.
+ * @return
+ * TRUE if iPoint is in the interval with regards to iPeriod, FALSE otherwise.
+ */
+  CATBoolean InPeriodicTrim(const double iPoint , const double iPeriod,
+                      const double iTolerance = 0.0);
+
+/**
+ * Retrieves the closest external point of &lt;tt&gt;this&lt;/tt&gt; CATMathInterval among those obtained
+ * by all the successive translations of length + or -&lt;tt&gt;iPeriod&lt;/tt&gt;.
+ * @param iPoint
+ * The initial point (input) and the resulting one (output).
+ * @param iPeriod
+ * The period.
+ * @return
+ * The distance between this point and the initial one.
+ */
+  double ClosestPeriodicEndpoint(double &amp; ioPoint, const double iPeriod);
+  
+
+/**
+ * @nodoc
+ */
+  friend ExportedByYN000FUN ostream&amp; operator &lt;&lt;
+    (ostream&amp; s, const CATMathInterval &amp; i);
+
+//
+//- Operators
+//
+/**
+ * Returns the square root interval of a CATMathInterval.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[0]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;High &lt;= 0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[0,sqrt(High)]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &lt;= 0&lt;/tt&gt; and &lt;tt&gt;High &lt;= 0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[sqrt(Low),sqrt(High)]&lt;/tt&gt;&lt;dd&gt; otherwise&lt;/dl&gt;
+ */
+  ExportedByYN000FUN friend CATMathInterval sqrt(const CATMathInterval &amp; iToOperate);  
+
+/**
+ * Returns the square interval of a CATMathInterval.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[Low*Low,High*High]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &gt;= 0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[High*High,Low*Low]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;High &lt;= 0&lt;/tt&gt; 
+ *     &lt;dt&gt;&lt;tt&gt;[0,High*High]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low*Low &lt;= High*High &lt;/tt&gt;(and the interval
+ * is not empty)
+ *     &lt;dt&gt;&lt;tt&gt;[0,Low*Low]&lt;/tt&gt;&lt;dd&gt;if &lt;tt&gt;Low*Low &gt; High*High &lt;/tt&gt;(and the interval
+ * is not empty)&lt;/dl&gt;
+ */
+  ExportedByYN000FUN friend CATMathInterval square(const CATMathInterval &amp; iToOperate); 
+
+/**
+ * Returns the absolute value interval of a CATMathInterval.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[Low,High]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;Low &gt;= 0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[-High,-Low]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;High &lt;= 0&lt;/tt&gt; 
+ *     &lt;dt&gt;&lt;tt&gt;[0,High]&lt;/tt&gt;&lt;dd&gt; if &lt;tt&gt;-Low &lt;= High &lt;/tt&gt;(and the interval
+ * is not empty)
+ *     &lt;dt&gt;&lt;tt&gt;[0,-Low]&lt;/tt&gt;&lt;dd&gt;if &lt;tt&gt;-Low &gt; High &lt;/tt&gt;(and the interval
+ * is not empty)&lt;/dl&gt;
+ */  
+  ExportedByYN000FUN friend CATMathInterval abs(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the sine function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[inf( sin(x),x in iToOperate ),max( sin(x),x in iToOperate )]&lt;/tt&gt; 
+ */   
+  ExportedByYN000FUN friend CATMathInterval sin(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the cosine function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[inf( cos(x),x in iToOperate ),max( cos(x),x in iToOperate )]&lt;/tt&gt; 
+ */   
+  ExportedByYN000FUN friend CATMathInterval cos(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of function A*cos(x)+B*sin(x) on a CATMathInterval.
+ * @return
+ *  &lt;tt&gt;[inf( A*cos(x)+B*sin(x),x in iToOperate ),max( A*cos(x)+B*sin(x),x in iToOperate )]&lt;/tt&gt;
+ */
+  ExportedByYN000FUN friend CATMathInterval ACosPlusBSin(const CATMathInterval &amp; iToOperate, double A, double B);
+
+/**
+ * Returns the interval resulting of the application of the arctangent function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[inf( arctan(x),x in iToOperate ),max( arctan(x),x in iToOperate )]&lt;/tt&gt; 
+ */   
+  ExportedByYN000FUN friend CATMathInterval atan(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the arctangent function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[inf( arctan(x),x in iToOperate ),max( arctan(x),x in iToOperate )]&lt;/tt&gt; 
+ */   
+  ExportedByYN000FUN friend CATMathInterval atan2(const CATMathInterval &amp; iY,
+                                                  const CATMathInterval &amp; iX );
+
+/**
+ * Returns the interval resulting of the application of the hyperbolic 
+ * sine function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[sinh(Low),sinh(High)]&lt;/tt&gt; 
+ */ 
+  ExportedByYN000FUN friend CATMathInterval sinh(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the hyperbolic 
+ * cosine function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[min( cosh(x), x in this ),max (cosh(x),x in this)]&lt;/tt&gt; 
+ */  
+  ExportedByYN000FUN friend CATMathInterval cosh(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the hyperbolic 
+ * tangent function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[tanh(Low),tanh(High)]&lt;/tt&gt; 
+ */ 
+  ExportedByYN000FUN friend CATMathInterval tanh(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the exponential 
+ * function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[exp(Low),exp(High)]&lt;/tt&gt; 
+ */   
+  ExportedByYN000FUN friend CATMathInterval exp(const CATMathInterval &amp; iToOperate);
+
+/**
+ * Returns the interval resulting of the application of the logarithmic 
+ * function on a CATMathInterval.
+ * @return 
+ *  &lt;tt&gt;[log(Low),log(High)]&lt;/tt&gt; 
+ */    
+  ExportedByYN000FUN friend CATMathInterval log(const CATMathInterval &amp; iToOperate);
+
+//  Comparison
+/**
+ * Equality operator.
+ * @return
+ * &lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; if &lt;tt&gt;i1.GetMin==i2.GetMin&lt;/tt&gt; and
+ * &lt;tt&gt;i1.GetMax()==i2.GetMax()&lt;/tt&gt;
+ *       &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; otherwise &lt;/dl&gt;
+ */
+  friend ExportedByYN000FUN CATBoolean operator ==
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+
+/**
+ * Inequality operator.
+ * @return
+ * &lt;dl&gt; &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; if &lt;tt&gt;i1.GetMin==i2.GetMin&lt;/tt&gt; and
+ * &lt;tt&gt;i1.GetMax()==i2.GetMax()&lt;/tt&gt;
+ *       &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; otherwise &lt;/dl&gt;
+ */
+  friend ExportedByYN000FUN CATBoolean operator !=
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+
+//  Intersection
+/**
+ * Returns the interval resulting of the intersection of two CATMathIntervals.
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator &amp;&amp;
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+      
+
+//  Union
+/**
+ * Returns the interval resulting of the union of two CATMathIntervals.
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator ||
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+
+//  Addition
+/**
+ * Unary plus operator.
+ * @return
+ * &lt;tt&gt;[i1.GetMin()+i2.GetMin(),i1.GetMax()+i2.GetMax()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator +
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+
+/**
+ * Addition assignment operator.
+ * @return 
+ * &lt;tt&gt;io1 = [io1.GetMin()+=i2.GetMin(),io1.GetMax()+=i2.GetMax()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN void operator +=
+    (CATMathInterval &amp; io1, const CATMathInterval &amp; i2);
+      
+
+//  Substraction
+/**
+ * Subtraction operator.
+ * @return
+ * &lt;tt&gt;[i1.GetMin()-i2.GetMin(),i1.GetMax()-i2.GetMax()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator -
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+      
+/**
+ * Subtraction assignment operator.
+ * @return 
+ * &lt;tt&gt;io1= [i1.GetMin()-=i2.GetMax(),i1.GetMax()-=i2.GetMin()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN void operator -=
+    (CATMathInterval &amp; io1, const CATMathInterval &amp; i2);
+      
+
+//  Multiplication
+/**
+ * Defines the *= operator of a CATMathInterval with a scalar.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[io.GetMin()*=iScalar,io.GetMax()*=iScalar]&lt;/tt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&gt;0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[io.GetMax()*=iScalar,io.GetMin()*=iScalar]&lt;/tt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&lt;=0&lt;/tt&gt;&lt;/dl&gt;
+ */
+  INLINE friend ExportedByYN000FUN void operator *=
+    (CATMathInterval &amp; io, const double iScalar);
+
+/**
+ * Multiplication operator.
+ * @return 
+ * [inf (xy, x in i1, y in i2),sup (xy, x in i1, y in i2) ]
+ * ne pas passer en forceinline car bug compilo 64 bits sur CATOffsetRevolProfileEquationX
+  */
+  inline friend ExportedByYN000FUN CATMathInterval operator *
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+      
+
+//  Division
+/**
+ * Defines the dividion of a CATMathInterval by another one.
+ * @return 
+ * &lt;dl&gt; &lt;dt&gt;&lt;tt&gt;i1*[1/i2.GetMax(), 1/i2.GetMin()]&lt;/tt&gt;
+ *          &lt;dd&gt;if &lt;tt&gt;i2.GetMax()*i2.GetMin() &gt;0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[-CATMathInfinite,CATMathInfinite]&lt;/tt&gt;
+ *          &lt;dd&gt;if &lt;tt&gt;i2.GetMax()*i2.GetMin() &lt;=0&lt;/tt&gt;&lt;/dl&gt;
+  */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator /
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2);
+  
+
+//  Opposite
+/**
+ * Defines the opposite of a CATMathInterval.
+ * @return
+ * &lt;tt&gt;[-i.GetMax(),-i.GetMin()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator -
+    (const CATMathInterval &amp; i);
+      
+
+//  Scalar Addition
+/**
+ * Defines the scalar addition with a CATMathInterval.
+ * @return
+ * &lt;tt&gt;[i.GetMin()+iScalar,i.GetMax()+iScalar]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator +
+    (const double &amp; iScalar, const CATMathInterval &amp; i);
+      
+/**
+ * Defines the addition of a CATMathInterval with a scalar.
+ * @return
+ * &lt;tt&gt;[i.GetMin()+iScalar,i.GetMax()+iScalar]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN  CATMathInterval operator +
+    (const CATMathInterval &amp; i, const double &amp; iScalar);
+      
+/**
+ * Defines the += operator of a CATMathInterval with a scalar.
+ * @return 
+ * &lt;tt&gt;io = [io.GetMin()+=iScalar,io.GetMax()+=iScalar]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN void operator +=
+    (CATMathInterval &amp; io, const double &amp; iScalar);
+      
+
+//  Scalar Substraction
+/**
+ * Defines the scalar substraction with a CATMathInterval.
+ * @return  
+ * &lt;tt&gt;[iScalar-i.GetMin(),iScalar-i.GetMax()]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator -
+    (const double &amp; iScalar, const CATMathInterval &amp; i);
+     
+/**
+ * Defines the scalar substraction with a CATMathInterval.
+ * @return
+ * &lt;tt&gt;[i.GetMin()-iScalar,i.GetMax()-iScalar]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator -
+    (const CATMathInterval &amp; i, const double &amp; iScalar);
+      
+/**
+ * Defines the -= operator of a CATMathInterval with a scalar.
+ * @return 
+ * &lt;tt&gt;io = [io.GetMin()-=iScalar,io.GetMax()-=iScalar]&lt;/tt&gt;
+ */
+  INLINE friend ExportedByYN000FUN void operator -=
+    (CATMathInterval &amp; io, const double &amp; iScalar);
+      
+
+//  Scalar Multiplication
+/**
+ * Defines the multiplication of a CATMathInterval with a scalar.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[i.GetMin()*iScalar,i.GetMax()*iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&gt;0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[i.GetMax()*iScalar,i.GetMin()*iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&lt;=0&lt;/tt&gt;&lt;/dl&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator *
+    (const double &amp; iScalar, const CATMathInterval &amp; i);
+ 
+/**
+ * Defines the multiplication of a scalar with a CATMathInterval.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[i.GetMin()*iScalar,i.GetMax()*iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&gt;0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[i.GetMax()*iScalar,i.GetMin()*iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&lt;=0&lt;/tt&gt;&lt;/dl&gt;
+ */ 
+  INLINE friend ExportedByYN000FUN CATMathInterval operator *
+    (const CATMathInterval &amp; i, const double &amp; iScalar);
+      
+
+//  Scalar Division
+/**
+ * Defines the division of a scalar by a CATMathInterval.
+ * @return 
+ * &lt;dl&gt; &lt;dt&gt;&lt;tt&gt;iScalar*[1/i2.GetMax(), 1/i2.GetMin()]&lt;/tt&gt;&lt;/dt&gt;
+ *          &lt;dd&gt;if &lt;tt&gt;i2.GetMax()*i2.GetMin() &gt;0&lt;/tt&gt;
+ *      &lt;dt&gt;&lt;tt&gt;[-CATMathInfinite,CATMathInfinite]&lt;/tt&gt;&lt;/dt&gt;
+ *          &lt;dd&gt;if &lt;tt&gt;i2.GetMax()*i2.GetMin() &lt;=0&lt;/tt&gt;&lt;/dl&gt;
+  */
+  friend ExportedByYN000FUN CATMathInterval operator /
+    (const double &amp; iScalar, const CATMathInterval &amp; i);
+
+/**
+ * Defines the division of a CATMathInterval by a scalar.
+ * @return
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;[i.GetMin()/iScalar,i.GetMax()/iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&gt;0&lt;/tt&gt;
+ *     &lt;dt&gt;&lt;tt&gt;[i.GetMax()/iScalar,i.GetMin()/iScalar]&lt;/tt&gt;&lt;/dt&gt;
+ *                 &lt;dd&gt; if &lt;tt&gt;iScalar&lt;=0&lt;/tt&gt;&lt;/dl&gt;
+ */
+  INLINE friend ExportedByYN000FUN CATMathInterval operator /
+    (const CATMathInterval &amp; i, const double &amp; iScalar);
+      
+
+ private:
+  double min, max;
+};
+
+//======================================================================
+// INLINE IMPLEMENTATIONS
+//======================================================================
+INLINE CATMathInterval::CATMathInterval ()
+{
+    min = 0.;
+    max = 0.; 
+}
+
+//----------------------------------------------------------------------
+INLINE CATMathInterval::CATMathInterval (const double &amp; iLow, const double &amp; iHigh)
+{
+    min = iLow;
+    max = iHigh;
+} 
+ 
+//----------------------------------------------------------------------
+INLINE CATMathInterval::CATMathInterval (const CATMathInterval &amp; iToCopy)
+{
+    min = iToCopy.min;
+    max = iToCopy.max; 
+}
+
+//----------------------------------------------------------------------
+INLINE CATLONG32 CATMathInterval::IsEmpty() const
+{
+    if (min &gt; max) 
+       return 1; 
+    return 0; 
+}
+
+//----------------------------------------------------------------------
+#ifdef CATIACGMV5R21
+INLINE double CATMathInterval::Norm() const
+{
+   if (min &gt;= 0.)   return max;
+   if (max &lt;= 0.)   return -min;
+   if (max &gt;= -min) return max;
+   return -min;
+}
+
+//----------------------------------------------------------------------
+INLINE double CATMathInterval::DistanceTo(const double &amp; iPoint) const
+{
+   if (iPoint &gt;= min)
+   {
+      if (iPoint &lt;= max) return 0.;
+      else               return iPoint - max;
+   }
+   else
+      return min - iPoint;
+}
+#endif
+
+//----------------------------------------------------------------------
+INLINE double CATMathInterval::Center() const
+{
+   return (min + max)*.5; 
+}
+
+//----------------------------------------------------------------------
+INLINE double CATMathInterval::Width()  const
+{
+   return (max - min);
+   //if (min &lt;= max) return (max - min);
+   //return 0.;
+}
+
+//----------------------------------------------------------------------
+INLINE double CATMathInterval::GetMin() const
+{
+   return min; 
+}
+
+//----------------------------------------------------------------------
+INLINE double CATMathInterval::GetMax() const
+{
+   return max; 
+}
+
+//----------------------------------------------------------------------
+INLINE void CATMathInterval::SetMin(const double &amp; d)
+{
+   min = d; 
+}
+
+//----------------------------------------------------------------------
+INLINE void CATMathInterval::SetMax(const double &amp; d)
+{
+   max = d; 
+}
+
+//----------------------------------------------------------------------
+INLINE   CATMathInterval operator &amp;&amp;
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   #ifdef CATMATHINTERVAL_DetectInvalid
+   // Cas particulier des intervalles vides. NLD180516
+   if (   (i1.min &gt; i1.max)
+       || (i2.min &gt; i2.max)
+      )
+      #ifdef CATMATHINTERVAL_FixIfInvalid_TestOnlyNLD180516
+      if (i1.min &gt; i1.max)
+         return i1; // i1 vide, on rend i1
+      else
+         return i2; // i2 vide, on rend i2
+      #endif
+      #ifdef CATMATHINTERVAL_ThrowIfInvalid_TestOnlyNLD180516
+      CATThrowForNullPointerReturnValue(CATMathInterval());
+      #endif
+   #endif
+
+   double x0, x1;
+   if (i1.min &gt; i2.min)
+      x0 = i1.min;
+   else
+      x0 = i2.min;
+   if (i1.max &gt; i2.max)
+      x1 = i2.max;
+   else
+      x1 = i1.max;
+   return CATMathInterval(x0, x1); 
+}
+
+//----------------------------------------------------------------------
+INLINE    CATMathInterval operator ||
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   #ifdef CATMATHINTERVAL_DetectInvalid
+   // Cas particulier des intervalles vides. NLD180516
+   if (   (i1.min &gt; i1.max)
+       || (i2.min &gt; i2.max)
+      )
+      #ifdef CATMATHINTERVAL_FixIfInvalid_TestOnlyNLD180516
+      if (i1.min &gt; i1.max)
+         return i2; // i1 vide, on rend i2
+      else
+         return i1; // i2 vide, on rend i1
+      #endif
+      #ifdef CATMATHINTERVAL_ThrowIfInvalid_TestOnlyNLD180516
+      CATThrowForNullPointerReturnValue(CATMathInterval());
+      #endif
+   #endif
+
+   double x0, x1;
+   if (i1.min &gt; i2.min)
+      x0 = i2.min;
+   else
+      x0 = i1.min;
+   if (i1.max &gt; i2.max)
+      x1 = i1.max;
+   else
+      x1 = i2.max;
+   return CATMathInterval(x0, x1); 
+}
+
+//----------------------------------------------------------------------
+INLINE   CATMathInterval operator +
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   return CATMathInterval(i1.min + i2.min, i1.max + i2.max); 
+}
+
+//----------------------------------------------------------------------
+INLINE   void operator +=
+    (CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   i1.min += i2.min;
+   i1.max += i2.max; 
+}
+
+//----------------------------------------------------------------------
+//  Substraction
+//----------------------------------------------------------------------
+INLINE  CATMathInterval operator -
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   return CATMathInterval(i1.min - i2.max, i1.max - i2.min); 
+}
+
+//----------------------------------------------------------------------
+INLINE   void operator -=
+    (CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   i1.min -= i2.max;
+   i1.max -= i2.min; 
+}
+
+//----------------------------------------------------------------------
+//  Multiplication
+//----------------------------------------------------------------------
+INLINE   void operator *=
+    (CATMathInterval &amp; i1, const double alpha)
+{
+   if (alpha &gt; 0.) 
+   {
+      i1.min *= alpha;
+      i1.max *= alpha; 
+   }
+   else
+   {
+      double d = i1.min;
+      i1.min = alpha * i1.max;
+      i1.max = alpha * d; 
+   }
+}
+
+
+//----------------------------------------------------------------------
+inline  CATMathInterval operator *
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{
+   if (i1.min &gt;= 0)
+   {  
+      if (i2.min &gt;= 0) return CATMathInterval(i1.min*i2.min, i1.max*i2.max);
+      if (i2.max &lt;= 0) return CATMathInterval(i1.max*i2.min, i1.min*i2.max);
+      return                  CATMathInterval(i1.max*i2.min, i1.max*i2.max); 
+   }
+   if (i1.max&lt;=0)
+   {
+      if (i2.min &gt;= 0) return CATMathInterval(i1.min*i2.max, i1.max*i2.min);
+      if (i2.max &lt;= 0) return CATMathInterval(i1.max*i2.max, i1.min*i2.min);
+      return                  CATMathInterval(i1.min*i2.max, i1.min*i2.min);
+   }
+  if (i2.min &gt;= 0)     return CATMathInterval(i1.min*i2.max, i1.max*i2.max);
+  if (i2.max &lt;= 0)     return CATMathInterval(i1.max*i2.min, i1.min*i2.min);
+  double m = i1.min*i2.max;
+  double M = i1.min*i2.min;
+  double d = i1.max*i2.min;
+  if (d &lt; m)
+     m = d;
+  d = i1.max*i2.max;
+  if (d &gt; M)
+     M = d;
+  return CATMathInterval (m,M); 
+}
+
+//----------------------------------------------------------------------
+//  Division
+INLINE  CATMathInterval operator /
+    (const CATMathInterval &amp; i1, const CATMathInterval &amp; i2)
+{ 
+   CATMathInterval Result;
+   if ( i2.min * i2.max &lt;= 0.) 
+      Result = CATMathInterval( -CATMathInfinite, CATMathInfinite);
+   else
+      Result = (i1 * CATMathInterval(1/i2.max, 1/i2.min)); 
+   // pour hp1020ansi 1 seul return dans fonction inline
+   return Result;
+}
+
+//----------------------------------------------------------------------
+//  Opposite
+//----------------------------------------------------------------------
+INLINE  CATMathInterval operator -
+    (const CATMathInterval &amp; i)
+{
+   return CATMathInterval ( - i.max,  - i.min); 
+}
+
+//----------------------------------------------------------------------
+//  Scalar Addition
+//----------------------------------------------------------------------
+INLINE   CATMathInterval operator +
+    (const double &amp; d, const CATMathInterval &amp; i)
+{
+   return CATMathInterval( d + i.min, d + i.max ); 
+}
+
+//----------------------------------------------------------------------
+INLINE CATMathInterval operator +
+    (const CATMathInterval &amp; i, const double &amp; d)
+{
+   return CATMathInterval( d + i.min, d + i.max ); 
+}
+
+//----------------------------------------------------------------------
+INLINE  void operator +=
+    (CATMathInterval &amp; i, const double &amp; d)
+{
+   i.min += d;
+   i.max += d; 
+}
+
+//----------------------------------------------------------------------
+//  Scalar Substraction
+//----------------------------------------------------------------------
+INLINE CATMathInterval operator -
+    (const double &amp; d, const CATMathInterval &amp; i)
+{
+   return CATMathInterval( d - i.max, d - i.min ); 
+}
+
+//----------------------------------------------------------------------
+INLINE CATMathInterval operator -
+    (const CATMathInterval &amp; i, const double &amp; d)
+{
+   return CATMathInterval( i.min-d, i.max-d ); 
+}
+
+//----------------------------------------------------------------------
+INLINE void operator -=
+    (CATMathInterval &amp; i, const double &amp; d)
+{
+   i.min -= d;
+   i.max -= d; 
+}
+
+//----------------------------------------------------------------------
+//  Scalar Multiplication
+//----------------------------------------------------------------------
+INLINE   CATMathInterval operator *
+    (const double &amp; d, const CATMathInterval &amp; i)
+{
+   if (d &gt; 0.)
+      return CATMathInterval( d*i.min, d*i.max );
+   else
+      return CATMathInterval( d*i.max, d*i.min ); 
+}
+
+//----------------------------------------------------------------------
+INLINE CATMathInterval operator *
+    (const CATMathInterval &amp; i, const double &amp; d)
+{
+   if (d &gt; 0.)
+      return CATMathInterval( d*i.min, d*i.max );
+   else
+      return CATMathInterval( d*i.max, d*i.min ); 
+}
+
+//----------------------------------------------------------------------
+//  Scalar Division
+//----------------------------------------------------------------------
+
+INLINE CATMathInterval operator /
+    (const CATMathInterval &amp; i, const double &amp; d)
+{
+   if (d &gt; 0.)
+      return CATMathInterval( i.min/d, i.max/d );
+   else
+      return CATMathInterval( i.max/d, i.min/d ); 
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathFunctionXYType.html">← 上一页: CATMathFunctionXYType.h</a></div>
+        <div><a href="CATMathInterval2D.html">下一页: CATMathInterval2D.h →</a></div>
+    </div>
+</body>
+</html>

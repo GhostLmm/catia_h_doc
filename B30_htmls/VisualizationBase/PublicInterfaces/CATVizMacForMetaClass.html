@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATVizMacForMetaClass.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATVizMacForMetaClass.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVizGlobals.html">← 上一页: CATVizGlobals.h</a></div>
+        <div><a href="CATVizMetaClass.html">下一页: CATVizMetaClass.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATVizMacForMetaClass_H
+#define CATVizMacForMetaClass_H
+
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPPEAR AT ANY TIME*/
+/**********************************************************************/
+
+// COPYRIGHT DASSAULT SYSTEMES 2005
+
+#include &quot;CATVizMetaClass.h&quot;
+
+#define CATVizIsAKindOf(Object, Meta) (Object &amp;&amp; Object-&gt;MetaClass().IsAKindOf(Meta))
+
+
+#define CATVizDeclareMeta(MetaName)                                     \
+extern CATVIZMETAEXPORT const CATVizMetaClass MetaName                  \
+
+#define CATVizImplementBaseMeta(MetaName)                               \
+const CATVizMetaClass MetaName(#MetaName, NULL)                         \
+
+#define CATVizImplementMeta(MetaName,BaseMeta)                          \
+const CATVizMetaClass MetaName(#MetaName, &amp;BaseMeta)                    \
+
+#define CATVizDeclareClass                                              \
+public:                                                                 \
+  virtual int IsAKindOf(const CATVizMetaClass &amp; iMeta) const;           \
+  virtual int IsAKindOf(const CATVizMetaClassList &amp; iList) const;       \
+  virtual const CATVizMetaClass &amp; MetaClass() const;                    \
+  virtual const char * VizIsA() const                                   \
+
+
+#define CATVizImplementClass(ClassName, MetaName)                       \
+int ClassName::IsAKindOf(const CATVizMetaClass &amp; iMeta) const           \
+{                                                                       \
+   return MetaName.IsAKindOf(iMeta);                                    \
+}                                                                       \
+int ClassName::IsAKindOf(const CATVizMetaClassList &amp; iList) const       \
+{                                                                       \
+   return MetaName.IsAKindOf(iList);                                    \
+}                                                                       \
+const CATVizMetaClass &amp; ClassName::MetaClass() const                    \
+{                                                                       \
+   return MetaName;                                                     \
+}                                                                       \
+const char * ClassName::VizIsA() const                                  \
+{                                                                       \
+   return #ClassName;                                                   \
+}                                                                       \
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVizGlobals.html">← 上一页: CATVizGlobals.h</a></div>
+        <div><a href="CATVizMetaClass.html">下一页: CATVizMetaClass.h →</a></div>
+    </div>
+</body>
+</html>

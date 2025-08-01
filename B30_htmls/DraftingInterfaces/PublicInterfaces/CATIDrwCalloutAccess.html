@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwCalloutAccess.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwCalloutAccess.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwCallout.html">← 上一页: CATIDrwCallout.h</a></div>
+        <div><a href="CATIDrwCenterLine.html">下一页: CATIDrwCenterLine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2003
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+ 
+#ifndef CATIDrwCalloutAccess_H
+#define CATIDrwCalloutAccess_H
+
+#include &quot;DraftingItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSymbolType.h&quot;
+#include &quot;CATDftArrowEnum.h&quot;
+
+
+class CATIDrwAnnotationComponent;
+class CATIDftView;
+class CATIUnknownList;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwCalloutAccess;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwCalloutAccess ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface to manage callout
+ * &lt;p&gt;
+ * Callout represents an operation that has been performed on a generative view (such as a section cut for example).
+ * Callout is associated to the following view type: Section view, section cut, detail view, auxiliary view and break view.
+ * This interface manages main characteristics of callout. CATIVisProperties interface may be used to manage the whole 
+ * visualization properties of callout.  
+ *
+ * @see CATIVisProperties, CATIGenerSpec, CATIDftView
+ */
+class ExportedByDraftingItfCPP CATIDrwCalloutAccess: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+  * Kind of callout.
+  * @param SectionCallout
+  *   Callout defining section view or section cut.
+  * @param BreakCallout
+  *   Callout defining break view.
+  * @param DetailCallout
+  *   Callout defining Detail view.
+  * @param ProjectionCallout
+  *   Callout defining auxiliary view.
+  */
+    enum CATDrwCalloutType {SectionCallout,BreakCallout,DetailCallout,ProjectionCallout};
+
+  /** 
+  * Returns the type of callout.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the type of callout.
+  * @param oCalloutType
+  *     Type of the callout.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetCalloutType(CATDrwCalloutType &amp;oCalloutType) = 0;
+
+    
+  /** 
+  * Returns the associated view to callout.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the view defined by the callout.
+  * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;:	Don&#x27;t forget to RELEASE the resulting oAssociatedView after use.
+  * @param oAssociatedView
+  *     View defined by the callout.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or no view found or view doesn&#x27; exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetAssociatedView(CATIDftView  **oAssociatedView) = 0;
+
+
+  /** 
+  * Returns the visibility of the profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the visibility of the profile.
+  * @param oVisibility
+  *     visibility value.
+  *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *          1 = Callout is completely drawn.
+  *          2 = Callout is partially drawn.
+  *          3 = Callout is minimal.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Visibility doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetVisibility(int &amp;oVisibility) = 0;
+
+  /** 
+  * Returns the thickness of profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the thickness of profile defining the callout.
+  * @param oThickness
+  *     Thickness value  [1 to 55].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetProfileThickness(int &amp;oThickness) = 0;
+
+
+  /** 
+  * Returns the line type of profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the line type of profile defining the callout.
+  * @param oLineType
+  *     line type value  [1 to 63].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetProfileLineType(int &amp;oLineType) = 0;
+
+
+  /** 
+  * Returns the thickness of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the thickness of corner defined the callout.
+  * @param oThickness
+  *     Thickness value  [1 to 55].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetCornerThickness(int &amp;oThickness) = 0;
+
+
+  /** 
+  * Returns the line type of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the line type of corner defined the callout.
+  * @param oLineType
+  *     line type value  [1 to 63].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetCornerLineType(int &amp;oLineType) = 0;
+
+
+  /** 
+  * Returns the length of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the length of corner defined the callout.
+  * @param oLengthCorner
+  *     length value.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetCornerLength(double &amp;oLengthCorner) = 0;
+
+  /** 
+  * Returns the number of arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the number of arrows available for this callout.
+  * @param oNbOfArrows
+  *     Number of arrows.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetNumberOfArrow(int &amp;oNbOfArrows) = 0;
+
+  /** 
+  * Returns informations of one arrow.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns informations of arrow defined by iNumArrow.
+  * @param iNumArrow
+  *     Number of arrow.
+  * @param oHeadPostion
+  *     Head of arrow coordinates.
+  * @param oOrientation
+  *     Arrow orientation.
+  * @param oLength
+  *     Length of the arrow.
+  * @param oTypeSymb
+  *     Type of extremity symbol.
+  *    @see CATSymbolType
+  * @param oLengthSymb
+  *     Length of extremity symbol.
+  * @param oAngleSymb
+  *     Angle extremity symbol.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;   &lt;dd&gt; Wrong number of arrows.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetInfoOfArrow(const int iNumArrow, double *oHeadPosition, double &amp;oOrientation, double &amp;oLength, SymbolType &amp;oTypeSymb, double &amp;oLengthSymb, double &amp;oAngleSymb) = 0;
+
+  /** 
+  * Returns the thickness of Callout Arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the thickness of Callout Arrows.
+  * @param iNumArrow
+  *     Number of arrow.
+  * @param oArrowThickness
+  *     Thickness value  [1 to 8].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetArrowsThickness(const int iNumArrow,int &amp;oArrowThickness) = 0;
+
+    
+  /** 
+  * Returns attachment of callout arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns attachment of callout arrows.
+  * @param oAttachmentType
+  *     Attachment type.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or no attachment notion available for this callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetArrowsAttachment(CATDftArrowExtremity &amp;oAttachmentType) = 0;
+
+  /** 
+  * Returns the Position of Callout Arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the Position of Callout Arrows.
+  * @param oArrowPosition
+  *     Position value.
+  *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *          0 = Start Position.
+  *          50 = Middle Position.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetArrowsPosition(int &amp;oArrowPosition) = 0;
+
+
+    /** 
+  * Returns the number of texts.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns the number of texts available for this callout.
+  * @param oNbOfTexts
+  *     Number of texts available for this callout.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetNumberOfTexts(int &amp;oNbOfTexts) = 0;
+
+  /** 
+  * Returns text.
+  * &lt;b&gt;Role&lt;/b&gt;: Returns text objet defined by iNumText.
+  * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;:	Don&#x27;t forget to RELEASE the resulting oText after use.
+  * @param iNumText
+  *     Number of text: Start to 1 to Number of texts returned by GetNumberOfTexts method.
+  * @param oText
+  *     Text instance.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;   &lt;dd&gt; Wrong number of texts.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetCalloutText(const int iNumText,CATIDrwAnnotationComponent **oText) = 0;
+
+  /** 
+  * Sets the visibility of the profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the visibility of the profile.
+  * @param iVisibility
+  *     visibility value.
+  *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *          1 = Callout is completely drawn.
+  *          2 = Callout is partially drawn.
+  *          3 = Callout is minimal.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Visibility doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetVisibility(const int iVisibility) = 0;
+
+
+  /** 
+  * Sets the thickness of profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the thickness of profile defining the callout.
+  * @param iThickness
+  *     Thickness value  [1 to 55].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG &lt;/tt&gt;   &lt;dd&gt; Wrong thickness value.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetProfileThickness(const int iThickness) = 0;
+
+
+  /** 
+  * Sets the line type of profile.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the line type of profile defining the callout.
+  * @param iLineType
+  *     line type value  [1 to 63].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG &lt;/tt&gt;   &lt;dd&gt; Wrong line type value.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetProfileLineType(const int iLineType) = 0;
+
+
+  /** 
+  * Sets the thickness of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the thickness of corner defined the callout.
+  * @param iThickness
+  *     Thickness value  [1 to 55].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG &lt;/tt&gt;   &lt;dd&gt; Wrong thickness value.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetCornerThickness(const int iThickness) = 0;
+
+
+  /** 
+  * Sets the line type of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the line type of corner defined the callout.
+  * @param iLineType
+  *     line type value  [1 to 63].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG &lt;/tt&gt;   &lt;dd&gt; Wrong line type value.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetCornerLineType(const int iLineType) = 0;
+
+
+  /** 
+  * Sets the length of corner.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the length of corner defined the callout.
+  * @param iLengthCorner
+  *     length value.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or Corner doesn&#x27;t exist for this type of callout
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetCornerLength(const double iLengthCorner) = 0;
+
+
+  /** 
+  * Sets informations of one arrow.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets informations of arrow defined by iNumArrow.
+  * @param iNumArrow
+  *     Number of arrow.
+  * @param oLength
+  *     Length of the arrow.
+  * @param oTypeSymb
+  *     Type of extremity symbol.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; :
+  *     - FILLED_ARROW
+  *     - BLANKED_ARROW
+  *     - UNFILLED_ARROW
+  *     - OPEN_ARROW
+  *    @see CATSymbolType
+  * @param oLengthSymb
+  *     Length of extremity symbol.
+  * @param oAngleSymb
+  *     Angle extremity symbol.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;   &lt;dd&gt; Wrong number of arrows.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetInfoOfArrow(const int iNumArrow, const double iLength,  const SymbolType iTypeSymb, const double iLengthSymb,const  double iAngleSymb) = 0;
+
+  /** 
+  * Sets the thickness of Callout Arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the thickness of Callout Arrows.
+  * @param iNumArrow
+  *     Number of arrow.
+  * @param iArrowThickness
+  *     Thickness value  [1 to 8].
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetArrowsThickness(const int iNumArrow,const int iArrowThickness) = 0;
+    
+  /** 
+  * Sets attachment of callout arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets attachment of callout arrows.
+  * @param iAttachmentType
+  *     Attachment type. 
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior or no attachment notion available for this callout.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetArrowsAttachment(const CATDftArrowExtremity iAttachmentType) = 0;
+
+  /** 
+  * Sets the Position of Callout Arrows.
+  * &lt;b&gt;Role&lt;/b&gt;: Sets the Position of Callout Arrows.
+  * @param iArrowPosition
+  *     Position value.
+  *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *          0 = Start Position.
+  *          50 = Middle Position.
+  * @return 
+  * &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt;  Method correctly executed.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Abnormal behavior.
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT SetArrowsPosition(const int iArrowPosition) = 0;
+
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+CATDeclareHandler(CATIDrwCalloutAccess, CATBaseUnknown);
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwCallout.html">← 上一页: CATIDrwCallout.h</a></div>
+        <div><a href="CATIDrwCenterLine.html">下一页: CATIDrwCenterLine.h →</a></div>
+    </div>
+</body>
+</html>

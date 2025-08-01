@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwDimTolerance.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwDimTolerance.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimText.html">← 上一页: CATIDrwDimText.h</a></div>
+        <div><a href="CATIDrwDimToleranceAlphaNum.html">下一页: CATIDrwDimToleranceAlphaNum.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwDimTolerance_H
+#define CATIDrwDimTolerance_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIDrwDimFormat.h&quot;
+
+class CATUnicodeString;
+
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwDimTolerance ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwDimTolerance ;
+#endif
+
+/**
+ * Manages the dimension tolerance.
+ */
+
+class ExportedByDraftingItfCPP CATIDrwDimTolerance : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+   public:
+
+    /**
+     * Gets the tolerance name.
+     */
+     virtual int GetLabel (CATUnicodeString &amp;oDescr) = 0;
+
+    /**
+     * Gets the tolerance type.
+     *   @return
+     *    Tolerance type (see define definition file).
+     *    &lt;br&gt;Legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolNone&lt;/tt&gt; &lt;dd&gt;No tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolNumerical&lt;/tt&gt; &lt;dd&gt;Numerical tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolAlphaNumerical&lt;/tt&gt; &lt;dd&gt;AlphaNumerical tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolISOComb&lt;/tt&gt; &lt;dd&gt;Multi-tolerance.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetToleranceType() = 0;
+
+    /**
+     * Gets the tolerance upper value.
+     *   @return
+     *    Upper value.
+     */
+     virtual double GetUpperValue() = 0;
+
+    /**
+     * Gets the tolerance lower value.
+     *   @return
+     *    Lower value.
+     */
+     virtual double GetLowerValue() = 0;
+
+    /**
+     * Gets the tolerance display mode.
+     *   @return
+     *    Display mode.
+     *    &lt;br&gt;Legal values are: (see define definition file)
+     *    &lt;ol&gt;
+     *    &lt;li&gt;&lt;u&gt;&lt;i&gt;Alphanumerical:&lt;/i&gt;&lt;/u&gt;:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolFractional&lt;/tt&gt; &lt;dd&gt;Fractional.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolSideBySide&lt;/tt&gt; &lt;dd&gt;Side by side.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     *    &lt;li&gt;&lt;u&gt;&lt;i&gt;Numerical:&lt;/i&gt;&lt;/u&gt;:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolUnresolved&lt;/tt&gt; &lt;dd&gt;Unresolved (ex: 10 +/-0.25).&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolResolved&lt;/tt&gt; &lt;dd&gt;Resolved (ex: 9.75 , 10.25).&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     *    &lt;/ol&gt;
+     */
+     virtual int GetDisplayMode() = 0;
+
+    /**
+     * Gets the tolerance format.
+     *   @return
+     *    Format.
+     */
+     virtual CATIDrwDimFormat_var GetFormat() = 0;
+     
+     /**
+     * Sets the tolerance name.
+     */
+     virtual void SetLabel ( CATUnicodeString name ) = 0;
+
+    /**
+     * Sets the tolerance type.
+     *   @param ToleranceType
+     *    Tolerance type (see define definition file).
+     *    &lt;br&gt;Legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolNone&lt;/tt&gt; &lt;dd&gt;No tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolNumerical&lt;/tt&gt; &lt;dd&gt;Numerical tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolAlphaNumerical&lt;/tt&gt; &lt;dd&gt;AlphaNumerical tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolISOComb&lt;/tt&gt; &lt;dd&gt;Multi-tolerance.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetToleranceType(int ToleranceType) = 0;
+
+    /**
+     * Sets the tolerance upper value.
+     *   @param iUpperValue
+     *    Upper value.
+     */
+     virtual void SetUpperValue( const double iUpperValue ) = 0;
+
+    /**
+     * Sets the tolerance lower value.
+     *   @param iLowerValue
+     *    Lower value.
+     */
+     virtual void SetLowerValue( const double iLowerValue ) = 0;
+
+    /**
+     * Sets the tolerance display mode.
+     *   @param displayMode
+     *    Display mode.
+     *    &lt;br&gt;Legal values are: (see define definition file)
+     *    &lt;ol&gt;
+     *    &lt;li&gt;&lt;u&gt;&lt;i&gt;Alphanumerical:&lt;/i&gt;&lt;/u&gt;:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolFractional&lt;/tt&gt; &lt;dd&gt;Fractional.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolSideBySide&lt;/tt&gt; &lt;dd&gt;Side by side.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     *    &lt;li&gt;&lt;u&gt;&lt;i&gt;Numerical:&lt;/i&gt;&lt;/u&gt;:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolUnresolved&lt;/tt&gt; &lt;dd&gt;Unresolved (ex: 10 +/-0.25).&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimTolResolved&lt;/tt&gt; &lt;dd&gt;Resolved (ex: 9.75 , 10.25).&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     *    &lt;/ol&gt;
+     * Notes: Numeric tolerance values can not be different on main value and dual value. Only
+     *        tolerance name may be changed.             
+     */
+     virtual void SetDisplayMode(const int displayMode) = 0;
+
+};
+CATDeclareHandler(CATIDrwDimTolerance, CATBaseUnknown);
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimText.html">← 上一页: CATIDrwDimText.h</a></div>
+        <div><a href="CATIDrwDimToleranceAlphaNum.html">下一页: CATIDrwDimToleranceAlphaNum.h →</a></div>
+    </div>
+</body>
+</html>

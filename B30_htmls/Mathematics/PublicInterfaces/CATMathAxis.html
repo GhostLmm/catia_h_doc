@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathAxis.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathAxis.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathAdvancedBoxType.html">← 上一页: CATMathAdvancedBoxType.h</a></div>
+        <div><a href="CATMathAxis2D.html">下一页: CATMathAxis2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathAxis_H
+#define CATMathAxis_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+#include &quot;CATErrorDef.h&quot;
+#include &quot;CATMathematics.h&quot;
+
+
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CATMathDirection.h&quot;
+#include &quot;CATMath3x3Matrix.h&quot;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+
+
+/**
+* Class representing a mathematical axis system in dimension 3.
+* &lt;b&gt;Role&lt;/b&gt;:
+* &lt;br&gt;It is composed of an &lt;tt&gt;Origin&lt;/tt&gt;, and of three directions 
+* (normalized vectors) &lt;tt&gt;FirstDirection&lt;/tt&gt;, &lt;tt&gt;SecondDirection&lt;/tt&gt;,
+* &lt;tt&gt;ThirdDirection&lt;/tt&gt;. If the three directions are not directly
+* orthogonal or normalized, it will be done internally.
+*/ 
+class ExportedByCATMathematics CATMathAxis
+{
+public:
+	//============================================================================
+	//- Constructors
+	//============================================================================
+
+	/**
+	* Constructs a canonical CATMathAxis.
+	* &lt;br&gt;&lt;tt&gt;Origin= (0,0,0)&lt;/tt&gt;, &lt;tt&gt;FirstDirection = (1,0,0)&lt;/tt&gt;, 
+	* &lt;tt&gt;SecondDirection = (0,1,0)&lt;/tt&gt;, &lt;tt&gt;ThirdDirection= (0,0,1)&lt;/tt&gt;.
+	*/ 
+	CATMathAxis ();
+
+	/**
+	* Constructs a CATMathAxis from a CATMathPoint and the three CATMathVector: CATMathI, CATMathJ and CATMathK.
+	* &lt;p&gt;&lt;tt&gt;CATMathI&lt;/tt&gt; is the (1,0,0) CATMathVector
+	* &lt;br&gt;&lt;tt&gt;CATMathJ&lt;/tt&gt; is the (0,1,0) CATMathVector
+	* &lt;br&gt;&lt;tt&gt;CATMathK&lt;/tt&gt; is the (0,0,1) CATMathVector
+	* @param P 
+	* The point used as the axis origin.
+	*/
+	CATMathAxis ( const CATMathPoint &amp; P );
+
+	/**
+   * @nodoc
+	* @deprecated V5R20 Set
+	* Constructs a CATMathAxis from a CATMathPoint and a CATMathVector specified as the first direction.
+	* &lt;p&gt;The second and third directions are: CATMathJ and CATMathK.
+	* @param P 
+	* The point used as the axis origin.
+	* @param I 
+	* The CATMathVector used as the first direction.
+	*/
+	CATMathAxis ( const CATMathPoint &amp; P, const CATMathVector &amp; I ) ;
+
+	/**
+   * @nodoc
+	* @deprecated V5R20 Set
+	* Constructs a CATMathAxis from a CATMathPoint and two CATMathVector specified as the first and second directions.
+	* &lt;p&gt;The third direction is CATMathK. 
+	* @param P 
+	* The point used as the axis origin.
+	* @param I 
+	* The CATMathVector used as the first direction.
+	* @param J 
+	* The CATMathVector used as the second direction.
+	*/
+	CATMathAxis ( const CATMathPoint &amp; P, const CATMathVector &amp; I, const CATMathVector &amp; J );
+
+	/**
+   * @nodoc
+	* @deprecated V5R20 Set
+	* Constructs a CATMathAxis from a CATMathPoint and three CATMathVector.
+	* &lt;p&gt;The three vectors must define
+	* an axis system (vector null, colinear vectors), but the constructor does not test whether this 
+	* condition is fulfilled.&lt;br&gt;
+	* The first direction is normalized (if needed) to become the axis first
+	* direction. &lt;br&gt;The axis second direction belongs to the
+	* plane defined by the first and second directions. 
+	* &lt;br&gt;The third direction is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* &lt;br&gt;Throws an error if the three vectors do not define
+	* an axis system (vector null, colinear vectors).
+	* @param P 
+	* The point used as the axis origin.
+	* @param I 
+	* The CATMathVector used as the first direction.
+	* @param J 
+	* The CATMathVector used as the second direction.
+	* @param K
+	* The CATMathVector used as the third direction.
+	*/ 
+	CATMathAxis ( const CATMathPoint &amp; P, const CATMathVector &amp; I, const CATMathVector &amp; J, const CATMathVector &amp; K );
+
+	/**
+	* Copy constructor.
+	*/
+	CATMathAxis (const CATMathAxis &amp;iAxisToCopy);
+
+	//============================================================================
+	//- Get/Set
+	//============================================================================
+
+	/**
+	* Modifies the origin and the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* &lt;tt&gt;iFirstDirection&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane (&lt;tt&gt;iFirstDirection&lt;/tt&gt;, &lt;tt&gt;CATMathJ&lt;/tt&gt;). 
+	* &lt;tt&gt;CATMathK&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+	HRESULT Set( const CATMathPoint &amp; P, const CATMathVector &amp; I );
+
+	/**
+	* Modifies the origin and the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* &lt;tt&gt;iFirstDirection&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane (&lt;tt&gt;iFirstDirection&lt;/tt&gt;, &lt;tt&gt;iSecondDirection&lt;/tt&gt;). 
+	* &lt;tt&gt;CATMathK&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+	HRESULT Set(const CATMathPoint &amp; P,
+	                       	 const CATMathVector &amp; DV1,
+		                     const CATMathVector &amp; DV2);
+
+
+	/**
+	* Modifies the origin and the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* &lt;tt&gt;iFirstDirection&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane (&lt;tt&gt;iFirstDirection&lt;/tt&gt;, &lt;tt&gt;iSecondDirection&lt;/tt&gt;). 
+	* &lt;tt&gt;iThirdDirection&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+	HRESULT Set(const CATMathPoint &amp; P,
+       		                 const CATMathVector &amp; DV1,
+		                     const CATMathVector &amp; DV2,
+		                     const CATMathVector &amp; DV3);
+
+	/**
+	* Modifies the origin and the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* The first column of &lt;tt&gt;iMatrix&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane generated by the first and the second column of &lt;tt&gt;iMatrix&lt;/tt&gt;.
+	* The third column of &lt;tt&gt;iMatrix&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors composing &lt;tt&gt;iMatrix&lt;/tt&gt; can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors  do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+    HRESULT Set( const CATMathPoint &amp; iP, const CATMath3x3Matrix &amp; i3x3Matrix );
+
+	/** 
+	* Retrieves the three directions of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;The returned vectors are normalized.
+	*/
+#ifdef CATIACGMV5R21
+	INLINE void GetDirections (CATMathVector &amp; ioFirstDirection,
+		                       CATMathVector &amp; ioSecondDirection,
+		                       CATMathVector &amp; ioThirdDirection) const;
+#else
+	void GetDirections (CATMathVector &amp; ioFirstDirection,
+		                             CATMathVector &amp; ioSecondDirection,
+		                             CATMathVector &amp; ioThirdDirection) const;
+#endif
+
+	/** 
+	* Retrieves the three directions of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis in matrix form.
+	* The first (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis is stored in the first column of &lt;tt&gt;o3x3Matrix&lt;/tt&gt;
+	* The second (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis is stored in the second column of &lt;tt&gt;o3x3Matrix&lt;/tt&gt;
+	* The third (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis is stored in the third column of &lt;tt&gt;o3x3Matrix&lt;/tt&gt;
+	*/
+	INLINE void GetDirections (CATMath3x3Matrix &amp; o3x3Matrix) const;
+
+	/**
+   * @nodoc
+	* @deprecated V5R15 SetVectors
+	* Modifies the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* &lt;tt&gt;iFirstDirection&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane (&lt;tt&gt;iFirstDirection&lt;/tt&gt;, &lt;tt&gt;iSecondDirection&lt;/tt&gt;). 
+	* &lt;tt&gt;iThirdDirection&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;FALSE&lt;/tt&gt; if the three vectors do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;TRUE&lt;/tt&gt; otherwise.
+	*/
+	CATBoolean SetDirections (const CATMathVector &amp; iFirstDirection,
+		                                          const CATMathVector &amp; iSecondDirection,
+		                                          const CATMathVector &amp; iThirdDirection);
+
+	/**
+	* Modifies the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* &lt;tt&gt;iFirstDirection&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane (&lt;tt&gt;iFirstDirection&lt;/tt&gt;, &lt;tt&gt;iSecondDirection&lt;/tt&gt;). 
+	* &lt;tt&gt;iThirdDirection&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+	HRESULT SetVectors(const CATMathVector &amp; DV1,
+		                                  const CATMathVector &amp; DV2,
+		                                  const CATMathVector &amp; DV3);
+
+	/**
+	* Modifies the directions  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*&lt;br&gt;
+	* The first column of &lt;tt&gt;iMatrix&lt;/tt&gt; is normalized (if needed) to become the axis first
+	* direction. The axis second direction belongs to the
+	* plane generated by the first and the second column of &lt;tt&gt;iMatrix&lt;/tt&gt;.
+	* The third column of &lt;tt&gt;iMatrix&lt;/tt&gt; is used to give the orientation of the
+	* axis system. Although the input vectors composing &lt;tt&gt;iMatrix&lt;/tt&gt; can be not normalized, the
+	* resulting axis has three normalized directions.
+	* @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if the three vectors  do not define
+	* an axis system (vector null, colinear vectors), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+	*/
+	HRESULT SetVectors(const CATMath3x3Matrix &amp; i3x3Matrix); 
+
+	/** 
+	* Returns the origin of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*/
+#ifdef CATIACGMV5R21
+	INLINE void GetOrigin (CATMathPoint &amp; ioOrigin) const;
+#else
+	void GetOrigin (CATMathPoint &amp; ioOrigin) const;
+#endif
+
+	/**
+	* Modifies the origin  of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*/
+	void SetOrigin (const CATMathPoint &amp; iOrigin);
+
+	/** 
+	* Returns the first (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*/
+#ifdef CATIACGMV5R21
+	INLINE void GetFirstDirection (CATMathVector &amp; ioFirstDirection) const;
+#else
+	void GetFirstDirection (CATMathVector &amp; ioFirstDirection) const;
+#endif
+
+	/** 
+	* Returns the second (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*/
+#ifdef CATIACGMV5R21
+	INLINE void GetSecondDirection (CATMathVector &amp; ioSecondDirection) const;
+#else
+	void GetSecondDirection (CATMathVector &amp; ioSecondDirection) const;
+#endif
+
+	/** 
+	* Returns the third (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	*/
+#ifdef CATIACGMV5R21
+	INLINE void GetThirdDirection (CATMathVector &amp; ioThirdDirection) const;
+#else
+	void GetThirdDirection (CATMathVector &amp; ioThirdDirection) const;
+#endif
+
+	/**
+	* Dumps &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.
+	* &lt;br&gt;This writes the following lines on the ostream:
+	*&lt;pre&gt;
+	* Origin    = ( OriginFirstCoord    , OriginSecondCoord    , OriginThirdCoord )
+	* FirstDir  = ( FirstDirFirstCoord  , FirstDirSecondCoord  , FirstDirThirdCoord )
+	* SecondDir = ( SecondDirFirstCoord , SecondDirSecondCoord , SecondDirThirdCoord )
+	* ThirdDir  = ( ThirdDirFirstCoord  , ThirdDirSecondCoord  , ThirdDirThirdCoord )
+	*&lt;/pre&gt;
+	* @param iStream  
+	* A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+	* coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+	*/
+	void Dump(ostream * iStream=0L) const;
+
+	/** 
+	* @deprecated V5R20 GetSecondDirection
+	* Returns the second (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis. The signature which returns the
+	* CATMathDirection as an output argument should be preferably used.
+	*/
+	CATMathDirection GetSecondDirection () const;
+
+	/** 
+	* @deprecated V5R20 GetThirdDirection
+	* Returns the third (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis. The signature which returns the
+	* CATMathDirection as an output argument should be preferably used.
+	*/
+	CATMathDirection GetThirdDirection () const;
+
+	/** 
+	* @deprecated V5R20 GetFirstDirection
+	* Returns the first (normalized) direction of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis. The signature which returns the
+	* CATMathDirection as an output argument should be preferably used.
+	*/
+	CATMathDirection GetFirstDirection () const;
+
+	/** 
+	* @deprecated V5R20 GetOrigin
+	* Returns the origin of &lt;tt&gt;this&lt;/tt&gt; CATMathAxis.  The signature which returns the
+	* CATMathPoint as an output argument should be preferably used.
+	*/
+	CATMathPoint GetOrigin () const;
+
+
+	//===========================================================================
+	//- Private data
+	//===========================================================================
+private :
+	// normalized vectors
+	CATMathVector _FirstAxis, _SecondAxis, _ThirdAxis;
+	CATMathPoint   _Origin;
+
+  friend class CATMathTools;
+};
+/**
+* Defines the canonical axis system.
+*/
+extern ExportedByCATMathematics const CATMathAxis CATMathOIJK;
+
+#ifdef CATIACGMV5R21
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+
+INLINE void CATMathAxis::GetDirections (CATMathVector &amp; D1,
+                                        CATMathVector &amp; D2,
+                                        CATMathVector &amp; D3) const
+{
+  D1 = _FirstAxis;
+  D2 = _SecondAxis;
+  D3 = _ThirdAxis; 
+}
+
+INLINE void CATMathAxis::GetFirstDirection (CATMathVector &amp; Vec) const
+{
+  Vec=_FirstAxis;
+}
+
+INLINE void CATMathAxis::GetSecondDirection (CATMathVector &amp; Vec) const
+{
+  Vec=_SecondAxis;
+}
+
+INLINE void CATMathAxis::GetThirdDirection (CATMathVector &amp; Vec) const
+{
+  Vec=_ThirdAxis;
+}
+
+INLINE void CATMathAxis::GetOrigin (CATMathPoint &amp; Pt) const
+{
+  Pt=_Origin;
+}
+#endif
+
+INLINE void CATMathAxis::GetDirections (CATMath3x3Matrix &amp; oM) const
+{
+ oM.SetMatrix (_FirstAxis,_SecondAxis,_ThirdAxis) ;
+}
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathAdvancedBoxType.html">← 上一页: CATMathAdvancedBoxType.h</a></div>
+        <div><a href="CATMathAxis2D.html">下一页: CATMathAxis2D.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAApplicationFrame.edu/CAAAfrGeoEdition.m/LocalInterfaces/CAAAfrPointEditDlg.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAApplicationFrame.edu/CAAAfrGeoEdition.m/LocalInterfaces/CAAAfrPointEditDlg.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAAfrPointEditCmd.html">← 上一页: CAAAfrPointEditCmd.h</a></div>
+        <div><a href="CAAEAfrEditPlane.html">下一页: CAAEAfrEditPlane.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAAfrPointEditDlg_h
+#define CAAAfrPointEditDlg_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+//===========================================================================
+//  Abstract of the sample:
+//  ----------------------
+//
+//  Application using a new document (CAAGeometry) with its own workshop and 
+//  commands.
+//     
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Dialog box which edits a point (an CAASysPoint component).
+//  This dialog box is called by the CAAAfrPointEditCmd command which is the
+//  Edit command of the CAASysPoint component, that is to say the command 
+//  returned by the CAASysPoint implementation of the CATIEdit interface.
+//
+//  Illustrates:
+//    programming a dialog which edits an object.
+//
+//  The dialog box does not manage its life cycle. The calling command 
+//  must request its destruction.
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//            CATDlgDialog ( Dialog Framework) 
+//              CATDlgWindow ( Dialog Framework) 
+//                CATDialog   (Dialog Framework)
+//                  CATCommand  (System Framework)
+//                    CATBaseUnknown (System Framework).
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//
+//  Build        -&gt; Construction of the dialog objects
+//
+//  ClickPreview -&gt; Modifies the object and sends a notification 
+//                  to update the display
+//  ClickOk      -&gt; Modifies the object, sends a notification 
+//                  to update the display and closes the dialog box
+//  ClickCancel  -&gt; Restores the initial values, sends a notification 
+//                  to update the display and closes the dialog box
+//  ClickClose   -&gt; Closes the dialog box
+//
+//  CloseBox     -&gt; Hides the dialog box and sends a close notification.
+//                  
+//******************************************************************************
+// Dialog Framework
+#include &quot;CATDlgDialog.h&quot;   //Needed to derive from CATDlgDialog
+
+// CAASystem.edu Framework
+class CAAISysPoint;    //Needed by Object to modify
+
+// Dialog Framework
+class CATDlgSpinner;        // 3D coordinates 
+
+
+class CAAAfrPointEditDlg : public CATDlgDialog
+{ 
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAAAfrPointEditDlg.CATNLS 
+  //    
+  DeclareResource(CAAAfrPointEditDlg,CATDlgDialog) ;
+
+  public :
+
+    CAAAfrPointEditDlg( CATDialog       * iParent,
+                        const CATString &amp; iName,
+                        CATDlgStyle       iStyle,
+                        CAAISysPoint    * ipEdit);
+
+    virtual ~CAAAfrPointEditDlg();  
+	
+    // Construction of the dialog objects
+    void Build();
+
+  private : 
+
+    // ClickOK 
+    // -------
+    // Called when the end user clicks Ok.
+    // Assignes values from the Dialog box to the current object 
+    //
+    void ClickOK    (CATCommand         * iPublisher, 
+                     CATNotification    * iNotification ,
+                     CATCommandClientData iUsefulData);
+
+    // ClickPreview 
+    // ------------
+    // Called when the end user clicks Preview.
+    // Assignes values from the the Dialog box to the current object 
+    //
+    void ClickPreview(CATCommand         * iPublisher, 
+                     CATNotification    * iNotification ,
+                     CATCommandClientData iUsefulData);
+
+    // ClickCancel
+    // -----------
+    // The end user clicks Cancel. 
+    // Assignes the saved values
+    //
+    void ClickCancel(CATCommand         * iPublisher, 
+                     CATNotification    * iNotification ,
+                     CATCommandClientData iUsefulData);
+
+    // ClickClose
+    // ----------
+    // Called when the end user clicks Close. 
+    // 
+    void ClickClose (CATCommand         * iPublisher, 
+                     CATNotification    * iNotification ,
+                     CATCommandClientData iUsefulData);
+
+    // CloseBox
+    // --------
+    // Hiddes the Dialog Box and Asks the destruction of the command.
+    // Methods called when the Dialog box must be closed: ( ClickOK and 
+    // ClickCancel methods ) or when the command must be deleted ( Cancel method)
+    //
+    void CloseBox() ;
+
+    // ModifyModelAndVisu
+    // ------------------
+    // Modifies the position of the plane and sends a notification to 
+    // redraw it.
+    //
+    void ModifyModelAndVisu(const float iX, const float iY, const float iZ);
+
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAAfrPointEditDlg &amp; operator = (const CAAAfrPointEditDlg &amp;iObjectToCopy);
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAAfrPointEditDlg(const CAAAfrPointEditDlg &amp;iObjectToCopy);
+
+    // Default constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAAfrPointEditDlg ();
+
+  private : 
+
+    // X,Y,Z Coordinates of the point
+    CATDlgSpinner * _XSpinner ;
+    CATDlgSpinner * _YSpinner ;
+    CATDlgSpinner * _ZSpinner ;
+
+    // Object to modify
+    CAAISysPoint  * _piSysPointEdit;
+
+    // Values to restore if the end user clicks Cancel 
+    float  _Xfirst ;
+    float  _Yfirst ;
+    float  _Zfirst ;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAAfrPointEditCmd.html">← 上一页: CAAAfrPointEditCmd.h</a></div>
+        <div><a href="CAAEAfrEditPlane.html">下一页: CAAEAfrEditPlane.h →</a></div>
+    </div>
+</body>
+</html>

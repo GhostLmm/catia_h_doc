@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPDMReconcile/PublicInterfaces/CATIUExitPVRCommands.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPDMReconcile/PublicInterfaces/CATIUExitPVRCommands.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPDMUERecRulesScm.html">← 上一页: CATIPDMUERecRulesScm.h</a></div>
+        <div><a href="CATLISTPCATIPDMCharacteristicScm.html">下一页: CATLISTPCATIPDMCharacteristicScm.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIUExitPVRCommands_h
+#define CATIUExitPVRCommands_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2008-2010
+/**
+  *  @CAA2Level L1
+  *  @CAA2Usage U5
+  */
+// *****************************************************************
+//
+//   Description :
+//   ------------
+//
+//    User Exit to be implemented to customize PVR creation &amp; synchronization behavior
+//
+// *****************************************************************
+//
+//   Remarks :
+//   ---------
+//
+//
+// ****************************************************************
+//
+//   Story :
+//   -------
+//
+//    Revision 1.0  Dec 2008  Creation on this new User Exit.
+//
+// ****************************************************************
+   
+
+// --- Header that need to be referenced
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATPDMReconcileItfCPP.h&quot;
+
+// --- Forward declaration
+
+class CATDocument ;
+class CATUnicodeString;
+class CATListValCATUnicodeString;
+
+// --- Interface declaration.
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATPDMReconcileItfCPP  IID  IID_CATIUExitPVRCommands ; 
+#else
+ extern  &quot;C&quot;  const  IID  IID_CATIUExitPVRCommands ;
+#endif
+
+/**
+  *  Interface to allow the user to implement customize behavior in context of Product View Result Creation or Synchronization.
+  *
+  *  &lt;b&gt;Role&lt;/b&gt;: This interface is a user exit, that allows an customer to provide its own customization for
+  *  when creating or synchronizing  Product View Result (&lt;b&gt;&lt;i&gt;PVR&lt;/i&gt;&lt;/b&gt;).
+  *  &lt;br&gt;You should implement it on the &lt;tt&gt;CATUExitPVRCommands&lt;/tt&gt; component by using 
+  *  the CATObject mechanism on a late Type &quot;CATUExitPVRCommands&quot;
+  **/
+class ExportedByCATPDMReconcileItfCPP CATIUExitPVRCommands : public CATBaseUnknown 
+{
+   CATDeclareInterface ;
+  
+   public :
+  
+      // --------------------------------------------------------------
+      // No constructors or destructors on this pure virtual base class
+      // --------------------------------------------------------------
+
+   /** 
+     * User Exit called after opening a PRC from PVR specication.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to implement customer operation after the PRC is opened from a PVR opened in CATIA.
+     *
+     * @param ixPVRDoc [in]
+     *   PVR CATProduct document.
+     *
+     * @param ixPRCDoc [in]
+     *   PRC CATProduct document.
+     *
+     * @return
+     *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, otherwise...
+     */
+     virtual HRESULT AfterPRCOpenFromPVR( CATDocument * ixPVRDoc , CATDocument * ixPRCDoc ) = 0 ;
+
+   /** 
+     * Enables to update an attribute value on PVR document.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to update an attribute value on document to capture in particular PVR synchronization status.
+     *
+     * @param ixPVRDoc [in]
+     *   Product View Result document in loaded in CATIA session.
+     *
+     * @param inIsyncNeeded [in]
+     *   Synchronization status.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;0&lt;/dt&gt;  &lt;dd&gt;Means that PVR product structure is up to date compared to ENOVIA structure.&lt;dd&gt;
+     *   &lt;dt&gt;1&lt;/dt&gt;  &lt;dd&gt;Means that PVR product structure need to be synchronized.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     *
+     * @param ocAttrId [out]
+     *   Id of the attribute that need to be updated.
+     *
+     * @param ocAttrVal [out]
+     *   Attribute value to be set.
+     *
+     * @return
+     *   Method return code.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;S_OK&lt;/dt&gt;    &lt;dd&gt;If user exit run well and an attribute value needs to be updated.&lt;dd&gt;
+     *   &lt;dt&gt;S_FALSE&lt;/dt&gt; &lt;dd&gt;If user exit run well and no attribute update is required.&lt;dd&gt;
+     *   &lt;dt&gt;E_FAIL&lt;/dt&gt;  &lt;dd&gt;In case of error in the user exit.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     */
+     virtual HRESULT UpdateAttributeOnPvrSynchro( CATDocument      * ixPVRDoc
+                                                , int                inIsyncNeeded
+                                                , CATUnicodeString &amp; ocAttrId 
+                                                , CATUnicodeString &amp; ocAttrVal ) = 0 ;
+
+   /** 
+     * Enables to define default name to be used in Product View Result (PVR) document creation command.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to define default name for PVR and Expand Capture name in Product View Result document creation command.
+     *  &lt;ul&gt;
+     *  &lt;li&gt;Default name for PVR is generated using Part Master or PRC name concatenated with &quot;_PVR&quot; character string.&lt;/li&gt;
+     *  &lt;li&gt;Default name for Expand Capture (PVS) is generated using Part Master or PRC name concatenated with &quot;_PVS&quot; character string.&lt;/li&gt;
+     *  &lt;/ul&gt;
+     *  &lt;b&gt;&lt;u&gt;Note:&lt;/u&gt;&lt;/b&gt; User Exit will be called at PVR creation command initiation and when end-user will request to go back to default name concerning PVR or PVS.
+     *
+     * @param ilNewFrom [in]
+     *   One existing Product View Result document will be used to initialized new PVR.
+     *   &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt; 
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;0&lt;/dt&gt;         &lt;dd&gt;Means no PVR will be used to initialize the PVR to be created.&lt;dd&gt;
+     *   &lt;dt&gt;otherwise&lt;/dt&gt; &lt;dd&gt;All other values means one PVR new from is defined.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     *
+     * @param ilFilteredPVR [in]
+     *   PVR will be associated to an Expand Capture.
+     *   &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt; 
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;0&lt;/dt&gt;         &lt;dd&gt;Means no Expand filter defined.&lt;dd&gt;
+     *   &lt;dt&gt;otherwise&lt;/dt&gt; &lt;dd&gt;All other values means one Expand filter will be used.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     *
+     * @param iAttributeIdLst [in]
+     *   List of attribute Id build by having a prefix for object type followed by character &#x27;.&#x27; as separator and the attribute Id.
+     *   &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;PV.V_ID&lt;/dt&gt;    &lt;dd&gt;For the attribute V_ID of the Part Version (root of the PVR assembly).&lt;dd&gt;
+     *   &lt;dt&gt;PRC.V_Name&lt;/dt&gt; &lt;dd&gt;For the attribute V_Name of the PRC (root of the PVR assembly or the assembly).&lt;dd&gt;
+     *   &lt;/dl&gt;
+     *
+     *   &lt;br&gt;&lt;b&gt;Legal values for object types&lt;/b&gt;: 
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;PRC&lt;/dt&gt;  &lt;dd&gt;Product Root Class representing the root of the assembly of the PVR to be created or the PRC on which the part instance is located.&lt;dd&gt;
+     *   &lt;dt&gt;PVS&lt;/dt&gt;  &lt;dd&gt;Expand Capture (PVS) selected if defined in PVR creation command context.&lt;dd&gt;
+     *   &lt;dt&gt;PV&lt;/dt&gt;   &lt;dd&gt;Part Version representing the root of the assembly of the PVR.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     *
+     * @param iAttributeValueLst [in]
+     *   List of attribute values corresponding to &lt;b&gt;&lt;i&gt;iAttributeIdLst&lt;/i&gt;&lt;/b&gt;.
+     *
+     * @param ioPVRName [inout]
+     *   Default name for PVR to be created.
+     *
+     * @param ioPVSName [inout]
+     *   Default name to be used in case of PVS creation.
+     *
+     * @return
+     *   Method return code.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *   &lt;dt&gt;S_OK&lt;/dt&gt;    &lt;dd&gt;If user exit run well.&lt;dd&gt;
+     *   &lt;dt&gt;E_FAIL&lt;/dt&gt;  &lt;dd&gt;In case of error in the user exit.&lt;dd&gt;
+     *   &lt;/dl&gt;
+     */
+     virtual HRESULT GetDefaultNamesForPVRCreation( int                                ilNewFrom
+                                                  , int                                ilFilteredPVR
+                                                  , const CATListValCATUnicodeString &amp; iAttributeIdLst
+                                                  , const CATListValCATUnicodeString &amp; iAttributeValueLst
+                                                  , CATUnicodeString                 &amp; ioPVRName
+                                                  , CATUnicodeString                 &amp; ioPVSName           ) = 0 ;
+} ;
+
+
+CATDeclareHandler(CATIUExitPVRCommands, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPDMUERecRulesScm.html">← 上一页: CATIPDMUERecRulesScm.h</a></div>
+        <div><a href="CATLISTPCATIPDMCharacteristicScm.html">下一页: CATLISTPCATIPDMCharacteristicScm.h →</a></div>
+    </div>
+</body>
+</html>

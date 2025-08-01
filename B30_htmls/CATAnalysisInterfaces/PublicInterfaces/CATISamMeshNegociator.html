@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamMeshNegociator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamMeshNegociator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamMeshExplicitOper.html">← 上一页: CATISamMeshExplicitOper.h</a></div>
+        <div><a href="CATISamMeshPartFilter.html">下一页: CATISamMeshPartFilter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamMeshNegociator_H
+#define CATISamMeshNegociator_H
+// COPYRIGHT DASSAULT SYSTEMES 2000  
+//------------------------------------------------------------------
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+
+#include &quot;CATAnalysisInterface.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+class CATISpecObject;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamMeshNegociator ;
+#else
+extern &quot;C&quot; const IID IID_CATISamMeshNegociator ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface for changes triggered by mesh modification.
+ * &lt;b&gt;Role:&lt;/b&gt; Interface designed to manage &lt;b&gt;changes&lt;/b&gt;due to mesh modifications.&lt;br&gt;
+ * &lt;p&gt;
+ * In the Analysis Model, when &lt;b&gt;the mesh&lt;/b&gt; is modified 
+ * it is necessary to notify some entities of this changes. &lt;p&gt; 
+ * The interface allow to :
+ * &lt;ul&gt;&lt;li&gt;Set or Retreive the impacting mesh &lt;/li&gt;
+ *     &lt;li&gt;Set ,unset, test or retreive the entities that must be notified&lt;/li&gt;
+ * &lt;/ul&gt;
+ */ 
+class ExportedByCATAnalysisInterface CATISamMeshNegociator: public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+	public:
+
+  /**
+   * Defines the &lt;b&gt; iLauncher &lt;/b&gt; that will impact
+	 * all the subscribers when it is modified.
+   * @param iLauncher The object that will propagate.
+   */
+		virtual HRESULT SetLauncher(CATISpecObject* iLauncher) = 0;
+
+  /**
+   * Retrieves the object called launcher.
+   * @param oLauncher  [out , CATBaseUnknown#Release]
+   * The object that propagates.
+   */
+		virtual HRESULT GetLauncher(CATISpecObject*&amp; oLauncher) = 0;
+
+ /**
+   * Specifies that &lt;b&gt; iSubscriber &lt;/b&gt; should
+   * be notified that the Mesh has been modified.
+   * @param iSubscriber The object that is notified.
+   */
+		virtual HRESULT Subscribe(CATISpecObject* iSubscriber) = 0;
+
+ /**
+   * Removes the impacted object.
+   * @param iSubscriber The object that will no more be notified.
+   */
+		virtual HRESULT UnSubscribe(CATISpecObject* iSubscriber) = 0;
+
+  /**
+   * Retrieves all the objects that have subscribed to mesh
+   * changes.
+   * @param oSubscribers The list of objects that require to be notified.
+   */
+		virtual HRESULT GetSubscribers(CATLISTV(CATBaseUnknown_var)&amp; oSubscribers) = 0;
+
+	/**
+   * Checks is an object is already defined as impacted.
+   * @param iSubscriber The object to check.
+   */
+		virtual HRESULT HasSubscribed(CATISpecObject* iSubscriber) = 0;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATISamMeshNegociator, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamMeshExplicitOper.html">← 上一页: CATISamMeshExplicitOper.h</a></div>
+        <div><a href="CATISamMeshPartFilter.html">下一页: CATISamMeshPartFilter.h →</a></div>
+    </div>
+</body>
+</html>

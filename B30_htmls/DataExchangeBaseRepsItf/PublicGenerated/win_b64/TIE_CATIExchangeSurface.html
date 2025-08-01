@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataExchangeBaseRepsItf/PublicGenerated/win_b64/TIE_CATIExchangeSurface.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataExchangeBaseRepsItf/PublicGenerated/win_b64/TIE_CATIExchangeSurface.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIExchangeSphere.html">← 上一页: TIE_CATIExchangeSphere.h</a></div>
+        <div><a href="TIE_CATIExchangeSurfaceOfRevolution.html">下一页: TIE_CATIExchangeSurfaceOfRevolution.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIExchangeSurface
+#define __TIE_CATIExchangeSurface
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATIExchangeSurface.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIExchangeSurface */
+#define declare_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+class TIECATIExchangeSurface##classe : public CATIExchangeSurface \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIExchangeSurface, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT GetNormal(int iNbParams, double *iParams, double *oNormals) const ; \
+      virtual HRESULT GetTangents(int iNbParams, double *iParams, double *oUTangents, double *oVTangents) const ; \
+      virtual HRESULT GetSurfaceType(IID&amp; ouuid) const ; \
+      virtual HRESULT GetParamRangeRect(double oMinParam[2], double oMaxParam[2], CATBaseUnknown_var ioRelimitedOnFace = ((CATBaseUnknown*)0)) const ; \
+      virtual HRESULT GetPointAtParam(int iNbParam, double* iParams, double* oPoints) const ; \
+};
+
+
+
+#define ENVTIEdeclare_CATIExchangeSurface(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT GetNormal(int iNbParams, double *iParams, double *oNormals) const ; \
+virtual HRESULT GetTangents(int iNbParams, double *iParams, double *oUTangents, double *oVTangents) const ; \
+virtual HRESULT GetSurfaceType(IID&amp; ouuid) const ; \
+virtual HRESULT GetParamRangeRect(double oMinParam[2], double oMaxParam[2], CATBaseUnknown_var ioRelimitedOnFace = ((CATBaseUnknown*)0)) const ; \
+virtual HRESULT GetPointAtParam(int iNbParam, double* iParams, double* oPoints) const ; \
+
+
+#define ENVTIEdefine_CATIExchangeSurface(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT  ENVTIEName::GetNormal(int iNbParams, double *iParams, double *oNormals) const  \
+{ \
+return (ENVTIECALL(CATIExchangeSurface,ENVTIETypeLetter,ENVTIELetter)GetNormal(iNbParams,iParams,oNormals)); \
+} \
+HRESULT  ENVTIEName::GetTangents(int iNbParams, double *iParams, double *oUTangents, double *oVTangents) const  \
+{ \
+return (ENVTIECALL(CATIExchangeSurface,ENVTIETypeLetter,ENVTIELetter)GetTangents(iNbParams,iParams,oUTangents,oVTangents)); \
+} \
+HRESULT  ENVTIEName::GetSurfaceType(IID&amp; ouuid) const  \
+{ \
+return (ENVTIECALL(CATIExchangeSurface,ENVTIETypeLetter,ENVTIELetter)GetSurfaceType(ouuid)); \
+} \
+HRESULT  ENVTIEName::GetParamRangeRect(double oMinParam[2], double oMaxParam[2], CATBaseUnknown_var ioRelimitedOnFace ) const  \
+{ \
+return (ENVTIECALL(CATIExchangeSurface,ENVTIETypeLetter,ENVTIELetter)GetParamRangeRect(oMinParam,oMaxParam,ioRelimitedOnFace )); \
+} \
+HRESULT  ENVTIEName::GetPointAtParam(int iNbParam, double* iParams, double* oPoints) const  \
+{ \
+return (ENVTIECALL(CATIExchangeSurface,ENVTIETypeLetter,ENVTIELetter)GetPointAtParam(iNbParam,iParams,oPoints)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIExchangeSurface(classe)    TIECATIExchangeSurface##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIExchangeSurface, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIExchangeSurface, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIExchangeSurface, classe, 1) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIExchangeSurface, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIExchangeSurface, classe) \
+ \
+HRESULT  TIECATIExchangeSurface##classe::GetNormal(int iNbParams, double *iParams, double *oNormals) const  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetNormal(iNbParams,iParams,oNormals)); \
+} \
+HRESULT  TIECATIExchangeSurface##classe::GetTangents(int iNbParams, double *iParams, double *oUTangents, double *oVTangents) const  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetTangents(iNbParams,iParams,oUTangents,oVTangents)); \
+} \
+HRESULT  TIECATIExchangeSurface##classe::GetSurfaceType(IID&amp; ouuid) const  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetSurfaceType(ouuid)); \
+} \
+HRESULT  TIECATIExchangeSurface##classe::GetParamRangeRect(double oMinParam[2], double oMaxParam[2], CATBaseUnknown_var ioRelimitedOnFace ) const  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetParamRangeRect(oMinParam,oMaxParam,ioRelimitedOnFace )); \
+} \
+HRESULT  TIECATIExchangeSurface##classe::GetPointAtParam(int iNbParam, double* iParams, double* oPoints) const  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetPointAtParam(iNbParam,iParams,oPoints)); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIExchangeSurface(classe) \
+ \
+ \
+declare_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIExchangeSurface##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIExchangeSurface,&quot;CATIExchangeSurface&quot;,CATIExchangeSurface::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIExchangeSurface, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIExchangeSurface##classe(classe::MetaObject(),CATIExchangeSurface::MetaObject(),(void *)CreateTIECATIExchangeSurface##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIExchangeSurface(classe) \
+ \
+ \
+declare_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIExchangeSurface##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIExchangeSurface,&quot;CATIExchangeSurface&quot;,CATIExchangeSurface::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIExchangeSurface(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIExchangeSurface, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIExchangeSurface##classe(classe::MetaObject(),CATIExchangeSurface::MetaObject(),(void *)CreateTIECATIExchangeSurface##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIExchangeSurface(classe) TIE_CATIExchangeSurface(classe)
+#else
+#define BOA_CATIExchangeSurface(classe) CATImplementBOA(CATIExchangeSurface, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIExchangeSphere.html">← 上一页: TIE_CATIExchangeSphere.h</a></div>
+        <div><a href="TIE_CATIExchangeSurfaceOfRevolution.html">下一页: TIE_CATIExchangeSurfaceOfRevolution.h →</a></div>
+    </div>
+</body>
+</html>

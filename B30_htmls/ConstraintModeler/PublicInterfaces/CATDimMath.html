@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstraintModeler/PublicInterfaces/CATDimMath.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ConstraintModeler/PublicInterfaces/CATDimMath.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATConstraintServices.html">← 上一页: CATConstraintServices.h</a></div>
+        <div><a href="CATDimTempCst.html">下一页: CATDimTempCst.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef CATDimMath_h
+#define CATDimMath_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATCstComputerForwards.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathDirection.h&quot;
+#include &quot;CATCORBABoolean.h&quot;
+#include &quot;MF0DimInt.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+
+
+
+class CATDimMathElement;
+class CATIDimCst_var;
+class CATMathTransformation;
+class CATDimMathExt;
+
+
+/**
+ * @deprecated V5R15
+ * do not use
+ * angle_type value :
+ * stands for 0 x PI.
+ */
+#define CATDimAngle0PI 0
+/**
+ * @deprecated V5R15
+ * do not use
+ * angle_type value :
+ * Stands for 1 x PI.
+ */
+#define CATDimAngle1PI 1
+/**
+ * @deprecated V5R15
+ * do not use
+ * angle_type value :
+ * Stands for 2 x PI.
+ */
+#define CATDimAngle2PI 2
+/**
+ * @deprecated V5R15
+ * do not use
+ * angle_type value :
+ * Unspecified.
+ */
+#define CATDimAngleUnspec 3
+
+/**
+ * @nodoc 
+ */
+#define CATDimSector         0
+/**
+ * @nodoc 
+ */
+#define CATDimSectorOpposite 1
+/**
+ * @nodoc 
+ */
+#define CATDimSectorCompl    2
+
+/**
+ * @deprecated V5R15
+ * do not use
+ * Class for 3D constraint visualization. 
+ * &lt;b&gt;Role&lt;/b&gt;:All the characteristic points for constraint visualization 
+ * are stored in this class . 
+ * &lt;br&gt;This is an example of visualization for a vertical oriented length constraint.
+ * &lt;pre&gt;
+ * 
+ *
+ *                      ----- + callout
+ *                    /
+ *                  /
+ * p2dl!&lt;----------*----------&gt;!p1dl
+ *     !           ^           !
+ *     !           !           !
+ *     !           !vertical   !
+ *     !           !offset     !
+ *     !           !           ! 
+ *     !           !           !
+ * pt2 +           !           ! 
+ *       \         !           !
+ *         \       !           !
+ *           \     !           ! 
+ *             \   !           !
+ *               \             ! 
+ *      center     +           !
+ *                   \         !
+ *                     \       !
+ *                       \     !
+ *                         \   !           ^
+ *                           \ !           |
+ *                             + pt1       | dir
+ *                  
+ * &lt;/pre&gt;
+ */
+
+
+
+
+
+class ExportedByMF0DimInt CATDimMath
+{
+public:
+/** 
+ * Constructs a &lt;tt&gt;CATDimMath&lt;/tt&gt;.
+ */
+      CATDimMath();
+      virtual ~CATDimMath();
+private:
+     void Dump(const char* s,const CATMathPoint&amp; x);
+     void Dump(const char* s,const CATMathDirection&amp; x);
+     void Copy(const CATDimMath &amp;X);
+public:
+/**
+ * Copy Constructor of &lt;tt&gt;CATDimMath&lt;/tt&gt;.
+ */
+     CATDimMath(const CATDimMath&amp; X);
+/** 
+ * Copy Constructor of &lt;tt&gt;CATDimMath&lt;/tt&gt;.
+ */
+     CATDimMath &amp;operator = (const CATDimMath&amp;X);
+/** 
+ * @nodoc 
+ */     
+	 void Dump();
+/** 
+ * @nodoc 
+ */
+     virtual void Allocate(int nb);
+
+/**
+ * @nodoc 
+ * Stores the support&#x27;s elements of the constraint.
+ * @param iCst
+ * Visualized constraint.
+ * @param iE1 
+ * First element.
+ * @param iE2
+ * Second element.
+ * @param iE3 
+ * Third element.
+ */
+     virtual void SetElements( const CATIDimCst_var &amp;iCst,
+			       const CATBaseUnknown_var &amp;iE1,
+			       const CATBaseUnknown_var &amp;iE2,
+			       const CATBaseUnknown_var &amp;iE3);
+
+/**
+ * @nodoc 
+ * Retrieves the support&#x27;s elements of the constraint.
+ * @param oCst 
+ * Visualized constraint.
+ * @param oE1  
+ * First element.
+ * @param oE2  
+ * Second element.
+ * @param oE3  
+ * Third element.
+ */    
+	virtual void GetElements( CATIDimCst_var &amp;oCst,
+			       CATBaseUnknown_var &amp;oE1,
+			       CATBaseUnknown_var &amp;oE2,
+			       CATBaseUnknown_var &amp;oE3);
+/** 
+ * @nodoc 
+ */
+     void GetElements(CATDimMathElement *&amp;elements,int &amp;nb)
+       {
+	 nb = m_number_of_elements;
+	 elements = m_elements;
+       }
+      
+/**
+ * Data member: first extremity of extension line.
+ */
+  CATMathPoint pt1;
+/**
+ * Data member: second extremity of extension line.
+ */	 
+ CATMathPoint pt2;
+/** 
+ * Data member: center (angle/radius/diameter).
+ */
+ CATMathPoint center;
+/**
+ * Data member: dimension direction.
+ */ 
+ CATMathDirection dir;
+/**
+ * Data member: axis ( it is the normal of the dimension plane ).
+ */ 
+ CATMathDirection axis;
+/**
+ * Data member: rotation way
+ */
+ unsigned cclockwise:1;
+ /**
+ * Data member: dimension line first point.
+ */
+ CATMathPoint p1dl;
+/**
+ * Data member: dimension line second point.
+ */
+ CATMathPoint p2dl;
+/** 
+ * Data member: callout anchor point.
+ */ 
+ CATMathPoint callout;
+/**
+ * Sets by EvalPosition: Angles. 
+ */ 
+ unsigned angle_sector:3; 
+/**
+ * Sets by EvalPosition: Angles : 0 /pi/2*pi/Unspecified.    
+ */
+ unsigned angle_type:2; 
+/** 
+ * Declares that arcs are less than pi.
+ */    
+ unsigned lessthanPI:1; 
+
+private:
+
+	  CATDimMathElement *m_elements;
+      int m_number_of_elements;
+    CATDimMathExt* m_mathExt;
+      
+public:
+/**
+ * Data member: second dimension direction (angular case).
+ */ 
+ CATMathDirection w2;
+/**
+ * Gets dimension initial offset. 
+ */
+      double GetDefaultOffset() const;
+/**
+ * Sets dimension initial offset.
+ * @param oValue
+ * The default offset value.
+ */
+      void SetDefaultOffset(double value);
+/**
+ * Applies transformation to pt1, pt2, dir, w2, axis,
+ * and eventually to p1dl, p2dl and callout.
+ * @param iMatrix
+ * The matrix of transformation.
+ * @param iAll
+ * Optional value.	  
+ */
+      void Transform(const CATMathTransformation &amp;iMatrix, int iAll = 1);
+/**
+ * @nodoc 
+ */
+      HRESULT GetMathExtension(CATDimMathExt* &amp;mathExt);
+/**
+ * @nodoc 
+ */
+      HRESULT SetMathExtension(CATDimMathExt* mathExt);
+/**
+ * @nodoc 
+ */
+      HRESULT RemoveExtension();
+
+private:
+      double m_offset;
+      
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATConstraintServices.html">← 上一页: CATConstraintServices.h</a></div>
+        <div><a href="CATDimTempCst.html">下一页: CATDimTempCst.h →</a></div>
+    </div>
+</body>
+</html>

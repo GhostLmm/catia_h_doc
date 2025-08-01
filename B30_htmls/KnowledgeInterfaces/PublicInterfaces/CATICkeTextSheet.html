@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATICkeTextSheet.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATICkeTextSheet.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeSignature.html">← 上一页: CATICkeSignature.h</a></div>
+        <div><a href="CATICkeType.html">下一页: CATICkeType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1998
+//=============================================================================
+//
+// CATICkeTextSheet.h:
+//
+//=============================================================================
+// Usage Notes:
+//
+// See below
+//
+// 
+//
+//
+//=============================================================================
+// 08/06/98   Creation                                   T. Videcoq
+//=============================================================================
+
+/** 
+* @CAA2Level L1
+* @CAA2Usage U3 
+*/
+
+
+/**
+ * This interface is an encapsulation of an array of arrays (a sheet) &lt;br&gt;
+ * of strings contained in a file &lt;br&gt;
+ * The file has to be a tabulated text file. Its format has to be&lt;br&gt;
+ * string1 (tab) string2 etc &lt;br&gt;
+ * (n lines) &lt;br&gt;
+ * stringn (tab) stringn+1 etc &lt;br&gt;
+ * Empty strings are allowed, but not in the first row because the number of &lt;br&gt;
+ * columns is computed using the first row, except if you use the forceWidth &lt;br&gt;
+ * argument of the UpdateLocalCopy method (ancestor CATICkeSheet interface &lt;br&gt;
+ * method)&lt;br&gt;&lt;br&gt;
+ * To create a CATICkeTextSheet, use the CATICkeParmFactory::CreateSheet method&lt;br&gt;
+ * with a text file path as argument
+ * @see CATIDesignTable
+ * @see CATICkeSheet
+*/
+
+#ifndef CATICkeTextSheet_H
+#define CATICkeTextSheet_H
+
+#include &quot;KnowledgeItf.h&quot;
+#include &quot;CATICkeSheet.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByKnowledgeItf IID_CATICkeTextSheet;
+#else
+extern &quot;C&quot; const IID IID_CATICkeTextSheet;
+#endif
+
+class ExportedByKnowledgeItf CATICkeTextSheet : public CATICkeSheet
+{
+	CATDeclareInterface;
+public:
+	/**
+	* This methods adds a row in the text file.
+	* For vertical sheets, this method is much more effective than several calls to SetCell
+	* @param row
+	* the list of strings to add at the end of the file.
+	* @param init
+	* opens the file if equal to CATCke::True
+	* @param save
+	* saves the file if equal to CATCke::True
+	* @return
+	* CATCke::True if the operations succeeds, CATCke::False else
+	*/
+	virtual CATCke::Boolean AddRow(CATListOfCATUnicodeString &amp;row, CATCke::Boolean init, CATCke::Boolean save) = 0;
+};
+CATDeclareHandler(CATICkeTextSheet,CATICkeSheet);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeSignature.html">← 上一页: CATICkeSignature.h</a></div>
+        <div><a href="CATICkeType.html">下一页: CATICkeType.h →</a></div>
+    </div>
+</body>
+</html>

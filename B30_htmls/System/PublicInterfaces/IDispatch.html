@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/IDispatch.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/IDispatch.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="IClassFactory.html">← 上一页: IClassFactory.h</a></div>
+        <div><a href="IEnumVARIANT.html">下一页: IEnumVARIANT.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef __IDispatch
+#define __IDispatch
+
+#include &quot;IUnknown.h&quot;
+
+/** @nodoc */
+typedef wchar_t CATWCHAR_T;
+
+#ifndef _WINDOWS_SOURCE
+
+//
+// Uuid of IDispatch
+//
+extern const GUID IID_IDispatch;
+
+// forward
+interface ITypeInfo;
+
+/** @nodoc */
+typedef struct tagVARIANT VARIANT;
+/** @nodoc */
+typedef struct tagDISPPARAMS DISPPARAMS;
+/** @nodoc */
+typedef struct tagEXCEPINFO EXCEPINFO;
+
+//
+// Definition of the IDispatch interface for UNIX
+//
+/**
+ * Base interface for all Automation interfaces.
+ * &lt;b&gt;Role&lt;/b&gt;: All Automation interfaces derive from &lt;tt&gt;IDispatch&lt;/tt&gt; which replaces for UNIX the
+ * native Microsoft(R) &lt;tt&gt;IDispatch&lt;/tt&gt; interface.
+ * This interface supplies basic methods to be Microsoft(R) Automation compliant.
+ */
+interface IDispatch : public IUnknown
+{
+	//
+	// Give the number of TypeInfo that the object provides
+    //
+	/** @nodoc */
+	virtual HRESULT __stdcall GetTypeInfoCount(unsigned int *oNbOfTypeInfo)
+									    = 0;
+	
+	//
+	// Retrieves the type information for an object, which can 
+	// then be used to get the type information for an interface. 
+	//
+    /** @nodoc */
+	virtual HRESULT __stdcall GetTypeInfo(unsigned int iIndex,
+					      ULONG iLangId, 
+					      ITypeInfo **oPtTypeInfo)=0;
+	
+	//
+	// Maps a single member and an optional set of argument names
+	// to a corresponding set of integer DISPIDs
+	//
+    /** @nodoc */
+	virtual HRESULT __stdcall GetIDsOfNames(const IID &amp; forFutur,
+						CATWCHAR_T **iArrayOfNames,
+						unsigned int iNbNames,
+						ULONG iLangId,
+						LONG *oArrayOflong)=0;
+	
+	// 
+	// Provides access to properties and methods exposed by an object.
+	//
+	/** @nodoc */
+	virtual HRESULT __stdcall Invoke(LONG ilongMember, const IID &amp; forFutur,
+					 ULONG iLangId,
+					 unsigned short iFlags,
+					 DISPPARAMS *iPdisparams,
+					 VARIANT *oPvaresult,
+					 EXCEPINFO *oPexcepinfo,
+					 unsigned int *oPuArgErr)=0;
+};
+
+#endif //_WINDOWS_SOURCE
+
+#endif //__IDispatch
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="IClassFactory.html">← 上一页: IClassFactory.h</a></div>
+        <div><a href="IEnumVARIANT.html">下一页: IEnumVARIANT.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT2DManipulator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT2DManipulator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DLineRep.html">← 上一页: CAT2DLineRep.h</a></div>
+        <div><a href="CAT2DMarkerGP.html">下一页: CAT2DMarkerGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT2DManipulator_h
+#define CAT2DManipulator_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+//
+// CATIA Version 5 Release 1 Framework Visualization
+// Copyright Dassault Systemes 1996
+//------------------------------------------------------------------------------
+//
+// Abstract:    Object attached to a 2D representation providing a proposition 
+//		of a new position for 2D manipulation
+//
+//------------------------------------------------------------------------------
+//
+// Usage:
+//	In the instanciation :  
+//	1/	Instanciate a manipulator connected to the representation :
+//		  CAT2DManipulator * _Manip = new 
+//		    CAT2DManipulator( this, &quot;MYName&quot;, MYRep, CAT2DManipulator::DirectionTranslation);
+//
+//	2/	Position the manipulator	
+//		  _Manip-&gt;SetPosition( PositionComputedFromNewModelization)
+//			
+//	3/	Set characteristics (Invariants)   Note: Do it after SetPosition()
+//		  Manip-&gt;SetTranslationDirection( CATMathJ2D);
+//			
+//	4/ 	Branch a callback in you father command to be informed about the manipulation
+//  		  AddAnalyseNotificationCB( _Manip, CATManipulator::GetCATManipulate(), 
+//		    (CATCommandMethod) &amp;MYCommand::MYCallback, NULL);
+//
+//	In the callback :
+//	5/      Read data of manipulation
+//      	  - read the RESULT of the manipulation
+//		    CATMathAxis2D Position = ((CAT2DManipulator *)Command)-&gt;GetPosition();
+//		or:
+//                - read the event elementary TRANSFORMATION of the manipulation
+//                  CATTransformationNotification2D *TransfoNotif =
+//                     ((CATTransformationNotification2D *) Command-&gt;SendCommandSpecificObject(
+//                     CATTransformationNotification2D::ClassName(), Notification));
+//                  CATMathTransformation2D *Transformation = TransfoNotif-&gt;GetNotification();
+//
+//	6/	Update your modelization
+//          
+//	7/      Reposition the manipulator if needed (usualy when there is constraints)
+//		  _Manip-&gt;SetPosition( PositionComputedFromNewModelization)
+//				
+//------------------------------------------------------------------------------
+//
+// Main methods:
+// -------------
+//       
+//	CAT2DManipulator( father, &quot;Name&quot;, FirstStyle, SecondStyle);
+//		First style = used by Mouse Left button drag
+//		Second style = used by Mouse Left+Middle buttons drag (left THEN middle)
+//
+//	SetPosition( CATMathAxis2D)		: Set the position of the manipulator
+//	CATMathAxis2D GetPosition()		: Get the position of the manipulator
+//
+//	SetTranslationDirection( CATMathDirection2D)	: Axis of the DirectionTranslation
+//	SetRotationPoint( CATMathPoint2D)	: InvariantPoint for Rotation
+//
+//
+//------------------------------------------------------------------------------
+//
+// Class:      CAT2DManipulator
+// ------        CATManipulator
+//                 CATCommand (System FW)
+//
+//------------------------------------------------------------------------------
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATManipulator.h&quot;
+#include &quot;CATTransformation2DNotification.h&quot;
+#include &quot;CATMathPoint2D.h&quot;
+#include &quot;CATMathDirection2D.h&quot;
+#include &quot;CATMathAxis2D.h&quot;
+//egd for CAA #include &quot;CATVizForwardDeclarations.h&quot;
+
+class CAT2DRep;
+class CATViz2DViewer;
+class CAT2DViewpoint;
+class CAT2DBagRep;
+class CATDeviceEvent;
+
+/* WARNING : those classes is defined in Visualization framework */
+class CATViewer;
+class CAT2DViewer;
+class CAT3DViewer;
+
+/**
+*
+* Class to manipulate 3D representations
+*
+* This object adds 2D specific behaviors to the CATManipulator.
+* 
+*
+**/
+
+class ExportedByCATViz CAT2DManipulator : public CATManipulator
+{
+//------------------------------------------------------------------------------
+
+    CATDeclareClass;
+
+    friend class CAT2DVisuHandle;
+
+  public:
+/**
+* Defines the different types of manipulation available for
+* a 2D representation.
+*
+* @param NoManipulation          The CAT2DManipulator does no specific work
+* @param DirectionTranslation    The CAT2Dmanipulator contrains its position along a given direction during the manipulation
+* @param Translation             Free translation   
+* @param Rotation                The CAT2DManipulator constrains its position on a circle centered on a given point
+**/
+    enum ManipulationStyle {
+      NoManipulation,		
+      DirectionTranslation,	
+      Translation,		
+      Rotation};		
+
+    // Structors
+    //----------
+    /** Construction of the manipulator.
+     *  @param iFirstStyle = style of manipulation used by Mouse Left button drag
+     *  @param iSecondStyle = style of manipulation used by Mouse Left+Middle buttons drag (left THEN middle)
+     */
+    CAT2DManipulator( CATCommand *iFather, const CATString &amp;iName, CAT2DRep *iRep=NULL,
+	  const ManipulationStyle iFirstStyle=CAT2DManipulator::Translation, 
+	  const ManipulationStyle iSecondStyle=CAT2DManipulator::NoManipulation);
+ 
+   /** @nodoc */
+    virtual ~CAT2DManipulator();
+    
+    // Geometry invariants
+    //--------------------
+    /** Set the direction of DirectionTranslation ManipulationStyle. */
+    virtual void SetTranslationDirection( const CATMathDirection2D &amp;iAxis);
+    /** Set the invariant point of Rotation ManipulationStyle. */
+    virtual void SetRotationPoint( const CATMathPoint2D &amp;iPoint);
+    
+    /** 
+     * Gets the current position of the manipulator. 
+     *
+     *   This Position is not linked to the position of any maniulated representation
+     *   The Manipulator changes that position according to the manipulations 
+     */
+    virtual CATMathAxis2D GetPosition() const;
+
+    /** Sets the position of the manipulator. */
+    virtual void SetPosition( const CATMathAxis2D &amp;iPosition);
+
+ /**
+  * @nodoc
+  * Requests an object to be retrieved.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+  *  Asks a command for more information when that command calls you back.
+  * @param iUuid
+  *  The desired object, given by the ClassName method.
+  *  The CAT2DManipulator can return :
+  *    &lt;ol&gt;
+  *    &lt;li&gt;CATTransformation2DNotification  The notification containing the transformation associated to the manipulation.
+  *    &lt;/ol&gt;
+  * @param iGraphicNotification
+  *  The notification received in the callback which caused the need for that object.
+  * @return
+  *   A pointer to the retrieved object.
+  */  
+  virtual void * SendCommandSpecificObject ( const char *iUuid, CATNotification *iGraphicNotification);
+
+    // Manipulation calls from viewer
+    //-------------------------------
+  /** @nodoc */
+    virtual MInfo BeginManipulate(CATNotification *, CATManipulator *);
+  /** @nodoc */
+    virtual MInfo Manipulate(CATNotification *, CATManipulator *);
+  /** @nodoc */
+    virtual MInfo EndManipulate(CATNotification *, CATManipulator *);
+
+ /** 
+ * Changes the styles of manipulation.
+ * @param iFirstStyle =  style of manipulation used by Mouse Left button drag
+ *   @param iSecondStyle = style of manipulation used by Mouse Left+Middle buttons drag (left THEN middle)
+ */
+      void SetStyle( const ManipulationStyle iFirstStyle=CAT2DManipulator::Translation, 
+      const ManipulationStyle iSecondStyle=CAT2DManipulator::NoManipulation);
+
+//------------------------------------------------------------------------------
+  protected:
+   /** @nodoc */
+     CATViz2DViewer *_2DViewer;		// Current viewer of the manipulation
+   /** @nodoc */
+     CAT2DViewpoint *_2DViewpoint;	// Current viewpoint of the manipulation
+
+    // Manipulation styles
+    // -------------------
+   /** @nodoc */
+     ManipulationStyle _PrimaryStyle;		// With Button 1
+   /** @nodoc */
+     ManipulationStyle _SecondaryStyle;		// With Button 1 + Button 2
+
+    // Display Feedbacks
+    //------------------
+    void Feedback( const int DisplayOrHideRep);	// DisplayOrHideRep: 1=Display  0=Hide
+   /** @nodoc */
+     CAT2DBagRep *_FeedbackRep;
+   /** @nodoc */
+     CATPickPath *_RepPath;
+
+    // Geometry
+    //---------
+   /** @nodoc */
+     CATMathPoint2D _ContactPoint;
+   /** @nodoc */
+     CATTransformation2DNotification _Transformation;
+    /** @nodoc */
+    CATMathAxis2D _Position;
+    /** @nodoc */
+    CATMathAxis2D _ContactPosition;	// Position proposed
+    
+    // Manipulation Tools
+    //-------------------
+   /** @nodoc */
+     MInfo MouseManipulate( CATDeviceEvent *Notification, ManipulationStyle iStyle);
+   /** @nodoc */
+     CATMathPoint2D GetIntersection( CATDeviceEvent *Notification);
+   /** @nodoc */
+     void ConnectReferencesAxis( ManipulationStyle iStyle);
+
+    // Manipulation Reference geometry
+    // -------------------------------
+   /** @nodoc */
+     CATMathDirection2D _Axis;		// Vector of the axis operation
+    /** @nodoc */
+    CATMathPoint2D _InvariantPoint;		// Invariant point for rotation and movors
+    
+    // Dialog datas	
+    //-------------
+   /** @nodoc */
+     int _LastGeneralModifier, _LastMouseModifiers;	// For mouse multi-manipulations 
+   /** @nodoc */
+     ManipulationStyle _CurrentMouseManip;			
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DLineRep.html">← 上一页: CAT2DLineRep.h</a></div>
+        <div><a href="CAT2DMarkerGP.html">下一页: CAT2DMarkerGP.h →</a></div>
+    </div>
+</body>
+</html>

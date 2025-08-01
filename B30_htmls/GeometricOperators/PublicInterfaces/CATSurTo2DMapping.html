@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricOperators/PublicInterfaces/CATSurTo2DMapping.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricOperators/PublicInterfaces/CATSurTo2DMapping.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSurTo2DGlobalPlanarMapping.html">← 上一页: CATSurTo2DGlobalPlanarMapping.h</a></div>
+        <div><a href="Connect.html">下一页: Connect.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSurTo2DMapping_H
+#define CATSurTo2DMapping_H
+
+/** @CAA2Required */
+
+// 
+// COPYRIGHT DASSAULT SYSTEMES 1997
+//==========================================================================
+//
+// CATSurTo2DMapping:
+// Virtual class of mapping between CATsurface and 2 coordinates
+//
+//==========================================================================
+//
+// Usage notes:
+//      This virtual Object describes the mapping between one CATSurface and a
+//       virtual  2 dimension space 
+//       The derivation of this Object is generally created with derivation of 
+//        CATSurTo2DGlobalMapping 
+//        
+//       
+//	Methods :
+//             - Eval     ( CATSurface to 2D space , first derivatives optionnal)
+//             - InvEval  (   2D space to CATSurface, first derivatives optionnal)
+//             - Get Reference    
+//
+//==========================================================================
+#include &quot;Connect.h&quot;
+
+#include &quot;CATSurParam.h&quot;
+#include &quot;CATSurface.h&quot;
+#include &quot;CATMathVector2D.h&quot; 
+#include &quot;CATSurLimits.h&quot; 
+#include &quot;CATMathInterval2D.h&quot; 
+#include &quot;CATCGMVirtual.h&quot;
+
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATCGMOperator.h&quot;
+#include &quot;CATMappingValidity.h&quot;
+
+//-----------------------------------------------------------------------------
+class ExportedByConnect CATSurTo2DMapping : public CATCGMOperator
+
+  {
+  CATCGMVirtualDeclareClass(CATSurTo2DMapping);
+public :
+  //-------------
+  // Constructor
+  //-------------
+  CATSurTo2DMapping(CATGeoFactory *iFactory, const CATSurface * iReference, const CATSurLimits * iLimOnRef=0);
+  //-------------
+  // Destructor
+  //-------------
+  virtual ~CATSurTo2DMapping();
+  //-------------
+  // Evaluators
+  //-------------
+  //  Returned Boolean value is 0 if evalution (or inverse) is possible.
+  //                            1 if not (outside bound evaluation for example).
+  //  Direct evaluation 
+  //   You can use either CATSurParam or GlobalParameter on CATSurface ( consistent with GetGlobalEquation )
+  virtual CATBoolean Eval(const CATSurParam &amp; iParam, double &amp;oX,double &amp;oY ) const ;
+  
+  virtual CATBoolean Eval(const CATSurParam &amp; iParam,
+                          double &amp;oX,double &amp;oY,
+                          double &amp;oDXDU,double &amp;oDXDV,  
+                          double &amp;oDYDU,double &amp;oDYDV ) const ;
+  
+  virtual CATBoolean Eval(const double iU, const double iV,
+                          double &amp;oX,double &amp;oY ) const = 0;
+  
+  virtual CATBoolean Eval(const double iU, const double iV,
+                          double &amp;oX,double &amp;oY,
+                          double &amp;oDXDU,double &amp;oDXDV,  
+                          double &amp;oDYDU,double &amp;oDYDV ) const = 0;
+  
+  //  Inverse evaluation 
+  //   You can use either CATSurParam or GlobalParameter on CATSurface ( consistent with GetGlobalEquation )  
+  virtual CATBoolean InvEval(const double iX,const double iY, CATSurParam &amp;oParam  ) const ;
+  
+  virtual CATBoolean InvEval(const double iX,const double iY,
+                             CATSurParam &amp;oParam,
+                             CATMathVector2D &amp;oDX ,
+                             CATMathVector2D &amp;oDY ) const ;
+  
+  virtual CATBoolean InvEval(const double iX, const double iY, double &amp;oU, double &amp;oV ) const = 0;
+  
+  virtual CATBoolean InvEval(const double iX,const double iY,
+                             double &amp;oU,double &amp;oV,
+                             double &amp;oDUDX,double &amp;oDUDY,
+                             double &amp;oDVDX,double &amp;oDVDY ) const = 0;
+  
+  //----------------------
+  // Validity of the mapping . Describe information regarding local validity of Mapping
+  //---------------------- 
+  
+  enum CATMappingValidity{ ValidOnDomain = CATMappingValidOnDomain, PartiallyValidOnDomain = CATMappingPartiallyValidOnDomain, NotValidOnDomain = CATMappingNotValidOnDomain} ;
+  
+  //return TRUE if the image can be computed. 
+  //Else the Interval doesn&#x27;t necesarly contain the true image.
+  virtual CATBoolean ComputeImage(CATMathInterval2D &amp; oImage);
+  
+  //return TRUE if inverse functions are well defined on iImage.
+  //(Only in DevDev case with radiantness).
+  virtual CATBoolean CheckInvImage(CATMathInterval2D &amp; iImage);
+  
+  //----------------------
+  // Set and Get Methods 
+  //---------------------- 
+  inline void GetReference(const CATSurface * &amp;oReference)  const ;
+  
+  inline void GetReferenceLimits(CATSurLimits &amp;oLimits)  const ;
+  
+  inline CATSurTo2DMapping::CATMappingValidity GetValidity()  const ;
+  
+  
+protected :
+  
+  //----------------------
+  // DATA 
+  //---------------------- 
+  const CATSurface * _Reference;
+  CATSurLimits       _LimRef;
+  const CATMathFunctionXY * _RefFx,* _RefFy,* _RefFz;
+  CATMappingValidity _Validity;
+  
+};
+//
+// ------------------------------------------------------------------------------
+//
+// Inlines
+//
+// ------------------------------------------------------------------------------
+//
+inline void CATSurTo2DMapping::GetReference(const CATSurface * &amp;oReference)  const
+{
+  oReference = _Reference;
+}
+
+inline void CATSurTo2DMapping::GetReferenceLimits(CATSurLimits &amp;oLimits)  const
+{
+  oLimits=_LimRef;
+}
+
+inline CATSurTo2DMapping::CATMappingValidity CATSurTo2DMapping::GetValidity()  const
+{
+  return _Validity;
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSurTo2DGlobalPlanarMapping.html">← 上一页: CATSurTo2DGlobalPlanarMapping.h</a></div>
+        <div><a href="Connect.html">下一页: Connect.h →</a></div>
+    </div>
+</body>
+</html>

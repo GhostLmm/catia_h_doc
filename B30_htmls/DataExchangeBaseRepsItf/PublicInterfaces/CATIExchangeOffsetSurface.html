@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataExchangeBaseRepsItf/PublicInterfaces/CATIExchangeOffsetSurface.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DataExchangeBaseRepsItf/PublicInterfaces/CATIExchangeOffsetSurface.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIExchangeOffsetPCurve.html">← 上一页: CATIExchangeOffsetPCurve.h</a></div>
+        <div><a href="CATIExchangeOrganizedTessellatedRepresentation.html">下一页: CATIExchangeOrganizedTessellatedRepresentation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+
+#ifndef _CATIExchangeOffsetSurface_H
+#define _CATIExchangeOffsetSurface_H
+
+// COPYRIGHT DASSAULT SYSTEMES PROVENCE 2002
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;DataExchangeBaseRepsItfCPP.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDataExchangeBaseRepsItfCPP IID IID_CATIExchangeOffsetSurface;
+#else
+extern &quot;C&quot; const IID IID_CATIExchangeOffsetSurface;
+#endif
+
+/**
+ * Interface to exchange offset surfaces.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface is dedicated to get offset surfaces information.
+ * &lt;br&gt;Available from CATIA V5R10.
+ */ 
+class ExportedByDataExchangeBaseRepsItfCPP CATIExchangeOffsetSurface : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public: 
+  
+/**
+ * Returns the basis surface to offset.
+ * @param ioRelimitedOnFace
+ *				Never use this argument. Let it at its NULL_var default value.
+ */ 
+  virtual CATBaseUnknown_var GetOffsetSurfaceBasicSurface(CATBaseUnknown_var ioRelimitedOnFace = NULL_var)  const = 0;
+
+/**
+ * Retrieves the offset surface&#x27;s parameters.
+ * @param oNormalVector
+ *				Get the unit vector perpendicular to the basis surface (unused).
+ * @param oDistance
+ *				Get the offset distance.
+ * @param ioRelimitedOnFace
+ *				Never use this argument. Let it at its NULL_var default value.
+ */ 
+  virtual HRESULT GetOffsetSurfaceTranslationVector(double oNormalVector[3], double *oDistance,
+													CATBaseUnknown_var ioRelimitedOnFace = NULL_var) const = 0;
+
+/**
+ * Retrieves the offset surface&#x27;s reference direction.
+ * @param oRefDirection
+ *				Get the unit vector perpendicular to the basis surface.
+ */
+  virtual HRESULT GetOffsetSurfaceInfo(double oRefDirection[3]) const = 0;
+
+};
+CATDeclareHandler(CATIExchangeOffsetSurface,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIExchangeOffsetPCurve.html">← 上一页: CATIExchangeOffsetPCurve.h</a></div>
+        <div><a href="CATIExchangeOrganizedTessellatedRepresentation.html">下一页: CATIExchangeOrganizedTessellatedRepresentation.h →</a></div>
+    </div>
+</body>
+</html>

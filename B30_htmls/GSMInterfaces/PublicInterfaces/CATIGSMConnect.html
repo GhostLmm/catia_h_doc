@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMConnect.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMConnect.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMConic.html">← 上一页: CATIGSMConic.h</a></div>
+        <div><a href="CATIGSMCorner.html">下一页: CATIGSMCorner.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMConnect_H
+#define CATIGSMConnect_H
+ 
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATGSMOrientation.h&quot;
+#include &quot;CATGSMContinuityDef.h&quot;
+#include &quot;CATGSMConnectDef.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMConnect;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMConnect;
+#endif
+/**
+ * Interface to connect curve feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the Connect Curve feature created by using 
+ * two curves, two points, orientations, continuity, tension options,
+ * a support and trim option 
+ * Get, set the Connect definition elements
+ * @see CATIGSMFactory#CreateConnect
+ */
+class ExportedByCATGitInterfaces CATIGSMConnect : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+  /**
+   * Gets the first reference curve.
+   *   @param oCurve1
+   *      new first reference curve
+   */ 
+ virtual    HRESULT GetFirstCurve   (CATISpecObject_var &amp; oCurve1) = 0;
+  /**
+   * Gets the second reference curve.
+   *   @param oCurve2
+   *      new second reference curve
+   */
+ virtual    HRESULT GetSecondCurve   (CATISpecObject_var &amp; oCurve2) = 0;
+  /**
+   * Gets the first reference point.
+
+   *   @param oPoint1
+   *      new first reference point
+   */ 
+ virtual    HRESULT GetFirstPoint   (CATISpecObject_var &amp; oPoint1) = 0;
+  /**
+   * Gets the second reference point.
+   *   @param oPoint2
+   *      new second reference point
+   */ 
+ virtual    HRESULT GetSecondPoint   (CATISpecObject_var &amp; oPoint2) = 0;
+  /**
+   * Gets the first orientation.
+   *   @param oOrient1
+   *      orientation on first curve
+   */ 
+ virtual    HRESULT GetFirstOrientation     (enum CATGSMOrientation &amp; oOrient1) = 0;
+  /**
+   * Gets the second orientation.
+   *   @param oOrient1
+   *      orientation on second curve
+   */  
+ virtual    HRESULT GetSecondOrientation (enum CATGSMOrientation &amp; oOrient2) = 0;
+  /**
+   * Gets the first continuity.
+   *   @param oContinuity1
+   *      continuity on first curve
+   */  
+ virtual    HRESULT  GetFirstContinuity  (enum CATGSMContinuity &amp; oContinuity1) = 0;
+  /**
+   * Gets the second continuity.
+   *   @param oContinuity2
+   *      continuity on second curve
+   */   
+ virtual    HRESULT  GetSecondContinuity  (enum CATGSMContinuity &amp; oContinuity2) = 0;
+  /**
+   * Gets the first tension.
+   *   @param oTension1
+   *      tension on first curve
+   */   
+ virtual    HRESULT  GetFirstTension      (CATICkeParm_var &amp; oTension1) = 0;
+  /**
+   * Gets the second tension.
+   *   @param oTension2
+   *      tension on second curve
+   */   
+ virtual    HRESULT  GetSecondTension  (CATICkeParm_var &amp; oTension2) = 0; 
+  /**
+   * Gets the trim mode.
+   *   @param oTrim
+   *      trim mode : FALSE = no trim, TRUE = trim
+   */   
+ virtual    HRESULT GetTrim     (CATBoolean &amp; oTrim) = 0;
+  /**
+   * Gets the base reference curve.
+   *   @param oBaseCurve
+   *      new reference base curve
+   */ 
+ virtual    HRESULT GetBaseCurve   (CATISpecObject_var &amp; oBaseCurve) = 0;
+  /**
+    * Gets Connect type.
+    * &lt;br&gt;
+    * Normal or Base Curve type.
+    *   @param oType
+    *      Solution type
+    *       : CATGSMConnectNorm (=0) -&gt; Normal type
+    *       : CATGSMConnectSim  (=1) -&gt; Base Curve type
+    * @see CATGSMConnectType
+    */
+ virtual    HRESULT GetConnectType(CATGSMConnectType &amp; oType) = 0;
+
+  /**
+   * Sets the first reference curve.
+   *   @param iCurve1
+   *      new first reference curve
+   */ 
+ virtual    HRESULT SetFirstCurve  (const CATISpecObject_var iCurve1)  = 0;
+  /**
+   * Sets the second reference curve.
+   *   @param iCurve2
+   *      new second reference curve
+   */
+ virtual    HRESULT SetSecondCurve     (const CATISpecObject_var iCurve2)  = 0;
+  /**
+   * Sets the first reference point.
+   *   @param iPoint1
+   *      new first reference point
+   */ 
+ virtual    HRESULT SetFirstPoint     (const CATISpecObject_var iPoint1)  = 0;
+  /**
+   * Sets the second reference point.
+   *   @param iPoint2
+   *      new second reference point
+   */ 
+ virtual    HRESULT SetSecondPoint  (const CATISpecObject_var iPoint2)  = 0;
+  /**
+   * Sets the first orientation.
+   *   @param iOrient1
+   *      orientation on first curve
+   */ 
+ virtual    HRESULT SetFirstOrientation (const enum CATGSMOrientation iOrient1) = 0;
+  /**
+   * Sets the second orientation.
+   *   @param iOrient1
+   *      orientation on second curve
+   */ 
+ virtual    HRESULT SetSecondOrientation (const enum CATGSMOrientation iOrient2) = 0;
+  /**
+   * Sets the first continuity.
+   *   @param iContinuity1
+   *      continuity on first curve
+   */ 
+ virtual    HRESULT SetFirstContinuity   (const enum CATGSMContinuity iContinuity1) = 0;
+  /**
+   * Sets the second continuity.
+   *   @param iContinuity2
+   *      continuity on second curve
+   */  
+ virtual    HRESULT SetSecondContinuity  (const enum CATGSMContinuity iContinuity2) = 0; 
+  /**
+   * Sets the first tension.
+   *   @param iTension1
+   *      tension on first curve
+   */  
+ virtual    HRESULT SetFirstTension      (const CATICkeParm_var iTension1) = 0;
+  /**
+   * Sets the second tension.
+   *   @param iTension2
+   *      tension on second curve
+   */ 
+ virtual    HRESULT SetSecondTension     (const CATICkeParm_var iTension2) = 0;
+  /**
+   * Sets the trim mode.
+   *   @param iTrim
+   *      trim mode : FALSE = no trim, TRUE = trim
+   */ 
+ virtual    HRESULT SetTrim              (CATBoolean iTrim) = 0;
+
+  /**
+   * Sets the reference base curve.
+   *   @param iBaseCurve
+   *      new reference base curve
+   */ 
+ virtual    HRESULT SetBaseCurve  (const CATISpecObject_var iBaseCurve)  = 0;
+  /**
+    * Sets the Connect Type. 
+    * &lt;br&gt; It modifies the connect type either &quot;Normal&quot; or &quot;Base Curve&quot;
+    * &lt;br&gt; Note: 
+    * &lt;br&gt;  - If connect curve type selected is Normal, the connect is the usual connect.
+    * &lt;br&gt;  - If Base Curve is selected, the conenct is a similar curve.
+    *   @param iType
+    *      Solution type
+    *       : CATGSMConnectNorm (=0) -&gt; Normal
+    *       : CATGSMConnectSim  (=1) -&gt; Base Curve
+    * @see CATGSMConnectType
+    */
+ virtual    HRESULT SetConnectType(CATGSMConnectType iType) = 0;
+
+};
+CATDeclareHandler (CATIGSMConnect, CATBaseUnknown);
+#endif // CATIGSMConnect_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMConic.html">← 上一页: CATIGSMConic.h</a></div>
+        <div><a href="CATIGSMCorner.html">下一页: CATIGSMCorner.h →</a></div>
+    </div>
+</body>
+</html>

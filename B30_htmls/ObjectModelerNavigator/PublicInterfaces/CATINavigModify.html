@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerNavigator/PublicInterfaces/CATINavigModify.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerNavigator/PublicInterfaces/CATINavigModify.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATINavigElement.html">← 上一页: CATINavigElement.h</a></div>
+        <div><a href="CATINavigNodeCtrl.html">下一页: CATINavigNodeCtrl.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATINavigModify_h
+#define CATINavigModify_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U4 CATNodeExtension 
+  */
+
+
+#include &lt;CATBaseUnknown.h&gt;
+
+#include &quot;CATOmnMain.h&quot;
+
+extern ExportedByCATOmnMain IID IID_CATINavigModify;
+
+class CATNavigInstance;
+class CATUnicodeString ;
+
+/**
+* Interface to customize tree node visualization.
+* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This interface enables you to customize the visual aspect of nodes associated with
+* your object. If to be visualized in object tree, an object must implement the @href CATINavigateObject 
+* interface, this interface implementation is not mandatory. Nodes associated with an object have a
+* default implementation of this interface, such as the @href CATINavigElement and @href CATIGraphNode interfaces.
+* &lt;br&gt;&lt;br&gt;This implementation, full or partial, is not done on the object itself but on an object, named 
+* &lt;tt&gt;MyObject&lt;b&gt;_node&lt;/b&gt;&lt;/tt&gt;, where &lt;tt&gt;MyObject&lt;/tt&gt; is the name of the object. 
+* &lt;br&gt;&lt;br&gt;To implement @href #UpdateElem or @href #ModifyShortHelp , 
+* it can be useful to retrieve a pointer to the object implementing @href CATINavigateObject. 
+* From a node, there are two steps:
+* &lt;ol&gt;
+*    &lt;li&gt; Call @href CATINavigElement#GetAssociatedInstance , to retrieve a @href CATNavigInstance 
+*      pointer (It is already the @href #UpdateElem input) &lt;/li&gt;
+*    &lt;li&gt; Then, call @href CATNavigInstance#GetReference  to retrieve a pointer on the 
+*        object associated with the node.&lt;/li&gt;
+* &lt;/ol&gt;
+* &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CANNOT be implemented
+* using the BOA (Basic Object Adapter).
+* To know more about the BOA, refer to the CAA Encyclopedia home page.
+* Click Middleware at the bottom left, then click the Object Modeler tab page.
+* Several articles deal with the BOA.&lt;/p&gt;
+*/
+
+class ExportedByCATOmnMain CATINavigModify: public CATBaseUnknown
+{
+	CATDeclareInterface;
+public:
+
+	/**
+	* Defines node graphic representation.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:This method enables you to modify the default visual aspect of a node. By using
+    * the @href CATIGraphNode interface you can:
+    * &lt;ul&gt;
+    *   &lt;li&gt;Modify the text ( @href CATIGraphNode#SetText ): the default one is those returned 
+    *       by @href CATINavigateObject#GetIdentificators ,&lt;/li&gt;
+    *   &lt;li&gt;Modify the box color ( @href CATIGraphNode#SetColor ): the default color is blue , &lt;/li&gt;
+    *   &lt;li&gt;Add an icon ( @href CATIGraphNode#SetPixelImage ) , &lt;/li&gt;
+    *   &lt;li&gt;...&lt;/li&gt;  
+    * &lt;/ul&gt;
+    * The @href CATIGraphNode interface is natively implemented on your node. You use it in the
+    * &lt;tt&gt;UpdateElem&lt;/tt&gt; implementation such as:
+    * &lt;pre&gt;
+    *      CATIGraphNode *pIGraphNode = NULL ;
+    *      HRESULT rc = QueryInterface(IID_CATIGraphNode,
+	*                        (void**)&amp;pIGraphNode);
+    *      if ( SUCCEEDED(rc) )
+    *      {
+    *          pIGraphNode-&gt;SetXXX(..);
+    *      }
+    * &lt;/pre&gt;
+    * @param iInst
+    *   The navig instance associated with the node.
+    *   &lt;br&gt;This parameter enables you to retrieve the component associated with the node and then 
+    *   to get specific information from the component.
+	*/
+	virtual void UpdateElem (CATNavigInstance* iInst)=0;
+
+    /**
+    * Defines the node short help.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: When you pass over a node a short help is
+    * displayed. The short help text is the text associated with the node. This text
+    * is either the name returned by the @href CATINavigateObject#GetIdentificators
+    * method, or if defined, the text set thanks to the @href CATIGraphNode#SetText method.
+    * &lt;br&gt;This method enables you to modify this default behavior defined by
+    * @href CATNodeExtension#ModifyShortHelp. You have three
+    *  possibilities:
+    *   &lt;ul&gt;
+    *    &lt;li&gt;do not overwrite this method: you have the
+    *        default behavior: short help + text associated with the node, &lt;/li&gt;.
+    *    &lt;li&gt;Overwrite it and return &lt;tt&gt;E_FAIL&lt;/tt&gt;: no short help will be displayed,&lt;/li&gt;
+    *    &lt;li&gt;Overwrite it and return &lt;tt&gt;S_OK&lt;/tt&gt;: &lt;tt&gt;ioText&lt;/tt&gt; will be the displayed text.&lt;/li&gt;
+    *   &lt;/ul&gt;
+    * @param ioText
+    *   The short help of the node. 
+    *   &lt;br&gt;In input &lt;tt&gt;ioText&lt;/tt&gt; is the text associated with the node.
+    */
+    virtual HRESULT ModifyShortHelp(CATUnicodeString&amp; ioText) = 0;
+
+	/**
+	* Defines whether the node is selectable or not.
+	* &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; This method enables you to control 
+  *  the node selection. The default behavior brings the node selectionnable.
+  * @param iMode
+  *   The selectable mode.
+  *  
+	*/
+	virtual void Select(int iMode)=0;
+
+	/**
+	* Defines whether the node has ever been selected. 
+  * @return
+  *    The selecting state.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  *     &lt;ul&gt;
+  *      &lt;li&gt;0: The node is not selected&lt;/li&gt;
+  *      &lt;li&gt;Otherwise : selected&lt;/li&gt;
+  *     &lt;/ul&gt;
+	*/
+	virtual int IsSelected()=0;
+
+};
+
+CATDeclareHandler( CATINavigModify, CATBaseUnknown);
+
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATINavigElement.html">← 上一页: CATINavigElement.h</a></div>
+        <div><a href="CATINavigNodeCtrl.html">下一页: CATINavigNodeCtrl.h →</a></div>
+    </div>
+</body>
+</html>

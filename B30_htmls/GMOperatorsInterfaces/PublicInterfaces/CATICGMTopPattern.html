@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopPattern.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopPattern.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopParallel.html">← 上一页: CATICGMTopParallel.h</a></div>
+        <div><a href="CATICGMTopPointOperator.html">下一页: CATICGMTopPointOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopPattern_h_
+#define CATICGMTopPattern_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2011
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+#include &quot;CATDynOperatorDef.h&quot;
+#include &quot;ListPOfCATFace.h&quot;
+
+class CATBody;
+class CATCGMJournalList;
+class CATLISTP(CATMathTransformation);
+class CATLISTP(CATCGMJournalInfo);
+class CATMathTransformation;
+class CATPlane;
+class CATTopData;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopPattern;
+
+/**
+* Class dedicated to pattern operations. 
+* The pattern operation consists in creating multiple instances of an object
+* according to a transformation. 
+* A pattern can be a:
+* &lt;ul&gt;
+* &lt;li&gt;user pattern: the way the object is repeated is defined by a list of transformations
+* which is specified in the operator creation function.
+* &lt;li&gt;a rectangular pattern which is created by repeating an object along two directions. 
+* &lt;li&gt;a circular pattern is created by repeating an object around an axis at various distances.
+* &lt;/ul&gt;
+* &lt;p&gt;
+* Whatever the pattern type, the list of tranformations is to be specified. 
+* For rectangular and circular patterns, it is recommended to use the &lt;tt&gt;SetRectPattern&lt;\tt&gt;
+* and &lt;tt&gt;SetCirPattern&lt;\tt&gt; settings in addition to the list of transformations passed to the creation function.
+* This prevents the operator algorithm to launch useless computations. The performances are then enhanced.
+* &lt;p&gt;
+* The &lt;tt&gt;CATICGMTopPattern&lt;/tt&gt; operator follows the global frame of topological operators and satisfies the smart mechanism: 
+* the input bodies are not modified. A new resulting body is created, 
+* possibly sharing data with the input body.
+* &lt;ul&gt;
+* &lt;li&gt;A &lt;tt&gt;CATICGMTopPattern&lt;/tt&gt; operator is created with the &lt;tt&gt;CATCGMCreateTopPattern&lt;/tt&gt; global method:
+* It must be directly &lt;tt&gt;Release&lt;/tt&gt;d after use. It is not streamable. 
+* &lt;li&gt;Options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+* asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method
+* &lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometric factory. 
+* &lt;/ul&gt;
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMTopPattern: public CATICGMTopOperator
+{
+public:
+	/**
+	* Constructor
+	*/
+	CATICGMTopPattern();
+
+	/**
+	* Defines a canonical rectangular pattern. This method is to be used
+	* in addition to the list of transformations (better performances).
+	* @param NumberOfRows
+	* The number of rows.
+	* @param RowTransfo
+	* The transformation to be applied to the object to pattern in the rows. It must not be
+	* set to &lt;tt&gt;NULL&lt;/tt&gt; except if there is only one row.
+	* @param NumberOfColumns
+	* The number of columns.
+	* @param ColumnsTransfo
+	* The transformation to be applied to the object to pattern in the columns. It must not be
+	* set to &lt;tt&gt;NULL&lt;/tt&gt; except if there is only one column.
+	*/
+	virtual void SetRectPattern(
+		int NumberOfRows,
+		CATMathTransformation *RowTransfo,
+		int NumberOfColumns,
+		CATMathTransformation *ColumnsTransfo) = 0;
+
+	/**
+	* Defines a canonical circular pattern. This method is to be used
+	* in addition to the list of transformations (better performances).
+	* @param NumberOfRows
+	* The number of circular rows.
+	* @param RowTransfo
+	* The anguler transformation to be applied to the object to pattern in the circular rows. It must not be
+	* set to &lt;tt&gt;NULL&lt;/tt&gt; except if there is only one row.
+	* @param NumberOfColumns
+	* The number of columns. The columns are sets of instances located along the circle radii.
+	* @param ColumnsTransfo
+	* The radius transformation to be applied to the object to pattern. It must not be
+	* set to &lt;tt&gt;NULL&lt;/tt&gt; except if there is only one column.
+	*/
+	virtual void SetCirPattern(
+		int NumberOfRows,
+		CATMathTransformation *RowTransfo,
+		int NumberOfColumns,
+		CATMathTransformation *ColumnsTransfo) = 0;
+
+#ifdef CATIACGMV5R23
+  /**
+	* Allows partial result in case of pattern faces mode.
+	* In this case the result body may contain only the result of some transformation because 
+	* transformation works only when faces can be sew in invariant geometric / topological mode.
+	* Note : however , even in this mode , if all transformation failed , the operator will return an error.
+	*/
+  virtual void SetPartialResultAllowed() = 0;
+
+  /**
+	* Get the number of invalid transformation in case when partial result mode is active for pattern faces
+	*
+	* This service is useful after &quot;Run&quot; only in case of &quot;SetPartialResultAllowed&quot;.
+	* If partial result situation detected , the service the numbers of invalid transformation.
+	*
+	* @param oListTransfoStatus
+	* The list will be filled for a value for each transformation :
+	* &lt;ul&gt;
+	* &lt;li&gt; CATPatternOKWithSewing      : if instance OK ( made by sewing , specific case ).
+	* &lt;li&gt; CATPatternOKWithDuplication : if instance OK ( made by model duplication , standard case ).
+	* &lt;li&gt; CATPatternKO                : if instance KO ( close to the body but in non isotopological / geometrical situation ).
+	* &lt;li&gt; CATPatternKOAndFar          : if instance KO ( totally out of the body bounding box ).
+	* &lt;li&gt; CATPatternOKWithBoolean     : if instance OK ( made by boolean , specific case for non isotopologicaul / geometrical situation in &quot;FullResult&quot; mode).
+	* &lt;/ul&gt;
+	*/
+  virtual int GetNumberOfInvalidTransformation(
+    CATListOfInt &amp;oListTransfoStatus) = 0;
+#endif
+
+	/**
+	* Removes the internal faces between the body to be patterned and the support body. This operation
+	* is performed prior to creating new instances.
+	*/
+	virtual void SimplifyTool() = 0;
+
+protected:
+	/**
+	* Destructor
+	*/
+	virtual ~CATICGMTopPattern(); // -&gt; delete can&#x27;t be called
+};
+
+/**
+* Creates a CATICGMTopPattern operator with a body to pattern.
+* @param iFactory
+* The factory of the geometry. 
+* @param iData
+* The pointer to the data containing the configuration and the journal.
+* @param iOperation
+* The type of operation: 
+* &lt;dl&gt;
+* &lt;dt&gt;CATBoolUnion&lt;/dt&gt;&lt;dd&gt;Pattern union.
+* &lt;dt&gt;CATBoolRemoval&lt;/dt&gt;&lt;dd&gt;&lt;tt&gt;iTool&lt;/tt&gt; is subtracted to &lt;tt&gt;iPart&lt;/tt&gt;.
+* &lt;/dl&gt;
+* @param iPart
+* The pointer to the body to pattern.
+* @param iPlane
+* The pointer to the plane of the pattern.
+* @param iTool
+* The pointer to the the first item of the pattern.
+* @param iListTransfo
+* The pointer to the list of tranformation of each occurrence of the pattern.
+* @param iListJournalInfo
+* The pointer to the list of journal &quot;information&quot;. This list must have
+* the same size as the list of transformations. The pattern journal
+* is a list of orders:&lt;br&gt;
+* &lt;pre&gt;
+* [Face_A] - Creation -&gt; [Face_A1] 
+* [Face_A] - Creation -&gt; [Face_A2]
+* ...
+* [Face_A] - Creation -&gt; [Face_Ai]
+* ...
+* [Face_A] - Creation -&gt; [Face_AN] 
+* &lt;/pre&gt;
+* in which Face_A is a face belonging to the object to be patterned and Face_Ai
+* the corresponding face in instance i. If N instances are created, there are N orders
+* with Face_A as parent and basically no way to differentiate the faces Face_A1, Face_A2, Face_Ai, 
+* ... , Face_AN.
+* The iListJournalInfo argument is a way
+* to add an &quot;info&quot; data to each journal order so that the equivalent faces can be differentiated
+* in each instance.
+* @return
+* The pointer to the created operator. To &lt;tt&gt;Release&lt;/tt&gt;d after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopPattern *CATCGMCreateTopPattern(
+	CATGeoFactory *iFactory,
+	CATTopData *iData,
+	CATDynBooleanType iOperation,
+	CATBody *iPart,
+	CATPlane *iPlane,
+	CATBody *iTool,
+	CATLISTP(CATMathTransformation) *iListTransfo,
+	CATLISTP(CATCGMJournalInfo) *iListJournalInfo = NULL);
+
+/**
+* Creates a CATICGMTopPattern operator from a set of faces to pattern.
+* No boolean operation is carried out, the faces are simply transformed and inserted in the result body.
+* To complete, each transformation must keep the same topology and same dimension as well.
+* @param iFactory
+* The factory of the geometry. 
+* @param iData
+* The pointer to the data containing the configuration and the journal.
+* @param iPart
+* The pointer to the body to pattern.
+* @param iPlane
+* The pointer to the plane of the pattern or NULL. Specifying the plane is recommended
+* for better performances.
+* @param iPatternFacesList
+* List of faces of the body to pattern. Theses faces must belong to the &quot;iPart&quot; body.
+* @param iListTransfo
+* The pointer to the list of tranformations.
+* @param iListJournalInfo
+* The pointer to the list of journal &quot;information&quot;. This list must have the
+* same size as the list of transformations.
+* @return
+* The pointer to the created operator. To &lt;tt&gt;Release&lt;/tt&gt;d after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopPattern *CATCGMCreateTopPattern(
+	CATGeoFactory *iFactory,
+	CATTopData *iData,
+	CATBody *iPart,
+	CATPlane *iPlane,
+	CATLISTP(CATFace) &amp;iPatternFacesList,
+	CATLISTP(CATMathTransformation) *iListTransfo,
+	CATLISTP(CATCGMJournalInfo) *iListJournalInfo = NULL);
+
+#endif /* CATICGMTopPattern_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopParallel.html">← 上一页: CATICGMTopParallel.h</a></div>
+        <div><a href="CATICGMTopPointOperator.html">下一页: CATICGMTopPointOperator.h →</a></div>
+    </div>
+</body>
+</html>

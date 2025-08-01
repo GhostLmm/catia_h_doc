@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVIConnectable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVIConnectable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIChangeOwnerEvent.html">← 上一页: ENOVIChangeOwnerEvent.h</a></div>
+        <div><a href="ENOVIConnexion.html">下一页: ENOVIConnexion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+/**
+* @CAA2Level L1
+* @CAA2Usage U3 
+*/
+#ifndef ENOVIConnectable_H_
+#define ENOVIConnectable_H_
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATIVpmFactoryObject.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATTypUtilit.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVIConnectable;
+#else
+extern &quot;C&quot; const IID IID_ENOVIConnectable;
+#endif
+
+class CATIVpmPSDMUFilter_var;
+/**
+* Base interface for connectable objects.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Any instance of a class implementing ENOVIConnectable 
+* can be connected to any other implementation of ENOVIConnectable
+* or to a connector object, through connection objects. Such an object
+* is an implementation of ENOVIConnexion. Methods related to connectors
+* are optional.&lt;/p&gt;
+* A connector is an implementation of ENOVIConnectable that also provides
+* CreateConnector, RemoveConnector, GetConnectors, GetConnectorTimeStamp,
+* GetConnectorObject, GetConnectorName methods.&lt;p&gt;
+* Connector objects allows connection pointing to a sub-object of a more
+* complex object.
+* &lt;/p&gt;
+* @see ENOVIConnexion
+*/
+class ExportedByGUIDVPMInterfaces ENOVIConnectable : public CATBaseUnknown 
+{
+  CATDeclareInterface;
+  
+public:
+	/**
+	* Retrieves connection objects.
+	* @param oConnection
+	*	The retrieved list of connections objects.
+	* @param iConnectionTypeFilter
+	*	A filter to connection types.
+	*  &quot;all&quot;, thus returning all types.
+	* @param oConnectors
+	*	The retrieved list of connectors name. 
+	* @param iConnectionDirectionFilter
+	*  A filter to connections directions.
+	*	&lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+	*	&lt;ul&gt;
+	*		&lt;li&gt;&lt;code&gt;all&lt;/code&gt;: get all connections, default value.&lt;/li&gt;
+	*		&lt;li&gt;&lt;code&gt;pointed&lt;/code&gt;: get connections pointed by this.&lt;/li&gt;
+	*		&lt;li&gt;&lt;code&gt;pointing&lt;/code&gt;: get connection pointing to this.&lt;/li&gt;
+	*	&lt;/ul&gt;
+  	* @return S_OK 
+  	*	The method succeeds.
+  	* @return E_FAIL
+  	*	The method fails.
+	*/
+  virtual HRESULT GetConnexions(CATLISTV(CATIVpmFactoryObject_var)&amp; oConnections,
+				CATListOfCATUnicodeString&amp; oConnectors,
+				const CATUnicodeString&amp; iConnectionTypeFilter = &quot;all&quot;,
+				// iConnexionDirectionFilter=(&quot;all&quot;,&quot;pointed&quot;,&quot;pointing&quot;)
+				const CATUnicodeString&amp; iConnectionDirectionFilter = &quot;all&quot;) = 0;
+
+  /**
+  * Creates a connection.
+  * @param iConnectionType
+  *	The type of connection to be created, depends upon sub-types
+  *	of ENOVIConnexion you may have created.
+  * @param oConnection 
+  *	The reference to the newly created connection.
+  * @param iOwner
+  * 	Owner of the connection.
+  * @param iFiltrable
+  *	A flag to indicate whether the connection can be filtered.
+  *	&lt;ul&gt;
+  *		&lt;li&gt;&lt;code&gt;1&lt;/code&gt;: created connection is filtrable, default value.&lt;/li&gt;
+  *	&lt;/ul&gt;
+  * @return S_OK 
+  *	The method succeeds.
+  * @return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT CreateConnexion(const CATUnicodeString&amp; iConnectionType, 
+				  CATIVpmFactoryObject_var&amp; oConnection,
+				  const CATIVpmFactoryObject_var&amp; iOwner = NULL_var,
+				  const CATUnicodeString&amp; iConnector = &quot;unval&quot;, 
+				  int iFiltrable=1) = 0;
+	/**
+	* Creates a dependence connection.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+	* A dependence connection is an historical connection established
+	* between an owner object and pointed objects. Dependence is
+	* implemented through pointed object times stamps. This behavior
+	* is inherited from historical connections. Dependence connections add
+	* orientation to the historical connection. The connection owner is the
+	* object that did create the dependence connection. The owner is not
+	* pointed by the connection.
+	*@param iConnexionType
+	* 	The name of the connection type to be created.
+	*@param oConnexion
+	*	The newly created dependence connection. 
+	*@param iFiltrable
+	*	A flag to indicate whether the connection can be filtered.
+	*	&lt;ul&gt;
+	*		&lt;li&gt;&lt;code&gt;1&lt;/code&gt;: created connection is filtrable, default value.&lt;/li&gt;
+	*	&lt;/ul&gt;
+  	*@return S_OK 
+  	*	The method succeeds.
+  	*@return E_FAIL
+  	*	The method fails.
+	*/
+  virtual HRESULT CreateDependenceConnexion(const CATUnicodeString&amp; iConnexionType, 
+					    CATIVpmFactoryObject_var&amp; oConnexion,
+					    int iFiltrable=1) = 0;
+
+	/**
+	* Creates many dependence connections at once.  Additionally, allows dependence
+   * connections to be created with specified timestamps.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+	* A dependence connection is an historical connection established
+	* between an owner object and pointed objects. Dependence is
+	* implemented through pointed object times stamps. This behavior
+	* is inherited from historical connections. Dependence connections add
+	* orientation to the historical connection. The connection owner is the
+	* object that did create the dependence connection. The owner is not
+	* pointed by the connection.
+	*@param iConnexionType
+	* 	The name of the connection type to be created.
+   *@param iPointedObjects
+   *  A list of objects which will be pointed by dependence connections.
+   *@param iTimestamps
+   *  An array of timestamps.  This array may be NULL or it may be valuated. If
+   *  it is valuated, it must be the same length as iPointedObjects.  Each connection
+   *  will be created using the corresponding timestamp in iTimestamps.
+	*@param oConnexions
+	*	The newly created dependence connections. 
+	*@param iFiltrable
+	*	A flag to indicate whether the connections can be filtered.
+	*	&lt;ul&gt;
+	*		&lt;li&gt;&lt;code&gt;1&lt;/code&gt;: created connections are filtrable, default value.&lt;/li&gt;
+	*	&lt;/ul&gt;
+  	*@return S_OK 
+  	*	The method succeeds.
+  	*@return E_FAIL
+  	*	The method fails.
+	*/
+  virtual HRESULT CreateDependenceConnexions(const CATUnicodeString&amp; iConnexionType, 
+                   const CATListValCATBaseUnknown_var&amp; iPointedObjects,
+                   const SEQUENCE_octet*&amp; iTimestamps,
+                   CATListValCATIVpmFactoryObject_var&amp; oConnexions,
+                   int iFiltrable=1)=0;
+  
+  // oState : =0 all connection synchronized; =1 to be updated; =-1 no connection
+  // if (oState = 1) oListOfConnexionToBeSynchronized valuated
+
+  /**
+  * Checks connections states.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+  * For each connection it checks connected object states. If one of them
+  * has a state value equal to 1, the concerned connection is appended to
+  * the list of connections to be synchronized.
+  *@param oState 
+  *		This state is set to 0 if all connection and connectors 
+  *		are synchronized. 1 is returned if it is not the case.
+  *@param oListOfConnexionToBeSynchronized 
+  *		The list of connections. An empty list is returned if
+  *		all connection and connectors are synchronized. Otherwise it
+  *		contains the connections to be synchronized.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT CheckState(long&amp; oState, 
+			     CATLISTV(CATIVpmFactoryObject_var)&amp; oListOfConnexionToBeSynchronized) = 0;
+
+  /**
+  * Creates a connector.
+  *@param iConnector 
+  *		The connector&#x27;s name. Connectors on a given
+  *		object must have distinct names.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT CreateConnector(const CATUnicodeString&amp; iConnector) = 0;
+
+  /**
+  * Removes a connector.
+  *@param iConnector
+  *	The name of the connector to remove.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT RemoveConnector(const CATUnicodeString&amp; iConnector) = 0;
+
+  /** 
+  * Retrieves the list of created connectors.
+  *@param oConnectors 
+  *	The list of created connectors.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT GetConnectors(CATListOfCATUnicodeString&amp; oConnectors) = 0;
+
+  /**
+  * Retrieves a connector&#x27;s time stamp.
+  *@param iConnector
+  *	The name of the connector.
+  *@param oTimeStamp 
+  *	The retrieved time stamp.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT GetConnectorTimeStamp(const CATUnicodeString&amp; iConnector, 
+					SEQUENCE_octet&amp; oTimeStamp) = 0;
+
+  /**
+  * Retrieves the connector object.
+  *@param iConnector 
+  *	The name of the connector to retrieve.
+  *@param oConnector 
+  *	The retrieved connector object.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT GetConnectorObject(const CATUnicodeString&amp; iConnector, 
+				     CATIVpmFactoryObject_var&amp; oConnector) = 0;
+
+  /**
+  * Retrieves the connector name.
+  *@param iConnector
+  *	The concerned connector.
+  *@param oConnector 
+  *	The retrieved name of the connector.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL
+  *	The method fails.
+  */
+  virtual HRESULT GetConnectorName(const CATIVpmFactoryObject_var&amp; iConnector,
+				   CATUnicodeString&amp; oConnector) = 0;
+
+	/**
+	* @nodoc
+	* Use explicit filter parameter.
+	*/
+  virtual HRESULT GetConnections(CATLISTV(CATIVpmFactoryObject_var)&amp; oConnections,
+				CATListOfCATUnicodeString&amp; oConnectors,
+				const CATIVpmPSDMUFilter_var &amp;ihFilter,
+				const CATUnicodeString&amp; iConnectionTypeFilter = &quot;all&quot;,
+				// iConnexionDirectionFilter=(&quot;all&quot;,&quot;pointed&quot;,&quot;pointing&quot;)
+				const CATUnicodeString&amp; iConnectionDirectionFilter = &quot;all&quot;) = 0;
+
+	/**
+	* @nodoc
+	* Use explicit filter parameter.
+	*/
+  virtual HRESULT GetConnectors(CATListOfCATUnicodeString&amp; oConnectors,
+			const CATIVpmPSDMUFilter_var &amp;ihFilter) = 0;
+
+	/**
+	* @nodoc
+	* Use explicit filter parameter.
+	*/
+  virtual HRESULT GetConnectorObject(
+		const CATUnicodeString&amp; iConnector, 
+		CATIVpmFactoryObject_var&amp; oConnector,
+		const CATIVpmPSDMUFilter_var &amp;ihFilter) = 0;
+};
+
+CATDeclareHandler(ENOVIConnectable, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIChangeOwnerEvent.html">← 上一页: ENOVIChangeOwnerEvent.h</a></div>
+        <div><a href="ENOVIConnexion.html">下一页: ENOVIConnexion.h →</a></div>
+    </div>
+</body>
+</html>

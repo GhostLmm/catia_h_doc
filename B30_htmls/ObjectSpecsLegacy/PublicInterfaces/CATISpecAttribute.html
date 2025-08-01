@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectSpecsLegacy/PublicInterfaces/CATISpecAttribute.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectSpecsLegacy/PublicInterfaces/CATISpecAttribute.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISpecAttrKey.html">← 上一页: CATISpecAttrKey.h</a></div>
+        <div><a href="CATISpecDeclarations.html">下一页: CATISpecDeclarations.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATISpecAttribute_H_
+#define CATISpecAttribute_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecDeclarations.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;booleanDef.h&quot;
+#include &quot;octetDef.h&quot;
+#include &quot;sequence_octet.h&quot;
+
+#include &quot;CATIDomain.h&quot;
+
+class CATISpecObject;
+class CATISpecObject_var;
+class CATISpecAttribute_var;
+class CATListValCATBaseUnknown_var;
+class CATListValCATISpecAttribute_var;
+
+class CATILinkableObject;
+class CATILinkableObject_var;
+class _SEQUENCE_octet;
+class CATError;
+
+class CATRawCollint;
+class CATRawColldouble;
+class CATListValCATUnicodeString;
+
+#include &quot;AC0SPBAS.h&quot;
+extern ExportedByAC0SPBAS IID IID_CATISpecAttribute ;
+/**
+* Interface to define operations on a feature attribute.
+* &lt;b&gt;Note:&lt;/b&gt; it&#x27;s better to directly access attributes&#x27; values
+* by using CATISpecAttrAccess.
+* @see CATISpecObject, CATISpecAttrAccess
+*/
+class ExportedByAC0SPBAS CATISpecAttribute : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  // Attribute management
+
+  /**
+  * Returns the feature holding the attribute.
+  */
+  virtual CATISpecObject* 			GetOwner() const = 0;
+  /**
+  * Returns the access mode of the attribute.
+  */
+  virtual CATAttrAccess			GetAccess() const = 0;
+  /**
+  * Sets the access mode of the attribute.
+  * @param iAccess
+  *      access mode.
+  */
+  virtual void				SetAccess(CATAttrAccess iAccess) = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns the type of the data described by the attribute.
+  */
+  virtual CATAttrKind				GetType() const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns the name of the attribute.
+  */
+  virtual CATUnicodeString              	GetName() const = 0;
+
+  /**
+  * Returns a printable presentation of the value of the attribute.
+  */
+  virtual CATUnicodeString                    DumpValue() const = 0;
+  //  --------------------
+  // Timestamp management
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrAccess instead.
+  * &lt;br&gt;
+  * Returns the real timestamp assigned to the attribute.
+  */
+  virtual CATOldTimeStamp			GetTimeStamp() const = 0;
+
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrAccess instead.
+  * &lt;br&gt;
+  * Returns the update timestamp assigned to the attribute.
+  */
+  virtual CATOldUpdateStamp			GetUpdateStamp() const = 0;
+
+  /**
+  * @deprecated V5R17 CATISpecAttrAccess::Update
+  * Update.
+  * @param iDomain
+  *      domain.
+  */
+  virtual int                                 Update(CATIDomain_var iDomain=NULL_var) = 0 ;
+  /**
+  * @deprecated V5R17 CATISpecAttrAccess::IsUpToDate
+  * Determines whether the attribute status is up-to-date.
+  * @param iDomain
+  *      domain.
+  */
+  virtual CATBoolean				IsUpToDate(CATIDomain_var iDomain=NULL_var) const = 0;
+  /**
+  * Forces the attribute to an up-to-date status.
+  * @param iFlag
+  *      if TRUE, updates time stamp of attribute.
+  */
+  virtual void				SetUpToDate( CATBoolean iFlag ) = 0;
+  //  --------------------
+  // IN/OUT management
+  /** 
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns the in/out label of the attribute.
+  */
+  virtual CATAttrInOut			GetQuality () const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Sets the in/out label of the attribute.
+  * @param iQuality
+  *      quality of the attribute:  
+  *      &lt;ul&gt;&lt;li&gt;sp_IN
+  *          &lt;li&gt;sp_OUT
+  *          &lt;li&gt;sp_NEUTRAL
+  *      &lt;/ul&gt;
+  */
+  virtual void				SetQuality (CATAttrInOut iQuality) = 0;
+
+  //  --------------------
+  // Set/Unset management
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Determines whether the attribute is assigned a value.
+  */
+  virtual CATBoolean				TestAttributeValue() const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Unsets the attribute value.
+  */
+  virtual void				UnsetAttributeValue() = 0;
+  //  ---------------------------
+  // Values and lists management
+
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of double type to an attribute.
+  * @param iDouble
+  *      value to assign to the tk_double attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end. 
+  */
+  virtual void				SetDouble(double iDouble,int iIndex=0) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of integer type to an attribute. 
+  * @param iInt
+  *      value to assign to the tk_integer attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end. 
+  */
+  virtual void				SetInteger(int iInt,int iIndex=0) = 0;  
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of CATBoolean type to an attribute.
+  * @param iBool
+  *      value to assign to the tk_boolean attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.  
+  */
+  virtual void				SetBoolean(CATBoolean iBool,int iIndex=0) = 0;  
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of octet type to an attribute.
+  * @param iOct
+  *      value to assign to the tk_octet attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.  
+  */
+  virtual void				SetOctet(octet iOct,int iIndex=0) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of string type to an attribute. 
+  * @param iString
+  *      value to assign to the tk_string attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end. 
+  */
+  virtual void				SetString(const CATUnicodeString&amp; iString,int iIndex=0) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of specobject type to an attribute. 
+  * &lt;b&gt;Role: &lt;/b&gt; the refered SpecObject is shareable ( note that it is not the tk_specobject attribute 
+  * which is shared, but the feature which is assigned as a value to this attribute ), so it
+  * can be referenced by several features. A referenced feature does not belong to any other feature. 
+  * A referenced feature just lives on its own. Its life cyle is completely independent of the features
+  * which use it as a reference. 
+  * @param iObj
+  *      value to assign to the tk_specobject attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.
+  * @param iNeedToSave
+  *      When an attribute is valuated with a specobject, a link is created on the refered CATISpecObject.
+  *      If TRUE, does mean that save of document containing the feature with valuated attribute will
+  *      call save of document containing the refered SpecObject.
+  */
+  virtual void				SetSpecObject(const CATISpecObject_var&amp; iObj,int iIndex=0,CATBoolean iNeedToSave=FALSE,int relative=0) = 0; 
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of feature type to an attribute. 
+  * Use the &lt;tt&gt;tk_external&lt;/tt&gt; type for &lt;tt&gt;AddAttribute&lt;/tt&gt; method.
+  * &lt;br&gt;&lt;b&gt; Role: &lt;/b&gt; Creates a symbolic link between the feature (pointing object) owning 
+  * the &lt;tt&gt;tk_external&lt;/tt&gt; attribute and the (pointed) object specified in argument.
+  * This method is the same as SetSpecObject, but allows to refer any LinkableObject (  SetSpecObject refers
+  * only CATISpecObjects ).
+  * @param iObj
+  *      value to assign to the tk_external attribute.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.
+  * @param iNeedToSave
+  *      If TRUE, does mean that save of document containing the feature with valuated attribute will
+  *      call save of document containing the refered object.
+  */
+  virtual void				SetExternalObject(const CATILinkableObject_var&amp; iObj,int iIndex=0, CATBoolean iNeedToSave=FALSE) = 0; 
+  /**
+  * @nodoc
+  */
+  virtual void				SetExternalObjectName(const _SEQUENCE_octet&amp; name,int index=0) = 0; 
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a value of attribute type to an attribute. 
+  * @param iAtt
+  *      attribute value to be assigned.
+  * @param iIndex
+  */
+
+  virtual void				SetSpecAttribute(const CATISpecAttribute_var&amp; iAtt,int iIndex=0) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of double type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual double				GetDouble(int iIndex=0) const = 0;  
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of interger type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual int					GetInteger(int iIndex=0) const = 0;  
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of CATBoolean type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual CATBoolean				GetBoolean(int iIndex=0) const = 0;  
+  /** 
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of octet type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual octet				GetOctet(int iIndex=0) const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of string type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual CATUnicodeString			GetString(int iIndex=0) const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the value of specobject type of an attribute.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual CATISpecObject*			GetSpecObject(int iIndex=0) const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the object pointed to by the object containing the 
+  * &lt;tt&gt;tk_external&lt;/tt&gt; attribute. 
+  * @param iParam
+  *      parameter.
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  * @param iErrorMessage
+  *      error message.
+  */
+  virtual CATILinkableObject*			GetExternalObject(CATFlavorParam iParam = ANYWHERE,int iIndex=0, CATUnicodeString* iErrorMessage = NULL ) const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves the binary name of the object pointed to by the object containing
+  * the &lt;tt&gt;tk_external&lt;/tt&gt; attribute. 
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual SEQUENCE(octet)		        GetExternalObjectName(int iIndex=0) const = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves attribute valuating attribute. 
+  * @param iIndex
+  *      use for lists. If 0, gets first value in the list.
+  */
+  virtual CATISpecAttribute*			GetSpecAttribute(int iIndex=0) const = 0;
+  //  ----------------------
+  // Error value management
+  /** @nodoc 
+  */
+  virtual void			SetError ( CATError* error)=0;
+  /** @nodoc 
+  */
+  virtual CATError*			GetError () const = 0;
+
+  //  -----------------------
+  // Simple lists management
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a list of integers to an attribute of &lt;tt&gt;tk_list(tk_integer)&lt;/tt&gt; type.
+  * @param iList
+  *      list of integers.
+  */
+  virtual void                                SetListInteger ( const CATRawCollint&amp; iList ) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a list of doubles to an attribute of &lt;tt&gt;tk_list(tk_double)&lt;/tt&gt; type.
+  * @param iList
+  *      list of doubles.
+  */
+  virtual void                                SetListDouble ( const CATRawColldouble&amp; iList ) = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Assigns a list of strings to an attribute of &lt;tt&gt;tk_list(tk_string)&lt;/tt&gt; type.
+  * @param iList
+  *      list of strings.
+  */
+  virtual void                                SetListString ( const CATListValCATUnicodeString&amp; iList ) = 0;
+  /**
+  * @nodoc
+  * Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves a list of integers from an attribute of &lt;tt&gt;tk_list(tk_integer)&lt;/tt&gt; type.
+  */
+  virtual CATRawCollint*                      GetListInteger() const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves a list of doubles from an attribute of &lt;tt&gt;tk_list(tk_integer)&lt;/tt&gt; type.
+  */
+  virtual CATRawColldouble*                   GetListDouble() const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Retrieves a list of strings from an attribute of &lt;tt&gt;tk_list(tk_integer)&lt;/tt&gt; type.
+  */
+  virtual CATListValCATUnicodeString*         GetListString() const = 0;
+  //  -------------------------------
+  // Attributes reference management
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Tests if final attribute is valuated.
+  * &lt;b&gt; Role: &lt;/b&gt; Gets attributes recursively, and on the last one tests if is valuated.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.
+  * @return 
+  *      TRUE if it is valuated.
+  */
+  virtual CATBoolean				TestFinalAttributeValue(int iIndex=0) const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Gets final attribute when attributes are valuated with attributes.
+  * &lt;b&gt; Role: &lt;/b&gt; Gets attributes recursively, and on the last one returns its name.
+  * @param iIndex
+  *      use for lists. If 0, sets at the end.
+  * @return 
+  *      the name of the final attribute.
+  */
+  virtual CATISpecAttribute*			GetFinalSpecAttribute(int iIndex=0) const = 0;
+  //  --------------------------
+  // Specific methods for lists
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns the size of the list valuating an attribute.
+  */
+  virtual int					GetListSize () const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns the type of the list valuating an attribute.
+  */
+  virtual CATAttrKind				GetListType() const = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Removes an element of the list valuating the attribute, element defined by its position in the list.
+  * @param iIndex
+  *      position of the element to remove.
+  */
+  virtual void				RemovePosition(int iIndex) = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Removes all elements valuating the attribute.
+  */
+  virtual void				RemoveAll() = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns position of a SpecObject valuating the attribute.
+  * @param iObj
+  *      searched SpecObject valuating the attribute.
+  */
+  virtual int					GetPosition(const CATISpecObject_var&amp; iObj) = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Removes an element of the list valuating an attribute.
+  * @param iObj
+  *      SpecObject valuating the attribute, concerned value to remove.
+  */
+  virtual void				RemoveSpecObject ( const CATISpecObject_var&amp; iObj) = 0;
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * modifies the position in the list of a value of the list valuating attribute.
+  * @param iObj
+  *       concerned specObject referenced.
+  * @param iNewPos
+  *       new posiion in the list.
+  * @return 0 if succeeded.
+  */
+  virtual int					ChangePosition (const CATISpecObject_var&amp; iObj,int iNewPos) = 0;
+  
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Lists SpecObjects refered by the attribute.
+  * @param intfName
+  *      name of the interface filtering the kind of objects to find.
+  * @return 
+  *      list of SpecObjects refered by the attribute. If no intfName, we will have a list of CATISpecObject.
+  */
+  virtual CATListValCATBaseUnknown_var*	ListSpecObjects(CATClassId intfName=0) const = 0;
+
+  /**
+  * @nodoc
+  *  Obsolete R12 Use @href CATISpecAttrKey instead.
+  * &lt;br&gt;
+  * Returns type of the attribute.
+  */
+  virtual CATUnicodeString			IsOfType() const = 0;
+  /** @nodoc */
+  virtual   CATListValCATISpecAttribute_var * InverseAttrLink(CATClassId intfname = &quot;CATISpecObject&quot;, const CATUnicodeString &amp; name = NULL_string) = 0;
+
+};
+
+
+CATDeclareHandler( CATISpecAttribute, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISpecAttrKey.html">← 上一页: CATISpecAttrKey.h</a></div>
+        <div><a href="CATISpecDeclarations.html">下一页: CATISpecDeclarations.h →</a></div>
+    </div>
+</body>
+</html>

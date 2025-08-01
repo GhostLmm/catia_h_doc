@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopFaceReplaceSurface.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopFaceReplaceSurface.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopExtrude.html">← 上一页: CATICGMTopExtrude.h</a></div>
+        <div><a href="CATICGMTopGeodesicLineOperator.html">下一页: CATICGMTopGeodesicLineOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopFaceReplaceSurface_h_
+#define CATICGMTopFaceReplaceSurface_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2011
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+#include &quot;CATTopDefine.h&quot;
+
+class CATBody;
+class CATEdge;
+class CATEdgeCurve;
+class CATFace;
+class CATGMLiveShapeRunOptions;
+class CATMathPoint;
+class CATMathTransformation;
+class CATSurface;
+class CATVertex;
+class CATSurLimits;
+class CATCrvLimits;
+class CATTopData;
+class CATListPtrCATFace;
+class CATListPtrCATEdge;
+class CATCurve;
+
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopFaceReplaceSurface;
+
+/**
+* Class defining the operator which replaces the surfaces of faces in a body with the given surfaces.
+*&lt;br&gt;
+* The &lt;tt&gt;CATICGMTopFaceReplaceSurface&lt;/tt&gt; operator follows the global frame of the topological operators 
+* and satisfies the smart mechanism: the input bodies are not modified. A new resulting body 
+* is created, possibly sharing data with the input body.
+*&lt;ul&gt;
+* &lt;li&gt;A &lt;tt&gt;CATICGMTopFaceReplaceSurface&lt;/tt&gt; operator is created with the &lt;tt&gt;CATCreateFaceReplaceSurfaceOperator&lt;/tt&gt; global function:
+* It must be directly released with the &lt;tt&gt;Release&lt;/tt&gt; method after use. It is not streamable. 
+*&lt;li&gt;Options can be set with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+* calling the operator&#x27;s &lt;tt&gt;Run&lt;/tt&gt; method. In particular, an optimized mode
+* allows you to do some local operations in union mode.
+*&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometry factory. 
+*&lt;/ul&gt;
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMTopFaceReplaceSurface: public CATICGMTopOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopFaceReplaceSurface();
+
+  /**
+ * Specifies the face in the input body whose surface should be replaced in the result body.
+ * @param iOldFace
+ * The pointer of an existing face in the input body.
+ * @param iNewSurf
+ * The pointer to the replacing surface for iOldFace.
+ * If iNewSurf is a canonical surface, it may be replaced by an equivalent
+ * surface (for closure management purpose).
+ * @param iWorkingDomain
+ * The limits of iNewSurf that are useful for the operation
+ * These limits have to correctly match with its use in the result body, but
+ * the operator may perform an extrapolation on the surface if necessary.
+ * @param iOrientation
+ * The orientation of the face in the new Body with respect to the new surface. 
+ */
+  virtual void ReplaceWith(
+    CATFace *iOldFace,
+    CATSurface *iNewSurf,
+    CATSurLimits &amp;iWorkingDomain,
+    CATOrientation iOrientation) = 0;
+
+  /**
+ * Specifies the edge in the input body whose edge curve should be replaced in the result body.
+ * @param iOldEdge
+ * The pointer of an existing edge in the input body.
+ * @param iNewEdgeCurve
+ * The pointer to the replacing &lt;tt&gt;CATEdgeCurve&lt;/tt&gt; for iOldEdge. This new curve will
+ * include only one PCurve on surfaces associated to the faces boundary.
+ * iOldEdge
+ * @param iWorkingDomain
+ * The limits of iNewEdgeCurve that are useful for the operation.
+ * These limits have to correctly match with its use in the result body, but
+ * the operator may perform an extrapolation on the curve if necessary
+ * @param iOrientation
+ * The orientation of the edge in the new Body with respect to the new edge curve. 
+ */
+  virtual void ReplaceWith(
+    CATEdge *iOldEdge,
+    CATEdgeCurve *iNewEdgeCurve,
+    CATCrvLimits &amp;iWorkingDomain,
+    CATOrientation iOrientation) = 0;
+
+  /**
+ * Specifies the edge in the input body whose edge curve should be replaced in the result body.
+ * This method works for isotopological configurations (when there is a bijection between the cells
+ * of input and result body). It will have no effect otherwise.
+ * @param iOldEdge
+ * The pointer of an existing edge in the input body. This edge must border a face with a new
+ * surface specfied by the ReplaceWith method. An error is thrown if not.
+ * @param iCurve
+ * The pointer to the &lt;tt&gt;CATCurve&lt;/tt&gt; to laydown in order to compute the new EdgeCurve
+ * for iOldEdge. 
+ * @param iWorkingDomain
+ * The limits of iCurve that are useful for the operation.
+ * These limits have to correctly match with its use in the result body, but
+ * the operator may perform an extrapolation on the curve if necessary 
+ * This method is not compatible with the TransformWith, SetSameSurfacesParametrization
+ * and ReplaceWith(iNewEdgeCurve) methods.
+ */
+  virtual void SetLaydownEdge(
+    CATEdge *iOldEdge,
+    CATCurve *iNewCurve,
+    CATCrvLimits &amp;iWorkingDomain) = 0;
+
+  /**
+ * Specifies a new target point for a given vertex in the input body.
+ * This method is optionnal, but is required for some special cases where all adjacent
+ * new EdgeCurves are tangent, and so the new point location can&#x27;t be computed without
+ * external information.
+ * @param iOldVertex
+ * The pointer of an existing vertex in the input body.
+ * @param iNewTargetPoint
+ * The location of the new vertex in the result body. This MathPoint should
+ * be close enough (less than Tolerance) to all replacing surfaces of the 
+ * faces bordering iOldVertex.
+ */
+  virtual void ReplaceWith(CATVertex *iOldVertex, CATMathPoint &amp;iTargetPoint) = 0;
+
+  /**
+ * Method to call in order to specify the tansformation to apply to a list of faces
+ * in the input body. 
+ * An error is thrown if the same &lt;tt&gt;CATFace&lt;/tt&gt; is given with several Transformations.
+ * An error is thrown if the following other methods are called with this one :
+ *  - All ReplaceWith methods 
+ *  - SetCanonicalTangentEdge
+ *  - SetSameSurfacesParametrization
+ * @param iListFaces
+ * The list of faces to be tranformed.
+ * @param iTransfo
+ * The 3D trandformation to apply to theses faces.
+ */
+  virtual void TransformWith(
+    CATLISTP(CATFace) &amp;iListFaces,
+    CATMathTransformation &amp;iTransfo) = 0;
+
+  /**
+ * Method to call in order to specify the tansformation to apply to a list of edges in the input body.  
+ * @param iListEdges
+ * The list of edges to be tranformed.
+ * @param iTransfo
+ * The 3D trandformation to apply to theses edges.
+ */
+  virtual void TransformWith(
+    CATLISTP(CATEdge) &amp;iListEdges,
+    CATMathTransformation &amp;iTransfo) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopFaceReplaceSurface(); // -&gt; delete can&#x27;t be called
+};
+
+/**
+ * Creates a &lt;tt&gt;CATICGMTopFaceReplaceSurface&lt;/tt&gt; operator.
+ * @param iFactory
+ * The factory of the geometry. 
+ * @param iData
+ * The pointer to the data defining the software configuration and the journal. 
+ * If the journal inside &lt;tt&gt;iData&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+ * @param iBody
+ * The pointer to the body where the surfaces replacement will be performed.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMTopFaceReplaceSurface *CATCGMCreateFaceReplaceSurfaceOperator(
+  CATGeoFactory *iFactory,
+  CATTopData *iData,
+  CATBody *iBody);
+
+#endif /* CATICGMTopFaceReplaceSurface_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopExtrude.html">← 上一页: CATICGMTopExtrude.h</a></div>
+        <div><a href="CATICGMTopGeodesicLineOperator.html">下一页: CATICGMTopGeodesicLineOperator.h →</a></div>
+    </div>
+</body>
+</html>

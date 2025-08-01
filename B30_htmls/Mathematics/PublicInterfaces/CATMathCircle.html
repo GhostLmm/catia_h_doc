@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathCircle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathCircle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathBox2D.html">← 上一页: CATMathBox2D.h</a></div>
+        <div><a href="CATMathCircleArc2D.html">下一页: CATMathCircleArc2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathCircle_H
+#define CATMathCircle_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CATMathematics.h&quot;
+
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathDirection.h&quot;
+#include &quot;CATMathCurve.h&quot;
+#include &quot;CATMathConstant.h&quot;
+
+#include &quot;CATErrorDef.h&quot; //HRESULT
+
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+class CATMathLine;
+ 
+/**
+ * Class representing a 3D mathematical circle.
+ * &lt;br&gt;A CATMathCircle has a &lt;tt&gt;_Center&lt;/tt&gt; (CATMathPoint),
+ * a &lt;tt&gt;_Radius&lt;/tt&gt;, and two
+ * orthonormalized vectors defining the plane
+ * where it is lying on. It can be defined with a _Scale and a _Shift, such that its
+ * parametric equation is:
+ *&lt;br&gt;
+ * &lt;tt&gt;Circle(Param) = _Center + _Radius * [cos(_Scale*Param + _Shift) * _iFirstAxis + sin(_Scale*Param + _Shift) * _SecondAxis]&lt;/tt&gt;.
+ * where &lt;tt&gt;Param&lt;/tt&gt; is the circle parameter.
+ */
+class ExportedByCATMathematics CATMathCircle : public CATMathCurve
+{
+ public:
+//============================================================================
+//- Constructor
+//============================================================================
+
+/**
+ * Constructs a CATMathCircle of radius 1 of center &lt;tt&gt;(0,0,0)&lt;/tt&gt; lying on 
+ * the plane of directions &lt;tt&gt;(1,0,0)&lt;/tt&gt; and &lt;/tt&gt;(0,1,0)&lt;/tt&gt;.
+ */
+                      CATMathCircle      ();
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Set
+ * Constructs a CATMathCircle of given radius and center.
+ *&lt;br&gt;The two vectors must be orthogonal and not null,
+ * but this is not checked. If the vectors are not normed, the method
+ * normalizes them.
+ */
+                      CATMathCircle      (const CATMathPoint  &amp; iCenter            ,
+                                          const CATMathVector &amp; iFirstAxis         ,
+                                          const CATMathVector &amp; iSecondAxis        ,
+                                                double          iRadius            ,
+                                                double          iScale             = 1.,
+                                                double          iShift             = 0.);
+
+/**
+ * Copy constructor.
+ */
+                      CATMathCircle      (const CATMathCircle &amp; iCircleToCopy      ) ;
+
+
+
+//============================================================================
+//- Get/Set
+//============================================================================
+/**
+* Constructs a CATMathCircle of given radius and center.
+* @return 
+* &lt;tt&gt;E_FAIL&lt;/tt&gt; if the two vectors are not orthogonal or null, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+* Note that if he vectors are not normed, the method normalizes them.
+*/
+    HRESULT           Set                (const CATMathPoint  &amp; iCenter            ,
+                                          const CATMathVector &amp; iFirstAxis         ,
+                                          const CATMathVector &amp; iSecondAxis        ,
+                                                double          iRadius            ,
+                                                double          iScale             = 1.,
+                                                double          iShift             = 0.);
+
+/**
+* Returns the class name CATMathCircle.
+*/
+    CATMathClassId    IsA                ()                                          const;
+//
+
+/**
+ * Returns the mathematical type.
+ * @return
+ * The CATMathematicType.
+ */
+    CATMathematicType GetMathType        ()                                          const;
+
+
+
+/**
+ * Returns the (orthonormalized) directions of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    void              GetDirections      (      CATMathVector &amp; ioDirection1       ,
+                                                CATMathVector &amp; ioDirection2       ) const;
+
+/**
+ * Returns the center of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    void              GetCenter          (      CATMathPoint  &amp; oCenter            ) const; 
+
+/**
+ * Returns the radius of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    double            GetRadius          ()                                          const ;
+
+/**
+ * Returns the scale of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    double            GetScale           ()                                          const;
+
+/**
+ * Changes the scale of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    void              SetScale           (const double          iScale             );
+
+/**
+ * Returns the shift of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    double            GetShift           ()                                          const;
+
+/**
+ * Changes the shift of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */
+    void              SetShift           (const double          iShift             );
+
+/**
+ * Returns the point of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle corresponding to a given parameter
+ */
+    void              EvalPoint          (const double          iParam             ,
+                                                CATMathPoint  &amp; ioPoint            ) const;
+
+/**
+ * Retrieves the param on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle corresponding to a CATMathPoint
+ * inside limitations.
+ * @param iPoint
+ * The CATMathPoint which coordinates are to be transformed as a param.
+ * @param ioParam
+ * The table of parameters corresponding to iPoint 
+ * (must be allocate with size = 2).
+ * @param iTol
+ * Tolerance 3D
+ * @param iStartParam/iEndParam
+ * The limits to take into account for trimming the CATMathCircle.
+ * @return
+ * The number of parameters that can be evaluated on this point.
+ * &lt;dl&gt;&lt;dt&gt; 0  &lt;dd&gt;No parameter corresponds to this point.
+ *     &lt;dt&gt; 1  &lt;dd&gt;Only one parameter corresponds to this point.
+ *     &lt;dt&gt; 2  &lt;dd&gt;Two parameters correspond to this point (at the closure of the circle).
+ *&lt;/dl&gt;
+ */
+    int               GetParam           (const CATMathPoint  &amp; iPoint             ,
+                                          const double          iStartParam        ,
+                                          const double          iEndParam          ,
+                                          const double          iTol               ,
+                                          const CATTolerance  &amp; iTolObject         ,
+                                                double       *  oParam
+                                         )                                           const;
+ /**
+ * @nodoc
+ * @deprecated V5R25 GetParam with CATTolerance object and reordered arguments (XScale compliant)
+ */
+    int               GetParam           (const CATMathPoint  &amp; iPoint             ,
+                                                double       *  oParam             ,
+                                          const double          iTol               ,
+                                          const double          iStartParam        ,
+                                          const double          iEndParam          ) const;
+    
+/**
+ * Projects a CATMathPoint on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @return
+ * FALSE if &lt;tt&gt;iPointToProject&lt;/tt&gt; is the center of the circle, TRUE otherwise. 
+  * &lt;tt&gt;ioProjectedPoint&lt;/tt&gt; is only computed in the first case.
+ */
+    CATBoolean        Project            (const CATMathPoint  &amp; iPointToProject    ,
+                                                double        &amp; ioParamAtProjection) const;
+
+/**
+ * Projects a CATMathPoint on  &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @return
+ * FALSE if &lt;tt&gt;iPointToProject&lt;/tt&gt; is the center of the circle, TRUE otherwise. 
+ * &lt;tt&gt;ioParamAtProjection&lt;/tt&gt; is only computed in the first case.
+ */
+    CATBoolean        Project            (const CATMathPoint  &amp; iPointToProject    ,
+                                                CATMathPoint  &amp; ioProjectedPoint   ) const;
+
+/**
+ * Converts a parameter on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle to an angle in radians.
+ */
+    double            ConvertParamToAngle(const double          iParam             ) const;
+
+/**
+ * Converts an angle in radians to a parameter on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ */
+    double            ConvertAngleToParam(const double          iAngle             ) const;
+
+
+ /**
+ * Changes the parameter orientation of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ */   
+    void              ReverseDirection   () ;
+
+/**
+ * Intersects &lt;tt&gt;this&lt;/tt&gt; CATMathCircle with a CATMathLine. 
+ * @param iLine
+ *   The CATMathLine to intersect.
+ * @param iStartParamOnLine/iEndParamOnLine
+ *   The limits to take into account for the &lt;tt&gt;iLine&lt;/tt&gt;.
+ * @param iStartParamOnThisCircle/iEndParamOnThisCircle
+ *   The limits to take into account for &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. Must be allocated with size 2.
+ * @param ioParamOnLine[2] 
+ *   The parameter of the intersection on &lt;tt&gt;iLine&lt;/tt&gt;.
+ * @param ioParamOnThisCircle[2]
+ *   The parameter of the intersection on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. Must be allocated with size 2.
+ * @param iTol
+ *   Defines the distance between &lt;tt&gt;iLine&lt;/tt&gt; and &lt;tt&gt;this&lt;/tt&gt; CATMathCircle, below
+ * which they are considered to be intersecting. 
+ * @return
+ *   The number of intersection points. Defines the number of value(s)
+ * to read in &lt;tt&gt;oParamOnLine&lt;/tt&gt; and &lt;tt&gt;oParamOnThisCircle&lt;/tt&gt;
+ */
+    int               Intersect          (const CATMathLine   &amp; iLine                  ,
+                                                double          iStartParamOnLine      ,
+                                                double          iEndParamOnLine        ,
+                                                double          iStartParamOnThisCircle,
+                                                double          iEndParamOnThisCircle  ,
+                                                double          iTol                   ,
+                                          const CATTolerance  &amp; iTolObject             ,
+                                                double          ioParamOnLine      [2] ,
+                                                double          ioParamOnThisCircle[2] ) const;
+
+ /**
+ * @nodoc
+ * @deprecated V5R25 Intersect with CATTolerance object (XScale compliant)
+ */
+    int               Intersect          (const CATMathLine   &amp; iLine                  ,
+                                                double          iStartParamOnLine      ,
+                                                double          iEndParamOnLine        ,
+                                                double          iStartParamOnThisCircle,
+                                                double          iEndParamOnThisCircle  ,
+                                                double          iTol                   ,
+                                                double          ioParamOnLine      [2] ,
+                                                double          ioParamOnThisCircle[2] ) const;
+
+ /**
+ * Intersects &lt;tt&gt;this&lt;/tt&gt; CATMathCircle with another CATMathCircle. 
+ * @param iOtherCircle 
+ *   The other CATMathCircle to intersect. 
+ * @param iStartParamOnOtherCircle/iEndParamOnOtherCircle
+ *   The limits to take into account for &lt;tt&gt;iCircle&lt;/tt&gt;.
+ * @param iStartParamOnThisCircle/iEndParamOnThisCircle
+ *   The limits to take into account for &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @param ioParamOnOtherCircle[2] 
+ *   The parameter of the intersection on &lt;tt&gt;iCircle&lt;/tt&gt;. Must be allocated with size 2.
+ * @param ioParamOnThisCircle[2]
+ *   The parameter of the intersection on &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. Must be allocated with size 2.
+ * @param iTol
+ *   Defines the distance between &lt;tt&gt;iCircle&lt;/tt&gt; and &lt;tt&gt;this&lt;/tt&gt; CATMathCircle, below
+ * which they are considered to be intersecting.
+ * @return
+ *   The number of intersection points. Defines the number of value(s)
+ * to read in &lt;tt&gt;oParamOnOtherCircle&lt;/tt&gt; and &lt;tt&gt;oParamOnThisCircle&lt;/tt&gt;
+ */
+    int               Intersect          (const CATMathCircle &amp; iOtherCircle            ,
+                                                double          iStartParamOnOtherCircle,
+                                                double          iEndParamOnOtherCircle  ,
+                                                double          iStartParamOnThisCircle ,
+                                                double          iEndParamOnThisCircle   ,
+                                                double          iTol                    ,
+                                                double          ioParamOnOtherCircle [2],
+                                                double          ioParamOnThisCircle  [2]) const;
+
+/**
+ * Computes the distance between a CATMathPoint and &lt;tt&gt;this&lt;/tt&gt; CATMathCircle. 
+ * @param iStartParamOnCircle
+ * The start limit to take into account for &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @param iEndParamOnCircle
+ * The end limit to take into account for &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @param oParamAtMin
+ * The parameter of the point of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle which is the closest to &lt;tt&gt;iPt&lt;/tt&gt;.
+ * @return 
+ * The distance between &lt;tt&gt;iPt&lt;/tt&gt; and the point defined by &lt;tt&gt;oParamAtMin&lt;/tt&gt;.
+ **/
+ double               DistanceMin        (      CATMathPoint  &amp; iPt                     ,
+                                                double          iStartParamOnCircle     ,
+                                                double          iEndParamOnCircle       ,
+                                                double        &amp; oParamAtMin             );
+
+ /**
+ * @nodoc
+ * @deprecated V5R20 Intersect
+ */
+ ExportedByCATMathematics
+ friend int           Intersect          (const CATMathLine   &amp; iLine                   ,
+                                          const CATMathCircle &amp; iCircle                 ,
+                                                double          iStartParam1            ,
+                                                double          iEndParam1              ,
+                                                double          iStartParam2            ,
+                                                double          iEndParam2              ,
+                                                double          iTol                    ,
+                                                double          oParamOnLine         [2],
+                                                double          oParamOnCircle       [2]);
+
+ /** 
+ * @nodoc
+ * @deprecated V5R20 Intersect
+ */
+ ExportedByCATMathematics
+ friend int           Intersect          (const CATMathCircle &amp; iCircle1                ,
+                                          const CATMathCircle &amp; iCircle2                ,
+                                                double          iStartParam1            ,
+                                                double          iEndParam1              ,
+                                                double          iStartParam2            ,
+                                                double          iEndParam2              ,
+                                                double          iTol                    ,
+                                                double          oParamOnCircle1      [2],
+                                                double          oParamOnCircle2      [2]);
+
+ /**
+ * @nodoc
+ * @deprecated V5R20 EvalPoint
+ * Use the  signature which returns a CATMathPoint as an output argument. 
+ */
+        CATMathPoint  EvalPoint          (const double          iParam                  ) const;
+
+/**
+ * @nodoc
+ * Projects a CATMathPoint on  &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * @param iTol
+ *   Defines the distance between &lt;tt&gt;iPointToProject&lt;/tt&gt; and the center of &lt;tt&gt;this&lt;/tt&gt; CATMathCircle, below
+ * which they are considered to be confused. 
+ * @return
+ * FALSE if &lt;tt&gt;iPointToProject&lt;/tt&gt; is the center of the circle, TRUE otherwise. 
+ * &lt;tt&gt;ioParamAtProjection&lt;/tt&gt; is only computed in the first case.
+ */
+        CATBoolean    Project            (const CATMathPoint  &amp; iPointToProject         ,
+                                                CATMathPoint  &amp; ioProjectedPoint        ,
+                                          const double          iTol                    ) const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ * Dumps &lt;tt&gt;this&lt;/tt&gt; CATMathCircle.
+ * &lt;br&gt;This writes the following lines on the ostream:
+ *&lt;pre&gt;
+ * Origin    = ( OriginFirstCoord    , OriginSecondCoord    , OriginThirdCoord )
+ * FirstDir  = ( FirstDirFirstCoord  , FirstDirSecondCoord  , FirstDirThirdCoord )
+ * SecondDir = ( SecondDirFirstCoord , SecondDirSecondCoord , SecondDirThirdCoord )
+ * Radius    = Radius
+ *&lt;/pre&gt;
+ * @param iStream  
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+        void          Dump               (      ostream       * iStream                 = 0L) const;
+ 
+ private :
+   // normalized vectors
+    CATMathVector _FirstAxis,
+                  _SecondAxis;
+    CATMathPoint  _Center;
+    double        _Radius;
+    double        _Scale ;
+    double        _Shift ;
+
+};
+
+#endif
+
+
+ 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathBox2D.html">← 上一页: CATMathBox2D.h</a></div>
+        <div><a href="CATMathCircleArc2D.html">下一页: CATMathCircleArc2D.h →</a></div>
+    </div>
+</body>
+</html>

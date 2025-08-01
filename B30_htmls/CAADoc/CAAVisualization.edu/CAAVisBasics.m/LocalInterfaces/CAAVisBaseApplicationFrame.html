@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseApplicationFrame.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseApplicationFrame.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseApplication.html">← 上一页: CAAVisBaseApplication.h</a></div>
+        <div><a href="CAAVisBaseBERender.html">下一页: CAAVisBaseBERender.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAVisBaseApplicationFrame_h
+#define CAAVisBaseApplicationFrame_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+// Frame of the application.
+// This frame is made with a menu bar, itself made with
+// a file menu, a render menu, a viewpoint menu, a manipulator menu.
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//           CAAVisBaseApplicationFrame
+//             CATDlgDocument (Dialog Framework)
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//
+//
+//===========================================================================
+
+#include &quot;CATDlgDocument.h&quot;
+
+//Dialog Framework
+class CATDlgFile;
+class CATDlgCheckItem;
+
+class CAAVisBaseApplicationFrame : public CATDlgDocument
+{
+  // Declares the CAAVisBaseApplicationFrame.CATNls file as the dialog message catalog
+  DeclareResource(CAAVisBaseApplicationFrame, CATDlgDocument)
+    
+public:
+  
+  // Constructs the application frame from the main application and
+  // a title
+  //   Parameters
+  //     iParent
+  //       The parent class in the CATCommand agregation 
+  //       hierarchy. Here, our main application.
+  //     iDialogObjectName
+  //       The dialog object name. 
+  //     iStyle
+  //       The application window style.
+  CAAVisBaseApplicationFrame(CATInteractiveApplication *iParent, 
+                             const CATString &amp;iDialogObjectName, 
+                             CATDlgStyle iStyle = CATDlgWndFrameMDI|CATDlgShow);
+
+  //Destructor
+  virtual ~CAAVisBaseApplicationFrame();
+
+  // Builds the frame, with all its dialog components:
+  // - A menu bar:
+  //     - A File menu
+  //     - A Render menu
+  //     - A Viewpoint menu
+  void Build();
+
+  //When a window is activated.
+  void OnWindowActivated(int iActiveDocIndex);
+
+  //Warns the frame that a window
+  //is being closed. The associated
+  //layout&#x27;s elements must be updated.
+  void OnDeleteWindow(int iActiveDocIndex);
+
+
+private:
+
+  //Default constructor
+  CAAVisBaseApplicationFrame();
+
+  //Copy constructor
+  CAAVisBaseApplicationFrame(const CAAVisBaseApplicationFrame &amp;iBrother);
+  
+  //Assignment operator
+  CAAVisBaseApplicationFrame &amp; operator = (const CAAVisBaseApplicationFrame &amp;iBrother);
+
+  //Layout&#x27;s Callbacks
+  //
+  //Opens a CGR file in a new document.
+  void OpenCB           (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  void LoadOKCB         (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  void LoadCANCELCB     (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Inserts a graphical representation read from a CGR file into
+  //the active document.
+  void InsertCB         (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  void InsertOKCB       (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //To exit the application
+  void ExitCB           (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Renders the bounding boxes on the active document&#x27;s scene.
+  void RenderBECB       (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Reframes the active document&#x27;s scene.
+  void ReframeCB        (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Modifies the active document&#x27;s main 3D viewpoint parameters, thanks to a dialog box.
+  void ModifyViewpointCB(CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Adds a manipulator to the active document&#x27;s representation
+  void ManipulatorCB    (CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+  //Creates a specific visualization object
+  void CreateVisuObjectCB(CATCommand *iPublisher, CATNotification *iNotification, CATCommandClientData  iData);
+
+private:
+
+  //Layout&#x27;s dialog elements
+  //We need to store the check items dialog object.
+  //Indeed, we have to keep track of their states for each document.
+  CATDlgCheckItem *_pRenderBEChkItem;
+  CATDlgCheckItem *_pManipulatorChkItem;
+  
+  //The file selector box must also br stored
+  CATDlgFile *_pFileSelectorBox;
+  
+  //Array to store the _RenderBEChkItem check item state for
+  //each opened document
+  int *_aBEStates;
+  int _BEStatesArraySize;
+
+  //Array to store the _RenderBEChkItem check item state for
+  //each opened document
+  int * _aManipulatorStates;
+  int _ManipulatorStatesArraySize;
+
+  //Keeps track of the number of opened documents:
+  int _NumberOfDocuments;
+
+  //Keeps track of the current active document index:
+  int _ActiveDocIndex;
+
+  //Pointer on the parent application:
+  CATInteractiveApplication *_pApplication;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseApplication.html">← 上一页: CAAVisBaseApplication.h</a></div>
+        <div><a href="CAAVisBaseBERender.html">下一页: CAAVisBaseBERender.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATDynFilletRibbon.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATDynFilletRibbon.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDynFilletRadius.html">← 上一页: CATDynFilletRadius.h</a></div>
+        <div><a href="CATDynOperatorDef.html">下一页: CATDynOperatorDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDynFilletRibbon_h_
+#define CATDynFilletRibbon_h_
+
+//=============================================================================
+// Copyright Dassault Systemes 2006-2011, all rights reserved
+//=============================================================================
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;ListPOfCATEdge.h&quot;
+#include &quot;ListPOfCATFace.h&quot;
+#include &quot;ListPOfCATShell.h&quot;
+#include &quot;CATDynFilletRadius.h&quot;
+#include &quot;CATMath.h&quot;
+#include &quot;CATBody.h&quot;
+#include &quot;CATCreateEndingShell.h&quot;
+#include &quot;CATCreateShellForPunch.h&quot;
+#include &quot;ListPOfCATBody.h&quot;
+#include &quot;CATLISTP_CATMathVector.h&quot;
+#include &quot;CATFilletReconfigFillFunction.h&quot;
+#include &quot;CATCompositeLaw.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+#include &quot;CATFilletDefine.h&quot;
+class CATBlendParams;
+ 
+/**
+ * Defines the type of selected edge in a ribbon.
+ * @param CATDynRolling
+ * A rolling edge.
+ */
+enum CATDynEdgeCrossing
+{
+  CATDynRolling,
+  CATDynRelimit
+};
+
+/**
+ * Defines the construction mode of the resulting body.
+ * @param CATDynTrim
+ * The &lt;tt&gt;GetResult&lt;/tt&gt; method returns a body inside which the input and ribbon are connected.
+ * @param CATDynNoTrim
+ * The &lt;tt&gt;GetResult&lt;/tt&gt; method only returns a body containing the ribbon.
+ */
+enum CATDynSegmentationMode
+{
+  CATDynTrim,
+  CATDynNoTrimWithTraceOnSupport,
+  CATDynNoTrim
+};
+
+/**
+ * Defines the type of relimitation on the input bodies.
+ * &lt;br&gt;In case of a fillet between skins.
+ * @param CATDynMax
+ * The length of the ribbon is defined by the length of the largest face. In this case,
+ * some options can be set with the &lt;tt&gt;CATDynMaxRelimitationOption&lt;/tt&gt; enum
+ * to precise the shape of the ribbon in the other direction.
+ * @param CATDynMin
+ * The length of the ribbon is defined by the length of the smallest face.
+ */
+enum CATDynRelimitationMode
+{
+  CATDynMax,
+  CATDynMin
+};
+
+/**
+ * Defines the shape of the ribbon on the free boundaries.
+ * &lt;br&gt;In case of &lt;tt&gt;CATDynMax&lt;/tt&gt; relimitation mode.
+ * @param CATDynNone
+ * The whole computed ribbon is used.
+ * @param CATDynPline
+ * The ribbon free boundaries are Plines on the ribbon surface, from the extremities of each face.
+ * @param CATDynSpline
+ * The ribbon free boundaries are splines on the ribbon surface, from the extremities of each face. In such case,
+ * there is a tangential continuity.
+ */
+enum CATDynMaxRelimitationOption
+{
+  CATDynNone,
+  CATDynPline,
+  CATDynSpline
+#ifdef CATIAV5R30
+  /** @nodoc */
+  , CATDynSBdy
+#endif
+
+};
+
+    /**
+	 * Defines how the ribbon is seewed on the input skins.
+	 * &lt;br&gt;In case of &lt;tt&gt;CATDynTrim&lt;/tt&gt; mode.
+	 * @param CATDynDefaultSide
+     * The seewed edges are smooth.
+	 * @param CATDynReverseSide
+	 * The seewed egdes are sharp.
+	 */
+enum CATDynSewingOption
+{
+  CATDynDefaultSide,
+  CATDynReverseSide
+};
+
+	/**
+	 * Defines whether the internal ribbon edges are logged inside the journal.
+     * @param CATDynDefaultEdgeReporting
+     * The internal edges 
+	 * of the ribbon (such as the common edge between the ribbon and the adjacent face)
+	 * are not logged inside the journal.
+	 * @param CATDynInternalEdgeReporting
+	 * The internal edges 
+	 * of the ribbon (such as the common edge between the ribbon and the adjacent face)
+	 * are logged inside the journal.
+	 */
+enum CATDynEdgeReporting
+{
+  CATDynDefaultEdgeReporting,
+  CATDynInternalEdgeReporting
+};
+
+/**
+ * Defines the propagation behavior in case of a multiple automatic propagation ribbons.
+ * @param CATDynDefaultPropagAutoMode
+ * The ribbon is always propagated.
+ * @param CATDynStopOnFilletPropagAutoMode
+ * The ribbon is not propagated when it reaches another ribbon generated in the same operator. 
+ * @param CATDynPropagManualMode
+ * From V5R21: The ribbon is not propagated 
+ */
+enum CATDynPropagAutoMode
+{
+  CATDynDefaultPropagAutoMode,
+  CATDynStopOnFilletPropagAutoMode,
+  CATDynPropagManualMode
+};
+
+/**
+* Defines whether keep edges (or rolling edges) are automatically 
+* searched in the fillet process.
+* @param CATDynDefaultKeepEdge
+* Only explicit keep edges (defined by the user) are used 
+* in the fillet process. 
+* @param CATDynImplicitKeepEdge
+* All possible keep edges are automatically used in the fillet process
+* (priority is set to the keep edges defined by the user).
+*/
+enum CATDynKeepEdgeMode
+{
+  CATDynDefaultKeepEdgeMode,
+  CATDynImplicitKeepEdgeMode
+};
+
+/**
+ * Defines the geometric tool of the fillet.
+ * @param CATFilletSphereTool
+ * The fillet is created with a sphere.
+ * @param CATFilletCircleTool
+ * The fillet is created with a circle.
+ */
+
+enum CATFilletTool
+{
+  CATFilletSphereTool,
+  CATFilletCircleTool
+};
+
+/**
+ * Identifies a law
+ * @param CATFilletRadiusLaw
+ * Identifies a radius law
+ */
+enum CATFilletLawId
+{
+  CATFilletLawIdRadiusLaw
+};
+
+/** @nodoc */
+enum CATDynKeepEdgeSameConvexityMode
+{
+  CATDynDefaultIgnoreKeepEdgeSameConvexity,
+  CATDynRunOnKeepEdgeSameConvexity
+};
+
+
+/** 
+ * From V5R21
+ * Defines the multi-ribbon behaviour
+ * @param CATDynDefaultNoMultiSolutionAllowed
+ * No multi-ribbon is performed - default behaviour
+ * @param CATDynMultiSolutionAllowed
+ * Multi-ribbon is performed
+ */
+enum CATDynFilletFaceFaceInitMode
+{
+  CATDynDefaultNoMultiSolutionAllowed,
+  CATDynMultiSolutionAllowed
+};
+
+/** @nodoc */
+enum CATDynMinRelimitationOption
+{
+  CATDynMinNone,
+  CATDynMinPunch
+};
+/** @nodoc */
+enum CATDynFilletRibbonType
+{
+	CATDynEdgeFilletRibbonType,
+	CATDynFaceFaceFilletRibbonType,
+	CATDynRemoveFaceFilletRibbonType,
+	CATDynChamferRibbonType
+};
+
+/**
+ * Base class defining a fillet ribbon.
+ * &lt;br&gt;A ribbon is an elementary process of the filleting operator.
+ */
+class ExportedByCATGMOperatorsInterfaces CATDynFilletRibbon : public CATCGMVirtual
+{
+public:
+/**
+ * Default constructor.
+ */
+  CATDynFilletRibbon();
+  virtual ~CATDynFilletRibbon();
+  
+/**
+ * Returns the construction mode of the resulting body.
+ * @return
+ * The construction mode.
+ */
+  CATDynSegmentationMode GetSegmentationMode (int iSupport=0) const ;
+
+/**
+ * Defines the construction mode of the resulting body.
+ * @param iMode
+ * The construction mode.
+ */
+  void SetSegmentationMode (CATDynSegmentationMode iMode,int iSupport=0);
+
+/**
+ * Returns the type of relimitation on the input bodies.
+ * &lt;br&gt;In case of a fillet between skins.
+ * @return
+ * The relimitation mode.
+ */
+  CATDynRelimitationMode GetRelimitationMode (int iExtremite=0) const ;
+
+/**
+ * Defines the type of relimitation on the input bodies.
+ * &lt;br&gt;In case of a fillet between skins.
+ * @param iMode
+ * The relimitation mode.
+ */
+  void SetRelimitationMode (CATDynRelimitationMode iMode, int iExtremite=0);
+
+
+/**
+ * Returns the type of the shape of the ribbon on the free boundaries.
+ * &lt;br&gt;In case of &lt;tt&gt;CATDynMax&lt;/tt&gt; relimitation mode.
+ * @return
+ * The shape mode.
+ */
+  CATDynMaxRelimitationOption GetMaxOption (int iExtremite=0) const ;
+
+/**
+ * Defines the type of the shape of the ribbon on the free boundaries.
+ * &lt;br&gt;In case of &lt;tt&gt;CATDynMax&lt;/tt&gt; relimitation mode.
+ * @param iMode
+ * The shape mode.
+ */
+  void SetMaxOption (CATDynMaxRelimitationOption iMode, int iExtremite=0);
+
+/**
+ * Returns how the ribbon is seewed on the input skins.
+ * @return
+ * The seewing mode.
+ */
+  CATDynSewingOption GetSewingOption () const ;
+
+/**
+ * Defines how the ribbon is seewed on the input skins.
+ * @param iMode
+ * The seewing mode.
+ */
+  void SetSewingOption (CATDynSewingOption iMode);
+
+/**
+ * Returns whether the internal ribbon edges are logged inside the journal.
+ * @return
+ * The report mode.
+ */
+  CATDynEdgeReporting GetEdgeReportingOption () const ;
+
+/**
+ * Defines whether the internal edges are logged inside the journal.
+ * @param iMode
+ * The report mode.
+ */
+  void SetEdgeReportingOption (CATDynEdgeReporting iMode);
+
+/**
+ * Returns the propagation behavior in case of a multiple automatic propagation ribbons.
+ * @return
+ * The propagation mode.
+ */
+  CATDynPropagAutoMode GetPropagAutoMode () const ;
+
+/**
+ * Defines the propagation behavior in case of a multiple automatic propagation ribbons.
+ * @param iMode
+ * The propagation mode.
+ */
+  void SetPropagAutoMode (CATDynPropagAutoMode iMode);
+
+/**
+ * Returns whether keep edges (or rolling edges) are automatically searched in the fillet process.
+ * @return
+ * The search mode.
+ */
+  CATDynKeepEdgeMode GetKeepEdgeMode () const ;
+
+/**
+ * Defines whether keep edges (or rolling edges) are automatically searched in the fillet process.
+ * @param iMode
+ * The search mode.
+ */
+  void SetKeepEdgeMode (CATDynKeepEdgeMode iMode);
+
+  /** @nodoc */
+  void SetKeepEdgeSameConvexityMode (const CATDynKeepEdgeSameConvexityMode iMode);
+
+  /** @nodoc */
+  void SetCATCreateEndingShell (CATCreateEndingShell CreateEndingShellFct, void* iAnyDataForEndingShellFct=NULL);
+
+  /** @nodoc */
+  void SetCATCreateShellForPunch (CATCreateShellForPunch CreateShellFct, void* iAnyDataForShellFct=NULL);
+
+  /** @nodoc */
+  virtual void GetSupportBodies(CATLISTP(CATBody) &amp;oSupportBodies) const;
+
+/** @nodoc */
+  void SetReconfigFillFunction (CATFilletReconfigFillFunction iFillFct, 
+                                const CATBoolean iEnableUseForInnerTwist=FALSE);
+
+/** @nodoc */
+  void NoSimplif();
+ 
+/**
+ * Returns the kept (or rolling) edges.
+ * @return
+ * The list of the pointers to the special edges.
+ */
+  const CATLISTP(CATEdge)&amp; GetSpecialEdges() const;
+
+/**
+ * Reads the optional spine of &lt;tt&gt;this&lt;/tt&gt; ribbon.
+ * @return
+ * The pointer to the body containing the spine. 
+ */
+  const CATBody * GetSpine() const;
+
+  /**
+  * Defines the geometric tool of &lt;tt&gt;this&lt;/tt&gt; ribbon.
+  * @param iToolType
+  * The type of tool used for the fillet.
+  */
+  void SetFilletTool(CATFilletTool iToolType=CATFilletSphereTool);
+
+  /**
+ * Reads the geometric tool of &lt;tt&gt;this&lt;/tt&gt; ribbon.
+ * @return
+ * The type of tool used for the fillet.
+ */
+  const CATFilletTool GetFilletTool() const;
+
+ /**
+ * Specifies the radius type. The fillet shape is affected by this parameter.
+ */
+  void SetFilletRadiusType(CATFilletRadiusType iRadiusType=CATFilletRadiusDefaultType);
+
+ /**
+ * Retrieves the radius type.
+ */
+  const CATFilletRadiusType GetRadiusType() const;
+
+/**
+  * Defines the shape of the fillet cross-section.
+  * @param iSectionType
+  * The section type.
+  * @param iConicParameter
+  * The tightness value for the conic arc if &lt;tt&gt;iSectionType&lt;tt&gt; is &lt;tt&gt;CATFilletConicalSection&lt;tt&gt;.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;0.0 &lt; iConicParameter &lt; 1.0&lt;/tt&gt;. If &lt;tt&gt;iSectionType&lt;tt&gt; is not &lt;tt&gt;CATFilletConicalSection&lt;tt&gt;
+  * this parameter is not taken into account.
+  */
+  void SetFilletSectionType(CATFilletSectionType iSectionType, double iConicParameter=0.5);
+
+  /**
+  * Retrieves the shape of the fillet cross-section.
+  * @return 
+  * The section type.
+  */
+  CATFilletSectionType GetFilletSectionType() const;
+
+  /**
+  * Retrieves the tightness value of the fillet cross-section, if this one is conical.
+  * @return 
+  * The tightness value for the conic arc if the ribbon section type is &lt;tt&gt;CATFilletConicalSection&lt;tt&gt;.
+  * If the section type is not &lt;tt&gt;CATFilletConicalSection&lt;tt&gt; the return value is not relevant.
+  */
+  double GetConicParameter() const;
+
+  /** @nodoc */
+  void GetOptions(CATBody* iPart, CATBlendParams &amp; oBlendParams);
+
+  /** @nodoc */
+  void SetNotchRelimitationMode (CATDynRelimitationMode iMode);
+
+  /** @nodoc */
+  void SetAutomaticKeepEdgeMode(CATBoolean iOn=TRUE);
+
+/**
+* Reads the type of this ribbon.
+* @return
+* &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;fillet ribbon along an edge.
+* &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;fillet ribbon between two faces.
+* &lt;dt&gt;&lt;tt&gt;3&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;tri-tangent fillet ribbon.
+* &lt;dt&gt;&lt;tt&gt;4&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;Chamfer ribbon.
+* &lt;/dl&gt;
+*/
+  virtual const short GetType()=0;
+
+/** @nodoc*/
+  CATDynMinRelimitationOption GetMinOption (int iExtremite=0, CATLISTP(CATFace)* oFacesForMinRelimitation= NULL) const ;
+
+/** @nodoc*/
+  void SetMinOption (CATDynMinRelimitationOption iMode, int iExtremite=0, const CATLISTP(CATFace)* iFacesForMinRelimitation=NULL );
+
+/** @nodoc*/
+  void SetEdgesForMaxRelimitation (const CATLISTP(CATEdge)&amp; iEdges, CATDynMaxRelimitationOption iMode);
+
+/** @nodoc*/
+  const CATLISTP(CATEdge)&amp; GetEdgesForMaxRelimitation(CATDynMaxRelimitationOption&amp; oMode) const;
+
+  /**
+   * Returns the number of laws implemented for a fillet. 
+   * @return
+   * The number of laws.
+   */
+  int  GetNumberOfLaws() const;
+
+  /**
+   * Returns the mapping law corresponding to an index
+   * @param iIndex
+   * Index for which the mapping law is to be retrieved.
+   * @return
+   * The pointer to mapping law corresponding to the index.
+   */
+  const CATCompositeLaw*  GetMappingLaw(int iIndex) const;
+
+  /**
+   * Returns the distance law corresponding to an index
+   * @param iIndex
+   * Index for which the distance law is to be retrieved.
+   * @return
+   * The pointer to distance law corresponding to the index.
+  */
+  const CATCompositeLaw*  GetDistanceLaw(int iIndex) const;
+
+  /**
+   * Defines the smoothing option for the specified law
+   * @param iLawId
+   * Law identifier from enum CATFilletLawId 
+   * @param iLawSmoothingOption
+   * Smoothing option: CATTrue - smooth law, CATFalse - no smoothing
+   */
+  void SetLawSmoothingOption(CATFilletLawId iLawId, CATBoolean iLawSmoothingOption);
+
+  /**
+   * Defines the smoothing option for the specified law
+   * @param iLawId
+   * Law identifier from enum CATFilletLawId 
+   * @return
+   * Smoothing option: CATTrue - smooth law, CATFalse - no smoothing
+   */
+  CATBoolean GetLawSmoothingOption(CATFilletLawId iLawId) const;
+
+/** @nodoc*/
+  CATBoolean GetIsUpdated() const;
+/** @nodoc*/
+  void SetIsUpdated(const CATBoolean iIsUpdated);
+
+#ifdef CATIACGMR421CAA
+  /** @nodoc */
+  void SetPreserveExtremitiesForSheetMetal();
+
+  /** @nodoc */
+  CATBoolean GetPreserveExtremitiesForSheetMetal();
+#endif
+
+private:
+
+  CATDynKeepEdgeSameConvexityMode GetKeepEdgeSameConvexityMode () const ;
+  CATCreateEndingShell GetCATCreateEndingShell (void* &amp; oAnyDataForEndingShellFct) const;
+  CATCreateShellForPunch GetCATCreateShellForPunch (void* &amp; oAnyDataForShellFct) const;
+  CATFilletReconfigFillFunction GetFilletReconfigFillFunction (CATBoolean &amp;oEnableUseForInnerTwist) const;
+  CATDynRelimitationMode  GetNotchRelimitationMode () const ;
+  virtual void  GetInitialShells (CATTopData* iData, CATBody* InputBody, CATLISTP(CATShell) &amp;InitialShells)=0;
+  const CATBody * GetHoldBody() const;
+
+  virtual void  UpdateInputs (CATTopData* iTopData, CATCGMJournalList&amp; iJournal, CATBody* InputBody, CATBody* iCreationBody, CATCGMJournalList * iOffJournal = 0);
+  virtual void  UpdateInputs (const CATLISTP(CATEdge) &amp; iInitialEdges, CATLISTP(CATEdge) &amp; iNewEdges);
+
+  virtual void Dump(CATCGMOutput&amp; os) ;
+  virtual void Stream(CATGeoFactory *iFactory, CATCGMStream&amp; os, short iVersion);
+  virtual void UnStream(CATGeoFactory *iFactory, CATCGMStream&amp; os, short iVersion, const double iXScaleFactor = 1.);
+  CATBoolean GetSkinMode();
+  void SetSkinMode(CATBoolean iMode);
+
+  CATBoolean IsAutomaticKeepEdgeModeON();
+
+  CATBoolean _SkinMode;
+  CATDynSegmentationMode        _SegmentationMode1;      //Trim/No Trim
+  CATDynSegmentationMode        _SegmentationMode2;      //Trim/No Trim
+  CATDynRelimitationMode        _StartRelimitationMode;  //Max/Min
+  CATDynRelimitationMode        _EndRelimitationMode;    //Max/Min
+  CATDynRelimitationMode        _NotchRelimitationMode;  //Max/Min
+  
+  CATDynMaxRelimitationOption     _StartMaxOption;           //None/Pline/Spline
+  CATDynMaxRelimitationOption     _EndMaxOption;             //None/Pline/Spline
+  CATDynMinRelimitationOption     _StartMinOption;           //None/Punch
+  CATDynMinRelimitationOption     _EndMinOption;             //None/Punch
+
+  CATLISTP(CATEdge)               _EdgesForMaxRelimitation;
+  CATDynMaxRelimitationOption     _MaxOptionForEdges;        //None/Pline/Spline
+
+  CATLISTP(CATFace)               _FacesForMinRelimitation;
+
+  CATDynSewingOption              _SewingOption;             //Default/Reverse
+  CATDynEdgeReporting             _EdgeReportingOption;      //Default/InternalEdgeReporting
+  CATDynPropagAutoMode            _PropagAutoMode;           //Default/StopOnFillet
+  CATDynKeepEdgeMode              _KeepEdgeMode;             //Default/Implicit
+  CATDynKeepEdgeSameConvexityMode _KeepEdgeSameConvexityMode;//Default(Ignore/RunOn)
+  CATCreateEndingShell            _CreateEndingShellFct; 
+  void*                           _DataForEndingShellFct;
+
+  CATCreateShellForPunch          _CreateShellForPunchFct;
+   void*                          _DataForShellForPunchFct;
+  CATFilletReconfigFillFunction   _ReconfigFillFct;
+  CATBoolean                      _InnerTwistFill;
+  CATBoolean                      _NoSimplif;
+  CATBoolean                      _IsUpdated;
+#ifdef CATIACGMR421CAA
+  CATBoolean                      _PreserveExtremitiesForSheetMetal;
+#endif
+protected:
+  CATBoolean WithNoSimplif();
+
+  CATLISTP(CATEdge)               _special_edges;
+
+  CATBody                       * _SpineBody;
+  CATFilletTool                   _FilletToolType;
+  CATFilletRadiusType             _RadiusType; 
+
+  CATBody                       * _HoldBody;
+  CATDomain                     * _HoldDomain;
+  CATOrientation                  _HoldOrientation;
+
+  int                             _NbLaws;
+  CATCompositeLaw               **_MappingLaws;
+  CATCompositeLaw               **_DistanceLaws;
+
+  CATBoolean                    * _DistanceLawSmoothingOption;
+
+  CATFilletSectionType            _FilletSectionType;
+  double                          _ConicParameter;
+
+  CATBoolean                      _IsAutomaticKeepEdgeModeON;
+
+  // Methods for Chain : change the input body y a new one
+  virtual void UpdateWithNewBody (CATBody* iOldBody, CATBody* iNewBody);
+  CATUnicodeString       GetTypeName() ;
+  virtual CATBoolean             IsA(CATDynFilletRibbonType  iRibbonType);  
+
+  friend class CATDynRemoveFaceFilletRibbon;
+  friend class CATDynFaceFaceFilletRibbon;
+  friend class CATDynEdgeFilletRibbon;
+  friend class CATDynChamferRibbon;
+  friend class CATDynSolidFilletCGM;
+  friend class CATDynSolidChamferCGM;
+  friend class CATGMLiveShapeFilletImpl;
+  friend class CATGMLiveShapeSingleFilletImpl;
+  friend class CATCGMFilletUnit;
+  friend class CATlsoRibbonContext;
+  friend class CATDynFilletRibbonUtilities; // For implementing GetOptions()
+};
+
+/** 
+ * @collection CATLISTP(CATDynFilletRibbon)
+ * Collection class for pointers to fillet ribbons.
+ * All the methods of pointer collection classes are available.
+ * Refer to the articles dealing with collections in the encyclopedia. 
+ */
+#include &lt;CATLISTP_Clean.h&gt;
+#include &lt;CATLISTP_PublicInterface.h&gt;
+#include &lt;CATLISTP_Declare.h&gt;
+#undef  CATCOLLEC_ExportedBy
+#define CATCOLLEC_ExportedBy    ExportedByCATGMOperatorsInterfaces
+CATLISTP_DECLARE(CATDynFilletRibbon)
+
+#include &quot;CATDynEdgeFilletRibbon.h&quot;
+#include &quot;CATDynFaceFaceFilletRibbon.h&quot;
+#include &quot;CATDynRemoveFaceFilletRibbon.h&quot;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDynFilletRadius.html">← 上一页: CATDynFilletRadius.h</a></div>
+        <div><a href="CATDynOperatorDef.html">下一页: CATDynOperatorDef.h →</a></div>
+    </div>
+</body>
+</html>

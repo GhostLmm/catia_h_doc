@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperators/PublicInterfaces/CATTopExtrude.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperators/PublicInterfaces/CATTopExtrude.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTopExtrapolWireOpe.html">← 上一页: CATTopExtrapolWireOpe.h</a></div>
+        <div><a href="CATTopPattern.html">下一页: CATTopPattern.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTopExtrude_H
+#define CATTopExtrude_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;BOTOPOPE.h&quot;
+#include &quot;CATTopOperator.h&quot;
+#include &quot;CATTopBooleanType.h&quot;
+#include &quot;CATTopLimit.h&quot;
+#include &quot;CATTopLimitType.h&quot;
+#include &quot;CATTopPropagationType.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;ListPOfCATDomain.h&quot;
+
+class CATBody;
+class CATCGMJournalList;
+class CATGeoFactory;
+class CATCGMActivateDebug;
+class CATGeometry;
+class CATError;
+class CATExtTopExtrude;
+
+#include &quot;CATThrowForNullPointer.h&quot;
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+#define TEMP_CATFREEZEMODE
+#ifdef  TEMP_CATFREEZEMODE
+#include &quot;CATGeoToTopOperator.h&quot;
+#endif
+
+class CATTopData;
+
+/**
+ * Base class for of all the topological operators doing extrusions. 
+ * &lt;br&gt;Extrusion operators deriving 
+ * from this base class are used to build a prism, to revolve a profile about an axis 
+ * or to sweep a profile along a guide.
+ * &lt;br&gt; In addition to the extrusion creation, these operators provide the capability
+ * to use a Boolean operation between a body (called trimming body), and the 
+ * created extrusion. To obtain such result, use the &lt;tt&gt;SetOperation&lt;/tt&gt;
+ * and &lt;tt&gt;SetTrim&lt;/tt&gt; methods. In this case, &lt;tt&gt;GetResult&lt;/tt&gt; returns the
+ * created extrusion limited by the trimming body, while &lt;tt&gt;GetBooleanResult&lt;/tt&gt; returns the result of
+ * the Boolean operation between the trimming body and the extrusion.
+ */  
+class ExportedByBOTOPOPE CATTopExtrude : public CATTopOperator
+{
+  CATCGMVirtualDeclareClass(CATTopExtrude);
+  
+  public:
+/** @nodoc */
+    CATTopExtrude (CATGeoFactory * iGeoFactory, CATTopData * iData, CATExtTopOperator* iExtensible=NULL);
+
+/** @nodoc */
+    CATTopExtrude (CATGeoFactory * iGeoFactory, CATCGMJournalList * iJournal=NULL, CATExtTopOperator* iExtensible=NULL);
+
+/**
+ * Destructor.
+ */
+    virtual ~CATTopExtrude ();
+
+/**
+ * Asks for the closure of the profile on a given body.
+ * &lt;br&gt;The &lt;tt&gt;SetTrim&lt;/tt&gt; method must then be called to define the triming body.
+ */
+    virtual void SetProfileClosure () = 0;
+
+/**
+ * Asks for a Boolean operation between the extruded body and another (called trimming) body. 
+ * @param iBoolType
+ * The type of Boolean operation to perform after the extrusion. By default,
+ * no Boolean operation is done.
+ */
+    virtual void SetOperation (CATTopBooleanType iBoolType=CatBoolNone) = 0;
+
+/**
+ * Defines the triming body.
+ * &lt;br&gt;The trimming body defines the body on which the profil must be closed.
+ * Moreover, it defines the body used in the Boolean operation, if any.
+ * Hence, this method must be called after either a &lt;tt&gt;SetProfileClosure&lt;/tt&gt;,
+ * or a &lt;tt&gt;SetOperation&lt;/tt&gt; call. If both are invoked, only one trimming body
+ * can be set.
+ * @param iTrimBody
+ * The pointer to the trimming body. 
+ */
+    virtual void SetTrim (CATBody * iTrimBody=NULL) = 0;
+
+/**
+ * Defines the type of result to be output for &lt;tt&gt;this&lt;/tt&gt; 
+ * CATTopExtrude operator.
+ * @param iBothResultRequired
+ * The type of result.
+ * &lt;dl&gt;&lt;dt&gt; &lt;tt&gt;CATBoolean(0)&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; &lt;tt&gt;GetResult&lt;/tt&gt; only returns the relimitated shape
+ * &lt;dt&gt;&lt;tt&gt;CATBoolean(1) &lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt; &lt;ul&gt;
+ *                    &lt;li&gt; &lt;tt&gt;GetResult&lt;/tt&gt; returns the relimitated shape
+ *                      &lt;li&gt; &lt;tt&gt;GetBooleanResult&lt;/tt&gt; returns the result of the Boolean operation
+ *                                                     between the relimited shape and the trimming body.
+ *                       &lt;/ul&gt;
+ * &lt;/dl&gt;
+ */
+    virtual void SetResultMode        (CATBoolean   iBothResultRequired=CATBoolean(0)) = 0;
+
+/**
+ * @nodoc
+ * Enables or disables the CXR1 shape selection mode.
+ */
+            void SetOldShapeRequested (CATBoolean iOldShapeOn = CATBoolean(1));
+
+/**
+ * @nodoc
+ * Enables the choice of the limitation algorithm.
+ * @param iMode
+ * Mode 1 just as Mode 2 plus SetOldShapeRequested(1).
+ * Mode 2 is the first enabled mode.
+ * Mode 3 has been enabled since the V5R6.
+ * Mode 4 has been enabled since the V5R7.
+ * Mode 5 has been enabled since the V5R10.
+ * Mode 6 has been enabled since the V5R11.
+ * @param iAutomaticDirectionInversion
+ * This parameter has an effect when one of the limit is a offset value and the second one is the contextual limit ( UP TO .. )
+ * Mode 0 : the contextual limit is searched according only to the extrusion direction.
+ * Mode 1 : enable to automatic revert the extrusion direction when no limit was found in the extrusion direction ( default mode ).
+ */
+    void SetRelimitationMode(short iMode = 2, short iAutomaticDirectionInversion = 1);
+
+/**
+ * @nodoc
+ * @param iPolarity
+ * CATBoolean(0) indicates a normal body polarity, an union operation adds matter and a
+ *               substract removes matter.
+ * CATBoolean(1) indicates a reversed body polarity, an union operation removes matter and a
+ *               substract adds matter.
+ */
+    void SetReversePolarity(CATBoolean iPolarity = CATBoolean(1));
+
+/**
+ * @nodoc
+ */
+    void UnsetCheckTopoTwist(CATBoolean iUnsetCheckTopoTwist = CATBoolean(1));
+
+#ifdef CATIACGMV5R23
+/**
+ * @nodoc
+ */
+    virtual CATBoolean GetAxisWasAutoInverted();
+#endif
+
+/**
+ * Enables or disables the operator&#x27;s thin-solid mode.  This mode allows you to input a
+ * wire-body profile that will be automatically thickened in a direction normal
+ * to the extrusion during the operation.  The result body will therefore be a solid.
+ * @param iThinSolidMode
+ * A value of TRUE enables thin-solid mode.
+ * @param iIsNeutralFiber
+ * A value of TRUE directs the operator to thicken equally on both sides of the profile.
+ * @param iThinSolidThickness
+ * The distance to thicken on each side of the profile.
+ * @param
+ * A list of wires within the profile for which the iThinSolidThickness values are used
+ * in the reverse order.
+ */
+    void SetThinSolidMode ( const CATBoolean   iThinSolidMode                           ,
+                            const CATBoolean   iIsNeutralFiber                          ,
+                            const double       iThinSolidThickness[2]                   ,
+                            ListPOfCATDomain * iWireListWithReverseThinSolidSide = NULL );
+
+/**
+ * Defines the simplication mode.
+ * @param iSimplify
+ * The simplication mode.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;CATBoolean(1)&lt;/tt&gt; to simplify as much as possible the faces of the 
+ * resulting body, &lt;tt&gt;CATBoolean(0)&lt;/tt&gt; otherwise. By default, no simplication is done.
+ */
+    void SetSimplification(CATBoolean iSimplify = CATBoolean(1));
+
+#ifdef  TEMP_CATFREEZEMODE
+/**
+ * Defines the state of the resulting body.
+ * @param iOnOrOff
+ * The state of the resulting body. 
+ */
+  void SetFreezeMode(CATBodyFreezeMode iOnOrOff);
+
+/**
+ * Returns the mode in which the resulting body is created.
+ * @return
+ * The state of the resulting body.
+ */
+  CATBodyFreezeMode GetFreezeMode()const;
+#endif
+
+/**
+ * @nodoc
+ * Do not use. 
+ */
+    virtual CATBoolean HasConsistentOperandes (CATLONG32 &amp;oNbError, CATError **&amp;oErrors) = 0;
+/**
+ * Checks the consistency of the input operands.
+ * @param ioNbError
+ * The number of detected problems.
+ * @param oErrors
+ * The array of the pointers to the detected errors. 
+ * &lt;br&gt;To delete by the caller, as well as the created errors. 
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; &lt;tt&gt;0&lt;/tt&gt; if a problem is detected, &lt;tt&gt;1&lt;/tt&gt; otherwise.
+ */
+    virtual CATBoolean CheckOperands (CATLONG32 &amp;oNbError, CATError **&amp;oErrors) = 0;
+    
+
+#ifdef CATIACGMR215CAA
+/**
+ * @nodoc
+ * Returns a pointer to a body equivalent to that which will be used by extrude after
+ * extrapolating, if the limit is an extrapolated &#x27;until&#x27; limit.
+ * @param iLimit
+ * The limit for which the extrapolation is to be done
+ * @return
+ * The pointer to the created body. If the limit is not an extrapolated &#x27;until&#x27; limit, the return will be NULL.
+ * If you do not want to keep this body, 
+ * use the @href CATICGMContainer#Remove method to remove it from the 
+ * geometric factory.
+ */
+
+    virtual CATBody * GetExtrapolatedLimitBody(CATTopLimit iLimit);
+
+/**
+ * @nodoc
+ * Sets journal behaviour. If set to 1, the profile face will be added as a parent of faces involved in 
+ * contextual limits. Also, CATCGMJournalInfoItem data will be added for faces for the start and end limits.
+ * @param iJournalMode
+ * New value of the journal mode
+ */
+
+    void SetJournalMode(short iJournalMode);
+#endif
+
+/**
+ * Returns a pointer to the body resulting from the Boolean operation between the extrusion and a trimming body. 
+ * &lt;br&gt;Available if &lt;tt&gt;SetResultMode(CATBoolean(1))&lt;/tt&gt; has been invoked.
+ * @return
+ * The pointer to the created body. 
+ * If you do not want to keep this body, 
+ * use the @href CATICGMContainer#Remove method to remove it from the 
+ * geometric factory, after the operator deletion.
+ */
+    CATBody * GetBooleanResult() const;
+
+/**
+ * Returns a pointer to the topological Boolean journal dedicated to 
+ * &lt;tt&gt;this&lt;/tt&gt; CATTopExtrude.
+ * &lt;br&gt;The journal only contains the items relative to the Boolean operation. Available 
+ * if &lt;tt&gt;SetResultMode(CATBoolean(1)) &lt;/tt&gt; has been invoked.
+ * @return
+ * The pointer to the topological journal.
+ */
+    CATCGMJournalList * GetBooleanJournal() const;
+
+/**
+ * Tests whether the trimming body is touched by the Boolean operation. 
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if it is touched, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+    CATBoolean IsResultInvariant() const;
+
+#ifndef CATIACGMR215CAA
+   /** @nodoc @nocgmitf CATCGMReplay */
+    static void LoadInOutput(CATCGMStream            &amp;ioStream,
+                             CATGeoFactory*          &amp;iFactory,
+                             CATTopData              &amp;ioTopData,
+                             CATBodyFreezeMode       &amp;iFreezeMode,
+                             //CATBoolean              &amp;iInvariantResult,
+                             CATBoolean              &amp;iOldShapeRequested,
+                             short                   &amp;iRelimitationMode,
+                             short                   &amp;iAutomaticDirectionInversion,
+                             CATBoolean              &amp;iReversePolarity,
+                             CATBoolean              &amp;iUnsetCheckTopoTwist,
+                             CATBoolean              &amp;iSimplify,
+                             CATLISTP(CATICGMObject) &amp;ioInputCopy,
+                             CATLISTP(CATICGMObject) &amp;ioInputNoCopy,
+                             CATBody*                &amp;ioOutputBody,
+                             CATBoolean                 *iThinSolidMode,
+                             CATBoolean                 *iIsNeutralFiber,
+                             double                     *iThinSolidThickness,
+                             ListPOfCATDomain         *iWireListWithReverseThinSolidSide);
+#endif
+  protected:
+    /** @nodoc CATCGMReplay */
+    void WriteInput(CATCGMStream &amp;ioStream);
+
+    /** @nodoc CATCGMReplay */
+    void RequireDefinitionOfInputAndOutputObjects();
+
+    /** @nodoc CATCGMReplay */
+    void WriteOutput(CATCGMStream &amp;ioStream);
+
+    /** @nodoc CATCGMReplay */
+    void Dump(CATCGMOutput &amp;os);
+
+    /** @nodoc CATCGMReplay */
+    void DumpOutput(CATCGMOutput &amp;os);
+
+    /** @nodoc CATCGMReplay */
+    CATCheckDiagnostic CheckOutput(CATCGMOutput &amp; os);
+
+    /** @nodoc CATCGMReplay */
+    CATBoolean ValidateOutput(CATCGMStream &amp;Str, CATCGMOutput &amp;os, int VersionNumber=1);
+
+    /** @nodoc */
+    void SetBooleanResult (CATBody * iBooleanResult);
+
+    /** @nodoc */
+    void SetBooleanJournal (CATCGMJournalList* iBooleanJournal);
+
+    /** @nodoc */
+    void SetInvariantResult (CATBoolean iInvariant);
+
+    /** @nodoc */
+    inline CATExtTopExtrude* GetTopExtrudeExtensible() const;
+};
+
+/** @nodoc */
+inline CATExtTopExtrude* CATTopExtrude::GetTopExtrudeExtensible() const
+{
+    if (!_Extensible) CATThrowForNullPointerReturnValue(NULL);
+    return (CATExtTopExtrude*) _Extensible;
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTopExtrapolWireOpe.html">← 上一页: CATTopExtrapolWireOpe.h</a></div>
+        <div><a href="CATTopPattern.html">下一页: CATTopPattern.h →</a></div>
+    </div>
+</body>
+</html>

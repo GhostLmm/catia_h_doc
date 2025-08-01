@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATModelForRep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATModelForRep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMaterialNotification.html">← 上一页: CATMaterialNotification.h</a></div>
+        <div><a href="CATModelIdentificator.html">下一页: CATModelIdentificator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATModelForRep_H
+#define CATModelForRep_H
+
+//
+//  copyright dassault systemes 2001
+//  --------------------------------
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ *  Base class for dialog help objects.
+ *  &lt;b&gt;Role:&lt;/b&gt; 
+ *  This class is a the main class (implementation) of a component that 
+ *  implements a visualization interface.
+ *  It is dedicated to hold a graphic representation of an object that is 
+ *  not part of the document, but is used to ease the dialog. This
+ *  representation is to be built outside and set to the component.
+ *  &lt;br&gt;&lt;br&gt;
+ *  For example, it can hold the representation of a local 3D-axis system to 
+ *  enable the end user to indicate an axis.
+ *  Such a component it can be put into the &lt;i&gt;CATISO&lt;/i&gt; to be displayed, and thus 
+ *  selectable. Converted as a @href CATPathElement, it can be put into the 
+ *  @href CATHSO, 
+ *  and @href CATPSO objects to be highlighted, and prehighlighted respectively.
+ *  &lt;br&gt;&lt;br&gt;
+ *  Since this class is a base class, do not use it directly. Use its 
+ *  derived classes instead:
+ *  &lt;ul&gt;
+ *  &lt;li&gt;@href CATModelForRep2D that implements CATI2DGeoVisu&lt;/li&gt;  
+ *  &lt;li&gt;@href CATModelForRep3D that implements CATI3DGeoVisu&lt;/li&gt;
+ *  &lt;/ul&gt;
+ */
+
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;list.h&quot;
+
+class CATRep;
+
+class ExportedByCATViz CATModelForRep : public CATBaseUnknown 
+{
+  CATDeclareClass;
+
+public:
+ 
+  virtual ~CATModelForRep();
+
+  /**
+   * @nodoc 
+   * Associates the CATModelForRep with the given representation iRep.
+   *
+   * @param iRep
+   *   the given representation which you want CATModelForRep to be associated with.
+   *   Once the representation iRep has been associated to a CATModelForRep its lifecycle is
+   *   managed by the CATVisManager.
+   */
+  virtual void SetRep (CATRep * iRep);
+
+  /**
+   * Returns a pointer to the graphic representation.
+   */
+  virtual CATRep *GiveRep();
+
+  /**
+   * @nodoc
+   * Sets the representation associated to this object to NULL.
+   */
+  void UnreferenceRep(void);
+
+  /** @nodoc */
+  void SetSubElementList(const list&lt;int&gt; &amp;subElement);
+  /** @nodoc */
+  const list&lt;int&gt; &amp; GetSubElementList() const;
+
+
+protected:
+  /** @nodoc*/
+  CATModelForRep();
+
+private:
+  CATRep *_EnclosedRep;
+  list&lt;int&gt;  _subElementList;
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMaterialNotification.html">← 上一页: CATMaterialNotification.h</a></div>
+        <div><a href="CATModelIdentificator.html">下一页: CATModelIdentificator.h →</a></div>
+    </div>
+</body>
+</html>

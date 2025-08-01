@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATWorkshopConfigurationFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATWorkshopConfigurationFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATWorkbenchTransitionCmd.html">← 上一页: CATWorkbenchTransitionCmd.h</a></div>
+        <div><a href="CATWorkshopFactory.html">下一页: CATWorkshopFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/**
+ * @fullreview ERS-CVE 02:02:12
+ * @error UDOO Y work non remis a NULL apres Release
+ */
+#ifndef CATToolbarFactory_h
+#define CATToolbarFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &lt;CD0FRAME.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CATUnicodeString.h&gt;
+
+/**
+* Base class to create a workbench factory.
+* &lt;b&gt;Role&lt;/b&gt;: To create a factory class for your workbench, 
+* use the macro @href CATDeclareConfigurationFactory for the header file (.h) and   
+* the @href CATImplementConfigurationFactory for the source file (.cpp). 
+* @see CATIWorkbench
+*/
+class ExportedByCD0FRAME CATWorkshopConfigurationFactory :
+  public CATBaseUnknown
+{
+public:
+  
+  /** @nodoc */
+  CATWorkshopConfigurationFactory();
+  virtual ~CATWorkshopConfigurationFactory();
+  
+  /** @nodoc */
+  int IsAuthorized(const char *) const;
+  
+  /** @nodoc */
+  virtual unsigned char        Support(const CATUnicodeString &amp; EditName) = 0;
+  /** @nodoc */
+  virtual CATInterfaceObject * Create(const CATUnicodeString &amp; ItfName) = 0;
+};
+/**
+* Defines the header file of a workbench factory class.
+* &lt;b&gt;Role&lt;/b&gt;: To create an instance of your workbench, you must define a factory 
+* interface which derives from CATIGenericFactory.&lt;br&gt;
+* This interface is implemented using a factory class as an extension of 
+* the CATApplicationFrame class and is created by the two macros &lt;tt&gt;CATDeclareConfigurationFactory&lt;/tt&gt; 
+* and @href CATImplementConfigurationFactory.  
+* @param Config
+*    The name of the workbench&#x27;s class.This class must implement an interface which 
+*    derives from @href CATIWorkbench 
+*    &lt;br&gt;
+*    &lt;br&gt;
+* &lt;b&gt;Example:&lt;/b&gt; &lt;tt&gt;MyWorkbenchFactory&lt;/tt&gt; is a class which implements the &lt;tt&gt;IMyWorkbenchFactory&lt;/tt&gt; 
+*    factory interface, creates the &lt;tt&gt;MyWorkbench&lt;/tt&gt; workbench and is defined in the
+*    shared library myModule.dll
+* &lt;pre&gt; 
+* 1) The header file &lt;tt&gt;MyWorkbenchFactory.h&lt;/tt&gt; must contain these two lines:
+*
+*       #include &quot;CATWorkshopConfigurationFactory.h&quot;
+*       &lt;b&gt;CATDeclareConfigurationFactory&lt;/b&gt;(MyWorkbench);
+*
+* 2) The source file &lt;tt&gt;MyWorkbenchFactory.cpp&lt;/tt&gt; must contain these lines:
+*
+*       #include &quot;MyWorkbench.h&quot;
+*       #include &quot;MyWorkbenchFactory.h&quot;
+*
+*       #include &quot;TIE_IMyWorkbenchFactory.h&quot;
+*
+*       CATImplementConfigurationFactory(MyWorkbench, IMyWorkbenchFactory);
+*
+* 3) To declare that CATApplicationFrame implements IMyWorkbenchFactory,  
+*       insert the following line in the &lt;b&gt;interface dictionary&lt;/b&gt;:
+*
+*       CATApplicationFrame    IMyWorkbenchFactory  myModule 
+*
+* 4) To declare that the factory creates an instance of the MyWorkbench class, 
+*       insert the following line in the &lt;b&gt;factory dictionary&lt;/b&gt;:
+* 
+*       MyWorkbench            IMyWorkbenchFactory      
+* &lt;/pre&gt;
+* @see CATImplementConfigurationFactory, CATIWorkbench 
+*/
+#define CATDeclareConfigurationFactory(Config)                     \
+class Config##Factory : public CATWorkshopConfigurationFactory     \
+{                                                                  \
+  CATDeclareClass;                                                 \
+                                                                   \
+public:                                                            \
+                                                                   \
+  Config##Factory();                                               \
+  ~Config##Factory();                                              \
+                                                                   \
+  unsigned char        Support(const CATUnicodeString &amp; EditName); \
+  CATInterfaceObject * Create(const CATUnicodeString &amp; ItfName);   \
+};
+
+#ifndef CATFrmMkStringFromDefine
+#define CATFrmMkStringFromDefine1(x) #x
+#define CATFrmMkStringFromDefine(x) CATFrmMkStringFromDefine1(x)
+#endif
+
+/**
+* Defines the source file of the workbench factory class.
+* &lt;b&gt;Role&lt;/b&gt;: To create an instance of your workbench, you must define a factory 
+* interface which derives from CATIGenericFactory.&lt;br&gt;
+* This interface is implemented using a factory class as an extension of 
+* the CATApplicationFrame class and is created by the two macros @href CATDeclareConfigurationFactory 
+* and &lt;tt&gt;CATImplementConfigurationFactory&lt;/tt&gt;.  
+*
+* @param Config
+*    The name of the workbench&#x27;s class. This class must implement an interface which 
+*    derives from @href CATIWorkbench
+* @param CFactory
+*    The name of the workbench factory interface deriving from CATIGenericFactory. 
+*    &lt;br&gt;
+*    &lt;br&gt;
+* &lt;b&gt;Example:&lt;/b&gt; &lt;tt&gt;MyWorkbenchFactory&lt;/tt&gt; is a class which implements the &lt;tt&gt;IMyWorkbenchFactory&lt;/tt&gt; 
+*    factory interface, creates the &lt;tt&gt;MyWorkbench&lt;/tt&gt; workbench and is defined in the
+*    shared library myModule.dll
+* &lt;pre&gt; 
+* 1) The header file &lt;tt&gt;MyWorkbenchFactory.h&lt;/tt&gt; must contain these two lines:
+*
+*       #include &quot;CATWorkshopConfigurationFactory.h&quot;
+*       CATDeclareConfigurationFactory(MyWorkbench);
+*
+* 2) The source file &lt;tt&gt;MyWorkbenchFactory.cpp&lt;/tt&gt; must contain these lines:
+*
+*       #include &quot;MyWorkbench.h&quot;
+*       #include &quot;MyWorkbenchFactory.h&quot;
+*
+*       #include &quot;TIE_IMyWorkbenchFactory.h&quot;
+*
+*       &lt;b&gt;CATImplementConfigurationFactory&lt;/b&gt;(MyWorkbench, IMyWorkbenchFactory);
+*
+* 3) To declare that CATApplicationFrame implements IMyWorkbenchFactory,  
+*       insert the following line in the &lt;b&gt;interface dictionary&lt;/b&gt;:
+*
+*       CATApplicationFrame    IMyWorkbenchFactory  myModule 
+*
+* 4) To declare that the factory creates an instance of the MyWorkbench class, 
+*       insert the following line in the &lt;b&gt;factory dictionary&lt;/b&gt;:
+* 
+*       MyWorkbench            IMyWorkbenchFactory      
+* &lt;/pre&gt;
+* @see CATDeclareConfigurationFactory, CATIWorkbench 
+*/
+#define CATImplementConfigurationFactory(Config, CFactory)                  \
+TIE_##CFactory(Config##Factory);                                            \
+                                                                            \
+CATImplementKindOf(Config##Factory, CodeExtension,                          \
+		   CATWorkshopConfigurationFactory, CATApplicationFrame);               \
+                                                                            \
+Config##Factory::Config##Factory()                                          \
+{}                                                                          \
+                                                                            \
+Config##Factory::~Config##Factory()                                         \
+{}                                                                          \
+                                                                            \
+unsigned char Config##Factory::Support(const CATUnicodeString &amp; EditName)   \
+{                                                                           \
+  const CATUnicodeString editType = #Config;                                \
+  return (editType == EditName);                                            \
+}                                                                           \
+                                                                            \
+CATInterfaceObject * Config##Factory::Create                                \
+  (const CATUnicodeString &amp; ItfName)                                        \
+{                                                                           \
+  if (strcmp (CATFrmMkStringFromDefine(_MK_FWNAME_), &quot;External&quot;) &amp;&amp;         \
+      !IsAuthorized(CATFrmMkStringFromDefine(_MK_FWNAME_)))                 \
+    return NULL;                                                            \
+  CATBaseUnknown * work = new Config;                                       \
+  CATInterfaceObject * inter = work-&gt;QueryInterface(ItfName.CastToCharPtr()); \
+  work-&gt;Release(); work = NULL;      \
+  return inter ; \
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATWorkbenchTransitionCmd.html">← 上一页: CATWorkbenchTransitionCmd.h</a></div>
+        <div><a href="CATWorkshopFactory.html">下一页: CATWorkshopFactory.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DFaceGP.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DFaceGP.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DEdgeGP.html">← 上一页: CAT3DEdgeGP.h</a></div>
+        <div><a href="CAT3DFixedArrowGP.html">下一页: CAT3DFixedArrowGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DFaceGP_H
+#define CAT3DFaceGP_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//******************************************************************************
+//  Inheritance:
+//  ------------
+//                CAT3DFaceGP
+//                  CAT3DBoundingGP
+//                    CATGraphicPrimitive
+//                      CATBaseUnknown (SYSTEM framework)
+//
+//******************************************************************************
+
+#include &quot;CATViz.h&quot;
+#include &quot;CAT3DBoundingGP.h&quot;
+#include &quot;CATBoundingNormal.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATSupport.h&quot;
+#include &quot;CATVizGlobals.h&quot;
+#include &quot;CATVizMacForMetaClass.h&quot;
+
+
+class CATStreamer;
+class CATTextureCoordinate;
+class CATViz3DFace;
+class CATVizVertexBuffer;
+
+/**
+ * Class to create the graphic primitive of a 3D face.&lt;br&gt;
+ * &lt;b&gt;Role&lt;/b&gt;: Class to describe the standard tessellation of a face.
+ * A face is made of triangles, triangle strips, and triangle fans.
+ * This is one of the most common encountered graphic primitive.&lt;br&gt;
+ *  Main Methods:&lt;br&gt;
+ *    Drawing and texturing.&lt;br&gt;
+ *    Retrieve the tessellation parameters.
+ */
+class ExportedByCATViz CAT3DFaceGP : public CAT3DBoundingGP
+{
+  
+  friend class CATMarshallable3DFaceGP;
+  friend class CATDmuStreamSurfacicRep;
+  friend class CATSurfacicRep;
+  CATDeclareClass;
+  CATVizDeclareClass;
+  
+  
+  public :
+
+  /**
+   * Default constructor.
+   */
+    CAT3DFaceGP (void);
+
+  /**
+   * Constructs a 3D face graphic primitive from the face vertices coordinates list,
+   * and their texture coordinates.  Relying on the allocation mode, parameter data may have to be freed
+   * after the face is created. Set, strip and fan information is always
+   * duplicated at the face creation. Texture information can be provided
+   * at this stage when the texture coordinates have already been computed.
+   * @param iVertices
+   *    Array made of vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the face vertices number.
+   * @param iVerticesArraySize
+   *    The size, in floats, of the &lt;tt&gt;iVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   * @param iNormals
+   *    Array made of normals coordinates. It is organized like &lt;tt&gt;iVertices&lt;/tt&gt; : one vertex has exactly
+   *    one normal at the same field entry.
+   * @param iNormalsArraySize
+   *    The size, in floats, of the &lt;tt&gt;iNormal&lt;/tt&gt; array. Equal to three times the number
+   *    of normals.
+   * @param iTriangleIndices
+   *    This array is used to store the single triangles vertices. Each of its field represents
+   *    a vertex index in the &lt;tt&gt;iVertices&lt;/tt&gt; array.
+   *    As we find, in the &lt;tt&gt;iVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    So, the first three indices of the &lt;tt&gt;iTriangleIndices&lt;/tt&gt; array, are the three vertices indices of the face first
+   *    single triangle.
+   *    &lt;pre&gt;
+   *
+   *                 -----------------       
+   *                | iTriangleIndices|
+   *                 -----------------
+   *                |       i00       |   }
+   *                |       i01       |   } triangle 0 defined by index i00, i01 and i02
+   *                |       i02       |   }
+   *                |        .        |
+   *                |        .        |
+   *                |       ij0       |   }
+   *                |       ij1       |   } triangle j defined by index ij0, ij1 and ij2. 
+   *                |       ij2       |   }
+   *                |        .        |
+   *                |        .        |
+   *                 -----------------
+   *
+   *   &lt;/pre&gt;
+   *    For example, index ij0 enables access to the face j-th single triangle first vertex,
+   *    which coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal has coordinates Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   * @param iNbTriangle
+   *    The number of single triangles in the face. 
+   * @param iTriangleStripIndices
+   *    Array used to store the face triangles strips vertices. Each field contains a
+   *    vertex index, in the &lt;tt&gt;iVertices&lt;/tt&gt; array.  As, we find, in the
+   *    iVertices array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | iTriangleStripIndices|
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle strip defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle strip j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th strip first vertex 
+   *    wich coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   * @param iNbTriangleStrip
+   *    The number of face triangles strips.
+   * @param iNbVertexPerTriangleStrip
+   *    Array containing the number of vertices for each face triangles strip.
+   *    The size of this array is equal to &lt;tt&gt;iNbTriangleStrip&lt;/tt&gt;. For example, the first strip
+   *    is made with &lt;tt&gt;iNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               |iNbVertexPerTriangleStrip |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle strips(iNbTriangleStrip)
+   *               |             nm           |   nm = number of vertices of the m-th strip. (iNbVertexPerTriangleStrip[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param iTriangleFanIndices
+   *    Array used to store the face triangles fans vertices. Each field contains a
+   *    vertex index, in the iVertices array.  As, we find, in the
+   *    &lt;tt&gt;iVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | iTriangleFanIndices   |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle fan defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle fan j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th fan first vertex
+   *    wich coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   *    Each ij0, j in [0, jn], represents the j-th fan center.
+   * @param iNbTriangleFan
+   *    The number of face triangles fans.
+   * @param iNbVertexPerTriangleFan
+   *    Array containing the number of vertices for each face triangles fan.
+   *    The size of this array is equal to &lt;tt&gt;iNbTriangleFan&lt;/tt&gt;. For example, the first fan
+   *    is made with &lt;tt&gt;iNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               | iNbVertexPerTriangleFan  |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle fans(iNbTriangleFan)
+   *               |             nm           |   nm = number of vertices of the m-th fan. (iNbVertexPerTriangleFan[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param iTextureCoord
+   *    Array of texture coordinates. Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   *    Because vertex and normal information is being sorted at the face
+   *    creation, texture coordinates are to be generated with the tessellation
+   *    parameters that are retrieved after the face creation (ie with
+   *    properly translated indices). Nevertheless, a mapping operator can be
+   *    applied at anytime, when the face is the owner of it&#x27;s vertex data.
+   *    If computed before the face creation, texture coordinates can be given
+   *    at the face construction method. In this case, coordinates order is
+   *    rearranged in parallel with vertices coordinates.
+   * @param iTextureFormat
+   *    &lt;tt&gt;iTextureFormat&lt;/tt&gt; is the number of fields associated to one vertex in the &lt;tt&gt;iTextureCoord&lt;/tt&gt; array.
+   *    It is also the number of texture coordinates associated to each vertex.
+   *    Indeed, each vertex has associated coordinates in the texture map. The
+   *    number of coordinates depends on the map dimension: the texture map
+   *    may be in 1D, 2D or 3D. 
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;1&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a one dimension map. Each vertex has a single associated texture coordinate&lt;/dd&gt;
+   *      &lt;dt&gt;2&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a two-dimension map. Each vertex has two associated texture coordinates&lt;/dd&gt;
+   *      &lt;dt&gt;3&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a three-dimension map. Each vertex has three associated texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   * @param iAllocMode
+   *    The CAT3DFaceGP, and it&#x27;s planar inherited object, the CAT3DPlanarFaceGP
+   *    have allocation flags ruling their memory comsumption for vertices and
+   *    normals:
+   *    The default value is ALLOCATE_VERTICES | ALLOCATE_NORMALS.
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;ALLOCATE_VERTICES&lt;/dt&gt;
+   *        &lt;dd&gt;Vertex array is the property of the face and
+   *        is to be deleted with it.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;GET_VERTICES&lt;/dt&gt;
+   *        &lt;dd&gt;Vertex array is not duplicated at the face creation, but
+   *        is to be deleted during the object deletion.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; ALLOCATE_NORMALS&lt;/dt&gt;
+   *        &lt;dd&gt;Normal array is the property of the face and
+   *        is to be deleted with it. Planar faces always allocate their normals.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; GET_NORMALS&lt;/dt&gt;
+   *        &lt;dd&gt;Normal array is not duplicated at the face creation
+   *        although, as for vertices, it will be destroyed in the same time the object
+   *        is deleted.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; ALLOCATE_TEXTURES&lt;/dt&gt;
+   *        &lt;dd&gt;Texture coordinates array is the property of the face and is to be deleted with it.
+   *        This mode is suitable for computing new texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; GET_TEXTURES&lt;/dt&gt;
+   *        &lt;dd&gt;Texture coordinates array is not duplicated at the face creation
+   *        although, as for vertices, it will be destroyed in the same time the object
+   *        is deleted. In this mode, the texture format is 3.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   */
+  
+  //    Marshalling this object will fail when reading it back when data is not
+  //    holded by the object. In this case, an other object should take in
+  //    charge the unmarshalling step of the face from an external point of view
+  //    and resolve references problems.
+    CAT3DFaceGP (const float  iVertices[],
+                 const int    iVerticesArraySize,
+                 const float  iNormals[],
+                 const int    iNormalsArraySize,
+                 const int    iTriangleIndices[],
+                 const int    iNbTriangle,
+                 const int    iTriangleStripIndices[],
+                 const int    iNbTriangleStrip,
+                 const int    iNbVertexPerTriangleStrip[],
+                 const int    iTriangleFanIndices[],
+                 const int    iNbTriangleFan,
+                 const int    iNbVertexPerTriangleFan[],
+		           const float *iTextureCoord=NULL,
+                 const int    iTextureFormat=3,
+		           const char   iAllocMode=ALLOCATE_VERTICES | ALLOCATE_NORMALS | ALLOCATE_TEXTURES,
+	              const float  *tanBinormal=NULL);
+    
+  /**
+   * Constructs a 3D face graphic primitive from the face vertices coordinates list,
+   * and their texture coordinates.  Relying on the allocation mode, parameter data may have to be freed
+   * after the face is created. Set, strip and fan information is always
+   * duplicated at the face creation. Texture information can be provided
+   * at this stage when the texture coordinates have already been computed.
+   * @param iVertices
+   *    Array made of vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the face vertices number.
+   * @param iVerticesArraySize
+   *    The size, in floats, of the &lt;tt&gt;iVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   * @param iNormals
+   *    Array made of normals coordinates. It is organized like &lt;tt&gt;iVertices&lt;/tt&gt; : one vertex has exactly
+   *    one normal at the same field entry.
+   * @param iNormalsArraySize
+   *    The size, in floats, of the &lt;tt&gt;iNormal&lt;/tt&gt; array. Equal to three times the number
+   *    of normals.
+   * @param iTriangleIndices
+   *    This array is used to store the single triangles vertices. Each of its field represents
+   *    a vertex index in the &lt;tt&gt;iVertices&lt;/tt&gt; array.
+   *    As we find, in the &lt;tt&gt;iVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    So, the first three indices of the &lt;tt&gt;iTriangleIndices&lt;/tt&gt; array, are the three vertices indices of the face first
+   *    single triangle.
+   *    &lt;pre&gt;
+   *
+   *                 -----------------       
+   *                | iTriangleIndices|
+   *                 -----------------
+   *                |       i00       |   }
+   *                |       i01       |   } triangle 0 defined by index i00, i01 and i02
+   *                |       i02       |   }
+   *                |        .        |
+   *                |        .        |
+   *                |       ij0       |   }
+   *                |       ij1       |   } triangle j defined by index ij0, ij1 and ij2. 
+   *                |       ij2       |   }
+   *                |        .        |
+   *                |        .        |
+   *                 -----------------
+   *
+   *   &lt;/pre&gt;
+   *    For example, index ij0 enables access to the face j-th single triangle first vertex,
+   *    which coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal has coordinates Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   * @param iNbTriangle
+   *    The number of single triangles in the face. 
+   * @param iTriangleStripIndices
+   *    Array used to store the face triangles strips vertices. Each field contains a
+   *    vertex index, in the &lt;tt&gt;iVertices&lt;/tt&gt; array.  As, we find, in the
+   *    iVertices array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | iTriangleStripIndices|
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle strip defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle strip j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th strip first vertex 
+   *    wich coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   * @param iNbTriangleStrip
+   *    The number of face triangles strips.
+   * @param iNbVertexPerTriangleStrip
+   *    Array containing the number of vertices for each face triangles strip.
+   *    The size of this array is equal to &lt;tt&gt;iNbTriangleStrip&lt;/tt&gt;. For example, the first strip
+   *    is made with &lt;tt&gt;iNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               |iNbVertexPerTriangleStrip |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle strips(iNbTriangleStrip)
+   *               |             nm           |   nm = number of vertices of the m-th strip. (iNbVertexPerTriangleStrip[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param iTriangleFanIndices
+   *    Array used to store the face triangles fans vertices. Each field contains a
+   *    vertex index, in the iVertices array.  As, we find, in the
+   *    &lt;tt&gt;iVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | iTriangleFanIndices   |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle fan defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle fan j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th fan first vertex
+   *    wich coordinates are X = iVertices[ij0], Y = iVertices[ij0 + 1] and Z = iVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = iNormals[ij0], Ny = iNormals[ij0 + 1] and Nz = iNormals[ij0 + 2].
+   *    Each ij0, j in [0, jn], represents the j-th fan center.
+   * @param iNbTriangleFan
+   *    The number of face triangles fans.
+   * @param iNbVertexPerTriangleFan
+   *    Array containing the number of vertices for each face triangles fan.
+   *    The size of this array is equal to &lt;tt&gt;iNbTriangleFan&lt;/tt&gt;. For example, the first fan
+   *    is made with &lt;tt&gt;iNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               | iNbVertexPerTriangleFan  |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle fans(iNbTriangleFan)
+   *               |             nm           |   nm = number of vertices of the m-th fan. (iNbVertexPerTriangleFan[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param iTextureCoord
+   *    Array of texture coordinates. Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   *    Because vertex and normal information is being sorted at the face
+   *    creation, texture coordinates are to be generated with the tessellation
+   *    parameters that are retrieved after the face creation (ie with
+   *    properly translated indices). Nevertheless, a mapping operator can be
+   *    applied at anytime, when the face is the owner of it&#x27;s vertex data.
+   *    If computed before the face creation, texture coordinates can be given
+   *    at the face construction method. In this case, coordinates order is
+   *    rearranged in parallel with vertices coordinates.
+   * @param iTextureFormat
+   *    &lt;tt&gt;iTextureFormat&lt;/tt&gt; is the number of fields associated to one vertex in the &lt;tt&gt;iTextureCoord&lt;/tt&gt; array.
+   *    It is also the number of texture coordinates associated to each vertex.
+   *    Indeed, each vertex has associated coordinates in the texture map. The
+   *    number of coordinates depends on the map dimension: the texture map
+   *    may be in 1D, 2D or 3D. 
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;1&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a one dimension map. Each vertex has a single associated texture coordinate&lt;/dd&gt;
+   *      &lt;dt&gt;2&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a two-dimension map. Each vertex has two associated texture coordinates&lt;/dd&gt;
+   *      &lt;dt&gt;3&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a three-dimension map. Each vertex has three associated texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   * @param iAllocMode
+   *    The CAT3DFaceGP, and it&#x27;s planar inherited object, the CAT3DPlanarFaceGP
+   *    have allocation flags ruling their memory comsumption for vertices and
+   *    normals:
+   *    The default value is ALLOCATE_VERTICES | ALLOCATE_NORMALS.
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;ALLOCATE_VERTICES&lt;/dt&gt;
+   *        &lt;dd&gt;Vertex array is the property of the face and
+   *        is to be deleted with it.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;GET_VERTICES&lt;/dt&gt;
+   *        &lt;dd&gt;Vertex array is not duplicated at the face creation, but
+   *        is to be deleted during the object deletion.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; ALLOCATE_NORMALS&lt;/dt&gt;
+   *        &lt;dd&gt;Normal array is the property of the face and
+   *        is to be deleted with it. Planar faces always allocate their normals.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; GET_NORMALS&lt;/dt&gt;
+   *        &lt;dd&gt;Normal array is not duplicated at the face creation
+   *        although, as for vertices, it will be destroyed in the same time the object
+   *        is deleted.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; ALLOCATE_TEXTURES&lt;/dt&gt;
+   *        &lt;dd&gt;Texture coordinates array is the property of the face and is to be deleted with it.
+   *        This mode is suitable for computing new texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *   &lt;dl&gt;
+   *      &lt;dt&gt; GET_TEXTURES&lt;/dt&gt;
+   *        &lt;dd&gt;Texture coordinates array is not duplicated at the face creation
+   *        although, as for vertices, it will be destroyed in the same time the object
+   *        is deleted. In this mode, the texture format is 3.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   */
+
+  //    Marshalling this object will fail when reading it back when data is not
+  //    holded by the object. In this case, an other object should take in
+  //    charge the unmarshalling step of the face from an external point of view
+  //    and resolve references problems.
+    CAT3DFaceGP (const float  iVertices[],
+                 const int    iVerticesArraySize,
+                 const float  iNormals[],
+                 const int    iNormalsArraySize,
+                 const int    iTriangleIndices[],
+                 const int    iNbTriangle,
+                 const int    iTriangleStripIndices[],
+                 const int    iNbTriangleStrip,
+                 const int    iNbVertexPerTriangleStrip[],
+                 const int    iTriangleFanIndices[],
+                 const int    iNbTriangleFan,
+                 const int    iNbVertexPerTriangleFan[],
+                  const float *iTextureCoord,
+                 const int    iTextureFormat,
+		           const char   iAllocMode,
+	              const float  *tanBinormal,
+                  const float iToleranceScale);
+
+  /**
+   *@nodoc
+   */
+    virtual void Stream(CATStreamer&amp; oStr,int iSavetype=0);
+
+  /**
+   * @nodoc
+   */
+    virtual void UnStream(CATStreamer&amp; iStr);
+
+  /**
+   * Retrieves the tessellation information from the face.&lt;br&gt;
+   * &lt;b&gt;Role&lt;/b&gt;: As this method is designed to return values on its
+   * parameters, it has to be called like this :&lt;br&gt;
+   * &lt;tt&gt;&lt;pre&gt;
+   * int allocate;
+   * float * vertices;
+   * ...
+   * Get(&amp;allocate, &amp;vertices, ...);
+   * &lt;/pre&gt;&lt;/tt&gt;&lt;br&gt;
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: Get() only
+   *    retrieves references on stored data.
+   * @param oVertices
+   *    Retrieves an array made of face vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the face vertices number.
+   * @param oVerticesArraySize
+   *    Retrieves the size, in floats, of the &lt;tt&gt;oVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   *    If information on vertices is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   * @param oNormals
+   *    Retrieves an array made of normals coordinates. It is organized as &lt;tt&gt;oVertices&lt;/tt&gt; : one vertex has exactly
+   *    one normal at the same field entry.
+   * @param oNormalsArraySize
+   *    Retrieves The size, in floats, of the &lt;tt&gt;oNormal&lt;/tt&gt; array. Equal to three times the number
+   *    of normals.
+   *    If information on normals is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   * @param oTriangleIndices
+   *    Retrieves the array used to store the single triangles vertices. Each of its field represents
+   *    a vertex index, in the &lt;tt&gt;oVertices&lt;/tt&gt; array.
+   *    As,  we find, in the &lt;tt&gt;*oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    So, the first three indices of the *oTriangleIndices array, are the indices of the face first
+   *    single triangle three vertices.
+   *    &lt;pre&gt;
+   *
+   *                 -----------------       
+   *                |*oTriangleIndices |
+   *                 -----------------
+   *                |       i00       |   }
+   *                |       i01       |   } triangle 0 defined by index i00, i01 and i02
+   *                |       i02       |   }
+   *                |        .        |
+   *                |        .        |
+   *                |       ij0       |   }
+   *                |       ij1       |   } triangle j defined by index ij0, ij1 and ij2. 
+   *                |       ij2       |   }
+   *                |        .        |
+   *                |        .        |
+   *                 -----------------
+   *
+   *   &lt;/pre&gt;
+   *    For example, index ij0 enables access to the face j-th single triangle first vertex,
+   *    which coordinates are X = *oVertices[ij0], Y = *oVertices[ij0+1] and Z = *oVertices[ij0+2], and
+   *    which normal has coordinates Nx = *oNormals[ij0], Ny = *oNormals[ij0+1] and Nz = *oNormals[ij0+2].
+   * @param oNbTriangle
+   *    Retrieves the number of single triangles in the face. 
+   * @param oTriangleStripIndices
+   *    Retrieves the array used to store the face triangles strips vertices. Each field contains a
+   *    vertex index, belonging to one of the strips, in the oVertices array.  As, we find, in the
+   *    &lt;tt&gt;oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | oTriangleStripIndices |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle strip defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle strip j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th strip first vertex 
+   *    wich coordinates are X = *oVertices[ij0], Y = *oVertices[ij0 + 1] and Z = *oVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = *oNormals[ij0], Ny = *oNormals[ij0 + 1] and Nz = *oNormals[ij0 + 2].
+   * @param oNbTriangleStrip
+   *    Retrieves the number of face triangles strips.
+   * @param oNbVertexPerTriangleStrip
+   *    Retrieves an array containing the number of vertices for each face triangles strip.
+   *    The size of this array is equal to &lt;tt&gt;*oNbTriangleStrip&lt;/tt&gt;. For example, the first strip
+   *    is made with &lt;tt&gt;*oNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               |*oNbVertexPerTriangleStrip|
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle strips(*oNbTriangleStrip)
+   *               |             nm           |   nm = number of vertices of the m-th strip. (*oNbVertexPerTriangleStrip[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   * @param oTriangleFanIndices
+   *    Retrieves the array used to store the face triangles fans vertices. Each field contains a
+   *    vertex index, belonging to one of the fans, in the &lt;tt&gt;oVertices&lt;/tt&gt; array.  As, we find, in the
+   *    &lt;tt&gt;oVertices&lt;/tt&gt; array, the XYZ coordinates for each
+   *    vertex, the indices used to designate the vertices are multiples of three.
+   *    &lt;pre&gt;
+   *
+   *
+   *                   ----------------------
+   *                  | *oTriangleFanIndices  |
+   *                   ----------------------
+   *                  |          i00         |   }
+   *                  |          i01         |   } first triangle fan defined
+   *                  |           .          |   } by the first n1 indices
+   *                  |           .          |   }
+   *                  |          i0n1        |   }
+   *                  |           .          |
+   *                  |           .          |
+   *                  |           .          |   
+   *                  |          ij0         |   }
+   *                  |          ij1         |   }
+   *                  |           .          |   } triangle fan j
+   *                  |           .          |   } with nj vertices
+   *                  |          ijnj        |   }
+   *                   ----------------------
+   *
+   *
+   *    &lt;/pre&gt; 
+   *    For example, index ij0 allows to access to the face j-th fan first vertex
+   *    wich coordinates are X = *oVertices[ij0], Y = *oVertices[ij0 + 1] and Z = *oVertices[ij0 + 2], and
+   *    which normal coordinates are Nx = *oNormals[ij0], Ny = *oNormals[ij0 + 1] and Nz = *oNormals[ij0 + 2].
+   *    Each ij0, j in [0, jn], represents the j-th fan center.
+   * @param oNbTriangleFan
+   *    Retrieves the number of face triangles fans.
+   * @param oNbVertexPerTriangleFan
+   *    Retrieves the array containing the number of vertices for each face triangles fan.
+   *    The size of this array is equal to &lt;tt&gt;*oNbTriangleFan&lt;/tt&gt;. For example, the first fan
+   *    is made with &lt;tt&gt;*oNbVertexPerTriangleStrip[0]&lt;/tt&gt; vertices.
+   *    &lt;pre&gt;
+   *                --------------------------
+   *               | *oNbVertexPerTriangleFan |
+   *                --------------------------
+   *               |             n1           |
+   *               |             .            |
+   *               |             .            |   m = Number of triangle fans(*oNbTriangleFan)
+   *               |             nm           |   nm = number of vertices of the m-th fan. (*oNbVertexPerTriangleFan[m]
+   *                --------------------------    
+   *
+   *   &lt;/pre&gt;
+   */
+    void Get (int    * oAllocate,
+	           float ** oVertices,
+	           int    * oVerticesArraySize,
+	           float ** oNormals,
+	           int    * oNormalsArraySize,
+	           int   ** oTriangleIndices,
+	           int    * oNbTriangle,
+	           int   ** oTriangleStripIndices,
+	           int    * oNbTriangleStrip,
+	           int   ** oNbVertexPerTriangleStrip,
+	           int   ** oTriangleFanIndices,
+	           int    * oNbTriangleFan,
+	           int   ** oNbVertexPerTriangleFan);
+  
+  /** 
+   * @nodoc
+   */ 
+    void Get (int    * oAllocate,
+	           float ** oVertices,
+	           int    * oVerticesArraySize,
+	           float ** oNormals,
+	           int    * oNormalsArraySize,
+	           int   ** oTriangleIndices,
+	           int    * oNbTriangle,
+	           int   ** oTriangleStripIndices,
+	           int    * oNbTriangleStrip,
+	           int   ** oNbVertexPerTriangleStrip,
+	           int   ** oTriangleFanIndices,
+	           int    * oNbTriangleFan,
+	           int   ** oNbVertexPerTriangleFan,
+              void  ** oRenderData);
+
+  /**
+   * Retrieves face vertices.&lt;br&gt;
+   * &lt;b&gt;Role&lt;/b&gt;: As this method is designed to return values on its
+   * parameters, it must be called like this :&lt;br&gt;
+   * &lt;tt&gt;&lt;pre&gt;
+   * int allocate;
+   * float * vertices;
+   * ...
+   * GetVertices(&amp;allocate, &amp;vertices, ...);
+   * &lt;/pre&gt;&lt;/tt&gt;&lt;br&gt;
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: &lt;tt&gt;GetVertices&lt;/tt&gt; only
+   *    retrieves references on stored data.
+   * @param oVertices
+   *    Retrieves an array made of face vertices coordinates: XYZXYZXYZ...
+   *    Its size is equal to three times the face vertices number.
+   * @param oVerticesArraySize
+   *    Retrieves the size, in floats, of the &lt;tt&gt;oVertices&lt;/tt&gt; array. Equal to three times the
+   *    vertices number.
+   *    If information on vertices is shared with another element,
+   *    returned size for this parameter is equal to 0.
+   */
+    virtual void GetVertices (int    * oAllocate,
+			                            float ** oVertices,
+			                            int    * oVerticesArraySize);
+
+  /**
+   * Tests whether the face is owner of its vertices informations.
+   * @return
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;The face is owner of its vertices informations&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;The face is not owner of its vertices informations&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   */
+    inline int HasVertices (void);
+  
+  /**
+   * Tests whether the face is owner of its normals informations.
+   * @return
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;The face is owner of its normals informations&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;The face is not owner of its normals informations&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   */
+    inline int HasNormals  (void);
+
+  /**
+   * Tests whether the face is owner of its texture coordinates informations.
+   * @return
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;The face is owner of its texture coordinates informations&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;The face is not owner of its texture coordinates informations&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   */
+    int HasTextures  (void);
+
+  /**
+   * @nodoc
+   * In favor of GetTextureCoordinates (float ** oTextureCoord, int * oDimension).
+   * Retrieves the texture coordinates.
+   * This method must be used like this:
+   * &lt;br&gt;&lt;tt&gt;&lt;pre&gt;
+   * float * textureCoord;
+   * GetTextureCoord(&amp;textureCoord);
+   * &lt;br&gt;&lt;/pre&gt;&lt;/tt&gt;
+   * @param oTextureCoord
+   *    Retrieves the array of texture coordinates.
+   *    Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   */
+    virtual void GetTextureCoordinates     (float ** oTextureCoord);
+
+  /**
+   * Retrieves the texture coordinates.
+   * This method must be used like this:
+   * &lt;br&gt;&lt;tt&gt;&lt;pre&gt;
+   * float * textureCoord;
+   * GetTextureCoord(&amp;textureCoord);
+   * &lt;br&gt;&lt;/pre&gt;&lt;/tt&gt;
+   * @param oTextureCoord
+   *    Retrieves the array of texture coordinates.
+   *    Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   * @param oDimension
+   *    Retrieve the number of coordinates per vertex.
+   */
+    virtual void GetTextureCoordinates     (float ** oTextureCoord, int * oDimension);
+
+  /**
+   * Sets the texture coordinates.
+   * If the face shares its vertices, it also shares its
+   * texture coordinates.
+   * @param iTextureCoord
+   *    Array of texture coordinates. Each vertex has an associated position
+   *    in the texture map. The number of texture coordinates groups is always equal to the number of
+   *    vertices. 
+   *    Because vertex and normal information is being sorted at the face
+   *    creation, texture coordinates are to be generated with the tessellation
+   *    parameters that are retrieved after the face creation (ie with
+   *    properly translated indices). Nevertheless, a mapping operator can be
+   *    applied at anytime, when the face is the owner of it&#x27;s vertex data.
+   *    If computed before the face creation, texture coordinates can be given
+   *    at the face construction method. In this case, coordinates order is
+   *    rearranged in parallel with vertices coordinates.
+   * @param iTextureFormat
+   *    iTextureFormat is the number of fields associated to one vertex in the &lt;tt&gt;iTextureCoord&lt;/tt&gt; array.
+   *    It is also the number of texture coordinates associated to each vertex.
+   *    Indeed, each vertex has associated coordinates in the texture map. The
+   *    number of coordinates depends on the map dimension: the texture map
+   *    may be in 1D, 2D or 3D. 
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *      &lt;dt&gt;1&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a one dimension map. Each vertex has a single associated texture coordinate&lt;/dd&gt;
+   *      &lt;dt&gt;2&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a two-dimension map. Each vertex has two associated texture coordinates&lt;/dd&gt;
+   *      &lt;dt&gt;3&lt;/dt&gt;
+   *        &lt;dd&gt;The texture map is a three-dimension map. Each vertex has three associated texture coordinates&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   *    If data is shared, the format for the given texture coordinates must be three.
+   */
+    virtual void SetTextureCoordinates     (float  * iTextureCoord, int iTextureFormat, char iAllocMode=ALLOCATE_TEXTURES);
+
+  /**
+   * @nodoc
+   *    ComputeTextureCoordinates: Textures coordinates can&#x27;t be computed if
+   *    the face doesn&#x27;t hold it&#x27;s texture coordinates.
+   */
+    virtual void ComputeTextureCoordinates (const CATMappingOperator &amp; op);
+
+  /**
+   * @nodoc
+   *    ComputeTextureCoordinates: Textures coordinates can&#x27;t be computed if
+   *    the face doesn&#x27;t hold it&#x27;s texture coordinates.
+   */
+    virtual void ComputeTextureCoordinates (const CATMappingOperator * op,
+                                            const CATBaseUnknown     * cell);
+
+  /**
+   * Retrieves the face surfacic mesh parameters.
+   * @param oAllocate
+   *    Flag specifiying whether retrieved data is copied or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;dl&gt;
+   *        &lt;dt&gt;1&lt;/dt&gt;
+   *          &lt;dd&gt;retrieved data is copied.&lt;/dd&gt;
+   *        &lt;dt&gt;0&lt;/dt&gt;
+   *          &lt;dd&gt;retrieves references on data.&lt;/dd&gt;
+   *      &lt;/dl&gt;
+   *    oAllocate flag is always returned equal to 0: GetUV() only
+   *    retrieves references on stored data.
+   * @param oUV
+   *    Retrieves the UV array. Each vertex has an associated UV couple.
+   * @param oUVArraySize
+   *    Retrieves the size of the UV array. 
+   *    Equals 0 if the mesh is shared with another element or if the array is NULL, two times the number
+   *    of vertices elsewhere. 
+   */
+    virtual void GetUV (int    * oAllocate,
+                        float ** oUV,
+                        int    * oUVArraySize);
+
+  /**
+   * Sets the UV array.
+   * @param iUV
+   *    Array of UV parameters. Its size is equal to 2/3 the vertices array size.
+   *    The  management of this array follows the vertices array management concerning
+   *    the allocation mode.    
+   */
+    virtual void SetUV (float  * iUV); 
+    
+  /**
+   * Draws the face.
+   * @param iRender
+   *   The render through which the face is drawn.
+   */
+    virtual void Draw   (CATRender &amp; iRender);
+
+  /**
+   * @nodoc
+   */
+  virtual int DetailCulling(CATRender *render);
+    
+  /**
+   * @nodoc
+   *    ComputeBox: Updates information for the parent class (box and sphere
+   *    parameters).
+   */
+    virtual void ComputeBox (void);
+
+  /**
+   * Performs a multi-dimensionnal sort on vertices and normals, and updates
+   * all tessellation parameters.
+   * Vertices may be spatially sorted using the SortAndStrip method. Meshing
+   * information is kept up to date. &lt;br&gt;
+   * Sort is:
+   * &lt;pre&gt;
+   *          P1 &lt; P2 ==&gt; P1.x &lt; P2.x ||
+   *                      P1.x = P2.x &amp;&amp; P1.y &lt; P2.y ||
+   *                      P1.x = P2.x &amp;&amp; P1.y = P2.y &amp;&amp; P1.z &lt;= P2.z
+   * &lt;/pre&gt;
+   */
+    virtual void SortAndStrip (void);
+
+  /**
+   * @nodoc
+   * Retrieves the normals cone as array of bounding normals.
+   */
+    void  GetBoundingNormal(  CAT3DBoundingNormal **oBNSurface );
+
+  /**
+   * @nodoc
+   */
+    unsigned int GetNVert(void);
+#ifdef _SUNOS_SOURCE
+  /**
+   * @nodoc
+   */
+    inline void  SetRenderData (void *iRenderData);
+
+  /**
+   * @nodoc
+   */
+    inline void* GetRenderData (void);
+#endif
+
+  /**
+   * @nodoc
+   */
+    inline char   GetOrientation (void);
+
+  /**
+   * @nodoc
+   */
+    inline void   SetOrientation (char iOrientation);
+
+  /**
+   * @nodoc
+   * Retreive the texture coordinates set associated with iOperator.
+   */
+    void GetTextureCoordinates(const CATMappingOperator&amp; iOperator, float*&amp; oCoordinates, int&amp; oDimension);
+
+  /**
+   * @nodoc
+   * For the moment the dimension MUST be 3.
+   */
+    virtual void AddTextureCoordinates(float* iCoordinates, int iDimension, const CATMappingOperator&amp; iOperator);
+
+  /**
+   * @nodoc
+   */
+    virtual void RemoveTextureCoordinates(const CATMappingOperator&amp; iOperator);
+
+  /**
+   * @nodoc
+   * Used only by the render which cleans textures.
+   */
+    virtual void ResetTextureCoordinatesFlag();
+
+  /**
+   * @nodoc
+   * Used only by the render which cleans textures.
+   */
+    virtual void FlagTextureCoordinates(const CATMappingOperator&amp; iOperator);
+
+  /**
+   * @nodoc
+   */
+    virtual void CleanUnflaggedTextureCoordinates();
+
+  /**
+   * @nodoc
+   */
+    void Empty();
+
+  /**
+   * @nodoc
+   */
+    virtual void SetVertexBuffer(CATVizVertexBuffer * iVB);
+
+  /**
+   * @nodoc
+   */
+    virtual CATVizVertexBuffer * GetVertexBuffer();
+
+  /**
+   * @nodoc
+   */
+    virtual CATVizPrimitive * GetVizPrimitive(int &amp;oAllocateMode);
+
+  /**
+   * @nodoc
+   */
+    virtual void SetVizPrimitive(CATVizPrimitive *iPrimitive, int iAllocateMode);
+
+  /**
+   * @nodoc
+   */
+    inline void SetAllocMode(char iAllocMode);
+
+  /**
+   * @nodoc
+   */
+    inline char GetAllocMode();
+
+  /**
+   * @nodoc
+   */
+    inline void SetStorageID(unsigned int iStorageID);
+  /**
+   * @nodoc
+   */
+    inline unsigned int GetStorageID();
+   
+	/**
+   * @nodoc
+   */
+    inline unsigned int StorageIDisValid() const;
+
+    /**
+   * @nodoc
+   */
+    inline unsigned int GetIsEmpty();
+
+    /**
+   * @nodoc
+   */
+    void EmptyVBO();
+
+  protected :
+    
+    // Destruction:
+    // ------------
+    
+    virtual ~CAT3DFaceGP (void);
+    
+  /**
+   * @nodoc
+   */
+    virtual void ResetStorage();
+
+    /*
+    // Internal construction functions:
+    // --------------------------------
+    
+    void BuildTriangles (const int iTriangleIndices[],const int iNbTriangle);
+    void BuildStrips    (const int iTriangleStripIndices[],
+                         const int iNbTriangleStrip,
+                         const int iNbVertexPerTriangleStrip[]);
+    void BuildFans      (const int iTriangleFanIndices[],
+                         const int iNbTriangleFan,
+                         const int iNbVertexPerTriangleFan[]);
+    */
+    
+    // Tessellation parameters:
+    // -----------------------
+    
+    CATVizVertexBuffer *_vertexBuffer;
+    CATViz3DFace       *_vizFace;
+
+    unsigned int _StorageID:31;
+    unsigned int _b_isEmpty:1; //this boolean is only useful for CATVizVertexBufferForBufferedFace to prevent a crash in the VBO creation
+
+#ifdef _SUNOS_SOURCE
+    void   *_SUNrenderData;
+#endif    
+    
+    char   _alloc_mode;
+    char   _orientation; // we stock the orientation of the topological face
+                         // to know whether we need to invert the triangles or not
+                         // when loading from the tessellation cache
+
+    // Bounding cone information:
+    // --------------------------
+    
+    CAT3DBoundingNormal  *_bounding_cone;
+
+  private:
+    /**
+     * Box and sphere computation method prototype.
+     */
+    virtual void ComputeBox (float iToleranceScale);
+};
+
+
+
+
+//******************************************************************************
+//*** Inlined methods: *********************************************************
+//******************************************************************************
+
+inline int CAT3DFaceGP::HasVertices (void)
+{
+  if( (_alloc_mode &amp; ALLOCATE_VERTICES) || (_alloc_mode &amp; GET_VERTICES) )
+    return 1;
+  else
+    return 0;
+}
+
+inline int CAT3DFaceGP::HasNormals (void)
+{
+  if( (_alloc_mode &amp; ALLOCATE_NORMALS) || (_alloc_mode &amp; GET_NORMALS) )
+    return 1;
+  else
+    return 0;
+}
+
+inline char CAT3DFaceGP::GetAllocMode()
+{
+    return _alloc_mode;
+}
+
+#ifdef _SUNOS_SOURCE
+inline void CAT3DFaceGP::SetRenderData (void *renderData) 
+{
+  _SUNrenderData = renderData;
+}
+
+inline void* CAT3DFaceGP::GetRenderData (void)
+{
+  return(_SUNrenderData);
+}
+#endif
+
+inline char CAT3DFaceGP::GetOrientation (void)
+{
+   return _orientation;
+}
+
+inline void CAT3DFaceGP::SetOrientation (char iOrientation)
+{
+   _orientation = iOrientation;
+}
+
+inline void CAT3DFaceGP::SetAllocMode(char iAllocMode)
+{
+   _alloc_mode = iAllocMode;
+}
+
+inline void CAT3DFaceGP::SetStorageID(unsigned int iStorageID)
+{
+  _StorageID = iStorageID;
+}
+
+inline unsigned int CAT3DFaceGP::GetStorageID()
+{
+  return _StorageID;
+}
+
+inline unsigned int CAT3DFaceGP::GetIsEmpty()
+{
+  return _b_isEmpty;
+}
+
+inline unsigned int CAT3DFaceGP::StorageIDisValid() const
+{
+  if (_StorageID==0 || _StorageID==INVALID_STORAGEID)
+    return 0;
+  else
+    return 1;
+}
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DEdgeGP.html">← 上一页: CAT3DEdgeGP.h</a></div>
+        <div><a href="CAT3DFixedArrowGP.html">下一页: CAT3DFixedArrowGP.h →</a></div>
+    </div>
+</body>
+</html>

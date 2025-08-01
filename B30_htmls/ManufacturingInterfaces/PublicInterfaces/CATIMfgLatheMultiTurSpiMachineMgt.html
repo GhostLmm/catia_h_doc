@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgLatheMultiTurSpiMachineMgt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgLatheMultiTurSpiMachineMgt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgLatheLocalPlaneElement.html">← 上一页: CATIMfgLatheLocalPlaneElement.h</a></div>
+        <div><a href="CATIMfgLineAndCircleDiscretizeCurve.html">下一页: CATIMfgLineAndCircleDiscretizeCurve.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=============================================================================
+#ifndef CATIMfgLatheMultiTurSpiMachineMgt_H
+#define CATIMfgLatheMultiTurSpiMachineMgt_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+// module
+#include &quot;MfgItfEnv.h&quot;
+
+// inheritance
+#include &quot;CATBaseUnknown.h&quot;
+
+// forwards
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathDirection.h&quot;
+
+// OLE iid
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByMfgItfEnv IID_CATIMfgLatheMultiTurSpiMachineMgt ;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgLatheMultiTurSpiMachineMgt ;
+#endif
+
+/**   
+* Interface dedicated to Turret and Spindle management on Lathe machine objects.
+* &lt;b&gt;Role&lt;/b&gt;: This interface offers services to manage mainly the turret and spindle parameters.&lt;br&gt;
+* Common attributes are declared in CATMfgMachineConstant.&lt;br&gt;
+* 
+* @see CATIMfgMachine
+* @see CATMfgMachineConstant
+*/
+class ExportedByMfgItfEnv CATIMfgLatheMultiTurSpiMachineMgt : public CATBaseUnknown
+{
+	CATDeclareInterface ;  
+
+public:
+	/**
+	* Set the default turret (the first one) of a Lmt machine
+	* @return HRESULT.
+	*/
+	virtual HRESULT SetDefaultLatheTurret ()=0;
+
+	/**
+	* Create a lathe turret 
+	* @param oLatheTurret : the created MfgLmtTurret as a  CATBaseUnknown_var
+	* @return HRESULT.
+	*/
+	virtual HRESULT CreateLatheTurret (CATBaseUnknown_var &amp;oLatheTurret)=0;
+
+	/**
+	* Add a lathe turret iLatheTurret in the Lmt machine&#x27;s turret aggregat
+	* @param iLatheTurret : the MfgLmtTurret to be added
+	* @return HRESULT.
+	*/
+	virtual HRESULT AddLatheTurret(const CATBaseUnknown_var &amp;iLatheTurret)=0;
+
+	/**
+	* Remove all lathe turrets from the Lmt machine&#x27;s turret aggregat
+	* @return HRESULT.
+	*/
+	virtual HRESULT RemoveLatheTurrets ()=0;
+
+	/**
+	* Remove the turret iLatheTurret from the Lmt machine&#x27;s turret aggregat
+	* @param iLatheTurret : the MfgLmtTurret to be added
+	* @return HRESULT.
+	*/
+	virtual HRESULT RemoveLatheTurret (CATBaseUnknown_var  &amp;iLatheTurret)=0;
+
+	/**
+	* Create and add a lathe turret in the Lmt machine&#x27;s turret aggregat
+	* @param oLatheTurret : the created MfgLmtTurret
+	* @return HRESULT.
+	*/
+	virtual HRESULT CreateAndAddLatheTurret(CATBaseUnknown_var &amp;oLatheTurret)=0;
+
+	/**
+	* Get the turret oLatheTurret stored at index number in the Lmt machine&#x27;s turret aggregat
+	* @param number : index of the turret (first element index=1)
+	* @param oLatheTurret : the MfgLmtTurret stored at the index number
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetTurret (int number, CATBaseUnknown_var &amp;oLatheTurret)=0;
+
+	/**
+	* Get the number of turret stored in the Lmt machine&#x27;s turret aggregat
+	* @param oNumber : number of turret stored
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetNumberOfTurret(int&amp; oNumber)=0;
+
+	/**
+	* Get the list of turrets stored in the Lmt machine&#x27;s turret aggregat
+	* @param oListOfTurrets : list of turrets stored
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetListOfTurrets( CATListValCATBaseUnknown_var &amp; oListOfTurrets )=0;
+
+	/**
+	* Set the default Spindle (the first one) of a Lmt machine
+	* @return HRESULT.
+	*/
+	virtual HRESULT SetDefaultLatheSpindle ()=0;
+
+	/**
+	* Create a lathe Spindle 
+	* @param oLatheSpindle : the created MfgLmtSpindle as a  CATBaseUnknown_var
+	* @return HRESULT.
+	*/
+	virtual HRESULT CreateLatheSpindle (CATBaseUnknown_var &amp;oLatheSpindle)=0;
+
+	/**
+	* Add a lathe Spindle iLatheSpindle in the Lmt machine&#x27;s Spindle aggregat
+	* @param iLatheSpindle : the MfgLmtSpindle to be added
+	* @return HRESULT.
+	*/
+	virtual HRESULT AddLatheSpindle(const CATBaseUnknown_var &amp;iLatheSpindle)=0;
+
+	/**
+	* Remove all lathe Spindles from the Lmt machine&#x27;s Spindle aggregat
+	* @return HRESULT.
+	*/
+	virtual HRESULT RemoveLatheSpindles ()=0;
+
+	/**
+	* Remove the Spindle iLatheSpindle from the Lmt machine&#x27;s Spindle aggregat
+	* @param iLatheSpindle : the MfgLmtSpindle to be added
+	* @return HRESULT.
+	*/
+	virtual HRESULT RemoveLatheSpindle (CATBaseUnknown_var  &amp;iLatheSpindle)=0;
+
+	/**
+	* Create and add a lathe Spindle in the Lmt machine&#x27;s Spindle aggregat
+	* @param oLatheSpindle : the created MfgLmtSpindle
+	* @return HRESULT.
+	*/
+	virtual HRESULT CreateAndAddLatheSpindle(CATBaseUnknown_var &amp;oLatheSpindle)=0;
+
+	/**
+	* Get the Spindle oLatheSpindle stored at index number in the Lmt machine&#x27;s Spindle aggregat
+	* @param number : index of the Spindle (first element index=1)
+	* @param oLatheSpindle : the MfgLmtSpindle stored at the index number
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetSpindle (int number, CATBaseUnknown_var &amp;oLatheSpindle)=0;
+
+	/**
+	* Get the Main Spindle Reference Axis
+	* @param oMainSpindleRefPoint :    main spindle reference point
+	* @param oMainSpindleSpindleAxis : main spindle revolution axis
+	* @param oMainSpindleRadialAxis :  main spindle radial axis
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetMainSpindleAxisReference(CATMathPoint &amp;oMainSpindleRefPoint, CATMathDirection &amp;oMainSpindleSpindleAxis, CATMathDirection &amp;oMainSpindleRadialAxis )=0;
+
+	/**
+	* Get the Any Spindle Reference Axis
+	* @param iBULatheSpindle :   spindle (could be NULL_var then Main spindle is taken)
+	* @param oMainSpindleRefPoint :    main spindle reference point
+	* @param oMainSpindleSpindleAxis : main spindle revolution axis
+	* @param oMainSpindleRadialAxis :  main spindle radial axis
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetAnySpindleAxisReference(CATBaseUnknown_var &amp;iBULatheSpindle,CATMathPoint &amp;oSpindleRefPoint, CATMathDirection &amp;oSpindelAxialAxis, CATMathDirection &amp;oSpindleRadialAxis )=0;
+
+	/**
+	* Get the number of Spindle stored in the Lmt machine&#x27;s Spindle aggregat
+	* @param number : umber of Spindle stored
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetNumberOfSpindle(int&amp; oNumber)=0;
+
+	/**
+	* Get the list of spindles stored in the Lmt machine&#x27;s spindle aggregat
+	* @param oListOfSpindles : list of spindles stored
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetListOfSpindles( CATListValCATBaseUnknown_var &amp; oListOfSpindles )=0;
+
+	/**
+	* Check if the geometrical links of an axis sytem are not too strong to disable Sug.. services
+	* @param iBUTurret : Turret owning the Machining Axis Sytem
+	* @param iBUMachiningAxisSytemSug : convenient axis syteme for a turret
+	* @param iDisplayWarning : Display a warning window if too srong links
+	* @param oIsOk : = 1 if links are ok, = 0 if not possible
+	* @return HRESULT.
+	*/
+	virtual HRESULT CheckMachiningAxisSystemTurretGeometrialLinks(const CATBaseUnknown_var &amp;iBUTurret,const CATBaseUnknown_var &amp;iBUMachiningAxisSytem,const int iDisplayWarning,int &amp;oIsOk)=0;
+
+	/**
+	* Suggest a convenient axis syteme for a turret
+	* @param iTurretPoint : a point (origin of Turret Axis System)
+	* @param iBULatheSpindle : a reference spindle (main spindle)
+	* @param oBUMachiningAxisSytemSug : convenient axis syteme for a turret
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetSugMachiningAxisSystemTurret(CATMathPoint &amp;iTurretPoint,CATBaseUnknown_var &amp;iBUTurret,CATBaseUnknown_var &amp;iBULatheSpindle, CATBaseUnknown_var &amp; ioBUMachiningAxisSytemSug)=0;
+
+	/**
+	* Suggest a convenient axis syteme for a turret from an angle
+	* @param Angle representes : a rotation relative to main spindle axis system
+	* @param iBULatheSpindle : a reference spindle (main spindle)
+	* @param ioBUMachiningAxisSytemSug : convenient axis syteme for a turret
+	* @return HRESULT.
+	*/
+	virtual HRESULT GetSugMachiningAxisSystemTurretFromAngle(double  &amp;iRadAngle,CATBaseUnknown_var &amp;iBUTurret,CATBaseUnknown_var &amp;iBULatheSpindle, CATBaseUnknown_var &amp;ioBUMachiningAxisSytemSug)=0;
+
+	/**
+	* Set Machining Axis System TurretIn Plane
+	* @param iBULatheSpindle : a reference spindle (main spindle)
+	* @param ioBUMachiningAxisSytemSug : convenient axis syteme for a turret
+	* Returns HRESULT.
+	*/
+	virtual HRESULT SetMachiningAxisSystemTurretInPlane(CATBaseUnknown_var &amp;iBUTurret,CATBaseUnknown_var &amp;iBULatheSpindle, CATBaseUnknown_var &amp;ioBUMachiningAxisSytemSug)=0;
+
+	/**
+	* Shift an Axis 
+	* @param iRadial : representes a shift in Radial Direction 
+	* @param iAxial : representes a shift in Axial Direction 
+	* @param iBULatheSpindle : a reference spindle (main spindle)
+	* @param ioBUMachiningAxisSytemSug : convenient axis syteme for a turret
+	* @return HRESULT.
+	*/
+	virtual HRESULT ShiftMachiningAxisSystemTurretAxialRadial(double  &amp;iAxial,double iRadial, CATBaseUnknown_var &amp;iBUTurret,CATBaseUnknown_var &amp;iBULatheSpindle,CATBaseUnknown_var &amp; ioBUMachiningAxisSytemSug)=0;
+
+};
+
+CATDeclareHandler(CATIMfgLatheMultiTurSpiMachineMgt, CATBaseUnknown) ;
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgLatheLocalPlaneElement.html">← 上一页: CATIMfgLatheLocalPlaneElement.h</a></div>
+        <div><a href="CATIMfgLineAndCircleDiscretizeCurve.html">下一页: CATIMfgLineAndCircleDiscretizeCurve.h →</a></div>
+    </div>
+</body>
+</html>

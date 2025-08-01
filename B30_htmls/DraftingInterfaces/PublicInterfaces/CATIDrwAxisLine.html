@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwAxisLine.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwAxisLine.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwArrow.html">← 上一页: CATIDrwArrow.h</a></div>
+        <div><a href="CATIDrwBGAddin.html">下一页: CATIDrwBGAddin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+#ifndef CATIDrwAxisLine_H
+#define CATIDrwAxisLine_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// ObjectModeler
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+
+// Collections
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+// Mathematics
+#include &quot;CATLISTP_CATMathLine2D.h&quot;
+
+class CATIProduct_var;
+class CATFace_var;
+class CATBody_var;
+class CATIProduct;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwAxisLine ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwAxisLine ;
+#endif
+
+/**
+* Interface to manage an axis lines.
+*/
+
+class ExportedByDraftingItfCPP CATIDrwAxisLine : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+   public:
+   
+   /**
+   * Add a reference object to the axis line. 
+   * @param iReference
+   *   Reference object.
+   *   &lt;br&gt;This object must implement IDMLine2D
+   * @see IDMLine2D
+   */
+   virtual void AddReference(CATISpecObject_var iReference) = 0;
+
+   /**
+   * Remove a reference object from an axis line. 
+   * @param iReference
+   *   Reference object to remove.
+   *   &lt;br&gt;This object must implement IDMLine2D
+   * @see IDMLine2D
+   */
+   virtual void RemoveReference(const CATISpecObject_var &amp; iReference = NULL_var) = 0;
+
+   /**
+   * Get reference object list.
+   * @return
+   *   List of reference objects.
+   */
+   virtual CATLISTV(CATISpecObject_var) GetReferences() const = 0;
+   
+   /**
+   * @nodoc
+   * Replace reference
+   * &lt;br&gt;Internal use only
+   */
+   virtual void ReplaceReference(const CATFace_var &amp; iFace, const CATBody_var &amp; iBody, 
+                                 const CATIProduct_var &amp; iProd, CATMathLine2D * iLine) = 0;
+
+   /**
+   * @nodoc
+   * Get axis line informations
+   * &lt;br&gt;Internal use only
+   */
+   virtual void GetAxisLineInfo(CATFace_var &amp; iFace, CATBody_var &amp; iBody, CATIProduct_var &amp; iProd,
+                                  CATMathLine2D * &amp;oLine, char *oHaveOneRef=NULL) = 0;
+   
+   /**
+   * @nodoc
+   * Get axis line geometric informations
+   */
+   virtual void GetAxisLines(CATLISTP(CATMathLine2D) &amp; oAxisLines,
+                             CATListOfDouble &amp; oStartOffset,
+                             CATListOfDouble &amp; oEndOffset) const = 0;
+   
+   /**
+   * Get over run values.
+   * @param oStartOverruns
+   *   Over run first extremity value.
+   *   &lt;br&gt;Remark : List is limited to one element for now.
+   * @param oEndOverruns
+   *   Over run second extremity value.
+   *   &lt;br&gt;Remark : List is limited to one element for now.
+   */
+   virtual void GetOverruns(CATListOfDouble &amp; oStartOverruns,
+                            CATListOfDouble &amp; oEndOverruns) const = 0;
+
+   /**
+   * Set over run values.
+   * @param iStartOverruns
+   *   Over run first extremity value.
+   *   &lt;br&gt;Remark : List is limited to one element for now.
+   * @param iEndOverruns
+   *   Over run second extremity value.
+   *   &lt;br&gt;Remark : List is limited to one element for now.
+   */
+   virtual void SetOverruns(CATListOfDouble &amp; iStartOverruns,
+                            CATListOfDouble &amp; iEndOverruns) const = 0;
+
+   /**
+   * @nodoc
+   * Get center line validity.
+   */
+   virtual HRESULT GetValidity() const = 0;
+
+   
+   /**
+   * @nodoc
+   * Modify the line.
+   */
+   virtual HRESULT ModifyLine(CATMathLine2D *iMathLine) = 0;
+
+   /**
+   * @nodoc
+   * Get the CATIProduct.
+   * @param oProduct[out, CATBaseUnknown#Release]
+   */
+   virtual HRESULT GetProduct(const IID iid, CATIProduct **oProduct) const = 0;
+
+   /**
+   * @nodoc
+   * Gets the 3D pointed feature if it has been specified for this axis line.
+   * @param oFeat[out, CATBaseUnknown#Release]
+   */
+   virtual HRESULT Get3DFeature(const IID iid, IUnknown **oFeat) const = 0;
+};
+CATDeclareHandler(CATIDrwAxisLine, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwArrow.html">← 上一页: CATIDrwArrow.h</a></div>
+        <div><a href="CATIDrwBGAddin.html">下一页: CATIDrwBGAddin.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchematicInit.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchematicInit.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchematicExtension.html">← 上一页: CATISchematicExtension.h</a></div>
+        <div><a href="CATIScuWksConfigAddin.html">下一页: CATIScuWksConfigAddin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchematicInit_H
+#define CATISchematicInit_H
+
+
+//	COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATPathElement.h&quot;
+#include &quot;CATString.h&quot;
+
+class CATFrmEditor;
+class CATFrmWindow;
+class CATDocument;
+
+extern &quot;C&quot; const IID IID_CATISchematicInit ;
+
+/**
+ * Interface to manage a Schematic document initialization. 
+ * &lt;b&gt;Role&lt;/b&gt;: Defines Schematic document 2D behaviors
+ */
+class CATISchematicInit : public IUnknown
+{
+
+  public: 
+    
+  /**
+  * Get the editor of the schematic document. 
+  * @param iDocument
+  *   Pointer to the schematic document.
+  * @return
+  *   Pointer to the editor.
+  */
+  virtual CATFrmEditor *GetEditor (CATDocument *iDocument) = 0 ;
+
+  /**
+  * Create the 2D window for the schematic document. 
+  * @param iEditor
+  *   Pointer to the editor of the schematic document.
+  * @return
+  *   Pointer to the 2D window.
+  */
+  virtual CATFrmWindow *CreateDefaultWindow (CATFrmEditor * iEditor) = 0;
+
+  /**
+  * Get the current UI-active object. 
+  * @return
+  *   Pointer to the current active object.
+  */
+  virtual CATPathElement GetActiveObject() = 0;
+
+  /**
+  * Get the current workshop name. 
+  * @return
+  *   Name of the current workshop.
+  */
+  virtual CATString GetWorkshop () = 0 ;
+
+  /**
+  * Get the default command of the current workbench or workshop. 
+  * @return
+  *   Name of the default command workshop.
+  */
+  virtual CATString GetDefaultCommand () = 0;
+};
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchematicExtension.html">← 上一页: CATISchematicExtension.h</a></div>
+        <div><a href="CATIScuWksConfigAddin.html">下一页: CATIScuWksConfigAddin.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwDimSystem.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwDimSystem.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimFunnel.html">← 上一页: CATIDrwDimFunnel.h</a></div>
+        <div><a href="CATIDrwDimText.html">下一页: CATIDrwDimText.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2007
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#ifndef CATIDrwDimSystem_H
+#define CATIDrwDimSystem_H
+
+#include &quot;DraftingItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATDimSystemDefinition.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+class CATListValCATBaseUnknown_var;
+class CATMathPoint2D;
+class CATIDrwDimDimension;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwDimSystem;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwDimSystem;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+* Interface to manage the life cycle of dimensions used by the dimension system.
+* &lt;p&gt;
+* Refer to CATIDrwStackedDimSystem or CATIDrwCumulatedDimSystem to manage the properties of the dimension system.
+* Refer to CATIDftElementInSystem to retrieve a dimension system from a dimension
+* @see CATIDrwStackedDimSystem
+* @see CATIDrwCumulatedDimSystem
+* @see CATIDftElementInSystem
+*/
+class ExportedByDraftingItfCPP CATIDrwDimSystem: public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+
+  
+
+/**
+* Creates and adds a dimension in the list handled by the system.
+*  &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt; Don&#x27;t forget to use LineUp method at the end of dimension system creation to take into account the line up parameters.
+* @param &lt;tt&gt;ipDimElement&lt;/tt&gt;
+* [in] new element to dimension
+* @param &lt;tt&gt;opDim&lt;/tt&gt;
+* [out] the created dimension
+* @param &lt;tt&gt;ipSelPoint&lt;/tt&gt;
+* [in] a 2D point to resolve ambiguity in some cases
+* @param &lt;tt&gt;iComplementaryAngle&lt;/tt&gt;
+* [in] available for angle dimension. if iComplementaryAngle=TRUE, 
+* the dimension will be created with a complementary sector ( value &gt; CATPI)
+* @param &lt;tt&gt;iAssociativityMode&lt;/tt&gt;
+* [in] is the dimension associative or not
+*/
+  virtual HRESULT AddDimension(CATBaseUnknown * ipDimElement, CATIDrwDimDimension * &amp;opDim, CATMathPoint2D  * ipSelPoint=NULL, CATBoolean iComplementaryAngle=FALSE, int iAssociativityMode=1) = 0;
+
+/**
+* Removes (no destruction) a dimension from the list handled by the system.
+* @param &lt;tt&gt;ipDimension&lt;/tt&gt;
+* [in] dimension to remove from the list of dimensions
+*/
+  virtual HRESULT RemoveDimension(CATBaseUnknown * ipDimension) = 0;
+  
+/**
+* Gets the whole list of dimensions handled by the system.
+* @param &lt;tt&gt;ipDimList&lt;/tt&gt;
+* [out] list of dimensions handled by the system
+*/
+  virtual HRESULT GetDimensionsList(CATListValCATBaseUnknown_var &amp;opDimList) = 0;
+
+/**
+* Gets the type of the dimension system
+* @param &lt;tt&gt;opSystemType&lt;/tt&gt;
+* [out] type of the system (ChainedDimSystem, StackedDimSystem, CumulatedDimSystem, ...)
+*/
+  virtual HRESULT GetSystemType(CATDrwDimSystemType &amp;opSystemType) = 0;
+
+
+/**
+* Gets the master dimension of the dimension system.
+* The master dimension is the dimension to move for 
+* dimension system moving. the dimension must be updated
+* to take into account its modification, then LineUp method
+* must be executed to propagate the moving for all others dimensions of
+* the dimension system.
+* @param &lt;tt&gt;opmasterDim&lt;/tt&gt;
+* [out, CATBaseUnknown#Release] The master dimension
+*/
+  virtual HRESULT GetMasterDimension(CATIDrwDimDimension **opMasterDim) = 0;
+
+/**
+* To ask for the dimensions in the system to be aligned.
+*   @param iSubPart
+*    Defines which part of the dimensions should be aligned
+*    &lt;br&gt;  1 = Value
+*    &lt;br&gt;  2 = Dimension line 
+*    &lt;br&gt;  3 = Both dimension line and value
+* @return
+* &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;The line up operation is successful.
+* &lt;dt&gt;&lt;tt&gt;S_FALSE&lt;/tt&gt; &lt;dd&gt;The line up is already done.
+* &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+*/
+  virtual HRESULT LineUp(const int iSubPart) = 0;
+
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+CATDeclareHandler(CATIDrwDimSystem, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimFunnel.html">← 上一页: CATIDrwDimFunnel.h</a></div>
+        <div><a href="CATIDrwDimText.html">下一页: CATIDrwDimText.h →</a></div>
+    </div>
+</body>
+</html>

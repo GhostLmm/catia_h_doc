@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseSphere.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseSphere.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseScaling.html">← 上一页: CATIGSMUseScaling.h</a></div>
+        <div><a href="CATIGSMUseSpine.html">下一页: CATIGSMUseSpine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUseSphere_H
+#define CATIGSMUseSphere_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2001
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATICkeParm.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUseSphere;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseSphere;
+#endif
+/**
+ * Interface to sphere feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the sphere feature created by using 
+ * a center, an axis, a radius and four angle values
+ * @see CATIGSMUseFactory#CreateSphere
+ */
+class ExportedByCATGSMUseItf CATIGSMUseSphere : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+  /**
+    * Types of sphere limitation.
+    * @param Angles 
+    *    The sphere is limited by given angles.
+    * @param  Whole 
+    *    The sphere is entire.
+    * &lt;br&gt;This is the complementary circle of the previous one.
+    */
+    enum CATIGSMUseSphereLimitation {Angles = 0,Whole = 1};
+
+   /**
+    * Gets the sphere center.
+    *   @param oCenter
+    *      center point
+    */
+    virtual HRESULT GetCenter(CATIMmiMechanicalFeature_var&amp; oCenter) = 0;
+    /**
+    * Gets the  sphere axis.
+	*   @param oAxis
+    *   @return
+    *      sphere axis
+    */
+    virtual HRESULT GetAxis(CATIMmiMechanicalFeature_var&amp; oAxis) = 0;
+    /**
+    * Gets the sphere radius.
+    *   @param oRadius 
+    *      radius positive value
+    */
+    virtual HRESULT GetRadius(CATICkeParm_var&amp; oRadius) = 0;
+    /**
+    * Gets the first parallel angle value.
+    *   @param oAng1
+    *      first parallel angle value.
+    */
+   virtual    HRESULT   GetBeginParallelAngle( double &amp; oAng1) = 0;
+   /**
+    * Gets the second parallel angle value.
+    *   @param oAng2
+    *      second parallel angle value.
+    */
+   virtual    HRESULT   GetEndParallelAngle(double &amp; oAng2) = 0;
+    /**
+    * Gets the first parallel angle value.
+    *   @param oAng1
+    *      first parallel angle value.
+    */
+   virtual    HRESULT GetBeginParallelAngle (CATICkeParm_var &amp; oAng1) = 0;
+    /**
+    * Gets the second parallel angle value.
+    *   @param oAng2
+    *      second parallel angle value.
+    */
+   virtual    HRESULT GetEndParallelAngle (CATICkeParm_var &amp; oAng2) = 0;
+    /**
+    * Gets the first meridian angle value.
+    *   @param oAng3
+    *      first meridian angle value.
+    */
+   virtual    HRESULT   GetBeginMeridianAngle( double &amp; oAng3) = 0;
+   /**
+    * Gets the second meridian angle value.
+    *   @param oAng4
+    *      second meridian angle value.
+    */
+   virtual    HRESULT   GetEndMeridianAngle(double &amp; oAng4) = 0;
+    /**
+    * Gets the first meridian angle value.
+    *   @param oAng3
+    *      first meridian angle value.
+    */
+   virtual    HRESULT GetBeginMeridianAngle (CATICkeParm_var &amp; oAng3) = 0;
+    /**
+    * Gets the second meridian angle value.
+    *   @param oAng4
+    *      second meridian angle value.
+    */
+   virtual    HRESULT GetEndMeridianAngle (CATICkeParm_var &amp; oAng4) = 0;  
+
+   /**
+    * Sets the sphere center. 
+    *  @param iCenter
+    *      center point
+    */
+   virtual HRESULT SetCenter(const CATIMmiMechanicalFeature_var iCenter) = 0;
+    /**
+    * Sets the sphere axis.
+    *   @param iAxis
+    *      New sphere axis.
+    */
+   virtual    HRESULT SetAxis(const CATIMmiMechanicalFeature_var iAxis) = 0;
+    /**
+    * Sets the sphere radius.
+    *   @param iRadius 
+    *      radius 
+    */
+    virtual HRESULT SetRadius(const CATICkeParm_var iRadius) = 0;
+    /**
+    * Sets the firt parallel angle value.
+    *   @param iAng1
+    *      New first parallel angle value.
+    */
+   virtual    HRESULT SetBeginParallelAngle(double iAng1) = 0;
+    /**
+    * Sets the second parallel angle value.
+    *   @param iAng2
+    *      New second parallel angle value.
+    */
+   virtual    HRESULT SetEndParallelAngle(double iAng2) = 0;
+    /**
+    * Sets the firt parallel angle value.
+    *   @param iAng1
+    *      New first parallel angle value.
+    */
+   virtual    HRESULT SetBeginParallelAngle(const CATICkeParm_var iAng1) =0;
+    /**
+    * Sets the second parallel angle value.
+    *   @param iAng2
+    *      New second parallel angle value.
+    */
+   virtual    HRESULT SetEndParallelAngle  (const CATICkeParm_var iAng2) =0; 
+    /**
+    * Sets the firt meridian angle value.
+    *   @param iAng3
+    *      New first meridian angle value.
+    */
+   virtual    HRESULT SetBeginMeridianAngle(double iAng3) = 0;
+    /**
+    * Sets the second meridian angle value.
+    *   @param iAng4
+    *      New second meridian angle value.
+    */
+   virtual    HRESULT SetEndMeridianAngle(double iAng4) = 0;
+    /**
+    * Sets the firt meridian angle value.
+    *   @param iAng3
+    *      New first meridian angle value.
+    */
+   virtual    HRESULT SetBeginMeridianAngle(const CATICkeParm_var iAng3) =0;
+    /**
+    * Sets the second meridian angle value.
+    *   @param iAng4
+    *      New second meridian angle value.
+    */
+   virtual    HRESULT SetEndMeridianAngle  (const CATICkeParm_var iAng4) =0; 
+    /**
+      * Gets the limitation type for the sphere (see CATIGSMUseSphereLimitation enumeration).
+      *   @param oLimit 
+      *      sphere limitation
+      */
+   virtual HRESULT GetLimitation(CATIGSMUseSphereLimitation &amp; oLimit) = 0;
+    /**
+      * Sets the limitation type for the sphere (see CATIGSMUseSphereLimitation enumeration). 
+      *   @param iLimit  
+      *         enum CATIGSMUseSphereLimitation {Angles, Whole};
+      */
+   virtual HRESULT SetLimitation(const CATIGSMUseSphereLimitation  iLimit) = 0;
+
+
+};
+CATDeclareHandler (CATIGSMUseSphere, CATBaseUnknown);
+#endif // CATIGSMUseSphere_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseScaling.html">← 上一页: CATIGSMUseScaling.h</a></div>
+        <div><a href="CATIGSMUseSpine.html">下一页: CATIGSMUseSpine.h →</a></div>
+    </div>
+</body>
+</html>

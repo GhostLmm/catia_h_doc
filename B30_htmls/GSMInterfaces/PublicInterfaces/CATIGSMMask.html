@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMMask.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMMask.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMLoft.html">← 上一页: CATIGSMLoft.h</a></div>
+        <div><a href="CATIGSMMaskFactory.html">下一页: CATIGSMMaskFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+
+#ifndef CATIGSMMask_H
+#define CATIGSMMask_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/**
+  * @CAA2Level L1   
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATGSMMaskDef.h&quot;
+
+//ObjectSpecsModeler
+class CATISpecObject_var;
+
+//KnowledgeInterfaces
+class CATICkeParm_var;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID IID_CATIGSMMask;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMMask;
+#endif
+
+/**
+ * Mask feature.
+ * &lt;b&gt;Role&lt;/b&gt; : allows to manipulate the masks of the model
+ * 
+ */
+class ExportedByCATGitInterfaces CATIGSMMask: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+  /**
+   * Gets type of the mask.
+   *   @param oMaskType
+   *      Type of the mask.
+   */
+   virtual HRESULT GetMaskType(CATGSMMaskType&amp; oMaskType) = 0;
+
+  /**
+   * Sets type of the mask.
+   *   @param iMaskType
+   *      Type of the mask.
+   */
+   virtual HRESULT SetMaskType(const CATGSMMaskType iMaskType) = 0;
+
+  /**
+   * Gets axis system.
+   *   @param oAxisSystem
+   *      Axis system.
+   */
+   virtual HRESULT GetAxis(CATISpecObject_var&amp; oAxisSystem) = 0;
+
+  /**
+   * Sets axis system.
+   *   @param iAxisSystem
+   *      Axis system.
+   */
+   virtual HRESULT SetAxis(const CATISpecObject_var&amp; iAxisSystem) = 0;
+
+  /**
+   * Gets Point1 by object.
+   *   @param oPoint1
+   *      Point1.
+   */
+   virtual HRESULT GetRefPoint1(CATISpecObject_var&amp; oPoint1) = 0;
+
+  /**
+   * Gets Point1 by coordinate.
+   *   @param oX
+   *      X coordinate of Point1.
+   *   @param oY
+   *      Y coordinate of Point1.
+   *   @param oZ
+   *      Z coordinate of Point1.
+   */
+   virtual HRESULT GetRefPoint1(CATICkeParm_var&amp; oX,
+                                CATICkeParm_var&amp; oY,
+                                CATICkeParm_var&amp; oZ) = 0;
+
+  /**
+   * Gets Point2 by object.
+   *   @param oPoint2
+   *      Point2.
+   */
+   virtual HRESULT GetRefPoint2(CATISpecObject_var&amp; oPoint2) = 0;
+
+  /**
+   * Gets Point2 by coordinate.
+   *   @param oX
+   *      X coordinate of Point2.
+   *   @param oY
+   *      Y coordinate of Point2.
+   *   @param oZ
+   *      Z coordinate of Point2.
+   */
+   virtual HRESULT GetRefPoint2(CATICkeParm_var&amp; oX,
+                                CATICkeParm_var&amp; oY,
+                                CATICkeParm_var&amp; oZ) = 0;
+
+  /**
+   * Sets Point1 by object.
+   *   @param iPoint1
+   *      Point1.
+   */
+   virtual HRESULT SetRefPoint1(const CATISpecObject_var&amp; iPoint1) = 0;
+
+  /**
+   * Sets Point1 by coordinate.
+   *   @param iX
+   *      X coordinate of Point1.
+   *   @param iY
+   *      Y coordinate of Point1.
+   *   @param iZ
+   *      Z coordinate of Point1.
+   */
+   virtual HRESULT SetRefPoint1(const CATICkeParm_var&amp; iX,
+                                const CATICkeParm_var&amp; iY,
+                                const CATICkeParm_var&amp; iZ) = 0;
+
+  /**
+   * Sets Point2 by object.
+   *   @param iPoint2
+   *      Point2.
+   */
+   virtual HRESULT SetRefPoint2(const CATISpecObject_var&amp; iPoint2) = 0;
+
+  /**
+   * Sets Point2 by coordinate.
+   *   @param iX
+   *      X coordinate of Point2.
+   *   @param iY
+   *      Y coordinate of Point2.
+   *   @param iZ
+   *      Z coordinate of Point2.
+   */
+   virtual HRESULT SetRefPoint2(const CATICkeParm_var&amp; iX,
+                                const CATICkeParm_var&amp; iY,
+                                const CATICkeParm_var&amp; iZ) = 0;
+
+  /**
+   * Gets Origin by object.
+   *   @param oOrigin
+   *      Origin of mask box.
+   */
+   virtual HRESULT GetOrigin(CATISpecObject_var&amp; oOrigin) = 0;
+
+  /**
+   * Gets Origin by coordinate.
+   *   @param oX
+   *      X coordinate of origin of mask box.
+   *   @param oY
+   *      Y coordinate of origin of mask box.
+   *   @param oZ
+   *      Z coordinate of origin of mask box.
+   */
+   virtual HRESULT GetOrigin(CATICkeParm_var&amp; oX,
+                             CATICkeParm_var&amp; oY,
+                             CATICkeParm_var&amp; oZ) = 0;
+
+  /**
+   * Sets Origin by object.
+   *   @param iOrigin
+   *      Origin of mask box.
+   */
+   virtual HRESULT SetOrigin(const CATISpecObject_var&amp; iOrigin) = 0;
+
+  /**
+   * Sets Origin by coordinate.
+   *   @param iX
+   *      X coordinate of origin of mask box.
+   *   @param iY
+   *      Y coordinate of origin of mask box.
+   *   @param iZ
+   *      Z coordinate of origin of mask box.
+   */
+   virtual HRESULT SetOrigin(const CATICkeParm_var&amp; iX,
+                             const CATICkeParm_var&amp; iY,
+                             const CATICkeParm_var&amp; iZ) = 0;
+
+  /**
+   * Sets mask size.
+   *   @param iX
+   *      Size of x direction (Length).
+   *   @param iY
+   *      Size of y direction (Width).
+   *   @param iZ
+   *      Size of z direction (Hight).
+   */
+   virtual HRESULT SetSize(const CATICkeParm_var&amp; iX,
+                           const CATICkeParm_var&amp; iY,
+                           const CATICkeParm_var&amp; iZ) = 0;
+
+  /**
+   * Gets mask size.
+   *   @param oX
+   *      Size of x direction (Length).
+   *   @param oY
+   *      Size of y direction (Width).
+   *   @param oZ
+   *      Size of z direction (Hight).
+   */
+   virtual HRESULT GetSize(CATICkeParm_var&amp; oX,
+                           CATICkeParm_var&amp; oY,
+                           CATICkeParm_var&amp; oZ) = 0;
+
+  /**
+   * Sets datum mode for mask .
+   *   @param iMode
+   *      Datum mode 1: ON  0: OFF
+   */
+   virtual HRESULT SetDatumMode(const int iMode) = 0;
+
+  /**
+   * Gets datum mode for mask .
+   *   @param oMode
+   *      Datum mode 1: ON 0: OFF
+   */
+   virtual HRESULT GetDatumMode(int &amp;oMode) = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIGSMMask, CATBaseUnknown );
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMLoft.html">← 上一页: CATIGSMLoft.h</a></div>
+        <div><a href="CATIGSMMaskFactory.html">下一页: CATIGSMMaskFactory.h →</a></div>
+    </div>
+</body>
+</html>

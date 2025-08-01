@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIAVPMPartVersion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIAVPMPartVersion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIAVPMPartMaster.html">← 上一页: CATIAVPMPartMaster.h</a></div>
+        <div><a href="CATIAVPMProductClass.html">下一页: CATIAVPMProductClass.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// -*-C++-*-
+
+#ifndef CATIAVPMPartVersion_h
+#define CATIAVPMPartVersion_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+ 
+// =================================================================
+// Includes
+// =================================================================
+// System
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATIAVPMObjectVersion.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+// =================================================================
+// Forward classes declaration
+// =================================================================
+class CATMathTransformation;
+class CATIAVPMItemInstance;
+class CATIAVPMTechInterface;
+class CATIAVPMPartMaster;
+// class CATIAVPMProductSpecification;
+class CATIAVPMAssemblyRelation;
+class CATMathPoint;
+class CATTime;
+
+class CATBaseUnknown_var;
+class CATIAVPMAssemblyRelation_var;
+class CATIAVPMPartMaster_var;
+class CATICfgFilter_var;
+class CATICfgMileStone_var;
+class CATIAVPMTechInterface_var;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIAVPMPartVersion;
+#else
+extern &quot;C&quot; const IID IID_CATIAVPMPartVersion;
+#endif
+
+//------------------------------------------------------------------
+/**
+ * Interface to create and manage CATIAVPMPartVersion.
+ */
+
+class ExportedByGUIDVPMInterfaces CATIAVPMPartVersion : public CATBaseUnknown //CATIAVPMObjectVersion
+{
+	CATDeclareInterface;
+	
+public:
+	//
+	// =======================================================
+	// Method(s) 
+	// =======================================================
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   AggregateTechInterface(const CATBSTR &amp; id,
+		const CATBSTR &amp; name,
+		const CATBSTR &amp; description,
+		CATIAVPMTechInterface *&amp; TechInterface)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   get_TechInterface(long index,
+		CATIAVPMTechInterface *&amp; TechInterface)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   get_TechInterfaceCount(long &amp; NbItems)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   get_ParentItemInstance(long index,
+		CATIAVPMItemInstance *&amp; ItemInstance)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   get_ParentItemInstanceCount(long &amp; NbItems)=0;
+	
+/**
+* @nodoc
+*/
+	// To be called whenever you are finished with the list.
+	// This is used inside the server to free the memory allocated to hold the list.
+	//
+	virtual HRESULT   forget_ParentItemInstanceCount()=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   AggregateAssemblyRelation(CATIAVPMObject *Object,
+		CATIAVPMAssemblyRelation *&amp; AssemblyRelation)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT   get_AssemblyRelation(long index,
+					   CATIAVPMAssemblyRelation *&amp; AssemblyRelation, int ActivatedOnly=1)=0;
+	
+	/**
+	* Retrieves Count of Assembly Relations.
+	* @param NbItems
+	*	 The number of Assembly Relation Items.
+	* @param ActivatedOnly
+	*	 The flag to select only Activated Assembly Relations or all Assembly Relations.
+	*	 &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: The default value for ActivatedOnly is set to 1. 
+	*/
+	virtual HRESULT   get_AssemblyRelationCount(long &amp; NbItems, int ActivatedOnly=1)=0;
+	
+/**
+* @nodoc
+*/
+	// To be called whenever you are finished with the list.
+	// This is used inside the server to free the memory allocated to hold the list.
+	//
+	virtual HRESULT   forget_AssemblyRelationCount()=0;
+	
+/** @nodoc */
+	// S_OK : Yes, there is one CV attached.
+	// S_FALSE : No. No CV attached.
+	virtual HRESULT IsMasterConfigurable()=0;
+	
+/**
+* @nodoc
+* @deprecated	 Use GetChildAssemblyRelations(oAssemblyRelationList,NULL_var)
+*/
+	virtual HRESULT GetChildAssemblyRelations(CATLISTV(CATBaseUnknown_var) &amp; oAssemblyRelationList)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT GetChildAssemblyRelations(CATLISTV(CATBaseUnknown_var) &amp; oAssemblyRelationList,
+		const CATICfgFilter_var &amp; hCfgFilter)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT AddAssemblyRelation(const CATBaseUnknown_var &amp; iPartMaster,
+		const CATUnicodeString &amp; iAssemblyRelationName,
+		CATIAVPMAssemblyRelation_var &amp; oAssemblyRelation)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT CutAssemblyRelation(const CATIAVPMAssemblyRelation_var &amp; iAssemblyRelation)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT ReplaceAssemblyRelation(const CATIAVPMAssemblyRelation_var &amp; iOldAssemblyRelation,
+					   const CATBaseUnknown_var &amp; iNewReference,
+					   CATIAVPMAssemblyRelation_var &amp; oNewAssemblyRelation)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT put_ApplicabilityDate(const CATTime &amp; iDate)=0;
+	
+/**
+* @nodoc
+*/
+	virtual HRESULT put_ApplicabilityDate(const CATICfgMileStone_var &amp; iMileStoneDate)=0;
+	
+	
+	
+// SUU Jan-31-2003
+// New method (CATUnicodeString instead of BSTR)
+/**
+* @nodoc
+*/
+	virtual HRESULT   AggregateTechInterface(const CATUnicodeString  &amp; id,
+		const CATUnicodeString  &amp; name,
+		const CATUnicodeString  &amp; description,
+		CATIAVPMTechInterface_var &amp; TechInterface)=0;
+	
+	
+};
+//-----------------------------------------------------------------
+// Handler definition
+//-----------------------------------------------------------------
+/** @nodoc */
+CATDeclareHandler(CATIAVPMPartVersion, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIAVPMPartMaster.html">← 上一页: CATIAVPMPartMaster.h</a></div>
+        <div><a href="CATIAVPMProductClass.html">下一页: CATIAVPMProductClass.h →</a></div>
+    </div>
+</body>
+</html>

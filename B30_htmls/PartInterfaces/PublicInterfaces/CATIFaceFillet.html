@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIFaceFillet.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIFaceFillet.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIEdgeFillet.html">← 上一页: CATIEdgeFillet.h</a></div>
+        <div><a href="CATIFillet.html">下一页: CATIFillet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIFaceFillet_H
+#define CATIFaceFillet_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIFillet.h&gt;
+class CATIMfBRepFeature_var;
+class CATIMfBRep_var;
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIFaceFillet;
+#else
+extern &quot;C&quot; const IID IID_CATIFaceFillet;
+#endif
+
+/**
+ * Interface to represent the face fillet shape.
+ * &lt;b&gt;Role&lt;/b&gt;: A face fillet shape is built between two faces with a radius.
+ */
+class ExportedByPartItf CATIFaceFillet : public CATIFillet
+{
+  CATDeclareInterface;
+  
+public:
+/**
+ * Sets the face fillet radius.
+ * @param iRadius
+ * Specifies the radius value.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+ * than 0 but not equal to 0. 
+ */
+  virtual void ModifyRadius(double iRadius) = 0;
+  
+  
+  /** @nodoc */
+  virtual void SetFace1(CATIMfBRepFeature_var ihRsur1) const= 0;
+  
+  /**
+  * Sets or removes the first face to be filleted.
+  * @param ihRsur1
+  * Case remove a face, ihRsur1 must be equal to NULL_var.
+  * &lt;br&gt;Case set a face, the CATIMfBRep_var should be a 
+  * Rsur feature (CATIMfRsur) created with CATIMmiBRepFactory.
+  * This face should not be already used in the fillet.
+  * This face should belong to the same mechanical body.
+  */
+  virtual void SetFirstFace(CATIMfBRep_var ihRsur) const  = 0;
+  
+  
+  /** @nodoc */
+  virtual void SetFace2(CATIMfBRepFeature_var ihRsur2) const= 0;
+  
+  
+  /**
+  * Sets or removes the second face to be filleted.
+  * @param ihRsur2
+	* Case remove a face, ihRsur2 must be equal to NULL_var.
+  * &lt;br&gt;Case set a face, the CATIMfBRep_var should be a 
+  * Rsur feature (CATIMfRsur) created with CATIMmiBRepFactory.
+  * This face should not be already used in the fillet.
+  * This face should belong to the same mechanical body.
+	*/
+  virtual void SetSecondFace(CATIMfBRep_var ihRsur) const  = 0;
+  
+  
+  /**
+  * Returns the face fillet radius.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+  * than 0 but not equal to 0. 
+  */  
+  virtual double GetRadius() const= 0;
+  
+  /** @nodoc */
+  virtual CATICkeParm_var GetRadiusParm() const= 0;
+  
+  /** @nodoc */
+  virtual CATIMfBRepFeature_var GetFace1() const= 0;
+  
+  /**
+  * Returns the first filleted face.
+  * The CATISpecObject_var is a Rsur Feature (CATIMfRsur). 
+  */
+  virtual CATIMfBRep_var GetFirstFace() const= 0;
+  
+  /** @nodoc */
+  virtual CATIMfBRepFeature_var GetFace2() const= 0;
+  
+  /**
+  * Returns the second filleted face.
+  * The CATISpecObject_var is a Rsur Feature (CATIMfRsur). 
+  */
+  virtual CATIMfBRep_var GetSecondFace() const= 0;
+  
+  /** @nodoc */
+  virtual HRESULT SetHoldCurve(const CATISpecObject_var&amp; hHoldCurve) const= 0;
+  
+  /** @nodoc */
+  virtual HRESULT GetHoldCurve(CATISpecObject_var&amp; hHoldCurve) const= 0;
+  
+  /** @nodoc */
+  virtual HRESULT SetSpine(const CATISpecObject_var&amp; hSpine) const= 0;
+  
+  /** @nodoc */
+  virtual HRESULT GetSpine(CATISpecObject_var&amp; hSpine) const= 0;
+  
+};
+
+CATDeclareHandler (CATIFaceFillet, CATIFillet); 
+
+#endif // CATIFaceFillet_H
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIEdgeFillet.html">← 上一页: CATIEdgeFillet.h</a></div>
+        <div><a href="CATIFillet.html">下一页: CATIFillet.h →</a></div>
+    </div>
+</body>
+</html>

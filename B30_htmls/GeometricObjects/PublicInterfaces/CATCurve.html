@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCurve.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCurve.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvSide.html">← 上一页: CATCrvSide.h</a></div>
+        <div><a href="CATCylinder.html">下一页: CATCylinder.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCurve_h
+#define CATCurve_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATGeometry.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATCrvEvalCommand.h&quot;
+
+/* To suppress */
+#include &quot;CATEvalCommand.h&quot;
+/* To suppress */
+
+#include &quot;CATMathSetOfPoints.h&quot; 
+#include &quot;CATMathSetOfVectors.h&quot;
+class CATMathFunctionX;
+class CATMathPoint;
+class CATMathVector;
+class CATMathBox;
+class CATMathCurve;
+class CATKnotVector;
+class CATGeometry;
+class CATPCurve;
+class CATPlane;
+class CATCrvParamReference;
+class CATCrvParam;
+class CATCrvLimits;
+class CATSetOfCrvParams;
+class CATCrvEvalLocal;
+class CATCrvEvalResult;
+class CATMathTransformation1D;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCurve ;
+#else
+extern &quot;C&quot; const IID IID_CATCurve ;
+#endif
+
+class CATMathAdvancedBox;
+
+/**
+ * Interface representing the base class for all curves.
+ * Each point of a curve is identified by a global parameter
+ * &lt;tt&gt;CATCrvParam&lt;/tt&gt;. A curve portion is defined by &lt;tt&gt;CATCrvLimits&lt;/tt&gt;.
+ * &lt;b&gt;Curve parameterization&lt;/b&gt;&lt;br&gt;
+ * The geometric modeler optimal behavior requires
+ * arc length parameterized
+ * (or nearly arc length parameterized) curves. Standard operators generate 
+ * arc length parameterized curves and complete properly when their input data
+ * are arc length parameterized curves. Non-standard curves (foreign curves)
+ * should be created as arc length parameterized curves.&lt;br&gt;
+ * &lt;b&gt;Retrieving the CATCrvParam of a 3D point located on a curve&lt;/b&gt; &lt;br&gt;
+ * To retrieve the curve parameter associated with a
+ * 3D point, use a geometric projection operator.
+ * &lt;b&gt;Retrieving the point and derivatives from a CATCrvParam&lt;/b&gt;&lt;br&gt;
+ * Multiple evaluations can be performed in one way by defining
+ * a &lt;tt&gt;CATCrvCommand&lt;/tt&gt; object, evaluating through the &lt;tt&gt;Eval&lt;/tt&gt;
+ * method and retrieving the results with a &lt;tt&gt;CATCrvEvalResult&lt;/tt&gt; object.
+ * Example:
+ * &lt;pre&gt;
+ * CATCrvEvalLocal EvalResult;
+ * CATCrvParam Parameter ;
+ * Curve-&gt;GetStartLimit(Parameter) ;
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalPoint                , EvalResult) ; // Evaluate point
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalFirstDerivative      , EvalResult) ; // Evaluate first  derivative
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalSecondDerivative     , EvalResult) ; // Evaluate second derivative
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalThirdDerivative      , EvalResult) ; // Evaluate third  derivative
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalUpToFirstDerivative  , EvalResult) ; // Evaluate all    derivatives up to first  derivative 
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalUpToSecondDerivative , EvalResult) ; // Evaluate all    derivatives up to second derivative 
+ * Curve-&gt;Eval(Parameter, CATCrvEvalCommand::EvalUpToThirdDerivative  , EvalResult) ; // Evaluate all    derivatives up to third  derivative 
+ * &lt;/pre&gt;
+ * &lt;br&gt; The first and last arc number can be retrieved with the &lt;tt&gt;GetMaxLimits&lt;/tt&gt; method.
+ */
+class ExportedByCATGMGeometricInterfaces CATCurve : public CATGeometry
+{
+  CATDeclareInterface;
+
+public:
+
+/**
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve and its derivatives associated with &lt;tt&gt;this&lt;/tt&gt; CATCrvParam.
+ * @param iPoint
+ * The parameter of the point to evaluate.
+ * @param iCommand
+ * The type of evaluation.
+ * @param ioResult.
+ * The object containing the results.
+ */
+  virtual void Eval(const CATCrvParam       &amp; iPoint,
+		    const CATCrvEvalCommand &amp; iCommand,
+		    CATCrvEvalLocal         &amp; ioResult) const =0 ;
+
+ /**
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve and its derivatives inside a domain.
+ * @param iDomainToEvaluate
+ * The limits inside which the domain is to be evaluated.
+ * @param iNbOfPoints
+ * The number of equally spaced points of &lt;tt&gt;iDomainToEvaluate&lt;/tt&gt;.
+ * @param iCommand
+ * The type of evaluation.
+ * @param ioResult.
+ * The object containing the results.
+ */
+  virtual void Eval(const CATCrvLimits      &amp; iDomainToEvaluate,
+		    const CATLONG32                iNbOfPoints,
+		    const CATCrvEvalCommand &amp; iCommand,
+		    CATCrvEvalResult        &amp; ioResult) const =0 ;
+
+/**
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve and its derivatives associated with &lt;tt&gt;this&lt;/tt&gt; CATCrvParam.
+ * @param iParam
+ * The parameter of the point to evaluate.
+ * @param iCommand
+ * The type of evaluation. The corresponding output pointer must be allocated.
+ * @param iPoint
+ * A pointer to the resulting 3D point.
+ * @param iFirstDeriv 
+ * A pointer to the resulting first derivative.
+ * @param iSecondDeriv 
+ * A pointer to the resulting second derivative.
+ * @param iThirdDeriv 
+ * A pointer to the resulting third derivative.
+ */
+  virtual void Eval(const CATCrvParam &amp; iParam,
+		    const CATCrvEvalCommand &amp; iCommand,
+		    CATMathPoint* iPoint,
+		    CATMathVector* iFirstDeriv = NULL,
+		    CATMathVector* iSecondDeriv = NULL,
+		    CATMathVector* iThirdDeriv = NULL ) const =0;
+
+/**
+ * Sets a global parameter on &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @param iGlobalParam
+ * The value of the global parameter.
+ * @param ioParam
+ * The corresponding parameter on &lt;tt&gt;this&lt;/tt&gt;, valuated with &lt;tt&gt;iGlobalParam&lt;/tt&gt;.
+ */
+  virtual void CreateParam(const double iGlobalParam, CATCrvParam &amp; ioParam) const =0;
+
+/**
+ * Sets a global parameter on a CATCurve from a local parameter and
+ * an arc number.
+ * @param iLocal
+ * The value of the local parameter.
+ * @param iArc
+ * The arc number.
+ * @param ioParam
+ * The corresponding parameter on &lt;tt&gt;this&lt;/tt&gt;, valuated with &lt;tt&gt;iGlobalParam&lt;/tt&gt;.
+ */ 
+
+  virtual void CreateParam(const double iLocal, const CATLONG32 iArc, CATCrvParam &amp; ioParam) const =0;
+
+/**
+ * Returns the knot vector associated with &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @return
+ * The knot vector.
+ */
+  virtual const CATKnotVector * GetKnotVector() const =0;
+
+ /**
+ * Returns the current limits of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @param ioCurrentLimits
+ * The current limits.
+ */
+  virtual void GetLimits(CATCrvLimits &amp; ioCurrentLimits) const =0;
+
+ /**
+ * Returns the maximum limitations of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * &lt;br&gt;This does not take into account the current limitations of the
+ * curve. This maximum
+ * limits can be the creation limits or the limits that are obtained by 
+ * extrapolation, depending on the types of geometric objects.
+ * @param ioMaxLimits
+ * The maximum limits.
+ */
+  virtual void GetMaxLimits(CATCrvLimits &amp; ioMaxLimits) const = 0 ;
+
+//CAA_Exposed
+/**
+ * Returns the limitations of an arc of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ *&lt;br&gt;This does not take into account the current limitations of the
+ * curve.
+ * @param iArc
+ * The arc number.
+ * @param ioInternalMaxLimits
+ * The corresponding limitations.
+ */
+  virtual void GetInternalMaxLimits(const CATLONG32 iArc, CATCrvLimits &amp; ioInternalMaxLimits) const =0;
+
+/**
+ * Returns the limitations of an arc of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+  *&lt;br&gt;This takes into account the current limitations of the
+ * curve.
+ * @param iArc
+ * The arc number.
+ * @param ioInternalMaxLimits
+ * The corresponding limitations.
+ */
+  virtual void GetInternalLimits(const CATLONG32 iArc, CATCrvLimits &amp; ioInternalMaxLimits) const =0;
+
+//CAA_Exposed
+/**
+ * Returns the low current limitation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @param ioStartParam
+ * The first limitation.
+ */
+  virtual void GetStartLimit(CATCrvParam &amp; ioStartParam) const =0;
+
+  //CAA_Exposed
+/**
+ * Returns the high current limitation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+  * @param ioEndParam
+ * The end limitation.
+ */
+  virtual void GetEndLimit(CATCrvParam &amp; ioEndParam) const =0;
+
+/**
+ * Modifies the limitations of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @param iLimits
+ * The new current limitations.
+ */
+  virtual void SetLimits(const CATCrvLimits &amp; iLimits)=0;
+
+ //-------------------------------------------------------------------------
+ //- Equations management
+ //-------------------------------------------------------------------------
+  //CAA_Exposed
+/**
+ * Locks the equations of &lt;tt&gt;this&lt;/tt&gt; CATCurve before read them.
+ */
+  virtual void Lock() = 0 ;
+
+  //CAA_Exposed
+  /**
+ * Unlocks the equations of &lt;tt&gt;this&lt;/tt&gt; CATCurve after read them.
+ */
+  virtual void Unlock() = 0 ;
+
+  //CAA_Exposed
+/**
+ * Retrieves the mathematical equation associated with an arc of
+ * &lt;tt&gt;this&lt;/tt &gt; CATCurve.
+ * &lt;br&gt;Before retrieving the equations, you must &lt;tt&gt;Lock&lt;/tt&gt; the curve.
+ * You can then obtained the equations. When you have finished, you &lt;tt&gt;Unlock&lt;/tt&gt; the curve.
+ * The equations are then automatically deleted. 
+ * @param iArc
+ * The arc number.
+ * @param oFx
+ * A pointer to the equation of the first coordinate &lt;tt&gt;X=oFx(w)&lt;/tt&gt;.
+ * @param oFy
+ * A pointer to the equation of the second coordinate &lt;tt&gt;Y=oFy(w)&lt;/tt&gt;.
+ * @param oFz
+ * A pointer to the equation of the third coordinate &lt;tt&gt;Z=oFy(w)&lt;/tt&gt;.
+ */
+  virtual void GetEquation(const CATLONG32 iArc,
+			   const CATMathFunctionX * &amp; oFx,
+			   const CATMathFunctionX * &amp; oFy,
+			   const CATMathFunctionX * &amp; oFz) const=0;
+
+  //CAA_Exposed
+/**
+ * Retrieves the mathematical equation associated with 
+ * &lt;tt&gt;this&lt;/tt &gt; CATCurve.
+* &lt;br&gt;Before retrieving the equations, you must &lt;tt&gt;Lock&lt;/tt&gt; the curve.
+ * You can then obtained the equations. When you have finished, you &lt;tt&gt;Unlock&lt;/tt&gt; the curve.
+ * The equations are then automatically deleted. 
+ * @param oFx
+ * A pointer to the equation of the first coordinate &lt;tt&gt;X=oFx(w)&lt;/tt&gt;.
+ * @param oFy
+ * A pointer to the equation of the second coordinate &lt;tt&gt;Y=oFy(w)&lt;/tt&gt;.
+ * @param oFz
+ * A pointer to the equation of the third coordinate &lt;tt&gt;Z=oFy(w)&lt;/tt&gt;.
+ */
+  virtual void GetGlobalEquation(const CATMathFunctionX * &amp; oFx,
+				 const CATMathFunctionX * &amp; oFy,
+				 const CATMathFunctionX * &amp; oFz) const=0;
+
+  //CAA_Exposed
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCurve is periodic.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curve.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;If the CATCurve is not periodic.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the CATCurve is periodic.  &lt;/dl&gt;
+ */
+  virtual CATBoolean IsClosed() const=0;
+ 	
+  //CAA_Exposed
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCurve is invariant.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curve.
+ * @param oTransfo1D
+ * The 1D-transformation defining the change of parametrization between &lt;tt&gt;this&lt;/tt&gt; and the transformation of
+ * &lt;tt&gt;this&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not set.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of &lt;tt&gt;this&lt;/tt&gt; is geometrically the same as &lt;tt&gt;this&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean IsInvariant(const CATMathTransformation &amp; iTransfo,
+			         CATMathTransformation1D* oTransfo1D = NULL) const = 0;
+
+  //CAA_Exposed
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCurve is confused with another curve.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curves.
+ * @param oTransfo1D
+ * The 1D-transformation defining the change of parametrization between the transformation of 
+ * &lt;tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iTCurve&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not set.
+ * @return
+  * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of &lt;tt&gt;this&lt;/tt&gt; is geometrically the same as &lt;tt&gt;iTCurve&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean IsConfused(const CATMathTransformation   &amp; iTransfo,
+				const CATCurve                * iTCurve,
+				      CATMathTransformation1D * oTransfo1D = NULL) const = 0;
+
+ /**
+ * Retrieves the maximum bounding box including an arc of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * &lt;br&gt;This does not take into account the current limitations of the curve.
+ * @param iArc
+ * The arc number.
+ * @param ioBox.
+ * The 3D box.
+ */
+  virtual void GetInternalMaxBoundingBox(const CATLONG32 iArc, CATMathBox &amp; ioBox) const = 0 ;
+
+/**
+ * Retrieves the bounding box including an arc of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ *&lt;br&gt;This takes into account the current limitations of the
+ * curve.
+ * @param iArc
+ * The arc number.
+ * @param ioBox.
+ * The 3D box.
+ */
+  virtual void GetInternalBoundingBox(const CATLONG32 iArc, CATMathBox &amp; ioBox) const = 0 ;
+
+  //CAA_Exposed
+/**
+ * Computes the bounding box of &lt;tt&gt;this&lt;/tt&gt; CATCurve trimmed by given Limits.
+ *&lt;br&gt;This does not take into account the current limitations of the
+ * curve.
+ * @param iLimits
+ * The domain to take into account.
+ * @param ioBox.
+ * The 3D box.
+ */
+  virtual void GetBox( const CATCrvLimits &amp; iLimits, CATMathBox &amp; ioBox ) const = 0 ;
+
+  //CAA_Exposed
+/**
+ * Returns a pointer to the mathematical representation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * The life cycle of the returned CATMathCurve must be managed by the calling application.
+ * &lt;pre&gt;
+ * CATMathCurve * pMathCurve = hCurve-&gt;GetMathCurve();
+ * if (pMathCurve)
+ *   {
+ *     ...
+ *     delete pMathCurve; pMathCurve=NULL;
+ *	 }
+ * &lt;/pre&gt;
+ * @return 
+ * The mathematical curve associated with &lt;tt&gt;this&lt;/tt&gt;. If the
+ * mathematical representation does not exist, the method returns a
+ * &lt;tt&gt;NULL&lt;/tt&gt; pointer.
+ */
+  virtual CATMathCurve* GetMathCurve() const = 0 ;
+
+  //CAA_Exposed
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCurve has a mathematical representation.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If &lt;tt&gt;this&lt;/tt&gt; has a mathematical representation.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */ 
+  virtual CATBoolean HasMathCurve() const = 0 ;
+ 
+  //CAA_Exposed
+/**
+ * Returns a pointer to the geometric representation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * @param ioRepLimits
+ * The limitations of the returned curve.
+ * @param ioRepOrientation
+ * The relative orientation of the returned curve.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt; If the returned curve has the same orientation
+ *      &lt;dt&gt; &lt;tt&gt;-1&lt;/tt&gt; &lt;dd&gt; If the returned curve has the opposite orientation.
+ *&lt;/dl&gt;
+ * @return
+ * The canonical underlying geometry.
+ *&lt;br&gt; This is usefull for CATEdgeCurves suc as CATSimCurves in order to access
+ * the underlying canonical geometry (such as CATCircle, CATLine,...).
+ *  Returns &lt;tt&gt;this&lt;/tt&gt; otherwise.
+ */
+  virtual const CATCurve * GetGeometricRep(CATCrvLimits &amp; ioRepLimits,
+					   short &amp; ioRepOrientation) const = 0 ;
+
+  //CAA_Exposed
+/**
+ * The diagnosis of evaluation.
+ * @param NoSolution 
+ *No parameter corresponds to this point
+ * @param SingleSolution
+ *Only one parameter corresponds to this point.
+ *@param MultipleSolution
+ *Several parameters correspond to this point.
+ *@param InfiniteSolution
+ * Infinitely many parameters correspond
+ */
+  enum CATSolutionDiagnostic { NoSolution , 
+			       SingleSolution , 
+			       MultipleSolution ,
+			       InfiniteSolution } ;
+//CAA_Exposed
+ /**
+ * Retrieves the CATCrvParam on &lt;tt&gt;this&lt;/tt&gt; CATCurve corresponding to a given CATMathPoint.
+ * &lt;br&gt;This transformation is only available
+ * on canonical objects such as planes, lines, conics.
+ * @param iPoint
+ * The CATMathPoint which coordinates are to be transformed as CATCrvParam.
+ * @param ioParam
+ * The first corresponding CATCrvParam on the curve. 
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ */
+  virtual CATCurve::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,
+						         CATCrvParam  &amp; ioParam) const = 0 ;
+
+  //CAA_Exposed
+/**
+ * Retrieves the CATCrvParam on &lt;tt&gt;this&lt;/tt&gt; CATCurve corresponding to a CATMathPoint
+ * inside limitations.
+ *&lt;br&gt;This transformation is only available
+ * on canonical objects such as lines and conics.
+ * @param iPoint
+ * The CATMathPoint whose coordinates are to be transformed as a CATCrvParam.
+ * @param ioParam
+ * The first corresponding CATCrvParam on the curve.
+ * @param iInside
+ * The CATCrvLimits to take into account for trimming the CATCurve.
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ */
+  virtual CATCurve::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,
+		          		       	         CATCrvParam  &amp; ioParam   ,
+						   const CATCrvLimits &amp; iInside  ) const = 0 ;
+
+
+ //CAA_Exposed
+/**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCurve is containing another one.
+  * @param iOther
+  * The oother curve.
+  * @return
+  * The diagnosis of the test.
+  *&lt;dl&gt; &lt;dt&gt; FALSE &lt;dd&gt; if the CATCurve does not contain &lt;tt&gt;iOther&lt;/tt&gt;
+  *     &lt;dt&gt; TRUE &lt;dd&gt; if the CATCurve contains &lt;tt&gt;iOther&lt;/tt&gt; &lt;/dl&gt;
+  */
+  virtual CATBoolean IsContaining ( const CATCurve* iOther ) const = 0 ;
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+/**
+ * @nodoc
+ * Returns a pointer to the reference of a CATCurve.
+ * @return
+ * The curve reference.
+ */
+  virtual const CATCrvParamReference * GetParamReference() const = 0;
+
+/** 
+  * @nodoc 
+  * Use GetMaxLimits.
+  */
+  virtual CATLONG32 GetNumberOfComponent() const =0;
+
+/** @nodoc */
+  enum CATProjectionDiagnostic { ProjectionDone, 
+				 ProjectionNotAvailableYet, 
+                                 ProjectionSingular,
+				 ProjectionOverlaps, 
+				 ProjectionDimensionLost } ; 
+
+/** @nodoc*/
+  virtual CATCurve::CATProjectionDiagnostic 
+  CreateProjection(CATPlane* iOn, CATPCurve* &amp; oProjection, 
+		   CATSetOfCrvParams* iIndexOnCurve=NULL,CATSetOfCrvParams* ioIndexOnPCurve=NULL) const=0;
+
+  /**  @nodoc */
+  virtual CATGeometry* GetOwner ( ) const = 0 ;
+
+  /** 
+  * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve by computing a CATMathPoint from a CATCrvParam.
+  * &lt;p&gt;The CATCurve::Eval signature with the CATCrvEvalCommand::EvalPoint argument
+  * should be preferred over CATCurve::EvalPoint as CATCurve::EvalPoint
+  * can lead to bad performances when it is used intensively. 
+  * @param iParam
+  * The parameter of the point to evaluate.
+  * @return CATMathPoint 
+  * The CATMathPoint which has iParam as its parameter.  
+  */
+  virtual CATMathPoint EvalPoint(const CATCrvParam &amp; iParam) const =0; 
+  /** 
+  * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve by computing a first derivative from a CATCrvParam.
+  * &lt;p&gt;The CATCurve::Eval signature with the CATCrvEvalCommand::EvalFirstDeriv argument
+  * should be preferred over CATCurve::EvalFirstDeriv as CATCurve::EvalFirstDeriv
+  * can lead to bad performances when it is used intensively. 
+  * @param iParam
+  * The parameter of the vector to evaluate.
+  * @return CATMathVector 
+  * The CATMathVector which has iParam as its parameter.  
+  */
+  virtual CATMathVector EvalFirstDeriv(const CATCrvParam &amp; iParam) const =0;
+   /** 
+  * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve by computing a second derivative from a CATCrvParam.
+  * &lt;p&gt;The CATCurve::Eval signature with the CATCrvEvalCommand::EvalSecondDeriv argument
+  * should be preferred over CATCurve::EvalSecondDeriv as CATCurve::EvalSecondDeriv
+  * can lead to bad performances when it is used intensively. 
+  * @param iParam
+  * The parameter of the vector to evaluate.
+  * @return CATMathVector 
+  * The CATMathVector which has iParam as its parameter.  
+  */
+  virtual CATMathVector EvalSecondDeriv(const CATCrvParam &amp; iParam) const =0;
+   /** 
+  * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve by computing a third derivative from a CATCrvParam.
+  * &lt;p&gt;The CATCurve::Eval signature with the CATCrvEvalCommand::EvalThirdDeriv argument
+  * should be preferred over CATCurve::EvalThirdDeriv as CATCurve::EvalThirdDeriv
+  * can lead to bad performances when it is used intensively. 
+  * @param iParam
+  * The parameter of the vector to evaluate.
+  * @return CATMathVector 
+  * The CATMathVector which has iParam as its parameter.  
+  */
+  virtual CATMathVector EvalThirdDeriv(const CATCrvParam &amp; iParam) const =0;
+    /** @nodoc */
+  virtual void Eval(const CATCrvLimits &amp; box,
+		    CATEvalCommand command,
+		    CATMathSetOfPoints *&amp; point,
+		    CATMathSetOfVectors *&amp; dw,
+		    CATMathSetOfVectors *&amp; dw2) const =0;
+ /**
+ * Sets a global parameter on a CATCurve from a local parameter and
+ * an arc number. This API can lead to bad performances when it is used intensively. 
+ * &lt;p&gt;The CATCurve::CreateParam signature which returns a void (see above) 
+ * should be preferred over the present signature.
+ * @param iLocal
+ * The value of the local parameter.
+ * @param iArc
+ * The arc number.
+ * @return
+ * The corresponding parameter on &lt;tt&gt;this&lt;/tt&gt;, valuated with &lt;tt&gt;iGlobalParam&lt;/tt&gt;.
+ */ 
+  virtual CATCrvParam CreateParam(const double &amp; iLocal, const CATLONG32 &amp; iArc) const =0;
+  /**
+ * Sets a global parameter on &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * This API can lead to bad performances when it is used intensively. 
+ * &lt;p&gt;The CATCurve::CreateParam signature which returns a void (see above) 
+ * should be preferred over the present signature.
+ * @param iGlobalParam
+ * The value of the global parameter.
+ * @return ioParam
+ * The corresponding parameter on &lt;tt&gt;this&lt;/tt&gt;, valuated with &lt;tt&gt;iGlobalParam&lt;/tt&gt;.
+ */
+  virtual CATCrvParam CreateParam(const double &amp; iGlobalParam) const =0;
+  /**
+ * Returns the limitations of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * The CATCurve::GetLimits signature which returns a void should be preferred 
+ * over the present API.
+ * @return
+ * The current limitations.
+ */
+  virtual CATCrvLimits GetLimits() const =0;
+ /**
+ * Returns the maximum limitations of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * The CATCurve::GetMaxLimits signature which returns a void should be preferred 
+ * over the present API.
+ * @return
+ * The current limitations.
+ */
+  virtual CATCrvLimits GetMaxLimits() const = 0 ;
+    /** @nodoc */
+  virtual CATCrvLimits GetInternalMaxLimits(const CATLONG32 iArc) const =0;
+    /** @nodoc */
+  virtual CATCrvLimits GetInternalLimits(const CATLONG32 iArc) const =0;
+  /**
+ * Returns the low current limitation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * The CATCurve::GetStartLimit signature which returns a void should be preferred 
+ * over the present API.
+ * @return
+ * The start limitation.
+ */
+  virtual CATCrvParam GetStartLimit() const =0;
+  /**
+ * Returns the high current limitation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ * The CATCurve::GetEndLimit signature which returns a void should be preferred 
+ * over the present API.
+ * @return
+ * The end limitation.
+ */
+  virtual CATCrvParam GetEndLimit() const =0;
+    /** @nodoc */
+  virtual CATMathBox GetInternalMaxBoundingBox(const CATLONG32 iArc) const = 0 ;
+    /** @nodoc */
+  virtual CATMathBox GetInternalBoundingBox(const CATLONG32 iArc) const = 0;
+    /** @nodoc */
+  virtual void OpenEquation () const=0;
+    /** @nodoc */
+  virtual void CloseEquation () const=0;
+	 /**
+ * @nodoc
+ * converts the internal parameter W to the naturel parameter W for implicit curves. 
+ * For example, the natural parameter of a circle is the angle.
+ */
+	virtual double GetNaturalParamFromParam(const CATCrvParam &amp;iParam) const=0;
+	/**
+ * @nodoc
+ * converts the natural parameter W to the internal parameter W for implicit curves. 
+ */
+	virtual void GetParamFromNaturalParam(double iNatural, CATCrvParam &amp;oParam) const=0;
+
+ /**
+  * @nodoc
+  * @return 0 on success, negative number upon error
+  */
+  virtual int GetAdvancedBox(const CATCrvLimits &amp;iLimits, CATMathAdvancedBox &amp;ioBox) const = 0;
+
+/** @nodoc */
+  virtual void PropagateQuery(CATICGMUnknown *iFrom, const CATCrvLimits &amp; iLimits, CATCGMQueryManager &amp;iQuery ) = 0;
+};
+CATDeclareHandler(CATCurve,CATGeometry);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvSide.html">← 上一页: CATCrvSide.h</a></div>
+        <div><a href="CATCylinder.html">下一页: CATCylinder.h →</a></div>
+    </div>
+</body>
+</html>

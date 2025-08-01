@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSmarTeamIntegInterfaces/PublicGenerated/win_b64/TIE_CATIAStiEngine.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSmarTeamIntegInterfaces/PublicGenerated/win_b64/TIE_CATIAStiEngine.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIAStiDBItem.html">← 上一页: TIE_CATIAStiDBItem.h</a></div>
+        <div><a href="../../../CATStrFunctionalInterfaces/PublicGenerated/win_b64/CATIAEndCutESSObjectSettingAtt.html">下一页: CATIAEndCutESSObjectSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIAStiEngine
+#define __TIE_CATIAStiEngine
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATExitJournal.h&quot;
+#include &quot;CATIAStiEngine.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIAStiEngine */
+#define declare_TIE_CATIAStiEngine(classe) \
+ \
+ \
+class TIECATIAStiEngine##classe : public CATIAStiEngine \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIAStiEngine, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT __stdcall get_IntegrationType(CATBSTR &amp; oType); \
+      virtual HRESULT __stdcall get_UseGraphicalUI(CAT_VARIANT_BOOL &amp; oIsActive); \
+      virtual HRESULT __stdcall put_UseGraphicalUI(CAT_VARIANT_BOOL iIsActive); \
+      virtual HRESULT __stdcall Connect(const CATBSTR &amp; iUserLogin, const CATBSTR &amp; iUserPassword); \
+      virtual HRESULT __stdcall Disconnect(); \
+      virtual HRESULT __stdcall IsConnected(CAT_VARIANT_BOOL &amp; oIsConnected); \
+      virtual HRESULT __stdcall GetStiDBItemFromCATBSTR(const CATBSTR &amp; iFullPath, CATIAStiDBItem *&amp; oStiDBItem); \
+      virtual HRESULT __stdcall GetStiDBItemFromAnyObject(CATIABase * iAnyObject, CATIAStiDBItem *&amp; oStiDBItem); \
+      virtual HRESULT __stdcall GetSMARTEAMObjectID(CATIAStiDBItem * iStiDBItem, CATLONG &amp; oobjectId); \
+      virtual HRESULT __stdcall GetSMARTEAMClassID(CATIAStiDBItem * iStiDBItem, short &amp; oclassId); \
+      virtual HRESULT __stdcall Save(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleCheckIn(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleRelease(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleCheckOut(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleNewRelease(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleUndoCheckOut(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall BuildDocDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem); \
+      virtual HRESULT __stdcall BuildFileDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleCheckOutPropagated(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall LifeCycleNewReleasePropagated(CATIAStiDBItem * iStiDBItem); \
+      virtual HRESULT __stdcall RefreshInfo(); \
+      virtual HRESULT __stdcall GetTeamPDMURL(CATIAStiDBItem * iStiDBItem, CATBSTR &amp; oTeamPDMURL); \
+      virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+      virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+      virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+      virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+      virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+};
+
+
+
+#define ENVTIEdeclare_CATIAStiEngine(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT __stdcall get_IntegrationType(CATBSTR &amp; oType); \
+virtual HRESULT __stdcall get_UseGraphicalUI(CAT_VARIANT_BOOL &amp; oIsActive); \
+virtual HRESULT __stdcall put_UseGraphicalUI(CAT_VARIANT_BOOL iIsActive); \
+virtual HRESULT __stdcall Connect(const CATBSTR &amp; iUserLogin, const CATBSTR &amp; iUserPassword); \
+virtual HRESULT __stdcall Disconnect(); \
+virtual HRESULT __stdcall IsConnected(CAT_VARIANT_BOOL &amp; oIsConnected); \
+virtual HRESULT __stdcall GetStiDBItemFromCATBSTR(const CATBSTR &amp; iFullPath, CATIAStiDBItem *&amp; oStiDBItem); \
+virtual HRESULT __stdcall GetStiDBItemFromAnyObject(CATIABase * iAnyObject, CATIAStiDBItem *&amp; oStiDBItem); \
+virtual HRESULT __stdcall GetSMARTEAMObjectID(CATIAStiDBItem * iStiDBItem, CATLONG &amp; oobjectId); \
+virtual HRESULT __stdcall GetSMARTEAMClassID(CATIAStiDBItem * iStiDBItem, short &amp; oclassId); \
+virtual HRESULT __stdcall Save(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleCheckIn(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleRelease(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleCheckOut(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleNewRelease(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleUndoCheckOut(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall BuildDocDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem); \
+virtual HRESULT __stdcall BuildFileDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem); \
+virtual HRESULT __stdcall LifeCycleCheckOutPropagated(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall LifeCycleNewReleasePropagated(CATIAStiDBItem * iStiDBItem); \
+virtual HRESULT __stdcall RefreshInfo(); \
+virtual HRESULT __stdcall GetTeamPDMURL(CATIAStiDBItem * iStiDBItem, CATBSTR &amp; oTeamPDMURL); \
+virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+
+
+#define ENVTIEdefine_CATIAStiEngine(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT __stdcall  ENVTIEName::get_IntegrationType(CATBSTR &amp; oType) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)get_IntegrationType(oType)); \
+} \
+HRESULT __stdcall  ENVTIEName::get_UseGraphicalUI(CAT_VARIANT_BOOL &amp; oIsActive) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)get_UseGraphicalUI(oIsActive)); \
+} \
+HRESULT __stdcall  ENVTIEName::put_UseGraphicalUI(CAT_VARIANT_BOOL iIsActive) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)put_UseGraphicalUI(iIsActive)); \
+} \
+HRESULT __stdcall  ENVTIEName::Connect(const CATBSTR &amp; iUserLogin, const CATBSTR &amp; iUserPassword) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)Connect(iUserLogin,iUserPassword)); \
+} \
+HRESULT __stdcall  ENVTIEName::Disconnect() \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)Disconnect()); \
+} \
+HRESULT __stdcall  ENVTIEName::IsConnected(CAT_VARIANT_BOOL &amp; oIsConnected) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)IsConnected(oIsConnected)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetStiDBItemFromCATBSTR(const CATBSTR &amp; iFullPath, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetStiDBItemFromCATBSTR(iFullPath,oStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetStiDBItemFromAnyObject(CATIABase * iAnyObject, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetStiDBItemFromAnyObject(iAnyObject,oStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetSMARTEAMObjectID(CATIAStiDBItem * iStiDBItem, CATLONG &amp; oobjectId) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetSMARTEAMObjectID(iStiDBItem,oobjectId)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetSMARTEAMClassID(CATIAStiDBItem * iStiDBItem, short &amp; oclassId) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetSMARTEAMClassID(iStiDBItem,oclassId)); \
+} \
+HRESULT __stdcall  ENVTIEName::Save(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)Save(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleCheckIn(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleCheckIn(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleRelease(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleRelease(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleCheckOut(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleCheckOut(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleNewRelease(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleNewRelease(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleUndoCheckOut(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleUndoCheckOut(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::BuildDocDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)BuildDocDBItemFromSmarTeamID(iobjectId,iclassId,oStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::BuildFileDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)BuildFileDBItemFromSmarTeamID(iobjectId,iclassId,oStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleCheckOutPropagated(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleCheckOutPropagated(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::LifeCycleNewReleasePropagated(CATIAStiDBItem * iStiDBItem) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)LifeCycleNewReleasePropagated(iStiDBItem)); \
+} \
+HRESULT __stdcall  ENVTIEName::RefreshInfo() \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)RefreshInfo()); \
+} \
+HRESULT __stdcall  ENVTIEName::GetTeamPDMURL(CATIAStiDBItem * iStiDBItem, CATBSTR &amp; oTeamPDMURL) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetTeamPDMURL(iStiDBItem,oTeamPDMURL)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)get_Application(oApplication)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)get_Parent(oParent)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)get_Name(oNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)put_Name(iNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+return (ENVTIECALL(CATIAStiEngine,ENVTIETypeLetter,ENVTIELetter)GetItem(IDName,RealObj)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIAStiEngine(classe)    TIECATIAStiEngine##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIAStiEngine(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIAStiEngine, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIAStiEngine, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIAStiEngine, classe, 2) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIAStiEngine, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIAStiEngine, classe) \
+ \
+HRESULT __stdcall  TIECATIAStiEngine##classe::get_IntegrationType(CATBSTR &amp; oType) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,1,&amp;_Trac2,&amp;oType); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_IntegrationType(oType); \
+   ExitAfterCall(this,1,_Trac2,&amp;_ret_arg,&amp;oType); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::get_UseGraphicalUI(CAT_VARIANT_BOOL &amp; oIsActive) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,2,&amp;_Trac2,&amp;oIsActive); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_UseGraphicalUI(oIsActive); \
+   ExitAfterCall(this,2,_Trac2,&amp;_ret_arg,&amp;oIsActive); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::put_UseGraphicalUI(CAT_VARIANT_BOOL iIsActive) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,3,&amp;_Trac2,&amp;iIsActive); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;put_UseGraphicalUI(iIsActive); \
+   ExitAfterCall(this,3,_Trac2,&amp;_ret_arg,&amp;iIsActive); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::Connect(const CATBSTR &amp; iUserLogin, const CATBSTR &amp; iUserPassword) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,4,&amp;_Trac2,&amp;iUserLogin,&amp;iUserPassword); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Connect(iUserLogin,iUserPassword); \
+   ExitAfterCall(this,4,_Trac2,&amp;_ret_arg,&amp;iUserLogin,&amp;iUserPassword); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::Disconnect() \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,5,&amp;_Trac2); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Disconnect(); \
+   ExitAfterCall(this,5,_Trac2,&amp;_ret_arg); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::IsConnected(CAT_VARIANT_BOOL &amp; oIsConnected) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,6,&amp;_Trac2,&amp;oIsConnected); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsConnected(oIsConnected); \
+   ExitAfterCall(this,6,_Trac2,&amp;_ret_arg,&amp;oIsConnected); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::GetStiDBItemFromCATBSTR(const CATBSTR &amp; iFullPath, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,7,&amp;_Trac2,&amp;iFullPath,&amp;oStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetStiDBItemFromCATBSTR(iFullPath,oStiDBItem); \
+   ExitAfterCall(this,7,_Trac2,&amp;_ret_arg,&amp;iFullPath,&amp;oStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::GetStiDBItemFromAnyObject(CATIABase * iAnyObject, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,8,&amp;_Trac2,&amp;iAnyObject,&amp;oStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetStiDBItemFromAnyObject(iAnyObject,oStiDBItem); \
+   ExitAfterCall(this,8,_Trac2,&amp;_ret_arg,&amp;iAnyObject,&amp;oStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::GetSMARTEAMObjectID(CATIAStiDBItem * iStiDBItem, CATLONG &amp; oobjectId) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,9,&amp;_Trac2,&amp;iStiDBItem,&amp;oobjectId); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetSMARTEAMObjectID(iStiDBItem,oobjectId); \
+   ExitAfterCall(this,9,_Trac2,&amp;_ret_arg,&amp;iStiDBItem,&amp;oobjectId); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::GetSMARTEAMClassID(CATIAStiDBItem * iStiDBItem, short &amp; oclassId) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,10,&amp;_Trac2,&amp;iStiDBItem,&amp;oclassId); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetSMARTEAMClassID(iStiDBItem,oclassId); \
+   ExitAfterCall(this,10,_Trac2,&amp;_ret_arg,&amp;iStiDBItem,&amp;oclassId); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::Save(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,11,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Save(iStiDBItem); \
+   ExitAfterCall(this,11,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleCheckIn(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,12,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleCheckIn(iStiDBItem); \
+   ExitAfterCall(this,12,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleRelease(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,13,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleRelease(iStiDBItem); \
+   ExitAfterCall(this,13,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleCheckOut(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,14,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleCheckOut(iStiDBItem); \
+   ExitAfterCall(this,14,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleNewRelease(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,15,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleNewRelease(iStiDBItem); \
+   ExitAfterCall(this,15,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleUndoCheckOut(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,16,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleUndoCheckOut(iStiDBItem); \
+   ExitAfterCall(this,16,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::BuildDocDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,17,&amp;_Trac2,&amp;iobjectId,&amp;iclassId,&amp;oStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;BuildDocDBItemFromSmarTeamID(iobjectId,iclassId,oStiDBItem); \
+   ExitAfterCall(this,17,_Trac2,&amp;_ret_arg,&amp;iobjectId,&amp;iclassId,&amp;oStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::BuildFileDBItemFromSmarTeamID(CATLONG iobjectId, short iclassId, CATIAStiDBItem *&amp; oStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,18,&amp;_Trac2,&amp;iobjectId,&amp;iclassId,&amp;oStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;BuildFileDBItemFromSmarTeamID(iobjectId,iclassId,oStiDBItem); \
+   ExitAfterCall(this,18,_Trac2,&amp;_ret_arg,&amp;iobjectId,&amp;iclassId,&amp;oStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleCheckOutPropagated(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,19,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleCheckOutPropagated(iStiDBItem); \
+   ExitAfterCall(this,19,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::LifeCycleNewReleasePropagated(CATIAStiDBItem * iStiDBItem) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,20,&amp;_Trac2,&amp;iStiDBItem); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;LifeCycleNewReleasePropagated(iStiDBItem); \
+   ExitAfterCall(this,20,_Trac2,&amp;_ret_arg,&amp;iStiDBItem); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::RefreshInfo() \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,21,&amp;_Trac2); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;RefreshInfo(); \
+   ExitAfterCall(this,21,_Trac2,&amp;_ret_arg); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIAStiEngine##classe::GetTeamPDMURL(CATIAStiDBItem * iStiDBItem, CATBSTR &amp; oTeamPDMURL) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,22,&amp;_Trac2,&amp;iStiDBItem,&amp;oTeamPDMURL); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetTeamPDMURL(iStiDBItem,oTeamPDMURL); \
+   ExitAfterCall(this,22,_Trac2,&amp;_ret_arg,&amp;iStiDBItem,&amp;oTeamPDMURL); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAStiEngine##classe::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,23,&amp;_Trac2,&amp;oApplication); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Application(oApplication); \
+   ExitAfterCall(this,23,_Trac2,&amp;_ret_arg,&amp;oApplication); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAStiEngine##classe::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,24,&amp;_Trac2,&amp;oParent); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Parent(oParent); \
+   ExitAfterCall(this,24,_Trac2,&amp;_ret_arg,&amp;oParent); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAStiEngine##classe::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,25,&amp;_Trac2,&amp;oNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Name(oNameBSTR); \
+   ExitAfterCall(this,25,_Trac2,&amp;_ret_arg,&amp;oNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAStiEngine##classe::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,26,&amp;_Trac2,&amp;iNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;put_Name(iNameBSTR); \
+   ExitAfterCall(this,26,_Trac2,&amp;_ret_arg,&amp;iNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIAStiEngine##classe::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,27,&amp;_Trac2,&amp;IDName,&amp;RealObj); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetItem(IDName,RealObj); \
+   ExitAfterCall(this,27,_Trac2,&amp;_ret_arg,&amp;IDName,&amp;RealObj); \
+   return(_ret_arg); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIAStiEngine(classe) \
+ \
+ \
+declare_TIE_CATIAStiEngine(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIAStiEngine##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIAStiEngine,&quot;CATIAStiEngine&quot;,CATIAStiEngine::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIAStiEngine(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIAStiEngine, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIAStiEngine##classe(classe::MetaObject(),CATIAStiEngine::MetaObject(),(void *)CreateTIECATIAStiEngine##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIAStiEngine(classe) \
+ \
+ \
+declare_TIE_CATIAStiEngine(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIAStiEngine##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIAStiEngine,&quot;CATIAStiEngine&quot;,CATIAStiEngine::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIAStiEngine(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIAStiEngine, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIAStiEngine##classe(classe::MetaObject(),CATIAStiEngine::MetaObject(),(void *)CreateTIECATIAStiEngine##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIAStiEngine(classe) TIE_CATIAStiEngine(classe)
+#else
+#define BOA_CATIAStiEngine(classe) CATImplementBOA(CATIAStiEngine, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIAStiDBItem.html">← 上一页: TIE_CATIAStiDBItem.h</a></div>
+        <div><a href="../../../CATStrFunctionalInterfaces/PublicGenerated/win_b64/CATIAEndCutESSObjectSettingAtt.html">下一页: CATIAEndCutESSObjectSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricOperators/PublicInterfaces/CATIntersectionCrvSur.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricOperators/PublicInterfaces/CATIntersectionCrvSur.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIntersectionCrvCrv.html">← 上一页: CATIntersectionCrvCrv.h</a></div>
+        <div><a href="CATIntersectionSurSur.html">下一页: CATIntersectionSurSur.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIntersectionCrvSur_H 
+#define CATIntersectionCrvSur_H 
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATCreateIntersection.h&quot;
+#include &quot;CATIntersectionSign.h&quot;
+#include &quot;CATGeoOperator.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;Y30C3XGG.h&quot;
+
+class CATPointOnCurve; 
+class CATPointOnSurface; 
+class CATCartesianPoint; 
+class CATCurve;
+class CATEdgeCurve;
+class CATSurface;
+class CATPCurve;
+class CATCrvLimits;
+class CATCrvParam;
+class CATSurParam;
+class CATSurLimits;
+class CATMathSetOfPointsND;
+class CATGeoFactory;
+class CATMathBox;
+//#ifdef CATIAV5R14
+struct CATPipeData;
+//#endif
+
+/**
+ * Class defining the operator of the intersection of a curve and a surface.
+ *&lt;br&gt;The operator outputs the isolated solutions (points) and the
+ * overlapping solutions (curves).
+ *&lt;ul&gt;
+ *&lt;li&gt;The CATIntersectionCrvSur operator is created with the &lt;tt&gt;CreateIntersection&lt;/tt&gt; method and 
+ * directly &lt;tt&gt;delete&lt;/tt&gt;d with the usual C++ delete operator.
+ * It is is not streamable. 
+ *&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. The advanced mode also allows you to
+ * run the same operator with different curves or surfaces.
+ *&lt;li&gt;In both cases, the result is accessed with two specific interators, one for the solution points,
+ * the other for the solution curves.
+ *&lt;/ul&gt;
+ */
+class ExportedByY30C3XGG CATIntersectionCrvSur : public CATGeoOperator
+{
+  CATCGMVirtualDeclareClass(CATIntersectionCrvSur);
+  public:
+/**
+ * @nodoc
+ * Use the &lt;tt&gt;CreateIntersection&lt;/tt&gt; global method.
+ */   
+    CATIntersectionCrvSur(CATGeoFactory *);
+
+/**
+ * Destructor.
+ */   
+    virtual ~CATIntersectionCrvSur();
+
+//
+//  Getting the isolated intersections between the curve and the surface
+//
+/**
+ * Returns the number of isolated solution points of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The number of isolated solution points.
+ */
+    virtual CATLONG32                GetNumberOfPoints() const = 0;
+
+/**
+ * Initializes the iterator of the resulting points.
+ *&lt;br&gt;By default, the initialization is performed once the operator runs, 
+ * and this is therefore only used to read the solutions again.
+ */
+    virtual void                BeginningPoint() = 0;
+
+/**
+ * Skips to the next solution point of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ *&lt;br&gt;After &lt;tt&gt;BeginningPoint&lt;/tt&gt;, it skips to the first point. 
+ * @return
+ * The existence of the next solution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;dd&gt;if there is a solution point
+ *    &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; &lt;dd&gt;no more solution point.&lt;/dl&gt;
+ */
+    virtual CATBoolean          NextPoint() = 0;
+
+/**
+ * Createss the next solution point of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The pointer to the created point. A new point is created each time this method is called.
+ * If you do not want to keep the created point, use the @href CATICGMContainer#Remove method.
+ */
+    virtual CATCartesianPoint  *GetCartesianPoint()  = 0;
+
+/**
+ * Creates the next solution point on curve of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The pointer to the created point on curve. A new point is created each time this method is called.
+ * If you do not want to keep the created point, use the @href CATICGMContainer#Remove method.
+ */
+    virtual CATPointOnCurve    *GetPointOnCurve()  = 0;
+
+/**
+ * Returns the parameter on the curve of the next solution point of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The parameter.
+ */
+    virtual CATCrvParam         GetCurveParam() const =0;
+
+/**
+ * Returns the next solution point on surface of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The pointer to the created point on surface. A new point is created each time this method is called.
+ * If you do not want to keep the created point, use the @href CATICGMContainer#Remove method.
+ */
+    virtual CATPointOnSurface  *GetPointOnSurface()  = 0;
+
+/**
+ * Returns the parameter on the surface of the next solution point of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The parameter.
+ */
+    virtual CATSurParam         GetSurfaceParam() const  = 0;
+
+/**
+ * Returns the relative orientation of the curve tangent and the surface normal at the intersection point.
+ *&lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATIntersectionSignNegative&lt;/tt&gt;&lt;dd&gt; The scalar product between the curve tangent at the intersection point, 
+ * and the surface normal at the intersection point is negative. 
+ *    &lt;dt&gt;&lt;tt&gt;CATIntersectionSignPositive&lt;/tt&gt;&lt;dd&gt; The scalar product between the curve tangent at the intersection point, 
+ * and the surface normal at the intersection point is positive. 
+ *&lt;/dl&gt;
+ */
+    virtual CATIntersectionSign GetSignatureOn() const = 0;
+//
+//  Getting the confusion solution
+//
+/**
+ * Returns the number of solution curves of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The number of solution curves.
+ */
+    virtual CATLONG32         GetNumberOfCurves() const = 0;
+
+/**
+ * Initializes the iterator of the solution curves of &lt;tt&gt;this&lt;/tt&gt; 
+ * CATIntersectionCrvSur operator.
+ *&lt;br&gt;By default, the initialization is performed once the operator runs, 
+ * and this is therefore only used to read the solutions again.
+ */
+    virtual void         BeginningCurve() = 0;
+
+/**
+ * Skips to the next solution curve of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ *&lt;br&gt;After &lt;tt&gt;BeginningCurve&lt;/tt&gt;, it skips to the first curve. 
+ * @return
+ * The existence of the next solution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;dd&gt;if there is a solution curve
+ *    &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; &lt;dd&gt;no more solution curve.&lt;/dl&gt;
+ */
+    virtual CATBoolean   NextCurve() = 0;
+
+/**
+ * Creates the next solution curve of &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * @return
+ * The pointer to the created curve on surface. A new curve is created each time this method is called.
+ * If you do not want to keep the created curve, use the @href CATICGMContainer#Remove method.
+ */
+    virtual CATPCurve   *GetPCurve()  = 0;
+/**
+ *@nodoc
+ * Returns the marching points of the next resulting PCurve of a
+ * CATIntersectionCrvSur operator.
+ *&lt;br&gt;Creates the object if necessary.
+ */
+    virtual CATMathSetOfPointsND * GetSetOfPoints() const =0;
+
+/**
+ * Creates the next solution curve as an edge curve.
+ * @return
+ * The pointer to the created edge curve, composed of a part of the initial curve, and the corresponding
+ * part as a curve on the surface. 
+ * A new curve is created each time this method is called.
+ * If you do not want to keep the created curve, use the @href CATICGMContainer#Remove method.
+ */
+    virtual CATEdgeCurve * GetEdgeCurve() =0;
+
+
+/**
+ * Returns the domain of the next resulting curve of &lt;tt&gt;this&lt;/tt&gt;
+ * CATIntersectionCrvSur operator.
+ * @return
+ * The corresponding limitations.
+ */
+    virtual CATCrvLimits GetCurveBoundaries() const = 0;
+/**
+ * @nodoc
+ * Modifies the tolerance of points confusion for &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur operator.
+ * (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ */
+    virtual void SetTolerance(const double tolerance) = 0;
+
+/**
+ * Modifies the curve domain to take into account for &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur
+ * operator (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ *&lt;br&gt; It does not change the current curve 
+ * limitations.  
+ * @param iNewLimits
+ * The new limitations of the curve.
+ */
+    virtual void SetLimits(const CATCrvLimits &amp;iNewLimits) = 0;
+
+/**
+ * Modifies the surface domain to take into account for &lt;tt&gt;this&lt;/tt&gt; CATIntersectionCrvSur
+ * operator (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ *&lt;br&gt; It does not change the current surface 
+ * limitations. 
+ * @param iNewLimits
+ * The new limitations of the surface.
+ */
+    virtual void SetLimits(const CATSurLimits &amp;iNewLimits) = 0;
+
+/**
+ * Defines the intersection with another curve (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * @param iNewCurve
+ * The pointer to the new curve.
+ */
+    virtual void         SetCurve(const CATCurve * iNewCurve) = 0;
+
+/**
+ * Defines the intersection with another second surface (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * @param iNewSurface
+ * The pointer to the new surface.
+ */
+    virtual void         SetSurface(const CATSurface * iNewSurface) = 0;
+
+/**
+ * @nodoc
+ * Asks to the CATIntersectionCrvSur to get the solutions at the same geometric
+ * 3D point and with different paramters.
+ * Do not use.
+ */
+    virtual void         SetEliminationOn() = 0;
+
+/**
+ * @nodoc
+ * Asks to the CATIntersectionCrvSur to get one of the solutions at 
+ * the same geometrical location and with different parameters.
+ * Do not use.
+ */
+    virtual void         SetEliminationOff() = 0;
+
+/**
+ * @nodoc
+ * Asks CATIntersectionCrvSur to operate on the extremities of the operands.
+ * (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+ */
+    virtual void         FindExtremitiesOn() = 0;
+
+/**
+ * @nodoc
+ * Asks CATIntersectionCrvSur not to operate on the extremities of the operands.
+ * (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+ */
+    virtual void         FindExtremitiesOff() = 0;
+
+/**
+ * @nodoc
+ * Asks CATIntersectionCrvSur to operate inside the box limitations.
+ * (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+ * All solutions are in the box, if there are any.
+ * @param i3DBox
+ * The 3D Box in which to operate.
+ */
+    virtual void         SearchInBox(const CATMathBox&amp; i3DBox) = 0;
+
+//#ifdef CATIAV5R14
+   /**
+    * @nodoc
+	* Checks if a confusion exists between iCrvParam1 and iSurParam1 
+	* and between iCrvParam2 and iSurParam2. 
+	* &lt;br&gt;This method is called internally by operator when option has been set with 
+	* SetTryOnlyConfusion method.
+	* @param iCrvParam1
+	* The first point parameter on curve.
+	* @param iCrvParam2
+	* The second point parameter on curve.
+	* @param iSurParam1
+	* The first point parameter on surface.
+	* @param iSurParam2
+	* The second parameter on surface.
+    */
+    virtual void TryOnlyConfusion(const CATCrvParam &amp; iCrvParam1, const CATSurParam &amp; iSurParam1,
+		const CATCrvParam &amp; iCrvParam2, const CATSurParam &amp; iSurParam2) = 0;
+   /**
+    * @nodoc
+	* Do not use.
+    */
+    virtual void SetConfusionBetweenZerosOff() = 0;
+   /**
+    * @nodoc
+	* Authorize intersection with Surface Borders.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+	* &lt;br&gt;By default this option is unset for operator.
+    * @param iBorderSolution
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Intersection with borders allowed.
+    *     &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Intersection with border not allowed. &lt;/dl&gt;
+    */
+    virtual void SetBorderSolutions(CATBoolean iBorderSolution=1) = 0;
+    /**
+    * @nodoc
+	* Remove points at confusion extremities.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+	* &lt;br&gt;By default this option is unset for operator.
+    * @param iNoPointAtConfusionExtremity
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt; Remove points.
+    *     &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Don&#x27;t remove points.&lt;/dl&gt;
+    */
+    virtual void SetNoPointAtConfusionExtremity(CATBoolean iNoPointAtConfusionExtremity=1) = 0;
+    /**
+    * @nodoc
+	* Authorize mixed result in case of mixed solution.
+	* &lt;br&gt;By default result is a point.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+    */
+    virtual void SetMixedSolutionOfCrossingTreatment() = 0;
+    /**
+    * @nodoc
+	* Disable use of &quot;EasySolver&quot; used for performance reasons on expensive surfaces.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+	* &lt;br&gt;By default, EasySolver is used.
+    */
+    virtual void SetExpensiveSurface() = 0;
+    /**
+    * @nodoc
+	* Checks if a confusion was found in result.
+    * @return
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;There is a confusion in result.
+    *     &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&lt;/dt&gt;&lt;dd&gt;There isn&#x27;t a confusion in result.&lt;/dl&gt;
+    */
+    virtual CATBoolean IsMixedSolution() = 0;
+    /**
+    * @nodoc
+	* Enables quick detection of non intersection in the case of a pipe.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+    * @param iPipeData
+	* The PipeData of the surface to intersect.
+    */
+    virtual void SetPipeData(CATPipeData * iPipeData) = 0;
+    /**
+    * @nodoc
+	* Specify inits in a CATMathSetOfPoints of dimension 3.
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode)
+    *  &lt;br&gt;These inits consists in all the inits of the following type :
+	* &lt;ul&gt;
+    * &lt;li&gt; Curve extremities which are admissible in the surface.
+    * &lt;li&gt; Solution of the intersection between the curve and frontier of surfaces.
+	* &lt;/ul&gt;
+    * If admissable inits have been set, operator does not look for other inits .
+    * @param iInits
+	* The set of admissable init points.
+    */
+    virtual void SetAdmissibleInits(const CATMathSetOfPointsND &amp; iInits) = 0;
+    /**
+    * @nodoc
+	* Checks if Curve result is linear.
+	* &lt;br&gt;To be used within Curve iterator.
+	* @return
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt;Curve is linear.
+    *     &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;Curve isn&#x27;t linear. &lt;/dl&gt;
+    */
+    virtual CATBoolean IsLinearSol() const = 0;
+    /**
+    * @nodoc
+	* Gets construction data of a PCurve result when the solution is quintic.
+	* &lt;br&gt;To be used within Curve iterator.
+	* @param oPointsForQuintic
+	* @param oTangentsForQuintic
+	* @param oSecondDerivForQuintic
+    */
+    virtual CATBoolean GetDataForQuintic(CATMathSetOfPointsND &amp; oParamsForQuintic, 
+		CATMathSetOfPointsND &amp; oPointsForQuintic,
+		CATMathSetOfPointsND &amp; oTangentsForQuintic   , 
+		CATMathSetOfPointsND &amp; oSecondDerivForQuintic) const = 0;
+    /**
+    * @nodoc
+	* Get relative orientation of Curve result.
+    * &lt;br&gt;To be used within Curve iterator.
+	* @return
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt;Same orientation as input Curve.
+    *     &lt;dt&gt;&lt;tt&gt;-1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;Opposite orientation from input Curve. &lt;/dl&gt;
+    */
+    virtual CATLONG32 GetRelativeOrientation() const = 0;
+    /**
+    * @nodoc
+	* Gets the domain of the Curve result. 
+    * &lt;br&gt;To be used within Curve iterator.
+    * @param oStartParam 
+	* First limit.
+    * @param oEndParam
+	* End limit.
+    */
+    virtual void GetCurveBoundaries(CATCrvParam &amp; oStartParam, CATCrvParam &amp; oEndParam) const = 0;
+    /**
+    * @nodoc
+	* Set try only confusion option in order to check if a confusion exists 
+    * between iCrvParam1 and iSurParam1 and between iCrvParam2 and iSurParam2 
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	* &lt;br&gt;By default this option is unset for operator.
+	* @param iCrvParam1
+	* The first point parameter on curve.
+	* @param iSurParam1
+	* The first point parameter on surface.
+	* @param iCrvParam2
+	* The second point parameter on curve.
+	* @param iSurParam2
+	* The second point parameter on surface.
+    * @param iConf
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Option is set.
+    *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Option is unset.  &lt;/dl&gt;
+    */
+    virtual void SetTryOnlyConfusion(const CATCrvParam &amp; iCrvParam1, const CATSurParam &amp; iSurParam1,
+		const CATCrvParam &amp; iCrvParam2, const CATSurParam &amp; iSurParam2,CATBoolean iConf=1) = 0;
+//#endif
+};
+#include &quot;CreateIntersection.h&quot;
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIntersectionCrvCrv.html">← 上一页: CATIntersectionCrvCrv.h</a></div>
+        <div><a href="CATIntersectionSurSur.html">下一页: CATIntersectionSurSur.h →</a></div>
+    </div>
+</body>
+</html>

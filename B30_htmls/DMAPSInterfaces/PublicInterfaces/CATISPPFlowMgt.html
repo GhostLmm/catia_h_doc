@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMAPSInterfaces/PublicInterfaces/CATISPPFlowMgt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DMAPSInterfaces/PublicInterfaces/CATISPPFlowMgt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPContainer.html">← 上一页: CATISPPContainer.h</a></div>
+        <div><a href="CATISPPInitCreation.html">下一页: CATISPPInitCreation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISPPFlowMgt_H_
+#define CATISPPFlowMgt_H_
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;ProcessInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATISPPItem.h&quot;
+
+class CATISPPFlowMgt_var ;
+class CATListValCATBaseUnknown_var ;
+class CATISPPProductIO_var ;
+class CATISPPControlIO_var ;
+class CATISPPProductFlow_var ;
+class CATISPPControlFlow_var ;
+class CATISPPActivity_var ;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByProcessInterfaces IID IID_CATISPPFlowMgt ;
+#else
+extern &quot;C&quot; const IID IID_CATISPPFlowMgt ;
+#endif
+
+/**
+*  Interface to manage Control Flows and Product Flows between Activities. 
+*  &lt;br&gt; &lt;b&gt; Note: &lt;/b&gt; It is also used for Product Input and Output Management.
+**/
+
+class ExportedByProcessInterfaces CATISPPFlowMgt: public CATBaseUnknown 
+{
+  
+  CATDeclareInterface ;
+  
+ public:
+
+  /**
+    * Creates a Control Flow between two Activities.
+    * @param iPostActivity
+    * 	&lt;tt&gt; Handler on the Activity at the end of the Control Flow &lt;/tt&gt;
+    * @return
+    * 	Handler on the resulting Control Flow
+   **/
+  virtual HRESULT 			AddControlFlow (const CATISPPFlowMgt_var &amp; iPostActivity) = 0 ;
+  /**
+  * @nodoc
+  */
+  virtual void 				AddProductFlow (const CATISPPFlowMgt_var &amp; iPostActivity) = 0 ;
+
+  /**
+    * @nodoc
+    * This interface allows to create a Control Flow between two Activities, one being created at the same time
+    * @param iTypeToCreate
+    * 	&lt;tt&gt; Name of the type of Activity to create at the beginning of the Control Flow &lt;/tt&gt;
+    * @return
+    * 	Handler on the resulting Control Flow
+   **/
+  virtual CATBaseUnknown_var 				LinkAfter (const CATUnicodeString&amp; iTypeToCreate) = 0 ; 
+
+  /**
+    * @nodoc
+    * This interface allows to create a Control Flow between two Activities, one being created at the same time
+    * @param iTypeToCreate
+    * 	&lt;tt&gt; Name of the type of Activity to create at the end of the Control Flow &lt;/tt&gt;
+    * @return
+    * 	Handler on the resulting Control Flow
+   **/
+  virtual CATBaseUnknown_var 				LinkBefore (const CATUnicodeString&amp; iTypeToCreate) = 0 ;
+
+  /**
+    * @nodoc  
+    * This interface allows to insert an activity in a control flow
+    * @param iControlFlow
+    * 	&lt;tt&gt; Name of the control Flow &lt;/tt&gt;
+   **/
+// CFO 16/01/02 Passage of void to HRESULT to take into account of precedences
+  virtual  HRESULT 				InsertInLink (CATISPPControlFlow_var iControlFlow) = 0 ;
+
+  /**
+    * @nodoc  
+    * This interface allows to insert an activity in a product flow
+    * @param iControlFlow
+    * 	&lt;tt&gt; Name of the product Flow &lt;/tt&gt;
+   **/
+  virtual void 				InsertInLink (CATISPPProductFlow_var iProductFlow) = 0 ;
+
+  /**
+    * Allows to find the previous Activities from one Activity (in terms of Control).
+    * @param iType
+    * 	&lt;tt&gt; This optional parameter allows to filter for search on a certain Activity type &lt;/tt&gt;
+    * @return
+    * 	List of Handlers on preceding Activity interfaces
+   **/
+  virtual CATListValCATBaseUnknown_var		PreviousActivitiesForControl(const CATUnicodeString&amp; iType = &quot;Activity&quot;) =0;
+  /**
+  * @nodoc
+  */
+  virtual CATListValCATBaseUnknown_var		PreviousActivitiesForProduct(const CATISPPItem_var&amp; iItem = NULL_var) =0;
+
+  /**
+    * Returns following Activities from one Activity (in terms of Control).
+    * @param iType
+    * 	&lt;tt&gt; This optional parameter allows to filter for search on a certain Activity type &lt;/tt&gt;
+    * @return
+    * 	List of Handlers on following Activity interfaces
+   **/
+  virtual CATListValCATBaseUnknown_var		NextActivitiesForControl(const CATUnicodeString&amp; iType = &quot;Activity&quot;) =0;
+  /**
+  * @nodoc
+  */
+  virtual CATListValCATBaseUnknown_var		NextActivitiesForProduct(const CATISPPItem_var&amp; iItem = NULL_var) =0;
+
+ 
+  /**
+    * This interface allows to add a Product Input to an Activity
+    * @param iProductInstance
+    * 	&lt;tt&gt; This optional parameter allows to link this Input to a Part (Item) from an Assembly &lt;/tt&gt;
+    * @return
+    * 	Handler on newly created ProductIO interface
+   **/
+  virtual CATISPPProductIO_var		AddProductInput(const CATISPPItem_var &amp; iItem = NULL_var ) = 0 ;
+  /** @nodoc */
+  virtual CATISPPControlIO_var		AddControlInput() = 0 ;
+
+  
+  /**
+	* @nodoc
+    * This interface allows to add a Product Output to an Activity
+    * @param iProductInstance
+    * 	&lt;tt&gt; This optional parameter allows to link this Output to a Part (Item) from an Assembly &lt;/tt&gt;
+    * @return
+    * 	Handler on newly created ProductIO interface
+   **/
+  virtual CATISPPProductIO_var		AddProductOutput(const CATISPPItem_var &amp; iItem = NULL_var ) = 0 ;
+  /** @nodoc */
+  virtual CATISPPControlIO_var		AddControlOutput() = 0 ;
+
+
+  /**
+	* @nodoc
+    * This interface allows to add a Product Output to an Activity
+    * @param iProductIO
+    * 	&lt;tt&gt; This is the ProductIO to remove &lt;/tt&gt;
+   **/
+  virtual void				RemoveProductIO(const CATISPPProductIO_var &amp; iProductIO ) = 0 ;
+  /** @nodoc */
+  virtual void				RemoveControlIO(const CATISPPControlIO_var &amp; iProductIO ) = 0 ;
+  /** 
+    * Removes a Control Flow between two Activities.
+    * @param iActivity
+    * 	&lt;tt&gt; Handler on the Activity linked &lt;/tt&gt;
+  */
+  virtual void				RemoveControlFlow(const CATISPPFlowMgt_var &amp; iActivity ) = 0 ;
+  /** 
+   * Removes all Control Flow on the activity.
+   */
+  virtual void				RemoveControlFlow() = 0 ;
+  /** @nodoc */
+  virtual void				RemoveProductFlow(const CATISPPFlowMgt_var &amp; iActivity ) = 0 ;
+  /** @nodoc */
+  virtual void				RemoveProductFlow() = 0 ;
+
+  
+  /**
+    * @nodoc
+    * This interface allows to retrieve a list of Product Input to an Activity
+    * @param iItem
+    * 	&lt;tt&gt; This optional parameter allows to filter this search with a specific Part (Item) &lt;/tt&gt;
+    * @return
+    * 	List of Handlers on  ProductIO interface
+   **/
+  virtual CATListValCATBaseUnknown_var	 GetProductInput(const CATISPPItem_var &amp; iItem = NULL_var ) const = 0 ;
+  /**
+    * Returns a list of Control Input to an Activity.
+    * @return
+    * 	List of Handlers on  ControlIO interface
+   **/
+  virtual CATListValCATBaseUnknown_var	 GetControlInput() const = 0 ;
+
+  
+  /**
+    * @nodoc
+    * This interface allows to retrieve a list of Product Output to an Activity
+    * @param iProductInstance
+    * 	&lt;tt&gt; This optional parameter allows to filter this search with a specific Part (Item) &lt;/tt&gt;
+    * @return
+    * 	List of Handlers on  ProductIO interface
+   **/
+  virtual CATListValCATBaseUnknown_var	 GetProductOutput(const CATISPPItem_var &amp; iItem = NULL_var ) const = 0 ;
+  /**
+    * Returns a list of Control Output to an Activity.
+    * @return
+    * 	List of Handlers on  ControlIO interface
+   **/
+  virtual CATListValCATBaseUnknown_var	 GetControlOutput() const = 0 ;
+  
+};
+
+CATDeclareHandler( CATISPPFlowMgt, CATBaseUnknown ) ;
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPContainer.html">← 上一页: CATISPPContainer.h</a></div>
+        <div><a href="CATISPPInitCreation.html">下一页: CATISPPInitCreation.h →</a></div>
+    </div>
+</body>
+</html>

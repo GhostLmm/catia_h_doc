@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATColorManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATColorManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAddElements.html">← 上一页: CATAddElements.h</a></div>
+        <div><a href="CATCreate.html">下一页: CATCreate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATColorManager_H
+#define CATColorManager_H
+//
+// CATIA Version 5 Release 18 Framework Visualization
+// Copyright Dassault Systemes 2007
+//------------------------------------------------------------------------------
+// Abstract : 	basic class which allows to manage the current color
+// ----------   
+//	
+//------------------------------------------------------------------------------
+// Usage :	is used by application which wants to apply the current color
+// -------      
+//
+//------------------------------------------------------------------------------
+// Main methods :  GetColorManager()
+// --------------
+//------------------------------------------------------------------------------
+// Class :	CATColorManager
+// -------        CATCommand (System)
+//------------------------------------------------------------------------------
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATVisualization.h&quot;
+#include &quot;CATCommand.h&quot;
+
+class CATVisColorManager;
+
+
+/**
+ * Class to manage color definition, modification and application.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * This static object allows to define, to modify and to apply color in applications.
+ * &lt;br&gt;All applicative color chooser plug-ins should use this class to transmit
+ * the results of their interactions.
+ */
+
+class ExportedByCATVisualization CATColorManager : public CATCommand
+{
+   CATDeclareClass ;
+
+//------------------------------------------------------------------------------
+
+public:
+
+ /**
+   * Event sent when the current defined color is changed.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;this event is sent by the CATColorManager.
+	* &lt;br&gt;Sample of callback:
+	* &lt;pre&gt;
+   *  ::AddCallback(this,
+   *                CATColorManager::GetColorManager(),
+	*	              CATColorManager::CURRENT_COLOR_CHANGED(),
+	*	              (CATSubscriberMethod)&amp;MyClass::MyCBMethod,
+	*	              NULL);
+	* &lt;/pre&gt;
+	*/
+   CATDeclareCBEvent(CURRENT_COLOR_CHANGED);
+ /**
+   * Event sent when the new color is changed.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;this event is sent by the CATColorManager.
+	* &lt;br&gt;Sample of callback:
+	* &lt;pre&gt;
+   *  ::AddCallback(this,
+   *                CATColorManager::GetColorManager(),
+	*	              CATColorManager::NEW_COLOR_CHANGED(),
+	*	              (CATSubscriberMethod)&amp;MyClass::MyCBMethod,
+	*	              NULL);
+	* &lt;/pre&gt;
+	*/
+   CATDeclareCBEvent(NEW_COLOR_CHANGED);
+
+ /**
+   * Returns the CATColorManager pointer.
+   */
+   static  CATColorManager * GetColorManager();
+
+ /**
+   * Returns the current defined color.
+   * The legal value for R, G, B color components is in [0, 1].
+   */
+   virtual HRESULT GetCurrentColorRGB(float * oR, float * oG, float * oB) = 0;
+ /**
+   * Sets the current defined color.
+   * The legal value for R, G, B color components is in [0, 1].
+   */
+   virtual HRESULT SetCurrentColorRGB(const float iR, const float iG, const float iB) = 0;
+
+ /**
+   * Returns the new defined color.
+   * The legal value for R, G, B color components is in [0, 1].
+   */
+   virtual HRESULT GetNewColorRGB(float * oR, float * oG, float * oB) = 0;
+ /**
+   * Sets the new defined color.
+   * The legal value for R, G, B color components is in [0, 1].
+   */
+   virtual HRESULT SetNewColorRGB(const float iR, const float iG, const float iB) = 0;
+
+//------------------------------------------------------------------------------
+protected:
+
+   virtual ~CATColorManager();
+
+//------------------------------------------------------------------------------
+private:
+
+   friend class CATVisColorManager;
+
+private:
+
+   CATColorManager();
+   CATColorManager(const CATColorManager &amp;);               // no copy constructor
+   CATColorManager&amp; operator = (const CATColorManager &amp;);  // no equal operator
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAddElements.html">← 上一页: CATAddElements.h</a></div>
+        <div><a href="CATCreate.html">下一页: CATCreate.h →</a></div>
+    </div>
+</body>
+</html>

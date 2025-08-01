@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspResource.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspResource.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspPlacePartOnRun.html">← 上一页: CATIPspPlacePartOnRun.h</a></div>
+        <div><a href="CATIPspShareData.html">下一页: CATIPspShareData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspResource_H
+#define CATIPspResource_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2001
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATListOfInt.h&quot;
+
+class CATUnicodeString;
+class CATDocument;
+class CATListValCATUnicodeString;
+
+extern &quot;C&quot; const IID IID_CATIPspResource ;
+
+/**
+ * Interface to get application resources.
+ * &lt;b&gt;Role&lt;/b&gt;: Get application resources.
+ */
+
+class CATIPspResource : public IUnknown
+{
+  public:  
+
+  /**
+  * Open the document associated to the resource.
+  * @param iResourceName
+  *   Resource Name.
+  * @param opDocument
+  *   Document associated to the resource.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT OpenResource ( const CATUnicodeString&amp; iResourceName,
+    CATDocument *&amp;opDocument ) = 0;    
+
+  /**
+  * Get the logical line catalog.
+  * @param iClassType
+  *   Logical line class type.
+  * @param oPath
+  *   Logical line catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetLineCatalogPath ( const CATUnicodeString&amp; iClassType,
+    CATUnicodeString&amp; oPath, CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the zone catalog.
+  * @param iClassType
+  *   Zone class type.
+  * @param oPath
+  *   Zone catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetZoneCatalogPath ( const CATUnicodeString&amp; iClassType,
+    CATUnicodeString&amp; oPath, CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the ID Schema directory.
+  * @param iDomainName
+  *   Domain Name.
+  * @param oDirectory
+  *   ID Schema directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetIDSchemaDir ( const CATUnicodeString&amp; iDomainName,
+    CATUnicodeString&amp; oDirectory, CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the User dictionary file name.
+  * @param iDomainName
+  *   Domain Name.
+  * @param oFileName
+  *   User dictionary file name.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetUserDictFileName ( const CATUnicodeString&amp; iDomainName,
+    CATUnicodeString&amp; oFileName, CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Computed Attribute file name.
+  * @param iDomainName
+  *   Domain Name.
+  * @param oFileName
+  *   Computed attribute file name.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetComputedAttrFileName ( const CATUnicodeString&amp; iDomainName,
+    CATUnicodeString&amp; oFileName, CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the ID sequence number definition directory.
+  * @param oDirectory
+  *   ID sequence number definition directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetIDSequenceNumberDir ( CATUnicodeString&amp; oDirectory,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Discrete Values directory.
+  * @param oDirectory
+  *   Discrete Values directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetDiscreteValuesDir ( CATUnicodeString&amp; oDirectory,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Standards catalog.
+  * @param oPath
+  *   Standards catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetStandardsCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Design Rules catalog.
+  * @param oPath
+  *   Design Rules catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetDesignRulesCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Specification catalog.
+  * @param oPath
+  *   Specification catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetSpecificationCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Insulation Specification catalog.
+  * @param oPath
+  *   Insulation Specification catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetInsulationSpecCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Part catalog.
+  * @param oPath
+  *   Part catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPartCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the on/off sheet symbol catalog.
+  * @param oPath
+  *   On/off sheet catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetOffsheetCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Resolved Part catalog.
+  * @param oDirectory
+  *   Resolved Part catalog directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetResolvedPartCatalogDir ( CATUnicodeString&amp; oDirectory,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Graphic Representaion file name.
+  * @param oFileName
+  *   Graphic Representaion file name.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetGraphicRepFileName ( CATUnicodeString&amp; oFileName,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the discipline super classes file name.
+  * @param oFileName
+  *   Discipline super classes file name.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetDisciplineClassesFileName ( CATUnicodeString&amp; oFileName,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Connector Attribute file name.
+  * @param oFileName
+  *   Connector Attribute file name.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetCntrAttrFileName ( CATUnicodeString&amp; oFileName,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Report Definition directory.
+  * @param oDirectory
+  *   Report Definition directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetReportDefinitionDir ( CATUnicodeString&amp; oDirectory,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Annotation catalog.
+  * @param oPath
+  *   Annotation catalog path.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetAnnotationCatalogPath ( CATUnicodeString&amp; oPath,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Schematic graphic names directory.
+  * @param oPath
+  *   Graphic names directory.
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetGraphicNamesDir ( CATUnicodeString&amp; oDirectory,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Schematic Driven flag default value.
+  * @param oFlagValue
+  *   Schematic driven flag value = On or Off
+  * @param oResourceName
+  *   Resource Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetSchematicDrivenFlag ( CATUnicodeString&amp; oFlagValue,
+    CATUnicodeString&amp; oResourceName ) = 0;
+
+  /**
+  * Get the Function Driven flag default value.
+  * @param oFlagValue
+  *   Function driven flag value = On or Off
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetFunctionDrivenFlag ( CATUnicodeString&amp; oFlagValue ) = 0;
+
+  /**
+  * Get the growth factor value.
+  * @param oGrowthFactor
+  *   Growth factor value.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetGrowthFactorValue ( double &amp; oGrowthFactor ) = 0;
+
+  /**
+  * Get the cable clearance value.
+  * @param oCableClearance
+  *   Cable clearance value.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetCableClearanceValue ( double &amp;oCableClearance ) = 0;
+
+  /**
+  * Get the path of a resource.
+  * @param iResourceName
+  *   Resource Name.
+  * @param oPath
+  *   Resource path.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetResourcePath ( const CATUnicodeString&amp; iResourceName,
+    CATUnicodeString&amp; oPath ) = 0;
+
+  /**
+  * Get the value defined for a resource.
+  * @param iResourceName
+  *   Resource Name.
+  * @param oValue
+  *   Resource value.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetResourceValue ( const CATUnicodeString&amp; iResourceName,
+    CATUnicodeString&amp; oValue ) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspPlacePartOnRun.html">← 上一页: CATIPspPlacePartOnRun.h</a></div>
+        <div><a href="CATIPspShareData.html">下一页: CATIPspShareData.h →</a></div>
+    </div>
+</body>
+</html>

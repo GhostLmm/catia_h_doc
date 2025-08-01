@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogBrowser.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogBrowser.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICATALOGWorkshopAddin.html">← 上一页: CATICATALOGWorkshopAddin.h</a></div>
+        <div><a href="CATICatalogBrowserFactory.html">下一页: CATICatalogBrowserFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATICatalogBrowser_H
+#define CATICatalogBrowser_H
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+
+#include &quot;CATCclInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+class CATUnicodeString;
+class CATNotification;
+class CATICatalogQueryResult;
+class CATICatalogChapter;
+class CATICatalogDescription;
+class CATDlgDialog;
+class CATIDocId;
+class CATICatalogLink;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+
+extern ExportedByCATCclInterfaces IID IID_CATICatalogBrowser ;
+#else
+extern &quot;C&quot; const IID IID_CATICatalogBrowser ;
+#endif
+
+/**
+ * Interface to manipulate the Catalog Browser.
+ * &lt;b&gt;Role:&lt;/b&gt; The Catalog Browser is a Dialog box to browse and 
+ * instantiate component in context. 
+ * &lt;pr&gt;The @href CATICatalogBrowserFactory interface enables to create and display 
+ * an instance of this Dialog box.&lt;/p&gt;
+ * &lt;p&gt;This catalog browser will be created inside a @href CATCommand. After the creation,
+ * you must retrieve the window of the Dialob box, thanks
+ * to the @href #GetFatherWindow, and sets as parent for this window the command which
+ * has instantiate it. It enables to your command to receive the notifications sent by 
+ * the Catalog Browser:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href #GetOKNotification &lt;/li&gt;
+ * &lt;li&gt;@href #GetCloseNotification &lt;/li&gt;
+ * &lt;li&gt;@href #GetCancelNotification &lt;/li&gt;
+ * &lt;li&gt;@href #GetSelectDescriptionNotification &lt;/li&gt;
+ * &lt;li&gt;@href #GetChangeChapterNotification &lt;/li&gt;
+ * &lt;/ul&gt;
+ * and in case of Dialog box closing use the @href #CloseBrowser to close it.&lt;/p&gt;
+ * &lt;p&gt;On the catalog browser you can impose to the end user a type of behavior:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href #AuthorizeInstantiation &lt;/li&gt;
+ * &lt;br&gt;To authorize or not instantiation by contextual menu or double click on descriptions
+ * &lt;li&gt;@href #AuthorizeDragDrop &lt;/li&gt;
+ * &lt;br&gt;To authorize or not instantiation by drag and drop. 
+ * &lt;li&gt;@href #AuthorizeChangeCatalog &lt;/li&gt;
+ * &lt;br&gt;To authorize or not catalog change 
+ * &lt;li&gt;@href #SetCurrentCatalogDocId &lt;/li&gt;
+ * &lt;br&gt;Propose a default Catalog path at the beginning
+ * &lt;/ul&gt;&lt;/p&gt;
+ * &lt;p&gt;The last part concerning the catalog browser is the filtering. You can retrieve the end user filter or
+ * impose it a filtering. There are two kinds of filter:
+ * &lt;ul&gt;
+ * &lt;li&gt;The internal filter: you impose it to the end user on a chapter, the end
+ * user cannot change it.&lt;/li&gt;
+ * &lt;li&gt;The end user filter: those enter by the end user in the Filter editor, or
+ * by the @href #SetCurrentQuery method you can set a end user filter&lt;/li&gt;
+ * &lt;/ul&gt;
+ * The filter applied to a chapter is the internal filter and the end user filter.
+ */
+class ExportedByCATCclInterfaces CATICatalogBrowser: public CATBaseUnknown
+{
+   CATDeclareInterface;
+
+   public:
+
+   // --------------------------------------------------------------
+   //        Current catalog management
+   // --------------------------------------------------------------
+   /**
+    * @deprecated V5R15
+    * use GetCurrentCatalogDocId
+    */
+   virtual HRESULT GetCurrentCatalogPath(CATUnicodeString&amp; iName) = 0;
+
+   /**
+    * @deprecated V5R15
+    * use SetCurrentCatalogDocId
+    */
+   virtual HRESULT SetCurrentCatalogPath(CATUnicodeString iName) = 0;
+
+   /**
+    *  Sets the chapter to activate in the browser.
+    *   @param iChapter
+    *      The chapter to activate. It must be a chapter of the current CATICatalogQueryResult.
+    *   @param iSendevent
+    *      Send a event for updating the browser.     
+    */
+   virtual HRESULT SetCurrentChapter(const CATICatalogChapter* iChapter,const int iSendevent=0) = 0;
+   
+   /**
+    * Builds a CATUnicodeString to store the current chapter.&lt;br&gt;
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:This method is usefull if you want to be able to reopen Catalog browser with
+    * same chapter. You need to store catalog path (with GetCurrentCatalogDocId) and
+    * chapter path (with BuildCurrentChapterString).&lt;br&gt;
+    * To restore current catalog and chapter, you need to call @href #SetCurrentCatalogDocId and after
+    * @href #SetCurrentChapter.
+    *   @param listpath
+    *      A list of string to store and to use in SetCurrentChapter method.
+    */
+   virtual HRESULT BuildCurrentChapterString(CATListOfCATUnicodeString*&amp; oListpath) = 0;
+   
+   /**
+    * Sets a current sub-chapter in the catalog browser.
+    *   @param Chapter
+    *      The list of string describing the current chapter.
+    */
+   virtual HRESULT SetCurrentChapter(const CATListOfCATUnicodeString* iListpath) = 0;
+
+   // --------------------------------------------------------------
+   //        Browser management
+   // --------------------------------------------------------------
+   /**
+    * Authorizes the instantiation with drag&amp;drop.
+    *   @param iEnable
+    *      If iEnable is 1 then the functionality drag&amp;drop is enable.
+    *      Else 0 and the functionality is disable.
+    *      &lt;br&gt;Attention, the Drag and Drop is only possible if the current command is the Select
+    *       command. So if the catalog browser is launched from a command which is exclusive,
+    *       or shared, the instantiation by drag and drop is unavailable. 
+    */
+   virtual HRESULT AuthorizeDragDrop(int iEnable) = 0;
+   
+   /**
+    * Authorizes the instantiation with double click or the contextual menu.
+    *   @param iEnable
+    *      1: instantiation enable, 0: instantiation disable
+    */
+   virtual HRESULT AuthorizeInstantiation(int iEnable) = 0;
+                                         
+   /**
+    * Authorizes or not user to change of current catalog. 
+    *   @param iEnable
+    *      0: OK available only for description in end chapters. File Selection Box Icon is Disable.&lt;br&gt;
+    *      1: OK available for all description, default mode.  File Selection Box Icon is Enable. 
+    */
+   virtual HRESULT AuthorizeChangeCatalog(int iEnable) = 0;
+   
+   /**
+    * Activates OK button only for end chapters, not for sub-chapters.
+    *   @param iEnable
+    *      1: OK available for all description, default mode &lt;br&gt;
+    *      0: OK available only for description in end chapters.
+    */
+   virtual HRESULT OKActivationMode(int iEnable) = 0;
+
+   // --------------------------------------------------------------
+   //        Current query management
+   // --------------------------------------------------------------
+   /**
+    * Retrieves the current query result.
+    *   @param oQueryresult [out, CATBaseUnknown#Release]
+    *      The current query result which is displayed.
+    */
+   virtual HRESULT GetCurrentQueryResult(CATICatalogQueryResult*&amp; oQueryresult) = 0;
+   
+   /**
+    * Sets the current query result.
+    *   @param iQuery
+    *      Add your own query
+    *   @param iUserquery
+    *      A user query is displayed in the browser, user can modify it.
+    *      An internal quey allow you to hide some descriptions.
+    */
+   virtual HRESULT SetCurrentQuery(const CATUnicodeString&amp; iQuery,int iUserquery=1) = 0;
+   
+   /**
+    * Sets the selected description as the current in the browser.
+    *   @param iDesc
+    *      The selected description.
+    */
+   virtual HRESULT SetSelectedDescription(const CATICatalogDescription* iDesc) = 0;
+   
+   /**
+    * Retrieves the selected description.
+    *   @param oDesc [out, CATBaseUnknown#Release]
+    *      The selected description.
+    */
+   virtual HRESULT GetSelectedDescription(CATICatalogDescription*&amp; oDesc) = 0;
+
+   
+   // --------------------------------------------------------------
+   //        Notifications
+   // --------------------------------------------------------------
+   /**
+    * Retrieves the window to add notification.
+    *   @param oWindow
+    *      The current CATDlgDialog of browser.
+    */
+   virtual HRESULT GetFatherWindow(CATDlgDialog*&amp; oWindow) = 0;
+   
+   /**
+    * Retrieves a notification on the selected description.
+    *   @param oNotif
+    *      The notification which must be send when the user select a description (in the case of end-chapter only).
+    */
+   virtual HRESULT GetSelectDescriptionNotification(CATNotification*&amp; oNotif) = 0;
+   
+   /**
+    * Retrieves the notification when a modification on the current chapter has be done.
+    *   @param oNotif
+    *      The notification which must be send when the user change the current chapter.
+    */
+   virtual HRESULT GetChangeChapterNotification(CATNotification*&amp; oNotif) = 0;
+   
+   /**
+    * Retrieves the notification on the &quot;OK&quot; button (a final description need to be selected).
+    * Available only if browser is built with mode OKCancel
+    *   @param oNotif
+    *      The notification which must be send when the user select the &quot;OK&quot; button.
+    */
+   virtual HRESULT GetOKNotification(CATNotification*&amp;oNotif) = 0;
+   
+   /**
+    * Retrieves the notification on the &quot;Cancel&quot; button.
+    * Available only if browser is built with mode OKCancel
+    *   The notification which must be send when the user select the &quot;Cancel&quot; button
+    */
+   virtual HRESULT GetCancelNotification(CATNotification*&amp;oNotif) = 0;
+   
+   /**
+    * Retrieves the notification when the browser is closed.
+    * Available only if browser is built with mode Close
+    *   @param oNotif
+    *      The notification which must be send when the user close the panel.
+    *   @return
+    *      Error code of function.
+    */
+   virtual HRESULT GetCloseNotification(CATNotification*&amp;oNotif) = 0;
+
+   // --------------------------------------------------------------
+   //        Close
+   // --------------------------------------------------------------
+   /**
+    * Closes the current browser.
+    */
+   virtual HRESULT CloseBrowser() = 0;
+
+   /**
+    * Retrieves the current catalog.
+    *   @param oDocId
+    *      The current Catalog docid
+    */
+   virtual HRESULT GetCurrentCatalogDocId(CATIDocId** oDocId) = 0;
+
+   /**
+    * Sets the current catalog.
+    *   @param oDocId
+    *      The current Catalog docid
+    
+    */
+   virtual HRESULT SetCurrentCatalogDocId(CATIDocId* iDocId) = 0;
+
+   // No constructors or destructors on this pure virtual base class
+   // --------------------------------------------------------------
+
+   /**
+    * @nodoc
+    * 
+    */
+   virtual HRESULT GetPointedDescription(CATICatalogLink*&amp; oDesc) = 0;
+   
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATICatalogBrowser, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICATALOGWorkshopAddin.html">← 上一页: CATICATALOGWorkshopAddin.h</a></div>
+        <div><a href="CATICatalogBrowserFactory.html">下一页: CATICatalogBrowserFactory.h →</a></div>
+    </div>
+</body>
+</html>

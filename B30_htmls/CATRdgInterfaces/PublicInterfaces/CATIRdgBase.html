@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATRdgInterfaces/PublicInterfaces/CATIRdgBase.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATRdgInterfaces/PublicInterfaces/CATIRdgBase.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRdgBag.html">← 上一页: CATIRdgBag.h</a></div>
+        <div><a href="CATIRdgCamera.html">下一页: CATIRdgCamera.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIRdgBase_h
+#define CATIRdgBase_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATRdgItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+
+class CATString;
+class CATNotification;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATRdgItfCPP IID IID_CATIRdgBase;
+#else
+extern &quot;C&quot; const IID IID_CATIRdgBase;
+#endif
+
+/** 
+ * Interface for all rendering objects.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * This is the base interface for all rendering objects.
+ * It is used to identify and mark objects.
+ */
+
+class ExportedByCATRdgItfCPP CATIRdgBase : public CATBaseUnknown
+{
+/** @nodoc */
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Returns the object unique id.
+ * @param oUID
+ *   The object id. This id is unique and may be used as
+ *   an identifier.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetUID(CATString &amp;oUID) = 0;
+
+/**
+ * Updates the object state according to the event.
+ * @param iNotification
+ *   The event received.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT UpdateState(CATNotification *iNotification) = 0;
+
+/**
+ * Changes the dirty status.
+ * @param iDirty
+ *   The dirty status.
+ *   &lt;ul&gt; dirty status.
+ *   &lt;li&gt; TRUE  object is dirty &lt;/li&gt;
+ *   &lt;li&gt; FALSE object is not dirty &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT SetDirty(CATBoolean &amp;iDirty) = 0;
+
+/**
+ * Returns the object dirty status.
+ * @param oDirty
+ *   The dirty status.
+ *   &lt;ul&gt; dirty status.
+ *   &lt;li&gt; TRUE  object is dirty &lt;/li&gt;
+ *   &lt;li&gt; FALSE object is not dirty &lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT IsDirty(CATBoolean &amp;oDirty) = 0;
+
+/**
+ * Associates temporary data to the object.
+ * @param iData
+ *   The integer temporary data.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT SetData(int iData) = 0;
+
+/**
+ * Returns temporary data associated to the object.
+ * @param oData
+ *   The integer temporary data.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetData(int &amp;oData) = 0;
+
+/**
+ * Associates temporary data to the object.
+ * @param iData
+ *   The opaque temporary data.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT SetData(CATBaseUnknown *iData) = 0;
+
+/**
+ * Returns temporary data associated to the object.
+ * @param oData
+ *   The opaque temporary data. After use, a Release() must be made.
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT GetData(CATBaseUnknown **oData) = 0;
+
+/**
+ * Reset and release all temporary data (integer and opaque).
+ * @return
+ *   An HRESULT value.
+ *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+ *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt; the operation succeeded &lt;/li&gt;
+ *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; otherwise &lt;/li&gt;.
+ */
+    virtual HRESULT ReleaseData() = 0;
+};
+
+/** @nodoc */
+CATDeclareHandler(CATIRdgBase,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRdgBag.html">← 上一页: CATIRdgBag.h</a></div>
+        <div><a href="CATIRdgCamera.html">下一页: CATIRdgCamera.h →</a></div>
+    </div>
+</body>
+</html>

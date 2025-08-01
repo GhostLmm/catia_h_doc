@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATSetOfObject.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATSetOfObject.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATRepWeakRef.html">← 上一页: CATRepWeakRef.h</a></div>
+        <div><a href="CATShadowEnum.html">下一页: CATShadowEnum.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSetOfObject_h
+#define CATSetOfObject_h
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+#include &quot;CATViz.h&quot;
+#include &lt;string.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;stdlib.h&gt;
+
+/**
+* A set of objects.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : Enclosed objects are instances of the @href CATBaseUnknown class.
+* This class does not make use of the AddRef/Release mechanism when adding or removing object.
+*/
+class ExportedByCATViz CATSetOfObject 
+{
+  public:
+
+ /**
+  * Default constructor.
+  *
+  * @param iSize
+  *        It is the size of the set.
+  */
+  inline CATSetOfObject (int iSize=0);
+
+  /** Copy Constructor .
+   * @param iList
+   * The list to copy. 
+   */
+  inline CATSetOfObject (const CATSetOfObject &amp; iList) ;
+
+
+  inline ~CATSetOfObject();
+
+   /**
+   * Subscripting operator.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : returns an object using the object index.
+   * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt; : This method doesn&#x27;t AddRef returned value.
+   *
+   * @param iIndex
+   *        The index
+   *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; : &lt;tt&gt;iIndex&lt;/tt&gt; values are between 0 and GetSize()-1.
+   * @return
+   *        The object.
+   */
+  inline void * operator [] (int iIndex) const ;
+  
+ /**
+  * Adds an element to the set.
+  *
+  * @param iObject
+  *   The element to add to the set.
+  *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt; : This method doesn&#x27;t AddRef returned value.
+  */
+  inline void operator += ( void * iObject ) ;
+
+   /**
+   * Removes an element from the set.
+   *
+   * @param iObject
+   *        The objectto remove.
+   *        &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt; : No release is done on this object.
+   */
+  inline void operator -= ( void * iObject ) ;
+
+   /** Assignment operator.
+   * &amp;param iList
+   * The list of object&#x27;s pointer to copy. 
+   */
+  inline void operator = (const CATSetOfObject &amp; iList) ;
+
+  
+  /**
+   * Removes all elements from the set.
+   * No releases are done on the objects.
+   */
+   inline void Empty ();
+
+
+  /**
+   * Checks if an element ready exists in the set.
+   *
+   * @param iElem
+   *        The object to look for.
+   * @return
+   *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; : return 0 if the element isn&#x27;t in the set, otherwise return 1.
+   */
+   inline int IsMember (void *iElem);
+
+
+  /**
+   * Returns the count of elements in the set.
+   *
+   * @return
+   *        Return the size of the set.
+   */
+   inline int GetSize ();
+
+  /**
+   * Gathers an other set with this one.
+   *
+   * @param iSo
+   *            The set of elements to add.
+   */
+   //   void Gather(CATSetOfObject *iSo);
+
+
+  
+
+   
+ protected:
+  
+  /** @nodoc */
+  int _size, _memsize;
+  /** @nodoc */
+  void ** _tab;
+   
+  
+};
+
+
+inline CATSetOfObject::CATSetOfObject(int iSize) : _size(0), _memsize(iSize) 
+{ if (iSize) 
+  {
+    _tab = (void **) malloc (iSize * sizeof( void *) );
+    if (!_tab) _size = _memsize = 0;
+  }
+ else
+ {
+   _tab = NULL;
+ }
+  
+}
+
+
+
+inline void CATSetOfObject::Empty()
+{
+   if ( _tab ) free(_tab);
+   _size = _memsize = 0;
+   _tab  = 0;
+}
+
+inline CATSetOfObject::~CATSetOfObject() { Empty(); }
+
+inline void CATSetOfObject::operator += ( void * t )
+{ 
+ if (t)
+ {
+  if(_memsize &lt;= _size)
+  {
+   _memsize = (_memsize == 0) ? 5 : _memsize + (_memsize &gt;&gt; 1) ;
+   void ** newtab = (void **) malloc (_memsize * sizeof( void *) );
+   if ( _tab ) 
+   {
+     newtab = (void **) memcpy(newtab, _tab,_size*sizeof(void *));
+     free(_tab);
+   }
+   _tab = newtab;
+  }
+  if ( !_tab ) 
+  {
+   _size = _memsize = 0;
+  }
+  else
+  {
+   this-&gt;_tab[this-&gt;_size] = t;
+   this-&gt;_size++ ; 
+  }
+ }
+}
+
+inline int CATSetOfObject::IsMember( void * t)
+{
+  for(int i = _size -1; i &gt;= 0; i--) if(_tab[i] == t) return i;
+  return -1;
+}
+
+inline void CATSetOfObject::operator -= ( void * t )
+{ 
+  int index = IsMember(t);
+  if(index &lt; 0 || index &gt;= _size) 
+  {
+    1;
+  }
+  else
+  {
+    _size--;
+    for(int j = index; j &lt; _size; j++) _tab[j] = _tab[j+1];
+  }
+}
+
+
+
+inline void CATSetOfObject::operator = (const CATSetOfObject &amp; iList) 
+{
+  _memsize = iList._memsize;
+  _size = iList._size;
+  if (_tab) free(_tab);
+  if ( _size )
+  {
+   _tab = (void **) malloc (_size * sizeof( void *) );
+   if (_tab)
+   {
+    void **g;
+    int ii;
+    for ( ii=0, g = iList._tab ; ii&lt;_size ;ii++, g++)
+    {
+     _tab[ii] = *g;
+    }
+   }
+  }
+  else
+   _tab=NULL;
+  
+}
+
+inline CATSetOfObject::CATSetOfObject(const CATSetOfObject &amp; iList) 
+{
+  _memsize = iList._memsize;
+  _size = iList._size;
+  if ( _size )
+  {
+   _tab = (void **) malloc (_size * sizeof( void *) );
+   if (_tab)
+   {
+    void **g;
+    int ii;
+    for ( ii=0, g = iList._tab ; ii&lt;_size ;ii++, g++)
+    {
+     _tab[ii] = *g;
+    }
+   }
+  }
+  else
+   _tab=NULL;
+  
+}
+
+inline void * CATSetOfObject::operator [] (int i) const { return ( (i&gt;=0) &amp;&amp; (i&lt;_size) ? _tab[i] : 0); }
+
+inline int CATSetOfObject::GetSize() { return _size; }
+
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATRepWeakRef.html">← 上一页: CATRepWeakRef.h</a></div>
+        <div><a href="CATShadowEnum.html">下一页: CATShadowEnum.h →</a></div>
+    </div>
+</body>
+</html>

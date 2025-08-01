@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSOUseItf/PublicInterfaces/CATGSOVariableOffsetDef.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSOUseItf/PublicInterfaces/CATGSOVariableOffsetDef.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATGSOJunctionDef.html">← 上一页: CATGSOJunctionDef.h</a></div>
+        <div><a href="CATGSOWrapCurveDef.html">下一页: CATGSOWrapCurveDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATGSOVariableOffsetDef_H
+#define CATGSOVariableOffsetDef_H 
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+* @CAA2Level L0
+* @CAA2Usage U3
+*/
+
+
+/**
+ * Types for constraints. 
+ * &lt;b&gt;Role&lt;/b&gt;:  Used for VariableOffset creation and modifications
+ * Notes: &lt;br&gt;
+ *   Enumerations used as parameters in interfaces of manipulation of a VariableOffset surface. &lt;br&gt;
+ *   This surface is a VariableOffset feature created by the CATIGSOFactory. &lt;br&gt;
+ *
+ * @see CATIGSOVariableOffsetGetAccess, CATIGSOFactory 
+ */
+enum ConstraintType
+{
+	VO_VARIABLE_SURFACE		= 0,	//Variable Constraint on a surface
+	VO_VARIABLE_WIRE		= 1,	//Variable Constraint on an edge
+	VO_CONSTANT_SURFACE		= 2,	//Constant Constraint on a surface
+	VO_CONSTANT_WIRE_BORDER	= 3,	//Constant Constraint on a Border edge
+	VO_CONSTANT_WIRE_INNER	= 4		//Constant Constraint on an Inner edge
+};
+
+/**
+ * Macro for testing constraints global type. 
+ * &lt;b&gt;Role&lt;/b&gt;:  Used for VariableOffset creation and modifications
+ * Notes: &lt;br&gt;
+ *   Macro that tests that the constraint type is constant sub type. &lt;br&gt;
+ * @see ConstraintType
+ */
+#define VO_CONSTANT(cstType)							\
+	(													\
+		( (cstType) == VO_CONSTANT_SURFACE		) ||	\
+		( (cstType) == VO_CONSTANT_WIRE_BORDER	) ||	\
+		( (cstType) == VO_CONSTANT_WIRE_INNER	)		\
+	)
+
+/**
+ * Macro for testing constraints global type. 
+ * &lt;b&gt;Role&lt;/b&gt;:  Used for VariableOffset creation and modifications
+ * Notes: &lt;br&gt;
+ *   Macro that tests that the constraint type is variable sub type. &lt;br&gt;
+ * @see ConstraintType
+ */
+#define VO_VARIABLE(cstType)							\
+	(													\
+		( (cstType) == VO_VARIABLE_SURFACE		) ||	\
+		( (cstType) == VO_VARIABLE_WIRE			)		\
+	)
+
+/**
+ * Macro for testing constraints global type. 
+ * &lt;b&gt;Role&lt;/b&gt;:  Used for VariableOffset creation and modifications
+ * Notes: &lt;br&gt;
+ *   Macro that tests that the constraint type is surface based sub type. &lt;br&gt;
+ * @see ConstraintType
+ */
+#define VO_SURFACE(cstType)								\
+	(													\
+		( (cstType) == VO_VARIABLE_SURFACE		) ||	\
+		( (cstType) == VO_CONSTANT_SURFACE		)		\
+	)
+
+/**
+ * Macro for testing constraints global type. 
+ * &lt;b&gt;Role&lt;/b&gt;:  Used for VariableOffset creation and modifications
+ * Notes: &lt;br&gt;
+ *   Macro that tests that the constraint type is wire based sub type. &lt;br&gt;
+ * @see ConstraintType
+ */
+#define VO_WIRE(cstType)								\
+	(													\
+		( (cstType)	== VO_VARIABLE_WIRE			)		\
+		( (cstType) == VO_CONSTANT_WIRE_BORDER	) ||	\
+		( (cstType) == VO_CONSTANT_WIRE_INNER	)		\
+	)
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATGSOJunctionDef.html">← 上一页: CATGSOJunctionDef.h</a></div>
+        <div><a href="CATGSOWrapCurveDef.html">下一页: CATGSOWrapCurveDef.h →</a></div>
+    </div>
+</body>
+</html>

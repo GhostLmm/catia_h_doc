@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATPCircle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATPCircle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATOffsetSurface.html">← 上一页: CATOffsetSurface.h</a></div>
+        <div><a href="CATPCurve.html">下一页: CATPCurve.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPCircle_h
+#define CATPCircle_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATPCurve.h&quot;
+#include &quot;CATMathDef.h&quot;
+class CATSurParam ;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATPCircle ;
+#else
+extern &quot;C&quot; const IID IID_CATPCircle ;
+#endif
+	//CAA_Exposed CATIGemPCircle
+/**
+ * Interface representing a circle in the space of a surface.
+ *&lt;br&gt;A CATPCircle is created by the &lt;tt&gt;CreatePCircle&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface
+ * and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method
+ *&lt;br&gt;A CATPCircle is defined with:
+ *&lt;table&gt;
+ * &lt;tr&gt;&lt;td&gt;CATSurface&lt;/td&gt;&lt;td&gt;&lt;tt&gt; Sur &lt;/tt&gt;&lt;/td&gt;
+ *               &lt;td&gt; The underlying surface &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;&lt;tt&gt; R &lt;/tt&gt;&lt;/td&gt;
+ *               &lt;td&gt; The radius&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iStart &lt;/tt&gt;&lt;/td&gt;
+ *               &lt;td&gt; The low angle limitation &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iEnd &lt;/tt&gt;&lt;/td&gt;
+ *               &lt;td&gt; The high angle limitation&lt;/td&gt;&lt;/tr&gt;
+ *&lt;/table&gt;
+ * with &lt;tt&gt; 0 &lt;= iStart &lt; CAT2PI&lt;/tt&gt;, 
+ * &lt;tt&gt;iStart &lt; iEnd &lt;= iStart + CAT2PI&lt;/tt&gt;. The angles (in radian) are measured
+ * from the first direction of the surface.
+ */
+class ExportedByCATGMGeometricInterfaces CATPCircle : public CATPCurve
+{
+  CATDeclareInterface;
+
+public :
+	//CAA_Exposed
+/**
+ * Returns the radius of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @return
+ * The radius.
+ */
+  virtual double GetRadius() const = 0 ;
+
+  	//CAA_Exposed
+/**
+ * Returns the center of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @param ioCenter
+ * The center.
+ */
+  virtual void GetCenter(CATSurParam &amp;ioCenter) const = 0 ;
+
+  	//CAA_Exposed
+/**
+ * Returns the low limitation angle of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @return
+  * The first angle (in radian) limitation, measured from the first direction of the surface.
+ */
+  virtual CATAngle GetStartAngle() const = 0 ;
+
+  	//CAA_Exposed
+/**
+ * Returns the high limitation angle of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+  * @return
+  * The end angle (in radian) limitation, measured from the first direction of the surface.
+ */
+  virtual CATAngle GetEndAngle() const = 0 ;
+  
+  	//CAA_Exposed
+/**
+ * Modifies the characteristics of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @param iRadius
+ * The new value of the radius.
+ * @param iNewCenter
+ * The new center.
+ * @param iStart
+ * The first angle (in radian) limitation, measured from the first direction of the surface.
+ * @param iEnd
+ * The end angle (in radian) limitation, measured from the first direction of the surface.
+ * param iSupport
+ * A pointer to the underlying surface.
+ */
+  virtual void Set (const double   iRadius,
+		    const CATSurParam       &amp; iCenter,
+		    const CATAngle            iStart,
+		    const CATAngle            iEnd,
+		          CATSurface*         iSupport)  = 0 ;
+
+  	//CAA_Exposed
+/**
+ * Modifies the radius of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @param iRadius
+ * The new value of the radius.
+ */
+  virtual void SetRadius(const double iNewRadius) = 0 ;
+ 
+  	//CAA_Exposed
+/**
+ * Modifies the center of &lt;tt&gt;this&lt;/tt&gt; CATPCircle.
+ * @param iNewCenter
+ * The new center.
+ */
+  virtual void SetCenter(const CATSurParam &amp; iNewCenter) = 0 ;
+
+//Deprecated
+/** @nodoc */
+  virtual CATSurParam GetCenter() const = 0 ;
+};
+  CATDeclareHandler(CATPCircle,CATPCurve);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATOffsetSurface.html">← 上一页: CATOffsetSurface.h</a></div>
+        <div><a href="CATPCurve.html">下一页: CATPCurve.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATSurEvalCommand.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATSurEvalCommand.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSplineLaw.html">← 上一页: CATSplineLaw.h</a></div>
+        <div><a href="CATSurEvalLocal.html">下一页: CATSurEvalLocal.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSurEvalCommand_H
+#define CATSurEvalCommand_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATDataType.h&quot;
+//#if defined ( CATIAV5R10 )
+#include &quot;ExportedByCATCGMGeoMath.h&quot;
+/*
+#else
+#include &quot;YP00IMPL.h&quot;
+#endif  
+*/
+#include &quot;CATMathInline.h&quot;
+
+/**
+ * Class representing a command for computing a multiple evaluation 
+ * on points of a CATSurface.
+ *&lt;br&gt;The evaluation types are not exclusive. You can ask for other types
+ * by using the &lt;tt&gt;Order&lt;/tt&gt; method, or put the command to 
+ *&lt;tt&gt;No Evaluation&lt;/tt&gt; with the &lt;tt&gt;Reset&lt;/tt&gt; method. The evaluation is
+ * performed by the &lt;tt&gt;Eval&lt;/tt&gt; method of the CATSurface interface and results 
+ * are handled by the &lt;tt&gt;CATSurEvalLocal&lt;/tt&gt; class.
+ * &lt;br&gt;Example:
+ *&lt;pre&gt;
+ * CATSurEvalLocal EvalResult;
+ * CATSurEvalCommand Command;
+ * Command.OrderEvalPoint();
+ * Command.OrderFirstDeriv();
+ * CATSurParam Parameter ;
+ * Surface-&gt;GetStartLimit(Parameter) ;
+ * Surface-&gt;Eval(Parameter, Command, EvalResult) ; // Evaluate point and first derivatives.
+ * &lt;/pre&gt;
+ * @see CATSurface, CATSurEvalLocal, CATSurEvalResult
+ */
+//#if defined ( CATIAV5R10 )
+class ExportedByCATCGMGeoMath CATSurEvalCommand
+/*
+#else
+class ExportedByYP00IMPL CATSurEvalCommand
+#endif  
+*/
+{
+public:
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+//=============================================================================
+// CONSTRUCTORS AND DESTRUCTOR
+//=============================================================================
+/**
+ * Constructs a command with no specified evaluation.
+ */
+  INLINE CATSurEvalCommand();
+
+/**
+ * Copy constructor.
+ */
+  INLINE CATSurEvalCommand(const CATSurEvalCommand &amp;iCommandToCopy);
+
+//=============================================================================
+// SET AND GET METHODS
+//=============================================================================
+/**
+ * Resets all the specified evaluation on a CATSurface.
+ *&lt;br&gt;After this, no evaluation will be performed with this command.
+ */
+  INLINE void Reset();
+
+/**
+ * Adds the point evaluation to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ */
+  INLINE void OrderEvalPoint();
+
+/**
+ * Adds the first derivatives evaluation to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ */
+  INLINE void OrderEvalFirstDeriv();
+
+/**
+ * Adds the normal evaluation to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ */
+  INLINE void OrderEvalNormal();
+
+/**
+ * Adds the second derivatives evaluation to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ */
+  INLINE void OrderEvalSecondDeriv();
+
+/**
+ * Adds the third derivatives evaluation to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ */
+  INLINE void OrderEvalThirdDeriv();
+
+//------------------------------------------------------------
+// Get the orders on the command
+//------------------------------------------------------------
+/**
+ * Tests whether the point evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+
+  INLINE CATLONG32 IsSetToEvalPoint()       const;
+  
+/**
+ * Tests whether the first derivatives evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsSetToEvalFirstDeriv()  const;
+
+/**
+ * Tests whether the normal evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsSetToEvalNormal()      const;
+
+/**
+ * Tests whether the second derivatives evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsSetToEvalSecondDeriv() const;
+
+/**
+ * Tests whether the third derivatives evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsSetToEvalThirdDeriv()  const;
+
+/** @nodoc */
+  enum Evaluations
+    {
+      Point          = 0,
+      FirstDerivU    = 1,
+      FirstDerivV    = 2,
+      Normal         = 3,
+      SecondDerivU2  = 4,
+      SecondDerivUV  = 5,
+      SecondDerivV2  = 6,
+      ThirdDerivU3   = 7,
+      ThirdDerivU2V  = 8,
+      ThirdDerivUV2  = 9,
+      ThirdDerivV3   = 10
+    };
+
+/**
+ * Tests whether a specified evaluation belongs to &lt;tt&gt;this&lt;/tt&gt; CATSurEvalCommand.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if it does not belong to the command.
+ *    &lt;dt&gt; 1 &lt;dd&gt; if it belongs to the command.&lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsSetToEval(Evaluations iTestEvaluation) const;
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+//=============================================================================
+// GENERAL DEFINITIONS
+//=============================================================================
+
+
+/** @nodoc */
+  enum    { CountEval     = 11 }  ;
+
+
+/** @nodoc */
+  CATSurEvalCommand(CATLONG32 iCommand);
+
+
+/**
+ * @nodoc
+ * Adds a specified evaluation to the CATSurEvalCommand.
+ *&lt;br&gt; For a partial derivative, it also adds the other derivatives
+ * of the same order.
+ */
+  INLINE void OrderEval(Evaluations iAskedEvaluation);
+
+
+//=============================================================================
+// INTERNAL DATAS
+//=============================================================================
+protected:
+// Internal data is a CATLONG32 and is used with masks
+  CATLONG32 _Flags;
+
+	/** @nodoc */
+  enum Commands
+    { 
+      ResetFlag             = 0,
+      EvalPoint             = 1,
+      EvalFirstDerivatives  = 2,
+      EvalNormal            = 4,
+      EvalSecondDerivatives = 8,
+      EvalThirdDerivatives  = 16
+      }; 
+
+// Array for translation of value Evaluations to flags
+  static const Commands sFlagsForEval[CountEval];
+
+};
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+INLINE CATSurEvalCommand::CATSurEvalCommand()
+{
+  _Flags= EvalPoint;
+}
+
+INLINE CATSurEvalCommand::CATSurEvalCommand(const CATSurEvalCommand &amp;Command)
+{
+  _Flags=Command._Flags;
+}
+
+
+INLINE void CATSurEvalCommand::Reset()
+{
+  _Flags= ResetFlag;
+}
+
+INLINE void CATSurEvalCommand::OrderEvalPoint()
+{
+  _Flags  |= EvalPoint;
+}
+
+INLINE void CATSurEvalCommand::OrderEvalFirstDeriv()
+{
+  _Flags  |= EvalFirstDerivatives;
+}
+
+INLINE void CATSurEvalCommand::OrderEvalNormal()
+{
+  _Flags  |= EvalNormal;
+}
+
+INLINE void CATSurEvalCommand::OrderEvalSecondDeriv()
+{
+  _Flags  |= EvalSecondDerivatives;
+}
+
+INLINE void CATSurEvalCommand::OrderEvalThirdDeriv()
+{
+  _Flags  |= EvalThirdDerivatives;
+}
+
+// Ask for a special evaluation
+INLINE void CATSurEvalCommand::OrderEval(Evaluations AskedEvaluation)
+{
+  _Flags |= sFlagsForEval[AskedEvaluation];
+}
+
+//------------------------------------------------------------
+// Return what is ordered
+//------------------------------------------------------------
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEvalPoint() const
+{
+  return (_Flags &amp; EvalPoint) ? 1 : 0;
+}
+
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEvalFirstDeriv() const
+{
+  return (_Flags &amp; EvalFirstDerivatives) ? 1 : 0;
+}
+
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEvalNormal() const
+{
+  return (_Flags &amp; EvalNormal) ? 1 : 0;
+}
+
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEvalSecondDeriv() const
+{
+  return (_Flags &amp; EvalSecondDerivatives) ? 1 : 0;
+}
+
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEvalThirdDeriv() const
+{
+  return (_Flags &amp; EvalThirdDerivatives) ? 1 : 0;
+}
+
+INLINE CATLONG32 CATSurEvalCommand::IsSetToEval(Evaluations Eval) const
+{
+  return ( _Flags &amp; (sFlagsForEval[Eval])) ? 1 : 0;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSplineLaw.html">← 上一页: CATSplineLaw.h</a></div>
+        <div><a href="CATSurEvalLocal.html">下一页: CATSurEvalLocal.h →</a></div>
+    </div>
+</body>
+</html>

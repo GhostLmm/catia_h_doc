@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterferenceInterfaces/PublicInterfaces/CATInterfereDefine.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InterferenceInterfaces/PublicInterfaces/CATInterfereDefine.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATInterfereCurve.html">← 上一页: CATInterfereCurve.h</a></div>
+        <div><a href="CATInterfereModel.html">下一页: CATInterfereModel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATInterfereDefine_H
+#define CATInterfereDefine_H
+//----------------------------------------------------------------------------
+// CATIA Version 5 Release R201 Framework Interference
+// Copyright Dassault Systemes 2005
+//----------------------------------------------------------------------------
+//
+// Creation: 
+// ---------
+//
+//        12-2004 - DBS
+//
+//----------------------------------------------------------------------------
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U1
+ */
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//        Mode of Calculation --&gt; To use for ModeOfCalc in CATIntSpecDef class (encoding : first octet of a [int] = 8 bits )
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Mode of Calculation --&gt; One Result with couple of MODEL (only the first interference we find for ALL couple of model in interference)
+ */
+#define CAT_INTERFERE_MODELIGHT                 0x1
+/**
+ * Mode of Calculation --&gt; Results with couple of MODEL (only one  interference for one couple of model in interference)
+ */
+#define CAT_INTERFERE_MODELOW                   0x2
+/**
+ * Mode of Calculation --&gt; Results with couple of ELEMENT (one or several sub-interference for one couple of model in interference)
+ */
+#define CAT_INTERFERE_MODEHIGH                  0x4
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+//        Case of Calculation --&gt; To use for CaseOfCalc in CATSiInSpecDef class (encoding : second to three octet of a [int] = 16 bits)
+//-------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Case of Calculation --&gt; none interference
+ */
+#define CAT_INTERFERE_NONE                      0x100
+/**
+ * Case of Calculation --&gt; simple clash
+ */
+#define CAT_INTERFERE_CLASH                     0x200
+/**
+ * Case of Calculation --&gt; clash + contact
+ */
+#define CAT_INTERFERE_CONTACT                   0x400
+/**
+ * Case of Calculation --&gt; clash + contact + clearance
+ */
+#define CAT_INTERFERE_CLEARANCE                 0x800
+/** @nodoc
+ * Case of Calculation --&gt; band analysis
+ */
+#define CAT_INTERFERE_BAND_ANALYSIS             0x1000
+/**
+ * Case of Calculation --&gt; minimal distance
+ */
+#define CAT_INTERFERE_DISTANCE_MIN              0x2000
+
+//---------------------------------------------------------------------------------------------------------------------------
+//        Level Of Detail --&gt; To use for LevelOfDetail in CATIntSpecDef class (encoding : last octet of a [int] = 8 bits)
+//---------------------------------------------------------------------------------------------------------------------------
+/**
+ * Level Of Detail --&gt; default level (element)
+ */
+#define CAT_INTERFERE_LEVEL_DETAIL_DEFAULT      0x1000000  
+/**
+ * Level Of Detail --&gt; element level
+ */
+#define CAT_INTERFERE_LEVEL_DETAIL_ELEMENT      0x2000000  
+/**
+ * Level Of Detail --&gt; model level
+ */
+#define CAT_INTERFERE_LEVEL_DETAIL_MODEL        0x4000000  
+
+// ---------------------------------
+//        geometric result
+// ---------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------------------------
+//        Level Of Clash Result --&gt; To use for LevelOfClashResult in CATIntSpecDef class (encoding : first octet of a [int] = 8 bits )
+//----------------------------------------------------------------------------------------------------------------------------------------
+// In case of CLASH
+/**
+ * Level Of Clash Result --&gt; to have none geometric result in case of clash
+ */
+#define CAT_INTERFERE_LEVEL_CLASH_RESULT_NO     0x1 
+/**
+ * Level Of Clash Result --&gt; to have curve result in case of clash
+ */
+#define CAT_INTERFERE_LEVEL_CLASH_RESULT_CURVE  0x2 
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//        Level Of Contact Result --&gt; To use for LevelOfContResult in CATIntSpecDef class (encoding : second octet of a [int] = 8 bits )
+//------------------------------------------------------------------------------------------------------------------------------------------
+// In case of CONTACT or CLEARANCE
+/**
+ * Level Of Contact Result --&gt; to have none geometric result in case of contact and clearance
+ */
+#define CAT_INTERFERE_LEVEL_CONT_RESULT_NO      0x100 
+/**
+ * Level Of Contact Result --&gt; to have triangle result in case of contact and clearance
+ */
+#define CAT_INTERFERE_LEVEL_CONT_RESULT_TRI     0x200
+/**
+ * Level Of Contact Result --&gt; to have surface result in case of contact and clearance
+ */
+#define CAT_INTERFERE_LEVEL_CONT_RESULT_SURF    0x400
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+//        Level of Penetration --&gt; To use for ModeOfPenetration in CATIntSpecDef class (encoding : third octet of a [int] = 8 bits )
+//-------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Mode of Penetration --&gt; no penetration compute
+ */
+#define CAT_INTERFERE_LEVEL_PENETR_NO                 0x10000
+/**
+ * Mode of Penetration --&gt; penetration at element level
+ */
+#define CAT_INTERFERE_LEVEL_PENETR_ELEMENT            0x20000
+/**
+ * Mode of Penetration --&gt; penetration at model level
+ */
+#define CAT_INTERFERE_LEVEL_PENETR_MODEL              0x40000
+
+//----------------------------------------------------------------------------------------------------------------------------
+//        Level Of Distance --&gt; To use for ModeOfDist in CATIntSpecDef class (encoding : fourth octet of a [int] = 8 bits )
+//----------------------------------------------------------------------------------------------------------------------------
+/**
+ * Mode Of Distance --&gt; no distance compute
+ */
+#define CAT_INTERFERE_LEVEL_DIST_NO                   0x1000000
+/**
+ * Mode Of Distance --&gt; distance at model level
+ */
+#define CAT_INTERFERE_LEVEL_DIST_MODEL                0x2000000
+
+//----------------------------------------------------------------------------------------------------------------------------
+//        Level Of Geometry --&gt; Type of geometry to include in computing (encoding : first octet of a [int] = 8 bits )
+//----------------------------------------------------------------------------------------------------------------------------
+/**
+ * Level Of Geometry --&gt; to include curve in computing
+ */
+#define CAT_INTERFERE_LEVEL_GEO_CURVE                   0x1
+/**
+ * Level Of Geometry --&gt; to include surface in computing
+ */
+#define CAT_INTERFERE_LEVEL_GEO_SURFACE                 0x2
+/**
+ * Level Of Geometry --&gt; to include volume in computing
+ */
+#define CAT_INTERFERE_LEVEL_GEO_VOLUME                  0x4
+
+
+#endif // CATInterfereDefine
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATInterfereCurve.html">← 上一页: CATInterfereCurve.h</a></div>
+        <div><a href="CATInterfereModel.html">下一页: CATInterfereModel.h →</a></div>
+    </div>
+</body>
+</html>

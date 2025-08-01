@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspFunctional.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspFunctional.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspDomainEnvironment.html">← 上一页: CATIPspDomainEnvironment.h</a></div>
+        <div><a href="CATIPspGroup.html">下一页: CATIPspGroup.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspFunctional_H
+#define CATIPspFunctional_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATPspFunctionStatus.h&quot;
+#include &quot;CATListOfInt.h&quot;
+
+class CATIUnknownList;
+class CATListValCATUnicodeString;
+
+extern &quot;C&quot; const IID IID_CATIPspFunctional ;
+
+/**
+ * Interface to access Plant Ship functional object information. 
+ * &lt;b&gt;Role&lt;/b&gt;: To access Plant Ship object information. 
+ */
+
+class CATIPspFunctional : public IUnknown
+{
+  public:  
+  
+  /**
+  * Is functional object specification driven.
+  * @param oStatus
+  *   TRUE if this object is specification driven.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsSpecDriven ( CATBoolean&amp; oStatus )=0;
+  
+  /**
+  * Get all physical part types that are compatible for this function.
+  * @param iuStandard
+  *   Standard name.
+  * @param oListOfPartTypes
+  *   A list of compatible part types.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListCompatiblePartTypes ( const CATUnicodeString&amp; iuStandard, CATListValCATUnicodeString *&amp; oListOfPartTypes)=0;
+  
+  /**
+  * Get all the physical part numbers compatible to the given PartType, Standard and Catalog.
+  * @param iuPartType
+  *   Part type.
+  * @param iuStandard
+  *   Standard name.
+  * @param iuCatalogName
+  *   Catalog name.
+  * @param oListOfCatalogPartNames
+  *   A list of compatible part names.
+  * @param oListOfPartNumbers
+  *   A list of compatible part numbers.
+  * @param ipiListOverrideParameters
+  *   Optional input list of parameters to override.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListCompatiblePartNumbers ( const CATUnicodeString&amp; iuPartType, const CATUnicodeString&amp; iuStandard,
+    const CATUnicodeString&amp; iuCatalogName,
+    CATListValCATUnicodeString *&amp; oListOfCatalogPartNames,
+    CATListValCATUnicodeString *&amp; oListOfPartNumbers,
+    const CATIUnknownList* ipiListOverrideParameters = NULL )=0;
+
+  /**
+  * Is this function realized by a placed part.
+  * @param oStatus
+  *   TRUE if this object has placed part.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsRealized ( CATBoolean&amp; oStatus )=0;
+
+  /**
+  * Get all associated physical objects.
+  * @param oListOfPhysicals [out, IUnknown#Release]
+  *   A list of physical objects
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListPhysicals ( CATIUnknownList*&amp; oListOfPhysicals )=0;
+  
+  /**
+  * Check if this function can be realized by the input list of physical objects.
+  * @param iListOfPhysicals
+  *   A list of physical objects.
+  * @param oListOfStatus
+  *   A list of status
+  *      1: can be realized. 0: can not be realized.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT CanBeRealizedBy (const CATIUnknownList* iListOfPhysicals,
+                                   CATListOfInt*&amp; oListOfStatus )=0;
+  
+  /**
+  * Set part type.
+  * @param iuPartType
+  *   Part type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT SetPartType ( const CATUnicodeString&amp; iuPartType )=0;
+  
+  /**
+  * Get the part type of physical object that realizes this function.
+  * @param ouPartType
+  *   Part type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPartType ( CATUnicodeString&amp; ouPartType )=0;
+
+  /**
+  * Set part number.
+  * @param iuPartNumber
+  *   Part number.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT SetPartNumber ( const CATUnicodeString&amp; iuPartNumber )=0;
+  
+  /**
+  * Get part number of physical object that realizes this function.
+  * @param ouPartNumber
+  *   Part number.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPartNumber ( CATUnicodeString&amp; ouPartNumber )=0;
+
+  /**
+  * Set catalog part name.
+  * @param iuCatalogPartName
+  *   Catalog part name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT SetCatalogPartName( const CATUnicodeString&amp; iuCatalogPartName)=0;
+  
+  /**
+  * Get catalog part name of physical object that realizes this function.
+  * @param ouCatalogPartName
+  *   Catalog part name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetCatalogPartName ( CATUnicodeString&amp; ouCatalogPartName )=0;
+
+  /**
+  * Set standard.
+  * @param iuStandard
+  *   Standard.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT SetStandard ( const CATUnicodeString&amp; iuStandard )=0;
+  
+  /**
+  * Get Standard name.
+  * @param ouStandard
+  *   Standard name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetStandard ( CATUnicodeString&amp; ouStandard )=0;
+
+  /**
+  * Is it OK to integrate (realize) this function with a physical part.
+  * @param oStatus
+  *   True or False.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT IsOKToIntegrate(CATBoolean &amp;oStatus)=0;
+  
+  /**
+  * Set the integration status.
+  * @param iStatus
+  *   True or False.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetIntegrationStatus (CATBoolean iStatus)=0;
+
+  /**
+  * Set part catalog name.
+  * @param iuCatalogName
+  *   Part Catalog Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */ 
+  virtual HRESULT SetPartCatalogName( const CATUnicodeString&amp; iuCatalogName )=0;
+  
+  /**
+  * Get physical part catalog name.
+  * @param ouCatalogName
+  *   Part Catalog Name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPartCatalogName ( CATUnicodeString&amp; ouCatalogName )=0;
+
+  /**
+  * Get function object status.
+  * @param oStatus
+  *   Function object status.
+  *   @see CATPspFunctionStatus
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetFunctionStatus ( CATPspFunctionStatus&amp; oStatus )=0;
+  
+  /**
+  * Set filter attributes.
+  * @param iListOfFilterAttrNames, iListOfFilterAttrValues
+  *   Filter Attributes.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetFilterAttributes ( const CATListValCATUnicodeString * iListOfFilterAttrNames,
+                                        const CATListValCATUnicodeString * iListOfFilterAttrValues )=0;
+  
+  /**
+  * Get filter attributes.
+  * @param oListOfFilterAttrNames
+  *   List of Filter Attribute names.
+  * @param oListOfFilterAttrValues
+  *   List of Filter Attribute values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetFilterAttributes ( CATListValCATUnicodeString *&amp; oListOfFilterAttrNames,
+                                      CATListValCATUnicodeString *&amp; oListOfFilterAttrValues )=0;
+  
+  /**
+  * List physical attributes.
+  * @param oListOfPhysAttrNames
+  *   Physical part&#x27;s attribute names.
+  * @param oListOfPhysAttrValues
+  *   Physical part&#x27;s attribute values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FALSE/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListPhysicalAttributes ( CATListValCATUnicodeString *&amp; oListOfPhysAttrNames,
+                                           CATListValCATUnicodeString *&amp; oListOfPhysAttrValues )=0;
+
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspDomainEnvironment.html">← 上一页: CATIPspDomainEnvironment.h</a></div>
+        <div><a href="CATIPspGroup.html">下一页: CATIPspGroup.h →</a></div>
+    </div>
+</body>
+</html>

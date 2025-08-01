@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FittingInterfaces/PublicInterfaces/CATISiShuttle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FittingInterfaces/PublicInterfaces/CATISiShuttle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISiFiManipSettingAtt.html">← 上一页: CATISiFiManipSettingAtt.h</a></div>
+        <div><a href="CATISiShuttleFactory.html">下一页: CATISiShuttleFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATISiShuttle_H_
+#define CATISiShuttle_H_
+//
+// CATIA Version 5 Release 1 Framework FittingSimulation
+// Copyright   : Dassault Systemes 1997
+//----------------------------------------------------------------
+// Description : C++ class header file for the class named &quot;CATISiShuttle&quot;
+//----------------------------------------------------------------
+// Usage : Domain Model for Shuttle
+//----------------------------------------------------------------
+// Inheritance : CATISiShuttle 
+//                 CATBaseUnknown
+//----------------------------------------------------------------
+// Main Methods : 
+//         GetShuttleName    
+//         SetShuttleName           
+//         GetShuttleAxis
+//         SetShuttleAxis        
+//         GetShuttleLinkList    
+//----------------------------------------------------------------
+//
+
+
+/**
+ * @CAA2Level L1  
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;G60I0FIT.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+/**
+ * Matching flag for activating shuttle angle validation
+ * &lt;b&gt;Role&lt;/b&gt;: Note for use in CAA.
+ */
+#define  CATSiFiShuttleAngle ((unsigned short)(1 &lt;&lt; 0))
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByG60I0FIT IID IID_CATISiShuttle;
+#else
+extern &quot;C&quot; const IID IID_CATISiShuttle;
+#endif
+
+class CATUnicodeString;
+class CATMathTransformation;
+class CATMathAxis;
+class CATISiList_var;
+class CATIMovable_var;
+class CATMathVector;
+class CATListValCATBaseUnknown_var;
+
+
+    /**
+     * Definition of the CATISiShuttle object.
+     * &lt;b&gt;Role:&lt;/b&gt; The shuttle object is used to define a grouping of products. 
+     * Once products have been placed in the shuttle then they can be moved 
+     * all at once.  Also the shuttle has a base location defined by the 
+     * shuttle axis.
+     */
+
+
+class ExportedByG60I0FIT CATISiShuttle : public CATBaseUnknown
+{
+	
+	CATDeclareInterface;
+	
+	public :
+	
+     /**
+      * Retrieve the name of the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Used to retrieve the name of the shuttle object.
+      * @return 
+      *     The name of the shuttle.
+      */
+	virtual CATUnicodeString   GetShuttleName            ()                                                                      const=0;
+
+
+     /**
+      * Set the name of the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Used to set the name of the shuttle object.
+      * @param iName
+      *     The new name to set the to the shuttle.
+      */
+	virtual void               SetShuttleName            (CATUnicodeString iName)                                                const=0;
+
+
+     /**
+      * Retrieve the number of shuttle axises.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve the number of axises associated to the shuttle.
+      * @return
+      *     The number of axises.
+      */
+	virtual int                GetNumberOfShuttleAxises  ()                                                                      const=0;
+
+
+     /**
+      * Retrieve shuttle axis information.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve information about the shuttle&#x27;s axis position.
+      * @param oAxis
+      *     The position of a shuttle axis.
+      * @param iInd
+      *     Used to specify which shuttle axis to retrieve.  Note that if no
+      *     parameters are specified the first axis is used.
+      */
+	virtual void               GetShuttleAxis            (CATMathTransformation &amp;oAxis, int iInd=0)                              const=0;
+
+
+     /**
+      * Sets the shuttle axis information.
+      * &lt;b&gt;Role:&lt;/b&gt; Sets positional information about the shuttle&#x27;s axis.
+      * @param iAxis
+      *     The position of a shuttle axis.
+      * @param iInd
+      *     Used to specify which shuttle axis to set.  Note that if no
+      *     parameters are specified the default behavior is to set it as the\
+      *     first shuttle axis.
+      * @param iTrans
+      *     Used to specify if to use transient move or not.  It is recommended
+      *     to use the default of FALSE.
+      */
+    virtual void               SetShuttleAxis            (const CATMathTransformation &amp;iAxis, int iInd=-1, boolean iTrans=FALSE) const=0;
+
+
+     /**
+      * Remove a specific shuttle axis.
+      * &lt;b&gt;Role:&lt;/b&gt; Used to remove a specific assigned shuttle axis.
+      * @param iInd
+      *     Used to specify which shuttle axis to remove
+      */
+	virtual void               RemoveShuttleAxis         (int iInd)                                                              const=0;
+
+
+     /**
+      * @nodoc
+      * Used to set/get information related to the shuttle axis visibility.
+      * This seems related to shuttle axises after the first axis.  That is the
+      * first axis is drawn with a custom rep with an icon, then any other axis
+      * is drawn with a CAT3DAxisRep. These CAT3DAxisReps can be drawn or not
+      * depending on these two functions.
+      */
+	virtual boolean            GetShuttleAxisesVisibility()                                                                      const=0;
+     /** @nodoc */
+	virtual void               SetShuttleAxisesVisibility(boolean iVisible)                                                      const=0;
+
+
+     /**
+      * @nodoc 
+      * The following is used only in the Gather method below and thus seems to be
+      * only used internally.  
+      */
+	virtual void               GetProductAbsolutePosition(CATMathTransformation &amp;oPos, int iInd, int iSec=0)                     const=0;
+
+
+     /**
+      * @nodoc
+      * Used to synchronize the shuttle axis and the product positions.
+      * &lt;b&gt;Role:&lt;/b&gt; Position the products with respect to the shuttle axis.
+      * This is done because in transiant move mode we just move the shuttle axis
+      * and product reps.  So at the end of the move process, the product positions
+      * are synchronized with the shuttle axis.
+      */
+	virtual void               Gather()                                                                                          const=0;
+	
+
+     /**
+      * Retrieve the number shuttle lists.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve the number of lists of items associated to the shuttle.
+      * @return
+      *     The number of lists.  
+      */
+	virtual int                GetNumberOfShuttleLists   ()                                                                      const=0;
+
+
+     /**
+      * Retrieve a specific shuttle list.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve a list of items from the current shuttle.
+      * @param iInd
+      *     Used to specify a particular list from the shuttle.  Note that if this
+      *     is not specified then the first shuttle is returned.
+      * @return
+      *     A list contained within the shuttle.
+      */
+	virtual CATISiList_var     GetShuttleList            (int iInd=0)                                                            const=0;
+
+
+     /**
+      * Append a list to the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Appends a list of items to the shuttle.
+      * @param iList
+      *     The list of items to append to the shuttle.
+      */
+	virtual void               AddShuttleList             (CATISiList_var iList)                                                  const=0;
+
+
+     /**
+      * Stores a list to the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Stores a list of items to the shuttle.  
+      * @param iList
+      *     The list of items to store in the shuttle.
+      * @param iInd
+      *     Index to specify the position of where the list should be stored.
+      *     If this parameter is not provided, then iList is added to the
+      *     end.
+      */
+	virtual void               SetShuttleList            (CATISiList_var iList, int iInd=-1)                                     const=0;
+
+
+     /**
+      * Removes a list from the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Removes a list of items from the shuttle.  
+      * @param iInd
+      *     Index to specify the which list should be removed.
+      */
+	virtual void               RemoveShuttleList         (int iInd)                                                              const=0;
+
+
+     /**
+      * Returns the shuttle&#x27;s reference object.
+      * &lt;b&gt;Role:&lt;/b&gt; Returns the shuttle&#x27;s reference object.
+      * @return
+      *     The shuttle&#x27;s reference object.
+      */
+	virtual CATIMovable_var    GetReferenceObject        ()                                                                      const=0;
+
+
+     /**
+      * Sets the shuttle&#x27;s reference object.
+      * &lt;b&gt;Role:&lt;/b&gt; Sets the shuttle&#x27;s reference object.
+      * @param iRef
+      *     A movable object to be assigned as the reference object.
+      * @return
+      *     0 : OK &lt;br&gt;
+      *     1 : The Set operation failed.  It can be the result of
+      *         a cross reference. 
+      */
+	virtual int                SetReferenceObject        (CATIMovable_var iRef)                                                  const=0;
+
+
+     /**
+      * @nodoc
+      * Retrieve the validation test status of the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve the validation test status of the shuttle.
+      * @param oValidation
+      *     The status of the validation test.
+      * @return
+      *     TRUE  : The status was found correctly. &lt;br&gt;
+      *     FALSE : The status was not found correctly.
+      */
+	virtual boolean            GetValidationTest         (unsigned int &amp;oValidation)                                             const=0;
+
+
+     /**
+      * @nodoc
+      * Set the validation test status of the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Set the validation test status of the shuttle.
+      * @param iValidation
+      *     The new validation status to be set with the shuttle.
+      */
+	virtual void               SetValidationTest         (unsigned int iValidation)                                              const=0;
+
+
+     /**
+      * @nodoc
+      * Retrieve the angle used during validation with the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve the angle used during validation with the shuttle.
+      * @param oAngle
+      *     The angle used during validation.
+      * @return
+      *     TRUE  : The angle value was found correctly. &lt;br&gt;
+      *     FALSE : The angle value was not found correctly.
+      */
+	virtual boolean            GetAngle                  (double &amp;oAngle)                                                        const=0;
+ 
+
+     /**
+      * @nodoc
+      * Set the angle used during validation with the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Set the angle used during validation with the shuttle.
+      * @param iAngle
+      *     The angle used during validation.
+      */
+    virtual void               SetAngle                  (double iAngle)                                                         const=0;
+
+
+     /**
+      * @nodoc
+      * Retrieve the vector used during validation with the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Retrieve the vector used during validation with the shuttle.
+      * @param oVector
+      *     The vector used during validation. 
+      * @return
+      *     TRUE  : The angle value was found correctly. &lt;br&gt;
+      *     FALSE : The angle value was not found correctly.
+      */
+	virtual boolean            GetVector                 (CATMathVector &amp;oVector)                                                const=0;
+
+
+     /**
+      * @nodoc
+      * Set the vector used during validation with the shuttle.
+      * &lt;b&gt;Role:&lt;/b&gt; Set the vector used during validation with the shuttle.
+      * @param iAngle
+      *     A vector to be used during validation.
+      */
+    virtual void               SetVector                 (CATMathVector iVector)                                                 const=0;
+
+
+     /** 
+      * @nodoc 
+      * BPL, 02/07/2005, IR 0481491
+      * Method: RebuildAllShuttledObjectCallbacks
+      * Removes callbacks for all shuttled objects and recreates the callbacks.
+      * This method was created to fix callback problems when pasting a shuttle 
+      * into a new container.
+      * Returns S_OK if data could be accessed.
+      */
+	virtual HRESULT            RebuildCBForObjectsInShuttle()                                                                    const=0;
+
+
+    // Used to get/set section lists to a shuttle.  This is only done during when interacting with
+    // a track.  When defining the shots for our track we want the sections to update.
+    /** @nodoc */
+    virtual CATListValCATBaseUnknown_var &amp; GetSectionList ()                                                                          =0;
+    /** @nodoc */
+    virtual boolean            SetSectionList (CATListValCATBaseUnknown_var &amp; spSectionList)                                          =0;
+
+};
+
+CATDeclareHandler(CATISiShuttle,CATBaseUnknown);
+
+// CATISiShuttle_H_
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISiFiManipSettingAtt.html">← 上一页: CATISiFiManipSettingAtt.h</a></div>
+        <div><a href="CATISiShuttleFactory.html">下一页: CATISiShuttleFactory.h →</a></div>
+    </div>
+</body>
+</html>

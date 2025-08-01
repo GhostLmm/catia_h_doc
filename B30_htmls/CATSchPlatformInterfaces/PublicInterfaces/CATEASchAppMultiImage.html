@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppMultiImage.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppMultiImage.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppModelInit.html">← 上一页: CATEASchAppModelInit.h</a></div>
+        <div><a href="CATEASchAppMultiImageMaster.html">下一页: CATEASchAppMultiImageMaster.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEASchAppMultiImage2_H
+#define CATEASchAppMultiImage2_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2007
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+// System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSchItfCPP.h&quot;
+
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+#include &quot;CATSchMultiImageEnum.h&quot;
+
+class CATISchAppMultiImage;
+class CATISchAppMultiImageMaster;
+class CATDocument;
+
+/**
+ * Super class to derive implementation for interface CATISchAppReplace.
+ * &lt;b&gt;Role&lt;/b&gt;: Adaptor
+ */
+
+class ExportedByCATSchItfCPP CATEASchAppMultiImage : public CATBaseUnknown
+{
+  public:  
+
+  CATDeclareClass;
+
+  /**
+   * Constructs an empty CATEASchAppReplace.
+   */
+  CATEASchAppMultiImage();
+  virtual ~CATEASchAppMultiImage();
+
+  public:  
+
+  /**
+  * Get the master object of this image.
+  * @param oMasterImage [out, IUnknown#Release]
+  *   Pointer to the master object.
+  */
+  virtual HRESULT AppGetMasterObject (CATISchAppMultiImageMaster **oMasterImage);
+
+  /**
+  * Get the document where the master of this image object resides.
+  * @param oDocument
+  *   Pointer to the document. Do not release output pointer (no AddRef is done).
+  * @param oDocumentName
+  *   Name of the document containing the master.
+  *	@param oSymbolicLinkName
+  *   Name of the symbolic link.
+  */
+  virtual HRESULT AppGetMasterDocument (CATDocument	*&amp;oDocument,
+    CATUnicodeString &amp;oDocumentName, CATUnicodeString	&amp;oSymbolicLinkName);
+
+  /**
+  * Update the image object.
+  * @param iMasterImage
+  *   This is an optional input. 
+  *   Not NULL - the application has a handle on the master to update 
+  *   this image (for example in DSA application, the application will 
+  *   make sure the ID of this image is the same as the input master).
+  *   NULL - the application will find the master based on the specific way
+  *   it models the MIO concept.
+  * Sample case: the application will make sure the ID of this image is the same as the input master.
+  * @param oImage
+  *   Pointer to a new image object created if existing image object has to be
+  *   replaced during the update process.
+  *   This pointer is NULL if the image object is not replaced.
+  */
+  virtual HRESULT AppUpdate (const CATISchAppMultiImageMaster *iMasterImage,
+    CATISchAppMultiImage **oImage);
+
+  /**
+  * Check if the image object is up-to-date.
+  * @param oStatus
+  *   Possible Enum values: Enum values need to be mapped to those provided by PSP.
+  */
+  virtual HRESULT AppIsUpToDate (CATSchMIOImageStatus &amp;oStatus);
+
+  private:
+  // do not implement
+  CATEASchAppMultiImage (CATEASchAppMultiImage &amp;);
+  CATEASchAppMultiImage&amp; operator=(CATEASchAppMultiImage&amp;);
+
+};
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppModelInit.html">← 上一页: CATEASchAppModelInit.h</a></div>
+        <div><a href="CATEASchAppMultiImageMaster.html">下一页: CATEASchAppMultiImageMaster.h →</a></div>
+    </div>
+</body>
+</html>

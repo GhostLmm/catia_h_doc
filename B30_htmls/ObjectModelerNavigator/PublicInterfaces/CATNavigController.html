@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerNavigator/PublicInterfaces/CATNavigController.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerNavigator/PublicInterfaces/CATNavigController.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRedrawEvent.html">← 上一页: CATIRedrawEvent.h</a></div>
+        <div><a href="CATNavigInstance.html">下一页: CATNavigInstance.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATNavigController_H_
+#define CATNavigController_H_
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+#include &lt;CATOmnMain.h&gt;
+
+
+#include &quot;CATEventSubscriber.h&quot;
+#include &quot;CATINavigContainer.h&quot;
+#include &quot;sequence_CATBaseUnknown_ptr.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATErrors.h&quot;
+#include &quot;CATTraMacro.h&quot; 
+
+class CATListValCATBaseUnknown_var;
+class CATUnicodeString;
+class CATHSO;
+class CATPSO;
+class CATNavigInstance;
+class CATIGraphNode_var;
+class CATCommand;
+class CATNavigSONotification;
+class CATHashObject;
+class CATHashTable;
+class CATNavigInstance;
+
+/** 
+* Class used to control navigation. 
+*/  
+
+class ExportedByCATOmnMain CATNavigController:public CATEventSubscriber {
+	CATDeclareClass;
+	
+public:
+		/** @nodoc */
+	CATNavigController(const CATINavigContainer_var&amp; container, CATCommand* cmd = NULL);
+	virtual ~CATNavigController();
+	
+	/**
+	* Retrieves nodes associated to an object.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;An object visualized in a tree, see @href CATINavigateObject ,
+    * is represented by a node implementing @href CATIGraphNode , 
+    * @href CATINavigElement , and @href CATINavigModify. This node is multi-
+    * represented: there are as many nodes as tree instances. This method retrieves 
+    * all the nodes associated with an object. 
+	* @param iObject
+	*    The object associated with the nodes.
+    * @return 
+    *    The list of nodes. A node is an object implementing @href CATINavigModify , 
+    * @href CATINavigElement , and @href CATIGraphNode . 
+	*/
+	CATListValCATBaseUnknown_var* GetAssociatedElements(const CATBaseUnknown_var&amp; iObject) const;
+
+		/** @nodoc */
+	void Spy();
+
+	/**  
+   *  Returns the container.  
+   *  Returned pointer must be released.  
+   */
+	CATINavigContainer* GetContainer() const;
+
+	/** 
+	* Instances management.
+	*  &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Warning: Do not use this method if node already drawn in the graph. 
+	*/
+	void SetNoDuplicate();
+
+		/** @nodoc */
+	CATNavigInstance* GetFirstTwinInstance(CATNavigInstance*,CATIdent);
+		/** @nodoc */
+	CATBaseUnknown* GetAssociatedElement(CATNavigInstance* inst);
+			
+	/**
+	* Sets the mode to manage the display of + and -  on arcs.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method sets the mode to manage the depth of representation.&lt;br&gt;
+    *        &lt;B&gt;if mode =0 &lt;/B&gt;: &lt;BR&gt;
+	*         by default a + is always displayed on node. If you click on it,
+    *          @href CATINavigateObject#GetChildren method is called on node and we try to
+    *         display children.&lt;br&gt; 
+    *         - If children exist, they are displayed and + is replace by a -.&lt;br&gt;
+    *         - If there is no children, + disappear.&lt;br&gt;
+    *         This behavior is same as windows explorer on network directory.
+    *         Ergonomy is not perfect but it provides best performances.&lt;br&gt;
+    *        &lt;B&gt;if mode =1 &lt;/B&gt;: &lt;BR&gt;
+	*         @href CATINavigateObject#GetChildren is always called once
+    *         (even if children are not displayed) just to check if there are some children.&lt;br&gt;
+    *          If there is no children, no sign is displayed on arc.&lt;br&gt;
+    *          If there are some children a + is displayed on arc.&lt;br&gt;
+    *         This behavior is same as windows explorer on local directory.&lt;br&gt;
+    *         Ergonomy is better but it could impact performances if @href CATINavigateObject#GetChildren implementation is slow.
+	* @param mode
+	*    The mode value to manage the depth of representation.
+	*/
+	void SetDereferenceMode(int mode);
+	/**
+	* Retrieves the mode to manage the depth of representation.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the mode to manage the depth of representation.
+    * @return 
+    *    The mode.
+	*/
+	int GetDereferenceMode() const;
+
+	/** 
+	 * @nodoc 
+	 * management of the selection with CATPSO et CATHSO.
+	 */
+	void AttachToPSO(CATPSO* pso);
+		/** @nodoc */
+	void AttachToHSO(CATHSO* hso);
+
+		/** @nodoc */
+	CATListValCATBaseUnknown_var* GetSelectedObjects() const;
+
+	/**
+	* Sets expansion depth under a node.
+	* @param iDepth
+	*     if iDepth &lt; 0, expand all children till there is no one left
+	*/
+
+	void SetDepth(int iDepth=1);
+	/**
+	* @nodoc
+	*/
+	int GetDepth() const;
+
+	/**
+	* Sets the +/- sign visibility.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Warning: Do not use this method if node already drawn in the graph. 
+	* @param mode
+	*   Legal values:
+	*   &lt;ul&gt;
+	*  &lt;li&gt;0: Hide the +/- signs &lt;/li&gt;
+	*  &lt;li&gt;otherwise : show the +/- signs &lt;/li&gt;
+	*   &lt;/ul&gt; 
+	*/
+	void SetActivatorsVisibility ( int mode );
+
+	/** 
+	* Retrieves the +/- sign visibility.
+	* @return
+	*   Legal values:
+	*   &lt;ul&gt;
+	*  &lt;li&gt;0: signs are hidden  &lt;/li&gt;
+	*  &lt;li&gt;otherwise   &lt;/li&gt;
+	*   &lt;/ul&gt; 
+	*/
+	int GetActivatorsVisibility() const;
+
+	/** 
+	 * @nodoc 
+	 * Order management.
+	 */
+	void SetOrderedList(int OrderedList=1);
+		/** @nodoc */
+	int GetOrderedList() const;
+	
+	/** 
+	 * @nodoc 
+	 * management of events for data creation.
+	 */
+	void SetDataCreateSubscribe(int DataCreateSubscribe=1);
+		/** @nodoc */
+	int GetDataCreateSubscribe() const;
+	
+	/** 
+	* @nodoc 
+	* Extended mode management.
+	*/
+	void SetExtensionMode(int ExtensionMode=1);
+		/** @nodoc */
+	int GetExtensionMode() const;
+	
+	
+	
+	/** @nodoc 
+	* Management of model&#x27;s events.
+	*/
+	void WakeMeOnDataCreate(	CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+										
+		/** @nodoc */
+	void WakeMeOnDataModify(	CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+										
+		/** @nodoc */
+	void WakeMeOnDataDelete(	CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+		/** @nodoc */
+	void WakeMeOnRepDelete(		CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+		/** @nodoc */
+	void WakeMeOnRepEdit(		CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+										
+		/** @nodoc */
+	void WakeMeOnRepSelect(CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+										
+		/** @nodoc */
+	void WakeMeOnRepExtSelect(CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+										
+		/** @nodoc */
+	void WakeMeOnRepAction(CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+		/** @nodoc */
+    void WakeMeOnRepExpand(CATCallbackEvent evt,void* sender,
+                        CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+ 		/** @nodoc */
+    void WakeMeOnRepMethods(CATCallbackEvent evt,void* sender,
+                        CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+	    /** @nodoc 
+	      * Deprecated R6. This method should not be used.
+	      */
+	void WakeMeOnRepMulti(CATCallbackEvent evt,void* sender,
+						CATNotification* notif, CATSubscriberData data,CATCallback cb);
+
+		/** @nodoc */
+        void AddElement(CATNavigInstance* instance,const CATBaseUnknown_var&amp; element,int mode=0);
+		/** @nodoc */
+        void Intersect (CATListOfCATUnicodeString*,const CATListOfCATUnicodeString*);
+
+		/** @nodoc */
+	static void EndTransaction (CATCommand* ToClient,int State,void* clientdata);
+		/** @nodoc */
+	CATHashObject*&amp; GetInstancesList();
+		/** @nodoc */
+	CATHashObject*&amp; GetElementsList();
+		/** @nodoc */
+	CATHashObject*&amp; GetUpdateList();
+
+		/** @nodoc */
+	void PutInUpdateList ( CATBaseUnknown* obj );
+
+	/** @nodoc 
+	* Management of the list of expanded nodes.
+	*/
+	int AddExpandedNode(CATNavigInstance* Inst);
+	/** @nodoc */
+	int RemoveExpandedNode(CATNavigInstance* Inst);
+	/** @nodoc */
+	int ListedExpandedNode(CATNavigInstance* Inst);
+	/** @nodoc */
+	int GetNbExpandedNodes();
+	/** @nodoc */
+	void SetFixDepthMode(int FixMode);
+	/** @nodoc */
+	int GetFixDepthMode();
+
+  /** @nodoc */
+  static CATListPtrCATBaseUnknown* GetControllerList();
+
+  /** @nodoc */
+  inline CATOMNID_t GetId() const { return _ctrlId; }
+
+  /** @nodoc */
+  static CATBoolean IsRedrawLocked(); //JNV06082008++ :  supprimer sur GA
+
+  /** @nodoc */
+  CATBoolean IsControllerLockForRedraw(); //JNV15092008++
+
+private:
+	// Methodes d&#x27;ajout et de suppression de la liste de correspondance
+//	int RemoveInstance(CATNavigInstance* instance);
+	int RemoveElement(const CATBaseUnknown_var&amp; element);
+	int Locate(CATNavigInstance*);
+	
+	void AddDataSubscriptions(CATNavigInstance* instance,int mode);
+	void RemoveDataSubscriptions(CATNavigInstance* instance);
+	void AddRepSubscriptions(const CATBaseUnknown_var&amp; element);
+	void RemoveRepSubscriptions(const CATBaseUnknown_var&amp; element);
+	// ajout bpe
+	void AddRedrawSubscription(CATNavigInstance* instance,int mode);
+	void RemoveRedrawSubscription(CATNavigInstance* instance);
+	// ajout bpe fin
+
+  /** @nodoc */
+  static void LockRedraw();     //JNV06082008++ :  supprimer sur GA
+  /** @nodoc */
+  static void UnlockRedraw();   //JNV06082008++ :  supprimer sur GA
+  /** @nodoc */
+  static void ThisRedrawIsForbidden(); //JNV06082008++ :  supprimer sur GA
+
+  /** @nodoc */
+  void LockControllerForRedraw(); //JNV15092008++
+
+  /** @nodoc */
+  void UnlockControllerForRedraw(); //JNV15092008++
+
+	// Data
+
+	CATINavigContainer_var _container;
+	CATHashObject* _associated_reference;
+	CATHashObject* _associated_instance;
+	
+	int _no_duplicate;
+	int _depth;
+public:
+	/** @nodoc */
+	void* _hso;
+	/** @nodoc */
+	void* _pso;
+	/** @nodoc */
+    CLSID* _controlID;
+	/** @nodoc */
+	static CATListPtrCATBaseUnknown* _ControllerList; //JNV06082008 :  passer en priv, faire migrer les applis sur GetControllerList()
+private:
+	int _OrderedList;
+	int _ExtensionMode;
+	int _activ_visibility;
+	int _DataCreateSubscribe;
+
+	CATCommand* _Cmd;
+	
+	CATHashObject*			_liste_update;
+	CATNavigSONotification*		_navigso;
+
+	// Table des noeuds expanses, pour la persistance de l&#x27;etat des noeuds
+	// Gestion par le nom du chemin du noeud
+	CATHashTable* _ExpandedNodes;
+	int _FixDepthMode;
+	int _dereference_mode; /** @win64 fbq : 64-bit structure padding **/
+  CATOMNID_t _ctrlId;
+  static CATBoolean _LockRedraw;            //JNV06082008++ :  supprimer sur GA
+  static CATNavigController* _CtrlerInLock; //JNV15092008++ : enregistrement blocage/non blocage des Redraw 
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRedrawEvent.html">← 上一页: CATIRedrawEvent.h</a></div>
+        <div><a href="CATNavigInstance.html">下一页: CATNavigInstance.h →</a></div>
+    </div>
+</body>
+</html>

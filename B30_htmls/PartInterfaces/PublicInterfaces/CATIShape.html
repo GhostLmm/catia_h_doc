@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIShape.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIShape.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIShaft.html">← 上一页: CATIShaft.h</a></div>
+        <div><a href="CATIShell.html">下一页: CATIShell.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIShape_H
+#define CATIShape_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATISpecObject.h&gt;
+#include &lt;CATUnicodeString.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CATErrorMacros.h&gt;
+#include &lt;CATError.h&gt;
+#include &lt;CATTolerance.h&gt;
+
+class CATPathElement;
+class CATIBRepAccess_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIShape;
+#else
+extern &quot;C&quot; const IID IID_CATIShape;
+#endif
+
+/**
+ * Interface which provides a basic behavior to a Mechanical Design feature.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface allows users to manage the persistence of default values. 
+ * It also provides various informations about the feature.
+ */
+class ExportedByPartItf CATIShape : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+  virtual void Initialize() = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+  virtual int	Build() = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+  virtual int	BuildShape() = 0;
+    
+
+/**
+ * Stores a default value of integer type.
+ * @param iStr 
+ *   The storage name. Use a characteristic name to avoid naming conflicts.
+ * @param iVal
+ *   The value.
+ */
+  virtual void SetDefaultValue(const CATUnicodeString&amp; iStr, int iVal) = 0;
+  
+/**
+ * Stores a default value of double type.
+ * @param iStr 
+ *   The storage name. Use a characteristic name to avoid naming conflicts.
+ * @param iVal
+ *   The value.
+ */
+  virtual void SetDefaultValue(const CATUnicodeString&amp; iStr, double iVal) = 0;
+  
+/**
+ * Stores a default value of CATISpecObject type.
+ * @param iStr 
+ *   The storage name. Use a characteristic name to avoid naming conflicts.
+ * @param iVal
+ *   The value.
+ */
+  virtual void SetDefaultValue(const CATUnicodeString&amp; iStr, CATISpecObject_var&amp; iVal) = 0;
+
+
+/**
+ * Retrieves a integer type default value. 
+ * @param iStr 
+ *   The storage name.
+ * @param oVal
+ *   The value.
+ */
+  virtual void GetDefaultValue(const CATUnicodeString&amp; iStr, int&amp; oVal) = 0;
+  
+/**
+ * Retrieves a double type default value.
+ * @param iStr 
+ *   The storage name.
+ * @param oVal
+ *   The value.
+ */
+  virtual void GetDefaultValue(const CATUnicodeString&amp; iStr, double&amp; oVal) = 0;
+  
+/**
+ * Retrieves a CATISpecObject type default value.
+ * @param iStr 
+ *   The storage name.
+ * @param oVal
+ *   The value.
+ */
+  virtual void GetDefaultValue(const CATUnicodeString&amp; iStr, CATISpecObject_var&amp; oVal) = 0;
+
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+  virtual int IsOnCurrentTool(CATPathElement* iPath) = 0;
+  
+/**
+ * Tests if the feature was created in first position in its mechanical body. 
+ * @return
+ *   1 if the feature is in first position,
+ *   0 otherwise.
+ */
+  virtual int IsFirstInTool() = 0;
+
+/**
+ * @nodoc
+ */
+  virtual int HasAContext() = 0;
+  
+/**
+ * @nodoc
+ * Returns the topological model resolution.
+ */
+  virtual double GetModelResolution() = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+  virtual int IsOnValidTool(CATIBRepAccess_var&amp; hBrep) = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+	virtual HRESULT IsOnResultIN(CATPathElement* iPath) = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+	virtual HRESULT IsOnCurrentToolFeature(CATPathElement* iPath) = 0;
+
+/**
+ * @nodoc
+ * Do not use - Internal use only.
+ */
+	virtual HRESULT IsOnResult(CATPathElement* iPath) = 0;
+  
+/**
+ * @nodoc
+ * Returns the topological model resolution.
+ */
+  //virtual HRESULT GetModelTolerance(CATTolerance&amp; Tol) = 0;
+
+
+
+};
+
+CATDeclareHandler (CATIShape, CATBaseUnknown); 
+
+#endif // CATIShape_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIShaft.html">← 上一页: CATIShaft.h</a></div>
+        <div><a href="CATIShell.html">下一页: CATIShell.h →</a></div>
+    </div>
+</body>
+</html>

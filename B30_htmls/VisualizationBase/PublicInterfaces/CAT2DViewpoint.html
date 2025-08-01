@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT2DViewpoint.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT2DViewpoint.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DTo3DRep.html">← 上一页: CAT2DTo3DRep.h</a></div>
+        <div><a href="CAT2DViewport.html">下一页: CAT2DViewport.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT2DViewpoint_H
+#define CAT2DViewpoint_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATViewpoint.h&quot;
+#include &quot;CATMathPoint2Df.h&quot;
+#include &quot;CATMathPointf.h&quot;
+#include &quot;CAT3x3Matrix.h&quot;
+#include &quot;CAT2DBoundingBox.h&quot;
+#include &quot;CAT2DBagRep.h&quot;
+
+#include &quot;CATBoolean.h&quot;
+
+//enum ViewpointZoomType {  
+//  MillimeterScreenBased,	
+//  HalfWindowHeightBased,
+//  HalfWindowWidthAndHeigthBased };
+
+/** 
+* Type of zoom for 2D Viewpoint. 
+* &lt;br&gt;The zoom type gives the reference of the zoom
+* and (consequently) the behaviour of the display at the
+* resize of the window
+* @param  MillimeterScreenBased		
+*  For usual 2D viewpoint.
+*  &lt;br&gt;The zoom is based on the millimeter. 
+*   With this style, a model distance of L will take L*zoom millimeter on screen.
+* @param  HalfWindowHeightBased		
+*  For 2D viewpoint over conic 3D viewpoint.
+*  &lt;br&gt;The zoom is based on the half height of the window.
+*   With this style, a model distance of L will take L*zoom*(half height of the window) millimeter 
+*   on screen.
+* @param  HalfWindowWidthAndHeigthBased 
+*  For overview or non-isometric viewpoint.
+*  &lt;br&gt;	The zoom is based on the half height (resp width).
+*   of the window in vertical (resp. horizontal) direction. Projection is not isometric.
+*   When window is resized, the viewpoint does not changes. The same image is seen but streched.
+* @see CAT2DViewpoint
+*/
+enum CATViewpointZoomType {  
+  MillimeterScreenBased,	
+  HalfWindowHeightBased,
+  HalfWindowWidthAndHeigthBased };
+
+/** @nodoc */
+typedef CATViewpointZoomType ViewpointZoomType;
+
+/** 
+ * Class that represents the way the 2D scene is seen.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * A 2D viewpoint describes a list of 2D representations of a scene 
+ * seen by an observer position (point-of-view) through a 
+ * viewer&#x27;s graphic window.
+ */
+class ExportedByCATViz CAT2DViewpoint : public CATViewpoint
+{
+//------------------------------------------------------------------------------
+  CATDeclareClass;
+
+  public :
+
+    /**
+    * Retrieves whether viewpoint is a three dimensional one or not. 
+    * @return
+    * The value is always &lt;tt&gt;FALSE&lt;/tt&gt;.
+    */
+    virtual CATBoolean Is3D();
+
+    /**
+    * Anchor types. 
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:The anchor type gives the location in the window
+    * where the origin is projected. When zooming, this point will stay
+    * invariant.
+    */
+    enum Anchor { UpLeft=5, Up=4, UpRight=6,
+		  Left=1, Center=0, Right=2,
+		  DownLeft=9, Down=8, DownRight=10 };
+
+    /**
+     * Creates a non-initialized viewpoint. 
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:At the first display (when the viewer will appear)
+     * a reframe will automatically been done on the viewpoint.
+     */
+    CAT2DViewpoint();                      
+
+    /**
+     * Creates a new viewpoint by copying geometrical values.
+     * &lt;ul&gt;
+     * &lt;li&gt;Eye position and orientation (Origin, Zoom, ZoomType)
+     * &lt;li&gt;Dynamic behaviour (Anchor, Bounds)
+     * &lt;/ul&gt;
+     */
+    CAT2DViewpoint( const CAT2DViewpoint &amp;iViewpoint);
+    
+    /**
+     * Creates a new viewpoint with main characteristics.
+     * @param iEye Position of the Eye
+     * @param iZoom Zoom factor)
+     */
+    CAT2DViewpoint( const CATMathPoint2Df &amp;iEye, const float iZoom=1.);
+
+    virtual ~CAT2DViewpoint ();
+
+    /**
+     * Gets the origin.
+     * @return The eye position.
+     */
+    CATMathPoint2Df GetOrigin() const;
+    
+    /** 
+     * Sets the origin.
+     * @param iEye The eye posision
+     */
+    virtual void SetOrigin( const CATMathPoint2Df &amp;iEye);
+
+    /**
+     * Sets the Anchor type. 
+     * @param iAnchor 
+     *   Usually &lt;tt&gt;Center&lt;/tt&gt; or &lt;tt&gt;UpLeft&lt;/tt&gt; 
+     */
+    void SetAnchor ( const Anchor iAnchor);
+
+    /**
+     * Gets the Anchor type. 
+     */
+    Anchor GetAnchor();
+
+    /** 
+     * Gets the zoom type. 
+     */
+    virtual CATViewpointZoomType GetZoomType() const;
+    
+
+    /**
+     * Sets the zoom type.
+     * @param iZoomType 
+     * The zoom type
+     */
+    virtual void SetZoomType( const CATViewpointZoomType iZoomType);
+
+    /**
+     * Sets the zoom value.
+     * @param iZoom 
+     * Value meaning depends of the zoom type.
+     */
+    void SetZoom( const float &amp;iZoom);
+
+	/** @nodoc */
+	//int IsEmpty() const;
+
+
+    /**
+     * Copies the geometric definition of a CAT3DViewpoint.
+     */
+    CAT2DViewpoint &amp; operator = ( const CAT2DViewpoint &amp;iViewpoint);
+
+    /**
+     * Applies a geometic transformation to the viewpoint.
+     * That transformation is defined by the CAT3x3matrix
+     */
+    CAT2DViewpoint &amp; operator *= ( const CAT3x3Matrix &amp;iMatrix);
+
+   /** 
+    *Gets the limits between which the viewpoint can move.
+   */
+    virtual int GetTranslationBounds( float &amp;XMinModel, float &amp;XMaxModel, float &amp;YMinModel, float &amp;YMaxModel) const;
+
+   /** 
+    * Sets the limits between which the viewpoint can move.
+    */
+    virtual void SetTranslationBounds( const float XMinModel=-1.e+10, const float XMaxModel=1.e+10, 
+				       const float YMinModel=-1.e+10, const float YMaxModel=1.e+10);
+    
+    /** @nodoc */
+    const CAT3x3Matrix &amp;GetMatrix() const ;
+/** @nodoc */
+    const CAT3x3Matrix &amp;GetInverseMatrix();
+
+/** @nodoc */
+    virtual CATViewpoint *Clone() const;
+/** @nodoc */
+    virtual CATViewpoint *FullClone();
+/** @nodoc */
+    virtual CATViewpoint *Clone(CATViewpoint **) const;
+/** @nodoc */
+    inline virtual const CAT2DBagRep* GetBag() const;
+/** @nodoc */
+    inline virtual const CAT2DBagRep* GetBagFurtive() const;
+
+    /**
+     * Reframes the model in the window.
+     * @param XMinModel        Leftmost coordinate to be seen
+     * @param XMaxModel        Rightmost coordinate to be seen
+     * @param YMinModel        Bottommost coordinate to be seen
+     * @param YMaxModel        Topmost corrrdinate to be seen
+     * @param width            Wight of the window (in pixel)
+     * @param height           Height of the window (in pixel)
+     * @param mmInSupportUnit  Inverse of the size(height) of a pixel in millimeter
+     * @param ratioWH          Ratio Height of a pixel / Width of a pixel
+     */
+    virtual void ReframeOn( const float &amp;XMinModel, const float &amp;XMaxModel, 
+			    const float &amp;YMinModel, const float &amp;YMaxModel,
+			    const float &amp;width, const float &amp;height, 
+			    const float &amp;mmInSupportUnit, const float &amp;ratioWH);
+    /**
+     * Reframes the model in the window.
+     * @param iWidth Wight of the window (in pixel)
+     * @param iHeight Height of the window (in pixel)
+     * @param mmInSupportUnit Inverse of the size(height) of a pixel in millimeter
+     * @param ratioWH Ratio Height of a pixel / Width of a pixel
+     */
+    virtual void Reframe ( const float iWidth, const float iHeight, const float mmInSupportUnit, const float ratioWH);
+   
+/** @nodoc */
+    virtual void CreateViewportFrom (const float x, const float y, const float deltaX, const float deltaY, const float supportWidth, const float supportHeight, const float mmInSupportUnit, const float ratioWH);
+/** @nodoc */
+    virtual void CreateViewport (const float supportWidth, const float supportHeight, const float mmInSupportUnit, const float ratioWH);
+/** @nodoc */
+    void CreateClippedViewport (const CATMathPoint2Df &amp;bottomLeft, const CATMathPoint2Df &amp;topRight);
+/** @nodoc */
+    int GetClippedViewport (CATMathPoint2Df &amp;bottomLeft, CATMathPoint2Df &amp;topRight); 
+/** @nodoc */
+    void ResetClippedViewport ();
+
+    /**
+     * Sets the Depth mode. 
+     * @param iDepthMode The Depth mode
+     *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:&lt;ul&gt;
+     *   &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt; the draw priority is the same as the selection priority&lt;/li&gt;
+     *   &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt; otherwise (default value)&lt;/li&gt;.&lt;/ul&gt;
+     * The priority of each element attached to the viewpoint is retrieval
+     * with the @href CATGraphicAttributeSet#GetPriority method.
+     */
+    void SetDepth(const int iDepthMode);
+    /**
+     * Gets the Depth mode.
+     * @return The Depth mode.
+     */
+    int GetDepth() const;
+
+/**
+*  Computes the point laying under a given pixel position.
+*  @param x               Position in X of the point
+*  @param y               Position in Y of the point
+*  @param neard           Nearest point in the viewpoint under the given position
+*  @param fard            farest point in the viewpoint under the given position
+*  @param width           Width in pixels of the window
+*  @param height          Height in pixels of the window
+*  @param mmInSupportunit Inverse of the size(height) of a pixel in millimeter
+*  @param ratioWH         Ratio Height of a pixel / Width of a pixel
+*
+* The neard and fard CATMathPointf are 3D point. Ignore the z coordinate.
+*/
+    virtual void ComputeModelFromPixel(const float x, const float y, CATMathPointf &amp;neard, CATMathPointf &amp;fard, const float width, const float height, const float mmInSupportUnit, const float ratioWH);
+  /** @nodoc */
+    virtual void ComputePixelFromModel(const CATMathPointf &amp;pt_model, CATMathPoint2Df &amp;pt_pixel, const float width, const float height, const float mmInSupportUnit, const float ratioWH);
+
+  /** @nodoc */
+  void ComputePixelFromModel( const float iXModel, const float iYModel, float &amp;oXPixel, float &amp;oYPixel, 
+    const float &amp;width, const float &amp;height, const float &amp;mmInSupportUnit, const float &amp;ratioWH);
+/**
+*  Computes the point laying under a given pixel position.
+*  @param iXPixel               Position in X of the point
+*  @param iYPixel               Position in Y of the point
+*  @param oXModel           X coordinate of the model point nder the given position
+*  @param oYModel           Y coordinate of the model point nder the given position
+*  @param width           Width in pixels of the window
+*  @param height          Height in pixels of the window
+*  @param mmInSupportunit Inverse of the size(height) of a pixel in millimeter
+*  @param ratioWH         Ratio Height of a pixel / Width of a pixel
+*/
+  void ComputeModelFromPixel( const float iXPixel, const float iYPixel, float &amp;oXModel, float &amp;oYModel, 
+    const float &amp;width, const float &amp;height, const float &amp;mmInSupportUnit, const float &amp;ratioWH);
+
+  /** @nodoc */
+    virtual float GetScaleFactor(const float width, const float height, const float mmInSupportUnit, const float ratioWH);
+
+    /**
+     * Adds a representation in the scene the observator may seen.
+     * @param iRep 
+     *   Representation 2D
+     */
+    void AddRep ( CAT2DRep *iRep);
+
+	/** @nodoc */
+	void AddRepForHighlight ( CAT2DRep *iRep );
+	/** @nodoc */
+	void AddHighlightBag ();
+
+	/** @nodoc */
+	void EndAddRepsForHighlight ();
+
+    /**
+     * Removes the representation from the furtive list.
+     * @param iRep Representation 2D
+     */
+    void RemoveRep ( CAT2DRep *iRep);
+  /** @nodoc */
+    void RemoveReps ( CAT2DRep *iRep);
+	/** @nodoc */
+    void RemoveRepFromHighlight ( CAT2DRep *iRep );
+	/** @nodoc */
+    void RemoveHighlightBag ();
+  /** @nodoc */
+    void EndRemoveReps ();
+
+	/** @nodoc */
+    void EndRemoveRepsFromHighlight ();
+    /**
+     * Adds a furtive representation in the scene the observator may seen.
+     * &lt;p&gt; Pixels of Furtive representations may not be in the expected color but can
+     * be displayed and hidden without re-drawind the whole scene. Must be used for 
+     * temporary displays
+     * @param iRep Representation 2D
+     */
+    void AddFurtiveRep ( CAT2DRep *iRep);
+    
+    /**
+     * Removes the representation from the furtive list.
+     * @param iRep Representation 2D
+     */
+    void RemoveFurtiveRep ( CAT2DRep *iRep);
+
+  /** @nodoc */
+    void RemoveFurtiveReps ( CAT2DRep *iRep);
+  /** @nodoc */
+    void EndRemoveFurtiveReps ();
+
+  /** @nodoc */	
+	void EmptyHighlightBag();
+	    
+  /** @nodoc */
+    CAT2DBoundingBox GetBoundingBox();
+
+  /** @nodoc */
+    virtual int SizeOf();
+
+  /** @nodoc */
+  void AttachIndicator(CATIndicator* indicator);
+
+   /** @nodoc */
+   CATPooledDisplayList* GetPooledDisplayList();
+
+  /** @nodoc */
+  CATDLPool*  GetDisplayListPool();
+
+//------------------------------------------------------------------------------
+    protected:
+
+  /** @nodoc */
+    CATMathPoint2Df _origin;
+  /** @nodoc */
+    CATMathPoint2Df  _bottomLeft2D;
+  /** @nodoc */
+    CATMathPoint2Df   _topRight2D;
+  /** @nodoc */
+    CATMathPointf _bottomLeft;
+  /** @nodoc */
+    CATMathPointf _topRight;
+
+  /** @nodoc */
+    float _XMinimumBound;
+  /** @nodoc */
+    float _XMaximumBound;
+  /** @nodoc */
+    float _YMinimumBound;
+  /** @nodoc */
+    float _YMaximumBound;
+      /** @nodoc */
+    int _AreTranslationBoundsDefined;
+  /** @nodoc */
+    int _clip;
+  /** @nodoc */
+    int _depth;
+  /** @nodoc */
+    CATViewpointZoomType _ZoomType;
+  /** @nodoc */
+    float _VerticalToHorizontalZoomRatio;
+  /** @nodoc */
+    Anchor _Anchor; /** @win64 fbq : 64-bit structure padding **/
+
+  /** @nodoc */
+    CAT3x3Matrix	_matrix;
+    CAT3x3Matrix _invert;	// matrice de transformation.
+
+  /** @nodoc */
+    CAT2DBagRep _Bag;
+  /** @nodoc */
+    CAT2DBagRep _BagFurtive;
+  /** @nodoc */
+   CAT2DBagRep _EnglobingHighlightBag;
+};
+
+/** @nodoc */
+inline const CAT2DBagRep* CAT2DViewpoint::GetBag() const
+{
+  return &amp;(_Bag);
+}
+
+/** @nodoc */
+inline const CAT2DBagRep* CAT2DViewpoint::GetBagFurtive() const
+{
+  return &amp;(_BagFurtive);
+}
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DTo3DRep.html">← 上一页: CAT2DTo3DRep.h</a></div>
+        <div><a href="CAT2DViewport.html">下一页: CAT2DViewport.h →</a></div>
+    </div>
+</body>
+</html>

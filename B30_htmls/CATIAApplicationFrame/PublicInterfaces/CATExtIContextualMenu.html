@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAApplicationFrame/PublicInterfaces/CATExtIContextualMenu.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAApplicationFrame/PublicInterfaces/CATExtIContextualMenu.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEditorPage.html">← 上一页: CATEditorPage.h</a></div>
+        <div><a href="CATExtIDlgTableViewColumnModel.html">下一页: CATExtIDlgTableViewColumnModel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATExtIContextualMenu_h
+#define CATExtIContextualMenu_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &lt;SELECT.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+
+class CATCmdContainer;
+
+/**
+   * Adapter class of the CATIContextualMenu interface.
+   * &lt;br&gt;Two ways to implement this interface:
+   * &lt;ol&gt;
+   * &lt;li&gt;You want to customize a default menu which contains these commands: Cut, Copy, Paste, 
+   * PasteSpecial, Delete, Open Properties, Selection Sets, Define Selection Sets , Hide/Show and
+   * some commands about the graph if your window contains one. 
+   * &lt;br&gt;So in the constructor of your data extension you 
+   * retrieve the default contextual menu, thanks to @href #GetContextualMenu, and you create 
+   * several items, that you chain to it. It is not necessary to overwrite the 
+   * &lt;tt&gt;GetContextualMenu&lt;/tt&gt; method.
+   * &lt;br&gt;Example of constructor:
+   * &lt;pre&gt;
+   *  MyDataExtentiobnClass::MyDataExtentionClass
+   * {
+   *    CATCmdContainer * pMenu = NULL ; 
+   *    CATExtIContextualMenu::GetContextualMenu(pMenu);
+   *    CATCmdStarter   * pst1  = new CATCmdStarter   (&quot;xxx&quot;); 
+   *    .....
+   *    pMenu-&gt;AddChild(pst1);
+   * }
+   * &lt;/pre&gt; 
+   * &lt;/li&gt;
+   * &lt;li&gt;You want a specific contextual menu. 
+   * &lt;br&gt;So you write a data extension in overwriting
+   * @href #GetContextualMenu to return your own menu. Your extension creates a 
+   *  @href CATCmdContainer (the menu) and manages completely its content and its destruction.&lt;/li&gt;
+   * &lt;/ol&gt;
+   * 
+   * @see CATIContextualSubMenu, CATCmdAccess , CATCmdStarter
+*/
+class ExportedBySELECT CATExtIContextualMenu : public CATBaseUnknown
+{
+  CATDeclareClass;
+  
+public:
+  
+  /** 
+    * Default constructor. 
+    * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;Initializes the contextual menu with commands defined at the top of 
+    * this page. 
+    */
+  CATExtIContextualMenu();
+
+  ~CATExtIContextualMenu();
+
+  /**
+   * Returns the contextual menu.
+   * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;This method returns the contextual menu. Its content can change between 
+   * two calls.
+   */
+  virtual HRESULT GetContextualMenu(CATCmdContainer *&amp; oMenu);
+  
+protected:
+  /** @nodoc */
+  CATCmdContainer * _Menu;
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEditorPage.html">← 上一页: CATEditorPage.h</a></div>
+        <div><a href="CATExtIDlgTableViewColumnModel.html">下一页: CATExtIDlgTableViewColumnModel.h →</a></div>
+    </div>
+</body>
+</html>

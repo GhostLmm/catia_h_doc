@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisSet.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisSet.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisScan.html">← 上一页: CATISamAnalysisScan.h</a></div>
+        <div><a href="CATISamAnalysisSetInit.html">下一页: CATISamAnalysisSetInit.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamAnalysisSet_h
+#define CATISamAnalysisSet_h
+//=================================================================================
+// COPYRIGHT DASSAULT SYSTEMES 1999  
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+//=================================================================================
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATAnalysisInterface.h&quot;
+#include &quot;CATLISTV_CATISamAnalysisSet.h&quot;
+#include &quot;CATSamDefs.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+
+class CATISamBasicComponent_var;
+class CATUnicodeString;
+class CATISamAnalysisModel;
+class CATListValCATISamAnalysisSet_var;
+class CATISamAnalysisManager;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamAnalysisSet;
+#else
+extern &quot;C&quot; const IID IID_CATISamAnalysisSet;
+#endif
+
+
+/**
+ * &lt;b&gt;SAM_ScanCriterium:&lt;/b&gt; Enumerate to manage search varaibles.&lt;br&gt;
+ * @param Scan_with_name 
+ *  The name of the set is a criteria for the search.
+ * @param Scan_with_type 
+ *  The type of the set is a criteria for the search.
+ * @param Scan_both 
+ *  The name and type of the set is a criteria for the search.
+ */
+
+enum SAM_ScanCriterium 
+{
+	Scan_with_name,
+	Scan_with_type,
+	Scan_both
+};
+
+/**
+ * Interface to manage the Analysis Sets.
+ * &lt;b&gt;Role:&lt;/b&gt; Interface designed to manage &lt;b&gt;Analysis Set behavior&lt;/b&gt;.&lt;br&gt;
+ * &lt;p&gt;
+ * In the Analysis Model, an &lt;b&gt;Analysis Set&lt;/b&gt; is the data 
+ * dedicated to manage the &lt;b&gt;Analysis Entities&lt;/b&gt;. 
+ * &lt;p&gt;
+ * Also, it provides some services dedicated to Analysis links between sets. It
+ * also provides scan services about those links.
+ * @see SAM_ScanCriterium , SAM_Status , CATISamAnalysisEntity
+ */ 
+
+class ExportedByCATAnalysisInterface CATISamAnalysisSet : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+	public:
+
+/**
+ * Initializes the analysis set.
+ * This Method is systematically called after the set creation. Do not use.
+ */
+	virtual HRESULT Initialize() = 0;
+
+/**
+ * Retrieves the FEM Model in which the set is included.
+ * Remember that a set can be a component of a unique FEM Model.
+ * @param oFEMModel [out , CATBaseUnknown#Release]
+ * The parent FEM Model .
+ */
+		virtual HRESULT GetFEMModel(CATISamAnalysisModel*&amp; oFEMModel) const = 0;
+
+//=================================================================================
+/**
+ * Appends an analysis entity to the current Analysis Set.
+ * @param iEntity The feature to be added.
+ * @param iQuality The quality of the entity.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt; &lt;li&gt; &lt;font color=&quot;red&quot;&gt;Sam_IN&lt;/font&gt; To Plug the entity as input of the set.&lt;/li&gt;
+ *      &lt;li&gt; &lt;font color=&quot;red&quot;&gt;Sam_OUT&lt;/font&gt; To Plug the entity as output of the set..&lt;/li&gt;&lt;/ul&gt;
+ * &lt;font color=&quot;red&quot;&gt;Default Value is Sam_IN.&lt;/font&gt;
+ * @param iAddInverseLink. If iQuality == Sam_OUT, sets the set as input of the entity.
+ * This mechanism allows to flag the entity not uptodate if the set is modified.
+ */
+		virtual HRESULT AddAnalysisEntity(const CATISpecObject_var&amp; iEntity,
+                                      SAM_Quality iQuality = Sam_IN, CATBoolean iAddInverseLink = FALSE ) = 0;
+/**
+ * Removes an analysis entity from the current Analysis Set.
+ * This method will remove the link from an analysis set to an analysis entity. 
+ * For complete remove of analysis entities, use @href CATISamAnalysisModel#RemoveAnalysisFeature
+ * @param iEntity 
+ * The feature to be removed.
+ * @param iQuality The quality of the entity. &lt;font color=&quot;red&quot;&gt;Default Value is Sam_IN.&lt;/font&gt;
+ */
+		virtual HRESULT RemoveAnalysisEntity(const CATISpecObject_var&amp; iEntity,
+                                         SAM_Quality iQuality = Sam_IN) = 0;
+/**
+ * Retrieves analysis entity with a given type.
+ * @param iType 
+ * The type used for search.
+ * @param oEntitiesList
+ * The collection of entities whose type is &lt;b&gt;iType&lt;/b&gt;.
+ * @param iQuality The quality of the entity. &lt;font color=&quot;red&quot;&gt;Default Value is Sam_IN.&lt;/font&gt; 
+ */
+		virtual HRESULT GetTypedEntity(const CATUnicodeString&amp; iType,
+							                     CATLISTV(CATISpecObject_var)&amp; oEntitiesList,
+                                   SAM_Quality iQuality = Sam_IN) const = 0;
+/**
+ * Retrieves analysis entity with a given name.
+ * &lt;p&gt;
+ * Entities have a unique Name in the context of an Analysis Set.
+ * @param iName 
+ * The name used for search.
+ * @param oEntity
+ * The entity whose name is &lt;b&gt;iName&lt;/b&gt;.
+ * @param iQuality The quality of the entity. &lt;font color=&quot;red&quot;&gt;Default Value is Sam_IN.&lt;/font&gt;
+ */
+		virtual HRESULT GetNamedEntity(const CATUnicodeString&amp; iName,
+                                   CATISpecObject_var&amp; oEntity,
+                                   SAM_Quality iQuality = Sam_IN) const = 0;
+
+/**
+ * Retrieves all the entities responding to a given interface.
+ * @param oEntitiesList
+ * The collection of entities found.
+ * @param iIntfIID
+ * identifier of the interface filtering the kind of objects to find.
+ * @param iQuality The quality of the entity. &lt;font color=&quot;red&quot;&gt;Default Value is Sam_IN.&lt;/font&gt;
+ */
+		virtual HRESULT GetAllDatas(CATLISTV(CATISpecObject_var)&amp; oEntitiesList,
+                                const IID&amp; iIntfIID,
+                                SAM_Quality iQuality = Sam_IN) const = 0;
+  
+//=================================================================================
+ /**
+ * Returns the status of the Analysis Set.
+ */
+		virtual  SAM_Status GetStatus() const = 0 ;		
+/**
+ * Sets the status of the Analysis Set.
+ * @param iStatus SAM_Status be modified on the set.
+ */
+		virtual  void SetStatus(SAM_Status iStatus) = 0;	
+
+ //=================================================================================
+/** 
+ * Links to a list of Sets. 
+ * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; Each set of the list must be in the same document of the current one.&lt;/li&gt;
+ *	   &lt;li&gt;	Quality of the feature link is Neutral.&lt;/li&gt;
+ *	   &lt;li&gt;	No view of this link is created inside the field model.&lt;/li&gt;&lt;/ul&gt;
+ * @param iLinks
+ * The collection of Set to be connected
+ * @param ToPlug
+ * The connection mode
+ */
+		virtual HRESULT ConnectTo(CATLISTV(CATISamAnalysisSet_var)&amp; iLinks,int ToPlug = 1) = 0;
+
+/** 
+ * Retrieves the list of linked Sets.
+ * @param oLinks
+ * Collection of CATISamAnalysisSet_var to be connected
+ * @param iLevel
+ * Indicates the number of level you want to scan in the hierarchy. &lt;br&gt;
+ * (-1) indicates no limit in the search. It is the default value.
+ */
+		virtual HRESULT GetConnected(CATLISTV(CATISamAnalysisSet_var)&amp; oLinks,int iLevel = -1) = 0;
+/** 
+ * Adds childrens to Set.
+ * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; Each set of the list must be in the same document of the current one.&lt;/li&gt;
+ *	   &lt;li&gt;	Quality of the feature link is Neutral.&lt;/li&gt;
+ *	   &lt;li&gt;	No view of this link is created inside the field model.&lt;/li&gt;&lt;/ul&gt;
+ * @param iSons
+ * Collection of Set to be connected
+ * @param ToPlug
+ * Connection mode
+ */
+		virtual HRESULT AddSons(CATLISTV(CATISamAnalysisSet_var)&amp; iSons,int ToPlug = 1) = 0;
+
+/** 
+ * Retrieves the children list of a Set.
+ * @param oSons
+ * Collection of children.
+ * @param iLevel
+ * The number of level you want to scan in the hierarchy. &lt;br&gt;
+ * (-1) indicates no limit in the search. It is the default value.
+ */
+
+		virtual HRESULT GetSons(CATLISTV(CATISamAnalysisSet_var)&amp; oSons,int iLevel = -1) = 0;
+
+/** 
+ * Scan service for sets links according to name and type.
+ * @param oLinks
+ * The collection of CATISamAnalysisSet found regarding the input criteria.
+ * @param iCriterium
+ * The search criterion with Name, Type or both criterion.
+ * @param iName
+ * The name you are looking for
+ * @param iType
+ * The type you are looking for
+ * @param iDirection
+ * The searching direction 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; 0 : upward. &lt;/li&gt;
+ *	   &lt;li&gt;	2 : downward.&lt;/li&gt;&lt;/ul&gt;
+ * @param iPartial
+ * The ability to search with a substring of the name or the type.&lt;br&gt; Default value is 0
+ * i.e. you are searching with the whole word
+ * @param iLevel
+ * The number of levels you want to scan in the hierarchy. &lt;br&gt; -1 indicates
+ * no limit in the search. It is the default value
+ */
+		virtual HRESULT Scan(CATLISTV(CATISamAnalysisSet_var)&amp; oLinks,SAM_ScanCriterium iCriterium,
+                         const CATUnicodeString&amp; iName,const CATUnicodeString&amp; iType,
+                         int iDirection = 0,int iPartial = 0,int iLevel = -1) = 0;
+
+//=================================================================================
+/**
+ * Retrieves the Analysis Manager of the Model.
+ * @param oAnalysisManager [out , CATBaseUnknown#Release]
+ * The Analysis Manager of the Model.
+ */
+		virtual HRESULT GetAnalysisManager(CATISamAnalysisManager*&amp; oAnalysisManager) const = 0;
+
+//=================================================================================
+/**
+ * Retrieves the basic component corresponding to a given name.
+ * @param iName name of the basic components.
+ * @param oComponents pointer used to returned the list.
+ */
+		virtual HRESULT GetNamedBasicComponent(const CATUnicodeString&amp; iName, CATISamBasicComponent_var&amp; oComponent) const = 0;
+
+
+/**
+ * Retrieves the list of basic components corresponding to a given type.
+ * If no type is given, every component is returned.
+ * Warning : you have to deal with the list destruction.
+ * @param oComponents  pointer used to returned the list.
+ * @param iType The type of the basic component.
+ */
+		virtual HRESULT GetBasicComponents(CATLISTV(CATBaseUnknown_var)* &amp;oComponents,const CATUnicodeString&amp; iType=NULL) const = 0;
+
+/**
+ * Adds an optional Basic component to an AnalysisEntity.
+ * Returns the identifiers of the optional basic components
+ * @param iBCName : List of Basic Components name, this is name of instance.
+ * @param iLiteralName: List of Basic Components name, this is name of startup.
+ * @param iType : Used only in the case of Literal features. CATICkeType of the literal to derive.&lt;br&gt;
+ * For Example,  use static CATICkeType_var MyLength = CATIParmDictionary::LengthType to create a length dimension.
+ * @see CATIParmDictionary
+ * @param iType 
+ */
+		virtual HRESULT AddBasicComponent(const CATUnicodeString&amp; iBCName,
+                                      const CATUnicodeString&amp; iLiteralName=NULL,
+                                      const CATBaseUnknown_var&amp; iType = NULL_var ) const = 0;
+
+/**
+ * Removes an optional Basic componentto an AnalysisEntity.
+ * @param iBCName  the name of the Basic Component to remove.
+ */
+		virtual HRESULT RemoveBasicComponent(const CATUnicodeString&amp; iBcName) const = 0;
+
+//=================================================================================
+/**
+ * Removes links to a list of Sets.
+ * @param iLinks  The Collection of Set to be deconnected.
+ * @param ToPlug  The connection mode.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt;0&lt;/li&gt;: upward.&lt;/li&gt;
+ *	   &lt;li&gt;2&lt;/li&gt;: downward.&lt;/li&gt;&lt;/ul&gt;
+ */
+		virtual HRESULT DeConnectTo(CATLISTV(CATISamAnalysisSet_var)&amp; iLinks,int ToPlug = 1) = 0;
+
+//=================================================================================
+/**
+ * Returns the rights on this analysis set.
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;TRUE&lt;/tt&gt; The analysis set is &quot;locked&quot;, No entity can be added or deleted.
+ * &lt;tt&gt;FALSE&lt;/tt&gt;  The Analysis set can be modified.
+ */
+  virtual CATBoolean IsReadOnly () const = 0;
+
+/**
+ * Sets the rights on this analysis set.
+ * @param iRights: 
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;TRUE&lt;/tt&gt; The analysis set is locked, No entity can be added or deleted.
+ * &lt;tt&gt;FALSE&lt;/tt&gt;  The analysis set can be modified.
+ */
+  virtual void SetReadOnly (const CATBoolean iRights) = 0; 
+
+//=================================================================================
+/**
+ * Appends a feature to this Analysis Set. 
+ * This feature will be aggregated as an output of the set.
+ * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; This feature must be in the same document of the current one.&lt;/li&gt;
+ *	   &lt;li&gt;	Quality of the feature link is Output.&lt;/li&gt;
+ *	   &lt;li&gt;	A view of this link can be created in the field model according to iWithFieldModel.&lt;/li&gt;&lt;/ul&gt;
+ * @param iFeature The feature to be added.
+ * @param iWithFieldModel Defines if a Field model Structure needs to be managed.
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;TRUE&lt;/tt&gt; The Field model object associated to iFeature is created. For this the 
+ * iFeature needs to have a Physical type.
+ * &lt;tt&gt;FALSE&lt;/tt&gt;  No Field model structure will be created.
+ */
+		virtual HRESULT AddOutputFeature(const CATISpecObject_var&amp; iFeature,CATBoolean iWithFieldModel=FALSE) = 0;
+
+/** 
+ * Removes a feature to this Analysis Set.
+ * This feature was previously added with the AddOutputFeature method. 
+ * @param iFeature The feature to be removed.
+ */
+		virtual HRESULT RemoveOutputFeature(const CATISpecObject_var&amp; iFeature) = 0;
+
+/**
+ * Retrieves all the Output Feature&#x27;s responding to a given interface.
+ * @param oFeatureList The collection of Feature&#x27;s found.
+ * @param iIntfIID Identifier of the interface filtering the kind of objects to find.
+ */
+		virtual HRESULT ListOutputFeature(CATLISTV(CATISpecObject_var)&amp; oEntitiesList,
+                                     const IID&amp; iIntfIID) const = 0;
+
+
+//=================================================================================
+/**
+ * Retrieves the list of analysis cases that reference the analysis set.
+ * For a set defined inside the analysis model, anlysis model will be returned.
+ * @param oListOfCases  Collection of analysis cases.
+ */
+
+    virtual HRESULT GetFatherCases(CATLISTV(CATBaseUnknown_var)* &amp; oListOfCases) const = 0;
+
+//=================================================================================
+
+/**
+ * Appends a feature to this Analysis Set. 
+ * This feature will be aggregated as an neutral of the set.
+ * &lt;br&gt;&lt;b&gt;Note&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; This feature must be in the same document of the current one.&lt;/li&gt;
+ *	   &lt;li&gt;	Quality of the feature link is Neutral.&lt;/li&gt;
+ *	   &lt;li&gt;	No view of this link can be created in the field model.&lt;/li&gt;
+ *	   &lt;li&gt;	This feature will be shown in the feature tree and for 3D vizualisation.&lt;/li&gt;&lt;/ul&gt;
+ * @param iFeature The feature to be added.
+ */
+    virtual HRESULT AddNeutralFeature(const CATISpecObject_var&amp; iFeature) = 0;
+
+/**
+ * Removes a feature to this Analysis Set. 
+ * This feature will be aggregated as an neutral of the set.
+ * @param iFeature The feature to be removed.
+ */
+    virtual HRESULT RemoveNeutralFeature(const CATISpecObject_var&amp; iFeature) = 0;
+
+/**
+ * Retrieves all the Neutral Feature&#x27;s responding to a given interface.
+ * @param oFeatureList The collection of Feature&#x27;s found.
+ * @param iIntfIID Identifier of the interface filtering the kind of objects to find.
+ */
+		virtual HRESULT ListNeutralFeatures(CATLISTV(CATISpecObject_var)&amp; oEntitiesList,const IID&amp; iIntfIID) const = 0;
+
+/**
+ * Removes all the Neutral Feature&#x27;s responding to a given interface.
+ * @param oFeatureList The collection of Feature&#x27;s found.
+ * @param iIntfIID Identifier of the interface filtering the kind of objects to find.
+ */
+    virtual HRESULT RemoveAllNeutralFeatures(const IID&amp; iIntfIID)= 0;
+};
+
+CATDeclareHandler(CATISamAnalysisSet,CATBaseUnknown);
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisScan.html">← 上一页: CATISamAnalysisScan.h</a></div>
+        <div><a href="CATISamAnalysisSetInit.html">下一页: CATISamAnalysisSetInit.h →</a></div>
+    </div>
+</body>
+</html>

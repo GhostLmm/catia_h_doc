@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATSoftwareConfiguration.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATSoftwareConfiguration.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSkillValue.html">← 上一页: CATSkillValue.h</a></div>
+        <div><a href="CATSoftwareModification.html">下一页: CATSoftwareModification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSoftwareConfiguration_h
+#define CATSoftwareConfiguration_h
+// COPYRIGHT DASSAULT SYSTEMES 1999
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+#include &quot;ExportedByCATMathStream.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+class CATSoftwareModification;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+class CATMathStream;
+
+//* &lt;br&gt;Example of use with a configuration stored on a feature.
+//*  &lt;pre&gt; xxxxxxxx::Build() 
+//*{
+//*....
+//*    CATSoftwareConfiguration* config = NULL;
+//*    int toStore = 0;
+//*....
+//*    if (!attrib)
+//*    {
+//*        // old feature
+//*        // creates a void closed configuration
+//*        config = new CATSoftwareConfiguration(NULL,0);
+//*    }
+//*    else
+//*    {
+//*        if (attrib value)
+//*        {
+//*           // Update of the feature
+//*           // creates a void closed configuration from the attribute
+//*            config = new CATSoftwareConfiguration(Buffer,sizeof(Buffer));
+//*            if (!config-&gt;IsSupported)
+//*                ERROR
+//*        }
+//*        else
+//*        {
+//*            // Creates the feature
+//*            // creates an open configuration
+//*            config = new CATSoftwareConfiguration();
+//*            toStore = 1;
+//*        }
+//*   }
+//*....
+//*    CATTopData* iTopData = new CATTopData(config,journal); 
+//*    CATxxxOperator* TopOp = CATCreatexxxOperator(iFactory,iTopData,.....); 
+//*    TopOp-&gt;Run();
+//*    TopOp-&gt;GetResult();
+//*    ....
+//*    if (1==toStore )
+//*    {
+//*        // writes the attribute in the feature.
+//*    }
+//*....
+//*}
+//*&lt;/pre&gt;           
+
+/**
+* Class defining the software configuration to be used to run a topological operator.
+* &lt;br&gt;
+* A configuration is a set of code modifications and a level on which the code must be run. 
+* The protocol offered by the configuration management allows the code of an operator to be enhanced or
+* modified with guaranteing the upwards compatibility of the customer data. 
+* &lt;br&gt;The configuration can be stored with the customer data, and the stored configuration can be used
+* to specify the code to run.
+*/
+
+class ExportedByCATMathStream CATSoftwareConfiguration
+{
+public :
+	
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+   /**
+    * Constructs a closed configuration.
+	* &lt;br&gt;To use if the input of the algorithm has been previously stored. 
+	* @param iStreamBuffer
+	* The pointer to the stream.
+	* @param iLength
+	* The length of the stream.
+	* @param iConvert
+	* Internal use. Use the &lt;tt&gt;0&lt;/tt&gt; default value.
+	*/
+	CATSoftwareConfiguration(const char* iStreamBuffer, int iLength, int iConvert=0); 
+	
+	/**
+	* Constructs an open configuration.
+	* &lt;br&gt;To use for running with the current configuration.  
+	*/
+	CATSoftwareConfiguration();
+
+	/**
+	* Creates the stream representing &lt;tt&gt;this&lt;/tt&gt; configuration.
+	* @param oStreamBuffer
+	* The pointer to the created stream.
+	* @param oLength
+	* The length to the created stream.
+	* @param iConvert
+	* Internal use. Use the &lt;tt&gt;0&lt;/tt&gt; default value.
+	*/
+	void Stream(char* &amp;oStreamBuffer, int &amp;oLength, int iConvert=0);
+	
+	/**
+	* Tests whether &lt;tt&gt;this&lt;/tt&gt; configuration is supported for the current software.
+	* @return
+	* The result of the test.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+	* &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The configuration is valid 
+	* &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The configuration is not valid:
+	* &lt;ul&gt;
+	* &lt;li&gt;The modification is known, but the level is not supported
+	* &lt;li&gt;The modification is unknown
+	*&lt;/ul&gt;
+	* &lt;/dl&gt;
+	*/
+	int IsSupported() const; 
+
+	/**
+	* Increments the reference count for the given interface. 
+	* @return The reference count value.
+	* &lt;br&gt;This information is meant to be used for diagnostic/testing purposes only, because, in certain situations, the value may be unstable.
+	*/
+	virtual int AddRef();
+
+	/**
+	* Decrements the reference count for the given interface. 
+	* @return The reference count value.
+	* &lt;br&gt;This information is meant to be used for diagnostic/testing purposes only, because, in certain situations, the value may be unstable.
+	*/
+	virtual int Release();
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+	/** @nodoc */
+	CATCGMNewClassArrayDeclare;
+
+	/**
+	* Returns the level of a modification of &lt;tt&gt;this&lt;/tt&gt; configuration.
+	* @param iModifIID
+	* The  given (code) modification identified by IID.
+	* @param ioLevel
+	* The level of a modification.
+	* @return
+ 	* Determines if the modification has been found.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;iModifIID&lt;/tt&gt; found on &lt;tt&gt;this&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise.&lt;br&gt;
+	*/
+   CATBoolean GetLevelFromIID(const IID &amp;iModifIID, short &amp; ioLevel) const; 
+	
+	/**
+	* Adds a modification to a configuration. 
+	* @param iModification
+	* The  given (code) modification identified by its IID and its code level.
+	*/
+	void AddModification(const CATSoftwareModification &amp;iModification);  
+
+	/**
+	* @nodoc
+	* Force a modification in the configuration. 
+	*/
+	void ForceModification(const CATSoftwareModification &amp;iModification);  
+	
+	/**
+	* Returns the level of a modification of &lt;tt&gt;this&lt;/tt&gt; configuration.
+	* @param iModification
+	* The given (code) modification 
+	* @return
+	* The version (or level) of the modification. If the configuration is &quot;open&quot;, the version is the
+	* current level of the software. If the configuration is &quot;closed&quot; and not known, the version is &lt;tt&gt;0&lt;/tt&gt;.
+	*/
+   short GetModificationLevel(const CATSoftwareModification &amp;iModification) const; 
+	
+	/**
+	* @nodoc
+	* Returns the count of modifications. For the tests.
+	*/
+	int GetModificationNb() const;
+		
+	/**
+	* Dumps the content of the config. ONLY FOR INTERNAL USE
+	*/
+	void Dump(ostream &amp; os);
+
+	/**
+	* @nodoc
+	* Traces Management.
+	*/
+   short CATCGMVersionningTraces() const;
+		
+	/**
+	* @nodoc
+	* Checks Management.
+	*/
+   short CATCGMVersionningCheck() const;
+		
+	/**
+	* @nodoc
+	* Check the level of a modification of &lt;tt&gt;this&lt;/tt&gt; configuration.
+	*/
+   short CheckModificationLevel(const CATSoftwareModification &amp;iModification) const; 
+	
+	/**
+	* @nodoc
+	* Returns the count of occurences. For the tests.
+	*/
+	int GetNbOccurences() const;
+	
+	/**
+	* @nodoc
+	* Returns the occurence Number. For the tests.
+	*/
+   int GetOccurenceNumber() const;
+	
+   /** 
+   * @nodoc 
+   * Copy constructor.
+   */  
+	CATSoftwareConfiguration(const CATSoftwareConfiguration&amp; ToCopy);
+
+   /** 
+   * @nodoc 
+   * Assignment operator.
+   */  
+   CATSoftwareConfiguration&amp; operator = (const CATSoftwareConfiguration&amp;);
+	
+
+protected:
+	/**
+	* @nodoc
+	* Will be move in Protected as soon as possible -&gt; Use Release Mechanism instead.
+	*/
+	virtual ~CATSoftwareConfiguration();
+	
+	
+private:
+   
+  friend class CATMathStreamImpl;
+
+  class ModificationData 
+  {
+  public :
+    IID    _ModificationId;
+    short  _ModificationLevel;
+  };
+  
+  static int _NbCreatedOccurences;        // Count of CATSoftwareConfiguration Occurences
+  int _OccurenceNumber;                   // Occurence Number
+  int _ReferenceCounter;                  // Reference Count
+  int _IsOpen;                            // Open or closed configuration
+  
+  /**
+	* @nodoc
+	*/
+  void RequireNbModifData( int NewNumberOfModifData );
+  /**
+	* @nodoc
+	*/
+  void PushModifData( int index, const IID &amp;iModificationId, const short iLevel );
+
+	int _NbModifications;                   // Count of modifications
+	int _MaxModifications;                  // Maximum Size of ModificationData[]
+	ModificationData* _ModificationArray;   // Pointer to the list of modifications
+	ModificationData  _StaticModifArray[3];   // Performane modifications
+};
+
+/**
+ * Constructs a closed configuration.
+ * &lt;br&gt;To use if the input of the algorithm has been previously stored. 
+ * @param iStreamBuffer
+ * The pointer to the stream.
+ * @param iLength
+ * The length of the stream.
+ * @param iConvert
+ * Internal use. Use the &lt;tt&gt;0&lt;/tt&gt; default value.
+ * @return [out, CATSoftwareConfiguration#Release]
+ */
+ExportedByCATMathStream CATSoftwareConfiguration *CATCreateSoftwareConfiguration(const char* iStreamBuffer, int iLength, int iConvert=0); 
+
+/**
+ * Constructs an open configuration.
+ * &lt;br&gt;To use for running with the current configuration.  
+ * @return [out, CATSoftwareConfiguration#Release]
+ */
+ExportedByCATMathStream CATSoftwareConfiguration *CATCreateSoftwareConfiguration();
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSkillValue.html">← 上一页: CATSkillValue.h</a></div>
+        <div><a href="CATSoftwareModification.html">下一页: CATSoftwareModification.h →</a></div>
+    </div>
+</body>
+</html>

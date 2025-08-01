@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavigatorInterfaces/PublicInterfaces/CATI3DMarker.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NavigatorInterfaces/PublicInterfaces/CATI3DMarker.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIDMUNavigatorAddin.html">← 上一页: TIE_CATIDMUNavigatorAddin.h</a></div>
+        <div><a href="CATIAnnotatedViewsXML.html">下一页: CATIAnnotatedViewsXML.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2001
+//===================================================================
+//
+// CATIInertia.h
+//   This interface allows the edition of a 3D Marker.
+//
+//===================================================================
+#ifndef CATI3DMarkerImpl_H
+#define CATI3DMarkerImpl_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATNavigatorItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+class CATListValCATISpecObject_var;
+class CATISpecObject_var;
+
+// Deprecated includes and forward declarations
+#include &quot;CATILinkableObject.h&quot;
+
+enum CAT3DMarkerType
+{
+  Marker_Text3D,
+  Marker_Pen3D,
+  Marker_URLLink,
+  Marker_Arrow3D
+};
+
+extern ExportedByCATNavigatorItf IID IID_CATI3DMarker;
+
+/**
+ * Represents 3D marker object.
+ * &lt;p&gt;
+ * The 3D marker object enables the user to annotate the mockup in 3D. These annotations can be:
+ * &lt;ul&gt;
+ * &lt;li&gt;text attached to different components
+ * &lt;li&gt;arrow pointing a point of interest
+ * &lt;/ul&gt;
+ * All the coordinates are expressed with respect to the absolute axis system.
+ */
+class  ExportedByCATNavigatorItf CATI3DMarker : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+     * Retrieves the 3D marker Type.
+     * @param oType
+     *    The type of 3D marker (only Marker_Text3D and Marker_Arrow3D are supported by this version).
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerType(CAT3DMarkerType &amp; oType) = 0;
+
+    /**
+     * Sets the 3D marker Type.
+     * @param iType
+     *    The type of 3D marker (only Marker_Text3D and Marker_Arrow3D are supported by this version).
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerType(CAT3DMarkerType &amp; iType) = 0;
+
+    /**
+     * Retrieves the coordinates of the positions of a 3D marker.
+     * &lt;p&gt;The number and the meaning of positions depend on the type of the 3D marker :
+     *    &lt;ul&gt;
+     *    &lt;li&gt;a text has one position for its anchor point (bottom-left corner) and several others for each anchor point on linked components
+     *    &lt;li&gt;an arrow has two positions, one for the head point and one for the tail point
+     *    &lt;/ul&gt;
+     * @param oPosition
+     *    The coordinates of the positions:
+     *    &lt;ul&gt;
+     *    &lt;li&gt;text
+     *       &lt;ul&gt;
+     *       &lt;li&gt;oPosition[0] is the X coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[1] is the Y coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[2] is the Z coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[3] is the X coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;oPosition[4] is the Y coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;oPosition[ 5] is the Z coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;...
+     *       &lt;li&gt;oPosition[3*n+0] is the X coordinate of the anchor point on the n-th linked component
+     *       &lt;li&gt;oPosition[3*n+1] is the Y coordinate of the anchor point on the n-th linked component
+     *       &lt;li&gt;oPosition[3*n+2] is the Z coordinate of the anchor point on the n-th linked component
+     *       &lt;/ul&gt;
+     *    &lt;li&gt;arrow
+     *       &lt;ul&gt;
+     *       &lt;li&gt;oPosition[0] is the X coordinate of the head point
+     *       &lt;li&gt;oPosition[1] is the Y coordinate of the head point
+     *       &lt;li&gt;oPosition[2] is the Z coordinate of the head point
+     *       &lt;li&gt;oPosition[3] is the X coordinate of the tail point
+     *       &lt;li&gt;oPosition[4] is the Y coordinate of the tail point
+     *       &lt;li&gt;oPosition[5] is the Z coordinate of the tail point
+     *       &lt;/ul&gt;
+     *    &lt;/ul&gt;
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerPosition(CATListOfDouble *&amp; oPosition) = 0;
+
+    /**
+     * Sets the coordinates of the positions of a 3D marker.
+     * &lt;p&gt;The number and the meaning of positions depend on the type of the 3D marker :
+     *    &lt;ul&gt;
+     *    &lt;li&gt;a text has one position for its anchor point (bottom-left corner) and several others for each anchor point on linked components
+     *    &lt;li&gt;an arrow has two positions, one for the head point and one for the tail point
+     *    &lt;/ul&gt;
+     * @param iPosition
+     *    The coordinates of the positions:
+     *    &lt;ul&gt;
+     *    &lt;li&gt;text
+     *       &lt;ul&gt;
+     *       &lt;li&gt;oPosition[0] is the X coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[1] is the Y coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[2] is the Z coordinate of the text anchor point
+     *       &lt;li&gt;oPosition[3] is the X coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;oPosition[4] is the Y coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;oPosition[ 5] is the Z coordinate of the anchor point on the first linked component
+     *       &lt;li&gt;...
+     *       &lt;li&gt;oPosition[3*n+0] is the X coordinate of the anchor point on the n-th linked component
+     *       &lt;li&gt;oPosition[3*n+1] is the Y coordinate of the anchor point on the n-th linked component
+     *       &lt;li&gt;oPosition[3*n+2] is the Z coordinate of the anchor point on the n-th linked component
+     *       &lt;/ul&gt;
+     *    &lt;li&gt;arrow
+     *       &lt;ul&gt;
+     *       &lt;li&gt;oPosition[0] is the X coordinate of the head point
+     *       &lt;li&gt;oPosition[1] is the Y coordinate of the head point
+     *       &lt;li&gt;oPosition[2] is the Z coordinate of the head point
+     *       &lt;li&gt;oPosition[3] is the X coordinate of the tail point
+     *       &lt;li&gt;oPosition[4] is the Y coordinate of the tail point
+     *       &lt;li&gt;oPosition[5] is the Z coordinate of the tail point
+     *       &lt;/ul&gt;
+     *    &lt;/ul&gt;
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerPosition(const CATListOfDouble &amp; iPosition) = 0;
+
+    /**
+     * Retrieves the text for a text 3D marker.
+     * @param oText
+     *    The text.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerText(CATUnicodeString &amp; oText) = 0;
+
+    /**
+     * Sets the text for a text 3D marker.
+     * @param iText
+     *    The text.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerText(CATUnicodeString &amp; iText) = 0;
+
+    /**
+     * Retrieves the list of components which are linked to a text 3D marker.
+     * @param ioComponentList
+     *    The list of components.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerLink(CATListValCATISpecObject_var &amp; ioComponentList) = 0;
+
+    /**
+     * Adds a link between a component and a text 3D marker.
+     * @param iComponent
+     *    The component.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerLink(const CATISpecObject_var iComponent) = 0;
+
+    /**
+     * Removes the link between a component and a text 3D marker.
+     * @param iComponent
+     *    The component.
+     * @param iPosition
+     *    The position of the component in the list (if it exists more than one link between the 3D marker and the component).
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT RemoveMarkerLink(const CATISpecObject_var iComponent, int iPosition) = 0;
+
+    /**
+     * Retrieves the text&#x27;s font for a text 3D marker.
+     * @param oFont
+     *    The font.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerFont(CATUnicodeString &amp; oFont) = 0;
+
+    /**
+     * Sets the text&#x27;s font for a text 3D marker.
+     * @param iFont
+     *    The font.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerFont(const CATUnicodeString &amp; iFont) = 0;
+
+    /**
+     * Retrieves the text&#x27;s properties for a text 3D marker.
+     * &lt;p&gt;The text&#x27;s properties are :
+     *    &lt;ul&gt;
+     *    &lt;li&gt;filling status : text is filled or not
+     *    &lt;li&gt;framing status : text is framed or not
+     *    &lt;li&gt;size of the text
+     *    &lt;li&gt;orientation of the text
+     *    &lt;/ul&gt;
+     * @param oProperties
+     *    The properties.
+     *    &lt;ul&gt;
+     *    &lt;li&gt;oProperties[10] : filling and framing status (= 0. Nothing, =1. Framed, = 2. Filled, =3. Framed + Filled)
+     *    &lt;li&gt;oProperties[ 1] : size
+     *    &lt;li&gt;oProperties[ 5] : orientation (= 0. Right, =1. Up, = 2. Left, =3. Down)
+     *    &lt;/ul&gt;
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerTextProperties(CATListOfDouble *&amp; oProperties) = 0;
+
+    /**
+     * Sets the text&#x27;s properties for a text 3D marker.
+     * &lt;p&gt;The text&#x27;s properties are :
+     *    &lt;ul&gt;
+     *    &lt;li&gt;filling status : text is filled or not
+     *    &lt;li&gt;framing status : text is framed or not
+     *    &lt;li&gt;size of the text
+     *    &lt;li&gt;orientation of the text
+     *    &lt;/ul&gt;
+     * @param oProperties
+     *    The properties. Warning : not documented values must NOT be modified.
+     *    &lt;ul&gt;
+     *    &lt;li&gt;oProperties[10] : filling and framing status (= 0. Nothing, =1. Framed, = 2. Filled, =3. Framed + Filled)
+     *    &lt;li&gt;oProperties[ 1] : size
+     *    &lt;li&gt;oProperties[ 5] : orientation (= 0. Right, =1. Up, = 2. Left, =3. Down)
+     *    &lt;/ul&gt;
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerTextProperties( const CATListOfDouble &amp; iProperties) = 0;
+
+    /**
+     * Retrieves the path of a file linked with an arrow 3D marker.
+     * @param oPath
+     *    The path of the file.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMarkerPath(CATUnicodeString &amp; oPath) = 0;
+
+    /**
+     * Sets the path of a file to be linked with an arrow 3D marker.
+     * @param iPath
+     *    The path of the file.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT SetMarkerPath(const CATUnicodeString &amp; iPath) = 0;
+
+    /**
+     * Updates the the marker 3D: that is to take into account all modifications which occur since last update.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT Update() = 0;
+
+    /**
+     * Retrieves the parent of the 3D marker : it can be a document, a section, a distance or a clash.
+     * @param oParent
+     *    The parent.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetParent(CATBaseUnknown *&amp; oParent) = 0;
+
+
+    // Deprecated methods : DO NOT USE
+
+    /** @nodoc */
+    virtual CAT3DMarkerType        GetMarkerType() = 0;
+    /** @nodoc */
+    virtual CATListOfDouble      * GetMarkerPosition() = 0;
+    /** @nodoc */
+    virtual CATUnicodeString       GetMarkerText() = 0;
+    /** @nodoc */
+    virtual double                 GetMarkerBoundSphere() = 0;
+    /** @nodoc */
+    virtual CATILinkableObject   * GetMarkerRoot() = 0;
+    /** @nodoc */
+    virtual void SetMarkerBoundSphere(const double&amp; rad) = 0;
+    /** @nodoc */
+    virtual void SetMarkerRoot(const CATILinkableObject_var root) = 0;
+};
+
+CATDeclareHandler(CATI3DMarker,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIDMUNavigatorAddin.html">← 上一页: TIE_CATIDMUNavigatorAddin.h</a></div>
+        <div><a href="CATIAnnotatedViewsXML.html">下一页: CATIAnnotatedViewsXML.h →</a></div>
+    </div>
+</body>
+</html>

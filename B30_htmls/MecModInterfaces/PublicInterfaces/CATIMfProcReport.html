@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMfProcReport.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMfProcReport.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfPointOnEdge.html">← 上一页: CATIMfPointOnEdge.h</a></div>
+        <div><a href="CATIMfRedge.html">下一页: CATIMfRedge.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMfProcReport_h
+#define CATIMfProcReport_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot; 
+#include &quot;CATLISTV_CATISpecObject.h&quot; 
+#include &quot;CATMfDefs.h&quot; 
+#include &quot;CATMfReportDefs.h&quot;
+
+class CATBody_var;
+class CATISpecObject_var;
+class CATGeoFactory_var;
+class CATProcReport;
+class CATCGMJournalList;
+
+class CATSoftwareConfiguration;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMfProcReport;
+#else
+extern &quot;C&quot; const IID IID_CATIMfProcReport;
+#endif
+
+/**
+ * Interface to create a generic naming scope with a procedural report.
+ * &lt;b&gt;Role:&lt;/b&gt;This advanced interface is useful to create the genering naming scope of
+ * a new geometrical feature. 
+ * &lt;p&gt;The &lt;b&gt;scope&lt;/b&gt; is the link between the geometrical feature and its topology
+ * result (&lt;tt&gt;CATBody&lt;/tt&gt;). It enables you to name with a stable way the  &lt;tt&gt;CATCell&lt;/tt&gt; of the 
+ * &lt;tt&gt;CATBody&lt;/tt&gt; result. Each scope contains nodes, one for each followed cells. It is the 
+ * responsability of the feature to ask the generation of its own 
+ * scope. This task is done in the following methods:&lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATIBuild#Build : to build the topology result of the feature&lt;/li&gt; 
+ * &lt;li&gt;@href CATIBuildShape#BuildShape : to build the topology associated with the form of the feature. 
+ * This method is only useful for the form features (pad, pocket, shaft, groove stiffener,...)&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;However, the feature has only an indirect control on how its scope is generated. There are two 
+ * means to create it wich depends on the type of the geometrical feature:&lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;The feature has no geometrical feature as input specification &lt;/li&gt;
+ * &lt;p&gt;In this case the feature is a datum, a geometrical feature without historic. 
+ * The @href CATIMfResultManagement interface must be used.&lt;/p&gt;
+ * &lt;li&gt;Otherwise&lt;/li&gt;
+ * &lt;p&gt;The topology of the feature will reuse the topology of the input features. As the geometry
+ * is based on the cell reusage, the scope creation will reuse the nodes of the input feature scopes.
+ * Once the topological operations have been done, the topological journal will be used to
+ * create the feature&#x27;s scope. This
+ * operation is possible thanks to a procedural report. This interface allows you to control
+ * the usage of this report.&lt;/p&gt;
+ * &lt;/ul&gt;
+ * 
+ * Use this interface as follows:
+ *  &lt;ol&gt;
+ *  &lt;li&gt;Create the procedural report with a @href #CreateProcReport call, &lt;/li&gt;
+ *  &lt;li&gt;Run the topological operator, &lt;/li&gt;
+ *  &lt;li&gt;Store the procedural report with a @href #StoreProcReport call or if a
+ * problem occurs in the &lt;tt&gt;Build/BuildShape&lt;/tt&gt; methods use the @href #DeleteProcReport call.&lt;/li&gt;
+ *  &lt;/ol&gt;
+ * If the feature is deactivated - see @href CATIMechanicalProperties#IsInactive - the
+ * @href CATIBuild#Build method can be called. In this case, the result must be deactivated by calling
+ * the @href CATIMfProcReport#InactivateResult method. 
+ * &lt;p&gt;Refer to the CAA Encyclopedia articles entitled
+ * &quot;Integrating a New Geometrical Feature in the Update Mechanism&quot; and 
+ * &quot;Generic Naming Overview&quot; for details about the usage of this interface.
+ */
+class ExportedByMecModItfCPP CATIMfProcReport : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+ public:
+/**
+ * Creates a report.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates the procedural report of the feature.
+ * &lt;br&gt;For example, to create the report of a pad built on Sketch.2 with a bottom face until the FSur.1:
+ * &lt;pre&gt;
+ * &lt;tt&gt;iSpecs[1]=Sketch.2&lt;/tt&gt;, &lt;tt&gt;iKeys[1]=MfKeyExtrudedFrom&lt;/tt&gt;, 
+ * &lt;tt&gt;iSpecs[2]=FSur.1&lt;/tt&gt;, &lt;tt&gt;iKeys[2]=MfKeyBottom&lt;/tt&gt;.
+ * &lt;/pre&gt;
+ * @param iInputSpecificationList
+ * The list of specifications must contain the geometrical features whose scopes are needed to build the
+ * scope of the current feature. This list can be empty. 
+ * @param iKeyList
+ * The list of key must have the same count of elements as the list of specifications. The default value is
+ * &lt;tt&gt;MfKeyNone&lt;/tt&gt;. A different value will tell to the V5 mechanism to replace the historical 
+ * relationship of a node with a user info.
+ * 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;MfKeyNone&lt;/tt&gt;,&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;MfKeyTop&lt;/tt&gt;,&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;MfKeyBottom&lt;/tt&gt;,&lt;/li&gt; 
+ * &lt;li&gt;&lt;tt&gt;MfKeyExtrudedFrom&lt;/tt&gt;
+ * &lt;/ul&gt;
+ * @param iBoolOper
+ * The integer value indicates which feature will own the generated scope. It is the same value 
+ * as used in the @href #StoreProcReport method.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;, when the scope should be associated with the feature itself: &lt;/li&gt;
+ * &lt;br&gt;For the contextual feature inside the &lt;tt&gt;Build&lt;/tt&gt; method or the form feature inside 
+ * the &lt;tt&gt;BuildShape&lt;/tt&gt; method. 
+ * Refer to the @href CATIShapeFeatureProperties interface for details about form and contextual
+ * features.
+ * &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;, when the scope should be associated with the ResultOUT attribute of a 
+ * shape feature.&lt;/li&gt;
+ * &lt;br&gt;For the form feature inside the &lt;tt&gt;Build&lt;/tt&gt; method. Refer to the @href CATIShapeFeatureBody interface for detail about the
+ * ResultOUT attribute.
+ * &lt;/ul&gt;
+ * @param iReferenceFeature
+ * The reference feature to use only for pattern. Lets the default value, NULL_var.
+ * @exception @href CATError
+ */
+  virtual void CreateProcReport(CATListValCATBaseUnknown_var&amp; iInputSpecificationList,
+                                CATListOfCATUnicodeString&amp;    iKeyList, 
+                                int                           iBoolOper=0,
+                                const CATISpecObject_var&amp;     iReferenceFeature=NULL_var) = 0;
+
+/**
+ * Stores the report.
+ * @param iBody
+ * The result body of the topological operator.
+ * @param iType
+ * &lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;br&gt;&lt;tt&gt;&lt;b&gt;Copy&lt;/b&gt;&lt;/tt&gt;: the nodes of the previous scope which are not modified by the operation 
+ * are copied in the current scope,
+ * &lt;br&gt;&lt;tt&gt;&lt;b&gt;NoCopy&lt;/b&gt;&lt;/tt&gt;: the nodes of the previous scope which are not modified by the operation 
+ * are not copied in the current scope.
+ * @param iBoolOper
+ * The integer value indicates which feature will own the generated scope. It is the same value 
+ * as used in the @href #CreateProcReport method.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;&lt;b&gt;0&lt;/b&gt;&lt;/tt&gt; when the scope should be associated with the feature itself: &lt;/li&gt;
+ * &lt;br&gt;For the contextual feature inside the build method or the form feature inside 
+ * the &lt;tt&gt;BuildShape&lt;/tt&gt; method. 
+ * Refer to the @href CATIShapeFeatureProperties interface for details about form and contextual
+ * features.
+ * &lt;li&gt;&lt;tt&gt;&lt;b&gt;1&lt;/b&gt;&lt;/tt&gt; when the scope should be associated with the ResultOUT feature of a 
+ * shape feature.&lt;/li&gt;
+ * &lt;br&gt;For the form feature inside the &lt;tt&gt;Build&lt;/tt&gt; method. Refer to the @href CATIShapeFeatureBody interface for detail about the
+ * ResultOUT feature.
+ * &lt;/ul&gt;
+ * @exception @href CATError
+ */
+  virtual void StoreProcReport(const CATBody_var&amp;             iBody,
+                               const CATMfStoreProcReportType iType, 
+                               int                            iBoolOper=0) = 0;
+
+/**
+ * Deletes the current report.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to clean the internal data created during the
+ * procedural report. You must use this method if an error occurs during the Build/BuildShape
+ * method.
+ */
+  virtual void DeleteProcReport() = 0;	 
+
+/**
+ * Reads the topological journal.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the object useful to create the &lt;tt&gt;CATTopData&lt;/tt&gt; class instance
+ * needed in topological operator.
+ * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation:&lt;/b&gt;Do not release the returned value.
+ * @exception @href CATError
+ */
+  virtual CATCGMJournalList * GetCGMJournalList()= 0;
+
+/**
+ * Inserts a new topological journal.
+ * @param iNewJournal
+ * New topological journal.
+ * @exception @href CATError
+ */
+  virtual void InsertCGMJournalList(CATCGMJournalList * iNewJournal) = 0;
+
+/**
+ * Gets the geometrical factory.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method gets the geometrical factory of the feature.
+ * &lt;p&gt;It is the factory which allows you to create the topological result of the geometrical feature. 
+ * A geometrical feature is a mechanical feature for which a topological object can be associated with its result. This topological object is a @href CATBody . &lt;/p&gt;
+ * @param oGeoFactory
+ * The geometrical factory which will contain the topological result of the geometrical feature.
+ * @return 
+ * S_OK when succeeded&lt;br&gt;
+ * E_FAIL if the factory has not been found.&lt;br&gt;
+ */
+  virtual HRESULT  GetGeoFactoryFromFeature( CATGeoFactory_var &amp;oGeoFactory) = 0;
+
+/**
+  * Inactivates the result of a geometrical feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method must be used when the feature is deactivated. In other words when 
+  * the @href CATIMechanicalProperties#IsInactive returns 1. But you have to take into
+  * account of this flag only for a feature deriving either from GSMGeom or from GeometricalElement3D. 
+  * In the case of a feature deriving either from the MechanicalFormFeature or from 
+  * MechanicalContextualFeature, the Build method in not called.
+  * @param iBoolOper
+  * The integer value indicates which feature will own the generated scope. It is the same value 
+  * as used in the @href #StoreProcReport method.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  * &lt;ul&gt;
+  * &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;, when the scope should be associated with the feature itself: &lt;/li&gt;
+  * &lt;br&gt;For the contextual feature inside the &lt;tt&gt;Build&lt;/tt&gt; method or the form feature inside 
+  * the &lt;tt&gt;BuildShape&lt;/tt&gt; method. 
+  * Refer to the @href CATIShapeFeatureProperties interface for details about form and contextual
+  * features.
+  * &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;, when the scope should be associated with the ResultOUT attribute of a 
+  * shape feature.&lt;/li&gt;
+  * &lt;br&gt;For the form feature inside the &lt;tt&gt;Build&lt;/tt&gt; method. Refer to the @href CATIShapeFeatureBody interface for detail about the
+  * ResultOUT attribute.
+  * &lt;/ul&gt;
+ * @exception @href CATError
+  */
+  virtual HRESULT InactivateResult(int iBoolOper=0) =0;
+
+/**
+  * Adds a rule on the journal.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method must be used to add a rule to be applied when creating the nodes at the end of the build.
+  * It should be invoqued before calling the @href #StoreProcReport method.
+  * It allows managing the behavior of the created elements in the selection process. See CAA articles for more information.
+  * @param Rule
+  * The rule to be applied.
+  * @return
+  * S_OK when succeeded&lt;br&gt;
+  * E_FAIL if the rule could not be set.&lt;br&gt;
+  */
+  virtual HRESULT SetProcTranslateRule ( CATMfProcTranslateRules Rule ) =0;
+
+
+//--------------------------------------------------- End 
+/**
+ * @nodoc
+ * Stores the report.
+ * @param iBody
+ * The result body of the topological operator.
+ * @param iType
+ * &lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;Copy&lt;/tt&gt;: the nodes of the previous scope which are not modified by the operation 
+ * are copied in the current scope,
+ * &lt;li&gt;&lt;tt&gt;NoCopy&lt;/tt&gt;: the nodes of the previous scope which are not modified by the operation 
+ * are not copied in the current scope.&lt;/ul&gt;
+ * @param iBoolOper
+ * The integer value indicates which feature will own the generated scope. It is the same value 
+ * as used in the @href #CreateProcReport method.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt; when the scope should be associated with the feature itself: &lt;/li&gt;
+ * &lt;br&gt;For the contextual feature inside the build method or the form feature inside 
+ * the &lt;tt&gt;BuildShape&lt;/tt&gt; method. 
+ * Refer to the @href CATIShapeFeatureProperties interface for details about form and contextual
+ * features.
+ * &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt; when the scope should be associated with the ResultOUT feature of a 
+ * shape feature.&lt;/li&gt;
+ * &lt;br&gt;For the form feature inside the &lt;tt&gt;Build&lt;/tt&gt; method. Refer to the @href CATIShapeFeatureBody interface for detail about the
+ * ResultOUT feature.
+ * &lt;/ul&gt;
+ * @param iReferenceFeature
+ * Reference feature for pattern only.
+ */
+  virtual void StoreProcReport(const CATBody_var&amp;             iBody,
+                               const CATMfStoreProcReportType iType, 
+                               int                            iBoolOper,
+                               const CATISpecObject_var&amp;      iReferenceFeature) = 0;
+/**
+ * @nodoc
+ * Stores the report.
+ * &lt;br&gt;Advanced method with the explicit list of operands not to be copied.
+ * The nodes of these operands in the previous scope are not copied in the current scope.
+ * @param iBody
+ * The result body of the topological operator.
+ * @param iNoCopySpec
+ * List of operands not to be copied.
+ * @param iNoCopyKeys
+ * List of key words.
+ * @param iBoolOper
+ * The integer value indicates which feature will own the generated scope. It is the same value 
+ * as used in the @href #CreateProcReport method.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt; when the scope should be associated with the feature itself: &lt;/li&gt;
+ * &lt;br&gt;For the contextual feature inside the build method or the form feature inside 
+ * the &lt;tt&gt;BuildShape&lt;/tt&gt; method. 
+ * Refer to the @href CATIShapeFeatureProperties interface for details about form and contextual
+ * features.
+ * &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt; when the scope should be associated with the ResultOUT feature of a 
+ * shape feature.&lt;/li&gt;
+ * &lt;br&gt;For the form feature inside the &lt;tt&gt;Build&lt;/tt&gt; method. Refer to the @href CATIShapeFeatureBody interface for detail about the
+ * ResultOUT feature.
+ * &lt;/ul&gt;
+ * @param iReferenceFeature
+ * Reference feature for pattern only.
+ */
+  virtual void StoreProcReport(const CATBody_var&amp;            iBody,
+                               CATListValCATBaseUnknown_var&amp; iNoCopySpec,
+                               CATListOfCATUnicodeString&amp;    iNoCopyKeys,
+                               int                           iBoolOper=0,
+                               const CATISpecObject_var&amp;     iReferenceFeature=NULL_var) = 0;
+/**
+ * @nodoc
+ * Stores the report.
+ * &lt;br&gt;The same method as the first &lt;tt&gt;StoreProcReport&lt;/tt&gt; with the following arguments:
+ * &lt;ul&gt;
+ * &lt;li&gt; iType == NoCopy &lt;/li&gt;
+ * &lt;li&gt; iBoolOper = 0 &lt;/li&gt;
+ * &lt;/ul&gt; 
+ * @param iBody
+ * The result body of the topological operator.
+ */
+  virtual void StoreProcReport(const CATBody_var&amp; iBody) = 0;
+/**
+ * @nodoc
+ * Reads the current report.
+ */
+  virtual CATProcReport* GetProcReport() const = 0;
+
+/**
+ * @nodoc
+ * Defines the number of report blocs.
+ * &lt;br&gt;Used in sheet metal application.
+ * @param iNbBloc
+ * Number of blocs.
+ */
+  virtual void SetNbProcReportBloc(int iNbBloc) =0;
+/**
+ * @nodoc
+ * Internal use for Cut, Copy Paste.
+ */
+  virtual HRESULT CreateReport(const CATBaseUnknown_var &amp;iFeatureReference) = 0;
+/**
+ * @nodoc
+ * Internal use for Cut, Copy Paste.
+ */
+  virtual void StoreReportInCopy(const CATBody_var&amp;                         iNewBody, 
+                                 const CATMfStoreProcReportNamingType iMfNamingType) = 0;
+  /**
+  * @nodoc
+  * Internal for next version 
+  */
+  virtual HRESULT CreateReport(CATSoftwareConfiguration *iConfig,const CATBaseUnknown_var &amp;iFeatureReference) = 0;
+  /**
+  * @nodoc
+  * Internal for next version 
+  */
+  virtual void CreateProcReport(CATSoftwareConfiguration*     iConfig,
+                                CATListValCATBaseUnknown_var&amp; iSpecs,
+                                CATListOfCATUnicodeString&amp;    iKeys, 
+                                int                           iBoolOper=0,
+                                const CATISpecObject_var&amp;     iReferenceFeature=NULL_var) = 0;
+  /**
+  * @nodoc
+  * Internal for Modify Datum 
+  */
+  virtual HRESULT CreateReportForDatum(CATSoftwareConfiguration *Config) = 0;
+  /**
+  * @nodoc
+  * Internal use (Report with Bridge)
+  */
+  virtual void StoreProcReportWithBridge(const CATBody_var&amp;             iBody,
+                                         const CATMfStoreProcReportType iType, 
+                                         int                            iBoolOper,
+                                         const CATISpecObject_var&amp;      iReferenceFeature) = 0;
+  /**
+  * @nodoc
+  * Internal use (Report with Bridge)
+  */
+  virtual void StoreProcReportWithBridge(const CATBody_var&amp;            iBody,
+                                         CATListValCATBaseUnknown_var&amp; iNoCopySpec,
+                                         CATListOfCATUnicodeString&amp;    iNoCopyKeys,
+                                         int                           iBoolOper=0,
+                                         const CATISpecObject_var&amp;     iReferenceFeature=NULL_var) = 0;
+};
+
+CATDeclareHandler(CATIMfProcReport,CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfPointOnEdge.html">← 上一页: CATIMfPointOnEdge.h</a></div>
+        <div><a href="CATIMfRedge.html">下一页: CATIMfRedge.h →</a></div>
+    </div>
+</body>
+</html>

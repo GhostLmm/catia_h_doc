@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchAppCompatible.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchAppCompatible.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchAppCntrShow.html">← 上一页: CATISchAppCntrShow.h</a></div>
+        <div><a href="CATISchAppComponent.html">下一页: CATISchAppComponent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchAppCompatible_H
+#define CATISchAppCompatible_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISchAppCompatible ;
+
+class CATIUnknownList;
+
+/**
+ * Interface to query an application component whether an application
+ * route or component can be connected. 
+ * &lt;b&gt;Role&lt;/b&gt;: Defines connection rules.
+ */
+class CATISchAppCompatible : public IUnknown
+{
+  public:  
+
+  /**
+  * Query whether a route of the input class type
+  * can be connected to &quot;this&quot; object (the target, which
+  * can be a route or a component).
+  * This method is used when routing a route.
+  * @param iRouteCntrClassType
+  *   Class type of a schematic route connector.
+  * @param oLOKCntrs
+  *   A list of compatible and available connectors on this object. 
+  *   (members are CATISchAppConnector interface pointers)
+  * @param oBYes
+  *   If TRUE, the object is OK to be connected to a route.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AppIsTargetOKForRoute (const char *iRouteCntrClassType,
+    CATIUnknownList **oLOKCntrs, CATBoolean *oBYes) = 0;
+
+  /**
+  * Query whether a component (source) is compatible to be connected to &quot;this&quot; object 
+  * (the target, which can be a route or a component).
+  * This method is used when placing a component to be connected to another object.
+  * @param iLCompSourceCntrs
+  *   A list of connectors on the source component. The target (to be connected)
+  *   is &quot;this&quot; component.
+  * @param oLOKCntrs
+  *   A list of compatible and available connectors on &quot;this&quot; component (the target)
+  *   to be connected to the source component (the input source).
+  *   (members are CATISchAppConnector interface pointers)
+  * @param oBYes
+  *   If TRUE, the object is OK to be connected to a route.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AppIsTargetOKForPlace (CATIUnknownList *iLCompSourceCntrs,
+    CATIUnknownList **oLTargetCntrs, CATBoolean *oBYes) = 0;
+
+  /**
+  * Query whether a component (source) is compatible to be inserted into this route.
+  * This method is used when inserting a component into a route.
+  * This mehtod should only be implemented on a route object. For a component
+  * object, the method should simply returns oBYes=FALSE.
+  * @param iLCompSourceCntrs
+  *   A list of connectors on the source component. The target (to be connected)
+  *   is &quot;this&quot; route.
+  * @param oLSourceCntrs
+  *   A list of compatible and available connectors on the source component (the input)
+  *   that can be connected to the target (&quot;this&quot; route)
+  *   (members are CATISchAppConnector interface pointers)
+  * @param oBYes
+  *   If TRUE, the object is OK to be connected to a route.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AppIsTargetOKForInsert (CATIUnknownList *iLCompSourceCntrs,
+    CATIUnknownList **oLSourceCntrs, CATBoolean *oBYes) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchAppCntrShow.html">← 上一页: CATISchAppCntrShow.h</a></div>
+        <div><a href="CATISchAppComponent.html">下一页: CATISchAppComponent.h →</a></div>
+    </div>
+</body>
+</html>

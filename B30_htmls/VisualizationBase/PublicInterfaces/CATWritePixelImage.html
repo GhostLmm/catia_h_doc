@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATWritePixelImage.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATWritePixelImage.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVueNotification.html">← 上一页: CATVueNotification.h</a></div>
+        <div><a href="RepWeakRefR10.html">下一页: RepWeakRefR10.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#ifndef CATWritePixelImage_H
+#define CATWritePixelImage_H
+
+//------------------------------------------------------------------------------
+// Abstract: Functions to Write 
+//           Color Pixel Image or Texture in memory. 
+//
+//------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------
+
+#include &quot;CATViz.h&quot;
+
+class CATPixelImage;
+class CATString;
+
+/** @nodoc */
+enum CodingFormat { TC_UNCOMPRESSED , TC_PACKBITCOMPRESSED , INDEXE_UNCOMPRESSED ,
+                    INDEXE_PACKBITCOMPRESSED , RGB_UNCOMPRESSED,
+                    RGBA_UNCOMPRESSED,
+                    UNCOMPRESSED, PACKBITS, CCITT_G4, INDEXED_UNCOMPRESSED, INDEXED_PACKBITS };
+
+
+// Write RGB file
+// Allowed coding formats are RGB_UNCOMPRESSED and RGBA_UNCOMPRESSED
+/** @nodoc */
+ExportedByCATViz int WriteRGBPixelImage(const CATPixelImage*, const char* pathName, CodingFormat codingFormat = RGB_UNCOMPRESSED);
+
+// Write TIFF file(True color, not compressed, 1 strip only)
+/** @nodoc */
+ExportedByCATViz int WriteTIFFPixelImage(const CATPixelImage*, const char* pathName, CodingFormat codingFormat = UNCOMPRESSED);
+
+// Write HP/RTL file(a scale may be applied)
+// gama is optional, if not specified(-1.0 value) then best gama is calculated. 
+/** @nodoc */
+ExportedByCATViz int WriteHPRTLPixelImage(const CATPixelImage* pRGBImage, const char* pathName, float scale, int dpi, float gama=-1.0);
+
+// Write HP/RTL file with maximum size specified
+// maxSize is the maximum dimension in mm 
+/** @nodoc */
+ExportedByCATViz int WriteFixedSizeHPRTLPixelImage(const CATPixelImage* pRGBImage, const char* pathName, float maxSize, int dpi, float gama=-1.0);
+
+// return value is a return code equal to 0 if ok. 
+
+// Write a BMP File
+/** @nodoc */
+// compression = 0: uncompressed
+// compression = 1: compressed
+ExportedByCATViz int WriteBMPPixelImage(const CATPixelImage* pRGBImage, const char* pathName, int compresion = 0);
+  // return 9     : bad entry format
+  // return 1     : Can&#x27;t open file
+  // return 2,3,4 : problem during writing
+  // return 5     : can&#x27;t close file
+  // return 6     : X or Y size of image = 0
+  
+
+
+
+// @@@@@@@@@@@@@@@@@ Tiff Bilevel @@@@@@@@@@@@@@@@@@
+
+// Compression =1 ---&gt; PackBit
+// Compression =0 ---&gt; Non Compresse
+  
+/** @nodoc */
+ExportedByCATViz int WriteTIFFBWPixelImage(const CATPixelImage* pRGBImage, const char* pathName, CodingFormat codingFormat = CCITT_G4);
+  // return 0  : ok
+  // return 1  : No RGB PixelImage
+  // return 2  : Image size = 0;
+  // return 3  : Compression flag incorrect;
+
+// =============== Tiff Grey  ===============
+
+// Compression =1 ---&gt; PackBit
+// Compression =0 ---&gt; Non Compresse
+
+/** @nodoc */
+ExportedByCATViz int WriteTIFFGreyPixelImage(const CATPixelImage* pRGBImage, const char* pathName, CodingFormat codingFormat = PACKBITS);
+  // return 0  : ok
+  // return 1  : No RGB or L PixelImage
+  // return 2  : Image size = 0;
+  // return 3  : Compression flag incorrect;
+  // return 4  : memory error
+
+
+// Writes a CATPixelImage to a JPEG file.
+// &lt;b&gt;Role&lt;/b&gt;:
+// @param iPixelImage
+//   The CATPixelImage to save.
+// @param iPathName
+//   The path to save the file to.
+// @param iQuality
+//   JPEG quality.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the standard quality levels enumerated in jpg_quality or an integer value between 1 and 100.&lt;/dt&gt;
+//     &lt;dd&gt;Low values give a better compression on the expense of the quality of the reconstructed image.&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @param iMode
+//   JPEG output mode.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the jpg_mode enum.&lt;/dt&gt;
+//   &lt;/dl&gt;
+// @return
+//   An integer value. 
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;9&lt;/dt&gt;
+//     &lt;dd&gt;Bad entry format&lt;/dd&gt;
+//     &lt;dt&gt;1&lt;/dt&gt;
+//     &lt;dd&gt;Cannot open file for writing&lt;/dd&gt;
+//     &lt;dt&gt;5&lt;/dt&gt;
+//     &lt;dd&gt;Cannot close file&lt;/dd&gt;
+//     &lt;dt&gt;6&lt;/dt&gt;
+//     &lt;dd&gt;X or Y size of image = 0&lt;/dd&gt;
+//     &lt;dt&gt;-1&lt;/dt&gt;
+//     &lt;dd&gt;Null entry&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @see CATPixelImage, jpg_quality, jpg_mode
+/** @nodoc */
+ExportedByCATViz int WriteJPEGPixelImage(const CATPixelImage* iPixelImage, const char* iPathName,
+                                                   int iQuality = 75, int iMode = 0);
+
+// Writes a CATPixelImage to a JPEG memory buffer.
+// &lt;b&gt;Role&lt;/b&gt;:
+// @param iPixelImage
+//   The CATPixelImage to save.
+// @param oMemJPEGtoDelete
+//   A pointer to the buffer the image has been saved in. The buffer must be de-allocated with delete[].
+// @param oMemJPEGSize
+//   The size of the generated JPEG buffer.
+// @param iQuality
+//   JPEG quality.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the standard quality levels enumerated in jpg_quality or an integer value between 1 and 100.&lt;/dt&gt;
+//     &lt;dd&gt;Low values give a better compression on the expense of the quality of the reconstructed image.&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @param iMode
+//   JPEG output mode.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the jpg_mode enum.&lt;/dt&gt;
+//   &lt;/dl&gt;
+// @return
+//   An integer value. 
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;9&lt;/dt&gt;
+//     &lt;dd&gt;Bad entry format&lt;/dd&gt;
+//     &lt;dt&gt;1&lt;/dt&gt;
+//     &lt;dd&gt;Cannot open file for writing&lt;/dd&gt;
+//     &lt;dt&gt;5&lt;/dt&gt;
+//     &lt;dd&gt;Cannot close file&lt;/dd&gt;
+//     &lt;dt&gt;6&lt;/dt&gt;
+//     &lt;dd&gt;X or Y size of image = 0&lt;/dd&gt;
+//     &lt;dt&gt;-1&lt;/dt&gt;
+//     &lt;dd&gt;Null entry&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @see CATPixelImage, jpg_quality, jpg_mode
+/** @nodoc */
+ExportedByCATViz int WriteToMemoryJPEGPixelImage(const CATPixelImage* iPixelImage, unsigned char** oMemJPEGtoDelete, int* oMemJPEGSize,
+                                                           int iQuality = 75, int iMode = 0);
+
+// Writes a CATPixelImage to a PNG memory buffer.
+// &lt;b&gt;Role&lt;/b&gt;:
+// @param iPixelImage
+//   The CATPixelImage to save.
+// @param oMemPNGtoDelete
+//   A pointer to the buffer the image has been saved in. The buffer must be de-allocated with delete[].
+// @param oMemPNGSize
+//   The size of the generated PNG buffer.
+// @param iMode
+//   PNG output mode.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the png_mode enum.&lt;/dt&gt;
+//   &lt;/dl&gt;
+// @return
+//   An integer value. 
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;9&lt;/dt&gt;
+//     &lt;dd&gt;Bad entry format&lt;/dd&gt;
+//     &lt;dt&gt;1&lt;/dt&gt;
+//     &lt;dd&gt;Cannot open file for writing&lt;/dd&gt;
+//     &lt;dt&gt;5&lt;/dt&gt;
+//     &lt;dd&gt;Cannot close file&lt;/dd&gt;
+//     &lt;dt&gt;6&lt;/dt&gt;
+//     &lt;dd&gt;X or Y size of image = 0&lt;/dd&gt;
+//     &lt;dt&gt;-1&lt;/dt&gt;
+//     &lt;dd&gt;Null entry&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @see CATPixelImage, png_quality, png_mode
+/** @nodoc */
+ExportedByCATViz int WriteToMemoryPNGPixelImage(const CATPixelImage* iPixelImage, unsigned char** oMemPNGtoDelete, int* oMemPNGSize,
+                                                           int iMode = 0);
+
+// Writes a CATPixelImage to a BMP memory buffer.
+// &lt;b&gt;Role&lt;/b&gt;:
+// @param iPixelImage
+//   The CATPixelImage to save.
+// @param oMemBMPtoDelete
+//   A pointer to the buffer the image has been saved in. The buffer must be de-allocated with delete[].
+// @param oMemBMPSize
+//   The size of the generated BMP buffer.
+// @param iMode
+//   BMP output mode.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;One of the bmp_mode enum.&lt;/dt&gt;
+//   &lt;/dl&gt;
+// @return
+//   An integer value. 
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+//   &lt;dl&gt;
+//     &lt;dt&gt;9&lt;/dt&gt;
+//     &lt;dd&gt;Bad entry format&lt;/dd&gt;
+//     &lt;dt&gt;1&lt;/dt&gt;
+//     &lt;dd&gt;Cannot open file for writing&lt;/dd&gt;
+//     &lt;dt&gt;5&lt;/dt&gt;
+//     &lt;dd&gt;Cannot close file&lt;/dd&gt;
+//     &lt;dt&gt;6&lt;/dt&gt;
+//     &lt;dd&gt;X or Y size of image = 0&lt;/dd&gt;
+//     &lt;dt&gt;-1&lt;/dt&gt;
+//     &lt;dd&gt;Null entry&lt;/dd&gt;
+//   &lt;/dl&gt;
+// @see CATPixelImage, bmp_quality, bmp_mode
+/** @nodoc */
+ExportedByCATViz int WriteToMemoryBMPPixelImage(const CATPixelImage* iPixelImage, unsigned char** oMemJPEGtoDelete, int* oMemBMPSize,
+                                                           int iMode = 0);
+
+/** @nodoc */
+ExportedByCATViz int WritePNGPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteCALSPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteIFFPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteIOCAPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WritePCXPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WritePICTPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WritePSDPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteRASTPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteTGAPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteXPMPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+/** @nodoc */
+ExportedByCATViz int WriteXWDPixelImage(const CATPixelImage* pixelImage, const char* pathName);
+
+
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVueNotification.html">← 上一页: CATVueNotification.h</a></div>
+        <div><a href="RepWeakRefR10.html">下一页: RepWeakRefR10.h →</a></div>
+    </div>
+</body>
+</html>

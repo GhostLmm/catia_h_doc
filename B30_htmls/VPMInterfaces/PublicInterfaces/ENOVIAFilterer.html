@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVIAFilterer.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVIAFilterer.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIABoundingVolume.html">← 上一页: ENOVIABoundingVolume.h</a></div>
+        <div><a href="ENOVIAHistory.html">下一页: ENOVIAHistory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef ENOVIAFilterer_h
+#define ENOVIAFilterer_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// =================================================================
+// Includes
+// =================================================================
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATTypUtilit.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATIVpmPredicate.h&quot;
+
+// =================================================================
+// Forward classes declaration
+// =================================================================
+class CATIVpmPredicate;
+class CATBaseUnknown;
+class CATTime;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVIAFilterer;
+#else
+extern &quot;C&quot; const IID IID_ENOVIAFilterer;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface to define the properties of a Generalized filter.
+ * &lt;b&gt;Role&lt;/b&gt;: ENOVIAFilterer is a behavior interface. It defines
+ * the properties of a Generalized Filter, which can be used to filter
+ * the filterable objects.
+ * Important: the objects which adhere to ENOVIAFilterer are assumed to be organized in a tree, not a graph.
+ * &lt;p&gt; The generalized filter is an AND combination of specialized sub-filters:
+ * &lt;ol&gt;
+ * &lt;li&gt; an ATTRIBUTE filter : specifies a predicate on the attribute values
+ * &lt;li&gt; a DISCIPLINE filter : specifies a predicate on a discipline attribute
+ * &lt;li&gt; a ZONE filter : specifies how the Bounding volume of the filterable objects are related to the volume
+ *                   of an other object contained in the filter (FULLY_IN, PARTLY_IN, ....)
+ * &lt;li&gt; a CONFIG filter : specifies rank, date, milestone and specification criteria.
+ * &lt;li&gt; a VOLUMIC filter : specifies how the Bounding volume of the filterable objects are related to the 3D volume
+ *                   contained in the filter (FULLY_IN, PARTLY_IN, ....)
+ * &lt;/ol&gt;
+ * &lt;p&gt; EACH sub-filter can itself be an AND combination of elementary filters (of the same type).
+ * &lt;p&gt; For example:
+ * The generalized filter can be made of a CONFIG sub-filter and a ZONE sub-filter.
+ * The CONFIG sub-filter can be made of two elementary CONFIG filters combined by an AND operation.
+ * The ZONE sub-filter can be made of three elementary ZONE filters combined by an AND operation.
+ * &lt;p&gt; When making changes to the contents of the generalized filter, a &#x27;type&#x27; must be specified.
+ * The mode controls which specialized sub-filter is to be changed.
+ */
+class ExportedByGUIDVPMInterfaces ENOVIAFilterer : public CATBaseUnknown 
+{
+
+/**
+ * @nodoc
+ */
+  CATDeclareInterface;
+  
+ public:
+
+/**
+ * Saves the Current Filter.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Filters can be saved in a stack, in order to temporarily change the value of the filter
+ * without losing the value specified previously.
+ * FilterType can take the value (#define) : FLT_ATTRIBUTE, FLT_DISCIPLINE, FLT_CONFIG,
+ *                                          FLT_ZONE, FLT_VOLUME or other one or a | combination
+ * FLT_XXX are defined in CATVpmTPInclude.h
+ */
+  virtual HRESULT SaveCurrentFilter()=0;
+
+/**
+ * Restores the Current Filter.
+ */
+  virtual HRESULT RestoreCurrentFilter()=0;
+
+/**
+ * Resets totally the generalized filter
+ */
+  virtual HRESULT ResetCurrentFilter()=0;
+
+
+/**
+ * Dumps the current filter. Debug purposes.
+ */
+  virtual HRESULT dump_CurrentFilter()=0;
+
+/**
+ * Turns the sub-filter of the given type ON or OFF.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: the sub-filter types that are not specified by the &#x27;FilterType&#x27; argument are left UNCHANGED.
+ * &lt;p&gt;Example:
+ * put_GlobalFilterModeByType( FLT_ATTRIBUTE, TRUE )
+ * -&gt; turns the CONFIG part of the generalized filter ON, leaving the other sub-filter types unchanged.
+ * put_GlobalFilterModeByType( FLT_ZONE, FALSE )
+ * -&gt; turns the CONFIG part of the generalized filter OFF, leaving the other sub-filter types unchanged.
+ * @param FilterType
+ *   Filter Type.
+ * @param FilterActivated
+ *   FilterActivated a boolean value.
+ */
+  virtual HRESULT put_GlobalFilterModeByType(long FilterType,
+					     boolean FilterActivated)=0;
+
+/**
+ * Adds a sub-filter of a given type to the Generalized filter.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The sub-filter types that are not specified by the &#x27;FilterType&#x27; argument are left UNCHANGED.
+ * &lt;p&gt;Example:
+ * add_Filter( FLT_ATTRIBUTE, &lt;attribute filter&gt; )
+ * -&gt; adds a new component to the CONFIG part of the generalized filter.
+ * @param FilterType
+ *   Filter Type.
+ * @param AttFilter
+ *   Attrubute Filter.
+ */
+  virtual HRESULT add_Filter(long FilterType,
+			     CATIVpmPredicate *AttFilter)=0;
+
+  // Returns the number of elementary filters present for a given sub-filter type.
+  // For exmaple, returns the number of elementary ATTRIBUTE filters that compose the ATTRIBUTE sub-filter
+  // of the generalized filter.
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_FilterCount( long FilterType, long &amp; NbFilter)=0;
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_Filter(long index,
+			     long &amp; FilterType,
+			     CATIVpmPredicate *&amp; AttFilter)=0;
+
+  // Returns the CONCATENATION of elementary filters present for a given sub-filter type.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_GlobalFilterByType(long FilterType,
+										 CATIVpmPredicate_var&amp; Filter)=0;
+
+  // Removes the index-th Generalized Filter present in the stack.
+  // All the sub-filters of the generalized filter are removed at once.
+  // Note: this is more than juut a deactivation, the filter is really removed !
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT RemoveFilter(long index)=0;
+
+  // Resets the current (ie. top of stack) generalized filter.
+  // Here, ONLY the sub-filter of the given type is reset.
+  // Example:    RemoveFilterByType( FLT_CONFIG )
+/**
+ * @nodoc
+ */
+  virtual HRESULT RemoveFilterByType(long FilterType)=0;
+
+
+  // Selectively activates or de-activate a sub-filter of a given type.
+  // Example: put_FilterMode( FLT_ALL, 1 )  -&gt; Activates all sub-filters
+  // Example: put_FilterMode( FLT_CONFIG, 0 )  -&gt; De-activate the CONFIG sub-filter (and this one only)
+/**
+ * @nodoc
+ */
+  virtual HRESULT put_FilterMode(long index,
+				 boolean FilterActivated)=0;
+
+  // Returns a boolean that says whether a given sub-filter type is currently active or not.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_FilterMode(long index,
+				 boolean&amp; FilterActivated)=0;
+
+  // Returns a boolean that says whether a given sub-filter type is currently active or not.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_GlobalFilterModeByType(long FilterType,
+											 boolean&amp; FilterActivated)=0;
+
+  // Selectively activate or de-activate a given sub-filter in the Generalized Filter present 
+  // at the index-th position in the stack.
+  // Note: Here, ONLY the sub-filter of the given &#x27;FilterType&#x27; in reset in the generalized filter.
+  // Note2: this is not a removal, the filter stays in the stack.
+/**
+ * @nodoc
+ */
+  virtual HRESULT put_FilterModeByType(long FilterType,
+				       boolean FilterActivated)=0;
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_CurrentFilter(long FilterType,
+				    CATIVpmPredicate *&amp; Filter,
+				    boolean iSearchOnParent=TRUE)=0;
+
+  // Returns the (unique) parent of the current ENOVIAFilterer object (this).
+  // See header.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_ParentFilterObject(ENOVIAFilterer *&amp; ParentFilter)=0;
+
+
+  // Main Filtering method.
+  // Applies the Generalized Filter to the current ENOVIAFilterer object.
+  // Computes the resulting number of filterable objects.
+  // The method allows to filter only a given type of objects (&#x27;Entity&#x27; argument).
+  // The method allows to combine the predefined Generalized Filter to one last-minute filter (&#x27;FilterToAdd&#x27;).
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_FilteredObject(const CATBSTR &amp; Entity,
+				       CATIVpmPredicate *FilterToAdd,
+				       CATLISTV(CATBaseUnknown_var)&amp; oList)=0;
+
+
+  // Other Filtering method.
+  // Applies the given filter (&#x27;FilterToApply&#x27;) to the current ENOVIAFilterer object.
+  // Note: Here, ONLY the given filter is taken into account. The Genelized filter is ignored !!!
+  // Computes the resulting number of filterable objects.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_FilteredObjectByFilter(const CATBSTR &amp; Entity,
+						  CATIVpmPredicate *FilterToApply,
+						  CATLISTV(CATBaseUnknown_var)&amp; oList)=0;
+
+
+  // Defines a Filter on Standard Parts.
+  // if iMode=FALSE, get_FilteredObject/get_FilteredObjectByFilter will not give StandardParts.
+  // iMode=TRUE is the default mode.
+  // Note: an ItemInstance is a Standard Part if the V508_isStandardPart attribute of 
+  // its PartMaster is equal to TRUE. 
+/**
+ * @nodoc
+ */
+  virtual HRESULT put_WithStandardPartMode(const boolean &amp; iMode)=0;
+
+
+  // Gets the WithStandardPart mode.
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_WithStandardPartMode(boolean &amp; oMode)=0;
+
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT ResetVersionDate()=0;
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT put_VersionDate(const CATTime &amp; iDate)=0;
+
+/**
+ * @nodoc
+ */
+  virtual HRESULT get_VersionDate(CATTime &amp; oDate)=0;
+
+
+};
+
+/**
+ * @nodoc
+ */
+CATDeclareHandler(ENOVIAFilterer, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIABoundingVolume.html">← 上一页: ENOVIABoundingVolume.h</a></div>
+        <div><a href="ENOVIAHistory.html">下一页: ENOVIAHistory.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMf3DAxisSystemManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMf3DAxisSystemManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMf3DAxisSystemFactory.html">← 上一页: CATIMf3DAxisSystemFactory.h</a></div>
+        <div><a href="CATIMf3DBehavior.html">下一页: CATIMf3DBehavior.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2001
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+
+#ifndef CATIMf3DAxisSystemManager_H
+#define CATIMf3DAxisSystemManager_H
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIMf3DAxisSystem.h&quot;
+#include &quot;CATListOfCATIMf3DAxisSystem.h&quot;
+class CATMathTransformation;
+
+#include &quot;MecModItfCPP.h&quot; 
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMf3DAxisSystemManager;
+#else
+extern &quot;C&quot; const IID IID_CATIMf3DAxisSystemManager;
+#endif
+//------------------------------------------------------------------
+
+/**
+ * Interface to manage the axis systems.
+ * &lt;b&gt;Role:&lt;/b&gt;This interface enables you:
+ * &lt;ul&gt;
+ * &lt;li&gt;To know all the axis systems created by the @href CATIMf3DAxisSystemFactory interface
+ * into a Part document. See the @href #GetAxisSystems method. &lt;/li&gt;
+ * &lt;li&gt;To set or retrieve the current axis system.
+ *  See @href #SetCurrentAxisSystem and 
+ * @href #GetCurrentAxisSystem respectively. &lt;/li&gt;
+ * &lt;li&gt;To translate the coordinates of a point ( @href #ConvertPointCoordinates ) or a 
+ *  vector ( @href #ConvertVectorCoordinates ) in the current axis system.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;br&gt;This interface is implemented by the specification container of the Part document. You 
+ * retrieve it by at least two means:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATIContainerOfDocument#GetSpecContainer &lt;/li&gt;
+ * &lt;li&gt;@href CATInit#GetRootContainer &lt;/li&gt;
+ * &lt;/ul&gt;
+ * @see CATIMf3DAxisSystem, CATIMf3DAxisSystemFactory
+ */
+class ExportedByMecModItfCPP CATIMf3DAxisSystemManager: public CATBaseUnknown
+{
+   CATDeclareInterface;
+
+public :
+
+	/**
+    * Retrieves all the axis systems of the Part document.
+    *   @param oAxisSystemList
+    *      The axis system list.
+    */
+	virtual HRESULT GetAxisSystems(CATLISTV(CATIMf3DAxisSystem_var)&amp; oAxisSystemList) const =0; 
+	
+   /**
+	* Sets an axis system as the current one.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to set an axis system as current. It
+    * guarantees that only one axis system is current in the Part document. Set an axis 
+    * system the current one can be useful:
+    * &lt;ul&gt;
+    * &lt;li&gt;To use the @href #ConvertPointCoordinates and @href #ConvertVectorCoordinates 
+    * to translate the point/vector coordinates in this axis system.&lt;/li&gt;
+    * &lt;li&gt;In an interactive session, to control the current axis system which is used by 
+    * some commands such as Point. These commands can display points (or vectors )
+    * coordinates in the current axis system.&lt;/li&gt;
+    * &lt;/ul&gt;
+    *   @param iAxisSystem
+    *      The new current axis system. If the value is NULL_var, there is no current axis 
+    *      system, the coordinates are always displayed in the absolute axis system.
+    * @return
+    *  E_FAIL if the &lt;tt&gt;iAxisSystem&lt;/tt&gt; is not orthogonal - @href CATAxisSystemIsDirect
+    */
+	virtual HRESULT SetCurrentAxisSystem(const CATIMf3DAxisSystem_var&amp; iAxisSystem) const =0;
+
+	/**
+	* Retrieves the current axis system.
+    *   @param oCurrentAxisSystem
+    *      The current axis system. If the value is NULL_var, there is no current axis 
+    *      system.
+    */
+	virtual HRESULT GetCurrentAxisSystem(CATIMf3DAxisSystem_var&amp; oCurrentAxisSystem) const=0;
+
+
+     /**
+	 * Converts point coordinates in the current axis system.
+     *   @param iAbsoluteToCurrent
+     *     &lt;ul&gt;
+     *      &lt;li&gt;If TRUE, converts the coordinates from the absolute axis system 
+     *          to the current axis system. &lt;/li&gt;
+	 *      &lt;li&gt;If FALSE, converts the coordinates from the current axis systen 
+     *          to the absolute axis system. &lt;/li&gt;
+     *     &lt;/ul&gt;
+	 *   @param iPointToConvert
+	 *			The mathematical point to convert. 
+	 *   @param oConvertedPoint
+	 *			The converted mathematical point. 
+     */
+	virtual HRESULT ConvertPointCoordinates(
+		const CATBoolean iAbsoluteToCurrent,
+		const CATMathPoint&amp; iPointToConvert, 
+		CATMathPoint&amp; oConvertedPoint) const=0;
+
+	/**
+     * Converts vector coordinates in the current axis system.
+     *   @param iAbsoluteToCurrent
+     *     &lt;ul&gt;
+     *      &lt;li&gt;If TRUE, converts the coordinates from the absolute axis system 
+     *          to the current axis system. &lt;/li&gt;
+	 *      &lt;li&gt;If FALSE, converts the coordinates from the current axis systen 
+     *          to the absolute axis system. &lt;/li&gt;
+     *     &lt;/ul&gt;
+	 *   @param iVectorToConvert
+	 *			The mathematical vector to convert. 
+	 *   @param oConvertedVector
+	 *			The converted mathematical vector. 
+    */
+	virtual HRESULT ConvertVectorCoordinates(
+		const CATBoolean iAbsoluteToCurrent,
+		const CATMathVector&amp; iVectorToConvert, 
+		CATMathVector&amp; oConvertedVector) const=0;
+	
+};
+
+CATDeclareHandler(CATIMf3DAxisSystemManager, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMf3DAxisSystemFactory.html">← 上一页: CATIMf3DAxisSystemFactory.h</a></div>
+        <div><a href="CATIMf3DBehavior.html">下一页: CATIMf3DBehavior.h →</a></div>
+    </div>
+</body>
+</html>

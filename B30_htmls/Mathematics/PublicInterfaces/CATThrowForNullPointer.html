@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATThrowForNullPointer.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATThrowForNullPointer.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSoftwareModification.html">← 上一页: CATSoftwareModification.h</a></div>
+        <div><a href="CATTolerance.html">下一页: CATTolerance.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATThrowForNullPointer_H
+#define CATThrowForNullPointer_H
+/** @CAA2Required */
+// COPYRIGHT DASSAULT SYSTEMES  2001
+/**
+ *  Purpose : Throw an Error After detection of a NULL pointeur 
+ *
+ *  Audience : CGM (CATIA Geometric Modeler)   
+ *
+ *  Abstract : Quality improvement of V5R7+ integrated with mkCheckSource in June 2001.
+ *
+ *  Usage samples : 
+ *
+ *            void *pointer = ?;
+ *
+ *            if ( pointer == NULL ) CATThrowForNullPointer();
+ *
+ *            if ( pointer == NULL ) CATThrowForNullPointerReturnValue(ReturnValue);
+ *
+ *  Advice to avoid compilation error on wrong usage : 
+ *   
+ *    if your method (or function) returns a value, you must use 
+ *      CATThrowForNullPointerReturnValue(ReturnValue) with a default value
+ *      even if an assert or an exception is thrown inside the Macro 
+ *    in other cases (method of function without return value), you must use 
+ *       CATThrowForNullPointer()
+ */
+
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATMathematics.h&quot;
+#include &quot;CATCGMBuildDebug.h&quot;
+
+#ifndef NULL
+#define NULL    0
+#endif
+
+#ifdef CATIACGMV5R22
+ExportedByCATMathematics void CATCGMnull();
+#endif
+ExportedByCATMathematics void CATCGMnull(char *ifile, int iline); 
+#define CATCGMThrowForNullPointer(ifile,iline) CATCGMnull(ifile,iline)
+
+
+#if defined ( CATCGMBuildDebug )
+#define CATThrowForNullPointer()                          { CATCGMnull(__FILE__,__LINE__); return; }
+#define CATThrowForNullPointerReturnValue( ReturnValue )  { CATCGMnull(__FILE__,__LINE__); return ReturnValue; }
+#else
+#ifdef CATIACGMV5R22
+#define CATThrowForNullPointer()                          { CATCGMnull(); }
+#define CATThrowForNullPointerReturnValue( ReturnValue )  { CATCGMnull(); return ReturnValue; }
+#else
+#define CATThrowForNullPointer()                          { CATCGMnull(NULL,0); return; }
+#define CATThrowForNullPointerReturnValue( ReturnValue )  { CATCGMnull(NULL,0); return ReturnValue; }
+#endif
+#endif
+
+
+#endif
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSoftwareModification.html">← 上一页: CATSoftwareModification.h</a></div>
+        <div><a href="CATTolerance.html">下一页: CATTolerance.h →</a></div>
+    </div>
+</body>
+</html>

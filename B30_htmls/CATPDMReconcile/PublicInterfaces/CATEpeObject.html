@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPDMReconcile/PublicInterfaces/CATEpeObject.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPDMReconcile/PublicInterfaces/CATEpeObject.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEpeNode.html">← 上一页: CATEpeNode.h</a></div>
+        <div><a href="CATEpePartVersion.html">下一页: CATEpePartVersion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEpeObject_H
+#define CATEpeObject_H
+// Reconciliator
+// Version 1 Release 0
+// COPYRIGHT DASSAULT SYSTEMES 2004-2010
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+// *****************************************************************
+//
+//   Identification :
+//   ---------------
+//
+//      RESPONSIBLE : Jean-Luc MEDIONI
+//      FUNCTION    : Reconciliator
+//      USE         : CATIA &amp; ENOVIA
+//
+// *****************************************************************
+//
+//   Description :
+//   ------------
+//
+// Header definition: CATEpeObject represents one object to be reconciled.
+//
+// *****************************************************************
+//
+//   Remarks :
+//   ---------
+//
+//
+// ****************************************************************
+//
+//   Story :
+//   -------
+//
+//    Revision 1.0  Dec 2004  Author:  Jean-Luc MEDIONI
+//                            Purpose: CAA exposition
+//
+// ****************************************************************
+//
+// INSIDE class:
+// -------------
+//
+//
+// ****************************************************************
+
+#include &quot;CATPDMReconcileModel.h&quot;
+
+// --- Mother class
+
+#include &quot;CATEpeNode.h&quot;
+
+// --- Forward declaration
+
+class CATEpeObject           ;
+class CATScmPDMObject        ;
+class CATScmObject           ;
+
+// --- Necessary includes
+// --- * System
+
+#include &quot;CATCollec.h&quot;
+#include &quot;CATString.h&quot;
+
+// --- * Reconciliation session
+
+#include &quot;CATEpeSession.h&quot;    
+
+// --- * Reconciliator interfaces
+
+#include &quot;CATLISTPCATIPDMCriterionScm.h&quot;
+#include &quot;CATLISTPCATIPDMCharacteristicScm.h&quot;
+#include &quot;CATLISTPCATScmPDMObject.h&quot;
+
+/**
+  * CATIA Object to be reconciled with its representation in VPDM Repository.
+  *
+  * &lt;b&gt;Role&lt;/b&gt;:
+  * CATIA Object to be reconcile with its representation in VPDM Repository.
+  * It could represent either a &lt;b&gt;CATIA document&lt;/b&gt; or an &lt;b&gt;ASM_Product&lt;/b&gt;.
+  *
+  * &lt;br&gt;A typical definition of a reconciliation rule on an object is made of following steps
+  * &lt;ol&gt;
+  * &lt;li&gt;Select and sets one &lt;b&gt;&lt;i&gt;Environment&lt;/b&gt;&lt;/i&gt; among authorized one for this object.&lt;/li&gt;
+  * &lt;li&gt;Select and execute on &lt;b&gt;&lt;i&gt;Criterion&lt;/b&gt;&lt;/i&gt; among authorized one for this object.&lt;/li&gt;
+  * &lt;li&gt;Select on Criterion result one PDM Object (is object will not be saved as new object).&lt;/li&gt;
+  * &lt;li&gt;Define reconciliation rule to be applied among authorized reconciliation rule.&lt;/li&gt;
+  * &lt;/ol&gt;
+  *
+  * @see CATEpeSession.
+  */
+
+class ExportedByCATPDMReconcileModel CATEpeObject: public CATEpeNode
+{   
+   // ----------------------------------------------------------
+   // --- C++ standard methods (Constructor / Destructor...)
+   // ----------------------------------------------------------
+      
+     public:
+
+   /** @nodoc
+     * Constructs a reconciliation object.
+     * 
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Constructs a Reconciliation object.
+     */
+      CATEpeObject() ;
+
+    /** @nodoc
+      * Assignment operator from another object node.
+      * 
+      * @param ixNode
+      * Object used as reference for the assignment.
+      */
+      CATEpeObject &amp; operator=( const CATEpeObject &amp; ) ; 
+      
+    /** @nodoc
+      * Copy constructor.
+      * 
+      * @param ixNode
+      * Object to be duplicated.
+      */
+      CATEpeObject( const CATEpeObject &amp; ixNode ) ;
+
+   /** @nodoc
+     * Delete &amp; clean reconciliator object.
+     * 
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Delete &amp; clean reconciliator object.
+     */
+      ~CATEpeObject() ;
+
+    // -----------------------------------------
+    // --- General management
+    // -----------------------------------------
+
+
+    /**
+      * Access to CAA reconciliator object from other reconciliator objects.
+      *
+      * &lt;b&gt;Role:&lt;/b&gt; Access to CAA reconciliator object from other reconciliator objects.
+      * 
+      * @return
+      * Method return code 
+      * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;NULL&lt;/i&gt;&lt;/b&gt; if one error occur, otherwise provide access
+      * associated &lt;b&gt;&lt;i&gt;CATEpeObject&lt;/i&gt;&lt;/b&gt;. 
+      * 
+      * @param ixObj
+      *  Internal session entity.
+      */
+       static CATEpeObject * GetExposedEntity( const CATScmObject * ixObj ) ;
+
+    /**
+      * Access to object reconciliator internal object.
+      *
+      * &lt;b&gt;Role:&lt;/b&gt; Access to object reconciliator internal object..
+      * 
+      * @return
+      * Method return code 
+      * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;NULL&lt;/i&gt;&lt;/b&gt; if one error occur, otherwise provide access
+      * associated  &lt;b&gt;&lt;i&gt;CATScmObject&lt;/i&gt;&lt;/b&gt;. 
+      */
+       CATScmObject * GetExposedEntity() const ;
+
+   // -------------------------------------------
+   // --- Manage criterion (Object queries)
+   // -------------------------------------------
+
+   /**
+     * Gets List of criteria applicable for this object for a given environment.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets List of criteria applicable for this object for a given environment.
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that the address of an already
+     *   built &lt;b&gt;&lt;i&gt;CATLISTP(CATIPDMCriterion)&lt;/i&gt;&lt;/b&gt; is passed.
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: RemoveAll to be called by the caller on the list obtained.
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: All ready built list(object) to be passed.
+     *
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param ioCriteriaList
+     * List of authorized &lt;b&gt;&lt;i&gt;Criteria&lt;/i&gt;&lt;/b&gt;.
+     */
+     HRESULT GetCriteriaList( CATLISTP(CATIPDMCriterionScm) &amp; ioCriteriaList ) const ;
+
+   /**
+     * Gets current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; on this object.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; on this object.
+     * 
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: Release on the interface required by the caller.
+     *
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param oCrit
+     * &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     */
+      HRESULT GetCurrentCriterion( CATIPDMCriterionScm ** oCrit ) const ;
+
+   /** @nodoc
+     * Sets current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; on this object.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Sets current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; on this object.
+     * 
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: Release on the interface required by the caller.
+     *
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param iCrit
+     * &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     */
+      HRESULT SetCurrentCriterion( CATIPDMCriterionScm * iCrit ) ;
+
+   /**
+     * Executes the current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; queries.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Executes against VPDM repository the current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; query which 
+     * is a old mode criterion based on list of attributes.
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that oPDMObjList address should be passed 
+     * on as built objects, to be letft as it is
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param iQueryValueList
+     *  Optional list of value for a query
+     */
+      HRESULT ExecuteCriterion( CATListValCATUnicodeString  &amp; iQueryValueList ) ;
+
+   /**
+     * Executes the current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Executes against VPDM repository the current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; query which 
+     * is a XML mode criterion.
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that oPDMObjList address should be passed 
+     * on as built objects, to be letft as it is
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param icQueryXML
+     *   Criterion parameters to be used to Execute criterion.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: If XML stream is empty, we will recompute parameters from default values ( @see CATIPDMCriterionScm::GetCriterionParametersXML ). 
+     */
+      HRESULT ExecuteCriterion( CATUnicodeString &amp; icQueryXML ) ;
+
+   /**
+     * Resets Execute &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; results.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Suppress all Execute &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt; results.
+     */
+      void ResetExecuteCriterion() ;
+
+   /**
+     * Gets list of PDM objects result of the execution of current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets list of PDM objects result of the execution of current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that oPDMObjList address should be passed 
+     * on as built objects, should be left as it is.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param oPDMObjList
+     *  List of VPDM objects that fullfil request (@href CATScmPDMObject ).
+     */
+      HRESULT GetPDMObjectList( CATListPtrCATScmPDMObject &amp; oPDMObjList ) ;
+
+   /**
+     * Gets list of PDM attributes in the result of the execution of current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets list of PDM attributes in the result of the execution of current &lt;b&gt;&lt;i&gt;Criterion&lt;/i&gt;&lt;/b&gt;.
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that oAttrColNames address should be passed 
+     * on as built objects, only need to be emptied by RemoveAll.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param oAttrColNames
+     * List of attribute names readed in VPDM repository.
+     */
+      HRESULT GetAttributeColumnNameList( CATListValCATUnicodeString &amp; oAttrColNames ) const ;
+ 
+   // -------------------------------------------
+   // --- Manage rule definition
+   // -------------------------------------------
+
+   /**
+     * Defines &lt;b&gt;&lt;i&gt;Environment&lt;/i&gt;&lt;/b&gt;  where this object need to be stored.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Defines &lt;b&gt;&lt;i&gt;Environment&lt;/i&gt;&lt;/b&gt;  where this object need to be stored.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param iEnv
+     *  String defining the &lt;b&gt;&lt;i&gt;Environment&lt;/i&gt;&lt;/b&gt;.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Could be found using @href CATEpeSession#GetEnvironments. 
+     */
+      HRESULT SetEnvironment( const CATUnicodeString &amp; iEnv ) ;
+
+   /**
+     * Gets the &lt;b&gt;&lt;i&gt;Environment&lt;/i&gt;&lt;/b&gt; selected.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets the &lt;b&gt;&lt;i&gt;Environment&lt;/i&gt;&lt;/b&gt; selected for this object.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param ocEnv
+     *  Environment. (@set CATEpeSession)
+     */
+      HRESULT GetEnvironment( CATUnicodeString &amp; ocEnv ) const ;
+
+   /**
+     * Sets the Selected PDM Object amongst the PDM objects retrieved through the ExecuteCriterion.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Sets the Selected PDM Object amongst the PDM objects retrieved through the ExecuteCriterion.(@href CATScmPDMObject ).
+     *  This PDM object will be found as result of a &lt;b&gt;&lt;i&gt;Criterion&lt;/b&gt;&lt;/i&gt; execution
+     * (@href #ExecuteCriterion). 
+     * 
+     *  &lt;b&gt;&lt;u&gt;Warning:&lt;/u&gt;&lt;/b&gt; This method allocate a new CATScmPDMObject.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param iPDMObj
+     *  PDM object.
+     */
+      HRESULT SetPDMObject( CATScmPDMObject * iPDMObj ) ;
+
+   /**
+     * Gets the Selected PDM Object amongst the PDM objects retrieved through the ExecuteCriterion.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets the Selected PDM Object amongst the PDM objects retrieved through the ExecuteCriterion.(@href CATScmPDMObject ).
+     * 
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: Not to be deleted by the caller as reference is set.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param oPDMObj
+     *  PDM object.
+     */
+      HRESULT GetPDMObject( CATScmPDMObject * &amp;  oPDMObj ) const ;
+   
+   /**
+     * Checks that a reconcilation rule could be used on one object.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Checks that the reconcilation rule could be used on one object.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param iRule
+     * Reconciliation rule type (@href #CATReconcileRule)
+     *
+     * @param oResult
+     * Indicates if rule could be used on this object. It is object and context dependant.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;TRUE&lt;/i&gt;&lt;/b&gt; if &lt;b&gt;&lt;i&gt;Rules&lt;/b&gt;&lt;/i&gt; could be used for this object.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;FALSE&lt;/i&gt;&lt;/b&gt; otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      HRESULT IsRuleValid( CATEpeSession::CATReconcileRule  iRule
+                         , CATBoolean                     &amp; oResult ) ;
+
+   /**
+     * Sets the reconcilation rule to be applied.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Sets the reconcilation rule to be applied for this object.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param iRule
+     *  Reconciliation rule type (@set CATEpeSession)
+     */
+     HRESULT SetRule( CATEpeSession::CATReconcileRule iRule ) ;
+   
+   /**
+     * Gets the reconcilation rule selected.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets the reconcilation rule selected.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param oRule
+     *  Reconciliation rule type (@set CATEpeSession)
+     */
+     CATEpeSession::CATReconcileRule GetRule() const ;
+ 
+   /**
+     * Sets storage mode.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Sets storage mode to be applied for this object.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param inMode
+     *  Storage mode selected. (@set CATEpeSession)
+     */
+     HRESULT SetStorageMode( CATEpeSession::CATStorageMode inMode ) ;
+   
+   /**
+     * Gets storage mode.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets storage mode to be applied for this object.
+     * If storage mode has not been selected a default will be computed.
+     * 
+     * @return
+     *  Storage mode selected. (@set CATEpeSession)
+     */
+     CATEpeSession::CATStorageMode GetStorageMode() ;
+
+   // ------------------------------------------------
+   // --- Access to Characteristics for this object
+   // ------------------------------------------------
+
+   /**
+     * Gets list of authorized &lt;b&gt;&lt;i&gt;Characteristic&lt;/i&gt;&lt;/b&gt; for this object.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets list of authorized &lt;b&gt;&lt;i&gt;Characteristic&lt;/i&gt;&lt;/b&gt; for this object.
+     * (@href CATIPDMCharacteristicScm ).
+     * 
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: Assumes that oCharList address should be passed 
+     * on as built objects, only need to be emptied by RemoveAll.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     * 
+     * @param oCharList
+     *  List of &lt;b&gt;&lt;i&gt;Characteristic&lt;/i&gt;&lt;/b&gt; (@href CATIPDMCharacteristicScm ).
+     */
+      HRESULT GetCharacteristicList( CATLISTP(CATIPDMCharacteristicScm) &amp; oCharList ) ;
+
+   /** 
+     * Get status of a characteristic.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Get status of a characteristic.
+     *  ie global comparison status for this characteristics between the object in
+     *  CATIA session and the one selected on VPDM repository (@href CATIPDMCharacteristicScm ).
+     * 
+     * @return
+     *  Method return code 
+     *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param inChar
+     *  Characteristic (@href #GetCharacteristicList)
+     *
+     * @param ocStatus
+     *  List characteristics status
+     */
+      HRESULT GetCharacteristicStatus( int inChar , CATUnicodeString &amp; ocStatus ) ;
+
+   /** 
+     * Get detailed view of characteristics values.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Get detailed view of characteristics values.
+     *  ie detail comparison results for this characteristics between the object in
+     *  CATIA session and the one selected on VPDM repository (@href CATIPDMCharacteristicScm ).
+     *
+     * @return
+     *  Method return code 
+     *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param inChar
+     *  Characteristic (@href #GetCharacteristicList)
+     *
+     * @param olstCatia
+     *  List of characteristics on CATIA side
+     *
+     * @param olstPdm
+     *   List of characteristics on PDM side
+     */
+      HRESULT GetCharacteristicDetail( int inChar , CATListValCATUnicodeString &amp; olstCatia 
+                                                  , CATListValCATUnicodeString &amp; olstPdm  ) ;
+
+   /** 
+     * Test if a characteristics is already computed.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Test if a characteristics is already computed (@href CATIPDMCharacteristicScm ).
+     *
+     * @return
+     *  Method return code 
+     *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param inChar
+     *  Characteristic (@href #GetCharacteristicList)
+     *
+     * @param olComputed 
+     *  Define is this Characteristic has already been computed
+     */
+      HRESULT IsCharacteristicComputed( int inChar , int &amp; olComputed ) const ;
+
+   // -------------------------------------------
+   // --- Access to underlying CATIA object
+   // -------------------------------------------
+
+   /**
+     *  Gets underlying CATIA object.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Gets underlying CATIA object.
+     * 
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: Interface to be released by the caller.
+     *
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param oRecObj [out, CATBaseUnknown#Release]
+     *  CATIA object.
+     */
+      HRESULT GetGenericReconciliationId( CATBaseUnknown ** oRecObj ) const ;
+
+   /** @nodoc
+     *  Get access to CATIA document where this object belongs.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Get access to CATIA document where this object belongs.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;NULL &lt;/i&gt;&lt;/b&gt; if &lt;b&gt;&lt;i&gt;CATEpeObject&lt;/b&gt;&lt;/i&gt; does not rely on a CATIA object or in case of error. 
+     */
+      CATDocument * GetDocument() const ;
+
+   /**
+     * Indicates whether the given object is an encapsulation over the CATDocument or not.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Indicates whether the given object is an encapsulation over the CATDocument or not.
+     * 
+     * @return
+     * A boolean value.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;TRUE&lt;/i&gt;&lt;/b&gt; if &lt;b&gt;&lt;i&gt;Object&lt;/b&gt;&lt;/i&gt; is a document.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;FALSE&lt;/i&gt;&lt;/b&gt; otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      CATBoolean IsDocument() const ;
+
+   /**
+     * Indicates whether the given object is an encapsulation over the CATIProduct or not.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Indicates whether the given object is an encapsulation over the CATIProduct or not.
+     * 
+     * @return
+     * A boolean value.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;TRUE&lt;/i&gt;&lt;/b&gt; if &lt;b&gt;&lt;i&gt;Object&lt;/b&gt;&lt;/i&gt; is a part.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;FALSE&lt;/i&gt;&lt;/b&gt; otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      CATBoolean IsPart() const ;
+
+   /**
+     * Indicates whether the given object is a document not loaded.
+     *
+     * &lt;b&gt;Role:&lt;/b&gt; Indicates whether the given object is a document not loaded.
+     * 
+     * @return
+     * A boolean value.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;TRUE&lt;/i&gt;&lt;/b&gt; if &lt;b&gt;&lt;i&gt;Object&lt;/b&gt;&lt;/i&gt; is a document not loaded.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;FALSE&lt;/i&gt;&lt;/b&gt; otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      CATBoolean IsProxyDocument() const ;
+
+   // -------------------------------------------
+   // --- Method to enable Graph display
+   // -------------------------------------------
+
+   /**
+     * Gets Rule status of an object.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets rule status of an object among authorized status.
+     *
+     * @return
+     * Object status among authorized status.
+     */
+      CATRecStatus GetStatus() const ;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEpeNode.html">← 上一页: CATEpeNode.h</a></div>
+        <div><a href="CATEpePartVersion.html">下一页: CATEpePartVersion.h →</a></div>
+    </div>
+</body>
+</html>

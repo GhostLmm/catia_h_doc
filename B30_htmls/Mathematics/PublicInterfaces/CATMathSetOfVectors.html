@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathSetOfVectors.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathSetOfVectors.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSetOfPoints.html">← 上一页: CATMathSetOfPoints.h</a></div>
+        <div><a href="CATMathSincos.html">下一页: CATMathSincos.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathSetOfVectors_h
+#define CATMathSetOfVectors_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATMathSetOf3DObjects.h&quot;
+#include &quot;CATMathInline.h&quot;
+#include &quot;IUnknown.h&quot;
+
+
+
+/**
+ * Class representing a set of CATMathVectors.
+ *&lt;br&gt;The size is defined by a number of CATMathVectors
+ *&lt;tt&gt;NbVectors&lt;/tt&gt;. The index of the first CATMathVector is &lt;tt&gt;0&lt;/tt&gt;.
+ *&lt;br&gt;The &lt;tt&gt;SetNumberOfVectors&lt;/tt&gt; method enlarges the memory if
+ * needed, while the &lt;tt&gt;Compress&lt;/tt&gt; inherited method releases the free 
+ * unused memory.
+ */
+class ExportedByYN000MAT CATMathSetOfVectors 
+: public CATMathSetOf3DObjects
+{
+ public:
+  //---------------------------------------------------------------------------
+  //- Object Management.
+  //---------------------------------------------------------------------------
+/**
+ * Constructs an empty CATMathSetOfVectors with 0 vectors.
+ */
+  CATMathSetOfVectors();
+
+/**
+ * @nodoc
+ * @deprecated V5R20 SetVectorNumber
+ * Constructs a CATMathSetOfVectors of a given size.
+ * &lt;br&gt;The memory is allocated, but the values of the vectors are not initialized.
+ * Use &lt;tt&gt;SetVector&lt;/tt&gt; to initialize them.
+ */
+  CATMathSetOfVectors(CATLONG32 iNbVectors);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Set
+ * Constructs from an array of CATMathVectors.
+ */ 
+  CATMathSetOfVectors(CATLONG32 iNbVectors, const CATMathVector VectorsToCopy[]);
+
+/**
+ * CopyConstructor.
+ */
+  CATMathSetOfVectors(const CATMathSetOfVectors &amp; iCopiedSet);
+
+/**
+ * Destructor.
+ */
+  ~CATMathSetOfVectors();
+
+  //---------------------------------------------------------------------------
+  //- Setting and getting the vectors.
+  //---------------------------------------------------------------------------
+  /**
+  * Constructs from an array of CATMathVectors.
+  */ 
+  HRESULT Set(CATLONG32 iNbVectors, const CATMathVector VectorsToCopy[]);
+
+
+/** 
+ * Returns the number of vetors of &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfVectors. 
+ */    
+  CATLONG32 GetNumberOfVectors() const ;
+
+/** 
+  * @nodoc
+  * @deprecated V5R20 SetVectorNumber
+  * Allocates the memory for &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfVectors.
+  */
+  void SetNumberOfVectors(CATLONG32 iCountVectors);
+
+  /** 
+  * Allocates the memory for &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfVectors.
+  *@return E_FAIL if the given data is not positive, S_OK otherwise.
+  */
+  HRESULT SetVectorNumber(CATLONG32 iCountVectors);
+
+
+/**
+ * Returns the CATMathVector locating at a given index.
+ *&lt;br&gt;The index &lt;tt&gt;iIndexVector&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ *&lt;br&gt;Use preferently the second method signature if you want to avoid an
+ * useless constructor.
+ */
+  CATMathVector   GetVector(CATLONG32  iIndexVector) const;
+
+/**
+ * Retrieves the CATMathVector locating at a given index.
+ *&lt;br&gt;The index &lt;tt&gt;iIndexVector&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ */
+  void GetVector(CATLONG32 iIndexVector, CATMathVector &amp;ioVector);
+  
+/**
+ * Returns the array of CATMathVectors.
+ *&lt;br&gt;Note that the returned array is used by &lt;tt&gt;this&lt;/tt&gt; CATMathSetOfVectors and
+ * must not be deleted.
+ */
+  CATMathVector * GetVectors() const;
+
+/**
+ * Initializes the values of a CATMathVector in the CATMathSetOfVectors.
+ *&lt;br&gt;The index &lt;tt&gt;iIndexVector&lt;/tt&gt; starts at &lt;tt&gt;0&lt;/tt&gt;.
+ */
+  void SetVector(const CATMathVector &amp; iVector, CATLONG32 iIndex);
+
+/**
+ * Use now the former signature of this method.
+ */
+  void SetVector(double , double , double , CATLONG32 );
+};
+
+INLINE CATLONG32 CATMathSetOfVectors::GetNumberOfVectors() const
+{
+  return _CountDatas;
+}
+
+INLINE HRESULT CATMathSetOfVectors::SetVectorNumber(CATLONG32 iCountVectors)
+{
+	 HRESULT IsOK = SetNumberOf3DElements(iCountVectors);
+	return IsOK;
+}
+#include &quot;CATMathAbstractSetOfVectors.h&quot;
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSetOfPoints.html">← 上一页: CATMathSetOfPoints.h</a></div>
+        <div><a href="CATMathSincos.html">下一页: CATMathSincos.h →</a></div>
+    </div>
+</body>
+</html>

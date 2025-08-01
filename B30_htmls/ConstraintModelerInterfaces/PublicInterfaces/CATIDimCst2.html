@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstraintModelerInterfaces/PublicInterfaces/CATIDimCst2.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ConstraintModelerInterfaces/PublicInterfaces/CATIDimCst2.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICstData.html">← 上一页: CATICstData.h</a></div>
+        <div><a href="CATLISTV_CATICst.html">下一页: CATLISTV_CATICst.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2005
+//===================================================================
+#ifndef CATIDimCst2_H
+#define CATIDimCst2_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATConstraintModelerItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATConstraintModelerItf IID IID_CATIDimCst2;
+#else
+extern &quot;C&quot; const IID IID_CATIDimCst2 ;
+#endif
+
+
+/**
+ * Interface to manage constraints and parameters visualization.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface unifies behaviors of constraints 
+ * and features&#x27; parameters for visualization purpose.
+ */
+class ExportedByCATConstraintModelerItf CATIDimCst2: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+   * Gets the callout anchor point and the normal to dimension plane.
+   * (Necessary to create a 3D manipulator).
+   * Allows users to get the position of the constraint.
+   * @param oCallout 
+   *  coordinates of the callout in an array of 3 doubles.
+   * @param oNorm  
+   *  coordinates of the normal to dimension plane in an array of 3 doubles.
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt;on success
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;on failure
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetCalloutPositionForDimension3d( double * oCallout, double * oNorm ) const = 0;			
+   
+  /**
+   * Sets the callout position for 3D dimension.
+   * Throws &lt;tt&gt;GeometricalException&lt;/tt&gt;.
+   * Allows users to choose a position for the constraint.  
+   * @param iCallout 
+   *  coordinates of the callout as an array of 3 doubles.
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt;on success
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;on failure
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT SetCalloutPositionForDimension3d( double * iCallout ) const = 0;			
+   
+   /**
+   * Constraint display mode.
+   * The mode is used as input parameter in @href #SetDisplayMode
+   * and as output parameter in @href #GetDisplayMode
+   * @param DisplayValue
+   *    The text of the constraint is displayed as its value.
+   * @param DisplayName 
+   *    The text of the constraint is displayed as its name.
+   * @param DisplayNameAndValue 
+   *    The text of the constraint is displayed as its name = value.
+   * @param DisplayNameAndValueAndFormula 
+   *    The text of the constraint is displayed as its name = value - formula.
+   */
+   enum DisplayMode
+   {
+     DisplayValue = 1, 
+     DisplayName = 4, 
+     DisplayNameAndValue = 2, 
+     DisplayNameAndValueAndFormula = 3 
+   };
+
+  /** 
+   * Gets the display mode of the constraint.
+   * @param oDisplayMode
+   * &lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;br&gt;&lt;tt&gt;DisplayValue :&lt;/tt&gt;   The text of the constraint is displayed as its value.
+   * &lt;br&gt;&lt;tt&gt;DisplayName :&lt;/tt&gt;   The text of the constraint is displayed as its name.
+   * &lt;br&gt;&lt;tt&gt;DisplayNameAndValue :&lt;/tt&gt;   The text of the constraint is displayed as its name = value.
+   * &lt;br&gt;&lt;tt&gt;DisplayNameAndValueAndFormula :&lt;/tt&gt;   The text of the constraint is displayed as its name = value - formula.
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt;on success
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;on failure
+   * &lt;/dl&gt;
+   */ 
+   virtual HRESULT GetDisplayMode( DisplayMode &amp; oDisplayMode ) const = 0;
+
+  /** 
+   * Sets the display mode of the constraint. 
+   * @param iDisplayMode
+   * &lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;br&gt;&lt;tt&gt;DisplayValue :&lt;/tt&gt;   The text of the constraint is displayed as its value.
+   * &lt;br&gt;&lt;tt&gt;DisplayName :&lt;/tt&gt;   The text of the constraint is displayed as its name.
+   * &lt;br&gt;&lt;tt&gt;DisplayNameAndValue :&lt;/tt&gt;   The text of the constraint is displayed as its name = value.
+   * &lt;br&gt;&lt;tt&gt;DisplayNameAndValueAndFormula :&lt;/tt&gt;   The text of the constraint is displayed as its name = value - formula.
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt;on success
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;on failure
+   * &lt;/dl&gt;
+   */ 
+   virtual HRESULT SetDisplayMode( const DisplayMode iDisplayMode) = 0;
+
+};
+
+CATDeclareHandler(CATIDimCst2, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICstData.html">← 上一页: CATICstData.h</a></div>
+        <div><a href="CATLISTV_CATICst.html">下一页: CATLISTV_CATICst.h →</a></div>
+    </div>
+</body>
+</html>

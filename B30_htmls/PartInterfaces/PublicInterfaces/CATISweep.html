@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATISweep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATISweep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISuSplit.html">← 上一页: CATISuSplit.h</a></div>
+        <div><a href="CATISweepLimit.html">下一页: CATISweepLimit.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISweep_H
+#define CATISweep_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIShape.h&gt;
+#include &lt;CATPrtEnum.h&gt;
+class CATMathDirection;
+class CATUnicodeString;
+class CATISpecObject_var;
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATISweep;
+#else
+extern &quot;C&quot; const IID IID_CATISweep;
+#endif
+
+
+/**
+ * Class to manage sweep object.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface is the base object for rib and slot
+ * features.
+ * @see CATIShape
+ */
+class ExportedByPartItf CATISweep : public CATIShape
+{
+  CATDeclareInterface;
+  
+public:
+/**
+* Sets sweep profile.
+* @param ihProfile
+*   Sweep profile.
+*&lt;br&gt;The profile is swept along the centercurve. 
+*&lt;br&gt;Profile is represented by a sketch.
+  */   
+  virtual void  SetProfile (const CATISpecObject_var ihProfile)                 = 0;
+  
+  /**
+  * Sets sweep centercurve.
+  * @param ihCenterCurve
+  *   Sweep centercurve.
+  *&lt;br&gt;The profile is swept along this centercurve. 
+  *&lt;br&gt;Centercurve is represented by a sketch.
+  */   
+  virtual void  SetCenterCurve (const CATISpecObject_var ihCenterCurve)         = 0;
+  
+  /**
+  * Sets sweep referencesurface.
+  * @param ihRefSurf
+  *   Sweep reference surface.
+  *&lt;br&gt;Reference surface is used to define profile orientation.
+  *&lt;br&gt;By default profile is oriented with keep angle mode.
+  *&lt;br&gt;Centercurve must lay down reference surface.
+  */   
+  virtual void  SetReferenceSurface (const CATISpecObject_var ihRefSurf)        = 0;
+  
+  /** 
+  * @nodoc 
+  */
+  virtual void  SetLimit (CATPrtLimitName iName, const CATUnicodeString &amp;iType) = 0;
+  
+  /**
+  * Sets sweep pulling direction.
+  * @param iMathDir
+  *   Sweep pulling direction.
+  *&lt;br&gt;Pulling direction is used to define profile orientation.
+  *&lt;br&gt;By default profile is oriented with keep angle mode.
+  */   
+  virtual void  SetPullingDirection (const CATMathDirection iMathDir)           = 0;
+  
+  /**
+  * Sets sweep pulling direction.
+  * @param ihDirection
+  *   Sweep pulling direction.
+  *&lt;br&gt;Pulling direction is used to define profile orientation.
+  *&lt;br&gt;By default profile is oriented with keep angle mode.
+  */   
+  virtual void  SetPullingDirection (const CATISpecObject_var ihDirection)            = 0;
+  
+  /**
+  * Resets pulling direction.
+  */   
+  virtual void  UnsetPullingDirection ()                                        = 0;
+  
+  /**
+  * Returns sweep profile.
+  */   
+  virtual CATISpecObject_var  GetProfile ()                               const = 0;
+  
+  /**
+  * Returns sweep centercurve.
+  */   
+  virtual CATISpecObject_var  GetCenterCurve ()                           const = 0;
+  
+  /**
+  * Returns sweep reference surface.
+  */   
+  virtual CATISpecObject_var  GetReferenceSurface ()                      const = 0;
+  
+  /** @nodoc */
+  virtual CATUnicodeString    GetLimit (const CATPrtLimitName iName)      const = 0;
+  
+  /**
+  * Returns sweep pulling direction.
+  * @param iMathDir
+  *   Sweep pulling direction.
+  */   
+  virtual void  GetPullingDirection (CATMathDirection &amp;iMathDir)          const = 0;
+  
+  /**
+  * Returns sweep pulling direction.
+  * @param ihDirection
+  *   Sweep pulling direction.
+  */
+  virtual void  GetPullingDirection (CATISpecObject_var &amp;ihDirection)     const = 0;
+  
+  /**
+  * Returns if the sweep has a pulling direction.
+  * &lt;br&gt; If no pulling direction: returns FALSE.
+  * &lt;br&gt; If pulling direction:    returns TRUE.
+  */
+  virtual CATBoolean HasPullingDirection ()                                  const = 0;
+  
+  /**
+  * Returns the parameter links to the first thickness of a thin sweep.
+  * @return
+  *   The parameter.
+  */
+  virtual void GetThickThin1     (CATICkeParm_var &amp; oThickParm) = 0;
+  
+  /**
+  * Returns the value of the first thickness of a thin sweep.
+  * @return
+  *   The value.
+  */
+  virtual void GetThickThin1    (double &amp; oThick) = 0;
+  
+  /**
+  * Sets the value of the first thickness of a thin sweep.
+  */
+  virtual void SetThickThin1   (const double iThick) = 0;
+  
+  /**
+  * Returns the parameter links to the second thickness of a thin sweep.
+  * @return
+  *   The parameter.
+  */
+  virtual void GetThickThin2    (CATICkeParm_var &amp; oThickParm) = 0;
+  
+  /**
+  * Returns the value of the second thickness of a thin sweep.
+  * @return
+  *   The value.
+  */
+  virtual void GetThickThin2    (double &amp; oThick) = 0;
+  
+  /**
+  * Sets the value of the second thickness of a thin sweep.
+  */
+  virtual void SetThickThin2   (const double iThick)= 0;
+  
+  /**
+  * Returns the neutral fiber status for a thin sweep.
+  * @return
+  *  = 0 neutral fiber inactivated 
+  *  = 1 neutral fiber activated
+  */
+  virtual void GetNeutralFiber    (int &amp; oNeutralFiber) = 0;
+  
+  /**
+  * Sets the neutral fiber status for a thin sweep.
+  *  = 0 neutral fiber inactivated 
+  *  = 1 neutral fiber activated
+  */
+  virtual void SetNeutralFiber    (const int iNeutralFiber) = 0;
+  
+  /**
+  * Returns the lateral relimitation status for a thin sweep.
+  * @return
+  *  = 0 no lateral relimitation 
+  *  = 1 lateral relimitation
+  */
+  virtual void GetMergeThin    (int &amp; oMergeThin) = 0;
+  
+  /**
+  * Sets the lateral relimitation status for a thin sweep.
+  *  = 0 no lateral relimitation 
+  *  = 1 lateral relimitation
+  */ 
+  virtual void SetMergeThin    (const int iMergeThin) =0;
+  
+  /**
+  * Returns the thin status for a sweep.
+  * @return
+  *  = 0 prism not thin 
+  *  = 1 prism thin 
+  */
+  virtual void GetThinCheck    (int &amp; oThinCheck)= 0;
+  
+  /**
+  * Sets the thin status for a sweep.
+  *  = 0 prism not thin 
+  *  = 1 prism thin 
+  */
+  virtual void SetThinCheck    (const int iThinCheck) = 0;
+  
+  /**
+  * Returns the twist reduction status for a sweep.
+  * @return
+  *  = TRUE twist reduction activated 
+  *  = FALSE twist reduction non activated 
+  */
+  virtual void GetTwistReductionFlag (boolean &amp;oTwistReduction) = 0;
+
+  /**
+  * Sets the twist reduction status for a sweep.
+  *  = TRUE twist reduction activated 
+  *  = FALSE twist reduction non activated 
+  */
+  virtual void SetTwistReductionFlag (boolean iTwistReduction) = 0;
+  
+  /**
+  * Returns the parameter links to the offset if twist reduction is activated.
+  * @return
+  *   The parameter.
+  */
+  virtual void GetTwistReductionOffset (CATICkeParm_var &amp; oOffsetParm) = 0;
+
+  /**
+  * Returns the value of the offset if twist reduction is activated.
+  * @return
+  *   The value.
+  */
+  virtual void GetTwistReductionOffset    (double &amp; oOffset) = 0;
+  
+  /**
+  * Sets the value of the offset if twist reduction is activated.
+  */
+  virtual void SetTwistReductionOffset   (const double iOffset)= 0;
+};
+
+CATDeclareHandler(CATISweep, CATIShape);
+
+#endif // CATISweep_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISuSplit.html">← 上一页: CATISuSplit.h</a></div>
+        <div><a href="CATISweepLimit.html">下一页: CATISweepLimit.h →</a></div>
+    </div>
+</body>
+</html>

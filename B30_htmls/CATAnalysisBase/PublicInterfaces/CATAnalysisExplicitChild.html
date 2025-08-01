@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitChild.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitChild.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitCharac.html">← 上一页: CATAnalysisExplicitCharac.h</a></div>
+        <div><a href="CATAnalysisExplicitData.html">下一页: CATAnalysisExplicitData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitChild 
+//
+//=============================================================================
+//
+// Usage Notes: Services linked to the field model objects which can be children
+//              of entities or sets.
+//
+//=============================================================================
+// Octobre 99   Creation                                                    LBK
+//=============================================================================
+#ifndef CATAnalysisExplicitChild_H_
+#define CATAnalysisExplicitChild_H_
+
+#include &quot;CATAnalysisExplicitData.h&quot;
+
+class CATAnalysisExplicitList ;
+class CATAnalysisExplicitGrNode ;
+class CATMathVector;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Field model child.
+ * This object is used to provide services common to all objects of the field model
+ * which can be children of entities or sets.
+ */
+class ExportedByCATSAM0Explicit CATAnalysisExplicitChild : public CATAnalysisExplicitData
+{
+   public :
+/**
+ * Default constructor.
+ */
+      CATAnalysisExplicitChild() ;
+
+/**
+ * Copy constructor.
+ */
+      CATAnalysisExplicitChild(const CATAnalysisExplicitChild &amp;iChild) ;
+
+/**
+ * Copy constructor.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitChild(const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Assignment operator.
+ */
+      CATAnalysisExplicitChild &amp;operator = (const CATAnalysisExplicitChild &amp;iChild) ;
+
+/**
+ * Assignment operator.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitChild &amp;operator = (const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Deletes from the field model the object pointed to by the current object.
+ */
+      virtual HRESULT Delete() ;
+
+/**
+ * Deletes from the field model the object pointed to by the current object.
+ * @param really
+ *   if Really = TRUE, the child is really destroyed.
+ */
+      virtual HRESULT Delete(CATBoolean really) ;
+
+/**
+ * Delete from the field model the object pointed to by the current object.
+ */
+      virtual HRESULT UnDelete() ;
+
+/**
+ * Assigns a new physical type.
+ * @param iPhysicalType
+ *   The new physical type.&lt;br&gt;
+ *   This new physical type must not change the field model object type
+ *   (ie set, entity or characteristic).
+ */
+      HRESULT SetPhysicalType(CATSamPhysicalType iPhysicalType) const ;
+
+/**
+ * Assigns a solver name.&lt;br&gt;
+ * A solver name is a string used by a particular solver to identify data.
+ * @param iSolverName
+ *   The string representing the solver name.
+ */
+      HRESULT SetSolverName(const char *iSolverName) const ;
+
+/**
+ * @deprecated V5R17
+ * Stores an external pointer (ie the pointer to an object which does not belong to the field model).&lt;br&gt;
+ * &lt;b&gt;Note that an object has either an external pointer or an external tag but not both.&lt;/b&gt;
+ * @param iExternalPointer
+ *   The pointer to store.
+ */
+      HRESULT SetExternalPointer(const void *iExternalPointer) const ;
+
+/**
+ * @deprecated V5R17
+ * Stores an external tag (ie the tag of an object which does not belong to the field model).&lt;br&gt;
+ * &lt;b&gt;Note that an object has either an external pointer or an external tag but not both.&lt;/b&gt;
+ * @param iExternalTag
+ *   The tag to store.
+ */
+      HRESULT SetExternalTag(CATINT32 iExternalTag) const ;
+
+/**
+ * Assigns a sequential number.&lt;br&gt;
+ * A sequential number is a number indicating the position of a data in a list.
+ * @param iSequentialNumber
+ *   The sequential number.
+ */
+      HRESULT SetSequentialNumber(int iSequentialNumber) const ;
+
+/**
+ * Retrieves the physical type.
+ * @param oPhysicalType
+ *   The physical type number in database of rules.
+ */
+      HRESULT GetPhysicalType(CATSamPhysicalType &amp;oPhysicalType) const ;
+
+/**
+ * Retrieves the physical type.
+ * @param oIdentity
+ *   The physical type identity.
+ */
+      HRESULT GetPhysicalType(const char *(&amp;oIdentity)) const ;
+
+/**
+ * Retrieves the physical type.
+ * @param oString
+ *   The physical type NLS string.
+ */
+      HRESULT GetPhysicalType(CATUnicodeString &amp;oString) const ;
+
+/**
+ * Retrieves the solver name.&lt;br&gt;
+ * A solver name is a string used by a particular solver to identify data.
+ * @param oSolverName
+ *   The string representing the solver name.
+ */
+      HRESULT GetSolverName(const char *(&amp;oSolverName)) const ;
+
+/**
+ * Retrieves the status.&lt;br&gt;
+ * @param oStatus
+ *   The status of the field model object.
+ * @see CATSamStatus
+ */
+      HRESULT GetStatus(int &amp;oStatus) const ;
+
+/**
+ * @deprecated V5R17
+ * Retrieves the external pointer (ie the pointer to an object which does not belong to the field model).&lt;br&gt;
+ * &lt;b&gt;Note that an object has either an external pointer or an external tag but not both.&lt;/b&gt;
+ * @param oExternalPointer
+ *   The pointer.
+ */
+      HRESULT GetExternalPointer(void *(&amp;oExternalPointer)) const ;
+
+/**
+ * @deprecated V5R17
+ * Retrieves the external tag (ie the tag of an object which does not belong to the field model).&lt;br&gt;
+ * &lt;b&gt;Note that an object has either an external pointer or an external tag but not both.&lt;/b&gt;
+ * @param oExternalTag
+ *   The tag.
+ */
+      HRESULT GetExternalTag(CATINT32 &amp;oExternalTag) const ;
+
+/**
+ * Obtains the list of parents of the field model object.
+ * @param oParentList
+ *   The parent list.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT GetParentList(CATAnalysisExplicitList &amp;oParentList) const ;
+
+/**
+ * Obtains the array of pointers to the parents.
+ * @param oNumber
+ *   The number of parents.
+ * @param oParents[oNumber]
+ *   The array of pointers to the parents.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param iFilter
+ *   Indicates which type of parent should be obtained.&lt;br&gt;
+ *   If &lt;b&gt;CATSamDataTypeLast&lt;/b&gt; is provided, then all parents are obtained.
+ * @see CATSamDataType
+ */
+      HRESULT GetParents(int &amp;oNumber, CATSamExplicitPtr * &amp;oParents,
+         CATSamDataType iFilter = CATSamDataTypeLast) const ;
+
+/**
+ * Adds one parent to the current field model object.
+ * @param iParent
+ *   The parent to be added.
+ * &lt;b&gt;Note : &lt;/b&gt;The parent of a set can not be an entity.
+ * @see CATAnalysisExplicitParent
+ */
+      HRESULT AddParent(const CATAnalysisExplicitParent &amp;iParent) const ;
+
+/**
+ * Adds several parents to the current field model object.
+ * @param iParents
+ *   The list of parents to be added.
+ * &lt;b&gt;Note : &lt;/b&gt;The parents of a set can not be entities.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT AddParents(CATAnalysisExplicitList &amp;iParents) const ;
+
+/**
+ * Removes one parent from the current field model object.
+ * @param iParent
+ *   The parent to be removed.
+ * @see CATAnalysisExplicitParent
+ */
+      HRESULT RemoveParent(const CATAnalysisExplicitParent &amp;iParent) const ;
+
+/**
+ * Removes several parents from the current field model object.
+ * @param iParents
+ *   The list of parents to be removed.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT RemoveParents(CATAnalysisExplicitList &amp;iParents) const ;
+
+/**
+ * Retrieves the tag.
+ * @param oTag
+ *   The tag.
+ */
+      HRESULT GetTag(int &amp;oTag) const ;
+
+/**
+ * Retrieves a sequential number.&lt;br&gt;
+ * A sequential number is a number indicating the position of a data in a list.
+ * @param oSequentialNumber
+ *   The sequential number.
+ */
+      HRESULT GetSequentialNumber(int &amp;oSequentialNumber) const ;
+
+/**
+ * Links the current object with a field model object based on its tag (ie unique identifier).
+ * @param iTag
+ *   The tag of the field model object.
+ * @param iModel
+ *   A pointer to the field model.
+ * @see CATAnalysisExplicitModel
+ */
+      virtual HRESULT LinkWithTag(int iTag, const CATAnalysisExplicitModel *iModel) ;
+
+/**
+ * Obtains a pointer to the field model object the current object points to.
+ * @param oExplicitPtr
+ *   The field model object pointer.
+ */
+      void GetPointer(CATSamExplicitPtr &amp;oNewExplicitPtr) const ;
+
+/**
+ * Links the current object with a field model object based on its pointer.
+ * &lt;ul&gt;
+ * &lt;li&gt; iModel can be set to NULL or to the model used for the object creation. Use GetModel to retreive it.&lt;/li&gt;
+ * &lt;li&gt; iModel can be set to another model that reference the model used for object creation. Use GetContextModel to retreive this new explicit model or
+ *       GetModel to retreive the model used for the object creation. &lt;/li&gt;&lt;/ul&gt;
+ * @param iExplicitPtr  The pointer to the field model object.
+ * @param iModel   A pointer to the field model.
+ * @see CATAnalysisExplicitModel
+ */
+      HRESULT LinkWithPointer(const CATSamExplicitPtr&amp; iExplicitPtr, const CATAnalysisExplicitModel *iModel) ;
+
+   protected :
+      virtual void    Reset() ;
+      virtual HRESULT Init(const CATAnalysisExplicitData &amp;iData) ;
+
+    private :
+      // Friend Class for Private Methods
+      friend class CATAnalysisExplicitSet;
+      friend class CATAnalysisExplicitAxis;
+      friend class CATAnalysisExplicitData;
+      friend class CATAnalysisExplicitNode;
+      friend class CATAnalysisExplicitList;
+      friend class CATAnalysisExplicitSearch;
+      friend class CATAnalysisExplicitParent;
+      friend class CATAnalysisExplicitEntity;
+      friend class CATAnalysisExplicitCharac;
+      friend class CATAnalysisExplicitElement;
+      friend class CATAnalysisExplicitListATo;
+      friend class CATAnalysisCharacCollector;
+      friend class CATAnalysisExplicitServices;
+      friend class CATAnalysisExplicitRulesData;
+      friend class CATAnalysisExplicitVirtualNode;
+      friend class CATAnalysisExplicitVirtualElement;
+
+      // Apply the transformation matrix to the coordinates in context of assembly.
+      // @param ioCoordinates : The coordinates in meters to transform.
+      HRESULT ApplyTransformationOnCoord(double* ioCoordinates) const;
+      // Apply the transformation matrix to the coordinates in context of assembly.
+      // @param ioCoordinates : The coordinates in meters to transform.
+      HRESULT ApplyTransformationOnCoord(float* ioCoordinates) const;
+      // Apply the transformation matrix to a vector in context of assembly.
+      // @param ioVector : The vector to transform.
+      HRESULT ApplyTransformationOnVector(CATMathVector&amp; ioVector)const;
+
+      // Assigns a status.&lt;br&gt;
+      // @param iStatus
+      // The status of the field model object.
+      // @see CATSamStatus
+      HRESULT SetStatus(int iStatus, CATBoolean iCheckDisplayed = TRUE) const ;
+      // Adds a flag to the status.&lt;br&gt;
+      // @param iFlag : The flag to add.
+      HRESULT AddFlag(CATSamStatus iFlag, CATBoolean iCheckDisplayed = TRUE) const ;
+      // Removes a flag to the status.&lt;br&gt;
+      // @param iFlag : The flag to remove.
+      HRESULT RemoveFlag(CATSamStatus iFlag, CATBoolean iCheckDisplayed = TRUE) const ;
+
+      // retrieves the category of the object.
+      // @param oCategory : The category of the object.
+      HRESULT UnSafeGetCategory(CATSamValue &amp;oCategory) const ;
+      // UnSafeGetPointedObject
+      HRESULT UnSafeGetPointedObject(CATAnalysisExplicitChild&amp; oPointedObject) const;
+      // Check if this is a Proxy
+      CATBoolean UnSafeIsProxy() const;
+
+      // Proxy ExternalPointer
+      HRESULT SetProxyExternalPointer(const void *iExternalPointer) const ;
+      HRESULT GetProxyExternalPointer(void *(&amp;oExternalPointer)) const ;
+
+      // Check, UnCheck, UnCheck
+      HRESULT Check();
+      HRESULT UnCheck();
+      CATBoolean IsChecked() const;
+
+      // Uses the rules of the current field model to check the validity of the current field model object.
+      // @param oList : A user list containing the offending object followed by the objects recursively traversed and ending by the current object.
+      //                      This parameter is allocated by this method and must be deleted by the caller.
+      // @param Check : This parameter specifies the check mode.
+      HRESULT CheckValidity(CATAnalysisExplicitListUsr &amp;oList, const int Check = CATSamCheckTypeAll) const ;
+      // Scans the current model from the current object to check it is not cyclic.
+      // @param oList : A user list containing the offending object followed by the objects recursively traversed and ending by the current object.
+      //                This parameter is allocated by this method and must be deleted by the caller.
+      HRESULT CheckCyclicity(CATAnalysisExplicitListUsr &amp;oList) const ;
+
+      void GetPointer(Handler(CATSamModelDataRoot) &amp;oNewExplicitHandler) const;
+      HRESULT LinkWithPointer(const Handler(CATSamModelDataRoot)&amp; iExplicitHanlder, const CATAnalysisExplicitModel *iModel);
+      
+      HRESULT GetTag(CATSamExplicitTag &amp;oTag) const ;
+      virtual HRESULT LinkWithTag(const CATSamExplicitTag &amp;iTag, const CATAnalysisExplicitModel *iModel) ;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitCharac.html">← 上一页: CATAnalysisExplicitCharac.h</a></div>
+        <div><a href="CATAnalysisExplicitData.html">下一页: CATAnalysisExplicitData.h →</a></div>
+    </div>
+</body>
+</html>

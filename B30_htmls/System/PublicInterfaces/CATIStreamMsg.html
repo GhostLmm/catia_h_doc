@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATIStreamMsg.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATIStreamMsg.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIScriptMethodCall.html">← 上一页: CATIScriptMethodCall.h</a></div>
+        <div><a href="CATIStringList.html">下一页: CATIStringList.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIStreamMsg_H
+#define CATIStreamMsg_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &lt;IUnknown.h&gt;
+#include &quot;CATMessageClass.h&quot;
+#include &quot;CATSysCommunication.h&quot;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern   ExportedByCATSysCommunication   IID IID_CATIStreamMsg;
+#else
+extern &quot;C&quot; const IID IID_CATIStreamMsg;
+#endif
+
+/**
+ * Interface to stream and unstream backbone messages.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface must be implemented by backbone messages
+ * to enable their streaming and unstreaming.
+ * &lt;p&gt;
+ * If your message contains simple data types, use the methods of 
+ * the @href CATIBBStreamer interface implemented by the @href CATBBMessage 
+ * component.
+ */
+class ExportedByCATSysCommunication CATIStreamMsg : public CATBaseUnknown
+
+{
+  CATDeclareInterface;
+  public:
+  /**
+   * Unstreams a backbone message.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A message sent to the backbone bus is streamed.
+   * This method allows you to unstream it.
+   * If the message contains simple data types,
+   * you can use the @href CATIBBStreamer interface to unstream them.
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;b&gt;Example&lt;/b&gt;:
+   * &lt;dd&gt;
+   * This example implements &lt;tt&gt;UnstreamData&lt;/tt&gt; to unstream a received backbone message.
+   * &lt;pre&gt;
+   * HRESULT UnstreamData(void *iBuffer, uint32 iLength)
+   * {
+   *   ...
+   *   CATIBBStreamer * pICATIBBStreamer = NULL;
+   *   HRESULT rc = QueryInterface(IID_CATIBBStreamer,(void**)&amp;pICATIBBStreamer);
+   *   // unstream simple data types
+   *   if ( SUCCEEDED(rc) )
+   *   {
+   *     // Begin by this instruction 
+   *     pICATIBBStreamer-&gt;BeginUnstream(iBuffer, iLength);
+   *
+   *	 // Unstream message data (in the same order as when streaming)
+   *     // according to its type 
+   *	 // -----------------------------------------------------------
+   *     pICATIBBStreamer-&gt;UnstreamFloat(..); 
+   *     pICATIBBStreamer-&gt;UnstreamInt(..); 
+   *	 ...
+   *     // --------------------------
+   *     // End by this instruction 
+   *     pICATIBBStreamer-&gt;EndUnstream();
+   *
+   *     pICATIBBStreamer-&gt;Release();
+   *     pICATIBBStreamer = NULL;
+   *   }
+   *   ...  // unstream other data
+   * }
+   * &lt;/pre&gt;
+   * &lt;/dd&gt;
+   * &lt;/dl&gt;
+   * @param iBuffer
+   *   The buffer containing the raw data to unstream
+   * @param iLength
+   *   The length of &lt;tt&gt;iBuffer&lt;/tt&gt; expressed in bytes
+   */
+  virtual HRESULT UnstreamData( void *iBuffer, uint32 iLength)=0;
+
+
+  /**
+   * Streams a backbone message.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To send a message to the backbone bus, the message must be
+   * first streamed. 
+   * If the message contains simple data types,
+   * you can use the @href CATIBBStreamer interface to stream them.
+   * Once the message is sent, use @href #FreeStreamData to free the buffer containing
+   * the streamed message.
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;b&gt;Example&lt;/b&gt;:
+   * &lt;dd&gt;
+   * This example implements &lt;tt&gt;StreamData&lt;/tt&gt; to stream a backbone message.
+   * &lt;pre&gt;
+   * HRESULT StreamData( void **oBuffer, uint32 *oLength)
+   * {
+   *   ...
+   *   CATIBBStreamer * pICATIBBStreamer = NULL ;
+   *   HRESULT rc = QueryInterface(IID_CATIBBStreamer,(void**)&amp;pICATIBBStreamer);
+   *   // stream simple data types
+   *   if ( SUCCEEDED(rc) )
+   *   {
+   *     // Begin by this instruction 
+   *     pICATIBBStreamer-&gt;BeginStream();
+   *
+   *     // Stream each message data according to its type
+   *     // ----------------------------------------------
+   *     pICATIBBStreamer-&gt;StreamFloat(..); 
+   *     pICATIBBStreamer-&gt;StreamInt(..); 
+   *
+   *     // End by these 3 instructions 
+   *     int Length; 
+   *     *oBuffer = pICATIBBStreamer-&gt;EndStream(&amp;Length);
+   *     *oLength = Length ;
+   *
+   *     pICATIBBStreamer-&gt;Release();
+   *     pICATIBBStreamer = NULL;
+   *     }
+   *	 ... // stream other data and update oLength
+   *  }
+   *  &lt;/pre&gt;
+   *  &lt;/dd&gt;
+   *  &lt;/dl&gt;
+   *  @param oBuffer
+   *     This buffer, to be allocated, contains all the streamed data 
+   *  @param oLength
+   *     The length of &lt;tt&gt;oBuffer&lt;/tt&gt; expressed in bytes
+   */
+  virtual HRESULT StreamData( void **oBuffer, uint32 *oLength)=0;
+
+
+  /**
+   * Frees the backbone message streaming buffer.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Any backbone message sent uses a buffer allocated by the @href #StreamData method.
+   * This buffer must be freed as soon as the message is sent.
+   * If your message contains simple data types,
+   * you can use the @href CATIBBStreamer interface to free them.
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;b&gt;Example&lt;/b&gt;:
+   * &lt;dd&gt;
+   * This example implements &lt;tt&gt;FreeStreamData&lt;/tt&gt; to free the buffer containing a streamed backbone message.
+   * &lt;pre&gt;
+   * HRESULT FreeStreamData(void *Buffer, uint32 iLength)
+   * {
+   *   ...
+   *   CATIBBStreamer * pICATIBBStreamer = NULL ;
+   *   HRESULT rc = QueryInterface(IID_CATIBBStreamer,(void**)&amp;pICATIBBStreamer);
+   *   if ( SUCCEEDED(rc) )
+   *   {
+   *     pICATIBBStreamer-&gt;ResetStreamData();  // free simple data types at once
+   *
+   *     pICATIBBStreamer-&gt;Release();
+   *     pICATIBBStreamer = NULL ;
+   *   }
+   *   ... // free other data 
+   * }
+   * &lt;/pre&gt;
+   * &lt;/dd&gt;
+   * &lt;/dl&gt;
+   * @param iBuffer
+   *   The buffer to be freed.
+   *   It was created by the @href #StreamData method 
+   * @param iLength
+   *   The &lt;tt&gt;iBuffer&lt;/tt&gt; length expressed in bytes
+   */
+  virtual HRESULT FreeStreamData( void *Buffer, uint32 iLength)=0;
+
+
+  /**
+   * Sets backbone message class name and options.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use the @href CATICommMsg interface to set 
+   * options and class message name. The class name of the message is mandatory, but for
+   * specifiers, if you precise anything your message is without answer 
+   * and received by all destinator application ( @href CATMessageSpecifiers )
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;b&gt;Example&lt;/b&gt;:
+   * &lt;dd&gt;
+   * This example implements &lt;tt&gt;SetMessageSpecifications&lt;/tt&gt;
+   * &lt;pre&gt;
+   * HRESULT SetMessageSpecifications()
+   * {
+   *   ...
+   *   CATICommMsg * pICATICommMsg = NULL;
+   *   HRESULT rc = QueryInterface(IID_CATICommMsg,(void**)&amp;pICATICommMsg);
+   *  
+   *   if ( SUCCEEDED(rc) )
+   *   {
+   *     // To set the message class name (mandatory)
+   *     // MessageClassName is the name of the component. 
+   *     pICATICommMsg-&gt;SetMessageClass(MessageClassName);
+   *
+   *     // To set options (if necessary)
+   *     pICATICommMsg-&gt;SetMessageSpecifiers(..|..|..);
+   *
+   *     pICATICommMsg-&gt;Release();
+   *     pICATICommMsg = NULL;
+   *   }
+   * }
+   * &lt;/pre&gt;
+   * &lt;/dd&gt;
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT SetMessageSpecifications()=0;
+};
+
+/**
+ * @nodoc
+ * Declaration of the handler class  for CATIStreamMsg : CATIStreamMsg_var
+ */
+CATDeclareHandler( CATIStreamMsg, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIScriptMethodCall.html">← 上一页: CATIScriptMethodCall.h</a></div>
+        <div><a href="CATIStringList.html">下一页: CATIStringList.h →</a></div>
+    </div>
+</body>
+</html>

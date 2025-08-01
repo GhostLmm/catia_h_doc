@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmObjectOperation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmObjectOperation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmObjectLock.html">← 上一页: CATIVpmObjectLock.h</a></div>
+        <div><a href="CATIVpmObjectPool.html">下一页: CATIVpmObjectPool.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIVpmObjectOperation_H
+#define CATIVpmObjectOperation_H
+//  COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U6
+ */
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+//
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIVpmObjectOperation ;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmObjectOperation ;
+#endif
+/**
+ * A Graph operation.
+ * An operation is a transition from one state of the lifecycle graph to another.
+ */
+class ExportedByGUIDVPMInterfaces CATIVpmObjectOperation: public CATBaseUnknown 
+{
+	//
+	CATDeclareInterface;
+	//
+	public:
+	/**
+	 * Run the user Condition related to a terminal.
+	 * @param iConditionName
+	 * 	name of the condition to evaluate
+	 * 	@param iGraphPredicatList
+	 * 	list of graph predicate used to evaluate the condition
+	 * 	@param iObject
+	 * 	the object whose lifecycle is controlled by the graph, the condition 
+	 * 	evaluation will be done relative to this object
+	 *	@param iSimulateMode
+	 * iSimulateMode  = 0  -&gt;  the system could be modify by the evaluating the
+	 * 							condition
+	 * iSimulateMode  &gt; 0  -&gt;  the simulate mode is activated the system 
+	 * 							will not be modified by evaluating the condition 
+
+	 *
+	 * 
+	 * @return
+	 * An HRESULT value.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;
+	 *     &lt;dt&gt;S_OK&lt;/dt&gt;
+	 *     &lt;dd&gt;the condition is true&lt;/dd&gt;
+	 *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+	 *     &lt;dd&gt;the condition is false&lt;/dd&gt;
+	 *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+	 *     &lt;dd&gt;Unknown internal error&lt;/dd&gt;
+	 *   &lt;/dl&gt;
+	 */ 
+	virtual HRESULT  RunUserCondition 
+		( const CATUnicodeString&amp;              iConditionName     ,
+		  const CATLISTV(CATBaseUnknown_var)&amp;  iGraphPredicatList ,
+		  const CATBaseUnknown_var&amp;            iObject            ,
+		  const long&amp;                          iSimulateMode  ) const = 0;
+
+
+	/**
+	* Runs the user command related to a terminal.
+	*
+	*@param iOperationName
+	*	name of the operation to run.
+	*@param iCommandName
+	*	name of the command to run.
+	*	@param iCommandPredicateList
+	*	list of command predicate
+	*	@param iCommandParameters
+	*	list of command parameters
+	*	@param iConditionName
+	*	name of the condition
+	*	@param iConditionPredicatList
+	*	list of predicate for the condition
+	*	@param iObject
+	* 	the object whose lifecycle is controlled by the graph, the command 
+	* 	evaluation will be done relative to this object
+	*
+	* @param iConditionPredicatList 
+	* 	 If a condition is related by the command,
+	*                          a list of associated predicats is given 
+	*
+	*
+	*                          
+	*	@param iSimulateMode
+	* iSimulateMode  = 0  -&gt;  the system could be modify by the evaluating the
+	* 							condition
+	* iSimulateMode  &gt; 0  -&gt;  the simulate mode is activated the system 
+	* 							will not be modified by evaluating the condition 	
+	*
+	*
+	*  @return 
+	* An HRESULT value.
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;S_OK&lt;/dt&gt;
+	*     &lt;dd&gt;the condition is true&lt;/dd&gt;
+	*     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+	*     &lt;dd&gt;the condition is false&lt;/dd&gt;
+	*     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+	*     &lt;dd&gt;Unknown internal error&lt;/dd&gt;
+	*   &lt;/dl&gt;	
+	*/
+		virtual HRESULT  RunUserCommand 
+		( const CATUnicodeString&amp;      iOperationName                ,
+		  const CATUnicodeString&amp;      iCommandName                  ,
+		  const CATLISTV(CATBaseUnknown_var)&amp; iCommandPredicatList   ,
+		  const CATUnicodeString&amp;      iCommandParameters            ,
+		  const CATUnicodeString&amp;      iConditionName                ,
+		  const CATLISTV(CATBaseUnknown_var)&amp; iConditionPredicatList ,
+		  const CATBaseUnknown_var&amp;    iObject                       ,
+		  const long&amp;                  iSimulateMode     ) const = 0;
+	//
+};
+//-----------------------------------------------------------------
+// Handler definition 
+//-----------------------------------------------------------------
+CATDeclareHandler(CATIVpmObjectOperation, CATBaseUnknown);
+//
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmObjectLock.html">← 上一页: CATIVpmObjectLock.h</a></div>
+        <div><a href="CATIVpmObjectPool.html">下一页: CATIVpmObjectPool.h →</a></div>
+    </div>
+</body>
+</html>

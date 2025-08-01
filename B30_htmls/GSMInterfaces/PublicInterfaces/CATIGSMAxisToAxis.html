@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMAxisToAxis.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMAxisToAxis.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAxisLine.html">← 上一页: CATIGSMAxisLine.h</a></div>
+        <div><a href="CATIGSMBlend.html">下一页: CATIGSMBlend.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMAxisToAxis_H
+#define CATIGSMAxisToAxis_H
+// 
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATISpecObject.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMAxisToAxis;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMAxisToAxis;
+#endif
+
+/**
+ * Interface to axis to axis transformation feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the AxisToAxis feature created by using 
+ * an element, a reference axis system and a target axis system
+ * @see CATIGSMFactory#CreateAxisToAxis
+ */
+class ExportedByCATGitInterfaces CATIGSMAxisToAxis : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+  
+  /**
+    * Gets the feature to transform.
+    *   @param oElem
+    *      feature to transform      
+    */
+   virtual HRESULT GetElemToTransform(CATISpecObject_var &amp; oElem) = 0;
+
+  /**
+    * Sets the feature to transform.
+    *   @param iElem
+    *      new feature to transform
+    */
+ virtual HRESULT SetElemToTransform(const CATISpecObject_var iElem) = 0;
+
+  /**
+    * Gets the reference axis.
+    *   @param oAxis
+    *      reference axis
+    */
+ virtual HRESULT GetReferenceAxis(CATISpecObject_var &amp; oAxis) = 0;
+
+  /**
+    * Sets the reference axis.
+    *   @param iAxis
+    *      new reference axis
+    */
+ virtual HRESULT SetReferenceAxis(const CATISpecObject_var &amp; iAxis) = 0;
+
+  /**
+    * Gets the target axis.
+    *   @param oAxis
+    *      target axis
+    */
+ virtual HRESULT GetTargetAxis(CATISpecObject_var &amp; oAxis) = 0;
+
+  /**
+    * Sets the target axis.
+    *   @param iAxis
+    *      new target axis
+    */
+ virtual HRESULT SetTargetAxis(const CATISpecObject_var &amp; iAxis) = 0;
+
+ /**
+    * Gets the Creation Mode.
+    *   @param oMode
+    *      flag for transformation type (creation or modification)
+    */
+ virtual HRESULT GetCreationMode (CATBoolean &amp; oMode)= 0;
+
+ /**
+    * Sets the Creation Mode.
+    *   @param iMode
+    *      flag for transformation type (creation or modification)
+    */
+ virtual HRESULT SetCreationMode (const CATBoolean iMode)= 0;
+
+};
+CATDeclareHandler (CATIGSMAxisToAxis, CATBaseUnknown);
+#endif // CATIGSMAxisToAxis_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAxisLine.html">← 上一页: CATIGSMAxisLine.h</a></div>
+        <div><a href="CATIGSMBlend.html">下一页: CATIGSMBlend.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricOperators/PublicInterfaces/CATConvertCurveToCanonic.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricOperators/PublicInterfaces/CATConvertCurveToCanonic.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATConfusionPtOnSurPtOnSur.html">← 上一页: CATConfusionPtOnSurPtOnSur.h</a></div>
+        <div><a href="CATCreateConfusionPtOnCrvPtOnCrv.html">下一页: CATCreateConfusionPtOnCrvPtOnCrv.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATConvertCurveToCanonic_H
+#define CATConvertCurveToCanonic_H
+
+// COPYRIGHT DASSAULT SYSTEMES  2001
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+
+#include &quot;Y30UIUTI.h&quot;
+
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATSkillValue.h&quot;
+
+#include &quot;CATGeoOperator.h&quot;
+
+class CATCurveToCanonic;
+
+class CATGeoFactory;
+
+class CATEdgeCurve;
+class CATPointOnEdgeCurve;
+class CATSurface;
+class CATCurve;
+class CATCrvLimits;
+class CATCrvParam;
+class CATPCurve;
+
+//#ifdef CATIAV5R14
+
+#include &quot;CATCreateConvertCurveToCanonic.h&quot;
+class CATSoftwareConfiguration;
+
+//#endif
+
+
+/**
+* Class representing the geometric operator to compute the most approaching canonical
+* curve of a given curve.
+* 
+ *&lt;ul&gt;
+ *&lt;li&gt;The CATConvertCurveToCanonic operator is created with the &lt;tt&gt;CATCreateConvertCurveToCanonic&lt;/tt&gt; global function and 
+ * directly deleted with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator.
+ * It is is not streamable. 
+ *&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+ *&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method, that 
+ * can return &lt;tt&gt;NULL&lt;/tt&gt;, if no approaching canonic is found.
+ *&lt;/ul&gt;
+*/
+class ExportedByY30UIUTI CATConvertCurveToCanonic : public CATGeoOperator
+{
+  CATCGMVirtualDeclareClass(CATConvertCurveToCanonic);
+public :
+	
+	//=========================================================
+	//- Object management 
+	//=========================================================
+
+//#ifdef CATIAV5R14
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+                           CATSoftwareConfiguration * iConfig,
+	                         CATEdgeCurve * iEdgeCurve,
+	                         CATPointOnEdgeCurve * iStartPOEC,
+	                         CATPointOnEdgeCurve * iEndPOEC,
+	                         CATSurface * iSupport=NULL);
+	
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+                           CATSoftwareConfiguration * iConfig,
+	                         CATCurve * iCurve,
+	                         CATCrvLimits &amp; iLimits,
+	                         CATSurface * iSupport=NULL);
+	
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+                           CATSoftwareConfiguration * iConfig,
+	                         CATLONG32 iNbCrv,
+	                         CATCurve ** iTabCrv,
+	                         CATCrvParam * iStartParam,
+	                         CATCrvParam * iEndParam,
+	                         CATSurface * iSupport=NULL);
+
+
+//#endif
+
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+	                         CATEdgeCurve * iEdgeCurve,
+	                         CATPointOnEdgeCurve * iStartPOEC,
+	                         CATPointOnEdgeCurve * iEndPOEC,
+	                         CATSurface * iSupport=NULL);
+	
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+	                         CATCurve * iCurve,
+	                         CATCrvLimits &amp; iLimits,
+	                         CATSurface * iSupport=NULL);
+	
+	/**
+	* @nodoc
+	* Use the &lt;tt&gt;CreateConvertCurveToCanonic&lt;/tt&gt; global methods.
+	*/
+	CATConvertCurveToCanonic(CATGeoFactory * iFactory,
+	                         CATLONG32 iNbCrv,
+	                         CATCurve ** iTabCrv,
+	                         CATCrvParam * iStartParam,
+	                         CATCrvParam * iEndParam,
+	                         CATSurface * iSupport=NULL);
+	
+	/**
+	* Destructor.
+	*/
+	~CATConvertCurveToCanonic();
+	
+	//=========================================================
+	//- Public Methods
+	//=========================================================
+	
+	/**
+	* Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+	*/
+	int Run();
+	
+	/**
+	* Returns the pointer to the created canonical curve.
+	* @param ioLimits
+	* The limits of the created curve.
+	* @return
+	* The pointer to the created canonical curve, or &lt;tt&gt;NULL&lt;/tt&gt; if no result was found.
+	* If you do not want to keep it, you must remove it with the @href CATICGMContainer#Remove method.
+	*/
+	CATCurve * GetResult(CATCrvLimits &amp; ioLimits);
+	
+	/**
+	* Returns the pointer to the created canonical curve, as a CATPCurve.
+	* To use when the input curve is a CATEdgeCurve. In this case, a CATSurface
+	* must be set at the operator creation.
+	* @param ioOrientation
+	* The orientation of the created curve, with regards to the input CATEdgeCurve.
+	* @param ioLimits
+	* The limits of the created curve.
+	* @return
+	* The pointer to the created canonical CATPCurve, or &lt;tt&gt;NULL&lt;/tt&gt; if no result was found.
+	* If you do not want to keep it, you must remove it with the @href CATICGMContainer#Remove method.
+	*/
+	CATPCurve * GetPResult(CATLONG32 &amp; ioOrientation,
+	                       CATCrvLimits &amp; ioLimits);
+	
+	
+	/**
+	* Defines the recognition mode.
+	* @param iMode
+    * The recognition mode.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*&lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt; Exact recognition: the input curve must exactly fit a canonical curve.
+	*    &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; &lt;/dt&gt;&lt;dd&gt; Approximated recognition.
+	*&lt;/dl&gt;
+	*/
+	void SetRecognitionMode(CATBoolean iMode=TRUE);
+
+	/**
+	* Defines the tolerance to fit the input curve, in case of approximated recognition mode.
+	* @param iTolerance
+	* The tolerance used in case of an approximated recognition.
+	*/
+	void SetTolerance(double iTolerance);
+	
+private:
+	CATCurveToCanonic * _CurveToCanonicOper;
+};
+
+
+/**
+ * @deprecated V5R14
+ * Use CATCreateConvertCurveToCanonic with CATSoftwareConfiguration.
+ */ 
+ExportedByY30UIUTI
+CATConvertCurveToCanonic * CATCreateConvertCurveToCanonic(CATGeoFactory * iFactory,
+                                                       CATEdgeCurve * iEdgeCurve,
+                                                       CATPointOnEdgeCurve * iStartPOEC,
+                                                       CATPointOnEdgeCurve * iEndPOEC,
+                                                       CATSurface * iSupport=NULL,
+                                                       CATSkillValue iMode = BASIC);
+
+/**
+ * @deprecated V5R14
+ * Use CATCreateConvertCurveToCanonic with CATSoftwareConfiguration.
+ */ 
+ExportedByY30UIUTI
+CATConvertCurveToCanonic * CATCreateConvertCurveToCanonic(CATGeoFactory * iFactory,
+                                                       CATCurve * iCurve,
+                                                       CATCrvLimits &amp; iLimits,
+                                                       CATSurface * iSupport=NULL,
+                                                       CATSkillValue iMode = BASIC);
+
+/**
+ * @deprecated V5R14
+ * Use CATCreateConvertCurveToCanonic with CATSoftwareConfiguration.
+ */ 
+ExportedByY30UIUTI
+CATConvertCurveToCanonic * CATCreateConvertCurveToCanonic(CATGeoFactory * iFactory,
+                                                       CATLONG32 iNbCrv,
+                                                       CATCurve ** iTabCrv,
+                                                       CATCrvParam * iStartParam,
+                                                       CATCrvParam * iEndParam,
+                                                       CATSurface * iSupport=NULL,
+                                                       CATSkillValue iMode = BASIC);
+
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATConfusionPtOnSurPtOnSur.html">← 上一页: CATConfusionPtOnSurPtOnSur.h</a></div>
+        <div><a href="CATCreateConfusionPtOnCrvPtOnCrv.html">下一页: CATCreateConfusionPtOnCrvPtOnCrv.h →</a></div>
+    </div>
+</body>
+</html>

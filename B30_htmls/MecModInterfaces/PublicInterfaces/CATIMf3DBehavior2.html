@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMf3DBehavior2.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMf3DBehavior2.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMf3DBehavior.html">← 上一页: CATIMf3DBehavior.h</a></div>
+        <div><a href="CATIMfAxis.html">下一页: CATIMfAxis.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMf3DBehavior2_H
+#define CATIMf3DBehavior2_H
+
+// COPYRIGHT Dassault Systemes 2003
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4 CATMf3DBehavior2Adapter
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef E_MISSING_PARENT
+#define E_MISSING_PARENT             _HRESULT_TYPEDEF_(0xCFF80002L)
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMf3DBehavior2;
+#else
+extern &quot;C&quot; const IID IID_CATIMf3DBehavior2;
+#endif
+
+/**
+ * Interface extending CATIMf3DBehavior.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The @href CATIMf3DBehavior interface introduced the two 
+ * categories of geometrical features which are solid features and
+ * surface features. CATIMf3DBehavior2 introduces a sub-category of surface features
+ * which is the category of volume features.&lt;/p&gt;
+ * &lt;p&gt;The volume features behave,
+ * in terms of mechanical modeler functionnalities (insertion, deletion,
+ * reordering, display, ...), as the surface features. The main differences
+ * between volumes and surface are the associated topological body which
+ * topological dimension is 3 (considering only this aspect, volume features
+ * are similar to solid features), the geometric operations that can be
+ * applied to and the associated visual representations (icons, 3D reps).&lt;/p&gt;
+ *
+ * &lt;p&gt;&lt;b&gt;Implementation:&lt;/b&gt; A default implementation exists for &lt;tt&gt;GeometricalElement3D&lt;/tt&gt;
+ * startup, for which the method @href #IsAVolume returns &lt;tt&gt;E_FAIL&lt;/tt&gt;.
+ * For every startup deriving from &lt;tt&gt;GeometricalElement3D&lt;/tt&gt; being 
+ * a surface feature and generating volume topology, it is essential to reimplement
+ * this interface.&lt;/p&gt;
+ *
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CAN be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page.
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ */
+class ExportedByMecModItfCPP CATIMf3DBehavior2: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+   /**
+     * Tells whether the feature is a volume feature.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;  Tells whether the feature is a volume feature. A volume
+     * feature is a sub-kind of surface feature  and therefore if the method
+     * @href #IsAVolume returns &lt;tt&gt;S_OK&lt;/tt&gt;, the method @href 
+     * CATIMf3DBehavior#IsAShape invoked on the same feature must also
+     * return &lt;tt&gt;S_OK&lt;/tt&gt;.
+     * @return
+     *   &lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;The feature is a volume feature.&lt;/dd&gt;
+     *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;The feature is not a volume feature. It can nevertheless be a surface feature.&lt;/dd&gt;
+     *   &lt;dt&gt;&lt;tt&gt;E_MISSING_PARENT&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;It is impossible to know if the feature is a volume feature because its type is based on its parent&#x27;s type but the feature has no parent.&lt;/dd&gt;&lt;/dl&gt;&lt;/dl&gt;
+     */
+
+     virtual HRESULT IsAVolume() const = 0; 
+};
+
+CATDeclareHandler(CATIMf3DBehavior2,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMf3DBehavior.html">← 上一页: CATIMf3DBehavior.h</a></div>
+        <div><a href="CATIMfAxis.html">下一页: CATIMfAxis.h →</a></div>
+    </div>
+</body>
+</html>

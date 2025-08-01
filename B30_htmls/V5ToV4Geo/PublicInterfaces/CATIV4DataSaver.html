@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V5ToV4Geo/PublicInterfaces/CATIV4DataSaver.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>V5ToV4Geo/PublicInterfaces/CATIV4DataSaver.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIV4DataSaver.html">← 上一页: TIE_CATIV4DataSaver.h</a></div>
+        <div><a href="V5ToV4Tools.html">下一页: V5ToV4Tools.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+/**
+* @CAA2Level L1
+* @CAA2Usage U5
+*/
+#ifndef CATIV4DataSaver_H
+#define CATIV4DataSaver_H
+#include &quot;V5ToV4Tools.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByV5ToV4Tools IID IID_CATIV4DataSaver;
+#else
+extern &quot;C&quot; const IID IID_CATIV4DataSaver;
+#endif
+
+/** 
+ * Class to translate Spline and Spline2 Curves.
+ * 
+ */
+
+class ExportedByV5ToV4Tools CATIV4DataSaver: public CATBaseUnknown
+{
+  CATDeclareInterface;
+  public:
+  /**
+    * Retrieves the V4 data.
+	* @param oV4Type [out]
+	*   The CATGeo V4 type of the object to create
+	* @param oV4Block [out,delete]
+	*   The CATGeo V4 description block 
+	*   &lt;br&gt;&lt;b&gt;This table is allocated by using new[].&lt;/b&gt;
+	* @return 
+	* &lt;ul&gt;
+	* &lt;li&gt; &lt;tt&gt;S_OK&lt;/tt&gt;: The query succeeds&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;NO_INTERFACE&lt;/tt&gt;: The interface does not exist&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;E_OUTOFMEMORY&lt;/tt&gt;: Memory allocation fails&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt;: The query fails for another reason&lt;/li&gt;
+	* &lt;/ul&gt;
+    */
+   virtual HRESULT GetData(int &amp; oV4Type, double * &amp; oV4Block) = 0;
+  /**
+    * Retrieves the user intent.
+	* @param oIntent [out]
+	*   &lt;br&gt;&lt;b&gt;legal values&lt;/b&gt; 
+	*   &lt;ul&gt;&lt;li&gt;0 do not compute the V4 data&lt;/li&gt;
+	*       &lt;li&gt;1 do the standard process&lt;/li&gt;
+	*       &lt;li&gt;2 let the customer do&lt;/li&gt;
+	*   &lt;/ul&gt;
+	* @return 
+	* &lt;ul&gt;
+	* &lt;li&gt; &lt;tt&gt;S_OK&lt;/tt&gt;: The query succeeds&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;NO_INTERFACE&lt;/tt&gt;: The interface does not exist&lt;/li&gt;
+	* &lt;/ul&gt;
+    */
+   virtual HRESULT GetUserIntent(int &amp; oIntent) = 0;
+  /**
+    * Retrieves the spline constraint additional data.
+	* @param oV4SplineType [out]
+	*   &lt;br&gt;&lt;b&gt;legal values&lt;/b&gt; 
+	*   &lt;ul&gt;&lt;li&gt;0 it is not a spline curve&lt;/li&gt;
+	*       &lt;li&gt;1 it is a spline curve&lt;/li&gt;
+	*       &lt;li&gt;2 it is a spline2 curve&lt;/li&gt;
+	*   &lt;/ul&gt;
+	* @param oV4BlockLength [out]
+	*   The V4 number of doubles of the additional description to create 
+	* @param oV4BlockData [out,delete]
+	*   The V4 additional description block 
+	*   &lt;br&gt;&lt;b&gt;This table is allocated by using new[].&lt;/b&gt;
+	* @return
+	* &lt;ul&gt;
+	* &lt;li&gt; &lt;tt&gt;S_OK&lt;/tt&gt;: The query succeeds&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;NO_INTERFACE&lt;/tt&gt;: The interface does not exist&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;E_OUTOFMEMORY&lt;/tt&gt;: Memory allocation fails&lt;/li&gt;
+	* &lt;li&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt;: The query fails for another reason&lt;/li&gt;
+	* &lt;/ul&gt;
+    */
+   virtual HRESULT GetSplineConstraintData(int &amp; oV4SplineType, int &amp; oV4BlockLength, double * &amp; oV4BlockData) = 0;
+};
+CATDeclareHandler( CATIV4DataSaver , CATBaseUnknown ) ;
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIV4DataSaver.html">← 上一页: TIE_CATIV4DataSaver.h</a></div>
+        <div><a href="V5ToV4Tools.html">下一页: V5ToV4Tools.h →</a></div>
+    </div>
+</body>
+</html>

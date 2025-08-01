@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCldPolygon.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCldPolygon.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCldMultiCell.html">← 上一页: CATCldMultiCell.h</a></div>
+        <div><a href="CATCldScan.html">下一页: CATCldScan.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//==============================================================================================================
+// COPYRIGHT DASSAULT SYSTEMES PROVENCE 1999
+//==============================================================================================================
+// CATCldPolygon
+//==============================================================================================================
+// 07-Feb-2013 - JLH - Add an argument to GetPolyMesh to get iterators working only on the active vertices and
+//                     triangles.
+// 01-Sep-2009 - DNR - Add a method GetPolyMesh to delete the QueryInterface to get a CATIPolyMesh from a
+//                     CATCldPolygon.
+// ??-Oct-1999 - JLH - Creation
+// 24-03-2014 CGMOFF+CGMPRJ
+//==============================================================================================================
+
+#ifndef CATCldPolygon_H
+#define CATCldPolygon_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */ 
+
+#include &quot;CATCldUniCell.h&quot;
+
+#include &quot;CATListOfCATCldCells.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+class CATCldSetOfScans ;
+class CATIPolyMesh ;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCldPolygon ;
+#else
+extern &quot;C&quot; const IID IID_CATCldPolygon ;
+#endif
+
+/**
+ * Interface for the CloudEditor entity &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+ * The &lt;tt&gt;CATCldPolygon&lt;/tt&gt; corresponds to the tessellation of a cloud of points.&lt;br&gt;
+ * @see CATCldGenEntity, CATCldCell, CATCldUniCell
+ */
+class ExportedByCATGMGeometricInterfaces CATCldPolygon : public CATCldUniCell
+{
+  CATDeclareInterface ;
+
+public:
+
+//==============================================================================================================
+// Specific points management for the CATCldPolygon.
+//==============================================================================================================
+
+  /**
+   * Computes the normal to a point given by its relative indice in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * The normal is the normalized sum of the normals of each triangle having the given point as vertex.&lt;br&gt;
+   * The normal of a triangle &lt;tt&gt;(V1,V2,V3)&lt;/tt&gt; is the cross product &quot;&lt;tt&gt;(V1V2)^(V1V3)&lt;/tt&gt;&quot;.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.
+   */
+  virtual void ComputeVertexNormal (const int        iNoVertex,
+                                    float            oNormal[3],
+                                    const CATBoolean iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Computes the normal to a point given by its relative indice in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * The normal is the normalized sum of the normals of each triangle having the given point as vertex.&lt;br&gt;
+   * The normal of a triangle &lt;tt&gt;(V1,V2,V3)&lt;/tt&gt; is the cross product &quot;&lt;tt&gt;(V1V2)^(V1V3)&lt;/tt&gt;&quot;.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.
+   */
+  virtual void ComputeVertexNormal (const int        iNoVertex,
+                                    double           oNormal[3],
+                                    const CATBoolean iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Is the point given by its indice relative to the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; a vertex&lt;br&gt;
+   * ie is it belonging to a triangle ?
+   */
+  virtual CATBoolean IsAVertex (const int iNoPoint) const = 0 ;
+
+  /**
+   * Gets the number of points which are vertices.
+   */
+  virtual int GetNbVertices () const = 0 ;
+
+  /**
+   * Gets the relative indices of the vertices.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioNoVertices&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices.
+   */
+  virtual void GetVertices (int  &amp;oNbVertices,
+                            int* &amp;ioNoVertices) const = 0 ;
+
+//==============================================================================================================
+// Triangles management.
+//==============================================================================================================
+
+  /**
+   * Returns the fact that the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; could be assumed as a manifold surface,&lt;br&gt;
+   * ie each edge is shared by no more than two triangles.&lt;br&gt;
+   * This fact is determined by the &lt;tt&gt;EndOfModification&lt;/tt&gt; method.
+   */
+  virtual CATBoolean IsManifold () const = 0 ;
+
+  /**
+   * Returns the fact that the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; could be assumed as an orientable surface.&lt;br&gt;
+   * This fact is determined by the &lt;tt&gt;EndOfModification&lt;/tt&gt; method.
+   */
+  virtual CATBoolean IsOrientable () const = 0 ;
+
+  /**
+   * Returns the fact that the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; could be assumed as a closed surface.&lt;br&gt;
+   * This fact is determined by the &lt;tt&gt;EndOfModification&lt;/tt&gt; method.
+   */
+  virtual CATBoolean IsClosed () const = 0 ;
+
+  /**
+   * Adds a triangle given by the relative indices of its vertices.
+   */
+  virtual void AddTriangle (const int iNoVertices[3]) = 0 ;
+
+  /**
+   * Adds several triangles given by the relative indices of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :&lt;br&gt;
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   */
+  virtual void AddTriangles (const int  iNbTriangles,
+                             const int* iNoVertices) = 0 ;
+
+  /**
+   * Adds several triangles given by the coordinates of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;,
+   * the coordinates of this vertex will be described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iCoords[3*IVtx+0]
+   * &lt;li&gt;iCoords[3*IVtx+1]
+   * &lt;li&gt;iCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   */
+  virtual void AddTriangles (const int    iNbVertices,
+                             const float* iCoords,
+                             const int    iNbTriangles,
+                             const int*   iNoVertices) = 0 ;
+
+  /**
+   * Adds several triangles given by the coordinates of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;,
+   * the coordinates of this vertex will be described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iCoords[3*IVtx+0]
+   * &lt;li&gt;iCoords[3*IVtx+1]
+   * &lt;li&gt;iCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   */
+  virtual void AddTriangles (const int     iNbVertices,
+                             const double* iCoords,
+                             const int     iNbTriangles,
+                             const int*    iNoVertices) = 0 ;
+
+  /**
+   * Adds several triangles given by the indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the index of this vertex is &lt;tt&gt;iIndexes[IVtx]&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; It is assumed that there is not duplicated index in the array &lt;tt&gt;iIndexes&lt;/tt&gt;.
+   */
+  virtual void AddTriangles (const int  iNbVertices,
+                             const int* iIndexes,
+                             const int  iNbTriangles,
+                             const int* iNoVertices) = 0 ;
+
+  /**
+   * Adds a triangle given by the relative indices of its vertices and returns its indice.
+   */
+  virtual void AddTriangleNum (const int  iNoVertices[3],
+                               int       &amp;oNoTriangle) = 0 ;
+
+  /**
+   * Adds several triangles given by the relative indices of their vertices and returns their indices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :&lt;br&gt;
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioNoTriangles&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be at least &lt;tt&gt;iNbTriangles&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method.&lt;br&gt;
+   */
+  virtual void AddTrianglesNum (const int   iNbTriangles,
+                                const int*  iNoVertices,
+                                int*       &amp;ioNoTriangles) = 0 ;
+
+  /**
+   * Adds several triangles given by the coordinates of their vertices and returns their indices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;,
+   * the coordinates of this vertex will be described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iCoords[3*IVtx+0]
+   * &lt;li&gt;iCoords[3*IVtx+1]
+   * &lt;li&gt;iCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioNoTriangles&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be at least &lt;tt&gt;iNbTriangles&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method.&lt;br&gt;
+   */
+  virtual void AddTrianglesNum (const int     iNbVertices,
+                                const float*  iCoords,
+                                const int     iNbTriangles,
+                                const int*    iNoVertices,
+                                int*         &amp;ioNoTriangles) = 0 ;
+
+  /**
+   * Adds several triangles given by the coordinates of their vertices and returns their indices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;,
+   * the coordinates of this vertex will be described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iCoords[3*IVtx+0]
+   * &lt;li&gt;iCoords[3*IVtx+1]
+   * &lt;li&gt;iCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioNoTriangles&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be at least &lt;tt&gt;iNbTriangles&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method.&lt;br&gt;
+   */
+  virtual void AddTrianglesNum (const int      iNbVertices,
+                                const double*  iCoords,
+                                const int      iNbTriangles,
+                                const int*     iNoVertices,
+                                int*          &amp;ioNoTriangles) = 0 ;
+
+  /**
+   * Adds several triangles given by the indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; of their vertices and returns their indices.&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the index of this vertex is &lt;tt&gt;iIndexes[IVtx]&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION 1:&lt;/b&gt; It is assumed that there is not duplicated index in the array &lt;tt&gt;iIndexes&lt;/tt&gt;.
+   * &lt;b&gt;CAUTION 2:&lt;/b&gt; If &lt;tt&gt;ioNoTriangles&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be at least &lt;tt&gt;iNbTriangles&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method.&lt;br&gt;
+   */
+  virtual void AddTrianglesNum (const int   iNbVertices,
+                                const int*  iIndexes,
+                                const int   iNbTriangles,
+                                const int*  iNoVertices,
+                                int*       &amp;ioNoTriangles) = 0 ;
+
+  /**
+   * Removes the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The subsequent calls of the method &lt;tt&gt;GetTriangle&lt;/tt&gt; will return
+   * null numbers for the vertices and neighbouring triangles.
+   */
+  virtual void RemoveTriangle (const int iNoTriangle) = 0 ;
+
+  /**
+   * Updates the vertices of the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * This method consists of removing the given triangle and add a new one in place.
+   */
+  virtual void UpdateTriangle (const int iNoTriangle, const int iNoVertices[3]) = 0 ;
+
+  /**
+   * Removes a vertex given by its relative indice in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * That means removes all the triangles having this vertex.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; the point is not removed (ie it could be used after) unlike
+   * the &lt;tt&gt;RemovePoint&lt;/tt&gt; method.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.
+   */
+  virtual void RemoveVertex (const int iNoVertex) = 0 ;
+
+  /**
+   * Tests if the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; is valid,
+   * ie is not removed or each of its vertices indices is not null.
+   */
+  virtual CATBoolean IsTriangleValid (const int iNoTriangle) const = 0 ;
+
+  /**
+   * Tests if the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; is active,
+   * ie each of its vertices is active.
+   */
+  virtual CATBoolean IsTriangleActive (const int iNoTriangle) const = 0 ;
+
+  /**
+   * Returns the number of triangles.&lt;br&gt;
+   * @param iAllTriangles
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;,  the removed triangles are taken account.&lt;br&gt;
+   * If &lt;tt&gt;FALSE&lt;/tt&gt;, they are not.
+   */
+  virtual int GetNbTriangles (const CATBoolean iAllTriangles = TRUE) const = 0 ;
+
+  /**
+   * Returns the vertices and the orientation of the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * The &lt;tt&gt;oDirect&lt;/tt&gt; flag is computed by the &lt;tt&gt;EndOfCreation&lt;/tt&gt; or &lt;tt&gt;EndOfModification&lt;/tt&gt; methods.&lt;br&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;The first valid triangle is considered as direct and defines the global
+   * orientation for the whole &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.
+   * &lt;li&gt;The other valid triangles are oriented in regards on the first valid triangle.
+   * &lt;li&gt;&lt;b&gt;CAUTION:&lt;/b&gt; If the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; is not orientable, this flag could be not significant.
+   * &lt;/ul&gt;
+   */
+  virtual void GetTriangle (const int   iNoTriangle,
+                            int         oNoVertices[3],
+                            CATBoolean &amp;oDirect) const = 0 ;
+
+  /**
+   * Returns the vertices and the neighbouring triangles of the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[0]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[0],oNoVertices[1])&lt;/tt&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[1]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[1],oNoVertices[2])&lt;/tt&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[2]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[2],oNoVertices[0])&lt;/tt&gt;
+   * &lt;/ul&gt;
+   * If &lt;tt&gt;oNoConnexes[i]&lt;/tt&gt; equals to 0, there is no neighbouring triangle.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; &lt;tt&gt;oNoVertices[0]&lt;/tt&gt; equals 0 means that the triangle was removed.
+   */
+  virtual void GetTriangle (const int iNoTriangle,
+                            int       oNoVertices[3],
+                            int       oNoConnexes[3]) const = 0 ;
+
+  /**
+   * Returns the vertices, the neighbouring triangles and the orientation of the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[0]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[0],oNoVertices[1])&lt;/tt&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[1]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[1],oNoVertices[2])&lt;/tt&gt;
+   * &lt;li&gt;&lt;tt&gt;oNoConnexes[2]&lt;/tt&gt; gives the neighbouring triangle number
+   * along the edge &lt;tt&gt;(oNoVertices[2],oNoVertices[0])&lt;/tt&gt;
+   * &lt;/ul&gt;
+   * If &lt;tt&gt;oNoConnexes[i]&lt;/tt&gt; equals to 0, there is no neighbouring triangle.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; &lt;tt&gt;oNoVertices[0]&lt;/tt&gt; equals 0 means that the triangle was removed.&lt;br&gt;
+   * The &lt;tt&gt;oDirect&lt;/tt&gt; flag is computed by the &lt;tt&gt;EndOfCreation&lt;/tt&gt; or &lt;tt&gt;EndOfModification&lt;/tt&gt; methods.&lt;br&gt;
+   * &lt;ul&gt;
+   * &lt;li&gt;The first valid triangle is considered as direct and defines the global
+   * orientation for the whole &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.
+   * &lt;li&gt;The other valid triangles are oriented in regards on the first valid triangle.
+   * &lt;li&gt;&lt;b&gt;CAUTION:&lt;/b&gt; If the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; is not orientable, this flag could be not significant.
+   * &lt;/ul&gt;
+   */
+  virtual void GetTriangle (const int   iNoTriangle,
+                            int         oNoVertices[3],
+                            int         oNoConnexes[3],
+                            CATBoolean &amp;oDirect) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the index of this vertex is &lt;tt&gt;iIndexes[IVtx]&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioIndexes&lt;/tt&gt; (resp. &lt;tt&gt;ioNoVertices&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             int*             &amp;ioIndexes,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Its neighbouring triangles will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoConnexes[3*ITri+0]
+   * &lt;li&gt;iNoConnexes[3*ITri+1]
+   * &lt;li&gt;iNoConnexes[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * If &lt;tt&gt;oNoConnexes[i]&lt;/tt&gt; equals to -1, there is no neighbouring triangle.
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the index of this vertex is &lt;tt&gt;iIndexes[IVtx]&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioIndexes&lt;/tt&gt; (resp. &lt;tt&gt;ioNoVertices, ioNoConnexes&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             int*             &amp;ioIndexes,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             int*             &amp;ioNoConnexes,
+                             const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+  /**
+   * Returns a description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNoVertices&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             float*           &amp;ioCoords,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+  /**
+   * Returns a description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNoVertices&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices or triangles.&lt;br&gt;
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             double*          &amp;ioCoords,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * and the coordinates of the associated normal in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioNormals[3*IVtx+0]
+   * &lt;li&gt;ioNormals[3*IVtx+1]
+   * &lt;li&gt;ioNormals[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNormals, ioNoVertices&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbVertices, 3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             float*           &amp;ioCoords,
+                             float*           &amp;ioNormals,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             const CATBoolean  iOnlyActive = FALSE,
+                             const CATBoolean  iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * and the coordinates of the associated normal in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioNormals[3*IVtx+0]
+   * &lt;li&gt;ioNormals[3*IVtx+1]
+   * &lt;li&gt;ioNormals[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNormals, ioNoVertices&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbVertices, 3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             double*          &amp;ioCoords,
+                             double*          &amp;ioNormals,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             const CATBoolean  iOnlyActive = FALSE,
+                             const CATBoolean  iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Its neighbouring triangles will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoConnexes[3*ITri+0]
+   * &lt;li&gt;iNoConnexes[3*ITri+1]
+   * &lt;li&gt;iNoConnexes[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * If &lt;tt&gt;oNoConnexes[i]&lt;/tt&gt; equals to -1, there is no neighbouring triangle.
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * and the coordinates of the associated normal in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioNormals[3*IVtx+0]
+   * &lt;li&gt;ioNormals[3*IVtx+1]
+   * &lt;li&gt;ioNormals[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNormals, ioNoVertices, ioNoConnexes&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbVertices, 3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             float*           &amp;ioCoords,
+                             float*           &amp;ioNormals,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             int*             &amp;ioNoConnexes,
+                             const CATBoolean  iOnlyActive = FALSE,
+                             const CATBoolean  iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Returns the whole description of the polygon (the removed triangles are not taken account).&lt;br&gt;
+   * The &lt;tt&gt;ITri&lt;/tt&gt;&#x27;th triangle is described by :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoVertices[3*ITri+0]
+   * &lt;li&gt;iNoVertices[3*ITri+1]
+   * &lt;li&gt;iNoVertices[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * Its neighbouring triangles will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;iNoConnexes[3*ITri+0]
+   * &lt;li&gt;iNoConnexes[3*ITri+1]
+   * &lt;li&gt;iNoConnexes[3*ITri+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * If &lt;tt&gt;oNoConnexes[i]&lt;/tt&gt; equals to -1, there is no neighbouring triangle.
+   * Let be &lt;tt&gt;IVtx&lt;/tt&gt; a relative vertex number such for instance
+   * &lt;tt&gt;IVtx = iNoVertices[3*ITri+0]&lt;/tt&gt;, the coordinates of this vertex
+   * will be found in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioCoords[3*IVtx+0]
+   * &lt;li&gt;ioCoords[3*IVtx+1]
+   * &lt;li&gt;ioCoords[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * and the coordinates of the associated normal in :
+   * &lt;tt&gt;&lt;ul&gt;
+   * &lt;li&gt;ioNormals[3*IVtx+0]
+   * &lt;li&gt;ioNormals[3*IVtx+1]
+   * &lt;li&gt;ioNormals[3*IVtx+2]
+   * &lt;/ul&gt;&lt;/tt&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; if &lt;tt&gt;ioCoords&lt;/tt&gt; (resp. &lt;tt&gt;ioNormals, ioNoVertices, ioNoConnexes&lt;/tt&gt;) is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and
+   * its size must be greater than the expected &lt;tt&gt;3*oNbVertices&lt;/tt&gt;
+   * (resp. &lt;tt&gt;3*oNbVertices, 3*oNbTriangles, 3*oNbTriangles&lt;/tt&gt;).&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no vertices r triangles.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal of a triangle is normalized before being summed.
+   */
+  virtual void GetTriangles (int              &amp;oNbVertices,
+                             double*          &amp;ioCoords,
+                             double*          &amp;ioNormals,
+                             int              &amp;oNbTriangles,
+                             int*             &amp;ioNoVertices,
+                             int*             &amp;ioNoConnexes,
+                             const CATBoolean  iOnlyActive = FALSE,
+                             const CATBoolean  iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Returns the triangles having the given point as vertex.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The list will be cleared by the method before use.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.
+   */
+  virtual void GetNeighbours (const int     iNoVertex,
+                              CATListOfInt &amp;ioNoTriangles) const = 0 ;
+
+  /**
+   * Returns the neighbour vertices at a given level for a vertex given by its relative indice.
+   * &lt;pre&gt;
+   *           2       2       2
+   *           +-------+-------+              On this tesselation, the levels are shown
+   *          / \     / \     / \             in regards on the central vertex (level 0).
+   *         /   \   /   \   /   \
+   *       2/     \1/     \1/     \2
+   *       +-------+-------+-------+
+   *      / \     / \     / \     / \
+   *     /   \   /   \   /   \   /   \
+   *   2/     \1/     \0/     \1/     \2
+   *   +-------+-------+-------+-------+
+   *    \     / \     / \     / \     /
+   *     \   /   \   /   \   /   \   /
+   *      \2/     \1/     \1/     \2/
+   *       +-------+-------+-------+
+   *        \     / \     / \     /
+   *         \   /   \   /   \   /
+   *          \2/     \2/     \2/
+   *           +-------+-------+
+   * &lt;/pre&gt;
+   * @param iNoVertex
+   * The relative indice of the vertex that we want the neighbours.
+   * @param iLevel
+   * The wanted level.
+   * @param ioLevels
+   * Array of the levels offsets.&lt;br&gt;
+   * If &lt;tt&gt;NULL&lt;/tt&gt;, the array is allocated by the method and HAS TO RELEASED by the caller.&lt;br&gt;
+   * It size has to be greater or equal to &lt;tt&gt;1+iLevel+1&lt;/tt&gt;.&lt;br&gt;
+   * The vertices of the &lt;tt&gt;I&lt;/tt&gt;&#x27;th level (&lt;tt&gt;I in [0,iLevel]&lt;/tt&gt;) will be found between
+   * &lt;tt&gt;ioNoVertices[ioLevels[I]]&lt;/tt&gt; and &lt;tt&gt;ioNoVertices[ioLevels[I+1]-1]&lt;/tt&gt;.
+   * @param ioNoVertices
+   * List of the neighbour vertices indices.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The list will be cleaned at the beginning of the treatment.
+   * @return
+   * &lt;tt&gt;TRUE&lt;/tt&gt;, if the computation has succeeded. &lt;tt&gt;FALSE&lt;/tt&gt;, otherwise.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.
+   */
+
+  virtual CATBoolean GetNeighbours (const int     iNoVertex,
+                                    const int     iLevel,
+                                    int*         &amp;ioLevels,
+                                    CATListOfInt &amp;ioNoVertices) const = 0 ;
+
+  /**
+   * Returns the two triangles sharing the edge defined by the two points given
+   * their relative indices in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * If &lt;tt&gt;iNoTriangle1&lt;/tt&gt; and &lt;tt&gt;iNoTriangle2&lt;/tt&gt; equal to 0, that means
+   * there is no triangle having this edge.&lt;br&gt;
+   * If only &lt;tt&gt;iNoTriangle2&lt;/tt&gt; equals to 0, that means the edge belongs to
+   * only one triangle (ie it is a free edge).&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; In case of a non-manifold polygon, the returned triangles
+   * are the first having the given edge. So it is advised to call the hereafter method.
+   */
+  virtual void GetNeighbours (const int  iNoVertex1,
+                              const int  iNoVertex2,
+                              int       &amp;oNoTriangle1,
+                              int       &amp;oNoTriangle2) const = 0 ;
+
+  /**
+   * Returns all the triangles sharing the edge defined by the two points given
+   * their relative indices in the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;NB:&lt;/b&gt; If this method is called several times consecutively, it is advised to call it
+   * under the optimization context &lt;tt&gt;(OptimizeBegin,OptimizeEnd)&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The list &lt;tt&gt;ioNoTriangles&lt;/tt&gt; will be cleaned before any treatment.
+   */
+  virtual void GetNeighbours (const int     iNoVertex1,
+                              const int     iNoVertex2,
+                              CATListOfInt &amp;ioNoTriangles) const = 0 ;
+
+  /**
+   * Returns the connected triangle to the given triangle along the given edge.&lt;br&gt;
+   * @return
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;tt&gt;-1&lt;/tt&gt;: if the given edge does not belong to the given triangle.
+   * &lt;li&gt;&lt;tt&gt; 0&lt;/tt&gt;: if the given edge is a free edge.
+   * &lt;li&gt;The indice of the connected triangle.
+   * &lt;/ul&gt;
+   */
+  virtual int GetNeighbour (const int iNoTriangle,
+                            const int iNoVertex1,
+                            const int iNoVertex2) const = 0 ;
+
+  /**
+   * Flips the edge between two triangles.&lt;br&gt;
+   * Let be two triangles T1 (n1,n2,n3) and T2 (n4,n2,n1),
+   * they will be replaced by the triangles T&#x27;1 (n1,n4,n3) and T&#x27;2 (n4,n2,n3).
+   * &lt;pre&gt;
+   *   n4-----n2     n4-----n2
+   *   |     /|      |\     |
+   *   | T2 / |      | \ T2&#x27;|
+   *   |   /  |      |  \   |
+   *   |  /   | ==&gt;  |   \  |
+   *   | / T1 |      |T1&#x27; \ |
+   *   |/     |      |     \|
+   *   n1-----n3     n1-----n3
+   * &lt;/pre&gt;
+   */
+  virtual void FlipEdge (const int iNoVertex1,
+                         const int iNoVertex2) = 0 ;
+
+  /**
+   * Computes the normal of a triangle.&lt;br&gt;
+   * The normal of a triangle &lt;tt&gt;(V1,V2,V3)&lt;/tt&gt; is the cross product &quot;&lt;tt&gt;(V1V2)^(V1V3)&lt;/tt&gt;&quot;.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal is normalized.
+   */
+  virtual void ComputeTriangleNormal (const int        iNoTriangle,
+                                      float            oNormal[3],
+                                      const CATBoolean iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Computes the normal of a triangle.&lt;br&gt;
+   * The normal of a triangle &lt;tt&gt;(V1,V2,V3)&lt;/tt&gt; is the cross product &quot;&lt;tt&gt;(V1V2)^(V1V3)&lt;/tt&gt;&quot;.&lt;br&gt;
+   * @param iNormalize
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the normal is normalized.
+   */
+  virtual void ComputeTriangleNormal (const int        iNoTriangle,
+                                      double           oNormal[3],
+                                      const CATBoolean iNormalize = FALSE) const = 0 ;
+
+  /**
+   * Extracts a minimal sub-polygon composed of the given triangles.&lt;br&gt;
+   * It shares the same &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   */
+  virtual CATCldPolygon* ExtractSubPolygon (const int  iNbTriangles,
+                                            const int* iNoTriangles) const = 0 ;
+
+  /**
+   * Returns the free edges of the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; as a &lt;tt&gt;CATCldSetOfScans&lt;/tt&gt;.
+   */
+  virtual CATCldSetOfScans* FreeEdges () const = 0 ;
+
+  /**
+   * Returns the free edges of the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * @param oNbEdges.
+   * The number of free edges.
+   * @param oNoVertices.
+   * The free edges described by the relative indices of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;i&lt;/tt&gt;&#x27;th edge (&lt;tt&gt;i&lt;/tt&gt; in the range &lt;tt&gt;[0,oNbEdges-1]&lt;/tt&gt;) is defined
+   * by &lt;tt&gt;(oNoVertices[2*i],oNoVertices[2*i+1])&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;oNoVertices&lt;/tt&gt; is not null, it is desallocated by the method before any treatment.
+   * @param iOnlyActive
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the research will be done only on the active triangles.
+   * @return
+   * &lt;tt&gt;TRUE&lt;/tt&gt;, if there are free edges. &lt;tt&gt;FALSE&lt;/tt&gt;, otherwise.&lt;br&gt;
+   */
+
+  virtual CATBoolean GetFreeEdges (int              &amp;oNbEdges,
+                                   int*             &amp;oNoVertices,
+                                   const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+  /**
+   * Returns the non-manifold edges of the &lt;tt&gt;CATCldPolygon&lt;/tt&gt;.&lt;br&gt;
+   * An edge is said non-manifold if it is shared by more than two triangles.
+   * @param oNbEdges.
+   * The number of non-manifold edges.
+   * @param oNoVertices.
+   * The non-manifold edges described by the relative indices of their vertices.&lt;br&gt;
+   * The &lt;tt&gt;i&lt;/tt&gt;&#x27;th edge (&lt;tt&gt;i&lt;/tt&gt; in the range &lt;tt&gt;[0,oNbEdges-1]&lt;/tt&gt;) is defined
+   * by &lt;tt&gt;(oNoVertices[2*i],oNoVertices[2*i+1])&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;oNoVertices&lt;/tt&gt; is not null, it is desallocated by the method before any treatment.
+   * @param iOnlyActive
+   * If &lt;tt&gt;TRUE&lt;/tt&gt;, the research will be done only on the active triangles.
+   * @return
+   * &lt;tt&gt;TRUE&lt;/tt&gt;, if there are non-manifold edges. &lt;tt&gt;FALSE&lt;/tt&gt;, otherwise.&lt;br&gt;
+   */
+
+  virtual CATBoolean GetNonManifoldEdges (int              &amp;oNbEdges,
+                                          int*             &amp;oNoVertices,
+                                          const CATBoolean  iOnlyActive = FALSE) const = 0 ;
+
+//==============================================================================================================
+// Triangles attributes management in a CATCldPolygon.
+//==============================================================================================================
+
+  /**
+   * Returns the attribute associated to the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.&lt;br&gt;
+   * &lt;tt&gt;CAUTION:&lt;/tt&gt; Returns a &lt;tt&gt;NULL&lt;/tt&gt; pointer if the attributes is not set.
+   */
+  virtual CATCldAttribute* GetTriangleAttribute (const int iNoTriangle) const = 0 ;
+
+  /**
+   * Associates the given attribute to the &lt;tt&gt;iNoTriangle&lt;/tt&gt;&#x27;th triangle.
+   */
+  virtual void SetTriangleAttribute (const int              iNoTriangle,
+                                     const CATCldAttribute* iAttribute) = 0 ;
+
+//==============================================================================================================
+// Specific algorithms on a CATCldPolygon.
+//==============================================================================================================
+
+  /**
+   * Returns the normal projection of a given point.
+   * @param iPoint
+   * A point.
+   * @param oType
+   * The type of the projection :
+   * &lt;ul&gt;
+   * &lt;li&gt;&lt;tt&gt; 0&lt;/tt&gt;: On a vertex.
+   * &lt;li&gt;&lt;tt&gt; 1&lt;/tt&gt;: On an edge.
+   * &lt;li&gt;&lt;tt&gt; 2&lt;/tt&gt;: On a triangle.
+   * &lt;li&gt;&lt;tt&gt;-1&lt;/tt&gt;: If no result.
+   * &lt;/ul&gt;
+   * @param oNum1
+   * &lt;ul&gt;
+   * &lt;li&gt;If &lt;tt&gt;&quot;oType == 0&quot;&lt;/tt&gt;, the vertex relative indice.
+   * &lt;li&gt;If &lt;tt&gt;&quot;oType == 1&quot;&lt;/tt&gt;, the relative indice of the first vertex of the edge.
+   * &lt;li&gt;If &lt;tt&gt;&quot;oType == 2&quot;&lt;/tt&gt;, the triangle indice.
+   * &lt;/ul&gt;
+   * @param oNum2
+   * If &lt;tt&gt;&quot;oType == 1&quot;&lt;/tt&gt;, the relative indice of the second vertex of the edge.
+   * @param iTolerance
+   * The tolerance defining the confusion with a vertex or an edge.
+   * @return
+   * The point projection.
+   */
+
+  virtual CATMathPoint NormalProjection (const CATMathPoint &amp;iPoint,
+                                         int                &amp;oType,
+                                         int                &amp;oNum1,
+                                         int                &amp;oNum2,
+                                         const double        iTolerance = 0.) const = 0 ;
+
+  /**
+   * Splits the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; in connected components.
+   * @param ioSubPolygons.
+   * The connected sub-polygons.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The list &lt;tt&gt;ioSubPolygons&lt;/tt&gt; is cleaned by the method before any treatment.
+   */
+
+  virtual void SplitInConnectedZones (CATLISTP(CATCldCell) &amp;ioSubPolygons) const = 0 ;
+
+  /**
+   * Re-orientates the valid triangles of the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; computed as indirect.&lt;br&gt;
+   * If the &lt;tt&gt;CATCldPolygon&lt;/tt&gt; is not orientable, the result is not garanted.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The call of this method does not need a recall of &lt;tt&gt;EndOfCreation&lt;/tt&gt;
+   * or &lt;tt&gt;EndOfModification&lt;/tt&gt; methods.
+   */
+
+  virtual void ReOrientate () = 0 ;
+
+
+  /**
+   * Returns a CATIPolyMesh adapter to the CATCldPolygon.  The instance returned must be released
+   * by the caller.
+   * @param oMesh
+   *   A CATIPolyMesh interface to the instance constructed.  It must be released by the caller.
+   * @param iOnlyActive
+   *   If TRUE, the different iterators associated to the returned CATIPolyMesh will considerate
+   *   only the active vertices and triangles
+   * @return
+   *   TRUE if it constructs successfully a CATIPolyMesh object.
+   */
+  virtual CATBoolean GetPolyMesh (CATIPolyMesh*&amp; oMesh, const CATBoolean iOnlyActive = FALSE) = 0;
+
+
+} ;
+
+CATDeclareHandler (CATCldPolygon, CATCldUniCell) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCldMultiCell.html">← 上一页: CATCldMultiCell.h</a></div>
+        <div><a href="CATCldScan.html">下一页: CATCldScan.h →</a></div>
+    </div>
+</body>
+</html>

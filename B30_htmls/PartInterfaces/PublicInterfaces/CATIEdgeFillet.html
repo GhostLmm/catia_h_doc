@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIEdgeFillet.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIEdgeFillet.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDraft.html">← 上一页: CATIDraft.h</a></div>
+        <div><a href="CATIFaceFillet.html">下一页: CATIFaceFillet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIEdgeFillet_H
+#define CATIEdgeFillet_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIFillet.h&gt;
+#include &lt;CATPrtEnum.h&gt;
+#include &lt;CATLISTV_CATISpecObject.h&gt;
+#include &lt;CATISpecObject.h&gt;
+
+class CATICkeParm_var;
+class CATPointOnCurve_var;
+class CATCurve_var;
+class CATEdge_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIEdgeFillet;
+#else
+extern &quot;C&quot; const IID IID_CATIEdgeFillet;
+#endif
+
+/**
+ * Interface to represent the edge fillet shape with a constant radius or
+ * a variable radius.
+ * &lt;b&gt;Role&lt;/b&gt;: The resulting shape is made up of either
+ * constant edge fillets built with a constant radius, 
+ * variable edge fillets defined by radius/vertex pairs. 
+ */
+class ExportedByPartItf CATIEdgeFillet : public CATIFillet
+{
+  CATDeclareInterface;
+
+  public:
+    /**
+     * Sets the edge fillet constant radius.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a constant radius.
+	   * @param iRadius
+		 * Specifies the constant radius value.
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+     * than 0 but not equal to 0. 
+		 */
+  virtual void ModifyRadius(double iRadius) = 0;
+
+    /**
+     * Sets the fillet radius on an imposed vertex of a variable edge fillet.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a variable radius.
+     * A radius/vertex pair is made up of a vertex associated with a radius.
+     * @param iVertex
+     * Specifies the vertex which the radius to be modified.
+		 * The vertex should be a point, a plane (intersecting edges)  
+		 * or a CATIMfPointOnEdge feature belonging to the fillet.  
+     * @param iRadius
+     * The radius to be modified.
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+     * than or equal to 0. 
+		 */
+  virtual void ModifyRadiusOnVertex(CATISpecObject_var iVertex,double iRadius) = 0;
+
+	  /**
+     * Sets the propagation mode of the elements to be filleted.
+     * @param iPropagation 
+		 * The propagation mode specifies the edges taken into account when filleting.
+     * &lt;br&gt;The propagation can be performed in two ways:
+     * &lt;br&gt;&lt;b&gt;Tangency&lt;/b&gt;:CATIA continues filleting beyond the selected edge 
+		 * until it encounters an edge that is non continuous in tangency.
+     * &lt;br&gt;&lt;b&gt;Minimal&lt;/b&gt;: the propagation is done up to the first natural relimitation
+		 * by the geometry.
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtFilletPropagation propagation mode can be set
+		 * to &lt;tt&gt;TANGENCY&lt;/tt&gt; or &lt;tt&gt;MINIMAL&lt;/tt&gt;.
+		 */
+  virtual void ModifyPropagation(CATPrtFilletPropagation iPropagation) = 0;
+
+    /**
+     * Sets the edge fillet radius variation mode.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a variable radius.
+     * @param iVariation 
+		 * The variation mode specifies the way the fillet shape changes
+     * from one radius to another.
+     * &lt;br&gt;The variation can be performed in two ways:
+     * &lt;br&gt;&lt;b&gt;Cubic&lt;/b&gt;: the fillet changes smoothly from one
+     * radius to another.
+     * &lt;br&gt;&lt;b&gt;Linear&lt;/b&gt;: the fillet changes straight from one
+     * radius to another.;
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtFilletVariation variation mode can be set
+		 * to &lt;tt&gt;CUBIC&lt;/tt&gt; or &lt;tt&gt;LINEAR&lt;/tt&gt;.
+ 		 */
+	virtual void ModifyVariation(CATPrtFilletVariation iVariation) = 0;
+
+    /**
+     * Adds elements to be filleted.
+ 		 * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: It just adds the elements to the fillet. So 
+		 * for variable radius edge fillet, you have to use AddFilletRadius  
+		 * method on the edge to add vertices for computing variable fillet.
+     * @param iObjectList
+     * Specifies the list of sharp edges or faces to be filleted.
+     * &lt;br&gt;The CATISpecObject_var should be a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature
+		 * created with CATIMmiBRepFactory. 
+		 * This edge or face should not be already used in the fillet.
+		 * This edge or face should belong to the same mechanical body.
+	   */
+  virtual void AddObject(CATLISTV(CATISpecObject_var) iObjectList) = 0;
+
+    /**
+     * Removes elements from those to be filleted.
+     * @param iObjectList
+     * Specifies the list of edges or faces to be removed.
+     * The CATISpecObject_var should be a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature. 
+		 * This edge or face should belong to the fillet.
+	   */
+  virtual void RemoveObject(CATLISTV(CATISpecObject_var) iObjectList) = 0;
+
+   /**
+     * Adds new radius/vertex pairs.
+ 		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a variable radius.
+ 		 * If you want to add an edge, use AddObject method before.  
+     * @param iObject
+     * Specifies the edge to be filleted or the vertex where to impose the radius.
+		 * &lt;br&gt; The edge should be a Feature Redge (CATIMfRedge) used in AddObject method.
+		 * &lt;br&gt; The vertex should be a point, a plane or a feature CATIMfPointOnEdge. 
+		 * The feature PointOnEdge should be created using CATIMmiBRepFactory and
+		 * should use a Feature Redge belonging to the fillet. 
+     * @param iRadius
+     * In case of edges, the radius to impose along the edge. 
+		 * This radius is imposed at both end points of the edge.
+		 * &lt;br&gt; In case of vertices, the radius to impose at the given vertex
+	   */
+  virtual void AddFilletRadius(CATISpecObject_var iObject, double iRadius, const CATISpecObject_var &amp;iParm = NULL_var) = 0;
+
+    /**
+     * Removes a radius/vertex pair from those to be defined.
+     * @param iVertex
+     * Specifies the vertex where the radius is defined to be removed.
+ 		 * The vertex should be a point, a plane or a feature CATIMfPointOnEdge. 
+ 		 * This vertex should belong to the fillet.
+		 */
+  virtual void RemoveFilletRadius(CATISpecObject_var iVertex) = 0;
+
+    /**
+     * Adds edges that must not be modified during the fillet operation.
+     * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with constant radius. 
+     * @param iKeepEdgeList
+     * Specifies the list of sharp edges that must not be modified. 
+     * &lt;br&gt;The CATISpecObject_var should be a Redge (CATIMfRedge) feature
+		 * created with CATIMmiBRepFactory. 
+		 * This edge should not be already used in the fillet.
+		 * This edge should belong to the same mechanical body.
+	   */
+  virtual void AddKeepEdge(CATLISTV(CATISpecObject_var) iKeepEdgeList) = 0;
+
+    /**
+     * Removes edges from those to be not modified.
+     * @param iKeepEdgeList
+     * Specifies the list of edges to be removed. 
+     * &lt;br&gt;The CATISpecObject_var should be a Redge (CATIMfRedge) feature.
+		 * This edge should belong to the fillet.
+	   */
+  virtual void RemoveKeepEdge(CATLISTV(CATISpecObject_var) iKeepEdgeList) = 0;
+
+	  /**
+     * Returns the fillet type.
+		 * The fillet type specifies the ways the fillet is defined.
+     * &lt;br&gt;The fillet type can be :
+     * &lt;br&gt;&lt;b&gt;Constant&lt;/b&gt;: the constant edge fillet is built with a constant radius, .
+     * &lt;br&gt;&lt;b&gt;Variable&lt;/b&gt;: the variable edge fillet is defined by radius/vertex pairs
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtFilletType type can be set
+		 * to &lt;tt&gt;CONSTANT&lt;/tt&gt; or &lt;tt&gt;VARIABLE&lt;/tt&gt;.
+		 */
+  virtual CATPrtFilletType GetFilletType() const = 0;
+
+    /**
+     * Returns the edge fillet constant radius.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a constant radius.
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+     * than 0 but not equal to 0. 
+		 */
+  virtual double GetRadius() const= 0;
+  /** @nodoc */
+  virtual CATICkeParm_var GetRadiusParm() const= 0;
+
+    /**
+     * Returns the fillet radius on an imposed vertex of a variable edge fillet.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a variable radius.
+     * A radius/vertex pair is made up of a vertex associated with a radius.
+     * @param iVertex
+     * Specifies the vertex which the radius to be modified.
+		 * The vertex should be a point, a plane (intersecting edges)  
+		 * or a CATIMfPointOnEdge feature belonging to the fillet.  
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The radius value must be greater 
+     * than or equal to 0. 
+		 */
+  virtual double GetRadiusOnVertex(CATISpecObject_var iVertex) const = 0;
+
+  /** @nodoc */
+  virtual CATICkeParm_var GetRadiusParmOnVertex(CATISpecObject_var iVertex) const = 0;
+
+	  /**
+     * Returns the propagation mode of the elements to be filleted.
+		 * The propagation mode specifies the edges taken into account when filleting.
+     * &lt;br&gt;The propagation can be performed in two ways:
+     * &lt;br&gt;&lt;b&gt;Tangency&lt;/b&gt;:CATIA continues filleting beyond the selected edge 
+		 * until it encounters an edge that is non continuous in tangency.
+     * &lt;br&gt;&lt;b&gt;Minimal&lt;/b&gt;: the propagation is done up to the first natural relimitation
+		 * by the geometry.
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtFilletPropagation propagation mode can be set
+		 * to &lt;tt&gt;TANGENCY&lt;/tt&gt; or &lt;tt&gt;MINIMAL&lt;/tt&gt;.
+		 */
+  virtual CATPrtFilletPropagation GetPropagation() const= 0;
+
+    /**
+     * Returns the edge fillet radius variation mode.
+ 		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: only for edge fillets with a variable radius.
+		 * The variation mode specifies the way the fillet shape changes
+     * from one radius to another.
+     * &lt;br&gt;The variation can be performed in two ways:
+     * &lt;br&gt;&lt;b&gt;Cubic&lt;/b&gt;: the fillet changes smoothly from one
+     * radius to another.
+     * &lt;br&gt;&lt;b&gt;Linear&lt;/b&gt;: the fillet changes straight from one
+     * radius to another.;
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the CATPrtFilletVariation variation mode can be set
+		 * to &lt;tt&gt;CUBIC&lt;/tt&gt; or &lt;tt&gt;LINEAR&lt;/tt&gt;.
+ 		 */
+  virtual CATPrtFilletVariation GetVariation() const = 0;
+		/**
+     * Returns the list of filleted edges or faces.
+     * The CATISpecObject_var is a Redge (CATIMfRedge) or Rsur (CATIMfRsur) feature. 
+	   */
+  virtual CATLISTV(CATISpecObject_var) * GetObject() const= 0;
+    /**
+     * Returns the list of defined vertices.
+		 * The vertex is a point, a plane (intersecting edges)  
+		 * or a CATIMfPointOnEdge feature belonging to the fillet.  
+	   */
+  virtual CATLISTV(CATISpecObject_var) * GetVertex() const = 0;
+
+  /** @nodoc */
+  virtual CATLISTV(CATISpecObject_var) * GetKeepEdge() const = 0;
+
+  /** @nodoc */
+  virtual CATEdge_var GetSupportEdge(CATISpecObject_var ihVertex, CATISpecObject_var ihInitialEdge, CATPointOnCurve_var &amp;ohProjectedPoint, CATCurve_var &amp;ohCurveMin) const = 0;
+	
+	/** @nodoc */
+	virtual HRESULT SetFilletSpine(CATISpecObject_var ihSpine) = 0;
+	/** @nodoc */
+  virtual HRESULT GetFilletSpine(CATISpecObject_var &amp;ohSpine) const= 0;
+	/** @nodoc */
+	virtual HRESULT SetBitangencyType(CATPrtBitangencyType iBitangencyType) = 0;
+	/** @nodoc */
+  virtual HRESULT GetBitangencyType(CATPrtBitangencyType&amp; oBitangencyType) const= 0;
+
+  /** @nodoc */
+  virtual HRESULT SetTrimType(CATPrtTrimType iTrimType) = 0;
+  /** @nodoc */
+  virtual HRESULT GetTrimType(CATPrtTrimType&amp; oTrimType) const= 0;
+  
+  /** @nodoc */
+  virtual HRESULT AddBlendFromVertices(double&amp; oSetBackValue) const= 0;
+  /** @nodoc */
+  virtual HRESULT RemoveBlend(CATISpecObject_var&amp; iBlend) const= 0;
+  /** @nodoc */
+  virtual int GetNbOfBlends() const= 0;
+  /** @nodoc */
+  virtual HRESULT GetBlends(CATLISTV(CATISpecObject_var)&amp; oBlendList) const= 0; 
+  
+  /** @nodoc */
+  virtual HRESULT SetCliffEdgeMode(CATPrtCliffEdgeMode iCliffEdgeMode) const= 0;
+
+  /** @nodoc */
+  virtual HRESULT GetCliffEdgeMode(CATPrtCliffEdgeMode &amp;oCliffEdgeMode) const= 0;
+
+
+
+
+
+};
+
+CATDeclareHandler (CATIEdgeFillet, CATIFillet); 
+
+#endif // CATIEdgeFillet_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDraft.html">← 上一页: CATIDraft.h</a></div>
+        <div><a href="CATIFaceFillet.html">下一页: CATIFaceFillet.h →</a></div>
+    </div>
+</body>
+</html>

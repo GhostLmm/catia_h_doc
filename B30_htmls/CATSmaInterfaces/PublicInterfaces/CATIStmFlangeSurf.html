@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSmaInterfaces/PublicInterfaces/CATIStmFlangeSurf.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSmaInterfaces/PublicInterfaces/CATIStmFlangeSurf.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmCharacteristicCurves.html">← 上一页: CATIStmCharacteristicCurves.h</a></div>
+        <div><a href="CATIStmHydroForming.html">下一页: CATIStmHydroForming.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIStmFlangeSurf_H
+#define CATIStmFlangeSurf_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;ExportedByCATSmaInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATListPtrCATISpecObject.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATBody.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATICkeParm.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSmaInterfaces IID IID_CATIStmFlangeSurf;
+#else
+extern &quot;C&quot; const IID IID_CATIStmFlangeSurf;
+#endif
+
+/**
+ * Interface to manage the aerospace sheet metal &lt;b&gt;surfacic flange&lt;/b&gt; feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Provides the basic methods to access data of a sheet metal
+ * &lt;b&gt;surfacic flange&lt;/b&gt; feature.
+ *
+ * &lt;br&gt;A &lt;b&gt;surfacic flange&lt;/b&gt; is defined by :
+ *      &lt;ul&gt;
+ *      &lt;li&gt; &lt;b&gt;base feature&lt;/b&gt;              : the &lt;b&gt;web&lt;/b&gt; or another &lt;b&gt;surfacic flange&lt;/b&gt;,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;support&lt;/b&gt;                   : a surface or a curve,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;fillet radius&lt;/b&gt;             : a length,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;edge of part&lt;/b&gt;              : a curve or a length,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;first side&lt;/b&gt;                : a curve or a plane,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;first side corner radius&lt;/b&gt;  : a length,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;second side&lt;/b&gt;               : a curve or a plane,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;second side corner radius&lt;/b&gt; : a length,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;manufacturing process&lt;/b&gt;     : a parameter,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;joggle compensation&lt;/b&gt;       : a parameter,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;first side compensation&lt;/b&gt;   : a parameter,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;second side compensation&lt;/b&gt;  : a parameter.&lt;/li&gt;
+ *      &lt;/ul&gt;
+ */
+
+class ExportedByCATSmaInterfaces CATIStmFlangeSurf : public CATBaseUnknown
+  { 
+  CATDeclareInterface;
+   
+  public: 
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the base feature of the surfacic flange.
+     *
+     * @param opiBaseFeatureSpec 
+     *   Specification of the base feature  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; the &lt;b&gt;web&lt;/b&gt;,&lt;/li&gt;
+     *      &lt;li&gt; another &lt;b&gt;surfacic flange&lt;/b&gt;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetBaseFeature (CATISpecObject ** opiBaseFeatureSpec) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the base feature of the surfacic flange.
+     *
+     * @param ipiBaseFeatureSpec 
+     *   Specification of the base feature  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; the &lt;b&gt;web&lt;/b&gt;,&lt;/li&gt;
+     *      &lt;li&gt; another &lt;b&gt;surfacic flange&lt;/b&gt;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetBaseFeature (const CATISpecObject * ipiBaseFeatureSpec) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the bend radius type of the surfacic flange.
+     * @param oBendRadiusType 
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Constant&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetBendRadiusType (CATUnicodeString &amp; oBendRadiusType) = 0;
+	    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the bend radius type of the surfacic flange.
+     * @param iBendRadiusType 
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Constant&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetBendRadiusType (const CATUnicodeString &amp; iBendRadiusType) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the bend radius value of the surfacic flange.
+     *
+     * @param opiBendRadiusValueParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the bend radius value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetBendRadiusValue (CATICkeParm ** opiBendRadiusValueParam) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the support type of the surfacic flange.
+     *
+     * @param oSupportType 
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Exact&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Approximation&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSupportType (CATUnicodeString &amp; oSupportType) = 0;
+	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the support type of the surfacic flange.
+     *
+     * @param iSupportType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Exact&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Approximation&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSupportType (const CATUnicodeString &amp; iSupportType) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the support of the surfacic flange.
+     * @param opiSupportSpec
+     *   Specification of the support  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; a &lt;b&gt;surface&lt;/b&gt; (if support type is different from &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;),&lt;/li&gt;
+     *      &lt;li&gt; a &lt;b&gt;curve&lt;/b&gt;   (if support type is equal to &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;).&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSupport (CATISpecObject ** opiSupportSpec) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the support of the surfacic flange.
+     * @param ipiSupportSpec
+     *   Specification of the support  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; a &lt;b&gt;surface&lt;/b&gt; (if support type is different from &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;),&lt;/li&gt;
+     *      &lt;li&gt; a &lt;b&gt;curve&lt;/b&gt;   (if support type is equal to &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;).&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSupport (const CATISpecObject * ipiSupportSpec) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method is usefull to limit the support of the surfacic flange
+     *                  if the support type is &quot;Angle&quot; or &quot;Exact&quot;.
+     * @param opiLengthParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the support length value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetSupportLength (CATICkeParm ** opiLengthParam) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the approximate length of the surfacic flange 
+     *                  if &lt;b&gt;Support type&lt;/b&gt; is equal to &lt;b&gt;Approximation&lt;/b&gt;.
+     * @param opiApproxLengthParam  
+     *   a CATICkeParm : Do not modify this value.
+     */ 
+    virtual HRESULT __stdcall GetSupportApproxLength	(CATICkeParm ** opiApproxLengthParam) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the Angle of the support and the base feature support
+     *                  if &lt;b&gt;Support type&lt;/b&gt; is equal to &lt;b&gt;Angle&lt;/b&gt;.
+     * @param opiSupportAngleParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the bend radius value. @see CATICkeParm.
+     */ 
+  	virtual HRESULT __stdcall GetSupportAngle (CATICkeParm ** opiSupportAngleParam) = 0;
+
+ 	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the base feature orientation of the Surfacic Flange,
+     *                  it defines the base feature side to keep compared to the flange support orientation.
+     *
+     * @param oBaseFeatureOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The base feature side to keep is opposite to the flange support orientation,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The base feature side to keep is same as the flange support orientation,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetBaseFeatureOrient (CATOrientation &amp; oBaseFeatureOrient) = 0;
+ 	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the base feature orientation of the Surfacic Flange,
+     *                  it defines the base feature side to keep compared to the flange support orientation.
+     *
+     * @param iBaseFeatureOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The base feature side to keep is opposite to the flange support orientation,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The base feature side to keep is same as the flange support orientation,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetBaseFeatureOrient (const CATOrientation &amp; iBaseFeatureOrient) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the flange orientation of the Surfacic Flange,
+     *                  it defines the fillet orientation compared to the base feature support orientation.
+     * @param oFlangeOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The fillet and the base feature support orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The fillet and the base feature support orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetFlangeOrient (CATOrientation &amp; oFlangeOrient) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the flange orientation of the Surfacic Flange,
+     *                  it defines the fillet orientation compared to the base feature support orientation.
+     * @param iFlangeOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The fillet and the base feature support orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The fillet and the base feature support orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetFlangeOrient (const CATOrientation &amp; iFlangeOrient) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the material orientation of the surfacic flange.
+     *                  It defines the thickness direction compared to the surfacic flange support orientation.
+     * @param oMaterialOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The thickness and the surfacic flange support orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The thickness and the surfacic flange support orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetMaterialOrient (CATOrientation &amp; oMaterialOrient) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the material orientation of the surfacic flange.
+     *                  It defines the thickness direction compared to the surfacic flange support orientation.
+     * @param iMaterialOrient  
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The thickness and the surfacic flange support orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The thickness and the surfacic flange support orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetMaterialOrient (const CATOrientation &amp; iMaterialOrient) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the &lt;b&gt;edge of part&lt;/b&gt; type of the surfacic flange.
+     * @param oEOPType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length From OML&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetEOPType (CATUnicodeString &amp; oEOPType) = 0;
+	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the &lt;b&gt;edge of part&lt;/b&gt; type of the surfacic flange.
+     * @param iEOPType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length From OML&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetEOPType (const CATUnicodeString &amp; iEOPType) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methode retrieves the length of the edge of part of the surfacic flange
+     *                  if the edge of part type is equal to &lt;b&gt;Length from OML&lt;/b&gt;.
+     *
+     * @param opiEOPLengthParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the Length From OML value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetEOPLength (CATICkeParm ** opiEOPLengthParam) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methode retrieves the list of elements of the edge of part 
+     *                  if the edge of part type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FP&lt;/b&gt;.
+     * @param oEOPElementsList  
+     *   List of specifications : curves or opened sketchs.
+	   *
+     */ 
+	  virtual HRESULT __stdcall GetEOPElements (CATLISTP(CATISpecObject) &amp; oEOPElementsList) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methode sets the list of elements of the edge of part 
+     *                  if the edge of part type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FP&lt;/b&gt;.
+     * @param iEOPElementsList  
+     *   List of specifications : curves or opened sketchs.
+	   *
+     */ 
+	  virtual HRESULT __stdcall SetEOPElements (const CATLISTP(CATISpecObject) &amp; iEOPElementsList) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side type of the surfacic flange.
+     * @param oSideType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Standard&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide1Type (CATUnicodeString &amp; oSideType) = 0;
+	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the first side type of the surfacic flange.
+     * @param iSideType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Standard&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide1Type (const CATUnicodeString &amp; iSideType) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side elements of the surfacic flange
+     *                  if it&#x27;s type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FD&lt;/b&gt;.
+     * @param oSideElementsList  
+     *   List of specifications : curve(s) or opened sketch(s) or plane(s).
+     */ 
+    virtual HRESULT __stdcall GetSide1Elements (CATLISTP(CATISpecObject) &amp; oSideElementsList) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the first side elements of the surfacic flange
+     *                  if it&#x27;s type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FD&lt;/b&gt;.
+     * @param iSideElementsList  
+     *   List of specifications : curve(s) or opened sketch(s) or plane(s).
+     */ 
+    virtual HRESULT __stdcall SetSide1Elements (const CATLISTP(CATISpecObject) &amp; iSideElementsList) = 0;
+
+	 /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side Dress-Up type of the surfacic flange.
+     * @param oDressUpType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Corner&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide1DressUpType (CATUnicodeString &amp; oDressUpType) = 0;
+	 
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the first side Dress-Up type of the surfacic flange.
+     * @param iDressUpType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Corner&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide1DressUpType (const CATUnicodeString &amp; iDressUpType) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side corner value of the surfacic flange 
+     *                  if its DressUp type is equal to &lt;b&gt;Corner&lt;/b&gt;.
+     * @param opiCornerRadiusParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the first side corner radius value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetSide1CornerRadius (CATICkeParm ** opiCornerRadiusParam) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side type of the surfacic flange.
+     * @param oSideType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Standard&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide2Type (CATUnicodeString &amp; oSideType) = 0;
+	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the second side type of the surfacic flange.
+     * @param iSideType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Standard&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FD&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Element FP&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide2Type (const CATUnicodeString &amp; iSideType) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side elements of the surfacic flange
+     *                  if it&#x27;s type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FD&lt;/b&gt;.
+     * @param oSideElementsList  
+     *   List of specifications : curve(s) or opened sketch(s) or plane(s).
+     */ 
+    virtual HRESULT __stdcall GetSide2Elements (CATLISTP(CATISpecObject) &amp; oSideElementsList) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the second side elements of the surfacic flange
+     *                  if it&#x27;s type is equal to &lt;b&gt;Element FD&lt;/b&gt; or &lt;b&gt;Element FD&lt;/b&gt;.
+     * @param iSideElementsList  
+     *   List of specifications : curve(s) or opened sketch(s) or plane(s).
+     */ 
+    virtual HRESULT __stdcall SetSide2Elements (const CATLISTP(CATISpecObject) &amp; iSideElementsList) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side Dress-Up type of the surfacic flange.
+     * @param oDressUpType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Corner&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide2DressUpType (CATUnicodeString &amp; oDressUpType) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the second side Dress-Up type of the surfacic flange.
+     * @param iDressUpType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Corner&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide2DressUpType (const CATUnicodeString &amp; iDressUpType) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side corner value of the surfacic flange 
+     *                  if its Dress-Up type is equal to &lt;b&gt;Corner&lt;/b&gt;.
+     * @param opiCornerRadiusParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the first side corner radius value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetSide2CornerRadius (CATICkeParm ** opiCornerRadiusParam) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the K_Factor associated to the fillet of the surfacic flange.
+     * @param opiKFactorParam  
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the K_Factor value. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetKFactor (CATICkeParm ** opiKFactorParam) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the manufacturing process type of the surfacic flange.
+     * @param oManufProcType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Hydropressed&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;BreakFormed&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetManufacturingProcessType (CATUnicodeString &amp; oManufProcType) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the manufacturing process type of the surfacic flange.
+     * @param iManufProcType
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Hydropressed&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;BreakFormed&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetManufacturingProcessType (const CATUnicodeString &amp; iManufProcType) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methode retrieves the list of joggles of the surfacic flange.
+     * @param oJogglesList  
+     *   List of specifications : &lt;b&gt;Joggle&lt;/b&gt;(s).
+	   *
+     */ 
+	  virtual HRESULT __stdcall GetJoggles (CATLISTP(CATISpecObject) &amp; oJogglesList) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves if the joggle compensation is set on the surfacic flange.
+     *
+     * @param oCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Apply&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetJoggleCompensation (CATUnicodeString &amp; oCompensation) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the joggle compensation of the surfacic flange.
+     *
+     *                  !!! The joggle compensation method is defined on the sheet metal parameters.
+     *
+     * @param ipiPrtPartSpec
+     *   The Part Feature
+     * @param iCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Apply&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetJoggleCompensation (const CATISpecObject *   ipiPrtPartSpec,
+                                                     const CATUnicodeString &amp; iCompensation) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side compensation of the surfacic flange.
+     * @param oCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Automatic&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide1CompensationType (CATUnicodeString &amp; oCompensation) = 0;
+	  
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the first side compensation value of the surfacic flange.
+     * @param oCompensationValue
+     *   a double 
+     *
+     */ 
+    virtual HRESULT __stdcall GetSide1CompensationValue (double &amp; oCompensation) = 0;
+	      
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method valuate the first side compensation value of the surfacic flange.
+     * @param iCompensationValue
+     *   a double 
+     *
+     */ 
+    virtual HRESULT __stdcall SetSide1CompensationValue (const double &amp; iCompensation) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the first side compensation of the surfacic flange.
+     * @param iCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Automatic&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide1CompensationType (const CATUnicodeString &amp; iCompensation) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side compensation of the surfacic flange.
+     * @param oCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Automatic&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetSide2CompensationType (CATUnicodeString &amp; oCompensation) = 0;
+
+	  /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the second side compensation of the surfacic flange.
+     * @param iCompensation
+     *   a CATUnicodeString  
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;None&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Automatic&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Angle&lt;/b&gt;&quot;,&lt;/li&gt;
+     *      &lt;li&gt; &quot;&lt;b&gt;Length&lt;/b&gt;&quot;.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall SetSide2CompensationType (const CATUnicodeString &amp; iCompensation) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the second side compensation value of the surfacic flange.
+     * @param oCompensationValue
+     *   a double 
+     *
+     */ 
+    virtual HRESULT __stdcall GetSide2CompensationValue (double &amp; oCompensation) = 0;
+	      
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method valuate the second side compensation value of the surfacic flange.
+     * @param iCompensationValue
+     *   a double 
+     *
+     */ 
+    virtual HRESULT __stdcall SetSide2CompensationValue (const double &amp; iCompensation) = 0;
+
+  };
+
+CATDeclareHandler (CATIStmFlangeSurf, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmCharacteristicCurves.html">← 上一页: CATIStmCharacteristicCurves.h</a></div>
+        <div><a href="CATIStmHydroForming.html">下一页: CATIStmHydroForming.h →</a></div>
+    </div>
+</body>
+</html>

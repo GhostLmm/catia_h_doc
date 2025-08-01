@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATIVisuFilter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATIVisuFilter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVisu.html">← 上一页: CATIVisu.h</a></div>
+        <div><a href="CATLPFKRemoteControl.html">下一页: CATLPFKRemoteControl.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2008
+
+#ifndef CATIVisuFilter_h
+#define CATIVisuFilter_h
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &lt;CATVisualization.h&gt;
+
+#include &lt;CATBaseUnknown.h&gt;
+
+ExportedByCATVisualization extern IID IID_CATIVisuFilter;
+
+/**
+* Interface for visibility in layer filter.
+* &lt;br&gt;Interface implemented by the @href CATVisManager that you retrieve by the
+* static function @href CATVisManager#GetVisManager . 
+*/
+class ExportedByCATVisualization CATIVisuFilter: public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+ public :
+
+  /**
+  * Returns the visibility state of an object or a layer in the current layer filter.
+  * &lt;br&gt;&lt;br&gt;Role&lt;/b&gt;: This method gives the visibility state of an object or a layer. Two usages for this
+  * method:
+  * &lt;ul&gt;
+  * &lt;li&gt;iObject=NULL, and you only set iLayerNumber&lt;/li&gt;
+  * &lt;p&gt;In this case, you want to know whether a layer is visible in the current filter.&lt;/p&gt;
+  * &lt;li&gt;iObject!=NULL, and you don&#x27;t set iLayerNumber&lt;/li&gt;
+  * &lt;p&gt;In this case, you want to know whether an object is visible in the current filter.&lt;/p&gt;
+  * &lt;/ul&gt;
+  * &lt;p&gt;The reference layer filter for the query is the layer filter currently applied on the currently edited object.
+  * The currently edited object is the UIActive object in the current editor (CATFrmEditor).
+  * &lt;p&gt;This means an interactive context is needed for this method to work correctly. It may not work correctly
+  * if used in a batch context because there will be no current editor and no UIActive objects in editors.
+  * In a batch context the method will work fine only if the context contains only one editor and if this editor
+  * edits a single object and no assembly (i.e. no hierarchy of UIActivable objects).
+  * @param iObject
+  * The object you want to query. Remember objects placed in no layer are always visible.
+  * @param iLayerNumber
+  * The number of the layer you want to query:
+  * &lt;br&gt;
+  * &lt;ul&gt;
+  * &lt;li&gt;a valid value ranges between 0 and 999,  &lt;/li&gt;
+  * &lt;li&gt;-1, the method ignores the value. &lt;/li&gt;
+  * &lt;/ul&gt;
+  * Remember the current layer is always visible.
+  * @return
+  * S_OK if the layer or object is visible, E_FAIL if not visible.
+  */
+  virtual HRESULT IsVisible (const CATBaseUnknown *iObject,int iLayerNumber=-1) = 0;
+
+  /** @nodoc */
+  virtual HRESULT SaveCurrentLayer (const unsigned int layerNumber) = 0;
+  /** @nodoc */
+  virtual HRESULT LoadCurrentLayer (unsigned int *layerNumber) = 0;
+  /** @nodoc */
+  virtual void SetModelFilter(unsigned char * iLayerTab, unsigned int iSize) = 0;
+  /** @nodoc */
+  virtual HRESULT GetModelFilter (const unsigned char*&amp; ioLayerTab, unsigned int&amp; oSize) = 0;     
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVisu.html">← 上一页: CATIVisu.h</a></div>
+        <div><a href="CATLPFKRemoteControl.html">下一页: CATLPFKRemoteControl.h →</a></div>
+    </div>
+</body>
+</html>

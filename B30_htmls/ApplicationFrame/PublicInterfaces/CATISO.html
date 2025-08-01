@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATISO.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATISO.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRepeatableCommand.html">← 上一页: CATIRepeatableCommand.h</a></div>
+        <div><a href="CATISONotification.html">下一页: CATISONotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISO_H_
+#define CATISO_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CD0WIN.h&quot;
+#include &quot;CATCallbackManager.h&quot;
+#include &quot;CATListOfCATBaseUnknown.h&quot;
+#include &quot;CATDisplayType.h&quot;
+#include &quot;DefineCst.h&quot;
+#include &quot;list.h&quot;
+#include &quot;CATPathElement.h&quot;
+
+class CATListPtrCATViewer;
+class CAT3DViewer;
+class CAT2DViewer;
+class CATFrmEditor;
+class CAT4x4Matrix;
+class CATViewpoint;
+class CATViewer;
+
+/**
+ * Class for visualizing temporary objects in given viewers.
+ * &lt;b&gt;Role&lt;/b&gt;: Usually you put into the Interactive Set Objects (ISO), objects that are related
+ * to the current command. Thus it allows you to give temporaries information to the end-user.
+ * &lt;br&gt;The object, to set into the ISO, are components which implement either @href CATI3DGeoVisu 
+ * either @href CATI2DGeoVisu, two default interfaces of the Visualization Framework. 
+ * &lt;br&gt;To avoid to create a new component, you can use a @href CATModelForRep2D or 
+ * or a @href CATModelForRep3D. These 2 components already implement the visualization 
+ * interfaces.
+ *&lt;p&gt;
+ * There are three default CATISO in every editor:
+ *&lt;ol&gt;
+ *&lt;li&gt; a normal   CATISO&lt;/li&gt;
+ *&lt;li&gt; a furtive  CATISO&lt;/li&gt;
+ *&lt;li&gt; a background CATISO&lt;/li&gt;
+ *&lt;/ol&gt;
+ *@see CATDisplayType
+ */
+
+
+class ExportedByCD0WIN CATISO: public CATCallbackManager
+{
+  /** @nodoc */
+  CATDeclareClass ;
+
+   public:
+   
+  /**
+   * @nodoc 
+   * Constructs the class.
+   * @param iEditor
+   *    Editor attached to this Set of objects
+   * @param iLayout
+   *    Type of the Display. @href CATDisplayType . 
+   *    The default value is &lt;tt&gt;CATNormal&lt;/tt&gt;
+   */
+  CATISO (CATFrmEditor * iEditor, CATDisplayType iLayout=CATNormal);
+
+  virtual ~CATISO ();
+  
+  
+  /**
+   * Empties the Interactive Set Of Objects.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Empties every object put into it from any viewer. 
+   * The result is that all the
+   * graphical representations of the objects added into it are destroyed, and each object referenced in the current set
+   * is released.
+   */
+  void Empty ();
+
+  /**
+   * @deprecated V5R14 Empty
+   * Cleans the Interactive Set Of Objects.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Empties every object put into it from any viewer and detaches all the viewers.
+   * The result is that all the
+   * graphical representations of the objects added into it are destroyed, that it empties the 
+   * list of viewer as well as the list of objects referenced into the current set.
+   */
+  void Clean ();
+
+    
+  /**
+   * Sets the cursor at the begining of the Interactive Set Of Objects.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * In order to get the first object of the set, you need call the &lt;tt&gt;InitElementList()&lt;/tt&gt;
+   * method then call the @href #GetNextElement() method.
+   */
+  void InitElementList();
+  
+  /**
+   * Returns the next object of the the Interactive Set Of Objects.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * It is useful when you want to go through all the objects that are hold in the set.
+   * Notice that the internal cursor is updated to the new position. When this method returns
+   * NULL, it means that you are at the end of the list.
+	* @return a CATBaseUnknown value
+   */
+  CATBaseUnknown * GetNextElement();
+  
+  /**
+   * Adds an object to the Interactive Set Of Objects.
+   * @param iObject
+   *  The object to add.
+   * This object must NOT be a graphical representation.
+   * A CATCreate is sent to build the representation of iObject.
+   * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: An AddRef is done on iObject.
+   * 
+   */
+  virtual void AddElement( CATBaseUnknown * iObject );
+  /**
+   * Removes an object from the Interactive Set Of Objects.
+   * @param iObject
+   *  The object to remove.
+   * @param NoDestroying
+   *   if NoDestroying=0, default behaviour, the representation associated to 
+   *                  iObject is destroyed by sending a CATDelete.
+   *   if NoDestroying=1, then the representation associated to 
+   *                  iObject is not destroyed. It is simply removed from the 
+   *				  BagRep of CATISO.
+   * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: A Release is done on iObject.
+   */
+  
+  virtual void RemoveElement( CATBaseUnknown *iObject, int NoDestroying=0 );
+
+  /**
+   * Modifies a given object hold in the Interactive Set Of Objects.
+   * @param iObject
+   *  The object to modifie
+   * @param iMat
+   *   This matrix represents the tranformation to perform onto the object.If NULL
+   *   (the default value), the object is not modified. 
+   * @see CAT4x4Matrix
+   */
+  virtual void UpdateElement( CATBaseUnknown *iObject  , CAT4x4Matrix *iMat=NULL);
+   
+  /**
+   * Checks if an object is in the Interactive Set Of Objects.
+   *
+   * @param iObject
+   *  the object.
+   * @return an integer value
+   *&lt;ol&gt;
+   * &lt;li&gt; 1 if the given object is already there &lt;/li&gt;
+   * &lt;li&gt; 0 otherwise &lt;/li&gt;
+   *&lt;/ol&gt;
+   *
+   */
+  int IsMember ( CATBaseUnknown * iObject);
+ 
+  /**
+   * Adds a 3D viewer to the Interactive Set Of Objects.
+   *
+   * @param iViewer
+   * the 3D viewer to add.
+   * @see CAT3DViewer
+   */
+  void AddViewer (CAT3DViewer *iViewer);
+  
+  /**
+   *  Adds a 2D viewer to the Interactive Set Of Objects.
+   *
+   * @param iViewer
+   * the 2D viewer to add.
+   * @see CAT2DViewer
+   */
+  void AddViewer (CAT2DViewer *iViewer);
+    
+  /**
+   * @nodoc
+   *  Adds a viewer to the Interactive Set Of Objects.
+   *
+   * @param iViewer
+   * the viewer to add.
+   * @param VisuType
+   *  
+   * @see CATViewer
+   */
+  void AddViewer (CATViewer *iViewer, VisuType iType);
+    
+  /**
+   * Removes a 3D viewer from the Interactive Set Of Objects.
+   *
+   * @param iViewer
+   * the 3D viewer to remove.
+   * @see CAT3DViewer
+   */
+  void RemoveViewer (CAT3DViewer *iViewer);
+  
+  /**
+   * Removes a 2D viewer from the Interactive Set Of Objects.
+   * @param iViewer
+   * the 2D viewer to remove.
+   * @see CAT2DViewer
+   */
+  void RemoveViewer (CAT2DViewer *iViewer);
+  
+  /**
+   * @nodoc
+   * Removes a viewer from the Interactive Set Of Objects.
+   *
+   * @param iViewer
+   * The viewer to remove.
+   * @param VisuType
+   * @see CATViewer
+   */
+  void RemoveViewer (CATViewer *iViewer, VisuType iType);
+  
+
+  /**
+   * @nodoc
+   * Adds a viewpoint and a list of Visualization interfaces.
+   * @param iViewpoint
+   *    the viewpoint.
+   * @param iListIID
+   *   the list of IID.
+   * @see CATViewpoint
+   */
+  void AddViewpoint (CATViewpoint* iViewpoint, list&lt;IID&gt;&amp; iListIID);
+  
+  /**
+   * @nodoc
+   * Removes a viewpoint and a list of Visualization interfaces.
+   * @param iViewpoint
+   *    the viewpoint.
+   * @param iListIID
+   *   the list of IID.
+   * @see CATViewpoint
+   */
+  void RemoveViewpoint (CATViewpoint* iViewpoint, list&lt;IID&gt;&amp; iListIID);
+  
+  /**
+   * @nodoc
+   * Sets the internal cursor at the beginning of the list of 2D viewer hold by the ISO
+   *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * in order to get the first 2D viewer hold in the list, you need to call the
+   * @href #GetNext2DViewer() method  after the @href #Init2DViewerList() method.
+   */
+  void Init2DViewerList();
+  
+  /**
+   * @nodoc
+   * Returns the next 2D viewer hold in the list of the ISO
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : when it returns NULL, that means that you are at the end of the list.
+   */
+  CAT2DViewer * GetNext2DViewer();
+  
+  /**
+   * @nodoc
+   * Sets the internal cursor at the beginning of the list of 3D viewer hold in the CATISO.
+   *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * in order to get the first 3D viewer hold in the list, you need to call the
+   * @href #GetNext3DViewer() method  after the @href #Init3DViewerList() method.
+   */
+  void Init3DViewerList();
+
+  /**  
+   * @nodoc
+   *  Returns the next 3D viewer hold in the list of the CATISO.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : when it returns NULL, that means that you are at the end of the list.
+   */
+  CAT3DViewer * GetNext3DViewer();
+  
+   /**
+   * @nodoc
+   * Sets the internal cursor at the beginning of the list of 2D viewer hold in the CATISO.
+   *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * in order to get the first 2D viewer hold in the list, you need to call the
+   * @href #GetNext2DViewer() method  after the @href #Init2DViewerList() method.
+   */
+  void InitViewerFor2DList();
+
+   /**
+   * @nodoc
+   * Returns the next 2D viewer hold in the list of the  CATISO.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : when it returns NULL, that means that you are at the end of the list.
+   */
+  CATViewer * GetNextViewerFor2D();
+
+   /**
+   * @nodoc
+   * Sets the internal cursor at the beginning of the list of 3D viewer hold in the  CATISO.
+   *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: 
+   * in order to get the first 3D viewer hold in the list, you need to call the
+   * @href #GetNext3DViewer() method  after the @href #Init3DViewerList() method.
+   */
+  void InitViewerFor3DList();
+
+
+   /**  
+   * @nodoc
+   *  Returns the next 3D viewer hold in the list of the CATISO.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : when it returns NULL, that means that you are at the end of the list.
+   */
+  CATViewer * GetNextViewerFor3D();
+
+  
+private:
+  
+     CATLISTP (CATBaseUnknown) * _liste;
+     CATListPtrCATViewer       * _3DViewers;
+     CATListPtrCATViewer       * _2DViewers;
+     CATListPtrCATViewer       * _ViewersFor3D;
+     CATListPtrCATViewer       * _ViewersFor2D;
+     int                         _ListPosition;
+     int                         _3DViewerPosition;
+     int                         _2DViewerPosition;
+     int                         _ViewerFor3DPosition;
+     int                         _ViewerFor2DPosition ;
+     CATFrmEditor              * _Editor;
+     CATDisplayType              _layout;
+     CATPathElement _TreeRoot;
+     
+};
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRepeatableCommand.html">← 上一页: CATIRepeatableCommand.h</a></div>
+        <div><a href="CATISONotification.html">下一页: CATISONotification.h →</a></div>
+    </div>
+</body>
+</html>

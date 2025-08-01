@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppCCPCGCntrInfo.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppCCPCGCntrInfo.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppAssemblyMember.html">← 上一页: CATEASchAppAssemblyMember.h</a></div>
+        <div><a href="CATEASchAppCmdInfo.html">下一页: CATEASchAppCmdInfo.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEASchAppCCPCGCntrInfo_H
+#define CATEASchAppCCPCGCntrInfo_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+// System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSchItfCPP.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+/**
+ * Super class to derive implementation for interface CATISchAppCCPCGCntrInfo.
+ * &lt;b&gt;Role&lt;/b&gt;: Adaptor
+ */
+
+class CATIUnknownList;
+class CATICStringList;
+class CATISchAppConnector;
+
+class ExportedByCATSchItfCPP CATEASchAppCCPCGCntrInfo : public CATBaseUnknown
+{
+  public: 
+      
+  CATDeclareClass;
+
+  /**
+   * Constructs an empty CATEASchAppCCPCGCntrInfo.
+   */
+  CATEASchAppCCPCGCntrInfo();
+  virtual ~CATEASchAppCCPCGCntrInfo();  
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATEASchAppCCPCGCntrInfo#AppGetCGConnectInfo2 instead.
+  * Store appropriate information as attributes of iCompGroup.
+  * @param iCntrSrcOfThis
+  *   The connector that is a counterpart of this connector in the 
+  *   source component. It provides connectivity information of the
+  *   connector in the source component (this connector is in the target
+  *   component. Terminology as used in cut-copy-paste architecture).
+  * @param oLConCntrNeedsMapping
+  *   A list of connector interfaces. These are the connectors that
+  *   are connected to iCntrSrcOfThis. The caller needs to find the
+  *   corresponding copies under the CCP architecture.
+  * @param oLCStrConMainCntrName
+  *   A list of names of connectors. These connectors will be used
+  *   used to identify the reference connection (such as cable connection)
+  *   when the pin/wire connections are made in AppPostCGPlacementConnect.
+  */
+  virtual HRESULT AppGetCGConnectInfo (
+    const CATISchAppConnector *iCntrSrcOfThis,
+    CATIUnknownList **oLConCntrNeedsMapping,
+    CATICStringList **oLCStrConMainCntrName);
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATEASchAppCCPCGCntrInfo#AppPostCGPlacementConnect2 instead.
+  * Post process after placing this connector whoes owner is a component group.
+  * Through this method application will make use of the information 
+  * stored by AppGetCGConnectInfo to connect this connector to the input
+  * connector.
+  * @param iCntrToConnect
+  *   The connector to connect to. 
+  * @param iConMainCntrName
+  *   The name of the connector. The owner of this connector is connected
+  *   to the owner of iCntrToConnect (for .e.g. if iCntrToConnect is a wire 
+  *   connector, the iConMainCntrName is the name of a cable-extremity 
+  *   connector).
+  */
+  virtual HRESULT AppPostCGPlacementConnect (
+    const CATISchAppConnector *iCntrToConnect,
+    const char *iConMainCntrName);
+
+    /**
+  * Store appropriate information as attributes of iCompGroup.
+  * @param iCntrSrcOfThis
+  *   The connector that is a counterpart of this connector in the 
+  *   source component. It provides connectivity information of the
+  *   connector in the source component (this connector is in the target
+  *   component. Terminology as used in cut-copy-paste architecture).
+  * @param oLConCntrNeedsMapping
+  *   A list of connector interfaces. These are the connectors that
+  *   are connected to iCntrSrcOfThis. The caller needs to find the
+  *   corresponding copies under the CCP architecture.
+  * @param oLUStrConMainCntrName
+  *   A list of names of connectors. These connectors will be used
+  *   used to identify the reference connection (such as cable connection)
+  *   when the pin/wire connections are made in AppPostCGPlacementConnect.
+  */
+  virtual HRESULT AppGetCGConnectInfo2 (
+    const CATISchAppConnector *iCntrSrcOfThis,
+    CATIUnknownList **oLConCntrNeedsMapping,
+    CATListValCATUnicodeString &amp;oLCStrConMainCntrName);
+
+  /**
+  * Post process after placing this connector whoes owner is a component group.
+  * Through this method application will make use of the information 
+  * stored by AppGetCGConnectInfo to connect this connector to the input
+  * connector.
+  * @param iCntrToConnect
+  *   The connector to connect to. 
+  * @param iConMainCntrName
+  *   The name of the connector. The owner of this connector is connected
+  *   to the owner of iCntrToConnect (for .e.g. if iCntrToConnect is a wire 
+  *   connector, the iConMainCntrName is the name of a cable-extremity 
+  *   connector).
+  */
+  virtual HRESULT AppPostCGPlacementConnect2 (
+    const CATISchAppConnector *iCntrToConnect,
+    const CATUnicodeString &amp;iConMainCntrName);
+
+  //-------------------------
+
+  private:
+  // do not implement
+  CATEASchAppCCPCGCntrInfo (CATEASchAppCCPCGCntrInfo&amp;);
+  CATEASchAppCCPCGCntrInfo&amp; operator=(CATEASchAppCCPCGCntrInfo&amp;);
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppAssemblyMember.html">← 上一页: CATEASchAppAssemblyMember.h</a></div>
+        <div><a href="CATEASchAppCmdInfo.html">下一页: CATEASchAppCmdInfo.h →</a></div>
+    </div>
+</body>
+</html>

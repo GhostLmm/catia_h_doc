@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogQueryResult.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogQueryResult.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogQuery.html">← 上一页: CATICatalogQuery.h</a></div>
+        <div><a href="CATICatalogSynchronize.html">下一页: CATICatalogSynchronize.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATICatalogQueryResult_H_
+#define CATICatalogQueryResult_H_
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+
+#include &quot;CATCclInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+
+class CATICatalogChapter ;
+class CATICatalogDescription ;
+class CATListValCATICatalogDescription_var ;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATCclInterfaces IID IID_CATICatalogQueryResult ;
+#else
+extern &quot;C&quot; const IID IID_CATICatalogQueryResult ;
+#endif
+
+/**
+* Interface to inquire query results.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This interface is used to inquire query results. A query is
+* the means to filter the descriptions of a chapter in taken account of a criteria.
+* A criteria is a set of conditions that must resolve the keywords of the chapters.
+* Each description resolving the query has keyword values filling the criteria.
+* &lt;br&gt;The query result is a temporary object which is not included in
+* the catalog document. This interface is a handle on this object. 
+* There are three cases to have a such object:
+* &lt;ul&gt;
+* &lt;li&gt;&lt;b&gt;Persistent query&lt;/b&gt;: see @href CATICatalogPersistentQuery &lt;/li&gt;
+* &lt;p&gt; The @href CATICatalogPersistentQuery#GetGeneratedQueryResult method applied to
+*  the persistent query created by the @href CATICatalogChapter#AddPersistentQuery method
+* enables to retrieve the query result&lt;/p&gt;
+* &lt;li&gt;&lt;b&gt;Temporary query&lt;/b&gt;: see @href CATICatalogQuery &lt;/li&gt;
+* &lt;p&gt;The @href CATICatalogQuery#Query method enables to retrieve the query result&lt;/p&gt;
+* &lt;li&gt;&lt;b&gt;Sub-chapter&lt;/b&gt;: The @href CATICatalogDescription#GetObject method returns a such
+* object when the description has a link towards a sub-chapter.&lt;/li&gt;
+* &lt;/ul&gt;
+* 
+*/
+
+class ExportedByCATCclInterfaces CATICatalogQueryResult : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+public :
+   /**
+    *   Retrieves the chapter from the current query.
+    *   @param oChapter  [out, CATBaseUnknown#Release]
+    *      The chapter to which the query has been applied.
+    */
+   virtual HRESULT GetChapter (CATICatalogChapter*&amp; oChapter) = 0 ;
+
+   /**
+    *   Returns the knowledge expression of the current query.
+    *   @return
+    *      The query expression. It can be an empty string.
+    */
+   virtual CATUnicodeString GetQuery () = 0 ;
+
+   /**
+    *   Returns the number of descriptions solving the query.
+    *   @return
+    *      Retrieves the number of descriptions.
+    */
+	virtual int Size () = 0 ;
+
+   
+   /**
+    *   Returns the type of the query.
+    *   @return
+    *      The type of the query.there are two possibilities:
+    *      &lt;ul&gt;
+    *      &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;:It is the result of a persistent query on the chapter.&lt;/li&gt;
+    *      &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;:Otherwise&lt;/li&gt;
+    *      &lt;/ul&gt;
+    */
+   virtual int GetQueryMode () = 0 ;
+
+   /**
+   *  Retrieves the list of descriptions.
+   *  @param oListDescriptions
+   *        The list of descriptions which is the result of the query.
+   */
+   virtual HRESULT AsAList (CATListValCATICatalogDescription_var*&amp; oListDescriptions) = 0 ;
+   
+   //---------------------------------------------------------------------------
+   // methods NODOC or DEPRECATED
+   //---------------------------------------------------------------------------
+   /**
+    * @nodoc
+    *   @return  CATBaseUnknown#Release
+    */
+	virtual CATICatalogDescription* DescriptionAt (int n) = 0 ;	
+
+   /**
+     * @nodoc
+     */
+   virtual CATListValCATICatalogDescription_var* AsAList () = 0 ;
+
+   /**
+    * @nodoc
+    *   @return  CATBaseUnknown#Release
+    */
+   virtual CATICatalogChapter* GetChapter () = 0 ;
+	
+} ;
+
+
+CATDeclareHandler( CATICatalogQueryResult, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogQuery.html">← 上一页: CATICatalogQuery.h</a></div>
+        <div><a href="CATICatalogSynchronize.html">下一页: CATICatalogSynchronize.h →</a></div>
+    </div>
+</body>
+</html>

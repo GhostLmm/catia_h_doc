@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTPSInterfaces/PublicInterfaces/CATITPSShiftedProfileTolerance.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTPSInterfaces/PublicInterfaces/CATITPSShiftedProfileTolerance.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSSetVisu.html">← 上一页: CATITPSSetVisu.h</a></div>
+        <div><a href="CATITPSSituationFeatures.html">下一页: CATITPSSituationFeatures.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATITPSShiftedProfileTolerance_H
+#define CATITPSShiftedProfileTolerance_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2001 - 2018
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATTPSItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATTPSToleranceValueType.h&quot;
+
+class CATITTRS;
+class CATMathPoint;
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATTPSItfCPP IID IID_CATITPSShiftedProfileTolerance;
+#else
+extern &quot;C&quot; const IID IID_CATITPSShiftedProfileTolerance ;
+#endif
+
+/**
+ * Interface for accessing shifted tolerance zone informations of a TPS.
+ */
+class ExportedByCATTPSItfCPP CATITPSShiftedProfileTolerance : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+     * Retrieves shift value of tolerance zone (in millimeters); in case of tabulated type, returned value is the resolved value.
+     *&lt;br /&gt;The shift value is the distance between the toleranced surface and the median surface of tolerance zone.
+     *&lt;br /&gt;The index optional argument is interesting for linear non uniform tolerance to manage
+     * the &quot;lower&quot; (IndexOfBound = 1, default) and &quot;upper&quot; (IndexOfBound = 2) bounds of the linear non uniform tolerance zone.
+     *   @param oValue
+     *     Always positive because shift side is given by @href GetShiftSide method.
+     */
+    virtual HRESULT GetShiftValue ( double* oValue, int IndexOfBound = 1 ) const = 0;
+
+    /**
+    * Retrieves shift value of tolerance zone.
+    *&lt;br /&gt;Complements method @href CATITPSShiftedProfileTolerance#GetShiftValue for CATTPSTolTabulatedValue value; in this context,
+    * parameter type is String while in the other situations Length parameter is employed.
+    *&lt;br /&gt;Second parameter is an optional argument; when specified (not null) it addresses linear non uniform tolerance,
+    * CATTPSTolLinearNonUniformValue, to manage the &quot;upper&quot; bound of the linear non uniform tolerance zone.
+    */
+    virtual HRESULT GetShiftValue ( CATICkeParm_var &amp; ospTolValue, CATICkeParm_var * opspLinearNonUniUpperLimitTolValue = NULL ) const = 0;
+
+    /**
+     * Retrieves shift side.
+     *   @param opPoint
+     *     a mathematical point located on the shift side of surface.
+     */
+    virtual HRESULT GetShiftSide (CATMathPoint ** opPoint) const = 0;
+
+    /**
+     * Retrieves the shift direction by two points.
+     *   @param opOrigin
+     *     a mathematical point located on the surface.
+     *   @param opEnd
+     *     a mathematical point located that define the shift direction.
+     */
+    virtual HRESULT GetShiftDirection ( CATMathPoint ** opOrigin, 
+                                        CATMathPoint ** opEnd) const = 0;
+
+    /**
+    * Retrieve the value type of tolerance zone.     
+    *  @param oType
+    *   value type.
+    *  returns S_OK when the value type has been correctly retrieved, 
+    *  returns E_FAIL otherwise.
+    */
+    virtual HRESULT GetToleranceValueType (CATTPSToleranceValueType&amp; oType) const = 0;
+
+    /**
+    * Retrieves boundaries of Linear Non Uniform tolerance zone.  
+    *  @param opFirstSideBoundary [out, CATITTRS#Release]
+    *   First side boundary. 
+    *  @param opSecondBoundary [out, CATITTRS#Release]
+    *   Second side boundary.
+    *  returns S_OK when the boundaries have been correctly retrieved, 
+    *  returns E_FAIL otherwise.
+    */
+    virtual HRESULT GetNonUniformToleranceZone( CATITTRS ** opFirstSideBoundary, CATITTRS ** opSecondBoundary ) const = 0;
+};
+
+CATDeclareHandler (CATITPSShiftedProfileTolerance, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSSetVisu.html">← 上一页: CATITPSSetVisu.h</a></div>
+        <div><a href="CATITPSSituationFeatures.html">下一页: CATITPSSituationFeatures.h →</a></div>
+    </div>
+</body>
+</html>

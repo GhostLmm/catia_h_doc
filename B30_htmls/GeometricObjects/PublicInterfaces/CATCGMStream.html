@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCGMStream.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCGMStream.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMSpecialHandler.html">← 上一页: CATCGMSpecialHandler.h</a></div>
+        <div><a href="CATCGMStreamAttribute.html">下一页: CATCGMStreamAttribute.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMStream_H_
+#define CATCGMStream_H_
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATMathStream.h&quot;       
+
+#include &quot;YP0LOGRP.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATListOfCATICGMObjects.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATICGMObject;
+class CATCurve;
+class CATSurface;
+class CATCrvParam;
+class CATCrvLimits;
+class CATSurParam;
+class CATSurLimits;
+class CATKnotVector;
+class CATICGMContainer;
+class CATCGMStreamImpl;
+class CATCGMHashTable;
+
+/**
+*  Class defining the stream to use for the stream and unstream of a single geometric object.
+* &lt;b&gt;Role&lt;/b&gt;: This stream class is specially designed to deal with a list of linked objects.
+* The list of linked objects must be written/read prior to any other write/read operation.
+* &lt;br&gt;This class is used when you define the stream or unstream of your own CGM attribute, but you only has
+* to use it as a CATMathStream. In fact, if you have linked objects, use @href CATCGMStreamAttribute#AddLink , 
+* and  the stream/unstream of your linked objects will be automatic.
+* @see CATMathStream
+*/
+class ExportedByYP0LOGRP CATCGMStream : public CATMathStream 
+{
+ public:
+   //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  
+ /**
+  * Constructs CATCGMStream for stream operation (read and write acces are allowed).
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(CATCGMStreamImpl* ipImpl = NULL);
+
+ /**
+  * Constructs CATCGMStream for read only stream operation.
+  * @param iBuffer
+  *  The memory area directly acceded for the read operation.
+  * @param iSizeBuffer
+  *  The size in bytes of &lt;tt&gt;iBuffer&lt;/tt&gt;.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(void*             iBuffer,
+               size_t            iSizeBuffer,
+               CATCGMStreamImpl* ipImpl = NULL);
+  
+ /**
+  * Constructs CATCGMStream for write only stream operation.
+  * @param ioFile
+  * The stream on which the stream is saved.
+  * @param iInitialNumberOfBytes
+  *  The initial memory size of internal buffer in bytes.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(ostream&amp;          ioFile,
+               size_t            iInitialNumberOfBytes = 0,
+               const CATBoolean  iEnableByAddress = FALSE,
+               CATCGMStreamImpl* ipImpl = NULL);
+  
+ /**
+  * Constructs CATCGMStream for read only stream operation.
+  * @param ioFile
+  * The stream from which the stream is read.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(istream&amp;          ioFile,
+               CATCGMStreamImpl* ipImpl = NULL);
+
+ /**
+  * Constructs CATCGMStream for read only or write only stream operation.
+  * @param ioFile
+  * The stream from which the stream is read.
+  * @param iAcces
+  *  The kind of acces allowed on the CATCGMStream.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(const char*            iFilename,
+               const CATCGMStreamType iAcces,
+               const CATBoolean       iEnableByAddress = FALSE,
+               CATCGMStreamImpl*      ipImpl = NULL);
+
+ /**
+  * Constructs CATCGMStream for stream operation.
+  * @param iInitialNumberOfBytes
+  *  The initial number of bytes for internal buffer.
+  * @param iAcces
+  *  The kind of acces allowed on the CATCGMStream.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(size_t                 iInitialNumberOfBytes,
+               const CATCGMStreamType iAcces,
+               const CATBoolean       iEnableByAddress = FALSE,
+               CATCGMStreamImpl*      ipImpl = NULL);
+
+ /**
+  * @nodoc
+  * Constructs CATMathStream for read only or write only stream operation.
+  * @param iDirectStreaming
+  * The stream from which the stream is read or writen.
+  * @param iAcces
+  *  The kind of acces allowed on the CATMathStream.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param iEnableByAddress
+  *  Reserved for future use (do not change the default value)
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(CATStream&amp;             iDirectStreaming,
+               const CATCGMStreamType iAcces,
+               const CATBoolean       iEnableByAddress = FALSE,
+               CATCGMStreamImpl*      ipImpl = NULL);
+
+ /**
+  * @nodoc
+  * Constructs CATCGMStream for read only stream operation.
+  * @param iDirectStreaming
+  * The stream from which the stream is read.
+  * @param iSizeStream
+  *  The size in bytes of &lt;tt&gt;iDirectStreaming&lt;/tt&gt;.
+  * @param CATCGMStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATCGMStream(CATStream&amp;        iDirectStreaming,
+               size_t            iSizeStream,
+               CATCGMStreamImpl* ipImpl = NULL);
+
+ /**
+  * Destructor
+  */
+  virtual ~CATCGMStream();
+
+ /**
+  * Writes a CATCrvParam.
+  * @param ioCrvParam
+  * The CATCrvParam to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteCrvParam(const CATCrvParam&amp; ioCrvParam, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Reads a CATCrvParam.
+  * @param ioCrvParam
+  * The read CATCrvParam.
+  * @param ipCurve
+  * The CATCurve with which the CATCrvParam is associated.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadCrvParam(CATCrvParam&amp; ioCrvParam, CATCurve* ipCurve, const char iLabelReserved[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATCrvLimits.
+  * @param ioCrvLimits
+  * The CATCrvLimits to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteCrvLimits(const CATCrvLimits&amp; ioCrvLimits, const char iLabelReserved[] = &quot;&quot;);
+ 
+ /**
+  * Reads a CATCrvLimits.
+  * @param ioCrvLimits
+  * The read CATCrvLimits.
+  * @param ipCurve
+  * The CATCurve with which the CATCrvLimits is associated.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadCrvLimits(CATCrvLimits&amp; ioCrvLimits, CATCurve* ipCurve, const char iLabelReserved[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATSurParam.
+  * @param ioSurParam
+  * The CATSurParam to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteSurParam(const CATSurParam&amp; ioSurParam, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Reads a CATSurParam.
+  * @param ioSurParam
+  * The read CATSurParam.
+  * @param ipSurface
+  * The CATSurface with which the CATSurParam is associated.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadSurParam(CATSurParam&amp; ioSurParam, CATSurface* ipSurface, const char iLabelReserved[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATSurLimits.
+  * @param ioSurLimits
+  * The CATSurLimits to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteSurLimits(const CATSurLimits&amp; ioSurLimits, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Reads a CATSurLimits.
+  * @param ioSurLimits
+  * The read CATSurLimits.
+  * @param ipSurface
+  * The CATSurface with which the CATSurLimits is associated.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadSurLimits(CATSurLimits&amp; ioSurLimits, CATSurface* ipSurface, const char iLabelReserved[] = &quot;&quot;);
+    
+ /**
+  * Writes a CATKnotVector.
+  * @param ioKnotVector
+  * The CATKnotVector to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteKnotVector(const CATKnotVector&amp; ioKnotVector, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Reads a CATKnotVector.
+  * @param ioKnotVector
+  * The read CATKnotVector.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadKnotVector(CATKnotVector&amp; ioKnotVector, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Resets the stream to raw behaviour.
+  * &lt;br&gt;This removes checks on the stream use (i.e. when no object streaming/unstreaming).
+  */
+  void ResetToRawBehaviour();
+
+ /**
+  * Opens the stream for writing the content of a CATGeoFactory.
+  * @param iFactory
+  *  A pointer to the CATGeoFactory to be written.
+  * @param oWhere
+  *  internal parameter you must give back to &lt;tt&gt;CloseFactoryForWrite&lt;/tt&gt;.
+  * @param oLevel
+  *  internal parameter you must give back to &lt;tt&gt;CloseFactoryForWrite&lt;/tt&gt;.
+  * @param iForExternalWeakLinks
+  *  Internal use only. Do not change the default value.
+  */
+  void OpenFactoryForWrite(CATICGMContainer* iFactory, size_t&amp; oWhere, short&amp; oLevel, CATBoolean iForExternalWeakLinks = FALSE);
+
+ /**
+  * Closes the stream after writing of the content of a CATGeoFactory.
+  * @param iWhere
+  *  internal parameter given by &lt;tt&gt;OpenFactoryForWrite&lt;/tt&gt;.
+  * @param iLevel
+  *  internal parameter given by &lt;tt&gt;OpenFactoryForWrite&lt;/tt&gt;.
+  * @param iForExternalWeakLinks
+  *  Internal use only. Do not change the default value.
+  */
+  void CloseFactoryForWrite(const size_t iWhere, const short iLevel, CATBoolean iForExternalWeakLinks = FALSE);
+
+ /**
+  * Opens the stream for reading the content of a CATGeoFactory.
+  * @param iFactory
+  *  A pointer to the CATGeoFactory to be read.
+  * @param oWhere
+  *  internal parameter you must give back to &lt;tt&gt;CloseFactoryForRead&lt;/tt&gt;.
+  * @param oLevel
+  *  internal parameter you must give back to &lt;tt&gt;CloseFactoryForRead&lt;/tt&gt;.
+  * @param iForExternalWeakLinks
+  *  Internal use only. Do not change the default value.
+  */
+  void OpenFactoryForRead(CATICGMContainer *iFactory, size_t &amp;oWhere, short &amp;oLevel, CATBoolean iForExternalWeakLinks = FALSE);
+
+ /**
+  * Closes the stream after reading of the content of a CATGeoFactory.
+  * @param iWhere
+  *  internal parameter given by &lt;tt&gt;OpenFactoryForRead&lt;/tt&gt;.
+  * @param iLevel
+  *  internal parameter given by &lt;tt&gt;OpenFactoryForRead&lt;/tt&gt;.
+  * @param iForExternalWeakLinks
+  *  Internal use only. Do not change the default value.
+  */
+  void CloseFactoryForRead(const size_t iWhere, const short iLevel, CATBoolean iForExternalWeakLinks = FALSE);
+
+ /**
+  * Returns the CATGeoFactory used with a OpenFactoryForWrite/CloseFactoryForWrite or OpenFactoryForRead/CloseFactoryForRead operation.
+  * @return
+  * A CATICGMContainer pointer to the associated CATGeoFactory.
+  */
+  CATICGMContainer* GetAssociatedContainer();
+
+ /**
+  *  Prepares the object streaming.
+  * &lt;br&gt;This function forces the order of write operations:
+  * &lt;ol&gt;
+  *    &lt;li&gt;Indicates the linked objects count for the objects to stream.
+  *        &lt;br&gt;(thru a call to &lt;tt&gt;WriteLinkedObjectsCount&lt;/tt&gt;)
+  *        &lt;br&gt;
+  *        &lt;b&gt;This step is mandatory, even if there is no link.&lt;/b&gt;
+  *    &lt;li&gt;Writes the list of linked objects for object to be streamed, combining :
+  *    &lt;ul&gt;
+  *        &lt;li&gt;call(s) to &lt;tt&gt;WriteListOfLinkedObjects&lt;/tt&gt;,
+  *        &lt;li&gt;call(s) to &lt;tt&gt;WriteObject&lt;/tt&gt;.
+  *    &lt;/ul&gt;
+  *    &lt;li&gt;Write other informations (numbers and strings).
+  * &lt;/ol&gt;
+  * &lt;br&gt;It must be called anytime, even if there is no link. (use an empty list in such case)
+  */
+  void PrepareToObjectStreaming();
+
+ /**
+  *    Prepares the object unstreaming.
+  *
+  * &lt;br&gt;This function will force the order of read operations:
+  * &lt;ol&gt;
+  *    &lt;li&gt;Gets the linked objects for the objects to unstream:
+  *    &lt;ul&gt;
+  *        &lt;li&gt;Either read the linked objects count for object to be streamed.
+  *            &lt;br&gt;(in one shot, thru a call to &#x27;ReadListOfLinkedObjects&#x27;).
+  *            &lt;br&gt;Extract then only what you need: Do not make any assumptions on list&#x27;s size,
+  *                 as upcoming versions may add later linked objects to the modelization.
+  *        &lt;li&gt;Either read the count, then read individually each linked object.
+  *            &lt;br&gt;You must forecast to skip linked objects possibly added by upcoming versions.
+  *            &lt;br&gt;(thru a call to &#x27;ReadLinkedObjectsCount&#x27;,
+  *                 followed by as many calls as required to &#x27;ReadObject&#x27;,
+  *                 ended by a call to &#x27;SkipRemainingLinkedObjectsToRead&#x27;).
+  *    &lt;/ul&gt;
+  *        &lt;br&gt;&lt;b&gt;This step is mandatory, even if there is no link.&lt;/b&gt;
+  *    &lt;li&gt;Read other informations (numbers and strings).
+  * &lt;/ol&gt;
+  * &lt;br&gt;It must be called anytime, even if there is no link. (use an empty list in such case)
+  */
+  void PrepareToObjectUnstreaming();
+
+ /**
+  * Prepares the stream to process an object.
+  * &lt;br&gt;This resets the flags that control the order of read/write operations.
+  * &lt;br&gt;It must be called before streaming/unstreaming an object.
+  * @param iObjectSize
+  * The size of the object to be unstreamed (useless when streaming).
+  */
+  void PrepareToProcessAnObject(size_t iObjectSize = 0);
+
+ /**
+  *  Writes the linked objects count. 
+  * &lt;br&gt;Refer to the @href CATCGMStream#PrepareToObjectStreaming method for explanations
+  * about the write functions sequence.
+  */
+  void WriteLinkedObjectsCount(CATULONG32 iLinkedObjectsCount);
+
+ /**
+  * Reads the linked objects count. 
+  * @param ioLinkedObjectsCount
+  * The number of linked objects that are requsted by &lt;tt&gt;this&lt;/tt&gt;.
+  */
+  void ReadLinkedObjectsCount(CATULONG32&amp; ioLinkedObjectsCount);
+
+ /**
+  * Writes a linked object.
+  * &lt;br&gt;Refer to @href CATCGMStream#PrepareToObjectStreaming method for explanations
+  * about the write functions sequence.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteObject(CATICGMObject* iLinkedObject, const char iLabelReserved[] = &quot;&quot;);
+  
+ /**
+  * Reads a linked object.
+  * @param ioLinkedObject
+  * Retrieves the current linked object.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadObject(CATICGMObject*&amp; ioLinkedObject, const char iLabelReserved[] = &quot;&quot;);
+  
+ /**
+  * Writes a (partial or total) list of linked objects. 
+  * &lt;br&gt;Refer to  @href CATCGMStream#PrepareToObjectStreaming method for explanations
+  * about the write functions sequence.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteListOfLinkedObjects(const CATLISTP(CATICGMObject)&amp; iLinkedObjects, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Reads the total list of linked objects.
+  * @param ioLinkedObjects
+  * The list of linked objects. This list does not need to be empty in order 
+  * to make the concatenation easier.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadListOfLinkedObjects(CATLISTP(CATICGMObject)&amp; ioLinkedObjects, const char iLabelReserved[] = &quot;&quot;);
+
+ /**
+  * Skips over remaining linked objects to read.
+  */
+  void SkipRemainingLinkedObjectsToRead();
+
+ /**
+  * Writes an array of CGM objects.
+  * @param geometry
+  * A pointer to the array of CATICGMObjects to write.
+  * @param iNbGeometry
+  * The number of CATICGMObjects to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteGeometryV5(CATICGMObject** geometry, const CATLONG32 iNbGeometry, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Read an array of CGM objects.
+  * @param geometry
+  * A pointer to the array of read CATICGMObjects.
+  * @param iNbGeometry
+  * The number of CATICGMObjects to read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadGeometryV5(CATICGMObject** geometry, const CATLONG32 iNbGeometry, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Skips over remaining informations to read.
+  *
+  * &lt;br&gt;(i.e. what follows the linked objects sequence)
+  */
+  void SkipRemainingInformationsToRead();
+
+ /**
+  * Returns the number of bytes that remains to read.
+  * @return
+  * The number of bytes still to read, considering what has been already read
+  */
+  size_t GetNumberOfBytesToRead();
+
+ /**
+  * @nodoc
+  */
+  CATCGMNewClassArrayDeclare;
+
+
+private :
+
+  /** @nodoc  forbidden functionnality */
+  CATCGMStream(const CATCGMStream&amp;);
+
+  /** @nodoc   forbidden functionnality */
+  CATCGMStream&amp; operator=(const CATCGMStream&amp;);
+
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMSpecialHandler.html">← 上一页: CATCGMSpecialHandler.h</a></div>
+        <div><a href="CATCGMStreamAttribute.html">下一页: CATCGMStreamAttribute.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCGMAttribute.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCGMAttribute.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMAttrId.html">← 上一页: CATCGMAttrId.h</a></div>
+        <div><a href="CATCGMBOAObject.html">下一页: CATCGMBOAObject.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMAttribute_H
+#define CATCGMAttribute_H
+
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U2
+*/ 
+
+class CATCGMAttributeDef;
+class CATCGMStream;
+class CATCGMStreamCGMImpl;
+class CATICGMObject;
+class CATCGMContainer;
+class CATCGMOutput;
+class CATExtClonableManager;
+ 
+#include &quot;YP0LOGRP.h&quot;
+#include &quot;CATListOfCATCGMAttribute.h&quot;
+#include &quot;CATCGMAttrId.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &quot;CATMathInline.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+#if defined(_MOBILE_SOURCE) || defined(_DARWIN_SOURCE) || defined(_LINUX_SOURCE) || defined(_AIX_SOURCE) &amp;&amp; (__xlC__ &gt;= 0x0500)
+/** @nodoc */
+extern ExportedByYP0LOGRP CATCGMAttribute * CATCGMAttribute_CreateAttribute () ;
+#endif
+
+class CATGeometry;
+
+
+
+//-----------------------------------------------------------------------------
+/**
+* Class representing the attribute that can be pointed to by one or several CATICGMObject.
+* &lt;br&gt;The attribute are characterized by 
+* &lt;ul&gt; &lt;li&gt; A class name
+*       &lt;li&gt; An application name: the logical name of the physical load module containing the
+* class
+*       &lt;li&gt;A version number
+* &lt;/ul&gt;
+* The identifier is defined by the use of the macro &lt;tt&gt;UIDName(MyAttributeClassName)&lt;/tt&gt;.
+*&lt;br&gt;For streamable attribute, use @href CATCGMStreamAttribute.
+*&lt;br&gt;For declaration and implementation of your own attributes,
+* use macros @href CATCGMDeclareAttribute and @href CATCGMImplAttribute.
+*/
+class ExportedByYP0LOGRP CATCGMAttribute  : public CATCGMVirtual
+{
+public :
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+
+  virtual                       ~CATCGMAttribute ();
+  /**
+  * Creates an attribute of a given identifier.
+  * @param iId
+  * The attribute identifier
+  * @return
+  * The created attribute
+  */
+  static       CATCGMAttribute * CreateAttribute (const CATCGMAttrId * iId);
+  
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute is persistent.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute can be streamed (i.e. persistent), &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual       int              IsPersistent    ();
+  
+ /**
+ * Returns the identifier of &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+ * @return
+ * The identifier.
+ *&lt;br&gt;Do not overload this method.
+ * Use macros &lt;tt&gt;CATCGMDeclareAttribute&lt;/tt&gt; and &lt;tt&gt;CATCGMImplAttribute&lt;/tt&gt;.
+  */
+  virtual const CATCGMAttrId   * GetCGMAttrId    () const =0; 
+  
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute is of a given type (or a derived type).
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute identifier is &lt;tt&gt;iId&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+                int              IsATypeOf       (const CATCGMAttrId * iId); 
+  
+  /**
+  * Adds &lt;tt&gt;1&lt;/tt&gt; to the count of CATICGMObjects pointing to &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+  * @return
+  * The number of CATICGMObjects pointing to &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+  */
+                CATULONG32       AddAttrRef      ();
+ 
+  /**
+  * Removes &lt;tt&gt;1&lt;/tt&gt; to the count of CATICGMObjects pointing to &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+  * @return
+  * The number of CATICGMObjects still pointing to &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+  */
+                CATULONG32       ReleaseAttrRef  ();
+
+  /**
+  * Returns the number of CATICGMObjects pointing to &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute.
+  * @return
+  * The number of CATICGMObjects.
+  */
+  INLINE        CATULONG32       GetNbAttrRef    () const;
+
+  
+  /**
+  * Equality operator.
+  * @return
+  * The result of the test.
+  * &lt;tt&gt;1&lt;/tt&gt; if true, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+                CATLONG32        operator ==     (const CATCGMAttribute &amp;iToCompare);
+  
+  /**
+  * Inequality operator.
+  * @return
+  * &lt;tt&gt;1&lt;/tt&gt; if they are different, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+                CATLONG32        operator !=     (const CATCGMAttribute &amp;iToCompare);
+
+
+  protected :
+
+    /**
+    * Checks whether two attributes of the same identifier are equal.
+    * &lt;br&gt;Called in the == and =! operators.
+    * @return
+    * &lt;tt&gt;1&lt;/tt&gt; if they are, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+    */
+  virtual       CATLONG32        Compare         (const CATCGMAttribute &amp; iToCompare);
+
+  public :
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //  Attribute&#x27;s reporting : Limited availability    
+  //     restricted to entities&#x27;holder : Body/Face/Edge/Vertex holder
+  //     but genuine to Clone/TransfoManager (and partially to SmartDuplicator) services
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCGMAttribute is manageable by Clone managements.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute can be managed (i.e. implements ReportClonableAttributes), &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual       int              IsClonableAttribute();
+  
+   /**
+   * @nodoc limited availability low-level attributes reporting  
+   * Manage Report of attributes.
+   * @param iClonableManager
+   *    may be context of operator.
+   * @param Origin
+   *    Original Holder of attribute.
+   * @param Destination
+   *    Destination Holder of attribute.
+   */
+   virtual      CATCGMAttribute * ReportClonableAttributes(CATExtClonableManager* iClonableManager,
+                                                           CATICGMObject        * iOrigin         ,
+                                                           CATICGMObject        * iDestination    )  ;
+   /**
+   * @nodoc limited availability low-level attributes reporting  
+   * Set ReportedClonable Attributes.
+   */
+   INLINE       void              SetReportedClonableAttributes() ;
+
+   /**
+   * @nodoc limited availability low-level attributes reporting  
+   * Set ReportedClonable Attributes.
+   */
+   INLINE       CATBoolean        IsReportedAsClonableAttributes() const;
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  /** @nodoc @nocgmitf */
+  virtual       void              Dump           (CATCGMOutput &amp; os ); // For Debug Purpose
+  
+  /** @nodoc */
+  virtual       short             IsDirty        ();                   // For Debug Purpose
+  
+  /** @nodoc */
+                CATCGMConstrAttr  GetAttrFunc    () const;             // get the construction function
+
+
+  /** @nodoc */
+  virtual const CATCGMAttributeDef * GetAttributeDef() const =0 ;     // get the definition of attribute
+  
+
+  /** @nodoc */
+  virtual       int               AddRef         ();
+  
+
+  /** @nodoc */
+  virtual       int               Release        ();
+  
+  /**
+  * @nodoc 
+  * Allows the programmer to code a user link from &lt;tt&gt;this&lt;/tt&gt; attribute to the CATICGMObject.
+  * &lt;br&gt;By default, this method does nothing.
+  */
+  virtual       void              PutObject      (CATICGMObject * iToPoint);
+  
+    
+#ifdef CATIACGMR214CAA
+  /** @nodoc or UV project with optional Attributes on Topology and FreeStyle direct geometrical Edition  */
+  virtual       void              InvalidateExtendedCachesOnTopology(CATGeometry* iFromTopology) ;  
+#endif
+
+
+  /** @nodoc */
+  static        CATCGMAttrId _UAID;
+  
+  /** @nodoc */
+  static        void              InitStaticCATCGMAttributeDef();
+  
+  
+  protected :
+
+    /** @nodoc */
+                                  CATCGMAttribute(); 
+        
+    /** @nodoc */
+  static        short             CATCGMAttrIdSecureInit();
+        
+  private :
+    
+   friend class CATCGMStream;
+   friend class CATCGMStreamCGMImpl;
+    
+   friend       CATCGMAttribute * CATCGMAttribute_CreateAttribute ();
+    
+    /** @nodoc */
+    struct  CATCGMAttributeData
+    {
+      CATULONG32    RefCounter;
+      signed int    IsStreaming : 30;
+      unsigned int  _IsReportedAsClonableAttributes : 1;
+    } 
+    _CGM;
+};
+
+
+
+/** @nodoc */
+INLINE CATULONG32  CATCGMAttribute::GetNbAttrRef() const
+{
+  return _CGM.RefCounter; 
+}
+
+
+/**
+* @nodoc limited availability low-level attributes reporting  
+* Set ReportedClonable Attributes.
+*/
+INLINE CATBoolean CATCGMAttribute::IsReportedAsClonableAttributes() const 
+{
+  return _CGM._IsReportedAsClonableAttributes ? TRUE : FALSE; 
+}
+
+/**
+* @nodoc limited availability low-level attributes reporting  
+* Set ReportedClonable Attributes.
+*/
+INLINE void CATCGMAttribute::SetReportedClonableAttributes()   
+{
+  _CGM._IsReportedAsClonableAttributes = 1; 
+}
+
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMAttrId.html">← 上一页: CATCGMAttrId.h</a></div>
+        <div><a href="CATCGMBOAObject.html">下一页: CATCGMBOAObject.h →</a></div>
+    </div>
+</body>
+</html>

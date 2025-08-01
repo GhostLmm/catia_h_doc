@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATICkeFunctionFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATICkeFunctionFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeFunction.html">← 上一页: CATICkeFunction.h</a></div>
+        <div><a href="CATICkeInst.html">下一页: CATICkeInst.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICkeFunctionFactory_h
+#define CATICkeFunctionFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/** 
+ * @CAA2Level L1
+ * @CAA2Usage U3 
+ */
+//#include &quot;CK0FEAT.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;KnowledgeItf.h&quot;
+#include &quot;CATICkeType.h&quot;
+#include &quot;CATICkeArg.h&quot;
+#include &quot;CATICkeMagnitude.h&quot;
+#include &quot;CATIParmPublisher.h&quot;
+#include &quot;CATICkeNaming.h&quot;
+#include &quot;CATICkeSignature.h&quot;
+class CATDocument;
+//#include &quot;CATISpecObject.h&quot;
+
+//tdv #include &quot;CATLifFunctions.h&quot;
+
+class CATISpecObject_var;
+class CATCkeEvalContext;
+
+// OLE
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByKnowledgeItf IID_CATICkeFunctionFactory;
+#else
+extern &quot;C&quot; const IID IID_CATICkeFunctionFactory;
+#endif
+
+
+// functions evaluator : this is this kind of functions that you must implement to code your
+// own functions behaviour : In input, there-s a list of literals that are the function arguments
+// in output, you must create a C++ instance 
+// the list musnt be deallocated
+
+// WATCH OUT : pevalcontext can be NULL
+/**
+* @nodoc
+*/
+typedef void             (*CATCkeFunctionEvaluator) (CATCkeListOfParm plist,const CATICkeParm_var &amp;,const CATCkeEvalContext *pevalcontext);
+/**
+* @nodoc
+*/
+typedef CATCke::Boolean  (*CATCkeCheckMagnitude)    (CATCkeListOfParm plist,const CATICkeParm_var &amp;,const CATCkeEvalContext *pevalcontext);
+
+
+//-------------------------------------------------------------------
+/**   
+ * Interface to gather methods to create user functions.
+ * Gathers services about literals and relations.
+ * &lt;p&gt;
+ * &lt;b&gt;Role&lt;/b&gt;: This class gathers methods managing literals and relations.&lt;br&gt;
+ * It gives a way to create your own functions that can later be used in relations, and add them 
+ * to the dictionary.&lt;br&gt;
+ * It gives a way to add your own applications that can later be used in applications dialog in the
+ * knowledgeware workbench.&lt;br&gt;
+ */
+//-----------------------------------------------------------------------------
+class ExportedByKnowledgeItf CATICkeFunctionFactory : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+public:
+
+
+/**
+ * Creates a signature and adds it to the dictionary.
+ * @param iFunctionName function name (example : &quot;sin&quot;) It is the name
+ * that will be used in formulas
+ * @param iReturnedType returned type of the function (example : CATParmDictionary::RealType in our sinus example) 
+ * @param iEvalFuncPtr function evaluator 
+ * @param iCheckMagnitudeFuncPtr function evaluator
+ * @param iNotation notation
+ */
+virtual CATICkeSignature_var CreateFunction (const CATUnicodeString &amp;iFunctionName,
+					                        const CATICkeType_var  &amp;iReturnedType,
+							                CATCkeFunctionEvaluator iEvalFuncPtr = NULL,
+											CATCkeCheckMagnitude iCheckMagnitudeFuncPtr = NULL,
+											const CATICkeSignature::Mode iNotation = CATICkeSignature::Function)=0;
+									
+					      
+/**
+ * Creates an argument to be added to a signature. 
+ * @param iArgName argument name (example : &quot;x&quot;) 
+ * @param iArgType argument type (example : CATParmDictionary::RealType in our example)
+ * @param iMode indicates if the argument is In, Out or InOut
+ */
+virtual CATICkeArg_var       CreateArg (const CATUnicodeString &amp;iArgName,
+                                       const CATICkeType_var  &amp;iArgType,
+				                       const CATICkeArg::Mode iMode = CATICkeArg::In)=0;
+					      
+
+
+					      
+/**
+ * Creates an argument to be added to a signature. 
+ * @param iArgName argument name (example : &quot;x&quot;) 
+ * @param iArgType argument type (example : &quot;Real&quot; in our example)
+ * @param Mode iArgMode: indicates if the argument is In, Out or InOut
+ */
+virtual CATICkeArg_var       CreateArg (const CATUnicodeString &amp;iArgName,
+                                       const CATUnicodeString &amp;iArgType,
+				       const CATICkeArg::Mode iArgMode = CATICkeArg::In)=0;
+					      
+
+/**
+ * Creates a signature and add it to the dictionary.
+ * @param iFunctionName  function name (example : &quot;sin&quot;) It is the name
+ * that will be used in formulas
+ * @param iReturnedType returned type of the function (example : CATParmDictionary::RealType in our sinus example) 
+ * @param iEvalFuncPtr function evaluator 
+ * @param iCheckMagnitudePtr check magnitude evaluator
+ * @param iNotation notation
+ */
+virtual CATICkeSignature_var CreateFunction (const CATUnicodeString      &amp;iFunctionName,
+											const CATUnicodeString      &amp;iReturnedType,
+											CATCkeFunctionEvaluator      iEvalFuncPtr = NULL,
+											CATCkeCheckMagnitude         iCheckMagnitudePtr = NULL,
+											const CATICkeSignature::Mode iNotation = CATICkeSignature::Function)=0;
+
+	/** 
+	* @deprecated V5R14 - Use GetCurrentSet method instead.&lt;br&gt;
+	* Adds a relation to the current RelationSet.&lt;br&gt;
+	* It is dedicated to applications which create relations and want to see
+	* them in the relation set (in the tree view).&lt;br&gt;
+	* If the RelationSet does not exist, it is created and appended to the root
+	* Object.&lt;br&gt;
+	* @param iRelationToAdd relation to add to the relation set. 
+	* @param iRoot The root object is where the relationset will be appended.
+	* If the root object is NULL, the default one is asked to CATILiteralsRoot::GetRoot
+	* on the container of the relation
+	*/
+	virtual void AddToCurrentRelationSet (const CATISpecObject_var &amp;iRelationToAdd,
+										 const CATIParmPublisher_var &amp;iRoot = NULL_var)=0; 
+
+	/** 
+	* @deprecated V5R14 - Use GetCurrentSet method instead.&lt;br&gt;
+	* Adds a parameter to the current ParameterSet.&lt;br&gt;
+	* It is dedicated to applications which create parameters and want to see
+	* them in the parameter set (in the tree view).&lt;br&gt;
+	* If the ParameterSet does not exist, it is created and appended to the root
+	* Object.&lt;br&gt;
+	* @param iParameterToAdd parameter to add to the parameter set. 
+	* @param iRoot The root object is where the parameterset will be appended.
+	* If the root object is NULL, the default one is asked to CATILiteralsRoot::GetRoot
+	* on the container of the parameter
+	*/
+	virtual void AddToCurrentParameterSet (const CATICkeParm_var &amp;iParameterToAdd,
+										  const CATIParmPublisher_var &amp;iRoot=NULL_var)=0; 
+
+	/** 
+	* Initializes the list of methods and sort it.&lt;br&gt;
+	* Load all libraries if necessary
+	*/
+	virtual void Methods() = 0;
+
+	/** 
+	* Adds a constant (true, false).
+    * @param iParameter parameter to add to list of Constant. 
+	*/
+	virtual void AddConstant (const CATICkeParm_var &amp;iParameter) = 0;
+
+
+    /** 
+	* Evaluates a formula whithout parameters.
+	* Ex : 3*10+sin(80) ou &quot;Hello&quot;+&quot; World&quot;.&lt;br&gt;
+	* @param itexte is the texte of the formula. 
+	* the return value is in MKS unit
+    */
+    virtual CATICkeInst_var  ParseAndEval (const CATUnicodeString &amp;itexte,const CATICkeMagnitude_var &amp;imag = NULL_var) =0;
+
+	/**
+	* @nodoc
+	*/
+	virtual CATCkeCheckMagnitude GetStandardMagnitudeChecker() =0;
+
+	/**
+	* Creates an event signature and add it to the dictionary.
+	* @param iEventName :  function name (example : &quot;Instanciation&quot;)
+	* @param iNotation: notation
+	*/
+	virtual CATICkeSignature_var CreateEvent (const CATUnicodeString &amp;iFunctionName) = 0;
+
+	
+	/**
+	* Creates an evaluator context that can be given to the evaluation function.
+	* @param iObject :  relation that controls the evaluation.
+	* The return value must be deallocated
+	*/
+	virtual CATCkeEvalContext *CreateEvaluationContext (const CATBaseUnknown_var &amp;iObject) = 0;
+
+
+	/**
+	* Type of Set.
+	* @param Parameter
+	*   This set contains parameters.
+	* @param Relation
+	*   This set contains Relations.
+	* @param Optimization
+	*   This set contains optimizations.
+	* @param RuleBase
+	*   This set contains Rulebases.
+	*/
+
+	enum SetType
+	{
+		Parameter  	 = 0,   
+		Relation     = 1,  
+		Optimization = 2,  
+		RuleBase	 = 3
+	};
+
+	/** 
+	* Get the current set : ParameterSet,RelationSet,OptimizationSet,RuleBaseSet.&lt;br&gt;
+	* It is dedicated to applications which create parameters,relations,optimizations or rulebase and want to see
+	* them in the parameter set, relation set, optimization set and rulebase set (in the tree view).&lt;br&gt;
+	* If the Set does not exist, it is created if argument iForceCreation is true.&lt;br&gt;
+	* @param iSetType to choose the type of set (Parameter, relation, optimization or rulebase). 
+	* @param iForceCreation to force the creation of set if it doesn&#x27;t exist.
+	* @param iRoot The root object is where the set will be appended.
+	*/
+	virtual CATBaseUnknown_var GetCurrentSet(const CATICkeFunctionFactory::SetType iSetType,const CATIParmPublisher_var&amp; iRoot, const int iForceCreation = 0) = 0;
+
+
+};
+CATDeclareHandler(CATICkeFunctionFactory,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeFunction.html">← 上一页: CATICkeFunction.h</a></div>
+        <div><a href="CATICkeInst.html">下一页: CATICkeInst.h →</a></div>
+    </div>
+</body>
+</html>

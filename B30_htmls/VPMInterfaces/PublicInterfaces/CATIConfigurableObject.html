@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIConfigurableObject.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIConfigurableObject.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIConfigurable.html">← 上一页: CATIConfigurable.h</a></div>
+        <div><a href="CATIConfigurableObjectUE.html">下一页: CATIConfigurableObjectUE.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIConfigurableObject_h
+#define CATIConfigurableObject_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATICfgNormalValue.h&quot;
+#include &quot;CATListOfCATICfgModification.h&quot;
+#include &quot;CATListOfCATICfgHistory.h&quot;
+#include &quot;CATIVpmPredicate.h&quot;
+#include &quot;CATListOfCATILinkableObject.h&quot;
+#include &quot;CATListOfCATICfgXEff.h&quot;
+class CATIConfigurable_var;
+class CATICfgEffectivity_var;
+class CATICfgModification_var;
+class CATICfgValue_var;
+class CATICfgORExpression_var;
+class CATIConfigHandler_var;
+class CATICfgFilter_var;
+class CATListValCATICfgEffectivity_var;
+class CATListValCATIConfigurableObject_var;
+class CATListValCATICfgValidatedEffectivity_var;
+class CATListValCATICfgFilter_var;
+class CATListValCATICfgEffVal_var;
+class CATListValCATIConfigHandler_var;
+class CATUnicodeString;
+class CATIConfigurableObject_var;
+class CATILinkableObject_var;
+class CATICfgSessionEffectivity_var;
+class CATIVpmAFLAction_var;
+class CATListValCATICfgBasicEffectivity_var;
+class CATILinkableObject_var;
+class CATICfgSimpleSpecification_var;
+class CATIVpmAFLAction_var;
+class CATICfgInterval_var;
+class CATListValCATICfgORExpression_var;
+class CATListValCATIConfigurableObject_var;
+class CATISpecObject_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIConfigurableObject;
+#else
+extern &quot;C&quot; const IID IID_CATIConfigurableObject;
+#endif
+
+//=============================================================================
+
+class ExportedByGUIDVPMInterfaces CATIConfigurableObject : public CATBaseUnknown {
+
+     CATDeclareInterface;
+public:
+
+/**
+ * Return the Name of this ConfigurableObject.
+ * @param oName
+ *   The ConfigurableObject Name.
+ */
+     virtual HRESULT GetName(CATUnicodeString &amp;oName) const = 0; 
+
+/**
+ * Return the Name of the Object linked to this ConfigurableObject.
+ * @param oName
+ *   The Object Name.
+ */
+     virtual HRESULT GetProductName(CATUnicodeString &amp;oName) const = 0; 
+
+/**
+ * Return the UUID of the Object linked to this ConfigurableObject.
+ * @param oUID
+ *   UUID of the Object.
+ */
+     virtual  HRESULT GetObject(SEQUENCE(octet) &amp;oUID) const = 0;
+
+/**
+ * Create a new ModificationEffectivity, given its Name, assiociated to this ConfigurableObject.
+ * &lt;br&gt;&lt;b&gt;Postcondition:&lt;/b&gt; If a ModificationEffectivity of such a Name already exists, the method does nothing
+ * and returns S_FALSE: in this case, oModification is the ModificationEffectivity already existing.
+ * Else, a ModificationEffectivity is created, initialized, and added to the List of
+ * ModificationEffectivities of this ConfigurableObject.
+ * @param iModName
+ *   Name of the ModificationEffectivity.
+ * @param oModification
+ *   ModificationEffectivity returned.
+ */
+     virtual HRESULT CreateModificationEffectivity(const CATUnicodeString &amp;iModName,
+						   CATICfgModification_var &amp;oModification) = 0; 
+
+/**
+ * Create a new ModificationEffectivity, Name generated by the method, assiociated to this ConfigurableObject.
+ * &lt;br&gt;&lt;b&gt;Postcondition:&lt;/b&gt; First, the method generates a Name for the ModificationEffectivity, and then apply
+ * the method described just before.
+ * @param oModification
+ *   ModificationEffectivity to create.
+ */
+     virtual HRESULT CreateModificationEffectivity(CATICfgModification_var &amp;oModification) = 0; 
+
+/** @nodoc */
+     virtual HRESULT CreateModificationEffectivity(const CATUnicodeString &amp;iModFlag,  const int iSign,
+						   CATICfgModification_var &amp;oModification) = 0; 
+
+/** @nodoc */
+     virtual HRESULT GetValidatedEffectivityList(CATListValCATICfgValidatedEffectivity_var &amp; oEffectivityList)
+	  const = 0;
+
+/**
+ * Return the List of all ModificationEffectivites belonging to this ConfigurableObject.
+ * @param oEffectivityList
+ *   List of ModificationEffectivities to return.
+ */
+     virtual HRESULT GetModificationList(CATListValCATICfgModification_var &amp; oEffectivityList) const = 0;
+
+/**
+ * Return the List of ModificationEffectivites, having the same given Name, belonging to this ConfigurableObject.
+ * @param iModFlag
+ *   Name of the ModificationEffectivites.
+ * @param oEffectivityList
+ *   List of ModificationEffectivities to return (The size of the List cannot be greater than 1).
+ */
+     virtual HRESULT GetModificationListByName(const CATUnicodeString &amp;iModFlag,
+					       CATListValCATICfgModification_var &amp; oEffectivityList) const = 0;
+
+/** @nodoc */
+     virtual HRESULT Restructure(const CATILinkableObject_var &amp;iFrom, const CATILinkableObject_var &amp;iTo,
+				 const CATIConfigurableObject_var &amp;iToCV) const=0;
+
+/**
+ * Set the current configuration, given a Filter.
+ * @param iFilter
+ *   Filter determining the current configuration.
+ */
+     virtual HRESULT SetApplicativeConfiguration(CATICfgFilter_var &amp;iFilter) = 0;
+
+/**
+ * Return the current configuration as a Filter.
+ * @param oCfgFilter
+ *   Filter determining the current configuration.
+ */
+     virtual HRESULT GetApplicativeConfiguration(CATICfgFilter_var &amp;oCfgFilter) const = 0;
+ 
+/**
+ * Create a new ConfigHandler associated to this ConfigurabeObject, given its Name and Description.
+ * @param iId
+ *   Name of the ConfigHandler.
+ * @param iDescription
+ *   Description of the ConfigHandler.
+ * @param oConfigHandler
+ *   ConfigHandler to create.
+ */
+     virtual HRESULT CreateConfigHandler(const CATUnicodeString &amp;iId, const CATUnicodeString &amp;iDescription, 
+					 CATIConfigHandler_var &amp;oConfigHandler) = 0;
+
+/**
+ * Return the List of ConfigHandler associated to this ConfigurableObject.
+ * @param oCfgandlerList
+ *   List of ConfigHandler.
+ */
+     virtual HRESULT GetListOfConfigHandler(CATListValCATIConfigHandler_var&amp; oCfgandlerList) = 0; 
+
+/** @nodoc */
+     virtual HRESULT CopyConfigHandler(CATIConfigHandler_var &amp; iCH, const CATUnicodeString &amp;iId,
+				       CATUnicodeString &amp;DupliStr,CATIConfigHandler_var &amp; oCH, int DuplicateChildren=0) = 0;
+
+/**
+ * Delete this ConfigurableObject.
+ * &lt;br&gt;&lt;b&gt;Postcondition:&lt;/b&gt; If it is used by other Objects, the method does nothing, returns E_FAIL and set
+ * ErrorNumber 200. Else, the List of ModificationEffectivities and the List of ConfigHandler held
+ * by this ConfigurableObject are deleted. At last, it is removed from the ConfigurableObject List of the
+ * Configurable it is associated to.
+ */
+     virtual HRESULT Delete() = 0;  
+
+/** @nodoc */
+     virtual HRESULT CopyMe( const CATUnicodeString &amp;iId,CATListOfCATICfgNormalValue_var &amp;iNewValueList,
+			     CATListOfCATICfgNormalValue_var &amp;iOldValueList, CATListValCATICfgEffectivity_var &amp; oChangedEffectivityList,
+			     CATIConfigurableObject_var &amp; oCO, int WithHistoric = 0) = 0;
+
+/** @nodoc */
+     virtual HRESULT CopyModification(CATICfgModification_var &amp;iModifToCopy, CATICfgModification_var &amp;oNewModif) = 0;
+      
+/** @nodoc */
+     virtual HRESULT GetValueForUID(const SEQUENCE(octet) &amp;iUUID, CATListValCATICfgORExpression_var &amp; oListORExp,
+				    CATListOfCATUnicodeString &amp;oDomainNameList, CATListValCATICfgModification_var &amp; oEffectivityList,
+				    CATListOfCATUnicodeString oPlusMoins) = 0;
+
+/**
+ * @nodoc
+ * Warning: the caller must deallocate the returned char* with delete[].
+ */
+     virtual char* DisplayValueForUID(const SEQUENCE(octet) &amp;iUUID)=0;
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT DisplayValueForUID(const SEQUENCE(octet) &amp;iUUID, CATUnicodeString &amp;oStr)=0;
+
+/**
+ * @nodoc
+ */
+     virtual CATUnicodeString DisplayValueForUID2(const SEQUENCE(octet) &amp;iUUID)=0;
+
+/**
+ * Check if an object can be versioned
+ * @param iObj
+ *   Object to check.
+ * @param iTime
+ *   Date of versionning. 
+*   @return
+*   An HRESULT value. 
+*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*   &lt;dl&gt;
+*     &lt;dt&gt;S_OK&lt;/dt&gt;
+*     &lt;dd&gt;iObj is versionable&lt;/dd&gt;
+*     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+*     &lt;dd&gt;No error, but iObj is not versionable&lt;/dd&gt;
+*     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+*     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+*   &lt;/dl&gt;		
+ */
+     virtual HRESULT IsVersionable(const CATILinkableObject_var &amp;iObj, const CATTime &amp;iTime) const = 0;
+
+/**
+ * Check if it is possible to remove an input Effectivity from the Effectivity associated to a Filterable by
+ * a given DomainName.
+ * @param iFilterable
+ *   The Filterable to cut.
+ * @param iDomain
+ *   The Domain on which the cut is applied. 
+ * @param iEffectivities
+ *   The Effectivity used to cut.
+ */
+     virtual HRESULT CheckRemove(SEQUENCE(octet) &amp;iFilterable, const CATUnicodeString &amp;iDomain,
+				 const CATICfgEffectivity_var &amp;iEffectivities) =0;
+
+/**
+ * Check if it is possible to remove an input ORExpression from the ORExpression associated to a Filterable by
+ * a given DomainName.
+ * @param iFilterable
+ *   The Filterable to cut.
+ * @param iDomain 
+ *   The Domain on which the cut is applied.
+ * @param iORExp
+ *   The ORExpression used to cut.
+ */
+     virtual HRESULT CheckRemove(SEQUENCE(octet) &amp;iFilterable, const CATUnicodeString &amp;iDomain,
+				 const CATICfgORExpression_var &amp;iORExp)= 0;
+
+/**
+ * Return the List of ModificationEffectivities for this ConfigurableObject, where at least one of the X_Eff has a
+ * Status included in an input StatusList.
+ * @param iStatusList
+ *   The input StatusList.
+ * @param oList
+ *   The resulting List of ModificationEffectivities.
+ */
+     virtual HRESULT QueryEffectivitiesByStatus( const CATListOfCATUnicodeString &amp; iStatusList, 
+						 CATListOfCATICfgModification_var &amp;oList) const = 0 ; 
+
+/**
+ * Return a User defined Filter.
+ * @param iBSFName
+ *   Name of the Filter.
+ * @param oFilter
+ *   Filter to return.
+ */
+     virtual HRESULT GetBSFFilter(const CATUnicodeString &amp; iBSFName, CATICfgFilter_var &amp;oFilter)=0;
+        
+/**
+ * Return the List of ModificationEffectivities pointing in &quot;+&quot; toward a given UUID Filterable.
+ * @param iUUID
+ *   UUID of the input Filterable.
+ * @param oList
+ *   List of the ModificationEffectivities pointing in &quot;+&quot; toward this ItemInstance.
+ */
+     virtual HRESULT QueryEffectivitiesPlus(const SEQUENCE(octet) &amp;iUUID, CATListOfCATICfgModification_var &amp;oList) = 0;
+
+/**
+ * Return the List of ModificationEffectivities pointing in &quot;-&quot; toward a given UUID Filterable.
+ * @param iUUID
+ *   UUID of the input Filterable.
+ * @param oList
+ *   List of the ModificationEffectivities pointing in &quot;-&quot; toward this ItemInstance.
+ */
+     virtual HRESULT QueryEffectivitiesMinus(const SEQUENCE(octet) &amp;iUUID, CATListOfCATICfgModification_var &amp;oList) = 0;
+
+/** @nodoc */
+     virtual HRESULT ConfigAnalysis(SEQUENCE(CORBAAny)&amp; iIIListToAnalyse, CATListValCATIConfigHandler_var&amp; oCHList,
+				    SEQUENCE(CORBAAny)&amp; oIIListOfII, CATListOfInt &amp;oIndexList)=0;
+
+/**
+ * Every Object keeping a persistent pointer toward this ConfigurableObject must register itself in order to avoid
+ * the deletion of this ConfigurableObject.
+ * @param iUuid
+ *   UUID of the Object to register.
+ */
+     virtual HRESULT Register(const SEQUENCE(octet) &amp;iUuid)=0;
+
+/**
+ * Cancel a registration.
+ * @param iUuid
+ *   UUID of the object to unregister.
+ */
+     virtual HRESULT UnRegister(const SEQUENCE(octet) &amp;iUuid) =0;
+
+
+/** @nodoc */
+     virtual HRESULT QueryEffValByObject(const CORBAAny &amp;iUuid, CATListValCATICfgEffVal_var &amp;oList) = 0;
+
+/** @nodoc */
+     virtual HRESULT QueryEffValByListOfObject(SEQUENCE(CORBAAny)&amp; iListObject, CATListValCATICfgEffVal_var &amp;oList) = 0;
+
+/** @nodoc */
+     virtual HRESULT QueryModHistory(CATListOfCATICfgHistory_var&amp; oList,
+				     const CATIVpmPredicate_var&amp; iPred = NULL_var,
+				     const CATUnicodeString&amp; iAttributeToSort = NULL) = 0;
+
+
+/** @nodoc */
+     virtual HRESULT IsSessionEffectivityEmpty() = 0;
+
+/** @nodoc */
+     virtual HRESULT GetActionSE(CATIVpmAFLAction_var&amp; oAction) = 0;
+
+/** @nodoc */
+     virtual HRESULT ValidateAssociatedSessionEffectivity() const = 0;
+
+/** @nodoc */
+     virtual HRESULT GetAssociatedSessionEffectivity(CATICfgSessionEffectivity_var &amp;oSesEff) const = 0;
+
+/**
+ * Return the Configurable owning this Configurableobject.
+ * @param oConfigurable
+ *   The Configurable to return.
+ */
+     virtual HRESULT GetConfigurable(CATIConfigurable_var&amp; oConfigurable) = 0;
+
+/** @nodoc */
+     virtual HRESULT SplitEffectivity(const CATILinkableObject_var &amp;iObject1, const CATILinkableObject_var &amp;iObject2,
+				      const CATICfgSimpleSpecification_var &amp;iSpec, CATIVpmAFLAction_var &amp;ioAction) = 0;
+
+/** @nodoc */
+     virtual HRESULT SplitEffectivity(SEQUENCE(octet) &amp;iUuid1, SEQUENCE(octet) &amp;iUuid2,
+				      const CATICfgSimpleSpecification_var &amp;iSpec, CATIVpmAFLAction_var &amp;ioAction) = 0;
+
+
+/** @nodoc */
+     virtual HRESULT DuplicateConfigurationStructure(const CATListOfCATILinkableObject &amp; iListII1, 
+						     CATListOfCATILinkableObject &amp; iListII2,
+						     CATIConfigurableObject_var &amp; iCV2)  = 0;
+
+/** @nodoc */
+     virtual HRESULT GetX_EffListByObject(
+	  const SEQUENCE(octet) &amp;iUUID, 
+	  CATListOfCATUnicodeString&amp; oDomainList,
+	  CATListValCATICfgORExpression_var&amp; oORExpList) const = 0;
+
+/** @nodoc */
+     virtual HRESULT AddChildCV(const CATIConfigurableObject_var &amp;iObj) = 0;
+
+/** @nodoc */
+     virtual HRESULT GetListOfChildren(CATListValCATIConfigurableObject_var &amp;oList) const = 0;
+
+/** @nodoc */
+     virtual HRESULT GetFatherCV(CATListValCATIConfigurableObject_var &amp;oList) const = 0;
+
+/**
+ * Return the List of ModificationEffectivities for this ConfigurableObject for a given type.
+ * @param iType
+ *   The input type.
+ * @param oList
+ *   The resulting List of ModificationEffectivities.
+ */
+     virtual HRESULT QueryEffectivityByType(const CATUnicodeString&amp; iType, CATListOfCATICfgModification_var&amp; oMods) = 0;
+
+/**
+ * Check if an input ConfigurableObject belongs (is instantiated)  to this ConfigurableObject.
+ * @param iCV
+ *   The input ConfigurableObject.
+ */
+     virtual HRESULT BelongsTo(const CATIConfigurableObject_var&amp; iCV) = 0;
+
+/** @nodoc */
+    virtual HRESULT PropagateModification(const CATILinkableObject_var &amp;iSource, const CATILinkableObject_var &amp;iTarget) const = 0;
+
+/** @nodoc */
+     virtual HRESULT GetX_EffectivityListByObject(
+	  const SEQUENCE(octet) &amp;iUUID, 
+	  CATListOfCATICfgXEff_var &amp;oLOXEffs) const = 0;
+
+
+/**
+ * Return the effectivity XML string for each object.
+ * @param iUUIDs
+ *   list of object UUID.
+ * @param oEffectivities
+ *   list of returned effectivity XML strings.
+ * @return
+ *   An HRESULT value. 
+ */
+
+     virtual HRESULT DisplayObjectsEffectivity( const SEQUENCE(CORBAAny) &amp;iUUIDs , CATListOfCATUnicodeString&amp; oEffectivities ) =0;
+
+#if defined(CATIAV5R10)
+/** @nodoc */
+     virtual HRESULT GetPendingOperations(const CATILinkableObject_var&amp; iObject,
+					  CATListOfInt&amp; oOperations,
+					  CATBoolean recursive=FALSE) = 0; 
+     
+#endif
+
+/** @nodoc */
+     virtual HRESULT GetRootConfigurableObjects(CATListValCATIConfigurableObject_var &amp;oRootConfigurableObjects) const = 0;
+
+};
+
+// Handler definition 
+CATDeclareHandler(CATIConfigurableObject, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIConfigurable.html">← 上一页: CATIConfigurable.h</a></div>
+        <div><a href="CATIConfigurableObjectUE.html">下一页: CATIConfigurableObjectUE.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATSAXHandlerBase.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATSAXHandlerBase.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSAXException.html">← 上一页: CATSAXException.h</a></div>
+        <div><a href="CATSAXIOException.html">下一页: CATSAXIOException.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#ifndef CATSAXHandlerBase_h
+#define CATSAXHandlerBase_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserCls.h&quot;
+class CATISAXLocator_var;
+class CATISAXAttributeList_var;
+class CATISAXInputSource_var;
+class CATSAXParseException;
+
+/**
+ * Default base class for handlers.
+ *
+ * &lt;p&gt;This class implements the default behaviour for four SAX
+ * interfaces: @href CATISAXEntityResolver, @href CATISAXDTDHandler, 
+ * @href CATISAXDocumentHandler, and @href CATISAXErrorHandler.&lt;/p&gt;
+ *
+ * &lt;p&gt;Application writers can extend this class when they need to
+ * implement only part of an interface; parser writers can
+ * instantiate this class to provide default handlers when the
+ * application has not supplied its own.&lt;/p&gt;
+ *
+ * &lt;p&gt;Note that the use of this class is optional.&lt;/p&gt;
+ *
+ * @see CATISAXEntityResolver, CATISAXDTDHandler, CATISAXDocumentHandler, CATISAXErrorHandler
+ */
+class ExportedByXMLParserCls CATSAXHandlerBase: public CATBaseUnknown {
+	CATDeclareClass;
+	
+	public:
+		
+		/**
+		 * Constructor
+		 */
+		CATSAXHandlerBase();
+
+		/**
+		 * Destructor
+		 */
+		virtual ~CATSAXHandlerBase();
+		
+		/**
+		 * Receives notification of character data inside an element.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method to take specific actions for each chunk of character data
+		 * (such as adding the data to a node or buffer, or printing it to
+		 * a file).&lt;/p&gt;
+		 *
+		 * @param iCharacters 
+		 * The characters from the XML document.
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDocumentHandler#Characters
+		 */
+		virtual HRESULT Characters(
+			const CATUnicodeString &amp; iCharacters);
+		
+		/**
+		 * Receives notification of the end of the document.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method in a subclass to take specific actions at the beginning
+		 * of a document (such as finalising a tree or closing an output
+		 * file).&lt;/p&gt;
+		 *
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * &lt;/dl&gt;
+		 *
+		 * @see CATISAXDocumentHandler#EndDocument
+		 */
+		virtual HRESULT EndDocument();
+		
+		/**
+		 * Receives notification of the end of an element.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method in a subclass to take specific actions at the end of
+		 * each element (such as finalising a tree node or writing
+		 * output to a file).&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The element type name.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDocumentHandler#EndElement
+		 */
+		virtual HRESULT EndElement(
+			const CATUnicodeString &amp; iName);
+		
+		/**
+		 * Receives notification of ignorable whitespace in element content.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method to take specific actions for each chunk of ignorable
+		 * whitespace (such as adding data to a node or buffer, or printing
+		 * it to a file).&lt;/p&gt;
+		 *
+		 * @param iCharacters 
+		 * The characters from the XML document.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDocumentHandler#IgnorableWhitespace
+		 */
+		virtual HRESULT IgnorableWhiteSpace(
+			const CATUnicodeString &amp; iCharacters);
+		
+		/**
+		 * Receives notification of a processing instruction.
+		 *
+		 * &lt;p&gt;The @href CATISAXParser will invoke this method once for each processing
+		 * instruction found: note that processing instructions may occur
+		 * before or after the main document element.&lt;/p&gt;
+		 *
+		 * &lt;p&gt;A SAX parser should never report an XML declaration (XML 1.0,
+		 * section 2.8) or a text declaration (XML 1.0, section 4.3.1)
+		 * using this method.&lt;/p&gt;
+		 *
+		 * @param iTarget
+		 * The processing instruction target.
+		 * @param iData 
+		 * The processing instruction data (can be an empty @href CATUnicodeString if
+		 * no processing instruction data was given).
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDocumentHandler#ProcessingInstruction
+		 */
+		virtual HRESULT ProcessingInstruction(
+			const CATUnicodeString &amp; iTarget,
+			const CATUnicodeString &amp; iData);
+		
+		/**
+		 * Receives a locator object for document events.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method in a subclass if they wish to store the locator for use
+		 * with other document events.&lt;/p&gt;
+		 *
+		 * @param iLocator
+		 * A locator for all SAX document events.
+		 *
+		 * @see CATISAXDocumentHandler#SetDocumentLocator, CATISAXLocator
+		 */
+		virtual HRESULT SetDocumentLocator(
+			const CATISAXLocator_var&amp; iLocator);
+		
+		/**
+		 * Receives notification of the beginning of the document.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method in a subclass to take specific actions at the beginning
+		 * of a document (such as allocating the root node of a tree or
+		 * creating an output file).&lt;/p&gt;
+		 *
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * &lt;/dl&gt;
+		 *
+		 * @see CATISAXDocumentHandler#StartDocument
+		 */
+		virtual HRESULT StartDocument() ;
+		
+		/**
+		 * Receives notification of the start of an element.
+		 *
+		 * &lt;p&gt;By default, do nothing.  Application writers may override this
+		 * method in a subclass to take specific actions at the start of
+		 * each element (such as allocating a new tree node or writing
+		 * output to a file).&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The element type name.
+		 * @param iAttributes
+		 * The specified or defaulted attributes.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDocumentHandler#StartElement
+		 */
+		virtual HRESULT StartElement(
+			const CATUnicodeString &amp; iName, 
+			const CATISAXAttributeList_var&amp; iAttributes);
+		
+		/**
+		 * Receives notification of a notation declaration event.
+		 *
+		 * &lt;p&gt;It is up to the application to record the notation for later
+		 * reference, if necessary.&lt;/p&gt;
+		 *
+		 * &lt;p&gt;If a system identifier is present, and it is a URL, the SAX
+		 * parser must resolve it fully before passing it to the
+		 * application.&lt;/p&gt;
+		 *
+		 * @param iName
+		 * The notation name.
+		 * @param iPublicId
+		 * The notation&#x27;s public identifier (can be an empty @href CATUnicodeString if
+		 * no public identifier was given).
+		 * @param iSystemId
+		 * The notation&#x27;s system identifier (can be an empty @href CATUnicodeString if
+		 * no system identifier was given).
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATISAXDTDHandler#NotationDecl
+		 */
+		virtual HRESULT NotationDecl(
+			const CATUnicodeString &amp; iName, 
+			const CATUnicodeString &amp; iPublicId, 
+			const CATUnicodeString &amp; iSystemId);
+		
+		/**
+		 * Receives notification of an unparsed entity declaration event.
+		 *
+		 * &lt;p&gt;Note that the notation name corresponds to a notation
+		 * reported by the @href #NotationDecl event.  It is up to the
+		 * application to record the entity for later reference, if
+		 * necessary.&lt;/p&gt;
+		 *
+		 * &lt;p&gt;If the system identifier is a URL, the parser must resolve it
+		 * fully before passing it to the application.&lt;/p&gt;
+		 *
+		 * @param iName 
+		 * The unparsed entity&#x27;s name.
+		 * @param iPublicId 
+		 * The entity&#x27;s public identifier (can be an empty @href CATUnicodeString if
+		 * no public identifier was given).
+		 * @param iSystemId 
+		 * The entity&#x27;s system identifier (it must always have one).
+		 * @param iNotationName
+		 * name The name of the associated notation.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXDTDHandler#UnparsedEntityDecl
+		 */
+		virtual HRESULT UnparsedEntityDecl(
+			const CATUnicodeString &amp; iName, 
+			const CATUnicodeString &amp; iPublicId, 
+			const CATUnicodeString &amp; iSystemId, 
+			const CATUnicodeString &amp; iNotationName);
+		
+		/**
+		 * Allows the application to resolve external entities.
+		 *
+		 * &lt;p&gt;The @href CATISAXParser will call this method before opening any external
+		 * entity except the top-level document entity (including the
+		 * external DTD subset, external entities referenced within the
+		 * DTD, and external entities referenced within the document
+		 * element): the application may request that the parser resolve
+		 * the entity itself, that it use an alternative URI, or that it
+		 * use an entirely different input source.&lt;/p&gt;
+		 *
+		 * &lt;p&gt;Application writers can use this method to redirect external
+		 * system identifiers to secure and/or local URIs, to look up
+		 * public identifiers in a catalogue, or to read an entity from a
+		 * database or other input source (including, for example, a dialog
+		 * box).&lt;/p&gt;
+		 *
+		 * &lt;p&gt;If the system identifier is a URL, the SAX parser must
+		 * resolve it fully before reporting it to the application.&lt;/p&gt;
+		 *
+		 * @param iPublicId 
+		 * The public identifier of the external entity being referenced 
+		 * (can be an empty @href CATUnicodeString if no public identifier was given).
+		 * @param iSystemId 
+		 * The system identifier of the external entity being referenced.
+		 * @param oInputSource
+		 * An InputSource object describing the new input source,
+		 *         or &lt;tt&gt;NULL&lt;/tt&gt; to request that the parser open a regular
+		 *         URI connection to the system identifier.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2001&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an I/O error occurs, possibly the result of creating a new @href CATISAXInputSource
+		 * the method can raise this error.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXEntityResolver#ResolveEntity
+		 */
+		virtual HRESULT ResolveEntity(
+			const CATUnicodeString &amp; iPublicId, 
+			const CATUnicodeString &amp; iSystemId, 
+			CATISAXInputSource_var&amp; oInputSource) ;
+		
+		/**
+		 * Receives notification of a recoverable parser error.
+		 *
+		 * &lt;p&gt;The default implementation does nothing.  Application writers
+		 * may override this method in a subclass to take specific actions
+		 * for each error, such as inserting the message in a log file or
+		 * printing it to the console.&lt;/p&gt;
+		 *
+		 * @param iException
+		 * The error information encapsulated in a SAX parse exception.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXParseException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2002&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXErrorHandler#Warning, CATSAXParseException
+		 */
+		virtual HRESULT Error(
+			CATSAXParseException* iException) ;
+		
+		/**
+		 * Reports a fatal XML parsing error.
+		 *
+		 * &lt;p&gt;The default implementation raises a SAXParseException.
+		 * Application writers may override this method in a subclass if
+		 * they need to take specific actions for each fatal error (such as
+		 * collecting all of the errors into a single report): in any case,
+		 * the application must stop all regular processing when this
+		 * method is invoked, since the document is no longer reliable, and
+		 * the parser may no longer report parsing events.&lt;/p&gt;
+		 *
+		 * @param iException 
+		 * The error information encapsulated in a SAX parse exception.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXParseException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2002&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXErrorHandler#FatalError, CATSAXParseException
+		 */
+		virtual HRESULT FatalError(
+			CATSAXParseException* iException) ;
+		
+		/**
+		 * Receives notification of a parser warning.
+		 *
+		 * &lt;p&gt;The default implementation does nothing.  Application writers
+		 * may override this method in a subclass to take specific actions
+		 * for each warning, such as inserting the message in a log file or
+		 * printing it to the console.&lt;/p&gt;
+		 *
+		 * @param iException
+		 * The warning information encapsulated in a SAX parse exception.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXParseException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2002&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;The method can raise a CATSAXException&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see CATISAXErrorHandler#Warning, CATSAXParseException
+		 */
+		virtual HRESULT Warning(
+			CATSAXParseException* iException) ;
+		
+	private:
+		CATSAXHandlerBase (CATSAXHandlerBase &amp;);
+		CATSAXHandlerBase&amp; operator=(CATSAXHandlerBase&amp;);
+};
+
+#endif // CATSAXHandlerBase_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSAXException.html">← 上一页: CATSAXException.h</a></div>
+        <div><a href="CATSAXIOException.html">下一页: CATSAXIOException.h →</a></div>
+    </div>
+</body>
+</html>

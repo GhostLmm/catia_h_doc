@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATIAfrCommandHeaderRep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATIAfrCommandHeaderRep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIAfrCmdPaletteOptions.html">← 上一页: CATIAfrCmdPaletteOptions.h</a></div>
+        <div><a href="CATIAfrDialog.html">下一页: CATIAfrDialog.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __CATIAfrCommandHeaderRep_h
+#define __CATIAfrCommandHeaderRep_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;ApplicationFrame.h&quot;
+
+class CATAfrCommandHeaderRep;
+class CATDialog;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByApplicationFrame IID IID_CATIAfrCommandHeaderRep;
+#else
+extern &quot;C&quot; const IID IID_CATIAfrCommandHeaderRep;
+#endif
+
+/**
+  * Interface to customize the representations of a command header.
+  * &lt;b&gt;Role&lt;/b&gt;This interface, implemented on a class deriving from
+  *  @href CATAfrDialogCommandHeader , enables you to provide for your command header 
+  *  a customized representation into the toolbar, and/or the menubar, and/or the
+  *  contextual menu .
+  *  &lt;br&gt;This interface is called by the &quot;frame&quot; when a representation of the command header
+  * is necessary during a workshop change ( and only during workshop change ) : in other words, 
+  * each time the command header instance is associated with a starter during workshop change. 
+  *  &lt;ul&gt;
+  *    &lt;li&gt;You can in a workshop, associated with more one starter a command header instance, &lt;/li&gt;
+  *    &lt;li&gt;The end user can Drag/Drop a command header instance into a toolbar thanks the
+  *        Tools/Customize command.
+  *    &lt;li&gt;If two documents are opened, there are two representations of the same command header instance&lt;/li&gt;
+  *  &lt;/ul&gt;
+  *  Depending on the type of container of the starter, one of the three methods of this
+  * interface is called. Each method creates an instance of a class deriving from
+  * @href CATAfrCommandHeaderRep, or either returns E_FAIL if no representation. 
+  */
+class ExportedByApplicationFrame CATIAfrCommandHeaderRep: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+
+	/**
+    * Creates a representation to be displayed in a toolbar.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates and returns an instance of a
+    * class deriving from @href CATAfrCommandHeaderRep 
+    * which will be the representation of the command header in a toolbar.
+    * This representation manages one or several &lt;tt&gt;Dialog&lt;/tt&gt; derived objects.
+    * The representation will be automatically released .
+    * @param iParent
+    *    The parent for the CATDialog derived objects to create
+    * @param oHdrRep
+    *    The representation to be displayed in a toolbar.
+    * @return 
+    *  S_OK : oHdrRep is created otherwise E_FAIL
+    */
+  virtual HRESULT CreateToolbarRep (const CATDialog * iParent, CATAfrCommandHeaderRep ** oHdrRep) = 0;
+
+	/**
+    * Creates a representation to be displayed in the menu bar.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates and returns an instance of a
+    * class deriving from @href CATAfrCommandHeaderRep 
+    * which will be the representation of the command header in a toolbar.
+    * This representation manages one or several &lt;tt&gt;Dialog&lt;/tt&gt; derived objects.
+    * The representation will be automatically released .
+    * @param iParent
+    *    The parent for the CATDialog derived objects to create
+    * @param oHdrRep
+    *    The representation to be displayed in the menu bar.
+    * @return 
+    *  S_OK : oHdrRep is created otherwise E_FAIL
+    */
+  virtual HRESULT CreateMenuRep (const CATDialog * iParent, CATAfrCommandHeaderRep ** oHdrRep) = 0;
+
+	/**
+    * Creates a representation to be displayed in a contextual menu.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates and returns an instance of a
+    * class deriving from @href CATAfrCommandHeaderRep 
+    * which will be the representation of the command header in a toolbar.
+    * This representation manages one or several &lt;tt&gt;Dialog&lt;/tt&gt; derived objects.
+    * The representation will be automatically released .
+    * @param iParent
+    *    The parent for the CATDialog derived objects to create
+    * @param oHdrRep
+    *    The representation to be displayed in a contextual menu.
+    * @return 
+    *  S_OK : oHdrRep is created otherwise E_FAIL
+    */
+  virtual HRESULT CreateCtxMenuRep (const CATDialog * iParent, CATAfrCommandHeaderRep ** oHdrRep) = 0;
+
+};
+
+CATDeclareHandler (CATIAfrCommandHeaderRep, CATBaseUnknown);
+
+#endif//__CATIAfrCommandHeaderRep_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIAfrCmdPaletteOptions.html">← 上一页: CATIAfrCmdPaletteOptions.h</a></div>
+        <div><a href="CATIAfrDialog.html">下一页: CATIAfrDialog.h →</a></div>
+    </div>
+</body>
+</html>

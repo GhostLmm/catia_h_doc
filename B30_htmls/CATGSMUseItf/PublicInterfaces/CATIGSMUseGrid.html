@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseGrid.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseGrid.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseFilletTriTangent.html">← 上一页: CATIGSMUseFilletTriTangent.h</a></div>
+        <div><a href="CATIGSMUseGridFace.html">下一页: CATIGSMUseGridFace.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// 
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+//---------------------------------------------------------------------
+// Historic:
+// Creation     : 00/07/03 &gt; 
+// Modification : 02/07/15 &gt; CAA L0 exposition  
+// Modification : 05/03/03 &gt; CAA L1 exposition  
+//---------------------------------------------------------------------
+#ifndef CATIGSMUseGrid_H
+#define CATIGSMUseGrid_H
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID IID_CATIGSMUseGrid ;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseGrid ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Grid feature : allows to manipulate the generic data of grids
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to associate a grid to a working support 
+ * &lt;br&gt; Grid object is a genertal objet, it manipulate standard parameter for the grid 
+ * &lt;br&gt; -  Visibility : grid visible or not 
+ * @see  CATIGSMUseWorkingSupportFactory##CreateWorkingSupport
+ * @see  CATICartesianGrid
+ */
+
+class ExportedByCATGSMUseItf CATIGSMUseGrid: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+
+   /**
+    *   Gets the grid visibility.
+    *   &lt;br&gt;  Returned value  : = 0 Grid not visible 
+    *   &lt;br&gt;                  : = 1 Grid visible 
+    */                                  
+
+   virtual int GetVisibility() = 0;
+   /**
+    *   Sets the grid visibility.
+    *   @param iVisible 
+    *   &lt;br&gt;  iVisible   : = 0 Grid not visible 
+    *   &lt;br&gt;             : = 1 Grid visible 
+    */
+
+   virtual HRESULT SetVisibility(const int iVisible) = 0;
+   /**
+    *   Sets the grid furtivity.
+    *   @param iFurtivity
+    *   &lt;br&gt;  iFurtivity   : = 0 Grid not furtive 
+    *   &lt;br&gt;               : = 1 Grid furtive 
+    */
+
+   virtual HRESULT SetFurtivity(const int iFurtivity=1) = 0;
+  /**
+    *   Gets the grid furtivity.
+    *   &lt;br&gt;  Returned value  : = 0 Grid not furtive 
+    *   &lt;br&gt;                  : = 1 Grid furtive 
+    */
+
+   virtual int GetFurtivity() = 0;
+   /**
+    *   Sets the grid selectability.
+    *   @param iSelectability
+    *   &lt;br&gt;  iSelectability   : = 0 Grid not selectable 
+    *   &lt;br&gt;				   : = 1 Grid selectable 
+    */
+
+   virtual HRESULT SetSelectability(const int iSelectability=1) = 0;
+   /**
+    *   Gets the grid selectability.
+    *   &lt;br&gt;  Returned value  : = 0 Grid not selectable 
+    *   &lt;br&gt;                  : = 1 Grid selectable 
+    */
+   virtual int GetSelectability() = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIGSMUseGrid, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseFilletTriTangent.html">← 上一页: CATIGSMUseFilletTriTangent.h</a></div>
+        <div><a href="CATIGSMUseGridFace.html">下一页: CATIGSMUseGridFace.h →</a></div>
+    </div>
+</body>
+</html>

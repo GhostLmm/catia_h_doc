@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathCircleArc2D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathCircleArc2D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathCircle.html">← 上一页: CATMathCircle.h</a></div>
+        <div><a href="CATMathComplex.html">下一页: CATMathComplex.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathCircleArc2D_h
+#define CATMathCircleArc2D_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+
+#include &quot;CATErrorDef.h&quot;
+#include &quot;CATMathematics.h&quot;
+
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATMathPoint2D.h&quot;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+/**
+ * Class representing an arc of a circle.
+ *&lt;br&gt;It is defined by a CATMathPoint (&lt;tt&gt;Center&lt;/tt&gt;), a CATMathLength
+ *(&lt;tt&gt;Radius&lt;/tt&gt;) and 2 angles (&lt;tt&gt;StartAngle&lt;/tt&gt; and
+ *&lt;tt&gt;EndAngle&lt;/tt&gt;). The angles are expressed in radians and
+ *&lt;br&gt;&lt;tt&gt; 0 &lt; StartAngle &lt; CAT2PI ,
+ * StartAngle &lt; EndAngle &lt; StartAngle + CAT2PI&lt;/tt&gt;. 
+ */
+class ExportedByCATMathematics CATMathCircleArc2D
+{
+public:
+//======================================================================
+//  CONSTRUCTORS AND DESTRUCTOR
+//======================================================================
+/**
+ * Constructs an empty CATMathCircleArc2D without valued data.
+ *&lt;br&gt;This is mainly used for array creation. The use of an empty
+ * CATMathCircleArc2D leads to an exception, except for the IsEmpty
+ * method.
+ */
+  CATMathCircleArc2D();
+ 
+/** 
+ * @ deprecated V5R20 Set
+ * Constructs a CATMathCircleArc2D from 3 CATMathPoint.
+ *&lt;br&gt;The circle is limited by the first and  third points, without order.
+ * The program defines itself the corresponding &lt;tt&gt;StartAngle&lt;/tt&gt; and
+ * &lt;tt&gt;EndAngle&lt;/tt&gt;. 
+ * The second point belongs to the CATMathCircleArc2D. &lt;br&gt;
+ * This constructor produces an error when the iLimit and iMiddle points are  
+ * coincident. When iLimit and iOtherLimit are coincident, an arc whose 
+ * diameter ends are iLimit and iOtherLimit is constructed.
+ */
+  CATMathCircleArc2D(const CATMathPoint2D &amp; iLimit, 
+                     const CATMathPoint2D &amp; iMiddle, 
+                     const CATMathPoint2D &amp; iOtherLimit ) ;
+
+  //======================================================================
+  // Get/set
+  //======================================================================
+
+/** 
+ * Modifies  &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D by 3 CATMathPoint.
+ *&lt;br&gt;The circle is limited by the first and  third points, without order.
+ * The program defines itself the corresponding &lt;tt&gt;StartAngle&lt;/tt&gt; and
+ * &lt;tt&gt;EndAngle&lt;/tt&gt;. 
+ * The second point belongs to the CATMathCircleArc2D. &lt;br&gt;
+ * This constructor produces an error when the iLimit and iMiddle points are  
+ * coincident. When iLimit and iOtherLimit are coincident, an arc whose 
+ * diameter ends are iLimit and iOtherLimit is constructed.
+ * @return &lt;tt&gt;E_FAIL&lt;/tt&gt; if t the iLimit and iMiddle points are  coincident (an arc whose 
+ * diameter ends are iLimit and iOtherLimit is constructed), &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+ */
+  HRESULT           Set          (const CATTolerance   &amp; iTolObject  ,
+                                  const CATMathPoint2D &amp; iLimit      ,
+                                  const CATMathPoint2D &amp; iMiddle     ,
+                                  const CATMathPoint2D &amp; iOtherLimit ) ;
+
+ /**
+ * @nodoc
+ * @deprecated V5R25 Set with CATTolerance object (XScale compliant)
+ */
+  HRESULT           Set          (const CATMathPoint2D &amp; iLimit      ,
+                                  const CATMathPoint2D &amp; iMiddle     ,
+                                  const CATMathPoint2D &amp; iOtherLimit ) ;
+
+
+/**
+ * Returns &lt;tt&gt;0&lt;/tt&gt; if the data of &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D are valuated.
+ */
+  short             IsEmpty      ()                          const ;
+
+/**
+ * Returns the center of &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D.
+ */
+  void              GetCenter    (CATMathPoint2D &amp; ioOrigin) const ;
+
+/**
+ * Returns the radius of &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D.
+ */
+  CATPositiveLength GetRadius    ()                          const ;
+
+/**
+ * Returns the first limiting angle of &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D in radian.
+ */
+  CATAngle          GetStartAngle()                          const ;
+
+/**
+ * Returns the last limiting angle of &lt;tt&gt;this&lt;/tt&gt; CATMathCircleArc2D in radian.
+ */
+  CATAngle          GetEndAngle  ()                          const ;
+
+  //======================================================================
+  // For Debug
+  //======================================================================
+
+  /**
+  * @nodoc
+  * @deprecated V5R20 GetCenter
+  * Use the  signature which returns a CATMathPoint2D as an output argument.
+  */
+  CATMathPoint2D    GetCenter    ()                          const ;
+
+
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ */
+  friend ExportedByCATMathematics ostream&amp; operator &lt;&lt; (ostream&amp; s,
+                                                  const CATMathCircleArc2D &amp; iCircleArc);
+
+  //======================================================================
+  // INTERNAL DATA
+  //======================================================================
+
+private:
+
+  CATMathPoint2D    _Center ;
+  CATPositiveLength _Radius ;
+  CATAngle          _Start  ;
+  CATAngle          _End    ;
+  short             _Empty  ;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathCircle.html">← 上一页: CATMathCircle.h</a></div>
+        <div><a href="CATMathComplex.html">下一页: CATMathComplex.h →</a></div>
+    </div>
+</body>
+</html>

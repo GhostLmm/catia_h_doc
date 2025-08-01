@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMUIFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMUIFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMTrim.html">← 上一页: CATIGSMTrim.h</a></div>
+        <div><a href="CATIGSMWorkingSupport.html">下一页: CATIGSMWorkingSupport.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef _DS_COMPUTE_SERVER
+#ifndef CATIGSMUIFactory_H
+#define CATIGSMUIFactory_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+//---------------------------------------------------------------------
+// CATIGSMUIFactory.h
+// Factory for activating Wireframe and Shape design interactive commands 
+//---------------------------------------------------------------------
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATDlgEngUtility.h&quot;
+#include &quot;CATCommand.h&quot;
+
+class CATISpecObject_var;
+class CATString;
+
+// DMUNavigator / geometry creation
+class CATGSMUICmdInfo;
+class CATPathElement; 
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMUIFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUIFactory;
+#endif
+
+/**
+ * Factory allowing to access interactive components of Shape Design.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows  to call shape design command.
+ * &lt;br&gt;
+ * This interface allows to run wireframe and surface commands
+ * from other commands 
+ * &lt;br&gt; either in exclusive mode (current command is cancel)
+ * &lt;br&gt; or in shared mode (current command is handled until the end of 
+ * launched command).
+ *
+ * &lt;br&gt;  List of available commands :
+ * &lt;pre&gt;
+ *     Command                         StartUp Name                Icon Name
+ *   -------------------------------------------------------------------------
+ *   Point interactive command       &quot;GSMPoint&quot;                  &quot;I_Point&quot;
+ *   MidPoint                        &quot;GSMMidPoint&quot;               &quot;I_Midpoint&quot;
+ *   EndPoint                        &quot;GSMEndPoint&quot;               &quot;I_Endpoint&quot;
+ *   Line interactive command        &quot;GSMLine&quot;                   &quot;I_Line&quot;
+ *   Plane interactive command       &quot;GSMPlane&quot;                  &quot;I_Plane&quot;
+ *   Intersect interactive command   &quot;GSMIntersect&quot;              &quot;I_Intersection&quot;
+ *   Project interactive command     &quot;GSMProject&quot;                &quot;I_Project&quot;
+ *   Join interactive command        &quot;GSMAssemble&quot;               &quot;I_AssembleBipar&quot;
+ *   Boundary interactive command    &quot;GSMBoundary&quot;               &quot;I_Boundary&quot;
+ *   Extract interactive command     &quot;GSMExtract&quot;                &quot;I_Extract&quot;
+ *   Extrapol interactive command    &quot;GSMExtrapol&quot;               &quot;I_Extrapol&quot;
+ *   Law  interactive command        &quot;GSMLaw&quot;                    &quot;I_Law&quot;
+ *   Extremum interactive command    &quot;GSMExtremum&quot;               &quot;I_Extremum&quot;
+ *   CurveSmooth interactive command &quot;GSMCurveSmooth&quot;            &quot;I_CurveSmooth&quot;
+ *   Spine interactive command       &quot;GSMSpine&quot;                  &quot;I_Spine&quot;
+ *   Loft interactive command        &quot;GSMLoft&quot;                   &quot;I_Loft&quot;
+ *   Blend interactive command       &quot;GSMBlend&quot;                  &quot;I_Blend&quot;
+ *   Multiple Pt interactive command &quot;GSMMultiplePoint&quot;          &quot;I_MultiplePoint&quot;
+ *   Trim  interactive command       &quot;GSMTrim&quot;                   &quot;I_Trim&quot;
+ *   Spline interactive command      &quot;GSMCurve&quot;                  &quot;I_Curve&quot;
+ *   Polyline interactive command    &quot;GSMLineCorner&quot;             &quot;I_LineCorner&quot;
+ *   Near  interactive command       &quot;GSMNear&quot;                   &quot;I_Near&quot;
+ *   3D Curve offset interactive cmd &quot;GSM3DurveOffset&quot;           &quot;I_3DCurveOffset&quot;
+ *	 Sketch command					 &quot;PRTSketch&quot;				 &quot;I_Sketcher&quot;
+ *   Axis System interactive command &quot;AxisSystem&quot;				 &quot;I_3DAxisSystemGSD&quot;
+ *   3D Curve interactive command	 &quot;St3DCurveFeature&quot;			 &quot;I_St3DCurve&quot;
+ * &lt;/pre&gt;
+ * &lt;br&gt;
+ */
+
+class ExportedByCATGitInterfaces CATIGSMUIFactory : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+
+   /**
+    * Starts a Shape Design command in creation mode.
+	* Notice that the resulting command can be NULL 
+	* if the catalog needed for the feature creation was not loaded previously.
+    *   @param CmdInfo 
+    *      Class defining parameters to activatefor GSD command creation 
+    *  &lt;ul&gt;
+    *  &lt;li&gt;      StartUpName or Typename/WorkingPart
+    *  &lt;li&gt;      Datum Mode 
+    *  &lt;li&gt;      Contextual Item 
+    *  &lt;li&gt;      Aggregation mode (=Internal GSD use Only=) 
+    *  &lt;/ul&gt;
+    *   @param Name
+    *		The name of the created CATCommand
+    *		&lt;br&gt; Note: Default is &quot;CATIGSMUICommandCreation&quot;
+    *   @param Behavior
+    *		The behavior parameter of the CATStateCommand
+    *		&lt;br&gt; Note: Default is NULL
+    *   @param iMode
+    *		The CATCommand start mode (exclusive or shared)
+    *		&lt;br&gt; Note: Default is exclusive mode
+    *	@see CATCommand, CATStateCommand 
+    *	@see CATGSMUICmdInfo
+    */
+    virtual CATCommand *CreationCommand(CATGSMUICmdInfo* CmdInfo,const CATString &amp; Name=&quot;CATGSMUICommandCreation&quot;, CATDlgEngBehavior Behavior=NULL, CATCommandMode iMode=CATCommandModeExclusive) = 0;
+ 
+
+   /**
+    * Starts a Shape Design command in edit mode.
+    *   @param EditedSpec
+    *      The element to edit
+    *   @param Name
+    *		The name of the created CATCommand
+    *		&lt;br&gt; Note:Default is &quot;CATIGSMUICommandEdit&quot;
+    *   @param Behavior
+    *		The behavior parameter of the CATStateCommand
+    *		&lt;br&gt; Note:Default is NULL
+    *   @param iMode
+    *		The CATCommand start mode (exclusive or shared)
+    *		&lt;br&gt; Note:Default is exclusive mode
+    *	@see CATCommand, CATStateCommand
+    */
+   virtual CATCommand *EditCommand(CATISpecObject_var &amp;EditedSpec, const CATString &amp; Name=&quot;CATIGSMUICommandEdit&quot;, CATDlgEngBehavior Behavior=NULL, CATCommandMode iMode=CATCommandModeExclusive) = 0;
+
+};
+CATDeclareHandler (CATIGSMUIFactory, CATBaseUnknown);
+
+#endif
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMTrim.html">← 上一页: CATIGSMTrim.h</a></div>
+        <div><a href="CATIGSMWorkingSupport.html">下一页: CATIGSMWorkingSupport.h →</a></div>
+    </div>
+</body>
+</html>

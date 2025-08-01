@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATIASchCompatible.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATIASchCompatible.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIASchCompGroupExt.html">← 上一页: TIE_CATIASchCompGroupExt.h</a></div>
+        <div><a href="TIE_CATIASchComponent.html">下一页: TIE_CATIASchComponent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIASchCompatible
+#define __TIE_CATIASchCompatible
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATExitJournal.h&quot;
+#include &quot;CATIASchCompatible.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIASchCompatible */
+#define declare_TIE_CATIASchCompatible(classe) \
+ \
+ \
+class TIECATIASchCompatible##classe : public CATIASchCompatible \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIASchCompatible, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT __stdcall IsTargetOKForRoute(const CATBSTR &amp; iRouteCntrClassType, CATIASchGRR * iGRRTarget, CATIASchListOfObjects *&amp; oLOKCntrs, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall IsTargetOKForPlace(CATIASchGRRComp * iGRRTarget, CATIABase * iCompInfo, CATIABase *&amp; oPlaceCompatInfo, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall IsTargetOKForInsert(CATIABase * iCompInfo, CATIABase *&amp; oInsertCompatInfo, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall GetBestFitPlaceInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iPlaceCompatInfo, CATIABase *&amp; ioPlaceInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns); \
+      virtual HRESULT __stdcall GetBestFitInsertInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iInsertCompatInfo, CATIABase *&amp; ioInsertInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns); \
+      virtual HRESULT __stdcall GetBestCntrForRoute(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIASchGRR * iGRR, CATIASchListOfObjects * iLOKCntrs, CATIASchListOfDoubles *&amp; oDb2CntrPt, CATIASchAppConnector *&amp; oBestCntr); \
+      virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+      virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+      virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+      virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+      virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+};
+
+
+
+#define ENVTIEdeclare_CATIASchCompatible(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT __stdcall IsTargetOKForRoute(const CATBSTR &amp; iRouteCntrClassType, CATIASchGRR * iGRRTarget, CATIASchListOfObjects *&amp; oLOKCntrs, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall IsTargetOKForPlace(CATIASchGRRComp * iGRRTarget, CATIABase * iCompInfo, CATIABase *&amp; oPlaceCompatInfo, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall IsTargetOKForInsert(CATIABase * iCompInfo, CATIABase *&amp; oInsertCompatInfo, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall GetBestFitPlaceInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iPlaceCompatInfo, CATIABase *&amp; ioPlaceInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns); \
+virtual HRESULT __stdcall GetBestFitInsertInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iInsertCompatInfo, CATIABase *&amp; ioInsertInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns); \
+virtual HRESULT __stdcall GetBestCntrForRoute(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIASchGRR * iGRR, CATIASchListOfObjects * iLOKCntrs, CATIASchListOfDoubles *&amp; oDb2CntrPt, CATIASchAppConnector *&amp; oBestCntr); \
+virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+
+
+#define ENVTIEdefine_CATIASchCompatible(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT __stdcall  ENVTIEName::IsTargetOKForRoute(const CATBSTR &amp; iRouteCntrClassType, CATIASchGRR * iGRRTarget, CATIASchListOfObjects *&amp; oLOKCntrs, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)IsTargetOKForRoute(iRouteCntrClassType,iGRRTarget,oLOKCntrs,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::IsTargetOKForPlace(CATIASchGRRComp * iGRRTarget, CATIABase * iCompInfo, CATIABase *&amp; oPlaceCompatInfo, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)IsTargetOKForPlace(iGRRTarget,iCompInfo,oPlaceCompatInfo,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::IsTargetOKForInsert(CATIABase * iCompInfo, CATIABase *&amp; oInsertCompatInfo, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)IsTargetOKForInsert(iCompInfo,oInsertCompatInfo,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetBestFitPlaceInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iPlaceCompatInfo, CATIABase *&amp; ioPlaceInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)GetBestFitPlaceInfo(iDb2PlacementPt,iPlaceCompatInfo,ioPlaceInfo,iBYesCycleAllSolns)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetBestFitInsertInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iInsertCompatInfo, CATIABase *&amp; ioInsertInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)GetBestFitInsertInfo(iDb2PlacementPt,iInsertCompatInfo,ioInsertInfo,iBYesCycleAllSolns)); \
+} \
+HRESULT __stdcall  ENVTIEName::GetBestCntrForRoute(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIASchGRR * iGRR, CATIASchListOfObjects * iLOKCntrs, CATIASchListOfDoubles *&amp; oDb2CntrPt, CATIASchAppConnector *&amp; oBestCntr) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)GetBestCntrForRoute(iDb2PlacementPt,iGRR,iLOKCntrs,oDb2CntrPt,oBestCntr)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)get_Application(oApplication)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)get_Parent(oParent)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)get_Name(oNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)put_Name(iNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+return (ENVTIECALL(CATIASchCompatible,ENVTIETypeLetter,ENVTIELetter)GetItem(IDName,RealObj)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIASchCompatible(classe)    TIECATIASchCompatible##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIASchCompatible(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIASchCompatible, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIASchCompatible, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIASchCompatible, classe, 2) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIASchCompatible, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIASchCompatible, classe) \
+ \
+HRESULT __stdcall  TIECATIASchCompatible##classe::IsTargetOKForRoute(const CATBSTR &amp; iRouteCntrClassType, CATIASchGRR * iGRRTarget, CATIASchListOfObjects *&amp; oLOKCntrs, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,1,&amp;_Trac2,&amp;iRouteCntrClassType,&amp;iGRRTarget,&amp;oLOKCntrs,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsTargetOKForRoute(iRouteCntrClassType,iGRRTarget,oLOKCntrs,oBYes); \
+   ExitAfterCall(this,1,_Trac2,&amp;_ret_arg,&amp;iRouteCntrClassType,&amp;iGRRTarget,&amp;oLOKCntrs,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchCompatible##classe::IsTargetOKForPlace(CATIASchGRRComp * iGRRTarget, CATIABase * iCompInfo, CATIABase *&amp; oPlaceCompatInfo, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,2,&amp;_Trac2,&amp;iGRRTarget,&amp;iCompInfo,&amp;oPlaceCompatInfo,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsTargetOKForPlace(iGRRTarget,iCompInfo,oPlaceCompatInfo,oBYes); \
+   ExitAfterCall(this,2,_Trac2,&amp;_ret_arg,&amp;iGRRTarget,&amp;iCompInfo,&amp;oPlaceCompatInfo,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchCompatible##classe::IsTargetOKForInsert(CATIABase * iCompInfo, CATIABase *&amp; oInsertCompatInfo, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,3,&amp;_Trac2,&amp;iCompInfo,&amp;oInsertCompatInfo,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsTargetOKForInsert(iCompInfo,oInsertCompatInfo,oBYes); \
+   ExitAfterCall(this,3,_Trac2,&amp;_ret_arg,&amp;iCompInfo,&amp;oInsertCompatInfo,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchCompatible##classe::GetBestFitPlaceInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iPlaceCompatInfo, CATIABase *&amp; ioPlaceInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,4,&amp;_Trac2,&amp;iDb2PlacementPt,&amp;iPlaceCompatInfo,&amp;ioPlaceInfo,&amp;iBYesCycleAllSolns); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetBestFitPlaceInfo(iDb2PlacementPt,iPlaceCompatInfo,ioPlaceInfo,iBYesCycleAllSolns); \
+   ExitAfterCall(this,4,_Trac2,&amp;_ret_arg,&amp;iDb2PlacementPt,&amp;iPlaceCompatInfo,&amp;ioPlaceInfo,&amp;iBYesCycleAllSolns); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchCompatible##classe::GetBestFitInsertInfo(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIABase * iInsertCompatInfo, CATIABase *&amp; ioInsertInfo, CAT_VARIANT_BOOL iBYesCycleAllSolns) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,5,&amp;_Trac2,&amp;iDb2PlacementPt,&amp;iInsertCompatInfo,&amp;ioInsertInfo,&amp;iBYesCycleAllSolns); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetBestFitInsertInfo(iDb2PlacementPt,iInsertCompatInfo,ioInsertInfo,iBYesCycleAllSolns); \
+   ExitAfterCall(this,5,_Trac2,&amp;_ret_arg,&amp;iDb2PlacementPt,&amp;iInsertCompatInfo,&amp;ioInsertInfo,&amp;iBYesCycleAllSolns); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchCompatible##classe::GetBestCntrForRoute(const CATSafeArrayVariant &amp; iDb2PlacementPt, CATIASchGRR * iGRR, CATIASchListOfObjects * iLOKCntrs, CATIASchListOfDoubles *&amp; oDb2CntrPt, CATIASchAppConnector *&amp; oBestCntr) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,6,&amp;_Trac2,&amp;iDb2PlacementPt,&amp;iGRR,&amp;iLOKCntrs,&amp;oDb2CntrPt,&amp;oBestCntr); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetBestCntrForRoute(iDb2PlacementPt,iGRR,iLOKCntrs,oDb2CntrPt,oBestCntr); \
+   ExitAfterCall(this,6,_Trac2,&amp;_ret_arg,&amp;iDb2PlacementPt,&amp;iGRR,&amp;iLOKCntrs,&amp;oDb2CntrPt,&amp;oBestCntr); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchCompatible##classe::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,7,&amp;_Trac2,&amp;oApplication); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Application(oApplication); \
+   ExitAfterCall(this,7,_Trac2,&amp;_ret_arg,&amp;oApplication); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchCompatible##classe::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,8,&amp;_Trac2,&amp;oParent); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Parent(oParent); \
+   ExitAfterCall(this,8,_Trac2,&amp;_ret_arg,&amp;oParent); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchCompatible##classe::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,9,&amp;_Trac2,&amp;oNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Name(oNameBSTR); \
+   ExitAfterCall(this,9,_Trac2,&amp;_ret_arg,&amp;oNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchCompatible##classe::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,10,&amp;_Trac2,&amp;iNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;put_Name(iNameBSTR); \
+   ExitAfterCall(this,10,_Trac2,&amp;_ret_arg,&amp;iNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchCompatible##classe::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,11,&amp;_Trac2,&amp;IDName,&amp;RealObj); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetItem(IDName,RealObj); \
+   ExitAfterCall(this,11,_Trac2,&amp;_ret_arg,&amp;IDName,&amp;RealObj); \
+   return(_ret_arg); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIASchCompatible(classe) \
+ \
+ \
+declare_TIE_CATIASchCompatible(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIASchCompatible##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIASchCompatible,&quot;CATIASchCompatible&quot;,CATIASchCompatible::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIASchCompatible(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIASchCompatible, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIASchCompatible##classe(classe::MetaObject(),CATIASchCompatible::MetaObject(),(void *)CreateTIECATIASchCompatible##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIASchCompatible(classe) \
+ \
+ \
+declare_TIE_CATIASchCompatible(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIASchCompatible##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIASchCompatible,&quot;CATIASchCompatible&quot;,CATIASchCompatible::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIASchCompatible(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIASchCompatible, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIASchCompatible##classe(classe::MetaObject(),CATIASchCompatible::MetaObject(),(void *)CreateTIECATIASchCompatible##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIASchCompatible(classe) TIE_CATIASchCompatible(classe)
+#else
+#define BOA_CATIASchCompatible(classe) CATImplementBOA(CATIASchCompatible, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIASchCompGroupExt.html">← 上一页: TIE_CATIASchCompGroupExt.h</a></div>
+        <div><a href="TIE_CATIASchComponent.html">下一页: TIE_CATIASchComponent.h →</a></div>
+    </div>
+</body>
+</html>

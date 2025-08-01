@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATIVisCGRAdhesionSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATIVisCGRAdhesionSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATGraphicPrimitive.html">← 上一页: CATGraphicPrimitive.h</a></div>
+        <div><a href="CATIVizVisualizationSettingAtt.html">下一页: CATIVizVisualizationSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===========================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2007                                         
+//===========================================================================
+
+#ifndef __CATIVISCGRADHESIONSETTINGATT
+#define __CATIVISCGRADHESIONSETTINGATT
+#include &quot;CATViz.h&quot;
+#include &quot;CATBaseUnknown.h&quot;   
+#include &quot;CATISysSettingController.h&quot;
+
+// COPYRIGHT DASSAULT SYSTEMES 2007
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+class CATString;
+class CATUnicodeString;
+class CATSettingRepository;
+class CATSettingInfo;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATViz IID IID_CATIVisCGRAdhesionSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_CATIVisCGRAdhesionSettingAtt;
+#endif
+
+
+/**
+* Interface to handle the activation state of the CGR containers.
+* &lt;br&gt;This interface defines:
+* &lt;ul&gt;
+* &lt;li&gt;A method to set each parameter&lt;/li&gt;
+* &lt;li&gt;A method to get the value of each parameter&lt;/li&gt;
+* &lt;li&gt;A method to lock/unlock each parameter&lt;/li&gt;
+* &lt;li&gt;A method to retrieve the informations concerning each parameter&lt;/li&gt;
+* &lt;/ul&gt;
+*/
+class ExportedByCATViz CATIVisCGRAdhesionSettingAtt : public CATBaseUnknown
+{
+   CATDeclareInterface;
+
+public :
+
+   /**
+   * Retrieves the V4_Model_CommentPage container activation state.
+   */
+   virtual HRESULT GetV4_Model_CommentPage (unsigned char &amp;oActivated)=0;
+
+   /**
+   * Sets the V4_Model_CommentPage container activation state.
+   */
+   virtual HRESULT SetV4_Model_CommentPage (unsigned char iActivated)=0;
+
+   /** 
+   * Retrieves information about the V4_Model_CommentPage container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT GetV4_Model_CommentPageInfo (CATSettingInfo* oInfo)=0;
+
+   /** 
+   * Locks or unlocks the V4_Model_CommentPage container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT SetV4_Model_CommentPageLock (unsigned char iLock)=0;
+
+
+
+
+   /**
+   * Retrieves the V4_Model_LnF container activation state.
+   */
+   virtual HRESULT GetV4_Model_LnF (unsigned char &amp;oActivated)=0;
+
+   /**
+   * Sets the V4_Model_LnF container activation state.
+   */
+   virtual HRESULT SetV4_Model_LnF (unsigned char iActivated)=0;
+
+   /** 
+   * Retrieves information about the V4_Model_LnF container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT GetV4_Model_LnFInfo (CATSettingInfo* oInfo)=0;
+
+   /** 
+   * Locks or unlocks the V4_Model_LnF container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT SetV4_Model_LnFLock (unsigned char iLock)=0;
+
+
+
+
+   /**
+   * Retrieves the V5_SPA container activation state.
+   */
+   virtual HRESULT GetV5_SPA (unsigned char &amp;oActivated)=0;
+
+   /**
+   * Sets the V5_SPA container activation state.
+   */
+   virtual HRESULT SetV5_SPA (unsigned char iActivated)=0;
+
+   /** 
+   * Retrieves information about the V5_SPA container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT GetV5_SPAInfo (CATSettingInfo* oInfo)=0;
+
+   /** 
+   * Locks or unlocks the V5_SPA container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT SetV5_SPALock (unsigned char iLock)=0;
+
+
+
+
+   /**
+   * Retrieves the V4V5_FDT container activation state.
+   */
+   virtual HRESULT GetV4V5_FDT (unsigned char &amp;oActivated)=0;
+
+   /**
+   * Sets the V4V5_FDT container activation state.
+   */
+   virtual HRESULT SetV4V5_FDT (unsigned char iActivated)=0;
+
+   /** 
+   * Retrieves information about the V4V5_FDT container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT GetV4V5_FDTInfo (CATSettingInfo* oInfo)=0;
+
+   /** 
+   * Locks or unlocks the V4V5_FDT container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT SetV4V5_FDTLock (unsigned char iLock)=0;
+
+
+   /**
+   * Retrieves the Voxels container activation state.
+   */
+   virtual HRESULT GetVoxels (unsigned char &amp;oActivated)=0;
+
+   /**
+   * Sets the Voxels container activation state.
+   */
+   virtual HRESULT SetVoxels (unsigned char iActivated)=0;
+
+   /** 
+   * Retrieves information about the Voxels container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT GetVoxelsInfo (CATSettingInfo* oInfo)=0;
+
+   /** 
+   * Locks or unlocks the Voxels container activation state.
+   * &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+   */
+   virtual HRESULT SetVoxelsLock (unsigned char iLock)=0;
+};
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATGraphicPrimitive.html">← 上一页: CATGraphicPrimitive.h</a></div>
+        <div><a href="CATIVizVisualizationSettingAtt.html">下一页: CATIVizVisualizationSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwTextProperties.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwTextProperties.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwText.html">← 上一页: CATIDrwText.h</a></div>
+        <div><a href="CATIDrwTextStyle.html">下一页: CATIDrwTextStyle.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwTextProperties_H
+#define CATIDrwTextProperties_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;DraftingItfCPP.h&quot;
+#include &quot;CATIDrwProperties.h&quot;
+#include &quot;CATDrwTextPropertiesEnum.h&quot;
+#include &quot;CATDrwUtility.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATCORBABoolean.h&quot;
+#include &quot;CATDftTextBoxDisplay.h&quot;
+
+class CATIDrwTextProperties_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwTextProperties;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwTextProperties;
+#endif
+
+/**
+* Interface to modify font and layout properties of any object that can be seen as a text block.
+* &lt;b&gt;Role&lt;/b&gt;: You can manage all the properties related to the font (font name and size, scoring, color, etc)
+* or to the layout (justification, orientation, frame, etc) of any object that can be seen as a text block
+* using this interface.
+*/
+class ExportedByDraftingItfCPP CATIDrwTextProperties : public CATIDrwProperties
+{
+  CATDeclareInterface;
+
+  public:
+
+   /**
+   * Gets the short name of the font. 
+   * @param oFontName
+   *    The short name of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATFont
+   */
+   virtual HRESULT GetFontName( CATUnicodeString &amp; oFontName ) = 0;
+
+   /**
+   * Sets the short name of the font.
+   * @param iFontName
+   *    The short name of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATFont
+   */
+   virtual HRESULT SetFontName( const CATUnicodeString &amp; iFontName ) = 0;
+
+   /**
+   * Gets the size of the font in millimeter (mm).
+   * @param oFontSize
+   *    The size of the font in millimeter (mm).
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFontSize( double &amp; oFontSize ) = 0;
+
+   /**
+   * Sets the size of the font in millimeter (mm).
+   * @param iFontSize
+   *    The size of the font in millimeter (mm).
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFontSize( const double &amp; iFontSize ) = 0;
+
+   /**
+   * Gets the Color of the font.
+   * @param oRed
+   *    The red component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oGreen
+   *    The green component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oBlue
+   *    The blue component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oAlpha
+   *    The alpha component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFontColor( unsigned int &amp; oRed, unsigned int &amp; oGreen, unsigned int &amp; oBlue, unsigned int &amp; oAlpha ) = 0;
+   /**
+   * @nodoc
+   */
+   virtual HRESULT GetColor( unsigned int &amp; oRed, unsigned int &amp; oGreen, unsigned int &amp; oBlue, unsigned int &amp; oAlpha ) = 0;
+
+   /**
+   * Sets the Color of the font.
+   * @param iRed
+   *    The red component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iGreen
+   *    The green component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iBlue
+   *    The blue component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iAlpha
+   *    The alpha component of the font color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFontColor( const unsigned int &amp; iRed, const unsigned int &amp; iGreen, const unsigned int &amp; iBlue, const unsigned int &amp; iAlpha = 255 ) = 0;
+   /**
+   * @nodoc
+   * This method is now replaced by @href CATIDrwTextProperties#SetFontColor
+   */
+   virtual HRESULT SetColor( const unsigned int &amp; iRed, const unsigned int &amp; iGreen, const unsigned int &amp; iBlue, const unsigned int &amp; iAlpha = 255 ) = 0;
+
+   /**
+   * Gets the Bold style of the font.
+   * @param oBold
+   *    The Bold style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetBold( boolean &amp; oBold ) = 0;
+
+   /**
+   * Sets the Bold style of the font.
+   * @param iBold
+   *    The Bold style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetBold( const boolean &amp; iBold ) = 0;
+
+   /**
+   * Gets the Italic style of the font.
+   * @param oItalic
+   *    The Italic style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetItalic( boolean &amp; oItalic ) = 0;
+
+   /**
+   * Sets the Italic style of the font.
+   * @param iItalic
+   *    The Italic style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetItalic( const boolean &amp; iItalic ) = 0;
+
+   /**
+   * Gets the Underline style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param oUnderline
+   *    The Underline style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetUnderline( boolean &amp; oUnderline ) = 0;
+
+   /**
+   * Sets the Underline style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param iUnderline
+   *    The Underline style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetUnderline( const boolean &amp; iUnderline ) = 0;
+
+   /**
+   * Gets the Overline style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param oOverline
+   *    The Overline style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetOverline( boolean &amp; oOverline ) = 0;
+
+   /**
+   * Sets the Overline style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param iOverline
+   *    The Overline style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetOverline( const boolean &amp; iOverline ) = 0;
+
+   /**
+   * Gets the StrikeThru style of the font.
+   * @param oStrikeThru
+   *    The StrikeThru style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetStrikeThru( boolean &amp; oStrikeThru ) = 0;
+
+   /**
+   * Sets the StrikeThru style of the font.
+   * @param iStrikeThru
+   *    The StrikeThru style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetStrikeThru( const boolean &amp; iStrikeThru ) = 0;
+
+   /**
+   * Gets the Superscript style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param oSuperscript
+   *    The Superscript style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSuperscript( boolean &amp; oSuperscript ) = 0;
+
+   /**
+   * Sets the Superscript style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param iSuperscript
+   *    The Superscript style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSuperscript( const boolean &amp; iSuperscript ) = 0;
+
+   /**
+   * Gets the Subscript style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param oSubscript
+   *    The Subscript style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSubscript( boolean &amp; oSubscript ) = 0;
+
+   /**
+   * Sets the Subscript style of the font.
+   *    &lt;dd&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param iSubscript
+   *    The Subscript style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSubscript( const boolean &amp; iSubscript ) = 0;
+
+   /**
+   * Gets the Justification of the text inside of its box.
+   * @param oJustification
+   *    The Justification of the text inside of its box.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwJustification
+   */
+   virtual HRESULT GetJustification( CATDrwJustification &amp; oJustification ) = 0;
+
+   /**
+   * Sets the Justification of the text inside of its box.
+   * @param iJustification
+   *    The Justification of the text inside of its box.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwJustification
+   */
+   virtual HRESULT SetJustification( const CATDrwJustification &amp; iJustification ) = 0;
+
+
+ /**
+   * Gets the kerning style of the font. 
+   * @param oKerning
+   *    The kerning style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetKerning( boolean &amp; oKerning ) = 0;
+
+ /**
+   * Sets the Kerning style of the font.
+   * @param iKerning
+   *    The Kerning style of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetKerning( const boolean &amp; iKerning ) = 0;
+
+   /** 
+   * Gets the wrapping text mode.
+   * @param oMode
+   *   Wrapping text mode.
+   *   &lt;br&gt;Refer to CATDrwUtility. 
+   */
+   virtual HRESULT IsWrapped(CATDrwWrappingMode &amp; oMode) = 0;
+   
+   /**
+   * Sets or unset the wrapping width.
+   * @param iMode 
+   *   wrapping text mode.
+   *   &lt;br&gt;Refer to CATDrwUtility. 
+   * @param iWidth 
+   *   Wrapping Width value. 
+   */
+   virtual HRESULT SetWrappingWidth(CATDrwWrappingMode imode = CATDrwWrappingAuto, double iWidth = 0.) = 0;
+   
+   /**
+   * Gets the text wrapping width.
+   * @param oWidth 
+   *   Wrapping width value.
+   */
+   virtual HRESULT GetWrappingWidth(double &amp; oWidth) = 0;
+
+   /**
+   * Gets the AnchorPoint of the text box.
+   * @param oAnchorPoint
+   *    The AnchorPoint of the text box.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwAnchorPoint
+   */
+   virtual HRESULT GetAnchorPoint( CATDrwAnchorPoint &amp; oAnchorPoint ) = 0;
+
+   /**
+   * Sets the AnchorPoint of the text box.
+   * @param iAnchorPoint
+   *    The AnchorPoint of the text box.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwAnchorPoint
+   */
+   virtual HRESULT SetAnchorPoint( const CATDrwAnchorPoint &amp; iAnchorPoint ) = 0;
+
+   /**
+   * Gets all the frame types supported by the text.
+   * @param oNbOfSupportedFrameTypes
+   *    The number of frame types supported by the text.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;-1
+   *    &lt;dd&gt;Supports all frame types defined by CATDrwFrameType enum. 
+   *    &lt;dt&gt;0
+   *    &lt;dd&gt;No frame type supported.
+   *    &lt;dd&gt;1+
+   *    &lt;dd&gt;Number of frame types supported by the text.
+   *    &lt;dt&gt;Their type is given in oSupportedFrameTypesArray.
+   *    &lt;/dl&gt;
+   * @param oSupportedFrameTypesArray
+   *    Array of all the CATDrwFrameType supported by the text. 
+   *    Can be NULL.
+   *    &lt;dd&gt;&lt;i&gt;Must be allocated by the callee and deleted by the caller.&lt;/i&gt;
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT GetSupportedFrameTypes( int &amp; oNbOfSupportedFrameTypes, CATDrwFrameType ** oSupportedFrameTypesArray ) = 0;
+
+   /**
+   * @nodoc Not implemented yet.
+   * Gets the list of supported frames. The list of frame names is ordered as defined in the standard
+   * @param oOrderedSupportedFrameNames
+   *    The list of supported frame names.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT GetOrderedSupportedFrameNames(CATListOfCATUnicodeString &amp;oOrderedSupportedFrameNames) = 0;
+
+   /**
+   * Gets the Type of the Frame surrounding the text.
+   * @param oFrameType
+   *    The Type of the Frame surrounding the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT GetFrameType( CATDrwFrameType &amp; oFrameType ) = 0;
+
+   /**
+   * Sets the Type of the Frame surrounding the text.
+   * @param iFrameType
+   *    The Type of the Frame surrounding the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT SetFrameType( const CATDrwFrameType &amp; iFrameType ) = 0;
+
+   /**
+   * @nodoc Not implemented yet.
+   * Gets the name of the frame surrounding the text.
+   * @param oFrameType
+   *    The name of the frame surrounding the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT GetFrameName(CATUnicodeString &amp;oFrameName) = 0;
+
+   /**
+   * @nodoc Not implemented yet.
+   * Sets the name of the frame surrounding the text.
+   * @param iFrameType
+   *    The name of the frame surrounding the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwFrameType
+   */
+   virtual HRESULT SetFrameName(const CATUnicodeString &amp;iFrameName) = 0;
+
+   /**
+   * Gets the Color of the frame.
+   * @param oRed
+   *    The red component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oGreen
+   *    The green component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oBlue
+   *    The blue component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oAlpha
+   *    The alpha component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFrameColor( unsigned int &amp; oRed, unsigned int &amp; oGreen, unsigned int &amp; oBlue, unsigned int &amp; oAlpha ) = 0;
+
+   /**
+   * Sets the Color of the frame.
+   * @param iRed
+   *    The red component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iGreen
+   *    The green component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iBlue
+   *    The blue component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iAlpha
+   *    The alpha component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFrameColor( const unsigned int &amp; iRed, const unsigned int &amp; iGreen, const unsigned int &amp; iBlue, const unsigned int &amp; iAlpha = 255 ) = 0;
+
+   /**
+   * Gets the Thickness of the frame.
+   * @param oThickness
+   *    The indice defining the thickness of the frame.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 1 and 63
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATVisPropertiesValues
+   */
+   virtual HRESULT GetFrameThickness( unsigned int &amp; oThickness ) = 0;
+
+   /**
+   * Sets the Thickness of the frame.
+   * @param iThickness
+   *    The indice defining the thickness of the frame.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 1 and 63
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATVisPropertiesValues
+   */
+   virtual HRESULT SetFrameThickness( const unsigned int &amp; iThickness ) = 0;
+
+   /**
+   * Gets the LineType of the frame.
+   * @param oLineType
+   *    The indice defining the line type of the frame.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 1 and 63
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATVisPropertiesValues
+   */
+   virtual HRESULT GetFrameLineType( unsigned int &amp; oLineType ) = 0;
+
+   /**
+   * Sets the LineType of the frame.
+   * @param iLineType
+   *    The indice defining the line type of the frame.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 1 and 63
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATVisPropertiesValues
+   */
+   virtual HRESULT SetFrameLineType( const unsigned int &amp; iLineType ) = 0;
+
+   /**
+   * Gets the Type of the Frame surrounding the text.
+   * @param oFill
+   *    oFill = 0 -&gt; Frame has no fill. 
+   *    oFill = 1 -&gt; Frame has a fill.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed.  
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFrameFill( int &amp; oFill ) = 0;
+
+   /**
+   * Sets the fill of the Frame surrounding the text.
+   * @param iFill
+   *    iFill has only 2 values : 
+   *       - 0 : The frame has no fill. 
+   *       - 1 : The frame has a fill.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFrameFill( const int &amp; iFill ) = 0;
+
+   /**
+   * Gets the Color of the fill of the frame.
+   * @param oRed
+   *    The red component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oGreen
+   *    The green component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oBlue
+   *    The blue component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param oAlpha
+   *    The alpha component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFrameFillColor( unsigned int &amp; oRed, unsigned int &amp; oGreen, unsigned int &amp; oBlue, unsigned int &amp; oAlpha ) = 0;
+
+   /**
+   * Sets the Color of the fill of the frame.
+   * @param iRed
+   *    The red component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iGreen
+   *    The green component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iBlue
+   *    The blue component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @param iAlpha
+   *    The alpha component of the frame color.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;br&gt;Between 0 and 255
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFrameFillColor( const unsigned int &amp; iRed, const unsigned int &amp; iGreen, const unsigned int &amp; iBlue, const unsigned int &amp; iAlpha = 255 ) = 0;
+
+   /**
+   * Gets the Type of the Frame surrounding the text.
+   * @param oMargin1
+   * @param oMargin2
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed.  
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFrameMargin( double &amp; oMargin1, double &amp; oMargin2) = 0;
+
+   /**
+   * Sets the fill of the Frame surrounding the text.
+   * @param iMargin1
+   * @param iMargin2
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFrameMargin( const double &amp; iMargin1, const double &amp; iMargin2) = 0;
+
+   /**
+   * Gets all the engineering symbols supported by the annotation.
+   * @param oSupportedSymbolsArray
+   *    Array of all the symbol supported by the annotation. 
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSupportedSymbols(CATListOfCATUnicodeString  &amp; oSupportedSymbols ) = 0;
+  
+   /**
+   * Gets the engineering symbol attached to the annotation.
+   * @param oSymbol
+   *    The engineering symbol attached to the annotation.
+   *    The list of available symbols is obtained by the method GetSupportedSymbols.
+   *    @see CATIDrwTextProperties#GetSupportedSymbols
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSymbol(CATUnicodeString &amp; oSymbol ) = 0;
+
+   /**
+   * Sets the engineering symbol attached to the text.
+   * @Precondition: The list of available symbols is obtained by the method GetSupportedSymbols
+   *    @see CATIDrwTextProperties#GetSupportedSymbols
+   * @param iSymbol
+   *    The engineering symbol attached to the annotation.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSymbol( const CATUnicodeString &amp; iSymbol ) = 0;
+
+   /**
+   * @deprecated V5R17 use CATIDrwTextProperties#GetSupportedSymbols(CATListOfCATUnicodeString &amp; oSupportedSymbolsArray)
+   * Gets all the engineering symbols supported by the text.
+   * @param oNbOfSupportedSymbols
+   *    The number of engineering symbols supported by the text.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;-1
+   *    &lt;dd&gt;Supports all engineering symbols defined by CATDrwSymbol enum. 
+   *    &lt;dt&gt;0
+   *    &lt;dd&gt;No symbol supported.
+   *    &lt;dd&gt;1+
+   *    &lt;dd&gt;Number of engineering symbols supported by the text.
+   *    &lt;dt&gt;Their type is given in oSupportedSymbolsArray.
+   *    &lt;/dl&gt;
+   * @param oSupportedSymbolsArray
+   *    Array of all the CATDrwSymbol supported by the text. 
+   *    Can be NULL.
+   *    &lt;dd&gt;&lt;i&gt;Must be allocated by the callee and deleted by the caller.&lt;/i&gt;
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwSymbol
+   */
+   virtual HRESULT GetSupportedSymbols( int &amp; oNbOfSupportedSymbols, CATDrwSymbol ** oSupportedSymbolsArray ) = 0;
+  
+   /**
+   * @deprecated V5R17 use CATIDrwTextProperties#GetSymbol(CATUnicodeString &amp; oSymbol)
+   * Gets the engineering symbol attached to the text.
+   * @param oSymbol
+   *    The engineering symbol attached to the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwSymbol
+   */
+   virtual HRESULT GetSymbol( CATDrwSymbol &amp; oSymbol ) = 0;
+
+  /**
+   * @deprecated V5R17 use CATIDrwTextProperties#SetSymbol(const CATUnicodeString &amp; iSymbol)
+   * Sets the engineering symbol attached to the text.
+   * @param iSymbol
+   *    The engineering symbol attached to the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwSymbol
+   */
+   virtual HRESULT SetSymbol( const CATDrwSymbol &amp; iSymbol ) = 0;
+
+
+   /**
+   * Gets the AutoFlip style of the font.
+   * @param oAutoFlip
+   *    The AutoFlip style of the font.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;True 
+   *    &lt;dd&gt;writing angle between -90 deg and +90 deg.
+   *    &lt;dt&gt;False
+   *    &lt;dd&gt;writing angle between   0 deg and 360 deg.
+   *    &lt;/dl&gt;
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetAutoFlip( boolean &amp; oAutoFlip ) = 0;
+
+   /**
+   * Sets the AutoFlip style of the font.
+   * @param iAutoFlip
+   *    The AutoFlip style of the font.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;True 
+   *    &lt;dd&gt;writing angle between -90 deg and +90 deg.
+   *    &lt;dt&gt;False
+   *    &lt;dd&gt;writing angle between   0 deg and 360 deg.
+   *    &lt;/dl&gt;
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetAutoFlip( const boolean &amp; iAutoFlip ) = 0;
+
+   /**
+   * Gets the LineSpacing mode of the text.
+   * @param oLineSpacingMode
+   *    The LineSpacing mode of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwLineSpacingDefinition
+   */
+   virtual HRESULT GetLineSpacingMode( CATDrwLineSpacingDefinition &amp; oLineSpacingMode ) = 0;
+
+   /**
+   * Sets the LineSpacing mode of the text.
+   * @param iLineSpacingMode
+   *    The LineSpacing mode of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwLineSpacingDefinition
+   */
+   virtual HRESULT SetLineSpacingMode( const CATDrwLineSpacingDefinition &amp; iLineSpacingMode ) = 0;
+
+   /**
+   * Gets the LineSpacing value of the text.
+   * @param oLineSpacing
+   *    The LineSpacing value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwLineSpacingDefinition
+   */
+   virtual HRESULT GetLineSpacing( double &amp; oLineSpacing ) = 0;
+
+   /**
+   * Sets the LineSpacing value of the text.
+   * @param iLineSpacing
+   *    The LineSpacing value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwLineSpacingDefinition
+   */
+   virtual HRESULT SetLineSpacing( const double &amp; iLineSpacing ) = 0;
+
+   /**
+   * Gets the Mirroring style of the text.
+   * @param oMirroring
+   *    The Mirroring style of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwMirroringDefinition
+   */
+   virtual HRESULT GetMirroring( CATDrwMirroringDefinition &amp; oMirroring ) = 0;
+
+   /**
+   * Sets the Mirroring style of the text.
+   * @param iMirroring
+   *    The Mirroring style of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwMirroringDefinition
+   */
+   virtual HRESULT SetMirroring( const CATDrwMirroringDefinition &amp; iMirroring ) = 0;
+
+   /**
+   * Gets the FontRatio value of the text.
+   * @param oFontRatio
+   *    The font ratio (width/height) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFontRatio( double &amp; oFontRatio ) = 0;
+
+   /**
+   * Sets the FontRatio value of the text.
+   * @param iFontRatio
+   *    The font ratio (width/height) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFontRatio( const double &amp; iFontRatio ) = 0;
+
+   /**
+   * Gets the FontSlant value of the text.
+   * @param oFontSlant
+   *    The font slant (angle) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFontSlant( double &amp; oFontSlant ) = 0;
+
+   /**
+   * Sets the FontSlant value of the text.
+   * @param iFontSlant
+   *    The font slant (angle) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFontSlant( const double &amp; iFontSlant ) = 0;
+
+   /**
+   * Gets the Pitch of the font.
+   * @param oFontPitch
+   *    The Pitch of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwPitchDefinition
+   */
+   virtual HRESULT GetFontPitch( CATDrwPitchDefinition &amp; oFontPitch ) = 0;
+
+   /**
+   * Sets the Pitch of the font.
+   * @param iFontPitch
+   *    The Pitch of the font.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwPitchDefinition
+   */
+   virtual HRESULT SetFontPitch( const CATDrwPitchDefinition &amp; iFontPitch ) = 0;
+
+   /**
+   * Gets the character spacing of the font.
+   * @param oCharSpacing
+   *    The space between two character.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetCharacterSpacing( double &amp; oCharSpacing ) = 0;
+
+   /**
+   * Sets the character spacing of the font.
+   * @param iCharSpacing
+   *    The space between two character.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetCharacterSpacing( const double &amp; iCharSpacing ) = 0;
+
+   /**
+   * Gets the unit display mode of the text.
+   * @param oUnitDisplayMode
+   *    The display mode of units in a text (if the text contains (a) parameter(s) with unit(s))
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwUnitDisplayMode
+   */
+   virtual HRESULT GetUnitDisplayMode( CATDrwUnitDisplayMode &amp; oUnitDisplayMode ) = 0;
+
+   /**
+   * Sets the unit display mode of the text.
+   * @param iUnitDisplayMode
+   *    The display mode of units in a text (if the text contains (a) parameter(s) with unit(s))
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwUnitDisplayMode
+   */
+   virtual HRESULT SetUnitDisplayMode( const CATDrwUnitDisplayMode &amp; iUnitDisplayMode ) = 0;
+
+   /**
+   * Gets the scale behaviour of text.
+   * @param oScaleMode
+   *    The scale mode for the text (does the text follow the view scale ?)
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwScaleMode
+   */
+   virtual HRESULT GetScaleMode( CATDrwScaleMode &amp; oScaleMode ) = 0;
+
+   /**
+   * Sets the scale behaviour of text.
+   * @param iScaleMode
+   *    The scale mode for the text (should the text follow the view scale ?)
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwScaleMode
+   */
+   virtual HRESULT SetScaleMode( const CATDrwScaleMode &amp; iScaleMode ) = 0;
+
+   /**
+   * Sets all possible property values according to the ones defined by iValue.
+   * @param iValue
+   *    The object which text properties will be copied.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetValue( const CATIDrwTextProperties_var &amp; iValue ) = 0;
+
+   
+   /**
+   * Gets the text visualization mode.
+   * @param oModeDisplay
+   *    The text visualization mode 
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetTextBoxDisplay(CATDftTextBoxDisplay &amp;oModeDisplay) = 0;
+
+   /**
+   * Sets the text visualization mode.
+   * @param iModeDisplay
+   *    The text visualization mode 
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetTextBoxDisplay(const CATDftTextBoxDisplay &amp;iModeDisplay) = 0;
+
+   /**
+   * Gets the text back field mode.
+   * @param oValue
+   *    The text back field mode.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt; 0
+   *    &lt;dd&gt;Back field mode is unset. 
+   *    &lt;dl&gt; 1
+   *    &lt;dd&gt;Back field mode is set. 
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetTextBackField(int &amp;oValue) = 0;
+
+   /**
+   * Sets the text back field mode.
+   * @param iValue
+   *    The text back field mode.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt; 0
+   *    &lt;dd&gt;Back field mode unset. 
+   *    &lt;dl&gt; 1
+   *    &lt;dd&gt;Back field mode set. 
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetTextBackField(const int &amp;iValue) = 0;
+
+   /**
+   * Gets superscript offset factor.
+   * @param oValue.
+   *    The superscript offset factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSuperscriptOffsetFactor(double &amp;oValue) = 0;
+
+   /**
+   * Sets superscript offset factor.
+   * @param iValue.
+   *    The superscript offset factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSuperscriptOffsetFactor(const double &amp;iValue) = 0;
+
+   /**
+   * Gets subscript offset factor.
+   * @param oValue.
+   *    The subscript offset factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSubscriptOffsetFactor(double &amp;oValue) = 0;
+
+   /**
+   * Sets superscript offset factor.
+   * @param iValue.
+   *    The superscript offset factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSubscriptOffsetFactor(const double &amp;iValue) = 0;
+
+   /**
+   * Gets superscript size factor.
+   * @param oValue.
+   *    The superscript size factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSuperscriptSizeFactor(double &amp;oValue) = 0;
+
+   /**
+   * Sets superscript size factor.
+   * @param iValue.
+   *    The superscript size factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSuperscriptSizeFactor(const double &amp;iValue) = 0;
+
+   /**
+   * Gets subscript size factor.
+   * @param oValue.
+   *    The subscript size factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSubscriptSizeFactor(double &amp;oValue) = 0;
+
+   /**
+   * Sets superscript size factor.
+   * @param iValue.
+   *    The superscript size factor.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetSubscriptSizeFactor(const double &amp;iValue) = 0;
+
+   /**
+   * Get the blanking activity.
+   * @param oBlankingMode
+   *    The active mode on the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwUnitDisplayMode
+   */
+   virtual HRESULT GetBlankingMode( CATDrwBlankingMode &amp; oBlankingMode ) = 0;
+
+   /**
+   * Sets the blanking activity.
+   * @param iBlankingMode
+   *    The mode to activate on the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   * @see CATDrwBlankingMode
+   */
+   virtual HRESULT SetBlankingMode( const CATDrwBlankingMode &amp; iBlankingMode ) = 0;
+
+
+   /**
+   * @nodoc
+   * Get available anchor types.
+   * @param oNbAvailableAnchorTypes
+   *    The number of available anchor types.
+   * @param oAvailableAnchorTypes
+   *    Array of all the CATDrwAnchorType supported. 
+   *    Can be NULL.
+   *    &lt;dd&gt;&lt;i&gt;Must be allocated by the callee and deleted by the caller.&lt;/i&gt;
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetSupportedAnchorTypes(int &amp;oNbSupportedAnchorTypes, CATDrwAnchorType **oSupportedAnchorTypes) = 0;
+};
+
+CATDeclareHandler( CATIDrwTextProperties, CATIDrwProperties);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwText.html">← 上一页: CATIDrwText.h</a></div>
+        <div><a href="CATIDrwTextStyle.html">下一页: CATIDrwTextStyle.h →</a></div>
+    </div>
+</body>
+</html>

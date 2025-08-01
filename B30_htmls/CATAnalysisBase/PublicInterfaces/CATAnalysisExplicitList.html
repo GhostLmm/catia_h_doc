@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitList.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitList.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitExpression.html">← 上一页: CATAnalysisExplicitExpression.h</a></div>
+        <div><a href="CATAnalysisExplicitListABy.html">下一页: CATAnalysisExplicitListABy.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitList
+//
+//=============================================================================
+//
+// Usage Notes: General services linked to the lists of the field model.
+//
+//=============================================================================
+// Octobre 99   Creation                                                    
+//=============================================================================
+#ifndef CATAnalysisExplicitList_H_
+#define CATAnalysisExplicitList_H_
+
+#include &quot;CATAnalysisExplicitChild.h&quot;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+class CATSamModelListIterator;
+
+/**
+ * Field model list.
+ * This object provides services common to all types of lists of the field model.
+ */
+class ExportedByCATSAM0Explicit CATAnalysisExplicitList : public CATAnalysisExplicitData
+{
+   public :
+/**
+ * Default constructor.
+ */
+      CATAnalysisExplicitList() ;
+
+/**
+ * Donstructor.
+ */
+      virtual ~CATAnalysisExplicitList();
+
+/**
+ * Copy constructor.
+ */
+      CATAnalysisExplicitList(const CATAnalysisExplicitList &amp;iList) ;
+
+/**
+ * Copy constructor.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitList(const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Assignment operator.
+ */
+      CATAnalysisExplicitList &amp;operator = (const CATAnalysisExplicitList &amp;iList) ;
+
+/**
+ * Assignment operator.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitList &amp;operator = (const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Returns the length of the list.
+ * @param really
+ *   If really = TRUE, it returns the real length of the list (with temporary deleted datas).
+ */
+      int GetLength(CATBoolean really = FALSE) ;
+
+/**
+ * Returns the type of the list.
+ * @see CATSamListType
+ */
+      CATSamListType GetListType() const ;
+
+/**
+ * Returns the object at the current location in the list.
+ * @see CATAnalysisExplicitChild
+ */
+      const CATAnalysisExplicitChild &amp;GetCurrent() const ;
+
+/**
+ * Returns the object at the current location in the list.
+ * @see CATAnalysisExplicitChild
+ */
+      const CATAnalysisExplicitChild &amp;operator*() const ;
+
+/**
+ * Obtains the array of pointers to the list contents.
+ * @param oNumber
+ *   The number of objects in the list.
+ * @param oContents[oNumber]
+ *   The array of pointers to the objects.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ */
+      HRESULT GetContents(int &amp;oNumber, CATSamExplicitPtr * &amp;oContents) ;
+
+/**
+ * Moves to the first location in the list.
+ */
+      CATAnalysisExplicitList &amp;First() ;
+
+/**
+ * Moves to the last location in the list.
+ */
+      CATAnalysisExplicitList &amp;Last() ;
+
+/**
+ * Moves to the next location in the list.
+ */
+      CATAnalysisExplicitList &amp;Next() ;
+
+/**
+ * Moves to the previous location in the list.
+ */
+      CATAnalysisExplicitList &amp;Previous() ;
+
+/**
+ * Compare current location with first location in the list.
+ * Returns TRUE if there are equal.
+ */
+      CATBoolean CurrentIsFirst() const ;
+
+/**
+ * Compares the content of the current object with a value using a criteria.
+ * @param iCompareType
+ *   The compare criteria.
+ * @param iCompareValue
+ *   A pointer to the value used by the compare criteria.
+ */
+      int Compare(CATSamCompareType iCompareType, const void *iCompareValue) ;
+
+/**
+ * @deprecated V5R17
+ *    Use @href CATAnalysisExplicitListUsr#Sort instead with twice the same arguments.
+ * Sorts the list using a criteria.
+ * @param iCompareType
+ *   The criteria.
+ * @see CATSamCompareType
+ */
+      HRESULT Sort(CATSamCompareType iCompareType) ;
+
+/**
+ * @deprecated V5R17
+ *    Use @href CATAnalysisExplicitListUsr#Sort instead.
+ * Sorts the list using two criterias.
+ * @param iCompareType1
+ *   The first criteria.
+ * @param iCompareType2
+ *   The second criteria.
+ * @see CATSamCompareType
+   */
+      HRESULT Sort(CATSamCompareType iCompareType1, CATSamCompareType iCompareType2) ;
+
+/**
+ * @deprecated V5R17
+ *    Use @href #Find(CATSamCompareType, const void *) instead.
+ * Searches from the current location for data in a list.
+ * @param iCompareType
+ *   The search criteria. 
+ * @param iSorted
+ *   If TRUE, then the list is sorted using the search criteria.
+ * @param iWhat
+ *   A pointer to the value being searched for.
+ */
+      CATAnalysisExplicitList &amp;Find(CATSamCompareType iCompareType, CATBoolean iSorted, const void *iWhat) ;
+   
+/**
+ * Searches from the current location for data in a list.
+ * @param iCompareType
+ *   The search criteria. 
+ * @param iWhat
+ *   A pointer to the value being searched for.
+ */
+      CATAnalysisExplicitList &amp;Find(CATSamCompareType iCompareType, const void *iWhat) ;
+
+   protected :
+     CATAnalysisExplicitChild _Child ;
+     CATSamListType           _ExpListType ;
+     CATSamModelListIterator  *_Position;
+
+   private :
+     // Friend Class for Private Method
+     friend class CATSamModelListIterator;
+     friend class CATSamModelListServices;
+     friend class CATAnalysisExplicitModel;
+     friend class CATAnalysisExplicitChild;
+     friend class CATAnalysisExplicitEntity;
+     friend class CATAnalysisExplicitParent;
+     friend class CATAnalysisExplicitSearch;
+     friend class CATAnalysisExplicitListUsr;
+     friend class CATAnalysisExplicitListATo;
+     friend class CATAnalysisExplicitListABy;
+     friend class CATAnalysisExplicitServices; 
+     friend class CATAnalysisExplicitRulesData;
+
+    // Reset
+    virtual void Reset() ;
+    // ResetLocation
+    HRESULT ResetPosition();
+    // ResetLocation
+    virtual void ResetLocation() ;
+    // ResetCurrent
+    virtual void ResetCurrent() ;
+    // Init
+    virtual HRESULT Init(const CATAnalysisExplicitData &amp;iData) ;
+    // Init
+    HRESULT Init(const CATAnalysisExplicitModel *iModel, const Handler(CATSamModelList) &amp;iDataList, CATSamListType iListType, CATSamPhysicalType iPhysicalType = CATSamPhysicalTypeNone );
+    // Init
+    HRESULT Init(const CATAnalysisExplicitModel *iModel, const Handler(CATSamModelDataRoot) &amp;iListRootFrom, const Handler(CATSamModelList) &amp;iDataList, CATSamListType iListType, CATSamPhysicalType iPhysicalType = CATSamPhysicalTypeNone);
+    // CreateIterator
+    HRESULT CreateIterator(const CATSamListType &amp;iListType, const Handler(CATSamModelList)&amp; iModelList);
+    HRESULT CreateIterator(const Handler(CATSamModelDataRoot)&amp; iModelRoot, const CATSamListType &amp;iListType, const Handler(CATSamModelList)&amp; iModelList);
+    HRESULT CreateIterator(const CATSamModelListIterator* iIterator);
+    // IteratorIsGood
+    CATBoolean IteratorIsGood(const int&amp; iClassType) const;
+    CATBoolean IteratorIsGood(const CATSamModelListIterator* iIterator) const;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitExpression.html">← 上一页: CATAnalysisExplicitExpression.h</a></div>
+        <div><a href="CATAnalysisExplicitListABy.html">下一页: CATAnalysisExplicitListABy.h →</a></div>
+    </div>
+</body>
+</html>

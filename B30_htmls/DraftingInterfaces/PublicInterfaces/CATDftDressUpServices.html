@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATDftDressUpServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATDftDressUpServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDftArrowEnum.html">← 上一页: CATDftArrowEnum.h</a></div>
+        <div><a href="CATDftFilletRep.html">下一页: CATDftFilletRep.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2012
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#ifndef CATDftDressUpServices_H
+#define CATDftDressUpServices_H
+
+#include &quot;CATErrorDefs.h&quot;
+#include &quot;CATIUnknownList.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+
+
+/**
+ *   This toolbox purposes services on the dress-up elements: AxisLine, Centerline or Thread.
+ */
+
+class ExportedByDraftingItfCPP CATDftDressUpServices
+{
+  public:
+
+  /** 
+   * Retrieves the dimensionable sub-elements from a &quot;dimensionable&quot; Object. Object being AxisLine, Centerline or Thread.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the dimensionable sub-elements from a &quot;dimensionable&quot; Object.  
+   *
+   * @param CATBaseUnknown* [in]:
+   *	A Centerline: CATIDftCenterLine* or
+   *	An AxisLine: CATIDftAxisLine* or
+   *	A Thread: CATIDftThread*
+   * @return CATIUnknownList** [out]:
+   *	A list of dimensionable sub-elements usable by CATIDrwAnnotationFactory::CreateDimension().
+   *    @see CATIDrwAnnotationFactory.CreateDimension
+   * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the sub-elements Objects are retrieved correctly.
+   * &lt;dt&gt;&lt;tt&gt;E_INVALIDARG&lt;/tt&gt; &lt;dd&gt;if any argument is invalid.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation fails.
+   * &lt;/dl&gt;
+   */
+  static HRESULT GetObjectsForDimensioning(CATBaseUnknown *iDressUpObject, CATIUnknownList **oListDimObjects);      
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDftArrowEnum.html">← 上一页: CATDftArrowEnum.h</a></div>
+        <div><a href="CATDftFilletRep.html">下一页: CATDftFilletRep.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATExtIUIActivate.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATExtIUIActivate.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATExtIEdit.html">← 上一页: CATExtIEdit.h</a></div>
+        <div><a href="CATExtIWorkbenchTransition.html">下一页: CATExtIWorkbenchTransition.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATExtIUIActivate_H_
+#define CATExtIUIActivate_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATString.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CD0WIN.h&quot;
+#include &quot;CATPathElement.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATEventSubscriber.h&quot;
+#include &quot;CATEventSubscriberTypedefs.h&quot;
+
+class CATCmdContainer;
+class CATUndoRequest;
+class CATCommandGlobalUndo;
+class CATDocument;
+class CATIUndoTransaction;
+class CATFrmDropTarget;
+class CATFrmDropSource;
+class CATLISTP(CATUndoRequest);
+
+
+/** @nodoc
+  * Tells whether the active object contained in referencePath
+  * is already active in any editor but the current editor
+  */
+CATBoolean ExportedByCD0WIN CATFrmIsAlreadyUIActive (CATPathElement &amp; referencePath);
+
+
+/**
+  * Adapter class for the CATIUIActivate interface.
+  *
+  * To implement the interface &lt;tt&gt;CATIUIActivate&lt;/tt&gt; for a class &lt;tt&gt;MyClass&lt;/tt&gt;,
+  * write a class &lt;tt&gt;MyClassExtUIActivate&lt;/tt&gt; subclassed from 
+  * &lt;tt&gt;CATExtIUIActivate&lt;/tt&gt; and defined as an extension of &lt;tt&gt;MyClass&lt;/tt&gt;. 
+  * &lt;tt&gt;MyClassExtUIActivate&lt;/tt&gt; may &lt;b&gt;not&lt;/b&gt; override any methods, but
+  * &lt;b&gt;must&lt;/b&gt; set the protected variables &lt;tt&gt;_WorkshopString&lt;/tt&gt; and 
+  * &lt;tt&gt;_DefaultCommandString&lt;/tt&gt; in its constructor. These strings are
+  * respectively returned by the @href #GetWorkshop and @href #GetDefaultCommand
+  * methods.
+  * 
+  * @see CATIUIActivate 
+  */
+
+class ExportedByCD0WIN CATExtIUIActivate : public CATBaseUnknown
+{
+
+  CATDeclareClass;
+  
+public :
+  
+  /** @nodoc */
+  CATExtIUIActivate ();
+  
+  /** @nodoc */
+  virtual ~CATExtIUIActivate ();
+  
+  /**
+    * Returns the name of the workshop. 
+	 * @return a CATString
+    * @see CATIUIActivate
+    */
+  virtual CATString &amp; GetWorkshop ();
+  
+  /** 
+    * Returns the name of the default command.
+ 	 * @return a CATString
+    * @see CATIUIActivate
+    */
+  virtual CATString &amp; GetDefaultCommand ();
+  
+  /** 
+    * @nodoc
+    * Returns a contextual menu. The &lt;tt&gt;CATExtIUIActivate&lt;/tt&gt; instance is 
+    * responsible for destroying the returned &lt;tt&gt;CATCmdContainer&lt;/tt&gt;.
+    * @see CATIUIActivate, CATCmdContainer
+    */
+  virtual CATCmdContainer * GetContextualMenu ();
+  
+  /**
+    * @nodoc 
+    * Override it in order to add your ui-activation specific intialization 
+    * code. Don&#x27;t forget to call &lt;tt&gt;CATExtIUIActivate::UIActivate&lt;/tt&gt;
+    * from your overridden method.
+    */
+  virtual void UIActivate (CATPathElement &amp;);
+  
+  /**
+    * @nodoc
+    * Override it in order to add your ui-deactivation specific destruction 
+    * code. Don&#x27;t forget to call &lt;tt&gt;CATExtIUIActivate::UIDeactivate&lt;/tt&gt;
+    * from your overridden method.
+    */
+  virtual void UIDeactivate ();
+  
+  /**
+    * @nodoc
+    * Tells whether the ui-activable object is currently
+    * active or inactive.
+    * @return
+    * The activation state (0 if inactive, != 0 otherwise)
+    */
+  virtual int IsActive ();
+  
+  /** @nodoc */
+  virtual CATCommandGlobalUndo * GetGlobalUndo ();
+  
+  /** @nodoc */
+  virtual CATDocument * GetDocument ();  
+  
+  /** @nodoc */
+  virtual void SetDocument (CATDocument * Doc);  
+  
+  /** @nodoc */
+  virtual void SetDropSource (CATFrmDropSource * source);
+  
+  /** @nodoc */
+  virtual CATFrmDropSource * GetDropSource ();
+  
+  /** @nodoc */
+  virtual void SetDropTarget (CATFrmDropTarget * target);
+  
+  /** @nodoc */
+  virtual CATFrmDropTarget * GetDropTarget ();
+  
+  /** @nodoc */
+  virtual void ChangePathToActivate(CATPathElement * ioPathElement);
+  
+  
+  /** @nodoc */  
+  void StackUndoCB (CATCallbackEvent, void *, CATNotification * notif,
+                    CATSubscriberData, CATCallback);
+  
+  /** @nodoc */
+  void UnstackUndoCB (CATCallbackEvent, void *, CATNotification * notif,
+                      CATSubscriberData, CATCallback);
+
+  /** @nodoc */
+  void ObjectEdition(CATBoolean iObjectEdition);
+    
+  
+  /** @nodoc */
+  static CATCmdContainer * GetInitialContextualMenu ();
+
+  /** @nodoc */
+  virtual HRESULT ChangeComponentState (ComponentState iFromState,
+                                        ComponentState iToState,
+                                        const CATSysChangeComponentStateContext * iContext);
+  
+protected :
+  
+  /** @nodoc */
+  void Clean ();
+
+  /**
+  * The Name of the workshop .
+  */
+  CATString             _WorkshopString;
+
+  /**
+  * The Name of the first command .
+  */
+  CATString             _DefaultCommandString;
+
+  /** @nodoc */
+  CATUndoRequest      * _Undo;
+  /** @nodoc */
+  CATCmdContainer     * _ctxMenu;
+  /** @nodoc */
+  CATBoolean            _ObjectEdition;
+  /** @nodoc */
+  int                   _ObjectTransaction;
+  /** @nodoc */
+  CATDocument         * _document;
+  /** @nodoc */
+  CATIUndoTransaction * _IUndoTrans;
+  /** @nodoc */
+  HRESULT               _boundingBoxDrawn; // S_OK when TRUE, S_FALSE when FALSE
+  /** @nodoc */
+  CATFrmDropSource    * _DropSource;
+  /** @nodoc */
+  CATFrmDropTarget    * _DropTarget;
+  /** @nodoc */
+  int                   _UndoNumberBeforeUIactivate;
+  /** @nodoc */
+  CATLISTP(CATUndoRequest) * _UndoList;
+  /** @nodoc */
+  int _DeleteAllUndo;
+  /** @nodoc */
+  void DeleteAllUndoCB (CATCallbackEvent, void *, CATNotification * notif,
+                        CATSubscriberData, CATCallback);
+  
+};
+
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATExtIEdit.html">← 上一页: CATExtIEdit.h</a></div>
+        <div><a href="CATExtIWorkbenchTransition.html">下一页: CATExtIWorkbenchTransition.h →</a></div>
+    </div>
+</body>
+</html>

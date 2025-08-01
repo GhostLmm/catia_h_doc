@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATPixelImage.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATPixelImage.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPickPathList.html">← 上一页: CATPickPathList.h</a></div>
+        <div><a href="CATPreactivate.html">下一页: CATPreactivate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPixelImage_H
+#define CATPixelImage_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;list.h&quot;
+#include &quot;CATStatCleaner.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#ifdef _WINDOWS_SOURCE
+#   include &quot;wingdi.h&quot;
+#endif
+
+class CATUnicodeString;
+class CATStreamer;
+
+#ifndef uchar
+/** @nodoc */
+typedef unsigned char uchar;
+#endif
+
+#ifndef uint
+/** @nodoc */
+typedef unsigned int uint;
+#endif
+
+/**
+ * Format of the pixel data stored in a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+ * @param L
+ *   Luminance (grey levels) - 8 bits images.
+ * @param LA
+ *   Luminance with Alpha - 16 bits.
+ * @param RGB
+ *   Red, Green, Blue - 24 bits images.
+ * @param RGBA
+ *   Red, Green, Blue with Alpha - 32 bits.
+ * @param BILEVEL
+ *   Unused.
+ * @param BADFORMAT
+ *   Invalid format.
+ * @param RGB_S3TC_DXT1
+ *   RGB compression of DXT1 type.
+ * @param RGBA_S3TC_DXT1
+ *   RGBA compression of DXT1 type.
+ * @param RGBA_S3TC_DXT3
+ *   RGBA compression of DXT3 type.
+ * @param RGBA_S3TC_DXT5
+ *   RGBA compression of DXT5 type.
+ * @see CATPixelImage
+ */
+enum CATPixelImageFormat { L, LA, RGB, RGBA, BILEVEL, BADFORMAT, RGB_S3TC_DXT1, RGBA_S3TC_DXT1, RGBA_S3TC_DXT3, RGBA_S3TC_DXT5 };
+
+/** @nodoc */
+typedef CATPixelImageFormat PixelImageFormat ;
+
+/**
+ * Defines whether a &lt;tt&gt;CATPixelImage&lt;/tt&gt; can be modified or not.
+ * @param ReadOnly
+ *   No modifications allowed.
+ * @param NotReadOnly
+ *   The image can be modified.
+ * @see CATPixelImage
+ */
+enum CATReadOnlyState { ReadOnly, NotReadOnly };
+
+/** @nodoc */
+typedef CATReadOnlyState ReadOnlyState ;
+
+/**
+ * Defines whether the pixel data in a &lt;tt&gt;CATPixelImage&lt;/tt&gt; should be deallocated when the image is destroyed,
+ * and how (&lt;tt&gt;free()&lt;/tt&gt; or &lt;tt&gt;delete[]&lt;/tt&gt;).
+ * @param PixDeallocateYESdelete
+ *   Pixel data has been allocated with the C++ &lt;tt&gt;new&lt;/tt&gt; operator and will be deleted when the &lt;tt&gt;CATPixelImage&lt;/tt&gt; is destroyed.
+ * @param PixDeallocateYESfree
+ *   Pixel data has been allocated with the C &lt;tt&gt;malloc()&lt;/tt&gt; function and will be deleted when the &lt;tt&gt;CATPixelImage&lt;/tt&gt; is destroyed.
+ * @param PixDeallocateNO
+ *   Pixel data should not be deleted when the &lt;tt&gt;CATPixelImage&lt;/tt&gt; is destroyed. It is the user to deallocate the pixel data.
+ * @see CATPixelImage
+ */
+enum CATDeallocatePixels { PixDeallocateYESdelete, PixDeallocateYESfree, PixDeallocateNO };
+
+/** @nodoc */
+typedef CATDeallocatePixels DeallocatePixels ;
+
+/**
+ * Format of the secondary pixel data stored in a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+ * @param sRGB
+ *   Red, Green, Blue - 24 bits images.
+ * @param sRGBA
+ *   Red, Green, Blue with Alpha - 32 bits.
+ * @param sABGR
+ *   Alpha, Blue, Green, Red - 32 bits images.
+ * @param sARGB
+ *   Alpha, Red, Green, Blue - 32 bits.
+ * @see CATPixelImage
+ */
+enum CATSecondaryPixelImageFormat { sRGB, sRGBA, sABGR, sARGB };
+
+/** @nodoc */
+typedef CATSecondaryPixelImageFormat SecondaryPixelImageFormat;
+
+/**
+ * Line progression of the secondary pixel image stored in a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+ * @param Normalised
+ *   Rows are stored bottom line first.
+ * @param Inverted
+ *   Rows are stored upper line first.
+ * @see CATPixelImage
+ */
+enum CATLineProgression { Normalised, Inverted };
+
+/** @nodoc */
+typedef CATLineProgression LineProgression;
+
+/** @nodoc */
+enum PhotometricInterpretation { WhiteIsZero, BlackIsZero };
+
+/** @nodoc */
+enum CATStreamFormat
+{
+	Stream_DEFAULT       = 0,
+	Stream_BADCOMPRESSED = 1,
+	Stream_CCITTG3       = 2,
+	Stream_UNCOMPRESSED  = 3,
+	Stream_PNG           = 4,
+	Stream_JPEG          = 5
+};
+
+/** 
+ * Dither Algorithm used for Bilevel format.
+ * @param DITHER_FloydSteinberg
+ *   FloydSteinberg algorithm.
+ * @param DITHER_AverageThreshold
+ *   Average threshold algorithm.
+ */
+enum DITHER_MODE
+{
+	DITHER_FloydSteinberg,
+	DITHER_AverageThreshold
+};
+
+/**
+ * Class to represent a pixel image or texture in memory.
+ * &lt;b&gt;Role&lt;/b&gt;: This object is used to read, visualize, write pixel images.&lt;br&gt;
+ * Supported internal formats are &lt;tt&gt;RGBA&lt;/tt&gt;, &lt;tt&gt;RGB&lt;/tt&gt;, &lt;tt&gt;LA&lt;/tt&gt;, &lt;tt&gt;L&lt;/tt&gt; (where &lt;tt&gt;L&lt;/tt&gt; stands for
+ * Luminance, that is a 8-bit Grey Scale value, and &lt;tt&gt;A&lt;/tt&gt; for Alpha), &lt;tt&gt;RGB_S3TC_DXT1&lt;/tt&gt;, &lt;tt&gt;RGBA_S3TC_DXT1&lt;/tt&gt;, &lt;tt&gt;RGBA_S3TC_DXT3&lt;/tt&gt;, &lt;tt&gt;RGBA_S3TC_DXT5&lt;/tt&gt;.
+ * The image can be locked to a &lt;tt&gt;ReadOnly&lt;/tt&gt; State. This allows to create only one
+ * image, and to reference it many times, with little risks for modification
+ * conflicts.&lt;br&gt;
+ * &lt;br&gt;
+ * You can create a &lt;tt&gt;CATPixelImage&lt;/tt&gt; from RGB, TIFF, JPEG, BMP, PNG files.&lt;br&gt;
+ * You can visualize a &lt;tt&gt;CATPixelImage&lt;/tt&gt; using the @href CAT2DImagePixelRep class.&lt;br&gt;
+ * &lt;br&gt;
+ * The pointer to the pixel data points to the first pixel of the bottom line (or row) of the image.
+ * Origin is bottom left corner.&lt;br&gt;
+ * The data is not stored by colors planes, but pixel by pixel
+ * (that is : &lt;tt&gt;RGBRGBRGB&lt;/tt&gt;... or &lt;tt&gt;RGBARGBARGBA&lt;/tt&gt;...).&lt;br&gt;
+ * &lt;br&gt;
+ * @see CATPixelImageFormat, CATReadOnlyState, CATDeallocatePixels, CATSecondaryPixelImageFormat, CATLineProgression, CAT2DImagePixelRep
+ */
+
+class ExportedByCATViz CATPixelImage : public CATBaseUnknown
+{
+    friend class CATMarshallablePixelImage;
+    CATDeclareClass;
+
+    //--------------------------------------------------------------------------
+public:
+
+    /**
+     * Default constructor.
+     */
+    CATPixelImage();
+
+    /**
+     * Constructs an image from a pixel array, pixel data is not duplicated.
+     * &lt;br&gt;Be careful with this constructor because you have to make sure
+     * to not deallocate pixels memory before any &lt;tt&gt;CATPixelImage&lt;/tt&gt; referencing
+     * this data has disappeared. This is true for this image, but also any
+     * image copied from this image.&lt;br&gt;
+     * Use &lt;tt&gt;PixDeallocateYESdelete&lt;/tt&gt; if data to delete has been allocated with &lt;tt&gt;new&lt;/tt&gt;.
+     * Use &lt;tt&gt;PixDeallocateYESfree&lt;/tt&gt; if data to delete has been allocated with &lt;tt&gt;malloc&lt;/tt&gt;.&lt;br&gt;
+     * CAREFULL :
+     * Change the iToDelete value to &lt;tt&gt;PixDeallocateYESdelete&lt;/tt&gt; or &lt;tt&gt;PixDeallocateYESfree&lt;/tt&gt;
+     * do delete pixels when you delete the &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     * @param iXSize
+     *   The width of the image in pixels.
+     * @param iYSize
+     *   The height of the image in pixels.
+     * @param iFormat
+     *   The format of the data stored in the pixel array.
+     * @param iPixels
+     *   The pixel data.
+     * @param iToDelete
+     *   Whether the given pixel array has to be deleted when the &lt;tt&gt;CATPixelImage&lt;/tt&gt; is destroyed, and how (&lt;tt&gt;free()&lt;/tt&gt; or &lt;tt&gt;delete[]&lt;/tt&gt;).
+     *   The default value for this parameter is &lt;tt&gt;PixelDeallocateNO&lt;/tt&gt;, which implies the pixel data is not deleted when the image is destroyed.
+     *   It is the user to delete the pixel data.
+     */
+    CATPixelImage(int iXSize, int iYSize, CATPixelImageFormat iFormat, unsigned char* iPixels, CATDeallocatePixels iToDelete = PixDeallocateNO);
+
+    /**
+     * Constructs a blank image.
+     * Use @href #GetPixelsToModify to modify it.
+     * &lt;br&gt;The warning indicated on the previous constructor does not apply here.
+     * @param iXSize
+     *   The width of the image in pixels.
+     * @param iYSize
+     *   The height of the image in pixels.
+     * @param iFormat
+     *   The format of the data.
+     */
+    CATPixelImage(int iXSize, int iYSize, CATPixelImageFormat iFormat);
+
+    /**
+     * Copy constructor.
+     * @param iPixelImage
+     *   An existing &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     */
+    CATPixelImage(const CATPixelImage&amp; iPixelImage);
+
+    /**
+     * Assignment operator.
+     * @param iPixelImage
+     *   An existing &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     */
+    CATPixelImage&amp; operator=(const CATPixelImage&amp; iPixelImage);
+
+    /**
+     * @nodoc
+     * Streams a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     */
+    virtual void Stream(CATStreamer&amp; oStr, int iSaveType = 0);
+
+    /**
+     * @nodoc
+     * Streams a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+	 * The iStrCmpFormat parameter sets the format type of the stream.
+	 * For BILEVEL bitmap, the format used is CCITT Group3(Stream_CCITTG3).
+	 * For RGBA, RGB, LA, or L bitmap, the format used can be PNG or JPEG or not compressed
+	 * (Stream_PNG or Stream_JPEG or Stream_UNCOMPRESSED).
+     */
+    virtual void Stream(CATStreamer&amp; oStr, int iSaveType, CATStreamFormat iStrCmpFormat);
+
+    /**
+     * @nodoc
+     * UnStreams a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     */
+    virtual void UnStream(CATStreamer&amp; iStr);
+
+    /**
+     * @nodoc
+     * Get the format of a &lt;tt&gt;CATPixelImage&lt;/tt&gt; stream.
+	 * The oStrCmpFormat parameter is the format type of the stream.
+	 * For BILEVEL bitmap, the format used is CCITT Group3(Stream_CCITTG3).
+	 * For RGBA, RGB, LA, or L bitmap, the format used can be PNG or JPEG or not compressed
+	 * (Stream_PNG or Stream_JPEG or Stream_UNCOMPRESSED).
+     */
+    static void GetStreamFormat(CATStreamer&amp; iStr, CATStreamFormat&amp; oStrCmpFormat);
+
+    /**
+     * Returns the number of bytes per pixel.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;L format.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;LA format.&lt;/dd&gt;
+     *  &lt;dt&gt;3&lt;/dt&gt;
+     *  &lt;dd&gt;RGB format.&lt;/dd&gt;
+     *  &lt;dt&gt;4&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGB_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT3 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT5 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid format.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATPixelImageFormat
+     */
+    virtual int GetbytesPerPixel() const;
+
+    /**
+     * Returns the number of bits per pixel.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;8&lt;/dt&gt;
+     *  &lt;dd&gt;L format.&lt;/dd&gt;
+     *  &lt;dt&gt;16&lt;/dt&gt;
+     *  &lt;dd&gt;LA format.&lt;/dd&gt;
+     *  &lt;dt&gt;24&lt;/dt&gt;
+     *  &lt;dd&gt;RGB format.&lt;/dd&gt;
+     *  &lt;dt&gt;32&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGB_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT3 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT5 format.&lt;/dd&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid format.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATPixelImageFormat
+     */
+    virtual int GetBitsPerPixel() const;
+
+    /**
+     * Retrieves the image size in pixels.
+     * @param oXSize
+     *   Image width in pixels.
+     * @param oYSize
+     *   Image height in pixels.
+     */
+    virtual void GetSize(int&amp; oXSize, int&amp; oYSize) const { oXSize = _xSize, oYSize = _ySize; }
+
+    /**
+     * Returns the image format.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;L&lt;/dt&gt;
+     *  &lt;dd&gt;L format.&lt;/dd&gt;
+     *  &lt;dt&gt;LA&lt;/dt&gt;
+     *  &lt;dd&gt;LA format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGB&lt;/dt&gt;
+     *  &lt;dd&gt;RGB format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGBA&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGB_S3TC_DXT1&lt;/dt&gt;
+     *  &lt;dd&gt;RGB_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGBA_S3TC_DXT1&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT1 format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGBA_S3TC_DXT3&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT3 format.&lt;/dd&gt;
+     *  &lt;dt&gt;RGBA_S3TC_DXT5&lt;/dt&gt;
+     *  &lt;dd&gt;RGBA_S3TC_DXT5 format.&lt;/dd&gt;
+     *  &lt;dt&gt;BADFORMAT&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid format.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImageFormat GetFormat() const { return _format; }
+
+    /**
+     * Returns the pixel data for consultation.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A &lt;tt&gt;const&lt;/tt&gt; pointer to the pixel data&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual const unsigned char* GetPixelsToRead() const { return _pixels; }
+
+    /**
+     * Returns the pixel data for modification.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A pointer to the pixel data&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual unsigned char* GetPixelsToModify();
+
+    /** @nodoc */
+    virtual unsigned char* CreateUncompressedBitmap(int iAlignToDWORD = 0, PhotometricInterpretation iPhoto = BlackIsZero) const;
+
+    /** @nodoc */
+    virtual const unsigned char* GetPixelsRuns(int iRow) const { return _runs[iRow]; }
+    /** @nodoc */
+    virtual unsigned char*&amp; GetPixelsRuns(int iRow) { return _runs[iRow]; }
+
+    /** @nodoc */
+    virtual int GetPixelsRunsLength(int iRow) const { return _runsLength[iRow]; }
+    /** @nodoc */
+    virtual int&amp; GetPixelsRunsLength(int iRow) { return _runsLength[iRow]; }
+
+    /**
+     * Returns the secondary image pixel data for consultation.
+     * @param iFormat
+     *   The secondary image format.
+     * @param iProgression
+     *   The secondary image line progression.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A &lt;tt&gt;const&lt;/tt&gt; pointer to the secondary image pixel data&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual const unsigned char* GetSecondaryPixelsToRead(CATSecondaryPixelImageFormat iFormat, CATLineProgression iProgression);
+
+    /**
+     * Returns the size in mm of one pixel in X direction.
+     */
+    virtual float GetXPixelSize() const { return _xPixelSize; }
+
+    /**
+     * Returns the size in mm of one pixel in Y direction.
+     */
+    virtual float GetYPixelSize() const { return _yPixelSize; }
+
+    /**
+     * Prevents modifications on the image.
+     * @see CATReadOnlyState
+     */
+    virtual void LockAsReadOnly() { _readOnlyState = ReadOnly; }
+
+    /**
+     * Duplicates an image.
+     * &lt;br&gt;This allows to modify a &lt;tt&gt;ReadOnly&lt;/tt&gt; image.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A &lt;tt&gt;CATPixelImage&lt;/tt&gt; pointer&lt;/dt&gt;
+     *  &lt;dd&gt;The resulting image is not &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual CATPixelImage* Duplicate() const;
+
+    /**
+     * Duplicates an image and changes the format of the resulting image.
+     * &lt;br&gt;This allows to modify a &lt;tt&gt;ReadOnly&lt;/tt&gt; image.
+     * @param iFormat
+     *   The new format.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A &lt;tt&gt;CATPixelImage&lt;/tt&gt; pointer&lt;/dt&gt;
+     *  &lt;dd&gt;The resulting image is not &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual CATPixelImage* Duplicate(CATPixelImageFormat iFormat) const;
+
+    /**
+     * Changes the image format.
+     * It is not available for DXTN formats.
+     * &lt;br&gt;Valid conversions are: &lt;tt&gt;RGB&lt;/tt&gt; to &lt;tt&gt;RGBA&lt;/tt&gt; and &lt;tt&gt;RGBA&lt;/tt&gt; to &lt;tt&gt;RGB&lt;/tt&gt;.
+     * @param iFormat
+     *   The new format.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int ChangeFormat(CATPixelImageFormat iFormat);
+
+    /**
+     * Inverts the line progression (flips the image).
+     * It is not available for DXTN formats.
+	 * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int InvertLineProgression();
+
+    /**
+     * Redefines an image.
+     * &lt;br&gt;In some cases the assignment operator may be used in place of this method.
+     * The pixel data is not duplicated ; because of this, pixel data should not be
+     * deallocated before any &lt;tt&gt;CATPixelImage&lt;/tt&gt; referencing this data has disappeared.
+     * This is also true for any image copied from this image.
+     * @param iXSize
+     *   The width of the image in pixels.
+     * @param iYSize
+     *   The height of the image pixels.
+     * @param iFormat
+     *   The format of the data stored in the pixel array.
+     * @param iPixels
+     *   The pixel data.
+     * @param iToDelete
+     *   Whether the given pixel array has to be deleted when the &lt;tt&gt;CATPixelImage&lt;/tt&gt; is destroyed, and how (free() or delete[]).
+     *   The default value for this parameter is &lt;tt&gt;PixelDeallocateNO&lt;/tt&gt;, which implies the pixel data is not deleted when the image is destroyed.
+     *   It is the user to delete the pixel data.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int Modify(int iXSize, int iYSize, CATPixelImageFormat iFormat, unsigned char* iPixels, CATDeallocatePixels iToDelete = PixDeallocateNO);
+
+    /**
+     * Creates a new &lt;tt&gt;CATPixelImage&lt;/tt&gt; from a region of the image.
+     * It is not available for DXTN formats.
+     * @param iXMin
+     *   The X left coordinate of the region.
+     * @param iYMin
+     *   The Y lower coordinate of the region.
+     * @param iXMax
+     *   The X right coordinate of the region.
+     * @param iYMax
+     *   The Y upper coordinate of the region.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImage* CreateSubImage(int iXMin, int iYMin, int iXMax, int iYMax) const;
+
+    /**
+     * Inserts a &lt;tt&gt;CATPixelImage&lt;/tt&gt; inside the image.
+     * It is not available for DXTN formats.
+     * &lt;br&gt;Images must be of same type. The input image is clipped if it is larger than the original image.
+     * @param iX
+     *   The X coordinate of the insertion point.
+     * @param iY
+     *   The Y coordinate of the insertion point.
+     * @param iPixelImage
+     *   The &lt;tt&gt;CATPixelImage&lt;/tt&gt; to insert.
+     * @param iTransparency
+     *   If not null, the color of the first pixel of &lt;tt&gt;iPixelImage&lt;tt&gt; is taken as transparent
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;&lt;tt&gt;iPixelImage&lt;/tt&gt; is not a valid image.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt; or formats are different.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual int InsertPixelImage(int iX, int iY, const CATPixelImage* iPixelImage, int iTransparency = 0);
+
+    /**
+     * Creates a zoomed image from an existing image.
+     * It is not available for DXTN formats.
+     * &lt;br&gt;The size in mm of the image is also zoomed (that is the size in mm of each pixel is not changed).
+     * @param iXSize
+     *   The width of the new image in pixels.
+     * @param iYSize
+     *   The height of the new image in pixels.
+     * @param iZoomQuality
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Pixel replication only (fast, poor quality).&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;if &lt;tt&gt;iZoomFactor &lt; 1&lt;/tt&gt; : linear interpolation, replication if &lt;tt&gt;&gt; 1&lt;/tt&gt;.&lt;/dd&gt;
+     *  &lt;dt&gt;3&lt;/dt&gt;
+     *  &lt;dd&gt;Linear interpolation in all cases (slow, good quality).&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImage* CreateZoomedImage(int iXSize, int iYSize, int iZoomQuality = 1) const;
+
+    /**
+     * Creates a zoomed image from an existing image.
+     * It is not available for DXTN formats.
+     * &lt;br&gt;The size in mm of the image is also zoomed (that is the size in mm of each pixel is not changed).
+     * @param iZoomFactor
+     *   The zoom factor.
+     * @param iZoomQuality
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Pixel replication only (fast, poor quality).&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;if &lt;tt&gt;iZoomFactor &lt; 1&lt;/tt&gt; : linear interpolation, replication if &lt;tt&gt;&gt; 1&lt;/tt&gt;.&lt;/dd&gt;
+     *  &lt;dt&gt;3&lt;/dt&gt;
+     *  &lt;dd&gt;Linear interpolation in all cases (slow, good quality).&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImage* CreateZoomedImage(float iZoomFactor, int iZoomQuality = 1) const;
+
+    /**
+     * Creates a rotated image from an existing image.
+     * It is not available for DXTN formats.
+     * @param iAngleInDegrees
+     *   Legal values are 90, 180, 270.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImage* CreateRotatedImage(int iAngleInDegrees) const;
+
+    /**
+     * Sets the size in mm of one pixel in X direction.
+     * @param iXPixelSize
+     *   The new X pixel size.
+     */
+	 virtual void SetXPixelSize(float iXPixelSize) { _xPixelSize = iXPixelSize; }
+
+    /**
+     * Sets the size in mm of one pixel in Y direction.
+     * @param iYPixelSize
+     *   The new Y pixel size.
+     */
+    virtual void SetYPixelSize(float iYPixelSize) { _yPixelSize = iYPixelSize; }
+
+    virtual ~CATPixelImage();
+
+    /**
+     * Writes an image to a file.
+     * It is not available for DXTN formats on UNIX OS.
+     * @param iFileFormat
+     *   The output file format.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;&quot;TIFF&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;True color uncompressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;TIFFTCPB&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;True color PackBits compressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;TIFFINDEX&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Indexed (256 colors) uncompressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;TIFFPB&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Indexed (256 colors) PackBits compressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;TIFFGREY&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Grey scale PackBits compressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;TIFFBWPB&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Bilevel (black and white) PackBits compressed TIFF file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;RGB&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;RGB file.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;HPRTL&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;HP/RTL - 300 dpi.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;BMP&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Windows Bitmap.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;JPEG_FAIR&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;JPEG, fair quality.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;JPEG&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;JPEG, medium quality.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;JPEG_HIGH&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;JPEG, high quality.&lt;/dd&gt;
+     *  &lt;dt&gt;&quot;PNG&quot;&lt;/dt&gt;
+     *  &lt;dd&gt;Portable Network Graphics.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @param iPathName
+     *   The file to save the image in.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int WriteToFile(const CATString&amp; iFileFormat, const CATString&amp; iPathName) const;
+
+    /**
+     * Returns the number of pages for a multipage file.
+     */
+    static int GetNumberOfPages(const CATString&amp; iPathName);
+
+    /**
+     * Says whether the given file is a valid bitmap file or not.
+     */
+    static int IsValidBitmapFile(const CATString&amp; iPathName);
+
+    /**
+     * Creates an image from a file.
+     * @param iPathName
+     *   The file to create the image from.
+     *   &lt;br&gt;Recognized formats are : TIFF, BMP, JPEG, PNG, RGB, PICTURE.
+     * @param iRState
+     *   The &lt;tt&gt;ReadOnly&lt;/tt&gt; state of the new image.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+   static CATPixelImage* CreateFromFile(const CATString&amp; iPathName, CATReadOnlyState iRState = NotReadOnly, int iPageNumber = 0);
+
+    /**
+     * Creates an image from a file given an explicit file format.
+     * @param iFileFormat
+     *   The format of the file to create the image from ; valid values are :
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;&quot;TIFF&quot;&lt;/dt&gt;
+     *  &lt;dt&gt;&quot;RGB&quot;&lt;/dt&gt;
+     *  &lt;dt&gt;&quot;JPEG&quot;&lt;/dt&gt;
+     *  &lt;dt&gt;&quot;BMP&quot;&lt;/dt&gt;
+     *  &lt;dt&gt;&quot;PNG&quot;&lt;/dt&gt;
+     *  &lt;dt&gt;&quot;PICTURE&quot;&lt;/dt&gt;
+     * &lt;/dl&gt;
+     * @param iPathName
+     *   The file to create the image from.
+     * @param iRState
+     *   The &lt;tt&gt;ReadOnly&lt;/tt&gt; state of the new image.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A new &lt;tt&gt;CATPixelImage&lt;/tt&gt;.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static CATPixelImage* CreateFromFile(const CATString&amp; iFileFormat, const CATString&amp; iPathName, CATReadOnlyState iRState = NotReadOnly, int iPageNumber = 0);
+
+#ifdef _WINDOWS_SOURCE
+    /**
+     * Creates a HBITMAP from a &lt;tt&gt;CATPixelImage&lt;/tt&gt; (MS-Windows only).
+     * &lt;br&gt;The image must be in RGB format.
+     */
+    HBITMAP GetHBITMAP();
+#endif
+
+    // Extension File Format properties are in the file : ImageFilters.cfg
+    // &quot;Format:R/W:extension:command:-authorized_options:comment&quot;
+    // example :
+    // &quot;PNG:W:png:tiftopng : :PNG Format&quot;
+    // Get the List of Supported File Formats
+
+    /**
+     * Returns the list of the supported file formats.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A list of &lt;tt&gt;CATString&lt;/tt&gt;s giving the supported file formats.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static list&lt;CATString&gt;&amp; GetFileFormatList();
+
+    /**
+     * Returns the list of the supported file formats extensions.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A list of &lt;tt&gt;CATString&lt;/tt&gt;s giving the file formats extensions.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static list&lt;CATString&gt;&amp; GetFileExtensionList();
+
+    /**
+     * Returns a list of the supported file formats comments.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A list of &lt;tt&gt;CATString&lt;/tt&gt;s giving the file formats comments.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static list&lt;CATString&gt;&amp; GetFileCommentList();
+
+    /**
+     * Returns a list of the supported file formats Read and Write properties.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A list of &lt;tt&gt;CATString&lt;/tt&gt;s giving the file formats Read and Write properties.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static list&lt;CATString&gt;&amp; GetFileRWList();
+
+    /**
+     * Returns a list of the supported file formats options.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;A list of &lt;tt&gt;CATString&lt;/tt&gt;s giving the file formats options.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static list&lt;CATString&gt;&amp; GetFileOptionsList();
+
+    /**
+     * Retrieves the properties of a given file format.
+     * @param iFileFormat
+     *   The requested file format (see @href #CreateFromFile, @href #WriteToFile ).
+     * @param iReadOrWrite
+     *   The Read or Write properties of the file format.
+     * @param oExtension
+     *   The extension string associated with this file format.
+     * @param oCommand
+     *   The command string associated with this file format.
+     * @param oOptions
+     *   The options string associated with this file format.
+     * @param oComment
+     *   The comment string associated with this file format.
+     */
+    virtual void GetFileFormatProperties(const CATString&amp; iFileFormat, const CATString&amp; iReadOrWrite,
+                                         CATString** oExtension, CATString** oCommand,
+                                         CATString** oOptions, CATString** oComment);
+
+    /**
+     * Retrieves the color of a pixel.
+     * It is not available for DXTN formats.
+     * &lt;br&gt;If format is &lt;tt&gt;L&lt;/tt&gt;, only &lt;tt&gt;oRL&lt;/tt&gt; is evaluated (&lt;tt&gt;oRL&lt;/tt&gt; and &lt;tt&gt;oA&lt;/tt&gt; for &lt;tt&gt;LA&lt;/tt&gt; format)
+     * @param iX
+     *   The X coordinate of the pixel.
+     * @param iY
+     *   The Y coordinate of the pixel.
+     * @param oRL
+     *   The Red or Luminance value of the pixel.
+     * @param oG
+     *   The Green value of the pixel.
+     * @param oB
+     *   The Blue value of the pixel.
+     * @param oA
+     *   The Alpha value of the pixel.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;The format of the picture.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    virtual CATPixelImageFormat GetColorAtPixel(unsigned int iX, unsigned int iY,
+                                             unsigned int* oRL,
+                                             unsigned int* oG, unsigned int* oB,
+                                             unsigned int* oA);
+
+    /**
+     * Returns an array of the most frequent colors.
+     * &lt;br&gt;The image must be in &lt;tt&gt;RGB&lt;/tt&gt; format.
+     * @param oColorArray
+     *   The array of found colors. The array must be allocated before you call this method : &lt;tt&gt;oColorArray = new unsigned char[iNbBgColor*3]&lt;/tt&gt;.
+     * @param iNbBgColor
+     *   The number of colors to look for. Must be &lt;= 4.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;-1&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid format.&lt;/dd&gt;
+     *  &lt;dt&gt;-2&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid image.&lt;/dd&gt;
+     *  &lt;dt&gt;-3&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid &lt;tt&gt;iNbBgColor&lt;/tt&gt; parameter.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATPixelImageFormat
+     */
+    virtual int GetBgColor(unsigned char* oColorArray, unsigned int iNbBgColor);
+
+    /**
+     * Changes a specific color in the whole image.
+     * @param iR1
+     *   The old Red value.
+     * @param iG1
+     *   The old Green value.
+     * @param iB1
+     *   The old Blue value.
+     * @param iR2
+     *   The new Red value.
+     * @param iG2
+     *   The new Green value.
+     * @param iB2
+     *   The new Blue value.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Bad format.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual int ModifyColor(unsigned char iR1, unsigned char iG1, unsigned char iB1,
+                            unsigned char iR2, unsigned char iG2, unsigned char iB2);
+
+    /**
+     * Looks for the most frequent colors and replaces them.
+     * &lt;br&gt;The image must be in &lt;tt&gt;RGB&lt;/tt&gt; format.
+     * @param iNbBgColor
+     *   The number of colors to look for. Must be &lt;= 4.
+     * @param iR
+     *   The new Red component.
+     * @param iG
+     *   The new Green component.
+     * @param iB
+     *   The new Blue component.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid format.&lt;/dd&gt;
+     *  &lt;dt&gt;3&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid &lt;tt&gt;iNbBgColor&lt;/tt&gt; parameter.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState, CATPixelImageFormat
+     */
+    virtual int ModifyBgColor(unsigned int iNbBgColor, unsigned char iR, unsigned char iG, unsigned char iB);
+
+    /**
+     * Modifies a RGBA picture by setting every pixel which has the same color than the upper left one to a new alpha value.
+     * @param iAlpha
+     *   The new alpha value. &lt;tt&gt;iAlpha = 0&lt;/tt&gt; means transparent, &lt;tt&gt;iAlpha = 255&lt;/tt&gt; means opaque.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Failure.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    int SetTransparency(unsigned char iAlpha = 0);
+
+    /**
+     * Replaces every pixel whose alpha component is smaller than 128 by a new color.
+     * @param iR
+     *   The new Red component.
+     * @param iG
+     *   The new Green component.
+     * @param iB
+     *   The new Blue component.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Failure.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    int ChangeTransparencyToColor(unsigned char iR, unsigned char iG, unsigned char iB);
+
+    /**
+     * Replaces the &lt;tt&gt;A&lt;/tt&gt; (alpha) component by &lt;tt&gt;255-A&lt;/tt&gt;.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Failure.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int InvertTransparency();
+
+    /**
+     * Rebuilds the I/O image formats list.
+     */
+    virtual void UpdateAllList();
+
+    /**
+     * Returns the latest error.
+     * @return
+     * &lt;dl&gt;
+     *  &lt;dt&gt;Returns the last available error message.&lt;/dt&gt;
+     * &lt;/dl&gt;
+     */
+    static const CATUnicodeString* GetLastError();
+
+    /**
+     * Informs of an image modification.
+     * &lt;b&gt;Role&lt;/b&gt;: This method is not defined on a &lt;tt&gt;CATPixelImage&lt;/tt&gt;.
+     * &lt;br&gt;For a @href CATTexturePixelImage, a flag is set to indicate that
+     * a pixel in the data zone is modified so that the image is regenerated at the next draw.
+     * This method is used in all the methods of &lt;tt&gt;CATPixelImage&lt;/tt&gt; wich modify
+     * the pixel data.
+     */
+    virtual void SetImagePixelsModification() {} // redefined in CATTexturePixelImage
+
+    /**
+     * Sharpens the image applying a highpass filter.
+     * It is not available for DXTN formats.
+     * @param iAmount
+     *   The sharpening amount.&lt;br&gt;
+     *   &lt;tt&gt;0 &lt; iAmount &lt;= 200&lt;/tt&gt; gives good results.
+     *   &lt;tt&gt;iAmount = 50&lt;/tt&gt; is a good value
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid image.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual int Sharpen(int iAmount);
+
+    /**
+     * Grey levels to Black and White conversion using Floyd-Steinberg algorithm.
+     * &lt;br&gt;Pixel format must be &lt;tt&gt;L&lt;/tt&gt; and remains &lt;tt&gt;L&lt;/tt&gt;.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid image.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+    virtual int Dither();
+
+    /**
+     * @nodoc
+     */
+	int InsertPixelImage(int iX, int iY, const CATPixelImage&amp; iImage, uchar iLR, uchar iG, uchar iB);
+
+    /**
+     * @nodoc
+     */
+    void Clear(uchar iClearR, uchar iClearG, uchar iClearB,
+			   uchar iKeepR,  uchar iKeepG,  uchar iKeepB);
+
+    /**
+     * Sets the line progression for DXTn compressed pixel image.
+	 * Be careful, if the line progression is normalised and if the image height is not a multiple of 4,
+	 * top lines will be removed to get the right image height.
+	 * Otherwise, the bottom lines will be removed.
+     * @param iLineProgression
+     *   The line progression of pixel image with DXTn CATPixelImageFormat.
+     */
+	 virtual void SetDXTnLineProgression(CATLineProgression iLineProgression) { if (iLineProgression == Normalised) _normalisedDXTnLineProgression = TRUE; else _normalisedDXTnLineProgression = FALSE;}
+
+    /**
+     * Gets the line progression for DXTn compressed pixel image.
+	 * Be careful, if the line progression is normalised and if the image height is not a multiple of 4,
+	 * top lines will be removed to get the right image height.
+	 * Otherwise, the bottom lines will be removed.
+     * @param oLineProgression
+     *   The line progression of pixel image with DXTn CATPixelImageFormat.
+     */
+	 virtual CATLineProgression GetDXTnLineProgression() { if (_normalisedDXTnLineProgression = TRUE) return Normalised; else return Inverted;}
+	
+	/**
+     * Changes the image format to BILEVEL using DITHER_MODE algorithm.
+     * @param iMode
+     *   The dither algorithm (FloydSteinberg or AverageTheshold).
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     */
+    virtual int ChangeFormatBilevel(DITHER_MODE iMode= DITHER_FloydSteinberg);
+
+    /**
+     * Grey levels to Black and White conversion using average threshold algorithm.
+     * &lt;br&gt;Pixel format must be &lt;tt&gt;L&lt;/tt&gt; and remains &lt;tt&gt;L&lt;/tt&gt;.
+     * @return
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;
+     * &lt;dl&gt;
+     *  &lt;dt&gt;0&lt;/dt&gt;
+     *  &lt;dd&gt;Success.&lt;/dd&gt;
+     *  &lt;dt&gt;1&lt;/dt&gt;
+     *  &lt;dd&gt;Invalid image.&lt;/dd&gt;
+     *  &lt;dt&gt;2&lt;/dt&gt;
+     *  &lt;dd&gt;Image is &lt;tt&gt;ReadOnly&lt;/tt&gt;.&lt;/dd&gt;
+     * &lt;/dl&gt;
+     * @see CATReadOnlyState
+     */
+	virtual int DitherAverageThreshold();
+
+    ///////////////////////////////////////////////////////////////////////////
+private:
+	CATPixelImage(const CATPixelImageFormat iFormat, const CATPixelImageFormat iPixelsFormat,
+				  const int iXSize, const int iYSize, const uchar * const ipPixels);
+	CATBoolean IsValid() const;
+	void InitAsInvalid();
+	CATPixelImage * DiscardInvalid(CATPixelImage *&amp; iopPixelImage) const;
+	CATBoolean CreateBiLevelBuffers(const int iySize);
+	CATBoolean CreateBiLevelBuffers(const int iySize, const int * const ipRunsLength, const uchar * const * const ipRuns);
+	CATBoolean CreateBiLevelBuffers(const int ixSize, const int iySize, const uchar * const ipPixels, const CATBoolean iGray=FALSE);
+	CATBoolean CreateBitmapBuffer(const int ixSize, const int iySize);
+	CATBoolean CreateBitmapBuffer(const int ixSize, const int iySize, const uchar * const ipPixels);
+	CATBoolean AssignBitmapBuffer(const int ixSize, const int iySize, uchar * const ipPixels, const DeallocatePixels iToDelete=PixDeallocateYESdelete);
+	void SafeDone();
+	void SafeDonePrimary();
+	void SafeDoneBitmap();
+	void SafeDoneBiLevel();
+	void SafeDoneSecondary();
+
+	int FlipBitmap();
+	int FlipBiLevel();
+
+    CATPixelImage * ZoomBILEVEL(const int ixSize, const int iySize, const int iZoomQuality) const;
+    CATPixelImage * ZoomQuality1(const int ixSize, const int iySize) const;
+    CATPixelImage * ZoomQuality2(const int ixSize, const int iySize) const;
+    CATPixelImage * ZoomQuality3(const int ixSize, const int iySize) const;
+	unsigned char * CreateBitmap(const CATPixelImageFormat iFormat) const;
+	unsigned char * CreateDXTnCompression(const PixelImageFormat iFormat) const;
+
+
+    int					_xSize;
+	int					_ySize;
+    CATPixelImageFormat _format;
+
+    // L, LA, RGB, RGBA bitmaps
+    int			_pixelsLength;	// can be remove
+    uchar		*_pixels;
+
+    // BILEVEL bitmaps
+    int			*_runsLength;
+    uchar		**_runs;
+
+    CATReadOnlyState	_readOnlyState;
+    CATDeallocatePixels _deallocate;
+
+    // Size in mm of one pixel for x and y directions
+    float		_xPixelSize;
+	float		_yPixelSize;
+
+    // Duplicated image in another Format, Temporary and Read Only.
+    // Usefull for performance optimization.
+    CATPixelImage					*_secondaryPixelImage;
+    CATLineProgression				_secondaryLineProgression;
+    CATSecondaryPixelImageFormat	_secondaryFormat;
+
+    // StatClean just call delete StatPixelFormat in his destructor
+    static CATStatCleaner StatClean;
+
+	CATBoolean _normalisedDXTnLineProgression;
+};
+
+#endif // CATPixelImage_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPickPathList.html">← 上一页: CATPickPathList.h</a></div>
+        <div><a href="CATPreactivate.html">下一页: CATPreactivate.h →</a></div>
+    </div>
+</body>
+</html>

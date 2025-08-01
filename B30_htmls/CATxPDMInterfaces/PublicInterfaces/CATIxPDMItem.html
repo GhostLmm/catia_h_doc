@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATxPDMInterfaces/PublicInterfaces/CATIxPDMItem.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATxPDMInterfaces/PublicInterfaces/CATIxPDMItem.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../CATXCADServices/PublicInterfaces/CATXCADToV5DocumentFactory.html">← 上一页: CATXCADToV5DocumentFactory.h</a></div>
+        <div><a href="CATIxPDMPartItem.html">下一页: CATIxPDMPartItem.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIxPDMItem_h
+#define CATIxPDMItem_h
+// COPYRIGHT DASSAULT SYSTEMES 2004
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTP_CATMathTransformation.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;ExportedByCATxPDMInterfaces.h&quot;
+
+class CATUnicodeString;
+class CATIDocId;
+class CATIxPDMItem_var;
+class CATListValCATIxPDMItem_var;
+
+/**
+ * Interface to access any V5 item that can be stored in an external File PDM system.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface proposes an unified view of any V5 item
+ * that can be stored in an external File PDM system.
+ * &lt;p&gt;An item is a C++ object, handled by the current interface, which is associated with a file. This file can:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;Exist&lt;/b&gt; in a CATIA V5 session. Two cases to consider: &lt;/li&gt;
+ *   &lt;ul&gt;
+ *      &lt;li&gt;The file already exists on the disk: i.e. the file has been loaded in session&lt;/li&gt;
+ *      &lt;li&gt;The file does not yet exist on the disk: i.e. a new file&lt;/li&gt;
+ *   &lt;/ul&gt;
+ * &lt;li&gt;&lt;b&gt;Not Exist&lt;/b&gt; in a CATIA V5 session. Two cases to consider: &lt;/li&gt;
+ *    &lt;ul&gt;
+ *       &lt;li&gt;The file exists on the disk&lt;/li&gt;
+ *       &lt;li&gt;The file does not exist on the disk. It appends when the item is created by the @href CATIxPDMItem#GetChildrenItems method and
+ *            the file associated with the child item does not exist on the disk ( i.e broken link with a pointed file)&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * &lt;/ul&gt; 
+ * &lt;p&gt;To retrieve a first item instance: 
+ *  &lt;ul&gt;
+ *    &lt;li&gt;From a batch session use these two methods: &lt;/li&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATxPDMFileServices#GetItemFromFile : the method does not load in session the file.
+ * &lt;li&gt;@href CATxPDMSessionServices#GetItemFromDocument : the file is already loaded in session.
+ *  &lt;/ul&gt;
+ *    &lt;li&gt;From a CATIA V5 interactive command, use the @href CATIxPDMSession interface. This interface being only implemented on 
+ *        the interactive session. You can also use the two above methods.&lt;/li&gt;
+ * &lt;/ul&gt; 
+ *  &lt;/ul&gt; &lt;/p&gt;
+ * &lt;p&gt;Once you have an item instance, use the &lt;tt&gt;CATIxPDMItem&lt;/tt&gt; methods to get all needed information. Then use the @href CATIxPDMItem#GetChildrenItems method 
+ *  to navigate between various items.&lt;/p&gt;
+ * &lt;p&gt;Never compare two item pointers or handlers, because you can have several instances of item 
+ * representing the same file (loaded in session or not for example), always use the @href #Compare method.&lt;/p&gt;
+ * &lt;p&gt;Some methods work only on loaded items. To load an item, use the @href CATxPDMSessionServices#LoadItemInSession method.&lt;/p&gt;
+ * &lt;p&gt;All the methods pre-requisites the PX1 license &lt;/p&gt;
+  * @see CATIxPDMSession, CATxPDMFileServices , CATxPDMSessionServices
+ */
+extern ExportedByCATxPDMInterfaces IID IID_CATIxPDMItem;
+
+class ExportedByCATxPDMInterfaces CATIxPDMItem : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+
+	/**
+	* Retrieves the full path of the item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the full path of the file associated with the item. It does not require that the file 
+   * is loaded in session.  
+	* @param oDocFilePathName
+	*   The full path of the file associated with the item (with directory name and file extension, 
+   *   for example C:\Temp\Part1.CATPart). If the file has never been saved, the default name of the file is returned. 
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The full path is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: Impossible to retrieve the full path&lt;/li&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetDocFileName(CATUnicodeString &amp;oDocFilePathName) = 0;
+
+	/**
+	* Retrieves the real type of the item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the real of the file associated with the item. It allows you checking if a 
+   * file with a V5 extension is really a V5 file.
+   * &lt;p&gt;This method does not require that the file is loaded in session. &lt;/p&gt;
+	* @param oFileType
+	*   The type of the file associated with the item. The returned string can be:  
+   *  &lt;ul&gt;
+   *  &lt;li&gt;For a file with a V5 extension:&lt;/li&gt;
+   *    &lt;ul&gt;
+   *        &lt;li&gt;For a &quot;right&quot; V5 file : &lt;tt&gt;CATPart, CATProduct, CATDrawing,....&lt;/tt&gt; &lt;/li&gt;
+   *         &lt;p&gt;It is the &lt;i&gt;real&lt;/i&gt; type of the file that is returned. Even if you change the extension 
+   *             (renaming xx.CATPart in yy.CATProduct), the real type (CATPart) will be returned.&lt;/p&gt;
+   *        &lt;li&gt;Otherwise, not a &quot;right&quot; V5 file: &lt;tt&gt;NotAV5File&lt;/tt&gt; &lt;/li&gt;
+   *             &lt;p&gt;For example, suppose a txt file renamed myTextFile.CATPart. In this case, the string &lt;tt&gt;NotAV5File&lt;/tt&gt; is returned,
+   *                and not &lt;tt&gt;CATPart&lt;/tt&gt;&lt;/p&gt;
+   *     &lt;/ul&gt;
+   *
+   *  &lt;li&gt;Otherwise, a file without a V5 extension: the file extension without any check.&lt;/li&gt;
+   *       &lt;ul&gt;
+   *        &lt;li&gt;For a &quot;right&quot; V5 file : &lt;tt&gt;CATPart, CATProduct, CATDrawing,....&lt;/tt&gt; &lt;/li&gt;
+   *             &lt;p&gt;Ex: for  Part3 and Part3.titi, two Part documents, &lt;tt&gt;CATPart&lt;/tt&gt; will be returned &lt;/p&gt;
+   *        &lt;li&gt;Otherwise, not a &quot;right&quot; V5 file: The file extension without any check &lt;/li&gt;
+   *        &lt;/ul&gt;
+   *  &lt;/ul&gt;
+   *  
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: A V5 file type is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;S_FALSE: The &lt;tt&gt;NotAV5File&lt;/tt&gt; type is successfully returned.&lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is without extension and the file is not a V5 file.&lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is not loaded in session, and it does not exist on disk. &lt;/li&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetItemType(CATUnicodeString &amp;oFileType) = 0;
+
+	/**
+	* Retrieves the identifier of the item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the identifier of the file associated with the item. It does not require that 
+   *  the file is loaded in session.  
+	* @param oDocId
+	*   The identifier of the file associated with the item. The caller must release &lt;tt&gt;oDocId&lt;/tt&gt; after its usage.
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The identifier is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is not loaded in session, and it does not exist on disk.&lt;/li&gt;
+	*/
+	virtual HRESULT GetDocId(CATIDocId* &amp;oDocId) = 0;
+
+	/**
+	* Retrieves the path used during the last save of an item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the full path of the file associated with the item used during the last 
+   * save operation. It does not require that the file is loaded in session. 
+	* @param oSavePath
+	*   The full path of the file associated with the item during the last save. The file must be a V5 file.   
+   *   &lt;p&gt;This path can be a Windows path, a Unix path (it depends on the last save has been performed on Unix or Windows), 
+   *    or a DLName. For a DLName, this is the displayed name of the DLName. &lt;/p&gt;
+   *   &lt;p&gt;The returned path does not change if 
+   *    &lt;ul&gt;
+   *      &lt;li&gt;The file is renamed or moved directly on disk.&lt;/li&gt;
+   *      &lt;li&gt;The file is renamed or copied during Send To operations &lt;/li&gt;
+   *    &lt;/ul&gt; 
+   *    &lt;/p&gt;
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The path is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;S_FALSE: The file has never been saved. &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is not loaded in session, and it does not exist or there is no read access right.&lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is not a V5 file.&lt;/li&gt;
+   *  &lt;/ul&gt;
+   */
+	virtual HRESULT GetLastSavePath(CATUnicodeString&amp; oSavePath) = 0;
+
+   /**
+   * Retrieves the last save version of an item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the version used during the last save operation on the file associated with
+   * the item. It does not require that the file is loaded in session.
+   *  
+   * @param oVersion
+   *        The last save version of the file. This information is only accessible for V5 files, and those created from V5R10 and after. 
+   *        The version is a none NLS string with the following format: 
+   *        &lt;p&gt;&lt;tt&gt;
+   *            &amp;lt&lt;b&gt;Version&lt;/b&gt;&amp;gtV&amp;lt&lt;b&gt;/Version&lt;/b&gt;&amp;gt&amp;lt&lt;b&gt;Release&lt;/b&gt;&amp;gtR&amp;lt&lt;b&gt;/Release&lt;/b&gt;&amp;gt&amp;lt&lt;b&gt;ServicePack&lt;/b&gt;&amp;gtSP&amp;lt&lt;b&gt;/ServicePack&lt;/b&gt;&amp;gt&amp;lt&lt;b&gt;HotFix&lt;/b&gt;&amp;gtHF&amp;lt&lt;b&gt;/HotFix&lt;/b&gt;&amp;gt
+   *        &lt;/tt&gt;&lt;/p&gt;
+   *          &lt;p&gt; where:
+   *         &lt;ul&gt; 
+   *            &lt;li&gt;&lt;tt&gt;V&lt;/tt&gt; is the version number.&lt;/li&gt;
+   *            &lt;li&gt;&lt;tt&gt;R&lt;/tt&gt; is the release number. &lt;/li&gt;
+   *            &lt;li&gt;&lt;tt&gt;SP&lt;/tt&gt; is the service pack number. If zero, it a GA level&lt;/li&gt;
+   *            &lt;li&gt;&lt;tt&gt;HF&lt;/tt&gt; is the hotfix number; If zero it is not an hotfix. 
+   *                    The sub string &lt;tt&gt;&amp;ltHotFix&amp;gtHF&amp;lt/HotFix&amp;gt&lt;/tt&gt;&lt;/li&gt; is returned only in V5R14 and upper level. &lt;/li&gt;
+   *         &lt;/ul&gt;&lt;/p&gt;
+   *         &lt;p&gt;First example: V5R11 : 
+   *        &lt;br&gt;&lt;tt&gt;
+   *            &amp;ltVersion&amp;gt5&amp;lt/Version&amp;gt&amp;ltRelease&amp;gt11&amp;lt/Release&amp;gt&amp;ltServicePack&amp;gt0&amp;lt/ServicePack&amp;gt 
+   *        &lt;/tt&gt; &lt;/p&gt;
+   *        &lt;p&gt;Second example: V5R14SP3 : 
+   *        &lt;br&gt;&lt;tt&gt;
+   *            &amp;ltVersion&amp;gt5&amp;lt/Version&amp;gt&amp;ltRelease&amp;gt14&amp;lt/Release&amp;gt&amp;ltServicePack&amp;gt13&amp;lt/ServicePack&amp;gt&amp;ltHotFix&amp;gt0&amp;lt/HotFix&amp;gt
+   *        &lt;/tt&gt;&lt;/p&gt;
+   *        &lt;p&gt;For a file saved before the V5R10, the returned string is empty.&lt;/p&gt;
+   *     &lt;p&gt;The returned path does not change if:
+   *    &lt;ul&gt;
+   *      &lt;li&gt;The file is renamed or moved directly on disk.&lt;/li&gt;
+   *      &lt;li&gt;The file is renamed or copied during Send To operations &lt;/li&gt;
+   *    &lt;/ul&gt; 
+   *    &lt;/p&gt;
+   * @return 
+   *     &lt;ul&gt;
+   *     &lt;li&gt;S_OK: The version has been successfully retrieved. &lt;/li&gt;
+   *     &lt;li&gt;S_FALSE: The version is not available on the V5 file (previous to V5R10).&lt;/li&gt;
+   *     &lt;li&gt;S_FALSE: The file has never been saved. &lt;/li&gt;
+   *	   &lt;li&gt;E_FAIL: The file is not loaded in session, and it does not exist or there is no read access right.&lt;/li&gt;
+   *	   &lt;li&gt;E_FAIL: The file is not a V5 file.&lt;/li&gt;
+   *    
+   *     &lt;/ul&gt;
+   */
+	virtual HRESULT GetLastSaveVersion(CATUnicodeString&amp; oVersion) = 0;
+
+	/**
+	* Reads the access status (Read Only or Read/Write) of the item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the access status of the file associated with the item. The status is based on the 
+   * file access right read on the disk. This method does not require that the file is loaded in session. 
+   * &lt;p&gt;During the session, if the status is changed on disk, the status returned by this method does not take into account the new right. 
+   * If you need the &quot;real&quot; status, invoke the @href CATxPDMSessionServices#RefreshItemInformation method before the current one. 
+   * @param oIsReadOnly
+	*   The read only status. If the file is &#x27;Read Only&#x27; the returned value is &lt;tt&gt;TRUE&lt;/tt&gt; otherwise &lt;tt&gt;FALSE&lt;/tt&gt;. 
+   *   &lt;p&gt;If the file does not exist yet on the disk, but exists in session (a new V5 file), the right is &#x27;Read/Write&#x27;. &lt;/p&gt;
+   *   &lt;p&gt;Caution: Interactively, if the &#x27;Read Only&#x27; check button has been selected in the &#x27;File/Open&#x27; 
+   * dialog box, the returned value is &lt;tt&gt;TRUE&lt;/tt&gt; whathever the file access right on the disk.&lt;/p&gt;
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The access status is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file is not loaded in session, and it does not exist on disk. &lt;/li&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetReadOnlyStatus(CATBoolean&amp; oIsReadOnly) = 0;
+
+	/**
+	* Checks if the item needs to be saved.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to know if the file associated with the item needs to be saved or not. This method requires
+   *  that the file exists in session.  
+	* @param oNeedToBeSaved
+	*   The returned status. The value is &lt;tt&gt;TRUE&lt;/tt&gt; if the file has been modified in the session after the last save operation, 
+   *   or if it is a new file never saved. Otherwise, the returned value is &lt;tt&gt;FALSE&lt;/tt&gt;. 
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The status is successfully returned. &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The file does not exist in session.&lt;/li&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT NeedToBeSaved(CATBoolean&amp; oNeedToBeSaved) = 0;
+
+	/**
+	* Checks if the item can be loaded in session.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method checks if the file associated with the item can be loaded in session. There is no check on compatibility
+   * with pointing items already loaded in session.  
+	* @param oCanBeLoaded
+	*   The returned status. The value is:
+   *    &lt;ul&gt;
+   *    &lt;li&gt;&lt;tt&gt;TRUE:&lt;/tt&gt; If the file is already loaded in session, or otherwise, if the file exists on the disk. &lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;FALSE:&lt;/tt&gt; If the file is not loaded, and the file does not exist on the disk.&lt;/li&gt;
+   *    &lt;/ul&gt;
+   *   &lt;p&gt;The method does not guaranty that in case of &lt;tt&gt;TRUE&lt;/tt&gt; answser, the file could be effectively loaded in session. &lt;/p&gt;
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The status is successfully returned. &lt;tt&gt;oCanBeLoaded&lt;/tt&gt; can be &lt;tt&gt;TRUE&lt;/tt&gt; or &lt;tt&gt;FALSE&lt;/tt&gt; &lt;/li&gt;
+   *	&lt;li&gt;S_FALSE: The file is already loaded in session. In this case it it not necessary to check &lt;tt&gt;oCanBeLoaded&lt;/tt&gt;, its
+   *       value is always &lt;tt&gt;TRUE&lt;/tt&gt; &lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1123:&lt;/tt&gt;: This non CATIA document can never be loaded&lt;/li&gt;
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT CanBeLoaded(CATBoolean&amp; oCanBeLoaded) = 0;
+
+   /**
+	* Reads a property value.  
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method reads a property defined in the file associated with the item. This method requires that the file exists in session. 
+	* @param iPropName
+	*   The property name. 
+	* &lt;br&gt;The standard properties are:
+	* &lt;ul&gt;
+	*   &lt;li&gt;CN_PART_NUMBER&lt;/li&gt;
+	*   &lt;li&gt;CN_REVISION&lt;/li&gt;
+	*   &lt;li&gt;CN_DEFINITION&lt;/li&gt;
+	*   &lt;li&gt;CN_NOMENCLATURE&lt;/li&gt;
+	*   &lt;li&gt;CN_DESCRIPTIONREF&lt;/li&gt;
+	*   &lt;li&gt;CN_SOURCE&lt;/li&gt;
+	*   &lt;li&gt;CN_VOLUME&lt;/li&gt;
+	*   &lt;li&gt;CN_MASS&lt;/li&gt;
+	*   &lt;li&gt;CN_SURFACE&lt;/li&gt;
+	* &lt;/ul&gt;
+	* &lt;br&gt;Other properties are user defined properties.
+	* @param oPropValue
+	*   The property value
+   * @return
+   *   &lt;ul&gt;
+   *   &lt;li&gt;S_OK: The property value is successfully computed. &lt;/li&gt;
+   *   &lt;li&gt;E_FAIL: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1116:&lt;/tt&gt;: The file is not loaded in session&lt;/li&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1120:&lt;/tt&gt;: The property name has not been found&lt;/li&gt;
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetProperty(const CATUnicodeString &amp;iPropName, CATUnicodeString &amp;oPropValue) = 0;
+
+   /**
+	* Retrieves the property name list for the item.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the list of available properties on this item including
+   * standard properties (CN_PART_NUMBER...) and user properties. The file associated with the item needs to be loaded before.
+	* @param oListPropertyNames
+	*   The list of property names. 
+   * @return
+   *   &lt;ul&gt;
+   *   &lt;li&gt;S_OK: The property name list is successfully computed. &lt;/li&gt;
+   *   &lt;li&gt;E_FAIL: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1116:&lt;/tt&gt;: The file is not loaded in session&lt;/li&gt;
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetPropertyNames(CATListOfCATUnicodeString &amp; oListPropertyNames) = 0;
+
+	/**
+	* Sets a property value.  
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method modifies a property defined in the file associated with the item. This method requires that the file exists in session.
+   * Do not forget, after one or several property value modifications to save the items using the @href CATxPDMSessionServices#SaveSessionToDirectory
+   *  method. 
+	* @param iPropName
+	*   The property name
+	* &lt;br&gt;Standard properties are:
+	* &lt;ul&gt;
+	*   &lt;li&gt;CN_PART_NUMBER&lt;/li&gt;
+	*   &lt;li&gt;CN_REVISION&lt;/li&gt;
+	*   &lt;li&gt;CN_DEFINITION&lt;/li&gt;
+	*   &lt;li&gt;CN_NOMENCLATURE&lt;/li&gt;
+	*   &lt;li&gt;CN_DESCRIPTIONREF&lt;/li&gt;
+	*   &lt;li&gt;CN_SOURCE&lt;/li&gt;
+	* &lt;/ul&gt;
+	* &lt;br&gt;Other properties are user defined properties.
+	* @param iPropValue
+	*	The property value
+   * @return
+   *   &lt;ul&gt;
+   *   &lt;li&gt;S_OK: Property names successfully valuated. &lt;/li&gt;
+   *   &lt;li&gt;E_FAIL: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1116:&lt;/tt&gt; The file is not loaded in session&lt;/li&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1120:&lt;/tt&gt; The property name has not been found or cannot be modified.&lt;/li&gt;
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT SetProperty(const CATUnicodeString &amp;iPropName, const CATUnicodeString &amp;iPropValue) = 0;
+
+	/**
+	* Generates a preview file according to the given format.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method generates a file containing an image of the file associated with the item. This image 
+   *  is a preview of the file. 
+   * &lt;p&gt;This method does not require that the file is loaded in session. &lt;/p&gt;
+	* @param iFormat
+	*   The generated file format. You can only use one among those:
+	* &lt;ul&gt;
+	*   &lt;li&gt;jpg&lt;/li&gt;
+	*   &lt;li&gt;bmp&lt;/li&gt;
+	*   &lt;li&gt;tif&lt;/li&gt;
+	*   &lt;li&gt;png&lt;/li&gt;
+	* &lt;/ul&gt;	
+   * @param oPreviewFileName
+	*   The output file name of the generated preview file. The output file is generated at the same location as the
+   *   file associated with the item. The name of the preview file is the name of the file 
+   *   file associated with the item + extension of the format.
+   *   &lt;p&gt;&lt;b&gt;Example&lt;/b&gt;: If the file associated with the item is 
+   *    &lt;ul&gt; &lt;li&gt;Windows: &lt;tt&gt;c:\temp\Design\MyDesign.CATPart&lt;/tt&gt;   &lt;/li&gt;
+   *   &lt;li&gt;Unix: &lt;tt&gt;/temp/Design/MyDesign.CATPart&lt;/tt&gt; . &lt;/li&gt;
+   *    &lt;/ul&gt;
+   *    The output preview file ( with jpeg format) will be  
+   *    &lt;ul&gt;
+   *    &lt;li&gt;Windows:&lt;tt&gt;c:\temp\Design\MyDesign.CATPart.jpg&lt;/tt&gt;   &lt;/li&gt;
+   *   &lt;li&gt;Unix:&lt;tt&gt;/temp/Design/MyDesign.CATPart.jpg&lt;/tt&gt;  &lt;/li&gt;
+   *    &lt;/ul&gt;
+   * @return
+   *   &lt;ul&gt;
+   *   &lt;li&gt;S_OK: The preview file is successfully generated. &lt;/li&gt;
+   *   &lt;li&gt;E_FAIL: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1002:&lt;/tt&gt;&lt;/li&gt;
+   *       Internal error.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1004:&lt;/tt&gt;&lt;/li&gt;
+   *       Internal error.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1114:&lt;/tt&gt;&lt;/li&gt;
+   *       Requested format is not supported.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1115:&lt;/tt&gt;&lt;/li&gt;
+   *       Impossible to write file.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1116:&lt;/tt&gt;&lt;/li&gt;
+   *       The file is not loaded in session, and it does not exist on disk.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1117:&lt;/tt&gt;&lt;/li&gt;
+   *       Not available on V4 data.
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GeneratePreview(const CATUnicodeString &amp;iFormat, CATUnicodeString &amp;oPreviewFileName) = 0;
+
+	/**
+	* Returns all children of the item. 
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves all the child items from the current one. This method requires that the file associated with the
+   * current item is loaded in session. 
+	* @param oChildrenList
+	*   The children list, those items could be loaded or not.
+	* @param oChildrenLocationList
+	*   The list of positioning matrix for Product Structure children. The size of this list is always equal to
+   *    the size of the children list. If an element of  &lt;tt&gt;oChildrenList&lt;/tt&gt; is not a Product the corresponding 
+   *     matrix pointer is null.
+   *   &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt;After calling the method, and in all cases you must check all elements of 
+   *    the &lt;tt&gt;oChildrenLocationList&lt;/tt&gt;. If one is non null, the pointer must be released. &lt;/p&gt;
+   *    
+   * @return
+   *   &lt;ul&gt;
+   *   &lt;li&gt;S_OK: The children list is successfully computed. &lt;/li&gt;
+  *   &lt;li&gt;E_FAIL: The method has failed. The possible &lt;b&gt;returned errors &lt;/b&gt; (listed by their identifier) are:&lt;/li&gt;
+   *   &lt;ul&gt;
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1004:&lt;/tt&gt;&lt;/li&gt;
+   *       Internal error.
+   *      &lt;li&gt;&lt;tt&gt;InputERR_1116:&lt;/tt&gt;&lt;/li&gt;
+   *       The file is not loaded in session.
+   *  &lt;/ul&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT GetChildrenItems(CATListValCATIxPDMItem_var &amp;oChildrenList, CATLISTP(CATMathTransformation) &amp;oChildrenLocationList) = 0; 
+
+	/**
+	* Checks if two items are describing the same file.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;Direct handler comparison can not be used because you can have an item representing the non loaded file
+   * and another for the item loaded in session.
+	* @param ixPDMItemToCompare
+	*   This item to compare with the current one.
+   * @return 
+   *  &lt;ul&gt;
+   *  &lt;li&gt;S_OK: The items are exactly the same. &lt;/li&gt;
+   *  &lt;li&gt;S_FALSE: The items are representing the same file with different status (loaded or not for example). &lt;/li&gt;
+   *	&lt;li&gt;E_FAIL: The items are different.&lt;/li&gt;
+   *  &lt;/ul&gt;
+	*/
+	virtual HRESULT Compare(const CATIxPDMItem_var&amp; ixPDMItemToCompare) = 0;
+
+};
+
+CATDeclareHandler(CATIxPDMItem, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../CATXCADServices/PublicInterfaces/CATXCADToV5DocumentFactory.html">← 上一页: CATXCADToV5DocumentFactory.h</a></div>
+        <div><a href="CATIxPDMPartItem.html">下一页: CATIxPDMPartItem.h →</a></div>
+    </div>
+</body>
+</html>

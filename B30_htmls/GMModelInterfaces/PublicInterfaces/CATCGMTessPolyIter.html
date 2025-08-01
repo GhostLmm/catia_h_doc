@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATCGMTessPolyIter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATCGMTessPolyIter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMTessPointPolyIter.html">← 上一页: CATCGMTessPointPolyIter.h</a></div>
+        <div><a href="CATCGMTessStripeIter.html">下一页: CATCGMTessStripeIter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMTessPolyIter_H
+#define CATCGMTessPolyIter_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATDataType.h&quot;
+#include &quot;CATGMModelInterfaces.h&quot;
+
+/**
+ * Class defining the iterator on the polygons resulting from a Tessellation operator.
+ * &lt;br&gt; Such iterator is directly created by the @href CATICGMBodyTessellator#GetFace
+ * or @href CATICGMCellTessellator#GetFace methods. Its deletion is managed at the
+ * CATICGMBodyTessellator and CATICGMCellTessellator deletion. 
+ * &lt;br&gt; Use it according to the following scheme:
+ * &lt;ul&gt;
+ * &lt;li&gt; Retrieve the number of polygons 
+ * &lt;li&gt; Go the next result
+ * &lt;li&gt; Retrieve the result
+ * &lt;li&gt; Optionally, reset to begin again.
+ * &lt;/ul&gt;
+ * &lt;p&gt; If the polygon is closed, the first and last point of the polygon are different. 
+ * &lt;p&gt; This class also allows you to directly retrieve the results in an array that 
+ * you have to allocate and deallocate after use.
+ */
+class ExportedByCATGMModelInterfaces CATCGMTessPolyIter
+{
+public:
+
+  /**
+   * @nodoc
+	 * Default constructor.
+	 */
+  CATCGMTessPolyIter();
+
+  /**
+   * Destructor.
+	 */
+  virtual ~CATCGMTessPolyIter();
+
+ /**
+   * Returns the number of polygons.
+   * @param ioNbPtsAll
+   * The sum of the number of points for the definition of all the polygons.
+   * @return
+   * The number of polygons.
+   */
+  virtual CATLONG32 GetNbPoly( CATLONG32 &amp; ioNbPtsAll ) const = 0;
+
+  
+  /**
+  * Returns the number of points of the current polygon.
+  * @return
+  * The number of points.
+  */
+  virtual CATLONG32 GetPolyNbPts() const = 0;
+   
+#ifndef PLATEFORME_DS64
+  /**
+   * Retrieves the points ranks (as CATLONG32) defining the current polygon.
+   * @param iNuPts[] 
+   * The array of the points ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetPolyNbPts&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetPolyNuPts(CATLONG32 iNuPts[]) const = 0;
+#endif
+  
+  /**
+   * Retrieves the points ranks (as int) defining the current polygon.
+   * @param iNuPts[] 
+   * The array of the points ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetPolyNbPts&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetPolyNuPts(int  oNuPts[]) const = 0;
+
+   /**
+   * Globally retrieves the points ranks for all the polygons.
+   * @param ioNbPts[]
+   * The array of the number of points for each polygon. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetNbPoly&lt;/tt&gt; for its dimension.
+   * @param oNuPts[]
+   * The array of the points ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;oNbPtsAll&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetPolyAllNuPts(int oNbPts[], int oNuPts[]) const = 0;
+
+   /**
+   * Skips to the next polygon.
+   */
+  virtual void GoToNext() = 0;
+  
+  /**
+   * Resets the iterator to the beginning.
+   */
+  virtual void Reset() = 0;
+
+   /**
+   * Tests whether the list is completed.
+	 * @return
+	 * The result of the test.
+	 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the list is completed, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+   */
+  virtual CATLONG32 IsExhausted() const = 0;
+};
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMTessPointPolyIter.html">← 上一页: CATCGMTessPointPolyIter.h</a></div>
+        <div><a href="CATCGMTessStripeIter.html">下一页: CATCGMTessStripeIter.h →</a></div>
+    </div>
+</body>
+</html>

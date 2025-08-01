@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMAssemble.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMAssemble.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAffinity.html">← 上一页: CATIGSMAffinity.h</a></div>
+        <div><a href="CATIGSMAttributes.html">下一页: CATIGSMAttributes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+/* -*-c++-*- */
+#ifndef CATIGSMAssemble_H
+#define CATIGSMAssemble_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMAssemble;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMAssemble;
+#endif
+
+class CATICkeParm_var;
+
+/**
+ * Interface to join (also name assemble) feature. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to acess data of join feature:  that can be a set of curves or
+ * a set of surfaces.  The orientation of the result is the same of the first element.
+ * @see CATIGSMFactory#CreateAssemble
+ */
+class ExportedByCATGitInterfaces CATIGSMAssemble : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+  // ---------------------------------------------------
+  // GETS INFO ON ELEMENTS 
+  // ---------------------------------------------------
+   /**
+	* Gets the size of the list of elements to assemble.
+	*  @param oSize
+	*      Size of the list
+	*/
+	virtual HRESULT GetElementsSize(int&amp; oSize) =0;
+
+	/**
+	* Gets the list of elements to assemble.
+	*   @param oSpecObjectsList
+	*      a list of element
+	* @see CATISpecObject
+	*/ 
+	virtual HRESULT	GetElements(CATLISTV(CATISpecObject_var)&amp; oSpecObjectsList) = 0;
+
+	/**
+	* Gets the position of an element in the list.
+	*  @param iElem
+	*      Element in the list
+	*  @param oPos
+	*      Position of the previous element in the list
+	*/
+	virtual HRESULT GetPosition(CATISpecObject_var&amp; oElem,int &amp; oPos) = 0;
+
+	/**
+	* Gets in the list the element which has the given position.
+	*  @param oElem
+	*      Element in the list that is a the given position
+	*  @param iPos
+	*      Position in the list
+	*/
+	virtual HRESULT GetElementAtPosition(CATISpecObject_var&amp; oElem,int iPos) = 0;
+
+	// ---------------------------------------------------
+	// APPEND 
+	// ---------------------------------------------------
+	/**
+	* Appends an element to the list of elements to assemble.
+	*   @param hSpecObject
+	*      Element to append.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT	AppendElement(const CATISpecObject_var ihSpecObject) =0;
+
+	// ---------------------------------------------------
+	// REMOVE 
+	// ---------------------------------------------------
+	/**
+	* Removes an element to the list of elements to assemble.
+	*   @param i
+	*      Position of the element to remove.
+	*/ 
+	virtual HRESULT RemoveElement(int i) =0;
+
+	/**
+	* Removes the list of elements.
+	*/
+	virtual HRESULT RemoveAll() = 0;
+
+
+	// ---------------------------------------------------
+	// REPLACE
+	// ---------------------------------------------------
+	/**
+	* Replace the element i by the element ihSpecObject.
+	*   @param i
+	*      Position of the element to remove.
+	*   @param hSpecObject
+	*      Element to Insert.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT ReplaceElement(int i, const CATISpecObject_var&amp; ihSpecObject) =0;
+
+
+
+	// ---------------------------------------------------
+	// DEVIATION &amp; PARAMETERS 
+	// ---------------------------------------------------
+	/**
+	* Gets the merging distance.
+	*   @param oDevuser
+	*      Merging distance.
+	*   @see CATICkeParm
+	*/   
+	virtual    HRESULT  GetDevUser (CATICkeParm_var &amp; oDevUser) = 0;
+	/**
+	* Gets the merging distance.
+	*   @param oDevuser
+	*      Merging distance.
+	*/   
+	virtual    HRESULT  GetDevUser (double &amp; oDevUser) = 0;
+	/**
+	* Sets the merging distance.
+	*   @param iDevuser
+	*      Merging distance.
+	*   @see CATICkeParm
+	*/ 
+	virtual    HRESULT SetDevUser  (const CATICkeParm_var iDevUser) = 0;
+
+	/**
+	* Gets the angular tolerance mode.
+	*   @param oValue
+	*      The angular tolerance.
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT  GetAngularToleranceMode (CATBoolean &amp; oValue) = 0;
+	/**
+	* Sets the angular tolerance mode.
+	*   @param iValue
+	*      The angular tolerance.
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetAngularToleranceMode  (const CATBoolean iValue) = 0;
+
+	/**
+	* Gets the angular tolerance.
+	*   @param oValue
+	*      The angular tolerance.
+	*   @see CATICkeParm
+	*/   
+	virtual    HRESULT  GetAngularTolerance (CATICkeParm_var &amp; oValue) = 0;
+	/**
+	* Gets the angular tolerance.
+	*   @param oValue
+	*      The angular tolerance.
+	*/   
+	virtual    HRESULT  GetAngularTolerance (double &amp; oValue) = 0;
+	/**
+	* Sets the angular tolerance.
+	*   @param iValue
+	*      The angular tolerance.
+	*   @see CATICkeParm
+	*/ 
+	virtual    HRESULT SetAngularTolerance  (const CATICkeParm_var iValue) = 0;
+
+	/**
+	* Gets the connected mode.
+	*   @param oConnex
+	*      CATFalse = non connected elements,
+	*      CATTrue  = only connected elements
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT GetConnex (CATBoolean &amp; oConnex) = 0;
+	/**
+	* Sets the connected mode.
+	*   @param iConnex
+	*      CATTrue  = the check of connexity is enable,
+	*      CATFalse = the check of connexity is disable.
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetConnex    (CATBoolean iConnex) = 0;
+	/**
+	* Gets the Manifold mode.
+	*   @param oIsManifold
+	*      CATFalse = the check is not performed (non manifold result is allowed),
+	*      CATTrue  = the check is performed.
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT GetManifold (CATBoolean &amp; oIsManifold) = 0;
+	/**
+	* Sets the Manifold mode.
+	*   @param iIsManifold
+	*      CATFalse = the check is not performed (non manifold result is allowed),
+	*      CATTrue  = the check is performed.
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetManifold   (CATBoolean iIsManifold) = 0;
+
+	/**
+	* Gets the Tangency Continuity mode.
+	*   @param oTangencyContinuity
+	*      CATFalse = the check is not performed (non G1 result is allowed),
+	*      CATTrue  = the check is performed.
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT GetTangencyContinuity(CATBoolean &amp; oTangencyContinuity) = 0;
+	/**
+	* Sets the Tangency Continuity mode.
+	*   @param iTangencyContinuity
+	*      CATFalse = the check is not performed (non G1 result is allowed),
+	*      CATTrue  = the check is performed.
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetTangencyContinuity(CATBoolean iTangencyContinuity) = 0;
+	/**
+	* Gets the simplified mode.
+	*   @param oSimplify
+	*      CATTrue  = the topology of the result is simplified,
+	*      CATFalse = the topology of the result is not simplified.
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT GetSimplify (CATBoolean &amp; oSimplify) = 0;
+	/**
+	* Sets the simplified mode.
+	*   @param iSimplify
+	*      CATTrue  = the topology of the result is simplified,
+	*      CATFalse = the topology of the result is not simplified.
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetSimplify (CATBoolean iSimplify) = 0;
+
+
+	/**
+	* Gets &#x27;suppress mode&#x27;.
+	*   @param oSuppressMode
+	*      CATTrue  = 
+	*      CATFalse = 
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT GetSuppressMode (CATBoolean &amp; oSuppressMode) = 0;
+	/**
+	* Sets the suppress mode.
+	*   @param iSuppressMode
+	*      CATTrue  = 
+	*      CATFalse = 
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetSuppressMode (CATBoolean iSuppressMode) = 0;
+
+
+	/**
+	* Gets the invert mode.
+	*   @param oInvert
+	*      CATTrue  = the result is inverted,
+	*      CATFalse = the result is not inverted,
+	*   @see CATBoolean
+	*/   
+	virtual    HRESULT IsInverted (CATBoolean &amp; oInvert) = 0;
+	/**
+	* Sets the invert mode.
+	*   @param iInvert
+	*      CATTrue  = the result is inverted,
+	*      CATFalse = the result is not inverted,
+	*   @see CATBoolean
+	*/ 
+	virtual    HRESULT SetInvert(CATBoolean iInvert) = 0;
+	/**
+	* Invert the invert mode.
+	*/ 
+	virtual    HRESULT Invert () = 0;
+
+	/**
+	* Gets the list of sub-elements to remove. 
+	*   @param oSpecObjectsList
+	*      List of elements.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT	GetSubElements(CATLISTV(CATISpecObject_var)&amp; oSpecObjectsList) = 0;
+	/**
+	* Gets the size of the list of sub-elements to remove.
+	*  @param oSize
+	*      Size of the list.
+	*/
+	virtual HRESULT GetSubElementsSize(int&amp; oSize) =0;
+	/**
+	* Append an element to the list of sub-elements to remove.
+	*   @param hSpecObject
+	*      Element to append.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT	AppendSubElement(const CATISpecObject_var ihSpecObject) =0;
+	/**
+	* Remove an sub-element to the list of sub-elements to remove.
+	*   @param i
+	*      Position of the sub element (start at 1)
+	*/ 
+	virtual HRESULT RemoveSubElement(int i) =0;
+
+
+
+	// ---------------------------------------------------
+	// FEDERATION 
+	// ---------------------------------------------------
+	/**
+	* Gets the propagation mode of the federation.
+	*   @param i
+	*      type of propagation (0: No, 1: All, 2: Continuity, 3:Tangency).
+	*/ 
+	virtual HRESULT GetFederationPropagation(int&amp; i) =0;
+	/**
+	* Sets the propagation mode of federation.
+	*   @param i
+	*      type of propagation (0: No, 1: All, 2: Continuity, 3:Tangency).
+	*/ 
+	virtual HRESULT SetFederationPropagation(int i)=0;
+	/**
+	* Gets the list of elements to federate.
+	*   @param oSpecObjectsList
+	*      List of elements.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT	GetFederatedElements(CATLISTV(CATISpecObject_var)&amp; oSpecObjectsList) =0;
+	/**
+	* Gets the size of the list of elements to federate.
+	*   @param Size
+	*      Number of elements.
+	*/ 
+	virtual HRESULT GetFederatedElementsSize(int&amp; Size) =0;
+	/**
+	* Appends an element to the list of elements to federate.
+	*   @param ihSpecObject
+	*      Element to append.
+	*   @see CATISpecObject
+	*/ 
+	virtual HRESULT	AppendFederatedElement(const CATISpecObject_var ihSpecObject) =0;
+	/**
+	* Removes an element to the list of elements to federate.
+	*   @param i
+	*      Position of the element to remove.
+	*/ 
+	virtual HRESULT RemoveFederatedElement(int i) =0;
+
+
+	/**
+	* Replaces an element in the list at the given position.
+	*  @param iElem
+	*      New element
+	*  @param Pos
+	*      Position in the list of the element that will be replaced
+	*/
+	virtual HRESULT ReplaceElementAtPosition(CATISpecObject_var&amp; iElem,int iPos) = 0;
+
+	/**
+	* Gets the size of the list (number of elements to assemble).
+	*  @param oSize
+	*      Size of the list
+	*/
+	virtual HRESULT GetSize(int &amp; oSize) = 0;
+
+	/**
+	* Gets all the elements of the list. 
+	*  @param oElems
+	*      List of the elements
+	*/
+	virtual HRESULT GetAllElements(CATLISTV(CATISpecObject_var) &amp; oElems)=0;
+
+	// ---------------------------------------------------
+	// TOPOLOGICAL HEALING 
+	// ---------------------------------------------------
+	/**
+	* Gets the healing mode for merged cells.
+	*   @param oHeal
+	*      True  = merged cells are healed,
+	*      False = merged cells are not healed.
+	*   @see CATBoolean
+	*/
+	virtual    HRESULT GetHealingMode(CATBoolean &amp; oHeal) = 0;
+
+	/**
+	* Sets the healing mode for merged cells.
+	*   @param iHeal
+	*      True  = merged cells are healed,
+	*      False = merged cells are not healed.
+	*   @see CATBoolean
+	*/
+	virtual    HRESULT SetHealingMode(CATBoolean iHeal) = 0;
+
+};
+CATDeclareHandler (CATIGSMAssemble, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAffinity.html">← 上一页: CATIGSMAffinity.h</a></div>
+        <div><a href="CATIGSMAttributes.html">下一页: CATIGSMAttributes.h →</a></div>
+    </div>
+</body>
+</html>

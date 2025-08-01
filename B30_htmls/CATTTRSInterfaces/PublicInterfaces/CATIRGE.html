@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTTRSInterfaces/PublicInterfaces/CATIRGE.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTTRSInterfaces/PublicInterfaces/CATIRGE.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCreateCATITTRSList.html">← 上一页: CATCreateCATITTRSList.h</a></div>
+        <div><a href="CATIRGETopology.html">下一页: CATIRGETopology.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIRGE_h
+#define CATIRGE_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATTTRSItf.h&quot; 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMmrTTRSClass.h&quot;
+class CATMathPoint;
+class CATMathLine;
+class CATMathPlane;
+class CATMathRGE;
+class CATPoint_var;
+class CATLine_var;
+class CATPlane_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATTTRSItf IID IID_CATIRGE;
+#else
+extern &quot;C&quot; const IID IID_CATIRGE;
+#endif
+
+/**
+  * Interface representing RGEs (Reference Geometrical Elements).
+  * &lt;b&gt;Role&lt;/b&gt;: RGE is one of the two main concepts of the TTRS theory.
+  * &lt;ul&gt; &lt;li&gt;It is a handle representing either a surface, or one to three wireframes elements. &lt;/li&gt;
+  * &lt;li&gt;It respects the six TTRS class.&lt;/li&gt;
+  * &lt;li&gt;It is made up of a point and/or a line and/or a plane.&lt;/li&gt;&lt;/ul&gt;
+  */
+class ExportedByCATTTRSItf CATIRGE: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public :
+
+   /** 
+    * Gets the TTRS Class of the RGE.
+    * @param oTTRSClass
+    *   The TTRS class of the RGE
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: There are six classes of surfaces, TTRS and RGE :
+    *   &lt;pre&gt;Spherical, Planar, Cylindrical, Prismatic, Revolute, Complex&lt;/pre&gt;
+    */
+    virtual HRESULT	GetTTRSClass(CATMmrTTRSClass&amp; oTTRSClass) const = 0;
+
+   /**
+    * Returns the geometrical element associated to the RGE.
+    * @param oReferencedGeometry
+    *   In general, oReferencedGeometry is a feature representing a relimited surface.
+    *   &lt;br&gt;GeometricalElement may be NULL in case of a RGE representing &lt;b&gt;several&lt;/b&gt; wireframe features :
+    *   &lt;br&gt;For example : a point and a line for a Revolute RGE. 
+    *   &lt;br&gt;In that case, use GetReferencedGeometry(CATPoint_var, CATLine_var, CATPlane_var)
+    */
+    virtual HRESULT	GetReferencedGeometry (CATBaseUnknown_var&amp; oReferencedGeometry) const = 0 ;	
+
+   /**
+    * Gets the one to three geometrical elements associated to the RGE if they exist (skeleton model).
+    * &lt;br&gt;(to be used only if GetReferencedGeometry(CATBaseUnknown_var) returns nothing).
+    * @param oPoint
+    *   The point.
+    * @param oLine
+    *   The line.
+    * @param oPlane
+    *   The plane.
+    */
+    virtual HRESULT	GetReferencedGeometry(CATPoint_var&amp; oPoint, CATLine_var&amp; oLine, CATPlane_var&amp; oPlane) const = 0 ;	
+
+   /**
+    * Replaces the single geometrical element associated to the RGE by another of the same TTRS Class &lt;br&gt;
+    * @param iNewGeometry
+    *   The replacing geometry.
+    */
+    virtual HRESULT	ReplaceReferencedGeometry(CATBaseUnknown_var&amp; iNewGeometry) = 0 ;
+
+   /**
+    * Replaces the geometrical elements associated to the RGE by one to three GeometricalElements.
+    * &lt;br&gt;Typical usage are skeleton models: to replace a conic RSUR by a point (the apex) and a line (the axis).
+    * @param oPoint
+    *   The point.
+    * @param oLine
+    *   The line.
+    * @param oPlane
+    *   The plane.
+    */
+    virtual HRESULT	ReplaceReferencedGeometry(CATPoint_var&amp; oPoint, CATLine_var&amp; oLine, CATPlane_var&amp; oPlane) = 0 ;
+
+   /**
+    * Computes its corresponding CATMathRGE.
+    * You just have to ask this CATMathRGE for its coordinates (CATMathPoint, CAMathLine, CATMathPlane).
+    * @param oMathRGE
+    *   The CATMathRGE.
+    */
+    virtual HRESULT	GetMathRGE(CATMathRGE* &amp;oMathRGE) const = 0;
+
+  private:
+
+};
+
+CATDeclareHandler(CATIRGE, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCreateCATITTRSList.html">← 上一页: CATCreateCATITTRSList.h</a></div>
+        <div><a href="CATIRGETopology.html">下一页: CATIRGETopology.h →</a></div>
+    </div>
+</body>
+</html>

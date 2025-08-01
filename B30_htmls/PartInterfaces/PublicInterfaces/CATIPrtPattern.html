@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIPrtPattern.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIPrtPattern.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtManageFeatBuild.html">← 上一页: CATIPrtManageFeatBuild.h</a></div>
+        <div><a href="CATIPrtProfile.html">下一页: CATIPrtProfile.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIPrtPattern_H
+#define CATIPrtPattern_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIShape.h&gt;
+#include &lt;CATICkeParm.h&gt;
+#include &lt;CATLISTV_CATISpecObject.h&gt;
+#include &lt;CATMathDirection.h&gt;
+#include &lt;CATMathPoint.h&gt;
+#include &lt;CATMathGridOfVectors.h&gt;
+#include &quot;CATMathTransformation.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIPrtPattern;
+#else
+extern &quot;C&quot; const IID IID_CATIPrtPattern;
+#endif
+
+/**
+ * Interface to read or modify the specifications of the pattern.
+ * &lt;b&gt;Role&lt;/b&gt;: The pattern feature allows users to duplicate an original feature according
+ * a specific distribution. 
+ */
+class ExportedByPartItf CATIPrtPattern : public CATIShape
+{
+  CATDeclareInterface;
+
+  public :
+
+
+	/**
+	* Return a CATMathGridOfvectors. It contains all the transformation vectors of the 
+	* pattern instances.
+  * A CATMathGridOfvectors is a bi-dimensional grid of CATMathVector
+	*/
+  virtual CATMathGridOfVectors * GetTransfo() = 0;
+  /** @nodoc */
+  virtual int GetRotation(CATMathTransformation &amp;Rotation, int i, int j) = 0;
+  /** @nodoc */
+  virtual int GetGeneralTransformation(CATMathTransformation &amp;ioTransfo) = 0;
+
+  /**
+	*  Returns the original feature.
+	*/
+	virtual CATISpecObject_var GetItem() = 0;
+
+	/**
+	* Returns the list of feature used for the creation of the pattern of list.
+	*  @param oListItem
+	*    List containing reference features of the pattern of list.
+	*/
+	virtual void GetItemList(CATLISTV(CATISpecObject_var) &amp;oListItem) = 0;
+
+  /**
+   *  Sets the original feature.
+   *  @param iItem
+   *    iItem must be either:
+   *  &lt;br&gt;- a mechanical form feature in the same mechanical tool that the pattern 
+   *  &lt;br&gt;- a mechanical tool resulting from boolean operation
+   *  &lt;br&gt;- an imported solid in the same mechanical tool that the pattern
+   *  &lt;br&gt;- a feature which implement CATIPrtToPattern.
+   */
+  virtual void ModifyItem(const CATISpecObject_var &amp;iItem) = 0;
+
+  /**
+   *  Returns the anchor point of the original feature.
+   */  
+  virtual CATMathPoint GetAnchorPoint() = 0;
+  /** @nodoc */
+  virtual void LinearToPlaneIdentification(int iInput, int &amp; oPosi, int &amp; Posj) = 0;
+  /** @nodoc */
+  virtual void PlaneToLinearIdentification(int iPosi, int iPosj, int &amp; oI) = 0;
+
+  /** @nodoc */
+  virtual int GetScopeIdentification(int iId_Transfo, int &amp;oScope_i, int &amp;oScope_j) = 0;
+  /** @nodoc */
+  virtual int GetTransfoIdentification(int iScope_i, int iScope_j, int &amp;oId_Transfo) = 0;
+  /** @nodoc */
+  virtual CATISpecObject_var GetSite() = 0;
+
+  /**
+   *  Returns if users want to keep the specifications of the original feature such as &quot;Up to&quot;.
+   *  &lt;br&gt;1 indicates that users want to keep the specifications.
+   */
+  virtual int GetIfDesignIntent() = 0;
+
+  /**
+   * Sets if users want to keep the specifications of the original feature such as &quot;Up to&quot;.
+   * @param iDsgIntent
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;br&gt;1 indicates that users want to keep the specifications.
+   * &lt;br&gt;0 indicates that users do not want to keep the specifications.
+   */
+  virtual int SetDesignIntent(int iDsgIntent) = 0;
+
+  /** @nodoc */
+  virtual CATBoolean GetIfSimpleGeometry() = 0;
+  /** @nodoc */
+  virtual void SetSimpleGeometry(CATBoolean iFlagSimleGeom) = 0;
+
+  /** @nodoc */
+  virtual CATBoolean GetIfPatternOfList() = 0;
+
+	/** @nodoc */
+	virtual HRESULT ModifyContext(int iCtxt) = 0;
+  /** @nodoc */
+  virtual HRESULT GetContext(int&amp; oCtxt) = 0;
+  /** @nodoc */
+  virtual int GetContext() = 0;
+
+  /**
+  * Returns Number of Instances in First and Second Direction.
+  * @param InFirstDirection
+  *    Number of Instances in First Direction.
+  * @param InSecondDirection
+  *    Number of Instances in Second Direction.
+  */
+	virtual HRESULT GetNumberOfInstances(int &amp;oInFirstDirection, int &amp;oInSecondDirection) = 0;
+
+  /** @nodoc */
+  virtual CATBoolean GetIfPatternOfBody() = 0;
+
+  /** @nodoc */
+  virtual HRESULT UpdateCoherence (CATLISTV(CATISpecObject_var) ListSpec, int &amp;ModificationDone) = 0;
+
+  /** @nodoc */
+  virtual HRESULT GetIfPatternOfCurrentSolid (CATBoolean &amp;oBool) = 0;
+
+/** @nodoc */
+	//virtual void  ModifyCurrentSolidFlag(boolean iCurrentSolid) = 0;
+/** @nodoc */
+	//virtual HRESULT GetCurrentSolidFlag(boolean&amp; oCurrentSolid) = 0;
+
+  virtual HRESULT UpdateDesignIntentAttribute()=0;
+
+  /**
+  * Returns the Deactivated status of the instance at position i,j
+  * @param iposi
+  *    The position of the instance in the First Direction (i)
+  * @param iposj
+  *    The position of the instance in the Second Direction (j)
+  * @param obDeactivated
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;br&gt;1 indicates instance is deactivated   
+  */
+  virtual HRESULT IsInstanceAtLocationDeactivated (int &amp;iposi ,int &amp;iposj , CATBoolean &amp;obDeactivated) = 0 ;
+
+};
+
+CATDeclareHandler (CATIPrtPattern, CATIShape); 
+
+#endif // CATIPrtPattern_H
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtManageFeatBuild.html">← 上一页: CATIPrtManageFeatBuild.h</a></div>
+        <div><a href="CATIPrtProfile.html">下一页: CATIPrtProfile.h →</a></div>
+    </div>
+</body>
+</html>

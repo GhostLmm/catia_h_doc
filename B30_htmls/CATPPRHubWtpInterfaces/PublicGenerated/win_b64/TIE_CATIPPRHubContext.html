@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPPRHubWtpInterfaces/PublicGenerated/win_b64/TIE_CATIPPRHubContext.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPPRHubWtpInterfaces/PublicGenerated/win_b64/TIE_CATIPPRHubContext.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../../CATPPRHubWtpImpl/PublicInterfaces/CATPPRHubWtpBase.html">← 上一页: CATPPRHubWtpBase.h</a></div>
+        <div><a href="TIE_CATIPPRHubObject.html">下一页: TIE_CATIPPRHubObject.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIPPRHubContext
+#define __TIE_CATIPPRHubContext
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATIPPRHubContext.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIPPRHubContext */
+#define declare_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+class TIECATIPPRHubContext##classe : public CATIPPRHubContext \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIPPRHubContext, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT AddWSInContext( CATIPPRHubWorkSpace *iWS ) ; \
+      virtual HRESULT CreateTransaction(CATIPPRHubTransaction **oTransac) ; \
+};
+
+
+
+#define ENVTIEdeclare_CATIPPRHubContext(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT AddWSInContext( CATIPPRHubWorkSpace *iWS ) ; \
+virtual HRESULT CreateTransaction(CATIPPRHubTransaction **oTransac) ; \
+
+
+#define ENVTIEdefine_CATIPPRHubContext(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT  ENVTIEName::AddWSInContext( CATIPPRHubWorkSpace *iWS )  \
+{ \
+return (ENVTIECALL(CATIPPRHubContext,ENVTIETypeLetter,ENVTIELetter)AddWSInContext(iWS )); \
+} \
+HRESULT  ENVTIEName::CreateTransaction(CATIPPRHubTransaction **oTransac)  \
+{ \
+return (ENVTIECALL(CATIPPRHubContext,ENVTIETypeLetter,ENVTIELetter)CreateTransaction(oTransac)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIPPRHubContext(classe)    TIECATIPPRHubContext##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIPPRHubContext, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIPPRHubContext, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIPPRHubContext, classe, 1) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIPPRHubContext, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIPPRHubContext, classe) \
+ \
+HRESULT  TIECATIPPRHubContext##classe::AddWSInContext( CATIPPRHubWorkSpace *iWS )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;AddWSInContext(iWS )); \
+} \
+HRESULT  TIECATIPPRHubContext##classe::CreateTransaction(CATIPPRHubTransaction **oTransac)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateTransaction(oTransac)); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIPPRHubContext(classe) \
+ \
+ \
+declare_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIPPRHubContext##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIPPRHubContext,&quot;CATIPPRHubContext&quot;,CATIPPRHubContext::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIPPRHubContext, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIPPRHubContext##classe(classe::MetaObject(),CATIPPRHubContext::MetaObject(),(void *)CreateTIECATIPPRHubContext##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIPPRHubContext(classe) \
+ \
+ \
+declare_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIPPRHubContext##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIPPRHubContext,&quot;CATIPPRHubContext&quot;,CATIPPRHubContext::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIPPRHubContext(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIPPRHubContext, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIPPRHubContext##classe(classe::MetaObject(),CATIPPRHubContext::MetaObject(),(void *)CreateTIECATIPPRHubContext##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIPPRHubContext(classe) TIE_CATIPPRHubContext(classe)
+#else
+#define BOA_CATIPPRHubContext(classe) CATImplementBOA(CATIPPRHubContext, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../../CATPPRHubWtpImpl/PublicInterfaces/CATPPRHubWtpBase.html">← 上一页: CATPPRHubWtpBase.h</a></div>
+        <div><a href="TIE_CATIPPRHubObject.html">下一页: TIE_CATIPPRHubObject.h →</a></div>
+    </div>
+</body>
+</html>

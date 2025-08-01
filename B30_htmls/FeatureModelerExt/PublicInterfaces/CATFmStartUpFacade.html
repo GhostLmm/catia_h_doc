@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeatureModelerExt/PublicInterfaces/CATFmStartUpFacade.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FeatureModelerExt/PublicInterfaces/CATFmStartUpFacade.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATFmPointingFeatureIterator.html">← 上一页: CATFmPointingFeatureIterator.h</a></div>
+        <div><a href="CATIFmFeatureBehaviorCustomization.html">下一页: CATIFmFeatureBehaviorCustomization.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef __CATFmStartUpFacade_h__
+#define __CATFmStartUpFacade_h__
+
+
+// COPYRIGHT DASSAULT SYSTEMES 2010
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+ // FeatureModelerExt forwards and headers.
+class CATFmFeatureFacade;
+class CATFmContainerFacade;
+class CATFmAttributeName;
+#include &quot;CATFmCredentials.h&quot;
+#include &quot;FeatureModelerExt.h&quot; // ExportedByFeatureModelerExt
+
+// Other forwards and headers.
+class CATUnicodeString;
+#include &quot;CATDataType.h&quot; // CATUINTPTR
+#include &quot;CATSysBoolean.h&quot; // CATBoolean
+#include &quot;IUnknown.h&quot; // HRESULT
+
+
+/**
+ * Class representing a Feature Definition (StartUp).
+ * &lt;b&gt;Role&lt;/b&gt;: This class is a Facade object providing access to a Feature Definition, according to the provided Accreditations.
+ * &lt;br&gt;It gathers in a single place all operations defined at the Feature Modeler level that can be performed on a Feature Definition.
+ * &lt;p&gt;LifeCycle information.&lt;br&gt;
+ *   The recommended usage is to create Facades as local variables in functions and methods bodies.&lt;br&gt;
+ *   Feature Definition Facades are valid during the whole PLM Session in which they have been bound.
+ *   They are nevertheless not really intended to be used as global variables or class member data. The life cycle of Facades should not extend
+ *   beyond the scope of the funtion in which they have been created.&lt;p&gt;
+ * &lt;p&gt;&lt;b&gt;Access Control&lt;/b&gt; information.&lt;br&gt;
+ *   Interactions with Feature Modeler entities, either read-only or read+write, are subject to authorization.&lt;br&gt;
+ *   On a Facade with no (or insufficient) Accreditations only the methods related to the Facade binding will succeed.
+ *   Such a Facade can most notably be used as an output parameter for a method like @href CATFmFeatureFacade#GetStartUpFacade
+ *   to compare it immediatly with another Feature Definition through @href #CompareStartUpWith .
+ *   All other methods, i.e. those for wich E_ACCESSDENIED is a legal return value, will fail.&lt;br&gt;
+ *   To be allowed to instantiate a Feature, an application must be registered as the owner of the Feature Catalog defining the Feature.&lt;/p&gt;
+ * @see CATFmCredentials .
+ */
+class ExportedByFeatureModelerExt CATFmStartUpFacade
+{
+public:
+
+  /**
+   * Constructs an empty Feature Definition (StartUp) Facade.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This constructor creates a Facade with no Accreditation and not bound to any Feature Definition.
+   * &lt;br&gt;Only the assignment operator can affect the Credentials Set of a Facade after its construction.
+   */
+  CATFmStartUpFacade();
+
+  /**
+   * Constructs a Feature Definition (StartUp) Facade.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This constructor creates a Facade with the provided credentials and not bound to any Feature Definition.
+   * &lt;br&gt;Only the assignment operator can affect the Credentials Set of a Facade after its construction.
+   * @param iAccreditations [in]
+   *   The set of Accreditations obtained by the application.
+   *   &lt;br&gt;These Accreditations will be used to authorize or not any operation attempted on the bound Feature Definition (StartUp).
+   *   &lt;br&gt;&lt;b&gt;Lifecycle&lt;/b&gt;: A Facade keeps a copy of the set of accreditations it was created with.
+   *   Any addition of accreditations performed on the Crendentials object after the Facade has been created will not be reflected.
+   */
+  CATFmStartUpFacade(const CATFmCredentials &amp; iAccreditations);
+
+  /**
+   * Constructs a Feature Definition (StartUp) Facade.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This constructor creates a Facade with the provided credentials and bound to a Feature Definition.
+   * &lt;br&gt;Only the assignment operator can affect the Credentials Set of a Facade after its construction.
+   * &lt;br&gt;For debugging/troubleshooting purpose, using the previous constructor followed by an explicit call to BindTo(...) method 
+   * is a better option as the BindTo(...) method returns distinct HRESULT values depending on the error cause.
+   * @param iAccreditations [in]
+   *   The set of Accreditations obtained by the application.
+   *   &lt;br&gt;These Accreditations will be used to authorize or not any operation attempted on the bound Feature Definition (StartUp).
+   *   &lt;br&gt;&lt;b&gt;Lifecycle&lt;/b&gt;: A Facade keeps a copy of the set of accreditations it was created with.
+   *   Any addition of accreditations performed on the Crendentials object after the Facade has been created will not be reflected.
+   * @param iIdentification
+   *   An identification of the Feature Definition.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;&quot;`StartUpIdentifier`@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;&quot;`StartUpIdentifier`#&lt;number&gt;@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;&quot;0u???????-????-????-????????????????@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;&lt;/ul&gt;
+   * @see #BindTo .
+   */
+  CATFmStartUpFacade(const CATFmCredentials &amp; iAccreditations, const CATUnicodeString &amp; iIdentification);
+
+  /**
+   * Destructor.
+   */
+  ~CATFmStartUpFacade();
+
+
+  // Required standard C++ methods.
+
+  /**
+   * Copy constructor.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method creates an exact copy of a Feature Definition (StartUp) Facade.
+   * @param iStartUpFacade [in]
+   *   The Facade to copy.
+   */
+  CATFmStartUpFacade(const CATFmStartUpFacade &amp; iStartUpFacade);
+
+  /**
+   * Assignment operator.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method transforms this Facade to an exact copy of another Feature Definition (StartUp) Facade.
+   * &lt;br&gt;Both the Credentials and the bound Feature Definition are copied.
+   * @param iStartUpFacade [in]
+   *   The Facade to copy.
+   * @return
+   *   This Facade.
+   */
+  CATFmStartUpFacade &amp; operator=(const CATFmStartUpFacade &amp; iStartUpFacade);
+
+
+  // 0. Facades common methods.
+
+  /**
+   * Binds the Facade to a Feature Definition (StartUp).
+   * &lt;br&gt;This method does not affect the Accreditations Set of the Facade.
+   * @param iIdentification
+   *   An identification of the Feature Definition.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;&quot;`StartUpIdentifier`@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;&quot;`StartUpIdentifier`#&lt;number&gt;@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;&quot;0u???????-????-????-????????????????@`Catalog.CATfct`&quot;&lt;/tt&gt;&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The Feature Definition has been found and the Facade bound to it.&lt;/dd&gt;
+   *     &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+   *     &lt;dd&gt;The Feature Definition has not been found.&lt;/dd&gt;
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;Credentials do not grant access to this Feature Definition.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   */
+  HRESULT BindTo(const CATUnicodeString &amp; iIdentification);
+
+  /**
+   * Compares the bound Feature Definition(s) of two Facades.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: compares the bound Feature Definition(s) (StartUp) of two Facades without taking the Accreditations into account.
+   * &lt;br&gt;An Feature Definition remains valid until the PLM session is closed.
+   * @param iStartUpFacade [in]
+   *   The Feature Definition Facade to be compared to this.
+   * @return
+   *   An integer value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;TRUE&lt;/tt&gt;: if the Facades are either both invalid or both bound to the same valid Feature Definition.&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;FALSE&lt;/tt&gt;: in any other case.&lt;/li&gt;&lt;/ul&gt;
+   */
+  CATBoolean CompareStartUpWith(const CATFmStartUpFacade &amp; iStartUpFacade) const;
+
+  /**
+   * Checks the Facade validity.
+   * &lt;br&gt;An Feature Definition (StartUp) Facade remains valid until the PLM session is closed.
+   * @return
+   *   An boolean value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;TRUE&lt;/tt&gt;: if the Facade is valid.&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;FALSE&lt;/tt&gt;: if the Facade is invalid.&lt;/li&gt;&lt;/ul&gt;
+   */
+  CATBoolean IsValid() const;
+
+  /**
+   * Logical-negation (or logical-NOT) operator.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Checks if the Facade is invalid.
+   * &lt;br&gt;An Feature Definition (StartUp) Facade remains valid until the PLM session is closed.
+   * @return
+   *   An integer value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;&lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;: if the Facade is invalid.&lt;/li&gt;
+   *       &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;: if the Facade is valid.&lt;/li&gt;&lt;/ul&gt;
+   */
+  int operator!() const;
+
+  /**
+   * Unbinds the Facade from its bound Feature Definition.
+   * &lt;br&gt;This method does not affect the Accreditations Set of the Facade.
+   * @return
+   *   This Facade.
+   */
+  CATFmStartUpFacade &amp; Clear();
+
+
+  // 1. Identity.
+
+  /**
+   * Retrieves the Late Type of a Feature Definition.
+   * @param oLateType [out]
+   *   A (caller provided) string in which the Late Type associated to the Feature Definition will be stored.
+   *   The Late Type associated to the Feature Definition is the Late Type of the instances of Feature Definition.
+   *   &lt;br&gt;If the method fails &lt;tt&gt;oLateType&lt;/tt&gt; is not modified, it is otherwise overwritten with the retrieved value.
+   * @return
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The Late Type has been successfuly retrieved.&lt;/dd&gt;
+   *     &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+   *     &lt;dd&gt;Facade is not bound to a valid Feature Definition (StartUp).&lt;br&gt;The validity of any Facade can be checked with its Isvalid() method.&lt;/dd&gt;
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;Credentials do not grant access to this Feature Definition.&lt;/dd&gt;
+   *     &lt;dt&gt;Other&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  HRESULT GetTypeName(CATUnicodeString &amp; oLateType) const;
+
+
+  // 2. Instantiation.
+
+  /**
+   * Instantiates a Feature.
+   * @param iContainer [in]
+   *   A valid Facade bound to the container in which an Instance of this Feature Definition must be created.
+   * @param oInstance [out]
+   *   A (caller provided) Facade that will bound to the created Instance.
+   *   &lt;br&gt;Notice that the Credentials of the provided Facade will not be used nor be modified.
+   *   &lt;br&gt;If the method fails &lt;tt&gt;oInstance&lt;/tt&gt; is not modified, it is otherwise overwritten with the retrieved value.
+   * @return
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The instantiation succeeded.&lt;/dd&gt;
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;Credentials do not grant access to this Feature or the container.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FMINVALIDFEATURE&lt;/dt&gt;
+   *     &lt;dd&gt;This Facade is not bound to a valid Feature Definition (StartUp).&lt;br&gt;The validity of any Facade can be checked with its Isvalid() method.&lt;/dd&gt;
+   *     &lt;dt&gt;LCC_E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;The currently used license does not authorize the requested operation.&lt;/dd&gt;
+   *     &lt;dt&gt;Other&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  HRESULT InstantiateIn(const CATFmContainerFacade &amp; iContainer, CATFmFeatureFacade &amp; oInstance) const;
+
+  /**
+   * Instantiates a Feature.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Instantiates a Feature and aggregates the new instance under an existing Feature.
+   * @param iContainer [in]
+   *   A valid Facade bound to the container in which an Instance of this Feature Definition must be created.
+   * @param iParent [in]
+   *   A valid Facade bound to the Feature that will agregate the new Instance.
+   * @param iKey [in]
+   *   The name of the component (or list of components) typed attribute that will be used for aggregation.
+   *   In case of a list, the new Feature is added at the end of the list. The attribute value must otherwise be empty.
+   * @param oInstance [out]
+   *   A (caller provided) Facade that will bound to the created Instance.
+   *   &lt;br&gt;Notice that the Credentials of the provided Facade will not be used nor be modified.
+   *   &lt;br&gt;If the method fails &lt;tt&gt;oInstance&lt;/tt&gt; is not modified, it is otherwise overwritten with the retrieved value.
+   * @return
+   *   An HRESULT value.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;The instantiation succeeded.&lt;/dd&gt;
+   *     &lt;dt&gt;E_ABORT&lt;/dt&gt;
+   *     &lt;dd&gt;The attribute is not a list and there is already a component.&lt;/dd&gt;
+   *     &lt;dt&gt;E_ACCESSDENIED&lt;/dt&gt;
+   *     &lt;dd&gt;Credentials do not grant access to the bound Feature, the target Container, the target Feature or its attribute.&lt;/dd&gt;
+   *     &lt;dt&gt;E_FMINVALIDFEATURE&lt;/dt&gt;
+   *     &lt;dd&gt;This Facade is not bound to a valid Feature Definition (StartUp).&lt;/dd&gt;
+   *     &lt;dt&gt;E_FMTYPEMISMATCH&lt;/dt&gt;
+   *     &lt;dd&gt;Attribute is not an aggregation attribute.&lt;/dd&gt;
+   *     &lt;dt&gt;LCC_E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;The currently used license does not authorize the requested operation.&lt;/dd&gt;
+   *     &lt;dt&gt;Other&lt;/dt&gt;
+   *     &lt;dd&gt;Another failure has occured.&lt;/dd&gt;
+   *  &lt;/dl&gt;
+   */
+  HRESULT InstantiateUnder(const CATFmContainerFacade &amp; iContainer, CATFmFeatureFacade &amp; iParent, const CATFmAttributeName &amp; iKey, CATFmFeatureFacade &amp; oInstance) const;
+
+private:
+  CATUINTPTR m_Data[2];
+};
+
+
+#endif // __CATFmStartUpFacade_h__
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATFmPointingFeatureIterator.html">← 上一页: CATFmPointingFeatureIterator.h</a></div>
+        <div><a href="CATIFmFeatureBehaviorCustomization.html">下一页: CATIFmFeatureBehaviorCustomization.h →</a></div>
+    </div>
+</body>
+</html>

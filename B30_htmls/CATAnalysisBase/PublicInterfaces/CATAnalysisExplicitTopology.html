@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitTopology.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitTopology.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitSet.html">← 上一页: CATAnalysisExplicitSet.h</a></div>
+        <div><a href="CATAnalysisExplicitTopologyNotification.html">下一页: CATAnalysisExplicitTopologyNotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitTopologyUnit
+//
+//=============================================================================
+//
+// Usage Notes: basic axis information of a collector characteristic
+//
+//=============================================================================
+// July 2000   Creation                                                     JND
+//=============================================================================
+#ifndef CATAnalysisExplicitTopology_H
+#define CATAnalysisExplicitTopology_H
+
+#include &quot;CATSAM0Explicit.h&quot;
+#include &quot;CATAnalysisExplicitParent.h&quot;
+
+class CATMSHNode;
+class CATMSHElement;
+class CATIMSHMeshManager ;
+class CATAnalysisExplicitModel; 
+class CATAnalysisExplicitTopologyExtension;
+
+class CATIMSHMeshManager;
+class CATSamBufferManager;
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+//-----------------------------------------------------------------------
+
+/**
+* Common basic services for Field Model Objects.
+* Definition of the Topology of the FEM Model.&lt;br&gt;
+* This class provide services to obtain :&lt;br&gt;
+*    - The array of Nodes,&lt;br&gt;
+*    - The array of Elements,&lt;br&gt;
+*    - The array of Elements linked to a Node,&lt;br&gt;
+*    - The array of Nodes linked to an Element.&lt;br&gt;
+*/
+class ExportedByCATSAM0Explicit CATAnalysisExplicitTopology
+{ 
+    friend class CATAnalysisExplicitModel;
+    friend class CATAnalysisExplicitTopologyUnit;
+    friend class CATAnalysisExplicitTopologyAssembly;
+    friend class CATAnalysisExplicitTopologyServices;
+
+public:
+    /**
+    * Increase the reference counter by 1.
+    */
+    int AddRef() const;
+
+    /**
+    * Decrease the reference counter by 1.
+    */
+    virtual int Release() const = 0;
+
+    /**
+    * Requests the topology delayed destruction.
+    * &lt;br&gt; Inline Method. &lt;br&gt;
+    * The topology will be destroyed as soon as this will be possible.
+    * @param iRequestDestruction
+    *   This parameter indicates the request for the collector deletion.
+    */
+    virtual void RequestDelayedDestruction(CATBoolean iRequestDestruction = TRUE);
+
+    /**
+    * Retrieves a pointer to the mesh manager to which the Topology is linked to.&lt;br&gt;
+    * An AddRef() is done on the mesh manager before returning the pointer.
+    * @return  CATBaseUnknown#Release 
+    * * @see CATIMSHMeshManager
+    */
+    CATIMSHMeshManager * GetMeshManager() const;
+       
+    /**
+    * Get the number of Nodes of the FEM Model.
+    */
+    virtual int GetNbNodes() const = 0;
+    
+    /**
+    * Get the number of Nodes of the FEM Model.
+    */
+    virtual HRESULT GetNbNodes(int &amp;oNbNodes) const = 0;
+    
+    /**
+    * Get the number of Virtual Nodes of the FEM Model.
+    */
+    virtual int GetNbVirtualNodes() const = 0;
+    
+    /**
+    * Get the number of Virtual Nodes of the FEM Model.
+    */
+    virtual HRESULT GetNbVirtualNodes(int &amp;oNbVirtualNodes) const = 0;
+    
+    /**
+    * Get the number of Elements of the FEM Model.
+    */
+    virtual int GetNbElements() const = 0;
+    
+    /**
+    * Get the number of Elements of the FEM Model.
+    */
+    virtual HRESULT GetNbElements(int &amp;oNbElements) const = 0;
+    
+    /**
+    * Get the number of Virtual Elements of the FEM Model.
+    */
+    virtual  int GetNbVirtualElements() const = 0;
+    
+    /**
+    * Get the number of Virtual Elements of the FEM Model.
+    */
+    virtual HRESULT GetNbVirtualElements(int &amp;oNbElements) const = 0;
+    
+    /**
+    * Get the array of Nodes of the FEM Model.
+    * @param oNodes
+    *   The array of Nodes.
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    */
+    virtual HRESULT GetNodes(const CATSamExplicitPtr* &amp;oNodes) const = 0;
+    
+    /**
+    * Get the array of Nodes of the FEM Model.
+    * @param oNodes
+    *   The array of CATMSHNode (must be allocated with the size returned by GetNbNodes)
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be allocated with the size returned by the method GetNbNodes() before calling
+    *      the method, and be deleted after use.
+    * @see CATMSHNode
+    */
+    virtual HRESULT GetNodes(const CATMSHNode** oNodes) const = 0;
+    
+    /**
+    * Get the array of Virtual Nodes of the FEM Model.
+    * @param oNodes
+    *   The array of Virtual Nodes.
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    */
+    virtual HRESULT GetVirtualNodes(const CATSamExplicitPtr* &amp;oNodes) const = 0;
+    
+    /**
+    * Get the array of Elements of the FEM Model.
+    * @param oElements
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    *   The array of Elements.
+    */
+    virtual HRESULT GetElements(const CATSamExplicitPtr* &amp;oElements) const = 0;
+    
+    /**
+    * Get the array of Elements of the FEM Model.
+    * @param oElements
+    *   The array of CATMSHElement (must be allocated with the size returned by GetNbElements).
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be allocated with the size returned by the method GetNbElements() before calling
+    *      the method, and be deleted after use.
+    * @see CATMSHElement
+    */
+    virtual HRESULT GetElements(const CATMSHElement** oElements) const = 0;
+    
+    /**
+    * Get the array of Virtual Elements of the FEM Model.
+    * @param oElements
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    *   The array of Elements.
+    */
+    virtual HRESULT GetVirtualElements(const CATSamExplicitPtr* &amp;oElements) const = 0;
+    
+    /**
+    * Get the number of Nodes linked to an Element.
+    * @param iElement
+    *   The Element.
+    */
+    virtual   int GetNbNodesLinkedToElement(CATSamExplicitPtr iElement) const = 0;
+    
+    /**
+    * Get the number of Nodes linked to an Element.
+    * @param iElement
+    *   The Element.
+    */
+    virtual int GetNbNodesLinkedToElement(const CATMSHElement* iElement) const = 0;
+    
+    /**
+    * Get the array of Nodes linked to an Element.
+    * The method return the number of Nodes.&lt;br&gt;
+    * @param iElement
+    *   The Element.
+    * @param oLinkedNodes
+    *   The array of Nodes linked to the element.
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    */
+    virtual HRESULT GetNodesLinkedToElement(CATSamExplicitPtr iElement, const CATSamExplicitPtr* &amp;oLinkedNodes) const = 0;
+    
+        /**
+        * Get the array of Nodes linked to an Element.
+        * @param iElement
+        *   The Element.
+        * @param oLinkedNodes
+        *   The array of Nodes linked to the element (must be allocated with the size returned by GetNbNodesLinkedToElement).
+        *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+        *      Must be allocated with the size returned by the method GetNbNodesLinkedToElement() before calling
+        *      the method, and be deleted after use.
+        * @see CATMSHNode, CATMSHElement
+    */
+    virtual HRESULT GetNodesLinkedToElement(const CATMSHElement* iElement, const CATMSHNode**   oLinkedNodes) const = 0;
+    
+        /**
+        * Get the number of Elements linked to a Node.
+        * @param iNode
+        *   The Node.
+    */
+    virtual int GetNbElementsLinkedToNode(CATSamExplicitPtr iNode) const = 0;
+    
+    /**
+    * Get the number of Elements linked to a Node.
+    * @param iNode
+    *   The Node.
+    */
+    
+    virtual int GetNbElementsLinkedToNode(const CATMSHNode*  iNode) const = 0;
+    
+    /**
+    * Get the array of Elements linked to a Node.
+    * @param iNode
+    *   The Node.
+    * @param oLinkedElements
+    *   The array of Elements linked to the Node.
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be set to NULL before calling the method, and not be deleted after use.
+    */
+    virtual HRESULT GetElementsLinkedToNode(CATSamExplicitPtr iNode, const CATSamExplicitPtr* &amp;oLinkedElements) const = 0;
+    
+    /**
+    * Get the array of Elements linked to a Node.
+    * @param iNode
+    *   The Node.
+    * @param oLinkedElements
+    *   The array of Elements linked to the Node (must be allocated with the size returned by GetElementsLinkedToNode).
+    *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;
+    *      Must be allocated with the size returned by the method GetElementsLinkedToNode() before calling
+    *      the method, and be deleted after use.
+    * @see CATMSHNode, CATMSHElement
+    */
+    virtual HRESULT GetElementsLinkedToNode(const CATMSHNode* iNode, const CATMSHElement** oLinkedElements) const = 0;
+    
+    
+    /**
+    * Set the Flag IsUpToDate. 
+    * @param iUpToDate
+    *   The value of the flag IsUpToDate.
+    */
+    void SetUpToDate(CATBoolean iUpToDate) const;
+
+    /**
+    * Clean the Virtual Nodes and Elements arrays in order to recalculate them if the flag is false.
+    * @param iVirtualUpToDate
+    *   The value of the flag IsVirtualUpToDate.
+    */
+    HRESULT SetVirtualUpToDate(CATBoolean iVirtualUpToDate) const;
+    
+    /**
+    * Update activity status of the mesh.
+    */
+    virtual HRESULT UpdateActivityStatus() const = 0;
+    
+
+protected :
+
+   /**
+    * Set the mesh manager 
+    * @param iMeshManager which the field model is linked to.&lt;br&gt;
+    *    The mesh manager you want to link to.
+    * @see CATIMSHMeshManager
+    */
+    void SetMeshManager(const CATIMSHMeshManager *iMeshManager);
+ 
+    /**
+    * Assigns the Child Topology of its Parent Topology. It is useful in case of assemble Topology.
+    * @param iTopoParent
+    *   A reference to the explicit parent topology which this topology belongs to.
+    */
+    virtual HRESULT SetParentTopology(CATAnalysisExplicitModel* iModel) = 0;
+
+    /**
+    * Retrieves a pointer to the Topology parent of this topology. &lt;br&gt;
+    */
+    CATAnalysisExplicitTopology* GetParentTopology();  // inline
+
+    /**
+    * Build the array of Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateNodes() = 0;
+    
+    /**
+    * Build the array of Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateNbNodes() = 0;
+    
+    /**
+    * Build the array of EntitiesFlagsForNodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateEntitiesFlagsForNodes() = 0;
+
+    /**
+    * Build the array of Elements Linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateElements() = 0;
+    
+    /**
+    * Build the array of Elements Linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual  HRESULT UpdateNbElements() = 0;
+    
+    /**
+    * Build the array of EntitiesFlagsForElements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateEntitiesFlagsForElements() = 0;
+
+    /**
+    * Build the array of Nodes linked to Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateNodesLinkedToElements() = 0;
+    
+    /**
+    * Build the array of Nodes linked to Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateNbNodesLinkedToElements() = 0;
+    
+    /**
+    * Build the array of Elements Linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateElementsLinkedToNodes() = 0;
+
+    /**
+    * Update the number of Elements Linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT UpdateNbElementsLinkedToNodes() = 0;
+
+    /**
+    * Refresh the instance.&lt;br&gt;
+    */
+    HRESULT Refresh();
+
+    /**
+    * Set the MeshManager to NULL and clean the Assembly child topologies if needed.&lt;br&gt;
+    */
+    virtual void CleanMeshManagerAndAssembly();
+
+    /**
+    * Clean the array of Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanNodes() = 0;
+
+    /**
+    * Clean the array of Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanVirtualNodes() = 0;
+
+    /**
+    * Clean the array of EntitiesFlagsForNodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanEntitiesFlagsForNodes() = 0;
+
+    /**
+    * Clean the array of EntitiesFlagsForVirtualNodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanEntitiesFlagsForVirtualNodes() = 0;
+
+    /**
+    * Clean the array of Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanElements() = 0;
+
+    /**
+    * Clean the array of Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanVirtualElements() = 0;
+
+    /**
+    * Clean the array of EntitiesFlagsForElements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanEntitiesFlagsForElements() = 0;
+
+    /**
+    * Clean the array of EntitiesFlagsForVirtualElements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanEntitiesFlagsForVirtualElements() = 0;
+
+    /**
+    * Clean the array of Nodes linked to Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanNodesLinkedToElements() = 0;
+
+    /**
+    * Clean the array of number of Nodes linked to Elements of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanNbNodesLinkedToElements() = 0;
+
+    /**
+    * Clean the array of Elements linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanElementsLinkedToNodes() = 0;
+
+    /**
+    * Clean the array of number of Elements linked to Nodes of the instance.&lt;br&gt;
+    */
+    virtual HRESULT CleanNbElementsLinkedToNodes() = 0;
+
+    /**
+    * Set the array of Nodes of the instance on iNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetNodes(CATSamExplicitPtr* iNodes) = 0;
+
+    /**
+    * Set the array of EntitiesFlagsForNodes of the instance on iEntitiesFlagsForNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetEntitiesFlagsForNodes(const char* iEntitiesFlagsForNodes) = 0;
+
+    /**
+    * Set the array of VirtualNodes of the instance on iVirtualNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetVirtualNodes(CATSamExplicitPtr* iVirtualNodes) = 0;
+
+    /**
+    * Set the array of EntitiesFlagsForVirtualNodes of the instance on iEntitiesFlagsForVirtualNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetEntitiesFlagsForVirtualNodes(const char* iEntitiesFlagsForVirtualNodes) = 0;
+
+    /**
+    * Set the array of Elements of the instance on iElements.&lt;br&gt;
+    */
+    virtual HRESULT SetElements(CATSamExplicitPtr* iElements) = 0;
+
+    /**
+    * Set the array of EntitiesFlagsForElements of the instance on iEntitiesFlagsForElements.&lt;br&gt;
+    */
+    virtual HRESULT SetEntitiesFlagsForElements(const char* iEntitiesFlagsForElements) = 0;
+
+    /**
+    * Set the array of VirtualElements of the instance on iVirtualElements.&lt;br&gt;
+    */
+    virtual HRESULT SetVirtualElements(CATSamExplicitPtr* iVirtualElements) = 0;
+
+    /**
+    * Set the array of EntitiesFlagsForVirtualElements of the instance on iEntitiesFlagsForVirtualElements.&lt;br&gt;
+    */
+    virtual HRESULT SetEntitiesFlagsForVirtualElements(const char* iEntitiesFlagsForVirtualElements) = 0;
+
+    /**
+    * Set the array of NodesLinkedToElements of the instance on iNodesLinkedToElements.&lt;br&gt;
+    */
+    virtual HRESULT SetNodesLinkedToElements(CATSamExplicitPtr* iNodesLinkedToElements) = 0;
+
+    /**
+    * Set the array of NbNodesLinkedToElements of the instance on iNbNodesLinkedToElements.&lt;br&gt;
+    */
+    virtual HRESULT SetNbNodesLinkedToElements(int* iNbNodesLinkedToElements) = 0;
+
+    /**
+    * Set the array of ElementsLinkedToNodes of the instance on iElementsLinkedToNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetElementsLinkedToNodes(CATSamExplicitPtr* iElementsLinkedToNodes) = 0;
+
+    /**
+    * Set the array of NbElementsLinkedToNodes of the instance on iNbElementsLinkedToNodes.&lt;br&gt;
+    */
+    virtual HRESULT SetNbElementsLinkedToNodes(int* iNbElementsLinkedToNodes) = 0;
+
+    /**
+    * In order to get a child topology which points on an assembly topology.&lt;br&gt;
+    */
+    virtual void SetFullTopo(CATBoolean iBool) = 0;
+
+ private :
+    // Friend Class
+    friend class CATCharacCollectorFactory;
+    friend class CATCharacCollectorFactoryForEntity;
+    friend class CATCharacCollectorFactoryForLocalEntity;
+    friend class CATESamCharacCollectorForCombinedEntity;
+    friend class CATESamCharacCollectorForProxyEntity;
+    friend class CATAnalysisExplicitChild;
+
+      /**
+    * Get Entities Flags for Nodes.
+    */
+    virtual HRESULT GetNodesFlags(int &amp;oNbNodes, const char* &amp;oNodesFlags) const = 0;
+    
+    /**
+    * Get Entities Flags for Elements.
+    */
+    virtual HRESULT GetElementsFlags(int &amp;oNbElements, const char* &amp;oElementsFlags) const = 0;
+
+    /**
+    * Get Entities Flags for Virtual Nodes.
+    */
+    virtual HRESULT GetVirtualNodesFlags(int &amp;oNbVirtualNodes, const char* &amp;oVirtualNodesFlags) const = 0;
+    
+    /**
+    * Get Entities Flags for Virtual Elements.
+    */
+    virtual HRESULT GetVirtualElementsFlags(int &amp;oNbVirtualElements, const char* &amp;oVirtualElementsFlags) const = 0;
+   
+    /**
+    * Get the number of Nodes of the FEM Model.
+    */
+    virtual int GetUnitNbNodes() const = 0;
+
+    /**
+    * Get the number of Virtual Elements of the FEM Model.
+    */
+    virtual  int GetUnitNbElements() const = 0;
+
+    /**
+    * Returms TRUE if the topology is an assembly topology.
+    * @param oIsRoot
+    *   This parameter returns TRUE if the topology is the root topology.
+    */
+    virtual CATBoolean IsAssemblyTopology(CATBoolean &amp;oIsRoot) ;
+
+    /**
+    * Retrieves the list of linked topologies.
+    * @param oLeavesTopologies  List of topologies pointers.
+    * @param oNbPointedTopology Size of the list.
+    */
+    virtual HRESULT GetLeavesTopologies(CATAnalysisExplicitTopology * const * &amp;oLeavesTopologies, int &amp;oNbPointedTopology) const = 0;
+
+   /**
+    * Get the offset for the Nodes or Elements of a given Model.
+    * @param iCategory 
+    *    CATSamValueNode or CATSamValueElement.
+    * @param iModel
+    *    The Model for which you want the offset.
+    */
+    virtual int GetOffsetForValueTypeFromModel(CATSamValue iCategory, CATAnalysisExplicitModel *iModel) const;
+
+   /**
+    * Flags a Topology in order to know if we have condensed nodes - usefull to calculate the NbElementsLinkedToNodes -.
+    * @param iValue
+    *   TRUE or FALSE.
+    */
+    inline void SetHasCondensedNodes(CATBoolean iValue);
+ 
+    friend class CATAnalysisExplicitTopologyExtension;
+    friend class CATAnalysisExplicitTopologyExtensionElementsOfNodes;
+    /**
+    * Get TopologyExtension.&lt;br&gt;
+    */
+    virtual HRESULT GetTopologyExtension(int iExtensionType, CATAnalysisExplicitTopologyExtension* &amp;oExtension, CATBoolean iInstanciate = TRUE);
+
+    virtual HRESULT WarnParent();
+
+  // DATAMEMBERS
+  protected:
+    int                                    _NbNodes;
+    int                                    _NbVirtualNodes;
+    int                                    _NbElements;
+    int                                    _NbVirtualElements;
+    int                                   *_NbNodesLinkedToElements;
+    int                                   *_NbElementsLinkedToNodes;
+    const char                            *_EntitiesFlagsForNodes;
+    const char                            *_EntitiesFlagsForElements;
+    const char                            *_EntitiesFlagsForVirtualNodes;
+    const char                            *_EntitiesFlagsForVirtualElements;
+    int                                   *_OffsetOnNodes;
+    int                                   *_OffsetOnElements;
+    int                                   *_OffsetOnVirtualNodes;
+    int                                   *_OffsetOnVirtualElements;
+
+    CATSamExplicitPtr                     *_Nodes;
+    CATSamExplicitPtr                     *_VirtualNodes;
+    CATSamExplicitPtr                     *_Elements;
+    CATSamExplicitPtr                     *_VirtualElements;
+    CATSamExplicitPtr                     *_NodesLinkedToElements;
+    CATSamExplicitPtr                     *_ElementsLinkedToNodes;
+
+    CATAnalysisExplicitParent              _FEMModel;
+    CATBoolean                             _IsUpToDate;
+    CATBoolean                             _MustBeRenumbered;
+    CATIMSHMeshManager                    *_MeshManager ;
+    CATAnalysisExplicitModel              *_ExplicitModel ;
+
+    CATAnalysisExplicitTopology*           _ParentTopology;
+
+    int                                    _NumReference;
+    int                                    _NbActiveExtensions;
+    CATBoolean                             _IsRequestForDestruction;    
+
+    CATAnalysisExplicitTopologyExtension **_TopologyExtensions;
+    CATBoolean                             _OnlyNbNodesOrElements; 
+    CATBoolean                             _IsAssembly; 
+    CATBoolean                             _HasACondensedNode; 
+
+    // Constructor and destructor for internal use only
+    CATAnalysisExplicitTopology(); 
+    virtual ~CATAnalysisExplicitTopology();
+
+    // Management of memory with a buffer
+    static CATSamBufferManager* CATSamExpTopoBufferManager;        
+    static HRESULT GetMemoryArea(void**ioArea, size_t iSize);  
+    static HRESULT ReleaseMemoryArea(void**ioArea);
+    void ReleaseBufferManager();
+};
+
+// =============================================================================
+// CATAnalysisExplicitTopology::GetParentTopology()
+// =============================================================================
+inline CATAnalysisExplicitTopology* CATAnalysisExplicitTopology::GetParentTopology()
+{
+  return _ParentTopology;
+}
+
+// =============================================================================
+// CATAnalysisExplicitTopology::RequestDelayedDestruction()
+// =============================================================================
+inline void CATAnalysisExplicitTopology::RequestDelayedDestruction(CATBoolean iRequestDestruction)
+{
+  _IsRequestForDestruction = iRequestDestruction;
+}
+
+// =============================================================================
+// CATAnalysisExplicitTopology::SetHasCondensedNodes()
+// =============================================================================
+inline void CATAnalysisExplicitTopology::SetHasCondensedNodes(CATBoolean iValue)
+{
+  _HasACondensedNode = iValue;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitSet.html">← 上一页: CATAnalysisExplicitSet.h</a></div>
+        <div><a href="CATAnalysisExplicitTopologyNotification.html">下一页: CATAnalysisExplicitTopologyNotification.h →</a></div>
+    </div>
+</body>
+</html>

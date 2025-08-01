@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATIDOMTreeWalker.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATIDOMTreeWalker.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMText.html">← 上一页: CATIDOMText.h</a></div>
+        <div><a href="CATISAXAttributeList.html">下一页: CATISAXAttributeList.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIDOMTreeWalker_h
+#define CATIDOMTreeWalker_h
+
+// System framework
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+#include &quot;CATIDOMNodeFilter.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATIDOMTreeWalker;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern const IID IID_CATIDOMTreeWalker ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+
+class CATIDOMNode_var;
+/**
+ * Interface used to navigate a document tree or 
+ * subtree using the view of the document defined by their 
+ * &lt;tt&gt;GetWhatToShow&lt;/tt&gt; flags and filter (if any). Any function which 
+ * performs navigation using a @href CATIDOMTreeWalker will automatically 
+ * support any view defined by a @href CATIDOMTreeWalker.
+ * &lt;p&gt;Omitting nodes from the logical view of a subtree can result in a 
+ * structure that is substantially different from the same subtree in the 
+ * complete, unfiltered document. Nodes that are siblings in the 
+ * @href CATIDOMTreeWalker view may be children of different, widely 
+ * separated nodes in the original view. For instance, consider a 
+ * @href CATIDOMNodeFilter that skips all nodes except for Text nodes and 
+ * the root node of a document. In the logical view that results, all text 
+ * nodes will be siblings and appear as direct children of the root node, no 
+ * matter how deeply nested the structure of the original document.
+ * &lt;p&gt;See also the &lt;a href=&#x27;http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113&#x27;&gt;Document Object Model (DOM) Level 2 Traversal and Range Specification&lt;/a&gt;.
+ */
+
+class ExportedByXMLParserItf CATIDOMTreeWalker: public CATBaseUnknown {
+	CATDeclareInterface;
+
+	public:
+
+		/**
+		 * Retrieves the root node of the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt;, as specified 
+		 * when it was created.
+		 *
+		 * @param oRoot
+		 * The root node of the @href CATIDOMTreeWalker
+		 */
+		virtual HRESULT GetRoot(
+			CATIDOMNode_var &amp; oRoot) = 0;
+
+		/**
+		 * Retrieves the attribute which determines which node types are presented via the 
+		 * &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt;. The available set of constants is defined in 
+		 * the @href CATIDOMNodeFilter interface.  Nodes not accepted by 
+		 * @href #GetWhatToShow will be skipped, but their children may still 
+		 * be considered. Note that this skip takes precedence over the filter, 
+		 * if any.
+		 *
+		 * @param oType
+		 * the attribute which determines which node types are presented via the 
+		 * @href CATIDOMTreeWalker
+		 */
+		virtual HRESULT GetWhatToShow(
+			unsigned int&amp; oType) = 0;
+
+		/**
+		 * Retrieves the filter used to screen nodes.
+		 *
+		 * @param oNodeFilter
+		 * the filter used to screen nodes
+		 */
+		virtual HRESULT GetFilter(
+			CATIDOMNodeFilter_var &amp; oFilter) = 0;
+
+		/**
+		 * Retrieves the flag which determines whether the children of entity 
+		 * reference nodes are visible to the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt;. If false, 
+		 * they  and their descendants will be rejected. Note that this 
+		 * rejection takes precedence over @href #GetWhatToShow and the 
+		 * filter, if any. 
+		 * &lt;br&gt; To produce a view of the document that has entity references 
+		 * expanded and does not expose the entity reference node itself, use 
+		 * the @href #GetWhatToShow flags to hide the entity reference node 
+		 * and set @href #GetExpandEntityReferences to true when creating the 
+		 * @href CATIDOMTreeWalker. To produce a view of the document that has 
+		 * entity reference nodes but no entity expansion, use the 
+		 * @href #GetWhatToShow flags to show the entity reference node and 
+		 * set @href #GetExpandEntityReferences to false.
+		 *
+		 * @param oResult
+		 * the flag which determines whether the children of entity 
+		 * reference nodes are visible to the @href CATIDOMTreeWalker.
+		 *
+		 */
+		virtual HRESULT GetExpandEntityReferences(
+			CATBoolean &amp; oResult) = 0;
+
+		/**
+		 * Retrieves the node at which the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; is currently positioned.
+		 * &lt;br&gt;Alterations to the DOM tree may cause the current node to no longer 
+		 * be accepted by the @href CATIDOMTreeWalker &#x27;s associated filter. 
+		 * @href #GetCurrentNode may also be explicitly set to any node, 
+		 * whether or not it is within the subtree specified by the 
+		 * @href #GetRoot node or would be accepted by the filter and 
+		 * @href #GetWhatToShow flags. Further traversal occurs relative to 
+		 * @href #GetCurrentNode even if it is not part of the current view, 
+		 * by applying the filters in the requested direction; if no traversal 
+		 * is possible, @href #GetCurrentNode is not changed.
+		 *
+		 * @param oCurrentNode
+		 * the node at which the @href CATIDOMTreeWalker is currently positioned.
+		 */
+		virtual HRESULT GetCurrentNode(
+			CATIDOMNode_var &amp; oCurrentNode) = 0;
+
+		/**
+		 * Sets the node at which the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; is to be currently positioned.
+		 *
+		 * @param iCurrentNode
+		 * the node at which the @href CATIDOMTreeWalker is to be currently positioned.
+		 *
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2205&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NOT_SUPPORTED_ERR: Raised if an attempt is made to call 
+		 *   @href #SetCurrentNode with a &lt;tt&gt;NULL_var&lt;/tt&gt; argument.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 */
+		virtual HRESULT SetCurrentNode(
+			const CATIDOMNode_var &amp; iCurrentNode) = 0;
+
+		/**
+		 * Moves to and returns the closest visible ancestor node of the current 
+		 * node. If the search for @href #ParentNode attempts to step 
+		 * upward from the @href CATIDOMTreeWalker &#x27;s @href #GetRoot node, or 
+		 * if it fails to find a visible ancestor node, this method retains the 
+		 * current position and returns &lt;tt&gt;NULL_var&lt;/tt&gt;.
+		 *
+		 * @param oParentNode
+		 * The new parent node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node 
+		 *   has no parent  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT ParentNode(
+			CATIDOMNode_var &amp; oParentNode) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the first visible child of the 
+		 * current node, and returns the new node. If the current node has no 
+		 * visible children, returns &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the current 
+		 * node.
+		 * 
+		 * @param oFirstChild
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   visible children  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT FirstChild(
+			CATIDOMNode_var &amp; oFirstChild) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the last visible child of the 
+		 * current node, and returns the new node. If the current node has no 
+		 * visible children, returns &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the current 
+		 * node.
+		 *
+		 * @param oLastChild
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   children  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT LastChild(
+			CATIDOMNode_var &amp; oLastChild) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the previous sibling of the 
+		 * current node, and returns the new node. If the current node has no 
+		 * visible previous sibling, returns &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the 
+		 * current node.
+		 *
+		 * @param oPreviousSibling
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   previous sibling.  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT PreviousSibling(
+			CATIDOMNode_var &amp; oPreviousSibling) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the next sibling of the current 
+		 * node, and returns the new node. If the current node has no visible 
+		 * next sibling, returns &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the current node.
+		 *
+		 * @param oNextSibling
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   next sibling.  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT NextSibling(
+			CATIDOMNode_var &amp; oNextSibling) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the previous visible node in 
+		 * document order relative to the current node, and returns the new 
+		 * node. If the current node has no previous node,  or if the search for 
+		 * &lt;tt&gt;previousNode&lt;/tt&gt; attempts to step upward from the 
+		 * @href CATIDOMTreeWalker &#x27;s @href #GetRoot node,  returns 
+		 * &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the current node.
+		 *
+		 * @param oPreviousNode
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   previous node  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT PreviousNode(
+			CATIDOMNode_var &amp; oPreviousNode) = 0;
+
+		/**
+		 * Moves the &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; to the next visible node in document 
+		 * order relative to the current node, and returns the new node. If the 
+		 * current node has no next node, or if the search for nextNode attempts 
+		 * to step upward from the @href CATIDOMTreeWalker &#x27;s @href #GetRoot 
+		 * node, returns &lt;tt&gt;NULL_var&lt;/tt&gt;, and retains the current node.
+		 *
+		 * @param oNextNode
+		 * The new node, or &lt;tt&gt;NULL_var&lt;/tt&gt; if the current node has no 
+		 *   next node  in the @href CATIDOMTreeWalker &#x27;s logical view.  
+		 */
+		virtual HRESULT NextNode(
+			CATIDOMNode_var &amp; oNextNode) = 0;
+
+};
+CATDeclareHandler(CATIDOMTreeWalker, CATBaseUnknown);
+
+
+#endif // CATIDOMTreeWalker_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMText.html">← 上一页: CATIDOMText.h</a></div>
+        <div><a href="CATISAXAttributeList.html">下一页: CATISAXAttributeList.h →</a></div>
+    </div>
+</body>
+</html>

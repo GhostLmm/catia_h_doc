@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATSurface.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATSurface.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSurSide.html">← 上一页: CATSurSide.h</a></div>
+        <div><a href="CATSurfaceTools.html">下一页: CATSurfaceTools.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSurface_h
+#define CATSurface_h
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+#include &quot;CATGeometry.h&quot;
+#include &quot;CATEvalCommand.h&quot;
+#include &quot;CATIsoParameter.h&quot;
+
+class CATMathGridOfPoints;
+class CATMathGridOfVectors;
+class CATMathFunctionRN;
+class CATMathFunctionXY;
+class CATMathBox;
+class CATMathDirBox;
+class CATMathPoint;
+class CATMathVector;
+class CATMathDirection;
+class CATMathCurve;
+class CATMathSetOfLongs;
+class CATMathTransformation1D;
+class CATMathTransformation2D;
+class CATKnotVector;
+class CATSurParam;
+class CATSurLimits;
+class CATSurEvalCommand;
+class CATSurEvalResult;
+class CATSurEvalLocal;
+class CATSurParamReference;
+class CATGeoFactory;
+class CATCurve;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATSurface ;
+#else
+extern &quot;C&quot; const IID IID_CATSurface ;
+#endif
+
+#ifdef CATCGMIncludeForCompatibility
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSurParam.h&quot;
+#include &quot;CATSurLimits.h&quot;
+#include &quot;CATMathGridOfPoints.h&quot;
+#include &quot;CATMathGridOfVectors.h&quot;
+#include &quot;CATMathFunctionXY.h&quot;
+#include &quot;CATMathSetOfLongs.h&quot;
+#include &quot;CATCurve.h&quot;
+#endif
+
+class CATMathAdvancedBox;
+
+/**
+ * Interface representing the base class of all bi-parameterized
+ * geometric elements. 
+ * &lt;br&gt; A surface can be 
+ * represented by three CATMathFunctionXY (&lt;tt&gt;(FX(x,y), FY(x,y), FZ(x,y))&lt;/tt&gt;), 
+ * that can be retrieved through the
+ * &lt;tt&gt;GetGlobalEquation&lt;/tt&gt; method. &lt;tt&gt;(x,y)&lt;/tt&gt; are the parameters of a point on
+ * the surface. These parameters can also be denoted through &lt;tt&gt;(u,v)&lt;/tt&gt;,
+ * and they are handled 
+ * with the &lt;tt&gt;CATSurParam&lt;/tt&gt; class.
+ * &lt;br&gt;Surfaces can have several patches in each direction,
+ * that are located with a patch number in the first direction &lt;tt&gt;iPatchU&lt;/tt&gt; and
+ * a patch number in the second direction &lt;tt&gt;iPatchV&lt;/tt&gt;. Hence, you can use
+ * a local parameter on a given patch, or a global parameter, that takes in account the
+ * whole surface. Notice that the patch numbers are not necessarily
+ * positive, but their values are consecutive.
+ * &lt;br&gt;&lt;tt&gt;CATSurLimits&lt;/tt&gt; is a class allowing
+ * the surface to be restricted to a part of it. 
+ * The limits 
+ * define the area where the surface may currently be evaluated. It should not
+ * be evaluated outside this area of parameters.
+ * &lt;br&gt;Each type of surface is responsible for the mapping (called Evaluation) between the (u,v) parameters
+ * and their corresponding coordinates in the 3D space . No assumption can be made about
+ * this mapping by a developper who uses these objects, except that it is C2 continuous
+ * (at least twice differentiable).
+ * &lt;br&gt;Multiple evaluations can be performed in one way by defining
+ * a &lt;tt&gt;CATSurCommand&lt;/tt&gt; object, evaluating through the &lt;tt&gt;Eval&lt;/tt&gt;
+ * method and retrieving the results with a &lt;tt&gt;CATSurEvalResult&lt;/tt&gt; object.
+ * @see CATSurParam, CATSurLimits, CATSurEvalCommand, CATSurEvalResult, CATSurEvalLocal
+ */
+class ExportedByCATGMGeometricInterfaces CATSurface : public CATGeometry
+{
+  CATDeclareInterface;
+
+public:
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * Returns the smallest box surrounding a portion of &lt;tt&gt;this&lt;/tt&gt; CATSurface, with regards to
+ * the provided CATSurlimits.
+ * @param iLimits
+ * The limits on the surface
+ * @param ioBox
+ * The box surrounding the surface limited by &lt;tt&gt;iLimits&lt;/tt&gt;.
+ */
+  virtual void GetBox( const CATSurLimits &amp; iLimits,
+                             CATMathBox   &amp; ioBox  ) const = 0;
+
+/**
+ * Returns the mathematical point associated with a CATSurParam.
+ * @param iPosition
+ * The point of the surface.
+ * @param ioPoint
+ * The corresponding mathematical point.
+ */
+  virtual void EvalPoint(const CATSurParam &amp; iPosition,
+                               CATMathPoint &amp; ioPoint )const = 0 ;
+
+/**
+ * Retrieves the first derivatives on a point of &lt;tt&gt;this&lt;/tt&gt; surface. 
+ * @param iParam
+ * The point of the surface.
+ * @param ioDU
+ * The first derivative with respect to to the U parameter.
+ * @param ioDV
+ * The first derivative with respect to to the V parameter.
+ */
+  virtual void EvalFirstDeriv(const CATSurParam   &amp; iParam,
+                                    CATMathVector &amp; ioDU  ,
+                                    CATMathVector &amp; ioDV  ) const = 0;
+
+/**
+ * Retrieves the second derivatives on a point of &lt;tt&gt;this&lt;/tt&gt; surface. 
+ * @param iParam
+ * The point of the surface.
+ * @param ioDU2
+ * The second derivative with respect to to the U parameter.
+ * @param ioDUDV
+ * The second derivative with respect to to the UV parameters.
+ * @param ioDV2
+ * The second derivative with respect to to the V parameter.
+ */
+  virtual void EvalSecondDeriv(const CATSurParam   &amp; iParam,
+                                     CATMathVector &amp; ioDU2 ,
+                                     CATMathVector &amp; ioDUDV,
+                                     CATMathVector &amp; ioDV2 ) const = 0;
+
+/**
+ * Retrieves the third derivatives on a point  of &lt;tt&gt;this&lt;/tt&gt; surface. 
+ * @param iParam
+ * The point of the surface.
+ * @param ioDU3
+ * The third derivative with respect to to the U parameter.
+ * @param ioDU2DV
+ * The third derivative with respect to to the UUV parameters.
+ * @param ioDUDV2
+ * The third derivative with respect to to the UVV parameters.
+ * @param ioDV3
+ * The third derivative with respect to to the V parameter.
+ */
+  virtual void EvalThirdDeriv(const CATSurParam   &amp; iParam ,
+                                    CATMathVector &amp; ioDU3  ,
+                                    CATMathVector &amp; ioDU2DV,
+                                    CATMathVector &amp; ioDUDV2,
+                                    CATMathVector &amp; ioDV3  ) const = 0;
+
+/**
+ * Retrieves the normal at a point  of &lt;tt&gt;this&lt;/tt&gt; surface. 
+ * @param iParam
+ * The point of the surface.
+ * @param ioNormal
+ * The outer normal oriented along &lt;tt&gt; ds/du ^ ds/dv&lt;/tt&gt;.
+ */
+  virtual void EvalNormal(const CATSurParam      &amp; iParam ,
+                                CATMathDirection &amp; ioNormal) const = 0;
+
+
+/**
+ * Retrieves multiple evaluations on a grid of points of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;The method reallocates the memory if necessary.If the number of points 
+ * in U or V is 1, then the evaluation
+ * is done on the low part of the CATSurLimits for this(these) coordinate(s).
+ * @param iBox
+ * The limits of the surface to take into account.
+ * @param iNbOfPointsInU
+ * The number of points to distribute inside the limits on the surface 
+ * first direction.
+ * @param iNbOfPointsInV
+ * The number of points to distribute inside the limits on the surface 
+ * second direction.
+ * @param iCommand
+ * The command precising the requested evaluation types.
+ * @param ioResult
+ * The evaluation at the given points such that the &lt;tt&gt;(UIndex, VIndex)&lt;/tt&gt; point
+ * evaluation is located at the &lt;tt&gt;3*(UIndex + iNbOfPointsInU*VIndex)&lt;/tt&gt; place.
+ */
+  virtual void EvalMultiple(const CATSurLimits      &amp; iBox          ,
+                                  CATLONG32           iNbOfPointsInU,
+                                  CATLONG32           iNbOfPointsInV,
+                            const CATSurEvalCommand &amp; iCommand      ,
+                                  CATSurEvalResult  &amp; ioResult      ) const = 0;
+  
+/**
+ * Retrieves multiple evalutions at a given point of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param iParam
+ * The point of the surface.
+ * @param iCommand
+ * The command precising the requested evaluation types.
+ * @param ioResult
+ * The resulting evaluations.
+ */
+  virtual void EvalLocal(const CATSurParam       &amp; iPoint  ,
+                         const CATSurEvalCommand &amp; iCommand,
+                               CATSurEvalLocal   &amp; ioResult) const = 0;
+
+/**
+ * Creates an isoparametric curve on &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;The curve has the same global parameterization as the surface in this
+ * direction.
+ * @param iIsoParameter
+ * The type of iso parametric curve.
+ * @param iParam
+ * The point of the surface belonging to the curve to create.
+ * @param iWhere
+ * A pointer to the factory for creation.
+ * @return
+ * A pointer to the created curve.
+ */
+  virtual CATCurve *ExtractIsoParametricCurve(const CATIsoParameter  iIsoParameter,
+                                              const CATSurParam    &amp; iParam       ,
+                                                    CATGeoFactory  * iWhere       ) const = 0;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurface is periodic along the first direction.
+ * &lt;br&gt;This method does not take into account the current limitations of 
+ * the surface.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;If the CATSurface is not periodic on the first direction.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the CATsurface is periodic on the first direction.  &lt;/dl&gt;
+ */
+  virtual CATBoolean IsClosedU() const = 0;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurface is periodic along the second direction.
+ * &lt;br&gt;This method does not take into account the current limitations of 
+ * the surface.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ * &lt;dl&gt;
+ *  &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;If the CATSurface is not periodic on the second direction.
+ *  &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the CATsurface is periodic on the second direction. 
+ * &lt;/dl&gt;
+ */
+  virtual CATBoolean IsClosedV() const = 0;
+  
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurface is invariant.
+ * &lt;br&gt;This method does not take into account the current limits of the surface.
+ * @param iTransfo
+ * The tested transformation.
+ * @param ioTransfo2D
+ * The 2D-transformation defining the change of parameterization between &lt;tt&gt;this&lt;/tt&gt; and the transformation of
+ * &lt;tt&gt;this&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this is not output.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of &lt;tt&gt;this&lt;/tt&gt; is geometrically the same as &lt;tt&gt;this&lt;/tt&gt;.
+ * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ */
+  virtual CATBoolean IsInvariant(const CATMathTransformation   &amp; iTransfo    ,
+                                       CATMathTransformation2D * ioTransfo2D = NULL) const = 0;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurface is confused with another surface.
+ * &lt;br&gt;This method does not take into account the current limits of 
+ * the surfaces.
+ * @param iTransfo
+ * The tested transformation.
+ * @param iTSurface
+ * The other surface.
+ * @param ioTransfo2D
+ * The 2D-transformation defining the change of parametrization between the transformation of 
+ * &lt;tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iTSurface&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this is not output.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of &lt;tt&gt;this&lt;/tt&gt; is geometrically the same as &lt;tt&gt;iTSurface&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ */
+  virtual CATBoolean IsConfused(const CATMathTransformation   &amp; iTransfo    ,
+                                const CATSurface              * iTSurface   ,
+                                      CATMathTransformation2D * ioTransfo2D = NULL) const = 0;
+
+/**
+ * Returns the knot vector of &lt;tt&gt;this&lt;/tt&gt; CATSurface first direction.
+ * @return
+ * The pointer to the knot vector. All surfaces return a 
+ * knot vector but this knot vector can be NULL, for example when the surface is a canonical surface.
+ * For half-canonical surfaces such as tabulated surfaces with a non-canonical profile,
+ * the knot vector along U is not NULL.
+ */
+  virtual const CATKnotVector * GetKnotVectorU() const = 0;
+
+/**
+ * Returns the knot vector of &lt;tt&gt;this&lt;/tt&gt; CATSurface second direction.
+ * @return
+ * The pointer to the knot vector.
+ * Note that all surfaces return a knot vector, not only NURBS. 
+ * The knot vector along V can be NULL.
+ */
+  virtual const CATKnotVector * GetKnotVectorV() const = 0;
+
+/**
+ * Creates a CATSurParam on &lt;tt&gt;this&lt;/tt&gt; surface from global parameters.
+ * @param iParamU
+ * The parameter value in the first direction.
+ * @param iParamV
+ * The parameter value in the second direction.
+ * @param ioResult
+ * The resulting parameter.
+ */
+  virtual void CreateParam(const double      &amp; iParamU,
+                           const double      &amp; iParamV,
+                                 CATSurParam &amp; ioResult) const = 0;
+/**
+ * Creates a CATSurParam on &lt;tt&gt;this&lt;/tt&gt; surface from local parameters.
+ * @param iParamU
+ * The local parameter value in the first direction on &lt;tt&gt;iPatchU&lt;/tt&gt;.
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iParamV
+ * The local parameter value in the second direction on &lt;tt&gt;iPatchV&lt;/tt&gt;.
+ * @param iPatchV
+ * The patch number in the second direction.
+ * @param ioResult
+ * The resulting parameter. 
+ */
+  virtual void CreateParam(const double      &amp; iParamU,
+                           const CATLONG32   &amp; iPatchU,
+                           const double      &amp; iParamV,
+                           const CATLONG32   &amp; iPatchV,
+                                 CATSurParam &amp; ioResult) const = 0;
+  
+/**
+ * Returns the current low limit of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param ioParam
+ * The parameter defining the first limit of &lt;tt&gt;this&lt;/tt&gt; CATSurface. 
+ */
+  virtual void GetStartLimit(CATSurParam &amp; ioParam) const = 0 ;
+  
+
+/**
+ * Returns the current high limit of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param ioParam
+ * The parameter defining the last limit of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual void GetEndLimit(CATSurParam &amp; ioParam) const = 0 ;
+  
+
+/**
+ * Returns the current limits of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param ioLimits
+ * The limitations of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual void GetLimits(CATSurLimits &amp; ioLimits) const = 0 ;
+
+/**
+ * Returns the maximum limits of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;This does not take into account the current limits .
+ * @param ioLimits
+ * The maximum limits of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual void GetMaxLimits(CATSurLimits &amp; ioLimits) const = 0 ;
+
+
+
+/**
+ * Returns the limits of an internal patch of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iPatchV
+ * The patch number in the second direction.
+ * @param ioLimits
+ * The limitations of a patch.
+ */
+  virtual void GetInternalLimits(const CATLONG32      iPatchU, 
+                                 const CATLONG32      iPatchV,
+                                       CATSurLimits &amp; ioLimits) const = 0;
+
+
+/**
+ * Returns the maximum limits of an internal patch of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;This does not take into account the current limits .
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iPatchV
+ * The patch number in the second direction.
+ * @param ioLimits
+ * The limits of a patch.
+ */
+  virtual void GetInternalMaxLimits(const CATLONG32      iPatchU,
+                                    const CATLONG32      iPatchV,
+                                          CATSurLimits &amp; oLimits) const = 0 ;
+
+/**
+ * Modifies the current limits of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param iNewLimits
+ * The new current limits.
+ */
+  virtual void SetLimits(const CATSurLimits &amp; iNewLimits) = 0 ;
+  //-------------------------------------------------------------------------
+  //- Equations management methods
+  //-------------------------------------------------------------------------
+/**
+ * Locks any modification of the equations of&lt;tt&gt;this&lt;/tt&gt; CATSurface .
+ */
+  virtual void Lock() = 0 ;
+/**
+ * Unlocks the modifications of the equations of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual void Unlock() = 0 ;
+
+  /**
+ * Retrieves the mathematical equation associated with a patch of
+ * &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;&lt;tt&gt;(ioFx(U,V), ioFy(U,V), ioFz(U,V))&lt;/tt&gt; is then a point of the surface patch.
+ * &lt;br&gt;Before retrieving the equations, you must &lt;tt&gt;Lock&lt;/tt&gt; the surface.
+ * You can then obtained the equations. When you have finished, you &lt;tt&gt;Unlock&lt;/tt&gt; the surface.
+ * The equations are then automatically deleted. 
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iPatchU
+ * The patch number in the second direction.
+ * @param oFx
+ * A pointer to the parametric equation of the first coordinate. 
+ * @param oFy
+ * A pointer to the parametric equation of the second coordinate. 
+ * @param oFz
+ * A pointer to the parametric equation of the third coordinate. 
+ */
+  virtual void GetEquation(const CATLONG32             iPatchU,
+                           const CATLONG32             iPatchV,
+                           const CATMathFunctionXY * &amp; oFx    ,
+                           const CATMathFunctionXY * &amp; oFy    ,
+                           const CATMathFunctionXY * &amp; oFz    ) const = 0;
+
+ /**
+ * Retrieves the mathematical equation associated with
+ * &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * &lt;br&gt;&lt;tt&gt;(ioFx(U,V), ioFy(U,V), ioFz(U,V))&lt;/tt&gt; is then a point of the surface.
+ * &lt;br&gt;Before retrieving the equations, you must &lt;tt&gt;Lock&lt;/tt&gt; the surface.
+ * You can then obtained the equations. When you have finished, you &lt;tt&gt;Unlock&lt;/tt&gt; the surface.
+ * The equations are then automatically deleted. 
+ * @param oFx
+ * A pointer to the parametric equation of the first coordinate. 
+ * @param oFy
+ * A pointer to the parametric equation of the second coordinate. 
+ * @param oFz
+ * A pointer to the parametric equation of the third coordinate. 
+ */
+  virtual void GetGlobalEquation(const CATMathFunctionXY * &amp; oFx,
+                                 const CATMathFunctionXY * &amp; oFy,
+                                 const CATMathFunctionXY * &amp; oFz) const = 0;
+
+/**
+ * Returns a pointer to the mathematical representation of an isoparametric
+ * curve of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param iIsoParameter
+ * The type of iso-parametric curve.
+ * @param iLocation
+ * A point belonging to the curve.
+ * @return
+ * The corresponding mathematical curve, that
+ * has to be managed (deleted) by the caller.
+ */
+  virtual CATMathCurve* GetMathCurve(const CATIsoParameter   iIsoParameter,
+                                     const CATSurParam     &amp; iLocation ) const = 0 ;
+
+/**
+ * Tests whether an isoparametric curve of &lt;tt&gt;this&lt;/tt&gt; CATSurface has a mathematical representation.
+ * @param iIsoParameter
+ * The type of iso-parametric curve.
+ * @param iLocation
+ * A point belonging to the curve.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If an isoparametric curve of &lt;tt&gt;this&lt;/tt&gt; has a mathematical representation.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */ 
+  virtual CATBoolean HasMathCurve(const CATIsoParameter   iIsoParameter,
+                                  const CATSurParam     &amp; iLocation ) const = 0 ;
+
+/**
+ * Retrieves the bounding box including a patch of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iPatchV
+ * The patch number in the second direction.
+ * @param ioBox
+ * The corresponding bounding box.
+ */
+  virtual void GetInternalBoundingBox(const CATLONG32    iPatchU,
+                                      const CATLONG32    iPatchV,
+                                            CATMathBox &amp; ioBox  ) const = 0;
+ 
+/**
+ * Retrieves the maximum bounding box including a patch of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ *&lt;br&gt;This does not take into account the current limitations of the
+ * surface.
+ * @param iPatchU
+ * The patch number in the first direction.
+ * @param iPatchV
+ * The patch number in the second direction.
+ * @param ioBox
+ * The corresponding bounding box.
+ */
+  virtual void GetInternalMaxBoundingBox(const CATLONG32    iPatchU,
+                                         const CATLONG32    iPatchV,
+                                               CATMathBox &amp; ioBox) const = 0;
+
+  /**
+ * The diagnosis of evaluation.
+ * @param CATSurface::NoSolution 
+ *No parameter corresponds to this point
+ * @param CATSurface::SingleSolution
+ *Only one parameter corresponds to this point.
+ *@param CATSurface::MultipleSolution
+ *Several parameters correspond to this point.
+ *@param CATSurface::InfiniteSolution
+ * Infinitely many parameters correspond to this point.
+ */
+        enum CATSolutionDiagnostic { NoSolution , SingleSolution , MultipleSolution , InfiniteSolution } ;
+
+/**
+ * Retrieves the CATSurParam on &lt;tt&gt;this&lt;/tt&gt; CATSurface corresponding to a given CATMathPoint.
+ * &lt;br&gt;This transformation is only available
+ * on canonical objects such as planes, cylinders, cones. If the surface is not canonical, 
+ * the operator throw an exception. For non-canonical surfaces, 
+ * use a projection operator.
+ * @param iPoint
+ * The CATMathPoint whose coordinates are to be transformed as CATSurParam.
+ * @param ioParam
+ * The first corresponding CATSurParam on the surface. 
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ * &lt;dl&gt;&lt;dt&gt; CATSurface::NoSolution  &lt;dd&gt;No parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::SingleSolution  &lt;dd&gt;Only one parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::MultipleSolution&lt;dd&gt;Several parameters correspond to this point.
+ *     &lt;dt&gt; CATSurface::InfiniteSolution &lt;dd&gt;Infinitely many parameters correspond
+ * to this point.
+ *&lt;/dl&gt;
+ */
+  virtual CATSurface::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,
+                                                           CATSurParam  &amp; oIndex ) const = 0 ;
+
+/**
+ * Retrieves the CATSurParam on &lt;tt&gt;this&lt;/tt&gt; CATSurface corresponding to a CATMathPoint.
+ * inside limitations.
+ *&lt;br&gt;This transformation is only available
+ * on canonical objects such as planes, cylinders, cones. If the surface is not canonical,
+ * the operator throws an exception. For non-canonical surface, use a projection operator.
+ * @param iPoint
+ * The CATMathPoint whose coordinates are to be transformed as a CATSurParam.
+ * @param ioParam
+ * The first corresponding CATSurParam on the surface.
+ * @param iInside
+ * The CATSurLimits to take into account for trimming the CATSurface.
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ * &lt;dl&gt;&lt;dt&gt; CATSurface::NoSolution  &lt;dd&gt;No parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::SingleSolution  &lt;dd&gt;Only one parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::MultipleSolution&lt;dd&gt;Several parameters correspond to this point.
+ *     &lt;dt&gt; CATSurface::InfiniteSolution &lt;dd&gt;Infinitely many parameters correspond
+ * to this point.
+ *&lt;/dl&gt;
+ */
+  virtual CATSurface::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,
+                                                           CATSurParam  &amp; ioIndex  ,
+                                                     const CATSurLimits &amp; iInside  ) const = 0 ;
+
+ /**
+ * Retrieves the parameter on an iso-parametric curve of &lt;tt&gt;this&lt;/tt&gt; CATSurface corresponding to a CATMathPoint.
+ * &lt;br&gt; Used for surfaces for which &lt;/tt&gt;GetImplicitEquation&lt;/tt&gt;
+ * returns a non-null pointer.
+ * @param iPoint
+ * The CATMathPoint whose coordinates are to be transformed as a CATSurParam.
+ * @param iIsoparam
+ * The isoparametric curve on which the parameter is computed.
+ * @param iStart
+ * The low limitation to take into account for trimming the CATSurface.
+ * @param iEnd
+ * The high limitation to take into account for trimming the CATSurface.
+ * @param ioLambdaOnIsopar
+ * The corresponding parameter value on the isoparametric curve.
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ * &lt;dl&gt;&lt;dt&gt; CATSurface::NoSolution  &lt;dd&gt;No parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::SingleSolution  &lt;dd&gt;Only one parameter corresponds to this point.
+ *     &lt;dt&gt; CATSurface::MultipleSolution&lt;dd&gt;Several parameters correspond to this point.
+ *     &lt;dt&gt; CATSurface::InfiniteSolution &lt;dd&gt;Infinitely many parameters correspond
+ * to this point.
+ *&lt;/dl&gt;
+ */
+  virtual CATSurface::CATSolutionDiagnostic GetParamOnIsopar( const CATMathPoint    &amp; iPoint,
+                                                              const CATIsoParameter &amp; iIsoparam,
+                                                              const CATSurParam     &amp; iStart,
+                                                              const CATSurParam     &amp; iEnd,
+                                                                    double          &amp; ioLambdaOnIsopar) const = 0 ;
+
+/**
+ * Tests whether two parameters can be considered as different.
+ *&lt;br&gt;This can be used for distinguishing 2 points on both sides of a surface
+ * closure.
+ * @param iW1
+ * The first parameter to compare.
+ * @param iW2
+ * The second parameter to compare.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt; 0 &lt;dd&gt; if they are not considered as different
+ *     &lt;dt&gt; 1 &lt;dd&gt; if they are considered as different&lt;/dl&gt;
+ */
+  virtual CATBoolean Compare( const CATSurParam &amp; iW1,
+                              const CATSurParam &amp; iW2 ) const = 0;
+
+/** Checks if &lt;tt&gt;this&lt;/tt&gt; CATSurface is linear in a or two directions of the parameter.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt; CATIsoParNoDir   &lt;dd&gt; if they is no linearity
+ *     &lt;dt&gt; CATIsoParamU     &lt;dd&gt; if the isoparameters with U constant are lines
+ *     &lt;dt&gt; CATIsoParamV     &lt;dd&gt; if the isoparameters with V constant are lines
+ *     &lt;dt&gt; CATIsoParBothDir &lt;dd&gt; if the isoparameters with U constant or V constant are lines&lt;/dl&gt;
+ */
+  virtual CATIsoParameter IsLinear() const = 0;
+
+/** Checks if &lt;tt&gt;this&lt;/tt&gt; CATSurface is circular in a or two directions of the parameter.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt; CATIsoParNoDir   &lt;dd&gt; if they is no circle on the surface
+ *     &lt;dt&gt; CATIsoParamU     &lt;dd&gt; if the isoparameters with U constant are circles.
+ *     &lt;dt&gt; CATIsoParamV     &lt;dd&gt; if the isoparameters with V constant are circles.
+ *     &lt;dt&gt; CATIsoPaRBothDir &lt;dd&gt; if the isoparameters with U constant or V constant are circles.&lt;/dl&gt;
+ */
+  virtual CATIsoParameter IsCircular() const = 0;
+  
+/**
+ * Returns a pointer to the geometric representation of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ *@return
+ * The pointer to the canonical surface (CATPlane, CATCylinder, CATCone, ..)
+ * of a complex object ( CATDraftSurface, CATFilletSurface) if it exists,
+ *  &lt;tt&gt;this&lt;/tt&gt; otherwise.
+ */
+  virtual const CATSurface * GetGeometricRep() const = 0;
+
+
+  
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+
+/**
+ * @nodoc
+ * Returns a linear transformation which converts the internal
+ * parameter U to the naturel parameter U for implicit surfaces.
+ * For example, the natural parameter of a circle is the angle.
+ */
+  virtual void GetMappingU(CATMathTransformation1D &amp;ioTransfo1D) const = 0;
+
+/**
+ * @nodoc
+ * Returns a linear transformation which converts the real
+ * parameter V to the naturel parameter V for implicit surfaces. 
+ */
+  virtual void GetMappingV(CATMathTransformation1D &amp;ioTransfo1D) const = 0;
+
+/** @nodoc */
+  virtual short GetOrientation( ) const = 0 ;
+/** @nodoc */
+  virtual void  SetOrientation( const short iNewOrientation ) = 0;
+
+
+/**
+ * @nodoc
+ * Returns a pointer to the reference of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * @return
+ * The pointer to the surface reference.
+ */
+  virtual const CATSurParamReference * GetParamReference() const = 0;
+
+
+/**
+ * @nodoc
+ * Use GetMaxLimits.
+ * Retrieves the number of patches on each direction of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual void GetNumberOfComponent( CATLONG32 &amp; oNbOfUPatches,
+                                     CATLONG32 &amp; oNbOfVPatches) const = 0;
+
+
+/**
+ * @nodoc
+ * Creates a new surface, offsetted with regards to &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * The newly created surface is a single surface ( as opposed to the CATOffsetSurface which will refer to this
+ * single surface).
+ */
+  virtual CATSurface * CreateOffset(      CATGeoFactory           * iWhere, 
+                                    const CATLength               &amp; iOffset,
+                                    const CATSurLimits            &amp; iLimits,
+                                          CATMathTransformation2D * &amp;oTransfo2D) const = 0;
+
+
+/**
+ * @nodoc
+ * Returns a pointer to the implicit equation representing &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ *&lt;br&gt;The equation is not restricted to the limits of the surface.
+ * @return
+ * A pointer to the equation of the surface,
+ * &lt;tt&gt;NULL&lt;/tt&gt; whenever no implicit equation exists for that surface type.
+ * The output equation must not be deleted, as part of the object..
+ */
+  virtual CATMathFunctionRN *GetImplicitEquation () const = 0;
+
+/**
+ * @nodoc
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurface has an implicit equation.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If &lt;tt&gt;this&lt;/tt&gt; has an implicit equation.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */ 
+  virtual CATBoolean HasImplicitEquation() const = 0;
+
+ 
+/**
+* @nodoc
+ * Retrieves the CATMathDirBox surrounding the normals of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ *&lt;br&gt;All the normals of the surface ( returned by EvalNormal ) belong to the
+ * CATMathDirBox defined as the set of &lt;br&gt;
+ *{ CATMathDirection Dir such that, 
+ *   Dir * DirBox.GetDirection() &gt; cos ( DirBox.GetSize() ) },&lt;br&gt;
+ * where DirBox = Surface-&gt;GetDirBox() }. 
+ * This method takes into account the current limitations of the surface.
+ */
+  virtual void GetDirBox( CATMathDirBox &amp; oDirBox ) const = 0 ;
+
+/**
+* @nodoc
+ * Retrieves the CATMathDirBox surrounding the normals of &lt;tt&gt;this&lt;/tt&gt; CATSurface patch.
+ *&lt;br&gt;All the normals of the patch ( returned by EvalNormal ) belong to the
+ * CATMathDirBox defined as the set of &lt;br&gt;
+ *{ CATMathDirection Dir such that, 
+ *   Dir * DirBox.GetDirection() &gt; cos ( DirBox.GetSize() ) },&lt;br&gt;
+ * where DirBox = Surface-&gt;GetDirBox() }.
+ * This methods takes into account the current limitations of the surface.
+ */
+  virtual void GetInternalDirBox(const CATLONG32       iPatchU,
+                                 const CATLONG32       iPatchV,
+                                       CATMathDirBox &amp; oDirBox) const = 0;
+  
+
+
+// Deprecated
+ /** @nodoc */
+  virtual void Eval(const CATSurLimits         &amp; iBoxToEvaluate,
+                          CATEvalCommand         iCommand      ,
+                          CATMathGridOfPoints  * iPointm       ,
+                          CATMathGridOfVectors * iVectord1     ,
+                          CATMathGridOfVectors * iVectord2     ) const = 0;
+
+ /**
+ * Retrieves the normal at a point  of &lt;tt&gt;this&lt;/tt&gt; surface. 
+ * The CATSurface::EvalNormal signature which returns a void should be preferred 
+ * over the present API.
+ * @param iParam
+ * The CATSurParam which defines the point of the surface.
+ * @return
+ * The outer normal oriented along &lt;tt&gt; ds/du ^ ds/dv&lt;/tt&gt;.
+ */
+  virtual CATMathDirection EvalNormal(const CATSurParam &amp; iParam) const = 0;
+
+ /**
+ * Returns the mathematical point associated with a CATSurParam. 
+ * The CATSurface::EvalPoint signature which returns a void should be preferred 
+ * over the present API.
+ * @param iParam
+ * The CATSurParam parameter.
+ * return
+ * The corresponding mathematical point.
+ */
+  virtual CATMathPoint EvalPoint(const CATSurParam &amp; iParam) const = 0;
+
+ /**
+ * Creates a CATSurParam on &lt;tt&gt;this&lt;/tt&gt; surface from global parameters.
+ * The CATSurface::CreateParam signature which returns a void should be preferred
+ * over the present API.
+ * @param iUParam
+ * The parameter value in the first direction.
+ * @param iVParam
+ * The parameter value in the second direction.
+ * @return
+ * The resulting parameter.
+ */
+  virtual CATSurParam CreateParam(const double &amp; iUParam,
+                                  const double &amp; iVParam) const = 0;
+/**
+ * Creates a CATSurParam on &lt;tt&gt;this&lt;/tt&gt; surface from local parameters.
+ * The CATSurface::CreateParam signature which returns a void should be preferred
+ * over the present API.
+ * @param iUParam
+ * The local parameter value in the first direction on &lt;tt&gt;iPatchU&lt;/tt&gt;.
+ * @param iUNum
+ * The patch number in the first direction.
+ * @param iVParam
+ * The local parameter value in the second direction on &lt;tt&gt;iPatchV&lt;/tt&gt;.
+ * @param iVNum
+ * The patch number in the second direction.
+ * @return
+ * The resulting parameter. 
+ */
+  virtual CATSurParam CreateParam(const double    &amp; iUParam,
+                                  const CATLONG32 &amp; iUNum  ,
+                                  const double    &amp; iVParam,
+                                  const CATLONG32 &amp; iVNum  ) const = 0;
+ /**
+ * Returns the current limitations of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * The CATSurface::GetLimits signature which returns a void should be preferred
+ * over the present API.
+ * @return
+ * The limitations of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual CATSurLimits GetLimits() const = 0;
+ /**
+ * Returns the high limitation of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * The CATSurface::GetEndLimit signature which returns a void should be preferred
+ * over the present API.
+ * @return
+ * The CATSurParam which defines the high limitation of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual CATSurParam GetEndLimit() const = 0;
+ /**
+ * Returns the low limitation of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ * The CATSurface::GetStartLimit signature which returns a void should be preferred
+ * over the present API.
+ * @return
+ * The CATSurParam which defines the low limitation of &lt;tt&gt;this&lt;/tt&gt; CATSurface.
+ */
+  virtual CATSurParam GetStartLimit() const = 0;
+
+ /** @nodoc */
+  virtual CATSurLimits GetInternalLimits(const CATLONG32 iIndexU,
+                                         const CATLONG32 iIndexV) const = 0;
+
+ /** @nodoc */
+  virtual CATSurLimits GetMaxLimits() const = 0;
+ 
+/** @nodoc */
+  virtual CATSurLimits GetInternalMaxLimits(const CATLONG32 iIndexU,
+                                            const CATLONG32 iIndexV) const = 0;
+
+ /** @nodoc */
+  virtual CATMathBox GetInternalBoundingBox(const CATLONG32 iUNum,
+                                            const CATLONG32 iVNum) const = 0;
+
+ /** @nodoc */
+  virtual CATMathBox GetInternalMaxBoundingBox(const CATLONG32 iUNum,
+                                               const CATLONG32 iVNum) const = 0;
+
+ /**
+  * @nodoc
+  * @return 0 on success, negative number upon error
+  */
+  virtual int GetAdvancedBox                   (const CATSurLimits       &amp; iLimits,
+                                                      CATMathAdvancedBox &amp; ioBox  ) const = 0;
+ /**
+  * @nodoc
+  * @return 0 on success, negative number upon error
+  */
+  virtual int GetInternalMaxAdvancedBoundingBox(const CATLONG32            iUNum,
+                                                const CATLONG32            iVNum,
+                                                      CATMathAdvancedBox &amp; ioBox) const = 0;
+
+/** @nodoc */
+  virtual CATMathSetOfLongs * GetNumberOfComponent() const = 0;
+ /** @nodoc */
+  virtual void                OpenEquation        () const = 0;
+/** @nodoc */
+  virtual void                CloseEquation       () const = 0;
+
+
+/** @nodoc */
+  virtual void PropagateQuery(      CATICGMUnknown     * iFrom  ,
+                              const CATSurLimits       &amp; iLimits,
+                                    CATCGMQueryManager &amp; iQuery ) = 0;
+
+};
+  CATDeclareHandler(CATSurface,CATGeometry);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSurSide.html">← 上一页: CATSurSide.h</a></div>
+        <div><a href="CATSurfaceTools.html">下一页: CATSurfaceTools.h →</a></div>
+    </div>
+</body>
+</html>

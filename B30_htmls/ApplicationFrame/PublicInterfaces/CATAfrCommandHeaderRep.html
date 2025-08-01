@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATAfrCommandHeaderRep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATAfrCommandHeaderRep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAfrCheckHeaderAccessor.html">← 上一页: CATAfrCheckHeaderAccessor.h</a></div>
+        <div><a href="CATAfrCommandHeaderServices.html">下一页: CATAfrCommandHeaderServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+
+#ifndef CATAfrCommandHeaderRep_h
+#define CATAfrCommandHeaderRep_h
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U2
+*/
+
+// System Framework
+#include &quot;CATCommand.h&quot; // to derive from
+
+#include &quot;ApplicationFrame.h&quot;
+
+class CATString ;
+class CATDialog ;
+class CATSysWeakRef;
+
+/**
+* Base class to create a customized representation for a command header.
+* &lt;b&gt;Role:&lt;/b&gt;This class is the base class to create a customized representation
+* for a @href CATCommandHeader class. This customized command header must 
+* derive from the @href CATAfrDialogCommandHeader class, and must implement
+* the @href CATIAfrCommandHeaderRep interface. This interface contains three
+* methods to overload the default representation of the command header into a toolbar, 
+* the menubar or a contextual menu. In most cases, only one method creates an instance
+* of a class deriving from &lt;tt&gt;CATAfrCommandHeaderRep&lt;/tt&gt;, and the two others 
+* create nothing. 
+* &lt;p&gt;The @href #Build method is automatically called just after the instantiation
+* of the class deriving from &lt;tt&gt;CATAfrCommandHeaderRep&lt;/tt&gt;. This method generally 
+* creates dialog object, whose the dialog parent is the first argument of the constructor, 
+* and that you retrieve with the @href #GetDialogParent method.&lt;/p&gt;
+* &lt;p&gt;It is strongly recommended to read User Interfaces articles about 
+* command header into the CAA Encyclopedia before to creating such classes. You will learn
+* how to manage the multi-representation, and more generally how to &quot;refresh&quot; all the 
+* instances of the representations.&lt;/p&gt;
+*/ 
+class ExportedByApplicationFrame CATAfrCommandHeaderRep : public CATCommand
+{
+
+public:
+  
+  /**
+  * Constructs a customized representation for a command header.
+  * @param iParent
+  * The Dialog parent of dialog objects created by the @href #Build method. 
+  * @param iCommandName
+  * The name of the command. It is the argument of the @href CATCommand class
+  * constructor. This name can be the same for all instances of the current class.
+  */
+  CATAfrCommandHeaderRep(const CATDialog * iParent, CATString &amp; iCommandName);
+
+  virtual ~CATAfrCommandHeaderRep() ;
+
+  /**
+  * Creates the customized representation.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method instantiates Dialog objects whose the dialog parent is
+  * the value returned by the @href #GetDialogParent method.
+  */
+  virtual HRESULT Build() = 0;
+
+  /**
+  * Retrieves the dialog parent.
+  * @param ioParent
+  * The first argument of the @href #CATAfrCommandHeaderRep constructor.
+  * @return an HRESULT value
+  * &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;:
+  * &lt;ol&gt;
+  * &lt;li&gt; S_OK if success&lt;/li&gt;
+  * &lt;li&gt; E_FAIL otherwise &lt;/li&gt;
+  * &lt;/ol&gt;
+  */
+  HRESULT GetDialogParent(const CATDialog ** ioParent);
+ 
+private:
+
+  // Copy constructor, not implemented
+  // Set as private to prevent from compiler automatic creation as public.
+  CATAfrCommandHeaderRep(const CATAfrCommandHeaderRep &amp;iObjectToCopy);
+
+  // Assignment operator, not implemented
+  // Set as private to prevent from compiler automatic creation as public.
+  CATAfrCommandHeaderRep &amp; operator = (const CATAfrCommandHeaderRep &amp;iObjectToCopy);
+
+  const CATDialog    * _pParent ;
+  CATSysWeakRef      * _parentWeakRef;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAfrCheckHeaderAccessor.html">← 上一页: CATAfrCheckHeaderAccessor.h</a></div>
+        <div><a href="CATAfrCommandHeaderServices.html">下一页: CATAfrCommandHeaderServices.h →</a></div>
+    </div>
+</body>
+</html>

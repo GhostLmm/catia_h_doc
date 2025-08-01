@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATGraphicPrimitive.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATGraphicPrimitive.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATGraphicMaterial.html">← 上一页: CATGraphicMaterial.h</a></div>
+        <div><a href="CATIVisCGRAdhesionSettingAtt.html">下一页: CATIVisCGRAdhesionSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATGraphicPrimitive_H
+#define CATGraphicPrimitive_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//******************************************************************************
+//  Inheritance:
+//  ------------
+//                CATGraphicPrimitive
+//                  CATBaseUnknown (SYSTEM framework)
+//******************************************************************************
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;list.h&quot;
+#include &quot;CATMutex.h&quot;
+#include &quot;CATSysAllocator.h&quot;
+#include &quot;CATMappingOperator.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATListPV.h&quot;
+#include &quot;CATVizMacForMetaClass.h&quot;
+
+class CATRender;
+class CATStreamer;
+class CATMappingOperator;
+class CATVizPrimitive;
+class CATCacheOfDestroyedElements;
+
+/**
+ * @nodoc 
+ * The data is allocated by the CATGraphicPrimitive and must be deleted by it.
+ */
+#define ALLOCATE         1
+
+/**
+ * @nodoc 
+ * The data is not allocated by the CATGraphicPrimitive.
+ */
+#define DONT_ALLOCATE    0
+
+/**
+ * @nodoc 
+ */
+#define INVALID_STORAGEID      0x7fffffff  //max value for a 31 bits unsigned int 
+
+
+/**
+ * @nodoc
+ * Flag to specify whether the tessellation of lines and polylines stand for real lines and polylines
+ * or for tesselated curves.
+ * @param LINE
+ *    The tessellation stands for real lines or polylines.
+ * @param CURVE
+ *    The tessellation stands for curves.
+ * @param INFINITE_LINE
+ *    The tessellation stands for infinite lines.
+ */
+enum TessFlag { 
+  LINE,
+  CURVE,
+  INFINITE_LINE
+};
+
+/**
+ * Base class of Graphic Primitives. It contains the graphic datas that are to be shown on the
+ * screen. We can either find 2d or 3d graphic data lying under this object.
+ * You cannot delete a graphic primitive. You must use the 
+ * CATGraphicPrimite::Destroy static method to delete a graphic primitive.
+ * The differed destruction is activated between the culling and the 
+ * drawing processing.
+ * The underlying inheritance tree looks like that:
+ * &lt;br&gt;
+ * &lt;pre&gt;
+ *      CATGraphicPrimitive &lt;-- CAT3DBoundingGP &lt;-- CAT3DFaceGP
+ *                                              &lt;-- CAT3DCylinderGP
+ *                                              &lt;-- ...
+ *                          &lt;-- CAT2DImagePixelGP
+ *                          &lt;-- CAT3DMarkerGP
+ *&lt;/pre&gt;
+ * Objects that inherits from a CAT3DBoundingGP are the ones that may require
+ * the services provided by a bounding box. This is only valid for 3d data.
+ * Objects that have no graphic datas (in terms of triangles) directly
+ * inherit from a CATGraphicPrimitive.
+ */
+class ExportedByCATViz CATGraphicPrimitive : public CATBaseUnknown
+{
+  /** @nodoc */
+  CATDeclareClass;
+  /** @nodoc */
+  CATVizDeclareClass;
+
+  /** @nodoc */
+  friend class CATCacheOfDestroyedElements;
+
+  public:
+  /** @nodoc */
+  void *operator new(size_t iSize,void *iAllocType=NULL,
+      void *iAddr=NULL,int iReservedSize=0);
+
+  /** @nodoc */
+  void operator delete(void *iAddr);
+
+#ifdef _WINDOWS_SOURCE
+  /** @nodoc */
+  void operator delete(void *iAddr,void *iAllocType,
+      void *iRefAddr,int iReservedSize);
+#endif
+
+  /**
+   * Default constructor
+   */
+  CATGraphicPrimitive (void);
+
+  /**
+   * @nodoc
+   * Streaming
+   */
+  virtual void Stream(CATStreamer&amp; oStr,int iSaveType=0);
+
+  /**
+   * @nodoc
+   * Streaming
+   */
+  virtual void UnStream(CATStreamer&amp; iStr);
+
+  /**
+   * @nodoc
+   * Skips the unstreaming of a graphic primitive.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;: This method can be used when you do not want
+   * to unstream a graphic primitive. It is used like this :&lt;br&gt;
+   * CATGraphicPrimitive::Skip(str);
+   * @param iStr
+   *   The streamer used to unstream the graphic primitives.
+   */
+  static void Skip(CATStreamer &amp; iStr);
+
+  /**
+   * Draws the graphic primitive.
+   * @param iRender
+   *    The render through which the graphic primitive is drawn.
+   */
+  virtual void Draw (CATRender &amp;iRender) = 0;
+
+  /**
+   * @nodoc
+   * Uses a Mapping operator to find the coordinates.
+   */
+  virtual void ComputeTextureCoordinates (const CATMappingOperator &amp;op);
+
+  /**
+   * @nodoc
+   * Overloading of the CATBaseUnknown::AddRef() method
+   */
+  virtual ULONG   __stdcall AddRef();
+
+  /**
+   * @nodoc
+   * Overloading of the CATBaseUnknown::Release() method in order
+   * to use CATGraphicPrimitive::Destroy method rather than the standard delete.
+   */
+  virtual ULONG   __stdcall Release() ;
+
+  /**
+   * @nodoc
+   * Differed destruction.
+   * Locks the differed destruction.
+   */
+  //static void Lock    (void);
+
+  /**
+   * @nodoc
+   * Differed destruction
+   * Unlocks and Destroys all memorized primitives.
+   */
+  //static void Unlock  (void);
+
+  /**
+   * Memorizes the primitive destruction or deletes it if the differed
+   * destruction is not active.
+   * @param iGPToDestroy
+   *    Pointer on the Graphic Primitive to destroy.
+   */
+  static void Destroy (CATGraphicPrimitive * iGPToDestroy);
+
+  /**
+   * @nodoc
+   * When CGMId is not 0, it is the CGM pesistent tag
+   * of the Topological face associate with the GP.
+   */
+  inline unsigned int GetCGMId();
+
+  /**
+   * @nodoc
+   * Do not use this method.
+   * We provide internaly the right CGM tag.
+   */
+  inline void SetCGMId(unsigned int iId);
+
+
+  /**
+   * @nodoc
+   * Return S_OK if the GP is decorated.
+   * Gives you a copy of the GP&#x27;s decoration. If you Get S_OK and oDecoration is NULL
+   * it means that the decoration is of type UNKNOWN.
+   * Use delete[] to clean the buffer iDecoration
+   */
+  HRESULT GetDecoration(char*&amp; oDecoration, int&amp; oSize);
+
+  /**
+   * @nodoc
+   * return 1 if there is a decoration
+   * return 0 if there is no decoration
+   */
+  int IsDecoration(void);
+
+  /**
+   * @nodoc.
+   * You can store additionnal informations on the GP.
+   * You just have to provide an array of byte and its size.
+   */
+  void SetDecoration(const char* iDecoration, int iSize);
+
+  /**
+   * @nodoc
+   */
+  static const char *GetUnknownDecoration();
+
+  /**
+   * @nodoc.
+   */
+  virtual void Empty();
+
+  /**
+   * @nodoc
+   */
+  virtual int DetailCulling(CATRender *render);
+
+  /**
+   * @nodoc
+   */
+  virtual void ResetDLs(); //SVQ_JUT
+
+  /**
+   * @nodoc
+   */
+  virtual CATVizPrimitive * GetVizPrimitive(int &amp;oAllocateMode);//SVQ_JUT
+
+  /**
+   * @nodoc
+   */
+  virtual void SetVizPrimitive(CATVizPrimitive * iPrimitive, int iAllocateMode); //SVQ_JUT
+
+  protected :
+
+  // Differed destruction parameters:
+  // --------------------------------
+
+  virtual ~CATGraphicPrimitive (void);
+  static void Reset  (void); 
+
+  static CATMutex             _mutexGP;
+  static const char           _gpUnknownDecoration;
+
+
+  private :
+
+  // Semantic decoration
+  // -------------------
+  unsigned int _CGMId;
+  char* _pDMUdecoration;
+};
+
+inline unsigned int CATGraphicPrimitive::GetCGMId() {return _CGMId;}
+
+inline void CATGraphicPrimitive::SetCGMId(unsigned int id) {_CGMId = id;}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATGraphicMaterial.html">← 上一页: CATGraphicMaterial.h</a></div>
+        <div><a href="CATIVisCGRAdhesionSettingAtt.html">下一页: CATIVisCGRAdhesionSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIDatumFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIDatumFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIContainerOfDocument.html">← 上一页: CATIContainerOfDocument.h</a></div>
+        <div><a href="CATIFVertex.html">下一页: CATIFVertex.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDatumFactory_h
+#define CATIDatumFactory_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATImportSettingBehavior.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#ifndef CATIAV5R16
+#include &quot;CATListOfCATCells.h&quot;
+#else
+class CATLISTP(CATCell);
+#endif
+class CATBody;
+class CATListValCATBaseUnknown_var;
+class CATListValCATISpecObject_var;
+class CATINewDuplicate_var;
+class CATIContainer_var;
+class CATPathElement;
+
+#include &quot;CATFormat.h&quot; 
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIDatumFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIDatumFactory;
+#endif
+
+
+/**
+ * Interface to create datum features.
+ * &lt;b&gt;Role&lt;/b&gt;: A datum feature is a geometrical feature (@href CATIGeometricalElement ) without
+ * geometrical specification. It is created with a topological object (a &lt;tt&gt;CATBody&lt;/tt&gt;)
+ * which represents its result. 
+ * &lt;p&gt;For a geometrical feature there is only one &lt;tt&gt;CATBody&lt;/tt&gt; and 
+ * a &lt;tt&gt;CATBody&lt;/tt&gt; can only be associated with one geometrical feature. So do not use the same 
+ * &lt;tt&gt;CATBody&lt;/tt&gt; for two instances of datum.&lt;/p&gt;
+ * &lt;p&gt;This interface contains two methods which create the new
+ * geometrical element into the current set ( @href CATIMechanicalRootFactory ). If the current set 
+ * is not available, a new one can be created to insert the new feature.&lt;/p&gt;
+ * This interface is implemented by the specification container of the Part Document 
+ * that you can retrieve by these two interfaces:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATIContainerOfDocument#GetSpecContainer &lt;/li&gt;
+ * &lt;li&gt;@href CATInit#GetRootContainer &lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+class ExportedByMecModItfCPP CATIDatumFactory: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+
+/**
+ * @nodoc
+ * Creates a datum feature.
+ * @param iList
+ *  The list should contain one element, the &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the 
+ * geometrical feature.
+ */ 
+   virtual CATISpecObject_var InstanciateDatum( CATListValCATBaseUnknown_var* iList) = 0;
+
+/**
+ * @nodoc
+ * Creates a datum feature with a name.
+ * @param iUserName
+ *  The user name of the returned datum feature.
+ * @param iList
+ *  The list should contain one element, the &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the 
+ * geometrical feature.
+ */ 
+   virtual CATISpecObject_var InstanciateDatum( const CATUnicodeString&amp; iUserName, 
+                                                CATListValCATBaseUnknown_var* iList) = 0 ; 
+
+#ifdef CATIAV5R16
+/*EQN : declared locally in CATMfDatumFactory.h of MechanicalModeler
+   virtual CATISpecObject_var InstanciatePoint( CATListValCATBaseUnknown_var* lst) = 0;
+   virtual CATISpecObject_var InstanciateLine ( CATListValCATBaseUnknown_var* lst) = 0;
+   virtual CATISpecObject_var InstanciatePlane( CATListValCATBaseUnknown_var* lst) = 0;
+*/
+/*EQN : Suppression of the 2 following methods never used. The second depends of the first.
+ * nodoc.
+   virtual CATISpecObject_var InstanciateDatum( CATINewDuplicate_var EntiyToDuplicate, CATIContainer_var GeomCont) = 0 ;
+
+ * nodoc.
+   virtual CATLISTV(CATISpecObject_var) InstanciateData( CATINewDuplicate_var EntiyToDuplicate, CATIContainer_var GeomCont , const CATFormat* format = NULL) = 0;
+ */
+#else
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciatePoint( CATListValCATBaseUnknown_var* lst) = 0;
+
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciateLine ( CATListValCATBaseUnknown_var* lst) = 0;
+
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciatePlane( CATListValCATBaseUnknown_var* lst) = 0;
+
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciateDatum( CATINewDuplicate_var EntiyToDuplicate, CATIContainer_var GeomCont) = 0 ;
+
+/**
+ * @nodoc.
+ */
+   virtual CATLISTV(CATISpecObject_var) InstanciateData( CATINewDuplicate_var EntiyToDuplicate, CATIContainer_var GeomCont , const CATFormat* format = NULL) = 0;
+
+#endif
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciateDatum( CATPathElement* EditedPath, CATPathElement* SelectedPath, int* ImportCreationInd = NULL,CATImportSettingBehavior iSettingBehavior = UseSettingValue ) = 0 ;
+
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciateDatum( CATPathElement* EditedPath, CATPathElement* SelectedPath, CATClassId intfname, int* ImportCreationInd = NULL,CATImportSettingBehavior iSettingBehavior = UseSettingValue) = 0 ; 
+
+
+#ifdef CATIAV5R16
+/*EQN : Declared locally in CATMfDatumFactory.h of MechanicalModeler
+   virtual CATISpecObject_var InstanciateCircle(CATListValCATBaseUnknown_var* liste) = 0;
+*/ 
+#else
+/**
+ * @nodoc.
+ */
+   virtual CATISpecObject_var InstanciateCircle(CATListValCATBaseUnknown_var* liste) = 0;
+#endif
+
+/**
+ * Creates a datum feature.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method creates a datum feature with an automatic naming for
+ * the cells. 
+ * @param iBody
+ *  The &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the geometrical feature.
+ * @param oDatumFeature
+ * The new geometrical feature. Depending on the content of the &lt;tt&gt;CATBody&lt;/tt&gt;, it can be:
+ *  &lt;ul&gt;
+ *   &lt;li&gt;a Point, a Line, a Circle, a Plane feature: The &lt;tt&gt;CATBody&lt;/tt&gt; has only one domain&lt;/li&gt;
+ *   &lt;li&gt;a GSMZeroDim,GSMMonoDim,GSMBiDim, Solid: The &lt;tt&gt;CATBody&lt;/tt&gt; has several 
+ *  domains with the same dimension. Respectively 0,1, 2 and 3.&lt;/li&gt;
+ *   &lt;li&gt;a GeometricalElement3D feature, otherwise &lt;/li&gt;
+ *  &lt;/ul&gt;
+ */ 
+  virtual HRESULT InstanciateDatum(CATBody* iBody,CATISpecObject* &amp;oDatumFeature) = 0;
+
+/**
+ * Creates a datum feature.
+ * @param iBody
+ *  The &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the geometrical feature.
+ * @param iGNUserCells
+ *  The list of followed cells (&lt;tt&gt;CATCell&lt;/tt&gt;). A followed cell is
+ *     &lt;ul&gt;
+ *      &lt;li&gt;The faces of a solid,&lt;/li&gt;
+ *      &lt;li&gt;The boundary edges and the faces of a shell,&lt;/li&gt;
+ *      &lt;li&gt;The extremity vertices and the edges of a wire.&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iUserKeys
+ *  The list of corresponding keys. (Only number keys are authorized). 
+ * @param oDatumFeature
+ * The new geometrical feature. Depending on the content of the &lt;tt&gt;CATBody&lt;/tt&gt;, it can be:
+ *  &lt;ul&gt;
+ *   &lt;li&gt;a GSMZeroDim,GSMMonoDim,GSMBiDim, Solid: The &lt;tt&gt;CATBody&lt;/tt&gt; has several 
+ *  domains with the same dimension. Respectively 0,1, 2 and 3.&lt;/li&gt;
+ *   &lt;li&gt;a GeometricalElement3D feature, otherwise &lt;/li&gt;
+ *  &lt;/ul&gt;
+ */
+  virtual HRESULT InstanciateDatum(CATBody* iBody,CATLISTP(CATCell)* iGNUserCells,CATListOfCATUnicodeString* iUserKeys,CATISpecObject* &amp;oDatumFeature) = 0;
+
+
+};
+
+CATDeclareHandler(CATIDatumFactory, CATBaseUnknown);
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIContainerOfDocument.html">← 上一页: CATIContainerOfDocument.h</a></div>
+        <div><a href="CATIFVertex.html">下一页: CATIFVertex.h →</a></div>
+    </div>
+</body>
+</html>

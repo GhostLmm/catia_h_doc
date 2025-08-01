@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseCorner.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseCorner.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseConnect.html">← 上一页: CATIGSMUseConnect.h</a></div>
+        <div><a href="CATIGSMUseCoupling.html">下一页: CATIGSMUseCoupling.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+/* -*-c++-*- */
+#ifndef CATIGSMUseCorner_H
+#define CATIGSMUseCorner_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATGSMOrientation.h&quot;
+#include &quot;CATIGSMUseDirection.h&quot;
+#include &quot;CATGSMCornerDef.h&quot;
+
+class CATMathVector;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUseCorner;
+#else
+extern &quot;C&quot; const IID   IID_CATIGSMUseCorner;
+#endif
+
+/**
+ * Corner feature. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to access data of the Corner feature created by using two elements,
+ * their orientation (same or inverse than the underlying curve), 
+ * a support (only for Corner On Support), 
+ * and a radius
+ * @see CATIGSMUseFactory#CreateCorner 
+ * @see CATIGSMUseFactory#Create3DCorner 
+ */
+class ExportedByCATGSMUseItf CATIGSMUseCorner : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public:
+  /**
+    * Gets the first reference element  (a curve or a point).
+    *   @param oElem
+    *      first reference element 
+    * @see CATIMmiMechanicalFeature
+    */ 
+ virtual    HRESULT GetFirstElem(CATIMmiMechanicalFeature_var &amp; oElem)= 0;
+
+  /**
+    * Sets the first reference element  (a curve or a point).
+    *   @param iElem
+    *      first reference element 
+    * @see CATIMmiMechanicalFeature
+    */ 
+ virtual    HRESULT  SetFirstElem(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+  /**
+    * Gets the second reference element (a curve).
+    *   @param oElem
+    *      second reference element 
+    * @see CATIMmiMechanicalFeature
+    */
+ virtual    HRESULT GetSecondElem(CATIMmiMechanicalFeature_var &amp; oElem)= 0;
+
+  /**
+    * Sets the second reference element (a curve).
+    *   @param iElem
+    *      second reference element 
+    * @see CATIMmiMechanicalFeature
+    */
+ virtual    HRESULT  SetSecondElem(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+  /**
+    * Gets the support of the corner (a plane or a surface).
+    *   @param oElem
+    *      support of the corner
+    * @see CATIMmiMechanicalFeature
+    */
+ virtual    HRESULT GetSupport(CATIMmiMechanicalFeature_var &amp; oElem)= 0;
+
+  /**
+    * Sets the support of the corner (a plane or a surface).
+    *   @param iElem
+    *      support of the corner
+    * @see CATIMmiMechanicalFeature
+    */
+ virtual    HRESULT  SetSupport(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+  /**
+    * Gets the radius of the corner.
+    *   @param oRadius
+    *      Radius
+    */
+ virtual    HRESULT  GetRadius(double &amp; oRadius)= 0;
+
+  /**
+    * Gets the radius of the corner.
+    *   @param oRadius
+    *      Radius
+    */
+ virtual    HRESULT GetRadius(CATICkeParm_var &amp; oRadius) = 0;
+ 
+  /**
+    * Sets the radius of the corner.
+    *   @param iRadius
+    *      Radius
+    */ 
+ virtual    HRESULT  SetRadius(double iRadius) = 0;
+
+  /**
+    * Sets the radius of the corner.
+    *   @param Radius
+    *      Radius
+    * @see CATICkeParm
+    */ 
+ virtual    HRESULT  SetRadius(const CATICkeParm_var iRadius) = 0;
+ 
+  /**
+    * Gets the first reference element orientation used to compute the corner.
+    * Orientation specifies corner center position
+    *
+    * Orientation is same or inverse than the result of the cross product:
+    * Normal(support) ^ Tangent(FirstReferenceCurve)
+    *
+    *   @param oOrientation
+    *      first orientation 
+    * @see CATGSMOrientation
+    */
+ virtual    HRESULT GetFirstOrientation(CATGSMOrientation &amp; oOrientation)= 0;
+
+  /**
+    * Sets the first reference element orientation used to compute the corner.
+    * Orientation specifies corner center position
+    *
+    * Orientation is same or inverse than the result of the cross product:
+    * Normal(support) ^ Tangent(FirstReferenceCurve)
+    *
+    *   @param iOrientation
+    *      first orientation 
+    * @see CATGSMOrientation
+    */
+ virtual    HRESULT  SetFirstOrientation (CATGSMOrientation iOrientation) = 0;
+
+  /**
+    * Gets the second reference element orientation used to compute the corner.
+    * Orientation specifies corner center position
+    *
+    * Orientation is same or inverse than the result of the cross product:
+    * Normal(support) ^ Tangent(SecondReferenceCurve)
+    *
+    *   @param oOrientation
+    *      second orientation 
+    * @see CATGSMOrientation
+    */
+ virtual    HRESULT GetSecondOrientation(CATGSMOrientation &amp; oOrientation)= 0;
+
+
+  /**
+    * Sets the second reference element orientation used to compute the corner.
+    * &lt;br&gt; 
+    * Orientation specifies corner center position
+    * Orientation is same or inverse than the result of the cross product:
+    * Normal(support) ^ Tangent(SecondReferenceCurve)
+    *
+    *   @param iOrientation
+    *      second orientation 
+    * @see CATGSMOrientation
+    */
+ virtual    HRESULT  SetSecondOrientation(CATGSMOrientation iOrientation) = 0;
+ 
+  /**
+    * Queries whether references curves are trimmed or not.
+    *   @param Trim
+    *      Trim Option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT GetTrim(CATBoolean &amp; oTrim)= 0;
+
+  /**
+    * Sets or unsets the trim option of the references curves.
+    *   @param iTrim
+    *      Trim Option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT  SetTrim(CATBoolean iTrim) = 0;
+
+  /**
+    * Queries whether references curves are trimmed or not.
+    *   @param oTrimMode
+    * NB : For compatibility reasons, trimming options GSMCornerTrimElement1 &amp; 2 
+    * are active only if discrimination index is not null.
+    * @see CATGSMCornerTrimMode
+    */
+ virtual    HRESULT GetTrimMode(CATGSMCornerTrimMode &amp; oTrimMode)= 0;
+
+  /**
+    * Sets the trim mode of the references curves.
+    *   @param iTrimMode
+    * NB : For compatibility reasons, trimming options GSMCornerTrimElement1 &amp; 2 
+    * are active only if discrimination index is not null.
+    * @see CATGSMCornerTrimMode
+    */
+ virtual    HRESULT  SetTrimMode(CATGSMCornerTrimMode iTrimMode) = 0;
+
+  /**
+  * Gets the Normal of the plane created when the Support of the curve is not specified
+  *   @param oNormal
+  *    CATMathVector
+  */
+ virtual    HRESULT  GetPlaneNormal (CATMathVector &amp; oNormal) = 0;
+
+ /**
+  * Sets the Normal of the plane created when the Support of the curve is not specified
+  *   @param iNormal
+  *    CATMathVector
+  */
+ virtual    HRESULT  SetPlaneNormal (const CATMathVector &amp; iNormal) = 0;
+
+ /**
+  * Gets the Direction of the 3D corner .
+  * -- direction (only for 3D Corner) --- 
+  * The 3D corner is seen as an arc of a circle along this Direction
+  *   @param oDir
+  * @see CATIGSMUseDirection
+  * @see CATIGSMUseFactory#Create3DCorner
+  */
+ virtual    HRESULT  GetDirection (CATIGSMUseDirection_var &amp; oDir) = 0;
+
+ /**
+  * Sets the Direction of the 3D corner .
+  * -- direction (only for 3D Corner) --- 
+  * The 3D corner is seen as an arc of a circle along this Direction
+  *   @param iDir
+  * @see CATIGSMUseDirection
+  * @see CATIGSMUseFactory#Create3DCorner
+  */
+ virtual    HRESULT  SetDirection (const CATIGSMUseDirection_var &amp; iDir) = 0;
+
+ /**
+  * Gets the Corner type . 
+  *   @param oCornerType
+  *     CATGSMCornerOnSupport = 0 : Corner On Support
+  *     CATGSM3DCorner        = 1 : 3D Corner          ( == DO NOT USED == ) 
+  * @see CATGSMCornerType
+  */  
+ virtual    HRESULT GetCornerType (enum CATGSMCornerType &amp; oCornerType) = 0;
+ 
+ /**
+  * Sets the Corner type . 
+  *   @param iCornerType
+  *     CATGSMCornerOnSupport = 0 : Corner On Support     (required)    
+  *     CATGSM3DCorner        = 1 : 3D Corner             ( == DO NOT USED == ) 
+  * @see CATGSMCornerType
+  */  
+ virtual    HRESULT SetCornerType (const enum CATGSMCornerType iCornerType) = 0;
+
+ /**
+  * Gets the Index of the solution.
+  *&lt;br&gt;  
+  * Several resulting solutions produced by the operator can be same 
+  * oriented regarding to the input wire bodies. 
+  * In such a case, they are sorted in order to distinguish them.&lt;br&gt;
+  * The Sequence FirstOrientation - SecondOrientation - IndexSol 
+  * allows you to identifie a unique one-domain solution.&lt;br&gt;
+  *   @param oIndexSol
+  *     int oIndexSol
+  */ 
+ virtual    HRESULT GetDiscriminationIndex (int &amp; oIndexSol) = 0;
+
+ /**
+  * Sets the Index of the solution.
+  * &lt;br&gt; 
+  * Several resulting solutions produced by the operator can be same 
+  * oriented regarding to the input wire bodies. 
+  * In such a case, they are sorted in order to distinguish them.&lt;br&gt;
+  * The Sequence FirstOrientation - SecondOrientation - IndexSol 
+  * allows you to identifie a unique one-domain solution.&lt;br&gt;
+  *   @param iIndexSol
+  *     int iIndexSol
+  */ 
+ virtual    HRESULT SetDiscriminationIndex (int iIndexSol) = 0;
+
+  /**
+    * Inverts the first reference element orientation used to compute the corner.
+    */
+ virtual    HRESULT InvertFirstOrientation() = 0;
+
+  /**
+    * Inverts the second reference element orientation used to compute the corner.
+    */
+ virtual    HRESULT InvertSecondOrientation() = 0;
+
+ /**
+  * Gets the number of the beginning curve of the corner.
+  * &lt;br&gt;This parameter is used to stabilize the resulting corner
+  */
+ virtual    HRESULT GetBeginOfCorner (int &amp; NumWire) = 0;
+
+ /**
+  * Sets the number of the beginning curve of the corner.
+  * &lt;br&gt;This parameter is used to stabilize the resulting corner
+  */
+ virtual    HRESULT SetBeginOfCorner (int NumWire) = 0;
+
+ /**
+  * Gets the first tangent curve orientation for circle computation.
+  *   @param oFirstOrient
+  *      first orientation
+  */
+ virtual HRESULT GetFirstTangentOrientation(CATGSMOrientation &amp; oFirstOrient) = 0;
+
+ /**
+  * Sets the first tangent curve orientation for circle computation.
+  *   @param iFirstOrient
+  *      first orientation
+  */
+ virtual HRESULT SetFirstTangentOrientation(const CATGSMOrientation iFirstOrient) = 0;
+
+ /**
+  * Gets the second tangent curve orientation for circle computation.
+  *   @param oSecontOrient
+  *      second orientation
+  */
+ virtual HRESULT GetSecondTangentOrientation(CATGSMOrientation &amp; oSecondOrient) = 0;
+
+ /**
+  * Sets the second tangent curve orientation for circle computation.
+  *   @param iSecondOrient
+  *      second  orientation
+  */
+ virtual HRESULT SetSecondTangentOrientation(const CATGSMOrientation iSecondOrient) = 0;
+
+  /**
+  * Sets the on vertex creation mode.
+  *   @param oOnVertex
+  *      Mode creation mode on vertex (TRUE or FALSE)  
+  */
+ virtual    HRESULT  GetOnVertex(CATBoolean &amp; oOnVertex)= 0;
+
+  /**
+   * Gets the creation mode : on vertex or not.
+   *   @param iOnVertex
+   *       creation mode on vertex (TRUE or FALSE)
+   */
+ virtual    HRESULT  SetOnVertex(CATBoolean iOnVertex) = 0;
+
+  /**
+  * Gets the number of remaining sharp vertices in case of corner on vertices of a curve.
+  *   @param oNbSharpVertices
+  *      The number of remaining sharp vertices  
+  */
+ virtual HRESULT GetNbRemainingSharpVertices(int &amp; oNbSharpVertices) = 0;
+
+  /**
+  * Sets the number of remaining sharp vertices in case of corner on vertices of a curve.
+  *   @param iNbSharpVertices
+  *      The number of remaining sharp vertices  
+  */
+ virtual HRESULT SetNbRemainingSharpVertices(int iNbSharpVertices) = 0;
+
+};
+CATDeclareHandler (CATIGSMUseCorner, CATBaseUnknown);
+#endif // CATIGSMUseCorner_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseConnect.html">← 上一页: CATIGSMUseConnect.h</a></div>
+        <div><a href="CATIGSMUseCoupling.html">下一页: CATIGSMUseCoupling.h →</a></div>
+    </div>
+</body>
+</html>

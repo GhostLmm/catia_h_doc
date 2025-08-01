@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeFormOperators/PublicInterfaces/CATFrFSmoothingOper.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FreeFormOperators/PublicInterfaces/CATFrFSmoothingOper.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATFrFSmoothing.html">← 上一页: CATFrFSmoothing.h</a></div>
+        <div><a href="CATInterproxCrv.html">下一页: CATInterproxCrv.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//====================================================================
+// Copyright Dassault Systemes Provence 2010, all rights reserved
+//====================================================================
+//
+
+#ifndef CATFrFSmoothingOper_H
+#define CATFrFSmoothingOper_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATIACGMLevel.h&quot;
+ 
+#include &quot;CATFrFSmoothing.h&quot;
+
+#include &quot;CATFreeFormDef.h&quot;
+#include &quot;CATFrFSmoothingDef.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+#include &quot;CATCGMOperator.h&quot;
+
+class CATGeoFactory;
+class CATSoftwareConfiguration;
+class CATMathSetOfPointsND;
+class CATMathVector;
+class CATCldScan;
+class CATCurve;
+
+ /**
+ * Class defining a geometric operator that smoothes a set of iNbrePts points to create a set of curves &quot;SetOfCurves&quot;.
+ * &lt;br&gt;The CATFrFSmoothingOper operator follows the global frame of the geometric operators:
+ * &lt;ul&gt;
+ * &lt;li&gt;A CATFrFSmoothingOper operator is created with the &lt;tt&gt;CATFrFCreateSmoothingOper&lt;/tt&gt; global method
+ * and must be directly &lt;tt&gt;delete&lt;/tt&gt;d with the usual C++ delete operator after use.
+ * It is is not streamable.
+ * &lt;li&gt;Options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method.
+ * &lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;Getxxx&lt;/tt&gt; methods.
+ * &lt;/ul&gt;
+ */
+class ExportedByCATFrFSmoothing CATFrFSmoothingOper : public CATCGMOperator
+{
+  CATCGMVirtualDeclareClass(CATFrFSmoothingOper);
+public :
+
+  virtual ~CATFrFSmoothingOper ();
+
+protected:
+  /** 
+  * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+  * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode. 
+  */
+  virtual int RunOperator() = 0;
+
+public:
+  /**
+  * Defines the Topological PassPoint constraint corresponding to each internal point of the initial set of points.
+  * The point iPoints[iRankPoint-1] is an Extremity of curve in the SetOfCurves result.
+  * Size of SetOfCurves increase by one.
+  * The final size of SetOfCurves is equal to Number of Internal Topological PassPoint Constraint + 1 .
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt; iRankPoint &lt; iNbrePts.
+  * @param iContinuity
+  * &lt;ul&gt;
+  *  &lt;li&gt;iContinuity = CATFrFNoCont        -&gt; Reset Geometrical constraint,
+  *  &lt;li&gt;iContinuity = CATFrFPointCont     -&gt; SetOfCurves is G0 at this point,
+  *  &lt;li&gt;iContinuity = CATFrFTangentCont   -&gt; SetOfCurves is G1 at this point,
+  *  &lt;li&gt;iContinuity = CATFrFCurvatureCont -&gt; SetOfCurves is G2 at this point.
+  * &lt;/ul&gt;
+  * @param iTangentVect
+  * The Tangency vector (normalized) corresponding to each point of the initial set of points.
+  * (if 0, a default value is computed)
+  * @param iratio
+  * Parameter to increase or decrease the norm of tangency vector (which is computed automatically).
+  * @param iCurvatureVect
+  * The Normal vector (normalized) corresponding to each point of the initial set of points.
+  * (if 0, a default value is computed)
+  * @param iCurvatureValue
+  * Imposed curvature value at the iRankPoint point.
+  */
+  virtual void SetTopConstraint (const int               iRankPoint      ,
+                                       CATFrFContinuity  iContinuity     = CATFrFPointCont,
+                                       CATMathVector   * iTangentVect    = 0,
+                                       double            iRatio          = 1.,
+                                       CATMathVector   * iCurvatureVect  = 0,
+                                 const double            iCurvatureValue = 0.0) = 0;
+
+  /**
+  * Resets the Topological constraint corresponding to each point of the initial set of points.
+  * The point iPoints[iRankPoint-1] is not a limitCurve in the result SetOfCurves.
+  * Size of SetOfCurves decrease by one.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt; iRankPoint &lt; iNbrePts
+  */
+  virtual void ResetTopConstraint (const int iRankPoint) = 0;
+
+
+  /**
+  * Defines the PassPoint constraint corresponding to each point of the initial set of points.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt;= iRankPoint &lt;= iNbrePts
+  * @param iContinuity
+  * &lt;ul&gt;
+  * &lt;li&gt; iContinuity = CATFrFNoCont        -&gt; Reset constraint,
+  * &lt;li&gt; iContinuity = CATFrFPointCont     -&gt; PassPoint constraint,
+  * &lt;li&gt; iContinuity = CATFrFTangentCont   -&gt; tangency constraint
+  * &lt;li&gt; iContinuity = CATFrFCurvatureCont -&gt; curvature constraint
+  * &lt;/ul&gt;
+  * @param iTangVect
+  * The Tangency vector (normalized) corresponding to each point of the initial set of points.
+  * (if 0, a default value is computed)
+  * @param iratio
+  * parameter to increase or decrease the norm of tangency vector (which is computed automatically)
+  */
+
+  virtual void SetConstraint (const int               iRankPoint  ,
+                                    CATFrFContinuity  iContinuity = CATFrFPointCont,
+                                    CATMathVector   * iTangVect   = 0,
+                                    double            iratio      = 1.0) = 0;
+
+ /**
+  * Reset the constraint corresponding to each point of the initial set of points.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt;= iRankPoint &lt;= iNbrePts
+  */
+
+  virtual void ResetConstraint (const int iRankPoint) = 0;
+
+
+  /**
+  * Defaults Options for parametrisation of set of points.
+  * @param iParamType
+  * The type of parametrization. Examples :
+  * &lt;ul&gt;
+  * &lt;li&gt;CATFrFSmoothingParamUniform = 0
+  * &lt;li&gt;CATFrFSmoothingParamChordal = 1
+  * &lt;/ul&gt;
+  */
+  virtual void SetParamType (CATFrFSmoothingParamType iParamType = CATFrFSmoothingParamChordal) = 0;
+
+  /**
+  * Defines the degree of the resulting curve.
+  * @param iDegree
+  * The degree value for each curve .
+  */
+  virtual void SetDegree    (const int iDegree = 5) = 0;
+
+  /**
+  * Defines the Maxdegree of the resulting curve.
+  * @param iDegree
+  * The Max degree value for each curve .
+  */
+  virtual void SetMaxDegree (const int iDegree = 5) = 0;
+
+
+  /**
+  * Defines the parameters corresponding to each point of the initial set of points.
+  * @param iNbreOfPts
+  * Number of initial set of points.
+  * @param iParameters
+  * The array of the parameter values that correspond on the smoothed curve to
+  * each point of the input set.
+  */
+  virtual void SetParametrization   (int            iNbreOfPts        ,
+                                     double       * iParameters       ) = 0;
+
+  /**
+  * Defines List of Parametric Cutting points corresponding to list of points of the initial set of points.
+  * The point iListOfPoints[index] is an Arc limit in the result SetOfCurves .
+  * @param iListOfPoints
+  * List of Parametric Cutting points,  1 &lt; iListOfPoints[index] &lt; iNbrePts
+  * @param iWithImposedPoint
+  * if (TRUE) each cutting point is imposed by passpoint constraint; else No Constraint.
+  */
+  virtual void ImposedCuttingPoints (CATListOfInt &amp; iListOfPoints     ,
+                                     CATBoolean     iWithImposedPoint = FALSE) = 0;
+
+
+  /**
+  * Defines the maximum number of arcs of the created curve.
+  * @param iMaxNumberOfArcs
+  * The maximum number of arcs of each created curve
+  * @param iInternalContinuity
+  * The Internal continuity of each created curve, iInternalContinuity = 2, 3, 4.
+  */
+  virtual void SetMaxNumberOfArcs (int iMaxNumberOfArcs    = 64,
+                                   int iInternalContinuity = 3) = 0;
+
+
+  /**
+  * Defines automatically the maximum number of arcs of the created curve.
+  * @param iRespectTolerance
+  * if (TRUE), we imposed automatically cutting points until that tolerance is reached.
+  */
+  virtual void CuttingUntilReachTolerance(CATBoolean iRespectTolerance = TRUE) = 0 ;
+
+
+  /**
+  * Compute automatically the number of Arcs by CurvatureAnalysis.
+  * @param iCurvatureVariationThreshold
+  * Criteria used to decide to insert arc limit is based on a factor of curvature variation
+  * between the beginning and the end of the curve, for example 5.
+  * @param iCurvatureRatio
+  * The position of the arc limit is computed at best using area repartition criteria.
+  * A parameter defining the ratio between the surfaces is then used to compute this position.
+  * @param iCase : CATFrFInflexionTreatment
+  * The type of Inflexion Treatment :
+  * &lt;ul&gt;
+  * &lt;li&gt;CATFrFNone  = 0
+  * &lt;li&gt;CATFrFInsertAtInflexion = 1
+  * &lt;li&gt;CATFrFSurroundingInflexion = 2
+  * &lt;/ul&gt;
+  * @param iWithImposedPoint
+  * if ( TRUE ) each cutting point computed is imposed by passpoint constraint; else No Constraint
+  */
+  virtual void SetCuttingByCurvatureAnalysis (const double                   iCurvatureVariationThreshold = 5,
+                                              const double                   iCurvatureRatio              = 0.5,
+                                                    CATFrFInflexionTreatment iCase                        = CATFrFSurroundingInflexion,
+                                                    CATBoolean               iWithImposedPoint            = FALSE) = 0;
+
+  /**
+  * Defines CuttingDefault Option.
+  * @param iCuttingType
+  * The type of Cutting Option :
+  * &lt;ul&gt;
+  * &lt;li&gt;CATFrFCuttingAutoLength  = 1
+  * &lt;li&gt;CATFrFCuttingAutoAreaCurvatr = 2
+  * &lt;li&gt;CATFrFCuttingAutoLengthCurvatr = 3
+  * &lt;/ul&gt;
+  */
+  virtual void SetCuttingDefault(CATFrFCuttingOption iCuttingType) = 0;
+
+  /**
+  * Defines the Tolerance of the result.
+  * @param iTol3d
+  * The maximum distance between the input points and the SetOfCurves.
+  * @param iTest
+  * &lt;ul&gt;
+  * &lt;li&gt;iTest = CATFrFTestByAverageDeviation : Average Deviation is satisfied
+  * &lt;li&gt;iTest = CATFrFTestByMaxDeviation     : Max Deviation is satisfied
+  * &lt;/ul&gt;
+  */
+#ifdef CATIACGMR421CAA
+  virtual void SetTolerance (const double                  iTol3d ,      // = 0.001,
+                                   CATFrFTestOfConvergence iTest  = CATFrFTestByAverageDeviation) = 0;
+#else
+  virtual void SetTolerance (const double                  iTol3d = 0.001,
+                                   CATFrFTestOfConvergence iTest  = CATFrFTestByAverageDeviation) = 0;
+#endif
+
+  /**
+  * Defines the number of iterations necessary to obtain the best resulting curve.
+  * Each iteration gives a different result.
+  * @param iIterations
+  * The Iteration value for each curve.
+  */
+  virtual void SetSlideIterations (const int iIterations=5) = 0;
+
+
+  /**
+  * Returns the SetOfCurves Result.
+  * @return
+  * oNbreOfCurve : The Number of curves of the Result
+  * @return
+  * Array of oNbreOfCurve curves result according to SetTopConstraint option
+  */
+
+  virtual int GetResult (CATCurve **&amp; oResultCurves) = 0 ;
+   
+#if defined CATIACGMR215CAA
+  /**
+  * Returns the set of result curves.
+  * @return
+  * The list of result curves.
+  */
+  virtual void GetResult (CATListPtrCATCurve &amp;oResultCurves) = 0;
+#endif
+
+  /**
+  * Returns the maximum deviation between set of points and the SetOfCurves Result.
+  * @return
+  * The maximum deviation value.
+  * @return
+  * Index of point with max deviation.
+  */
+  virtual int GetIndexMaxDeviation (double &amp;oMaxdeviation) = 0;
+
+  /**
+  * Returns the deviation at each point of the initial set of points.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt;= iRankPoint &lt;= iNbrePts
+  * @return
+  * The deviation at each point.
+  */
+  virtual double GetDeviation (const int iRankPoint) = 0;
+
+  /**
+  * Returns the Average deviation between set of points and the SetOfCurves Result.
+  * @return
+  * The Mean deviation value.
+  */
+  virtual double GetAverageDeviation () = 0;
+
+
+  /**
+  * Returns the tangency constraint corresponding to each point of the initial set of points.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt;= iRankPoint &lt;= iNbrePts
+  * @return
+  * the tangent vector at the current point,  1 &lt;= iRankPoint &lt;= iNbrePts.
+  */
+  virtual void GetTangentVect (const int             iRankPoint  ,
+                                     CATMathVector &amp; oTangentVect) = 0 ;
+
+  /**
+  * Returns the curvature constraint corresponding to each point of the initial set of points.
+  * @param iRankPoint
+  * The Rank of the point in iPoints,  1 &lt;= iRankPoint &lt;= iNbrePts
+  * @return
+  * the curvature value and Normal vector at the current point,  1 &lt;= iRankPoint &lt;= iNbrePts.
+  */
+  virtual void GetCurvatureVect (const int             iRankPoint,
+                                       double        &amp; oCvt      ,
+                                       CATMathVector &amp; oNormale  ) = 0 ;
+
+  /**
+  * Returns The parametrization .
+  * @return
+  * The array of the parameter values that correspond on the SetOfCurves to
+  * each point of the input set.
+  */
+  virtual void GetParametrization(int &amp;oNbreOfPts, double *&amp; oParameters)=0;
+
+
+  /**
+  * Returns List of indexes corresponding to Vertex of the SetOfCurves result
+  */
+  virtual void GetGeometricCuttingpoints(CATListOfInt &amp;oGeomList) = 0;
+
+  /**
+  * Returns List of indexes corresponding to internal Arc limit of the SetOfCurves result
+  */
+  virtual void GetParametricCuttingpoints(CATListOfInt &amp;oParamList) = 0;
+
+  
+protected:
+  CATFrFSmoothingOper(CATGeoFactory *iFactory);
+};
+
+/**
+* Creates the operator that smoothes a set of points to create a Set of curves.
+* @param iFactory
+* The pointer to the factory of the geometry.
+* @param iConfig
+* The pointer to configuration defining the level of code to replay.
+* @param iPoints
+* The pointer to the set of points (Its dimension=3).
+* @return
+* The pointer to the created operator. To &lt;tt&gt;delete&lt;/tt&gt; with the usual C++ delete operator afer use.
+* @see CATFrFSmoothingOper
+*/
+
+ExportedByCATFrFSmoothing
+CATFrFSmoothingOper * CATFrFCreateSmoothingOper (CATGeoFactory            * iFactory,
+                                                 CATSoftwareConfiguration * iConfig ,
+                                                 CATMathSetOfPointsND     * iPoints );
+
+/**
+* @nodoc
+* Creates the operator that smoothes a set of points to create a Set of curves.
+* @param iFactory
+* The pointer to the factory of the geometry.
+* @param iConfig
+* The pointer to configuration defining the level of code to replay.
+* @param iScan
+* The pointer to the CATCldScan corresponding to an ordered set of points (Its dimension=3).
+* @return
+* The pointer to the created operator. To &lt;tt&gt;delete&lt;/tt&gt; with the usual C++ delete operator afer use.
+* @see CATFrFSmoothingOper
+*/
+
+ExportedByCATFrFSmoothing
+CATFrFSmoothingOper * CATFrFCreateSmoothingOper (CATGeoFactory            * iFactory,
+                                                 CATSoftwareConfiguration * iConfig ,
+                                                 CATCldScan               * iScan   );
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATFrFSmoothing.html">← 上一页: CATFrFSmoothing.h</a></div>
+        <div><a href="CATInterproxCrv.html">下一页: CATInterproxCrv.h →</a></div>
+    </div>
+</body>
+</html>

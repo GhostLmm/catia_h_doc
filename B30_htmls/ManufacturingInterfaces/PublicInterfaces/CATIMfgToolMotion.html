@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgToolMotion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgToolMotion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgToolEditorCustom.html">← 上一页: CATIMfgToolEditorCustom.h</a></div>
+        <div><a href="CATIMfgToolPath.html">下一页: CATIMfgToolPath.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  1998
+//=============================================================================
+#ifndef CATIMfgToolMotion_H
+#define CATIMfgToolMotion_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATIMfgElementaryTraject.h&quot;
+#include &quot;CATIMfgToolPathFeedrate.h&quot;
+#include &quot;CATIMfgToolPathSpindle.h&quot;
+#include &quot;CATIMfgToolPathToolAxis.h&quot;
+#include &quot;CATIMfgToolPathToolAssembly.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByMfgItfEnv IID_CATIMfgToolMotion;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgToolMotion;
+#endif
+
+/**
+* Interface to manage tool motion object.
+* &lt;b&gt;Role&lt;/b&gt;: This interface offers services to manage attributes of tool motion object &lt;br&gt;
+*/
+
+class ExportedByMfgItfEnv CATIMfgToolMotion : public CATIMfgElementaryTraject
+{
+  CATDeclareInterface ;  
+
+  public:
+
+  /**
+  * Retrieves total number of subtrajects for a tool motion.
+  *   @param oNumber
+  *      The total number of subtrajects
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;ul&gt;
+  *   &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+  *   &lt;li&gt;&gt;=0 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+  *   &lt;/ul&gt;
+  */
+  virtual CATBoolean GetNumberOfSubTrajects   (int&amp; oNumber) = 0;
+  
+ /**
+  * Retrieves start and end number in the list of coordinates (tip points, contact points, contact normals, tool axis).
+  *   @param iSubTraject
+  *      The number of subtraject
+  *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *      &lt;ul&gt;
+  *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+  *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+  *      &lt;/ul&gt;
+  *   @param oStartNumber
+  *      The start number in the list of coordinates
+  *   @param oEndNumber
+  *      The end number in the list of coordinates
+  */
+  virtual CATBoolean GetStartAndEndNumber     (const int iSubTraject,
+		                                             int&amp; oStartNumber,
+												     int&amp; oEndNumber) = 0;
+  /**
+   *   Sets &quot;symbolic&quot; feedrate on a tool motion with a ratio to apply on it.&lt;br&gt;
+   *   Feedrate is &quot;symbolic&quot; like &quot;MachiningFeedrate&quot;.
+   *   @param iString
+   *      The feedrate symbol : use constants defined in CATMfgToolPathDefs.h
+   *   @param iRatio
+   *	  The ratio to apply on the feedrate
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean SetReferenceFeedrate (const CATUnicodeString&amp; iString,
+					const double iRatio,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves &quot;symbolic&quot; feedrate on a tool motion with the ratio to apply on it.&lt;br&gt;
+   *   @param oString
+   *      The feedrate symbol : use constants defined in CATMfgToolPathDefs.h
+   *   @param oRatio
+   *	  The ratio to apply on the feedrate
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   *   @return
+   *      Return code.
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;TRUE: feedrate stored on the tool motion is &quot;symbolic&quot;&lt;/li&gt;
+   *      &lt;li&gt;FALSE: feedrate stored on the tool motion is not &quot;symbolic&quot;&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetFeedrate (CATUnicodeString&amp; oString,double&amp; oRatio,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves value of &quot;symbolic&quot; feedrate stored on the tool motion.
+   *   @param oFeedrate 
+   *	  The feedrate value
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   *   @return
+   *      Return code.
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;TRUE: feedrate stored on the tool motion is &quot;symbolic&quot;&lt;/li&gt;
+   *      &lt;li&gt;FALSE: feedrate stored on the tool motion is not &quot;symbolic&quot;&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetReferenceFeedrate (CATIMfgToolPathFeedrate_var&amp; oFeedrate,const int iSubTraject) =0 ;
+
+  /**
+   *   Declares that the tool axis on the tool motion is equal to the tool axis stored on the manufacturing operation.
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean SetReferenceToolAxis (const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves value of tool axis stored on the tool motion.
+   *   @param oToolAxis
+   *	 The tool axis value 
+   *   @return
+   *      Return code.
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;TRUE: the tool axis on the tool motion is equal to the tool axis stored on the manufacturing operation&lt;/li&gt;
+   *      &lt;li&gt;FALSE: the tool axis on the tool motion is not equal to the tool axis stored on the manufacturing operation&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetReferenceToolAxis (CATIMfgToolPathToolAxis_var&amp; oToolAxis) =0 ;
+
+  /**
+   *   Declares that the spindle feedrate on the tool motion is equal to the spindle feedrate stored on the manufacturing operation.
+   *   @param iRatio
+   *	  The ratio to apply on the spindle feedrate stored on the manufacturing operation
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean SetReferenceSpindle (const double iRatio,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves spindle feedrate stored on the tool motion in the case where it is equal to the spindle
+   *     feedrate stored on the manufacturing operation.
+   *   @param oRatio
+   *	  The ratio on the spindle feedrate
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   *   @return
+   *      Return code.
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;TRUE: the spindle feedrate on the tool motion is equal to the spindle feedrate stored on the manufacturing operation&lt;/li&gt;
+   *      &lt;li&gt;FALSE: the spindle feedrate on the tool motion is not equal to the spindle feedrate axis on the manufacturing operation&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetSpindle (double&amp; oRatio,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves value of spindle feedrate stored on the tool motion.
+   *   @param oFeedrate 
+   *	  The feedrate value
+   *   @return
+   *      Return code.
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;TRUE: spindle feedrate stored on the tool motion is equal to the spindle feedrate stored on the manufacturing operation&lt;/li&gt;
+   *      &lt;li&gt;FALSE: spindle feedrate stored on the tool motion is equal to the spindle feedrate stored on the manufacturing operation&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetReferenceSpindle (CATIMfgToolPathSpindle_var&amp; oSpindle) =0 ;
+
+  /**
+   *   Sets type of traject of the tool motion.
+   *   @param iType
+   *	The type of traject : use constants defined in CATMfgToolPathDefs.h
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean SetTrajectType (const CATUnicodeString&amp; iType,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves type of traject of the tool motion.
+   *   @param oType
+   *	The type of traject  : use constants defined in CATMfgToolPathDefs.h
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetTrajectType (CATUnicodeString&amp; oType,const int iSubTraject) =0 ;
+
+  /**
+   *   Retrieves tool object stored on the manufacturing operation.
+   *   @param oToolAssembly
+   *	  The tool object
+   **/
+  virtual CATBoolean GetReferenceToolAssembly (CATIMfgToolPathToolAssembly_var&amp; oToolAssembly) =0 ;
+
+  /**
+   *   Retrieves tool object stored on the manufacturing operation.
+   *   @param oToolAssembly
+   *	  The tool object (supports @href CATIMfgTool interface)
+   **/
+   virtual CATBoolean GetToolAssembly (CATBaseUnknown_var&amp; oToolAssembly) =0 ;
+
+   /**
+   *   Retrieves the tool corrector number on the tool motion. 
+   *   If possible, you should use GetCorrectorNumber (int&amp; oCorrectorNumber,const int iSubTraject)
+   *   @param oCorrectorNumber
+   *	  The value of tool corrector number
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;0: no tool corrector defined&lt;/li&gt;
+   *      &lt;li&gt;other value: tool corrector number&lt;/li&gt;
+   *      &lt;/ul&gt;  
+   **/
+   virtual CATBoolean GetCorrectorNumber (int&amp; oCorrectorNumber) =0 ;
+
+   /**
+   *   Retrieves the tool corrector number on the tool motion.
+   *   @param oCorrectorNumber
+   *	  The value of tool corrector number
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;0: no tool corrector defined&lt;/li&gt;
+   *      &lt;li&gt;other value: tool corrector number&lt;/li&gt;
+   *      &lt;/ul&gt;  
+   *   @param iSubTraject
+   *      The number of subtraject
+   *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *      &lt;ul&gt;
+   *      &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *      &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *      &lt;/ul&gt;
+   **/
+   virtual CATBoolean GetCorrectorNumber (int&amp; oCorrectorNumber,const int iSubTraject) =0 ;
+
+   /**
+   *   Applies tool correction on a given point.
+   *   If possible, do not use this method.
+   *   @param x1,y1,z1
+   *	The coordinates of the point where to apply tool correction
+   *   @param x2,y2,z2
+   *	The coordinates of the point after tool correction
+   **/
+   virtual CATBoolean ApplyToolCompensation (const int numbloc,const double x1,const double y1,const double z1,
+	                                      double&amp; x2,double&amp; y2,double&amp; z2) =0 ;
+
+   /**
+   *   Retrieves CKE value of feedrate on the tool motion.
+   *   @param oFeedrate
+   *	The value of feedrate modelized by a CATICkeParm
+   *   @param oRatio
+   *	The ratio to apply on the feedrate value
+   *   @param iSubTraject
+   *      The number of subtraject
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;
+   *   &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *   &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *   &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetFeedrateConstantValue (CATICkeParm_var&amp; oFeedrate,double&amp; oRatio,const int iSubTraject) =0 ;
+
+ /**
+   *   Retrieves CKE value of spindle feedrate on the tool motion.
+   *   @param oSpindle
+   *	The value of spindle feedrate modelized by a CATICkeParm
+   *   @param oRatio
+   *	The ratio to apply on the spindle feedrate value
+   *   @param iSubTraject
+   *      The number of subtraject
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;
+   *   &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *   &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *   &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetSpindleConstantValue (CATICkeParm_var&amp; oSpindle,double&amp; oRatio,const int iSubTraject) =0 ;
+
+ /**
+   *   Retrieves value of tool axis on the tool motion.
+   *   @param oToolAxis
+   *	The value of tool axis
+   *   @param iSubTraject
+   *      The number of subtraject
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;ul&gt;
+   *   &lt;li&gt;=1  : for a @href CATIMfgTPSingleMotion object &lt;/li&gt;
+   *   &lt;li&gt;&gt;=1 : for a @href CATIMfgTPMultipleMotion object&lt;/li&gt;
+   *   &lt;/ul&gt;
+   **/
+  virtual CATBoolean GetToolAxisConstantValue (CATMathVector&amp; oFeedrate,const int iSubTraject) =0 ;
+
+  /**
+   *	Retrieves the coordinates of a tip point of the tool motion.
+   *    @param iNumber
+   *	   The range of the tip point
+   *    @param oX,oY,oZ
+   *	   The coordinates of the tip point
+   **/
+  virtual CATBoolean GetTipPoint (int iNumber,double&amp; oX,double &amp; oY,double &amp; oZ) = 0;
+
+  /**
+   *	Retrieves the coordinates of a contact point of the tool motion.
+   *    @param iNumber
+   *	   The range of the contact point
+   *    @param oX,oY,oZ
+   *	   The coordinates of the contact point
+   **/
+  virtual CATBoolean GetContactPoint (int iNumber,double&amp; oX,double &amp; oY,double &amp; oZ) = 0;
+
+  /**
+   *	Retrieves the coordinates of a contact normal of the tool motion.
+   *    @param iNumber
+   *	   The range of the contact normal
+   *    @param oX,oY,oZ
+   *	   The coordinates of the contact normal
+   **/
+  virtual CATBoolean GetContactNormal (int iNumber,double&amp; oX,double &amp; oY,double &amp; oZ) = 0;
+
+  /**
+   *	Retrieves the coordinates of a tool axis of the tool motion.
+   *    @param iNumber
+   *	   The range of the tool axis
+   *    @param oX,oY,oZ
+   *	   The coordinates of the tool axis
+   **/
+  virtual CATBoolean GetToolAxisPoint (int iNumber,double&amp; oX,double &amp; oY,double &amp; oZ) = 0;
+
+  /**
+  * @nodoc
+  */
+  virtual CATBoolean UnsetContactPoints () =0 ;
+
+  /**
+  * @nodoc
+  */
+  virtual CATBoolean UnsetContactNormals () =0 ;
+
+  /**
+  * @nodoc
+  */
+  virtual CATBoolean UnsetToolAxisPoints () =0 ;
+
+  /**
+   *	Retrieves total number of tip points of the tool motion.
+   *    @return
+   *       The total number of tip points
+   **/
+  virtual long GetNumberOfTipPoints () =0 ;
+
+  /**
+   *	Retrieves total number of contact points of the tool motion.
+   *    @return
+   *       The total number of contact points
+   **/
+  virtual long GetNumberOfContactPoints () =0 ;
+
+  /**
+   *	Retrieves number of contact normals of the tool motion.
+   *    @return
+   *       The total number of contact normals
+   **/
+  virtual long GetNumberOfContactNormals () =0 ;
+
+  /**
+   *	Retrieves number of tool axis of the tool motion.
+   *    @return
+   *       The total number of tool axis
+   **/
+  virtual long GetNumberOfToolAxisPoints () =0 ;
+
+  /**
+  * @nodoc
+  */
+  virtual CATBoolean GetMachiningTolerance (double&amp; oMachiningTolerance) =0 ;
+  
+  /**
+  * @nodoc
+  */
+  virtual CATBoolean GetTipPoints  (int iFirstPoint,int iLastPoint,CATListOfDouble&amp; oListeX,CATListOfDouble&amp; oListeY,CATListOfDouble&amp; oListeZ) = 0;
+
+ /**
+  * @nodoc
+  */
+  virtual CATBoolean GetContactPoints  (int iFirstPoint,int iLastPoint,CATListOfDouble&amp; oListeX,CATListOfDouble&amp; oListeY,CATListOfDouble&amp; oListeZ) = 0;
+
+ /**
+  * @nodoc
+  */
+  virtual CATBoolean GetContactNormals (int iFirstPoint,int iLastPoint,CATListOfDouble&amp; oListeX,CATListOfDouble&amp; oListeY,CATListOfDouble&amp; oListeZ) = 0;
+
+ /**
+  * @nodoc
+  */
+  virtual CATBoolean GetToolAxisPoints (int iFirstPoint,int iLastPoint,CATListOfDouble&amp; oListeX,CATListOfDouble&amp; oListeY,CATListOfDouble&amp; oListeZ) = 0;
+};
+
+CATDeclareHandler(CATIMfgToolMotion, CATIMfgElementaryTraject);
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgToolEditorCustom.html">← 上一页: CATIMfgToolEditorCustom.h</a></div>
+        <div><a href="CATIMfgToolPath.html">下一页: CATIMfgToolPath.h →</a></div>
+    </div>
+</body>
+</html>

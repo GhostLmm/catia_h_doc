@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAVisualization.edu/CAAVisManagerAppli.m/LocalInterfaces/CAAVisManagerWindow.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAVisualization.edu/CAAVisManagerAppli.m/LocalInterfaces/CAAVisManagerWindow.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisManagerEditor.html">← 上一页: CAAVisManagerEditor.h</a></div>
+        <div><a href="CAAVisManagerWindowActivateNotif.html">下一页: CAAVisManagerWindowActivateNotif.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAVisManagerWindow_H
+#define CAAVisManagerWindow_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  MDI Window .  
+//
+//
+//  Events send by it:
+//    
+//	       WINDOW_ACTIVATED    (from uncurrent window to current window)
+//	       WINDOW_DEACTIVATED  (from current window to uncurrent window)
+//	       WINDOW_CREATED
+//	       WINDOW_DELETED
+//         VIEWER_SELECTED    (MouseButton1 Down on a Viewer) (sender is viewer)
+//         VIEWER_ACTIVATED   (The CurrentViewer has been changed) (sender is viewer)
+//         VIEWPOINT_CHANGED  (The main viewpoint of the currentViewer has been changed) 
+//                             (sender is window)
+//------------------------------------------------------------------------------
+//       
+// Dialog Framework
+#include &quot;CATDlgDialog.h&quot;   // To derive from
+
+// Local framework
+class CAAVisManagerEditor ;
+
+// Visualization FrameWork
+class CATIndicator;
+class CAT3DIndicator;
+class CATViewer ;
+class CATPathElement ;
+
+#include &lt;CATString.h&gt;
+
+enum  CAAVisManagerWindowState {CAAVisModelMinimizeWindow, 
+                                CAAVisModelRestoredWindow,
+                                CAAVisModelMaximizeWindow};
+
+class CAAVisManagerWindow: public CATDlgDialog
+{
+
+   // Used in conjunction with CATImplementClass in the .cpp file 
+   CATDeclareClass ;
+   
+ public:
+
+   // Events define
+   CATDeclareCBEvent(WINDOW_ACTIVATED);
+   CATDeclareCBEvent(WINDOW_DEACTIVATED);
+   CATDeclareCBEvent(WINDOW_CREATED);
+   CATDeclareCBEvent(WINDOW_DELETED);
+   CATDeclareCBEvent(VIEWER_SELECTED);
+   CATDeclareCBEvent(VIEWER_ACTIVATED);
+   CATDeclareCBEvent(VIEWPOINT_CHANGED);
+   CATDeclareCBEvent(VIEWER_SHOW);
+   CATDeclareCBEvent(VIEWER_NO_SHOW);
+   
+   CAAVisManagerWindow(CAAVisManagerEditor * iEditor, const CATString &amp; iWindowId);
+
+   virtual ~CAAVisManagerWindow();
+
+   // Duplicator, Not Yet implemented
+   virtual CAAVisManagerWindow * DuplicateWindow();
+
+   CATViewer * GetViewer(void);
+  
+   virtual CAAVisManagerEditor * GetEditor() ;
+
+   virtual void Build() ;
+
+   // Methods called by the application 
+   virtual void DeleteWindow();
+
+
+ private:
+       
+    // Default constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAVisManagerWindow ();
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAVisManagerWindow(const CAAVisManagerWindow &amp;iObjectToCopy);
+   
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAVisManagerWindow &amp; operator = (const CAAVisManagerWindow &amp;iObjectToCopy);
+   
+    // CB on MDI events
+    void AddCB(void);
+   
+    // Callback methods 
+    void MDICB   (CATCommand*, CATNotification *, CATCommandClientData);
+
+    void WindowToDelete() ;
+    void WindowToActivate();
+
+    void Attach() ;
+    void Detach() ;
+    void ChangeBackgroundIndicator();
+    void ResetBackgroundIndicator();
+
+ private:
+   
+    // The Navigation 3DViewer 
+    CATViewer      * _pViewer;
+
+    // The Path of the model to visualize
+    CATPathElement * _pRootObjectPath ;
+
+    // the saved background indicator.
+    CATIndicator   * _pSavedBackgrdIndicator;
+
+    // the indicator of the current document.
+    CAT3DIndicator * _pDocBackgrdIndicator;
+
+    // The object which manages the interactivity
+    CAAVisManagerEditor * _pEditor ;
+}; 
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisManagerEditor.html">← 上一页: CAAVisManagerEditor.h</a></div>
+        <div><a href="CAAVisManagerWindowActivateNotif.html">下一页: CAAVisManagerWindowActivateNotif.h →</a></div>
+    </div>
+</body>
+</html>

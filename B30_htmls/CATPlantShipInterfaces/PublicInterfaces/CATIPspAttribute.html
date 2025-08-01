@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspAttribute.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspAttribute.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspApplication.html">← 上一页: CATIPspApplication.h</a></div>
+        <div><a href="CATIPspBranchConnection.html">下一页: CATIPspBranchConnection.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspAttribute_H
+#define CATIPspAttribute_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATISpecDeclarations.h&quot;
+
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+class CATICkeParm;
+class CATUnicodeString;
+class CATListValCATUnicodeString;
+
+
+extern &quot;C&quot; const IID IID_CATIPspAttribute ;
+
+/**
+ * Interface to query Plant Ship objects&#x27; attributes.
+ * &lt;b&gt;Role&lt;/b&gt;: To query and reset attributes.
+ */
+
+class CATIPspAttribute : public IUnknown
+{
+  public:  
+  
+  /**
+  * List available domain names.
+  * @param oListOfDomains 
+  *   A list of domain names associated to the attribute. 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListDomainNames ( CATListValCATUnicodeString **oListOfDomains ) = 0;
+
+  /**
+  * List all attribute names available in the given domain.
+  * @param iDomain
+  *   Domain name for attributes.
+  * @param oListOfAttributeNames
+  *   A list of attribute names. 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListAttributes ( const CATUnicodeString&amp; iDomain,
+    CATListValCATUnicodeString **oListOfAttributeNames ) = 0;
+  
+  /**
+  * Test if a discrete attribute.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oStatus
+  *   status.
+  * @param oDiscreteType
+  *   =1 standard discrete attribute.
+  *   =2 Encoded discrete attribute.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsDiscrete ( const CATUnicodeString&amp; iAttributeName, CATBoolean&amp; oStatus, int&amp; oDiscreteType ) = 0;
+
+  /**
+  * @deprecated V5R15 - Use ListStringDiscreteValues, ListDoubleDiscreteValues or ListStringDiscreteValues method instead.&lt;br&gt;
+  * List standard type of discrete values.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oListDiscreteValues
+  *   discrete values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListDiscreteValues ( const CATUnicodeString&amp; iAttributeName,
+    void * oListDiscreteValues ) = 0;
+
+ /**
+  * List standard type of integer discrete values. Use it for attribute of type tk_integer.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oListIntValues
+  *   integer discrete values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+
+  virtual HRESULT ListIntegerDiscreteValues ( const CATUnicodeString&amp; iAttrName,
+                           CATListOfInt&amp; oListIntValues) = 0;
+
+ /**
+  * List standard type of double (real) discrete values. Use it for attribute of type tk_double.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oListDbValues
+  *   double discrete values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+
+  virtual HRESULT ListDoubleDiscreteValues ( const CATUnicodeString&amp; iAttrName, 
+                           CATListOfDouble&amp; oListDbValues) = 0;
+
+ /**
+  * List standard type of string discrete values. Use it for attribute of type tk_string.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oListStrValues
+  *   string discrete values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListStringDiscreteValues ( const CATUnicodeString&amp; iAttrName, 
+                           CATListValCATUnicodeString&amp; oListStrValues) = 0;
+
+  /**
+  * List encode type of discrete values.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oListShortValues
+  *   short discrete values.
+  * @param oListLongValues
+  *   long discrete values.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListDiscreteValues ( const CATUnicodeString&amp; iAttributeName,
+    CATListValCATUnicodeString&amp; oListShortValues,
+    CATListValCATUnicodeString&amp; oListLongValues ) = 0;
+
+  /**
+  * Return the type of attribute.
+  * @param iAttributeName
+  *   Attribute name.
+  * @param oType
+  *   Attribute type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetType ( const CATUnicodeString&amp; iAttributeName,
+    CATAttrKind&amp; oType) = 0;
+
+  /**
+  * Get the parameter associated with the attribute.
+  * @param iAttributeName
+  *   An attribute name.
+  * @param oCkeParm [out, IUnknown#Release]
+  *   A parameter for this attribute.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetLiteral ( const CATUnicodeString&amp; iAttributeName, CATICkeParm **oCkeParm ) = 0;
+
+  /**
+  * Check if the attribute can be derived from its logical line.
+  * @param iAttributeName
+  *   An attribute name.
+  * @param oBYes
+  *   If TRUE, then it is derivable from the logical line.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsDerivable ( const CATUnicodeString&amp; iAttributeName, CATBoolean *oBYes ) = 0;
+
+  /** 
+  *
+  * Check if the attribute value is derived from its logical line.
+  * @param iAttributeName
+  *   An attribute name.
+  * @param oBYes
+  *   If TRUE, then its value is derived from the logical line.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsDerived ( const CATUnicodeString&amp; iAttributeName, CATBoolean *oBYes ) = 0;
+
+  /**
+  * 
+  * Reset the attribute value to be derived from its logical line.
+  * @param iAttributeName
+  *   An attribute name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ResetDerivedAttr ( const CATUnicodeString&amp; iAttributeName ) = 0;
+
+  /**
+  * Unset the attribute value.
+  * @param iAttributeName
+  *   An attribute name.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT UnsetAttrValue ( const CATUnicodeString&amp; iAttributeName ) = 0;
+
+  /**
+  * Check if the read only attribute is to be displayed writable in Properties Panel.
+  * @param iAttributeName
+  *   An attribute name. if a null string is passed, then it is applicable for all attributes.
+  * @param oFlag
+  *   If TRUE, then its value is derived from the logical line.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT IsReadOnly ( const CATUnicodeString&amp; iAttributeName, CATBoolean&amp; oFlag ) = 0;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspApplication.html">← 上一页: CATIPspApplication.h</a></div>
+        <div><a href="CATIPspBranchConnection.html">下一页: CATIPspBranchConnection.h →</a></div>
+    </div>
+</body>
+</html>

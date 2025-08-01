@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamEditionFrame.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamEditionFrame.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamEditionCusto.html">← 上一页: CATISamEditionCusto.h</a></div>
+        <div><a href="CATISamElementGroup.html">下一页: CATISamElementGroup.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamEditionFrame_H
+#define CATISamEditionFrame_H
+// COPYRIGHT DASSAULT SYSTEMES 2000  
+//==================================================================================
+// CATISamEditionFrame.h
+// Define the CATISamEditionFrame interface
+//==================================================================================
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U5
+  */
+#include &quot;CATAnalysisInterface.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATCommand;
+class CATNotification;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamEditionFrame ;
+#else
+extern &quot;C&quot; const IID IID_CATISamEditionFrame ;
+#endif
+/**
+ * Basic Component Edition.
+ * &lt;b&gt;Role:&lt;/b&gt;Basic components provide dialog entities to deal with their edition, thanks
+ * to interfaces CATISamEditWithCmd or CATISamEditWithFrame.
+ * This edition dialog entity can be of two kinds :
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;CATDlgFrame.&lt;/b&gt;
+ * &lt;li&gt;&lt;b&gt; CATStateCommand if it needs to get the selection management to access 
+ *   to other objects in the session.&lt;/b&gt;
+ * &lt;/ul&gt;
+ * CATDlgFrame corresponding to the first case must implement this interface.
+ * Interface providing services to integrate the implementing CATDlgFrame
+ * to the Edition Command of the Analysis Entity.
+ * &lt;p&gt;
+ * @see CATISamEditWithFrame,CATISamEditionCmd
+ */ 
+
+
+//------------------------------------------------------------------
+
+class ExportedByCATAnalysisInterface CATISamEditionFrame: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+	  // ======================
+	  //  Edition Management
+	  // ======================
+/**
+ * Return the notification that will be sent, each time the implementing frame
+ * modify the value of the edited Basic Component.
+ * @param oFromCmd CATCommand that will send the notification.
+ * @param oNotif CATNotification dedicated to warn the Edition Command. &lt;p&gt;
+ * It is recommanded to have a notification specific each implementation type.
+ * It just need to derive from 
+ * @see CATNotification .
+ */	
+	virtual void GetModificationNotification(CATCommand * &amp;oFromCmd,CATNotification * &amp;oNotif) = 0;
+
+/**
+ * Inform the implementing CATDlgFrame that it has to be updated according
+ * to the edited Basic component.
+ * WARNING ! This method must not send a Modification Notification.
+ */
+	virtual void UpdateFrame() = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATISamEditionFrame, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamEditionCusto.html">← 上一页: CATISamEditionCusto.h</a></div>
+        <div><a href="CATISamElementGroup.html">下一页: CATISamElementGroup.h →</a></div>
+    </div>
+</body>
+</html>

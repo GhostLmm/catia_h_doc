@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSmInterfaces/PublicInterfaces/CATIStmTechnologicalProcess.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSmInterfaces/PublicInterfaces/CATIStmTechnologicalProcess.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmTearDrop.html">← 上一页: CATIStmTearDrop.h</a></div>
+        <div><a href="CATIStmTechnologicalRequest.html">下一页: CATIStmTechnologicalRequest.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIStmTechnologicalProcess_H
+#define CATIStmTechnologicalProcess_H
+
+// COPYRIGHT Dassault Systemes 2004
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+#include &quot;ExportedByCATSmInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;ListPOfCATCell.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSmInterfaces IID IID_CATIStmTechnologicalProcess;
+#else
+extern &quot;C&quot; const IID IID_CATIStmTechnologicalProcess ;
+#endif
+
+//------------------------------------------------------------------
+
+class CATUnicodeString;
+
+/**
+ * Base interface holding the technological data process.
+ * &lt;b&gt;Role&lt;/b&gt;:This interface is available for the technological feature
+ * dedicated for Sheetmetal application. You can retrieve these features
+ * thanks to the @href CATIStmTechnologicalRequest interface. 
+ * &lt;p&gt;This interface is the base interface for any specific technological
+ * data associated to bending, stamping, or cutting process for example.&lt;/p&gt;
+ */
+class ExportedByCATSmInterfaces CATIStmTechnologicalProcess: public CATBaseUnknown
+{
+    CATDeclareInterface;
+
+public:
+
+    /**
+     * Gets the process identifier.
+     * @param   oId
+     *      A reference to &lt;tt&gt;CATUnicodeString&lt;/tt&gt; instance.
+     * @return &lt;tt&gt;S_OK&lt;/tt&gt;.
+     *      The process identifier is successfully valuated.
+     * @return &lt;tt&gt;E_FAIL&lt;/tt&gt;.
+     *      The process identifier cannot be valuated. Use CATError::CATGetLastError()
+     *      to retrieve the error by the &lt;tt&gt;HRESULT&lt;/tt&gt; value. @see CATError.
+     */
+    virtual HRESULT __stdcall GetProcessId( CATUnicodeString &amp; oId ) const = 0;
+
+    /**
+     * Gets all topological cells, included the topological body of the 
+     * resulting feature, associated to this technological process.
+     * @param   iView
+     *      A reference on &lt;tt&gt;CATUnicodeString&lt;/tt&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt;&lt;b&gt;&quot;MfUnfoldedView&quot;&lt;/b&gt; or &lt;b&gt;&quot;Unfolded&quot;&lt;/b&gt;: for an unfolded,&lt;/li&gt;
+     *      &lt;li&gt;&lt;b&gt;&quot;MfDefault3DView&quot;&lt;/b&gt;: for the default 3D view,&lt;/li&gt;
+     *      &lt;li&gt;otherwise: the default 3D view.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     * @param   oCells
+     *      A reference to list of topological cell.
+     * @return &lt;tt&gt;S_OK&lt;/tt&gt;.
+     *      The list of cell is successfully valuated.
+     * @return &lt;tt&gt;E_FAIL&lt;/tt&gt;.
+     *      The list of cell cannot be valuated. Use CATError::CATGetLastError()
+     *      to retrieve the error by the &lt;tt&gt;HRESULT&lt;/tt&gt; value. @see CATError.
+     */
+    virtual HRESULT __stdcall GetCells( const CATUnicodeString &amp; iView, 
+                                        CATLISTP( CATCell ) &amp; oCells ) const = 0;
+
+};
+
+CATDeclareHandler( CATIStmTechnologicalProcess, CATBaseUnknown );
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmTearDrop.html">← 上一页: CATIStmTearDrop.h</a></div>
+        <div><a href="CATIStmTechnologicalRequest.html">下一页: CATIStmTechnologicalRequest.h →</a></div>
+    </div>
+</body>
+</html>

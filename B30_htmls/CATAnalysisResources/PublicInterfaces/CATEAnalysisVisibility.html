@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisResources/PublicInterfaces/CATEAnalysisVisibility.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisResources/PublicInterfaces/CATEAnalysisVisibility.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEAnalysisUpgradeContainer.html">← 上一页: CATEAnalysisUpgradeContainer.h</a></div>
+        <div><a href="CATECharacCollector.html">下一页: CATECharacCollector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+//===================================================================
+#ifndef CATEAnalysisVisibility_H
+#define CATEAnalysisVisibility_H
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */ 
+#include &quot;CATAnalysisResources.h&quot;
+#include &quot;CATISamVisibility.h&quot;
+
+class CATListValCATBaseUnknown_var ;
+
+//-----------------------------------------------------------------------
+
+/**
+ * Adaptor for CATISamVisibility interface.
+ * This Adaptor can be used in &lt;font color=&quot;red&quot;&gt; BOA DataExtension&lt;/font&gt;.&lt;/p&gt;
+ * Basically, for implementing this interface, you just need to implement the constructor
+ * by initializing the internal data @href #_Visibility.
+ * @see CATISamVisibility.
+ */
+class ExportedByCATAnalysisResources CATEAnalysisVisibility: public CATISamVisibility
+{
+	public:
+
+/**
+ * Enumerate for decoding the visibility flag.
+ * @param InGraph For feature visible in the feature tree.
+ * @param In3D    For feature visible in 3D.
+ */
+	  enum DecodeVisibility {InGraph = (1&lt;&lt;0), In3D	= (1&lt;&lt;1)};
+
+// Standard constructors and destructors for an implementation class
+// -----------------------------------------------------------------
+/**
+ * Default constructor.
+ */
+		CATEAnalysisVisibility ();
+/**
+ * Default destructor.
+ */
+		virtual ~CATEAnalysisVisibility ();
+
+/**
+ * Defines the Visibility attribute of an analysis feature.
+ *   @param iVisibility Value for Visibility. @href CATSamVisibility
+ */
+		virtual void SetVisibilityProperty(CATSamVisibility iVisibility);
+
+/**
+ * Returns the Visibility attribute of an analysis feature.
+ *   @return iVisibility Value for Visibility. @href CATSamVisibility
+ */
+
+		virtual CATSamVisibility GetVisibilityProperty();
+/**
+ * Returns the Visibility attribute of an analysis feature in the feature tree.
+ *   @return True if the feature is connected to the tree. @href CATSamVisibility
+ */
+
+		virtual CATBoolean IsVisibleInGraph();
+
+/**
+ * Returns the Visibility attribute of an analysis feature in the 3D Window.
+ *   @return True if the feature will be visualize in the 3D Window . @href CATSamVisibility
+ */
+
+		virtual CATBoolean IsVisibleIn3D();
+
+ /**
+ * Returns the Visibility is managed by persistent attribute.
+ * @return True if the feature have a persistent attribute for this implementation.
+ */
+
+    virtual CATBoolean IsPersistent() const ;
+
+	protected :
+/**
+  * Set Up a default visibility.
+  * &lt;b&gt;Default Value&lt;/b&gt; is set up as &lt;font color=&quot;red&quot;&gt;VisuGraphAnd3D&lt;/font&gt;.
+  */
+    CATSamVisibility _Visibility;
+
+	private :
+
+/**
+ * Defines the show mode of an analysis feature.
+ *   @param iStatus TRUE if feature must be in No Show mode
+ */
+		virtual void SetShowStatus(CATBoolean iStatus);
+
+/**
+ * Returns the show mode of an analysis feature.
+ * @return True if the feature is in NoShow mode
+ */
+		virtual CATBoolean IsNoShow();
+/**
+ * Internal method.
+ * Should not be used.
+ * @return The list of parents for visualization and graph.
+ */
+    virtual CATListValCATBaseUnknown_var* GetFatherForGraphAnd3D();
+		CATBoolean _ShowStatus;
+
+};
+//-----------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEAnalysisUpgradeContainer.html">← 上一页: CATEAnalysisUpgradeContainer.h</a></div>
+        <div><a href="CATECharacCollector.html">下一页: CATECharacCollector.h →</a></div>
+    </div>
+</body>
+</html>

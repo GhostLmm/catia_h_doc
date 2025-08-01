@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnalysisMeshingModel/PublicInterfaces/CATMSHElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AnalysisMeshingModel/PublicInterfaces/CATMSHElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMSHCriterionServices.html">← 上一页: CATMSHCriterionServices.h</a></div>
+        <div><a href="CATMSHElementVisuAttribute.html">下一页: CATMSHElementVisuAttribute.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMSHElement_h
+#define CATMSHElement_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1 
+ * @CAA2Usage U1 
+ */
+
+#include &quot;MSHModel.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &lt;stddef.h&gt;
+
+class CATMSHMeshDomain;
+class CATMSHElementVisuGroup;
+class CATMSHElementVisuAttribute;
+class CATIMSHConnectivity;
+class CATMSHMesh;
+class CATMSHMeshPart;
+class CATMSHMeshDomain;
+class CATIMSHMesh;
+class CATMSHMeshExtStream;
+class CATMSHNode;
+class CATMSHSelectedElement;
+
+/**
+ * Object representing a finite element.
+ * @see CATIMSHMesh, CATMSHNode.
+ */
+class ExportedByMSHModel CATMSHElement 
+{
+  friend class CATMSHElementPrivate;
+  friend class CATMSHElementServices;
+
+// Mthodes et donnes membres publiques
+
+public:
+  /**
+   * Returns the number of linked nodes. 
+   */
+  inline int GetNumberOfLinkedNodes () const;
+  /**
+   * Returns the integer tag associated to the element.
+   */
+  inline unsigned int GetTag () const;
+  /**
+   * Returns the element number.
+   * Elements are numbered between 0 and the total number of elements minus one.
+   * Take care of the fact that this number is not stable upon modifications, 
+   * for example in case of element deletion.
+   */
+  int GetNumber ();
+  /**
+   * Check if the finite element is deleted.
+   * Returns 1 the element is deleted, 0 otherwise.
+   */
+  inline int IsDeleted () const;
+  /**
+   * Returns the &lt;b&gt;Mesh&lt;/b&gt; which contains the element.
+   * @return CATBaseUnknown#Release
+   */
+  CATIMSHMesh * GetMesh () const;
+  /**
+   * Returns the next element in the &lt;b&gt;Mesh&lt;/b&gt;. This method should be used with
+   * the @href CATIMSHMesh#GetFirstElement method to scan all elements.
+   */
+  inline CATMSHElement * Next () const;
+  /**
+   * Returns the previous element in the &lt;b&gt;Mesh&lt;/b&gt;.
+   */
+  inline CATMSHElement * Previous () const;
+  /**
+   * Retreives all nodes coordinates. 
+   * @param ioCoordinates
+   *   Array containing the nodes coordinates in the following order: X1, Y1, Z1, X2, Y2, Z2, ...
+	 * @return
+   *   The number of element&#x27;s nodes.
+   */
+  int GetNodesCoordinates ( double * ioCoordinates ) const;
+  /**
+   * @nodoc 
+   * Lecture des coordonnes des noeuds lis (floats pour la visu)
+   */
+  int GetNodesCoordinates ( float * Coordinates , float Shrink = 1.f ) const;
+  /**
+   * Returns the element&#x27;s connectivity.
+   * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: No AddRef is done on returned value.
+   */
+  inline CATIMSHConnectivity * GetConnectivity () const;
+  /**
+   * Returns a pointer on the list of element&#x27;s nodes.
+   */
+  virtual inline CATMSHNode * const * GetLinkedNodes () const = 0;
+  /**
+   * Returns graphic attribute for the finite element.
+   */
+  const CATMSHElementVisuAttribute * GetVisuAttribute () const;
+  /**
+   * Returns the &lt;b&gt;Mesh Domain&lt;/b&gt; which contains the element.
+   */
+  inline CATMSHMeshDomain * GetMeshDomain () const;
+  /**
+   * Returns the element activity. An element in considered as active if it belong to
+   * an active &lt;b&gt;Mesh Part&lt;/b&gt;. Otherwise the element is inactive. See @href CATIMSHMeshPart.
+   */
+  short IsActive ();
+
+
+// Mthodes et donnes membres prives 
+protected:
+
+  // Constructeur
+  CATMSHElement ( CATMSHElement * PrevElement , CATIMSHConnectivity * Connectivity , 
+                  int NbOfLinkedNodes , CATMSHNode * const * LinkedNodes, unsigned int Tag );
+  
+  // Destructeur
+  virtual ~CATMSHElement ();
+
+private:
+
+  CATMSHElement ( const CATMSHElement&amp; From );
+  CATMSHElement&amp; operator= ( const CATMSHElement&amp; From );
+  CATMSHElement ();
+
+
+
+  inline void SetDomain ( CATMSHMeshDomain * Group );
+  inline CATINTPTR GetWorkAsInt () const;
+  inline void SetWorkAsInt ( CATINTPTR Work );
+  inline void * GetWorkAsPtr () const;
+  inline void SetWorkAsPtr ( void * Work );
+  inline void SetDeleted ();
+  inline void SetActive ();
+  inline void WillBeRemoved ();
+  inline int IsInTransaction () const;
+  inline void SetInTransaction ();
+  inline void ResetFromTransaction ();
+  inline int HasAssociativity () const;
+  inline void SetHasAssociativity ();
+  inline void SetInPath ();
+  inline int IsInPath () const;
+  CATMSHMesh * GetMeshImpl ();
+  inline CATMSHElementVisuGroup * GetVisuGroup () const;
+  inline void SetVisuGroup ( CATMSHElementVisuGroup * Group );
+  inline void SetNext ( CATMSHElement * Next );
+  inline void SetPrevious ( CATMSHElement * Previous );
+  inline int IsToBeRemoved () const;
+  inline int GetVisibility () const;
+  void SetVisibility ( int Visible );
+  inline short GetQuality () const;
+  inline short GetOldQuality () const;
+  void SetQuality ( short Quality );
+  inline short GetInterference () const;
+  void SetInterference ( short Interference );
+  inline short IsVisible () const;
+  inline short IsFlagged () const;
+  short IsMeshPartFlagged ();
+  inline void SetFlagged ( short Flagged );
+  inline void * GetAttributes () const;
+  inline void SetAttributes ( void * Attributes );
+  inline unsigned short GetShared () const;
+  inline void SetShared ( unsigned short Shared );
+ 
+  // Donnes membres
+
+  CATMSHElement *          _Next;
+  CATMSHElement *          _Previous;
+  CATMSHElementVisuGroup * _VisuGroup;
+  void *                   _Attributes;
+  CATIMSHConnectivity *    _Connectivity;
+  CATMSHMeshDomain *       _Domain;
+
+  union
+  {
+    void *                 AsPtr;
+    CATINTPTR              AsInt;
+  }                        _Work;
+
+  int                      _NbOfLinkedNodes;
+  unsigned int             _Tag;
+
+  unsigned short           _SharedFacesEdges;
+
+  union
+  {
+    short                  _ShortFields;
+    struct
+    {
+      unsigned short       Deleted              : 1;
+      unsigned short       InCurrentTransaction : 1;
+      unsigned short       Quality              : 2;
+      unsigned short       QualityOld           : 2;
+      unsigned short       Interference         : 2;
+      unsigned short       ToBeRemoved          : 1;
+      unsigned short       HasAssociativity     : 1;
+      unsigned short       IsInPath             : 1;
+      unsigned short       Visibility           : 1;
+      unsigned short       Flagged              : 1;
+    }                      _BitFields;
+  }                        _ShortAndBit;
+};
+
+//
+//  Implmentations inline
+//
+
+//
+//==================================================
+// GetNumberOfLinkedNodes: nombre de noeuds de l&#x27;lment
+//==================================================
+//
+inline int CATMSHElement::GetNumberOfLinkedNodes () const
+{
+  return _NbOfLinkedNodes;
+}
+//
+//==================================================
+// GetTag: lecture du tag
+//==================================================
+//
+inline unsigned int CATMSHElement::GetTag () const
+{
+  return _Tag;
+}
+
+//
+//==================================================
+// IsDeleted: l&#x27;lment est-il dtruit?
+//==================================================
+//
+inline int CATMSHElement::IsDeleted () const
+{
+  return _ShortAndBit._BitFields.Deleted;
+}
+
+//
+//==================================================
+// L&#x27;lment va-t-il etre physiquement dtruit ?
+//==================================================
+//
+inline int CATMSHElement::IsToBeRemoved () const
+{
+  return _ShortAndBit._BitFields.ToBeRemoved;
+}
+
+//
+//==================================================
+// L&#x27;lment va etre physiquement dtruit...
+//==================================================
+//
+inline void CATMSHElement::WillBeRemoved ()
+{
+  _ShortAndBit._BitFields.ToBeRemoved = 1;
+}
+
+//
+//==================================================
+// Next: lment suivant
+//==================================================
+//
+inline CATMSHElement * CATMSHElement::Next () const
+{
+  return _Next;
+}
+
+//
+//==================================================
+// Previous: noeud prcdent
+//==================================================
+//
+inline CATMSHElement * CATMSHElement::Previous () const
+{
+  return _Previous;
+}
+
+//
+//==================================================
+// GetConnectivity: connectivit de l&#x27;lment
+//==================================================
+//
+inline CATIMSHConnectivity * CATMSHElement::GetConnectivity () const
+{
+  return _Connectivity;
+}
+
+//
+//==================================================
+// IsVisible: L&#x27;lment est-il visible
+//==================================================
+//
+inline short CATMSHElement::IsVisible () const
+{
+  return (~_SharedFacesEdges) &amp; 63;
+}
+
+//
+//==================================================
+// GetShared: Entits partages de l&#x27;lment
+//==================================================
+//
+inline unsigned short CATMSHElement::GetShared () const
+{
+  return _SharedFacesEdges;
+}
+
+//
+//==================================================
+// SetShared: Entits partages de l&#x27;lment
+//==================================================
+//
+inline void CATMSHElement::SetShared ( unsigned short Shared )
+{
+  _SharedFacesEdges = Shared;
+}
+
+//
+//==================================================
+// GetQuality: Lecture de la qualit de l&#x27;lment
+//==================================================
+//
+inline short CATMSHElement::GetQuality () const
+{
+  return _ShortAndBit._BitFields.Quality;
+}
+
+//
+//==================================================
+// GetOldQuality: Lecture de la qualit de l&#x27;lment
+//==================================================
+//
+inline short CATMSHElement::GetOldQuality () const
+{
+  return _ShortAndBit._BitFields.QualityOld;
+}
+
+//
+//==================================================
+// GetInterference: Lecture de l&#x27;interfrence
+//==================================================
+//
+inline short CATMSHElement::GetInterference () const
+{
+  return _ShortAndBit._BitFields.Interference;
+}
+//
+//==================================================
+// GetAttributes: lecture des attributs
+//==================================================
+//
+inline void * CATMSHElement::GetAttributes () const
+{
+  return _Attributes;
+}
+
+//
+//==================================================
+// SetAttributes: criture des attributs
+//==================================================
+//
+inline void CATMSHElement::SetAttributes ( void * Attributes )
+{
+  _Attributes = Attributes;
+}
+
+//
+//==================================================
+// GetWork: lecture du int Work
+//==================================================
+//
+inline CATINTPTR CATMSHElement::GetWorkAsInt () const
+{
+  return _Work.AsInt;
+}
+
+//
+//==================================================
+// GetWork: lecture du void * Work
+//==================================================
+//
+inline void * CATMSHElement::GetWorkAsPtr () const
+{
+  return _Work.AsPtr;
+}
+
+//
+//==================================================
+// SetWork: criture du int Work
+//==================================================
+//
+inline void CATMSHElement::SetWorkAsInt ( CATINTPTR Work )
+{
+  _Work.AsInt = Work;
+}
+
+//
+//==================================================
+// SetWork: criture du void * Work
+//==================================================
+//
+inline void CATMSHElement::SetWorkAsPtr ( void * Work )
+{
+  _Work.AsPtr = Work;
+}
+
+//
+//==================================================
+// Ecriture du domaine de l&#x27;lment.
+//==================================================
+//
+inline void CATMSHElement::SetDomain ( CATMSHMeshDomain * Domain )
+{
+  _Domain = Domain;
+}
+
+//
+//==================================================
+// SetDeleted: l&#x27;lment est marqu dtruit
+//==================================================
+//
+inline void CATMSHElement::SetDeleted ()
+{
+  _ShortAndBit._BitFields.Deleted = 1;
+}
+
+//
+//==================================================
+// SetActive: l&#x27;lment est marqu actif
+//==================================================
+//
+inline void CATMSHElement::SetActive ()
+{
+  _ShortAndBit._BitFields.Deleted = 0;
+}
+
+//
+//==================================================
+// IsInTransaction: l&#x27;lment est-il dans la transaction?
+//==================================================
+//
+inline int CATMSHElement::IsInTransaction () const
+{
+  return _ShortAndBit._BitFields.InCurrentTransaction;
+}
+
+//
+//==================================================
+// SetInTransaction: l&#x27;lment est dans la transaction courante
+//==================================================
+//
+inline void CATMSHElement::SetInTransaction ()
+{
+  _ShortAndBit._BitFields.InCurrentTransaction = 1;
+}
+
+//
+//==================================================
+// ResetFromTransaction: l&#x27;lment n&#x27;est plus dans la transaction
+//==================================================
+//
+inline void CATMSHElement::ResetFromTransaction ()
+{
+  _ShortAndBit._BitFields.InCurrentTransaction = 0;
+}
+
+//
+//==================================================
+// HasAssociativity: l&#x27;lment a-t-il une
+// associativit?
+//==================================================
+//
+inline int CATMSHElement::HasAssociativity () const
+{
+  return _ShortAndBit._BitFields.HasAssociativity;
+}
+
+//
+//==================================================
+// SetHasAssociativity: marque l&#x27;lment comme ayant
+// une associativit
+//==================================================
+//
+inline void CATMSHElement::SetHasAssociativity ()
+{
+  _ShortAndBit._BitFields.HasAssociativity = 1;
+}
+
+//
+//==================================================
+// SetInPath: marque l&#x27;lment comme tant dans un path
+//==================================================
+//
+inline void CATMSHElement::SetInPath ()
+{
+  _ShortAndBit._BitFields.IsInPath = 1;
+}
+
+//
+//==================================================
+// IsInPath: l&#x27;lment a-t-il une
+//==================================================
+//
+inline int CATMSHElement::IsInPath () const
+{
+  return _ShortAndBit._BitFields.IsInPath;
+}
+
+//
+//==================================================
+// GetMeshDomain: lecture du domaine
+//==================================================
+//
+inline CATMSHMeshDomain * CATMSHElement::GetMeshDomain () const
+{
+  return _Domain;
+}
+
+//
+//==================================================
+// GetVisibility: l&#x27;lment est-il visible?
+//==================================================
+//
+inline int CATMSHElement::GetVisibility () const
+{
+  return _ShortAndBit._BitFields.Visibility;
+}
+
+//
+//==================================================
+// IsFlagged: l&#x27;lment est-il flagg?
+//==================================================
+//
+inline short CATMSHElement::IsFlagged () const
+{
+  return _ShortAndBit._BitFields.Flagged;
+}
+
+//
+//==================================================
+// SetFlag: l&#x27;lment est-il flagg?
+//==================================================
+//
+inline void CATMSHElement::SetFlagged ( short Flagged )
+{
+  if ( Flagged ) _ShortAndBit._BitFields.Flagged = 1;
+  else _ShortAndBit._BitFields.Flagged = 0;
+}
+
+//
+//==================================================
+// GetVisuGroup: lecture du visugroup
+//==================================================
+//
+inline CATMSHElementVisuGroup * CATMSHElement::GetVisuGroup () const
+{
+  return _VisuGroup;
+}
+
+//
+//==================================================
+// SetVisuGroup: criture du groupe 
+//==================================================
+//
+inline void CATMSHElement::SetVisuGroup ( CATMSHElementVisuGroup * Group )
+{
+  _VisuGroup = Group;
+}
+
+//
+//==================================================
+// SetNext: chainage au suivant
+//==================================================
+//
+inline void CATMSHElement::SetNext ( CATMSHElement * Next )
+{
+  _Next = Next;
+}
+
+//
+//==================================================
+// SetPrevious: chainage au prcdent
+//==================================================
+//
+inline void CATMSHElement::SetPrevious ( CATMSHElement * Previous )
+{
+  _Previous = Previous;
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMSHCriterionServices.html">← 上一页: CATMSHCriterionServices.h</a></div>
+        <div><a href="CATMSHElementVisuAttribute.html">下一页: CATMSHElementVisuAttribute.h →</a></div>
+    </div>
+</body>
+</html>

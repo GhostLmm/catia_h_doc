@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATFrmWindow.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATFrmWindow.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATFrmPalette.html">← 上一页: CATFrmPalette.h</a></div>
+        <div><a href="CATI2DCamera.html">下一页: CATI2DCamera.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATFRMWINDOW_H
+#define CATFRMWINDOW_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+//------------------------------------------------------------------------------
+// Abstract: Working area to visualize application data:
+//           geometries, graphs, ...
+//
+//------------------------------------------------------------------------------
+// Usage:    A CATFrmWindow is a rectanglar subarea of an application frame.
+//           It allows to display and manipulate application data.
+//           It has always a ApplicationWindow as Parent.
+// 
+//           This class will be derived by application to display in Windows
+//           of the ApplicationFrame the application data.   
+//------------------------------------------------------------------------------
+// Inheritance: CATDlgDialog (Dialog framework)
+//------------------------------------------------------------------------------
+// Main methods:    
+//
+//           PrintWindow
+//           AddCommand
+//           ExecuteCommand
+//           GetViewer
+//           GetEditor
+//       
+//------------------------------------------------------------------------------
+// Events:    
+//	       WINDOW_ACTIVATED    (from uncurrent window to current window)
+//	       WINDOW_DEACTIVATED  (from current window to uncurrent window)
+//	       WINDOW_CREATED
+//	       WINDOW_DELETED
+//         VIEWER_SELECTED    (MouseButton1 Down on a Viewer) (sender is viewer)
+//         VIEWER_ACTIVATED   (The CurrentViewer has been changed) (sender is viewer)
+//         VIEWPOINT_CHANGED  (The main viewpoint of the currentViewer has been changed) (sender is window)
+//         VIEWER_SHOW        (the viewer is seen in show space)
+//         VIEWER_NO_SHOW     (the viewer is seen in noshow space)
+//------------------------------------------------------------------------------
+
+#include &quot;CD0WIN.h&quot;
+#include &quot;CATDlgInclude.h&quot;
+#include &quot;CATDlgDialog.h&quot;
+#include &quot;CATFrmLayout.h&quot;
+
+#include &quot;CATListPV.h&quot;
+class CATFrmAuxWindow;
+
+class CATDlgFrame;
+class CATViewer ;
+class CATFrmEditor ;
+class CATPrintImage ;
+class CATICamera ;
+class CATFrmWindowCommand;
+class CATVisibilityPanel;
+class CATMagnifierPanel;
+
+/** 
+ * @nodoc
+ * Defines the MDI state of the window.
+ * @param MinimizeWindow
+ *  The &lt;tt&gt;CATFrmWindow&lt;/tt&gt; is minimized.
+ * @param MaximizeWindow
+ *  The &lt;tt&gt;CATFrmWindow&lt;/tt&gt; is maximized.
+ * @param RestoredWindow
+ *  The &lt;tt&gt;CATFrmWindow&lt;/tt&gt; is restored.
+ * @see CATFrmWindow#GetWindowMDIState
+ */
+enum  CATFrmWindowState {MinimizeWindow, RestoredWindow, MaximizeWindow};
+
+/** @nodoc */
+#define MAXWINCMD 50
+
+/**
+ * Class to provid a working area to visualize application data.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to display and manipulate application data.
+ * This basic class will be derived by application to display 
+ * the application&#x27;s specific data. See also: @href CATFrmNavigGraphicWindow, 
+ * @href CATFrmGraphAnd3DWindow and @href CATFrmGraphAnd2DWindow.
+ */
+class ExportedByCD0WIN CATFrmWindow: public CATDlgDialog
+{
+   friend class CATFrmLayout;
+
+   friend class CATFrmAuxWindow;
+
+   DeclareResource(CATFrmLayout, CATDlgDialog) ;
+
+ public:
+
+ /**
+    * Event sent when the window is activated.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;this event is sent by the CATFrmLayout.
+	* &lt;br&gt;Sample of callback:
+	* &lt;pre&gt;
+    * ::AddCallback(this,
+    *              CATFrmLayout::GetCurrentLayout(),
+	*	           CATFrmWindow::WINDOW_ACTIVATED(),
+	*	           (CATSubscriberMethod)&amp;MyClass::MyCBMethod,
+	*	           NULL);
+	* &lt;/pre&gt;
+	*/
+   CATDeclareCBEvent(WINDOW_ACTIVATED);
+
+ /**
+    * Event sent when the window is deactivated.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;this event is sent by the CATFrmLayout.
+	* &lt;br&gt;Sample of callback:
+	* &lt;pre&gt;
+    * ::AddCallback(this,
+    *              CATFrmLayout::GetCurrentLayout(),
+	*	           CATFrmWindow::WINDOW_DEACTIVATED(),
+	*	           (CATSubscriberMethod)&amp;MyClass::MyCBMethod,
+	*	           NULL);
+	* &lt;/pre&gt;
+	*/
+   CATDeclareCBEvent(WINDOW_DEACTIVATED);
+
+   /** @nodoc */
+   CATDeclareCBEvent(WINDOW_CREATED);
+ /**
+    * Event sent when the window is deleted.
+	* &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;this event is sent by the CATFrmLayout.
+	* &lt;br&gt;Sample of callback:
+	* &lt;pre&gt;
+    * ::AddCallback(this,
+    *              CATFrmLayout::GetCurrentLayout(),
+	*	           CATFrmWindow::WINDOW_DELETED(),
+	*	           (CATSubscriberMethod)&amp;MyClass::MyCBMethod,
+	*	           NULL);
+	* &lt;/pre&gt;
+	*/
+   CATDeclareCBEvent(WINDOW_DELETED);
+   /** @nodoc do not use */
+   CATDeclareCBEvent(WINDOW_MOVED);
+   /** @nodoc do not use */
+   CATDeclareCBEvent(WINDOW_RESIZED);
+    /** @nodoc do not use */
+   CATDeclareCBEvent(WINDOW_MAXIMIZED);
+   /** @nodoc do not use */
+   CATDeclareCBEvent(WINDOW_MINIMIZED);
+   /** @nodoc do not use */
+   CATDeclareCBEvent(WINDOW_RESTORED);
+   /** @nodoc */
+   CATDeclareCBEvent(VIEWER_SELECTED);
+   /** @nodoc */
+   CATDeclareCBEvent(VIEWER_ACTIVATED);
+   /** @nodoc */
+   CATDeclareCBEvent(VIEWPOINT_CHANGED);
+   /** @nodoc */
+   CATDeclareCBEvent(VIEWER_SHOW);
+   /** @nodoc */
+   CATDeclareCBEvent(VIEWER_NO_SHOW);
+
+   CATDeclareClass ;
+
+//------------------------------------------------------------------------------
+
+
+// Constructor
+// -----------
+/**
+ * Constructs a CATFrmWindow.
+ * @param iWindowTag 
+ *   The window name.
+ *   This name is the base of displayed window title.
+ * @param iEditor 
+ *   The editor of the document.
+ */
+   CATFrmWindow(const CATString &amp; iWindowTag, CATFrmEditor * iEditor = NULL);
+
+// Duplicator
+// ----------
+/**
+ * Creates and returns a new window of the same document.
+ */
+   virtual CATFrmWindow * DuplicateWindow();
+
+// Destructor
+// ----------
+   virtual ~CATFrmWindow();
+/**
+ * Close the window.
+ */
+   virtual void            DeleteWindow();
+
+// Print the contents of window
+// ----------------------------
+/** @nodoc */
+   virtual CATPrintImage * PrintWindow();
+
+// Update the View menu in menu bar
+// --------------------------------
+/** @nodoc */
+   virtual void            InitViewCommand();
+/** @nodoc */
+   virtual void            AddCommand();
+/** @nodoc */
+   virtual void            RemoveCommand();
+
+// Execute a View menu item command
+// --------------------------------
+/** @nodoc */
+   virtual void  ExecuteCommand(const CATString &amp; commandId);
+
+// Get current viewer
+// ------------------
+/**
+ * Returns the frame in wich the viewer will be attached.
+ */
+   virtual CATDlgFrame     * GetViewerFrame();
+/** @nodoc */
+   virtual void              SetViewerFrame(CATDlgFrame *);
+
+/**
+ * Returns the viewer created in the window.
+ */
+   virtual CATViewer       * GetViewer();
+/**
+ * Changes the current viewer of the window.
+ * @param iViewer 
+ *   The new current viewer.
+ */
+   virtual void              SetViewer(CATViewer * iViewer);
+
+/** @nodoc */
+   virtual void              SetViewerSelectable(CATViewer * iViewer);
+/** @nodoc */
+   virtual void              UnsetViewerSelectable(CATViewer * iViewer);
+
+// Get/Set current viewpoint
+// -------------------------
+/** 
+ * Retrieves the current viewpoint of the window.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:See the @href #SetCurrentCamera method.
+ * @return 
+ * The current viewpoint. This pointeur must be released after usage. 
+ */
+   virtual CATICamera      * GetCurrentCamera();
+/** 
+ * Changes the viewpoint of the window.
+ * &lt;pre&gt;
+ * Example to handle the camera:
+ *
+ *   CATICamera *pICamera = NULL ;
+ *   pICamera = myWindow-&gt;GetCurrentCamera();
+ *
+ *   // Modify the camera 
+ *   pICamera-&gt;....... 
+ *
+ *   myWindow-&gt;SetCurrentCamera(pICamera);
+ *
+ *   pICamera-&gt;Release();
+ *   pICamera = NULL ;
+ * &lt;/pre&gt;
+ * @param iCamera
+ *  This Camera contains the new viewpoint.
+ * 
+ */
+   virtual void              SetCurrentCamera(CATICamera * iCamera);
+
+// GetEditor
+// ---------
+/**
+ * Returns the document editor.
+ */
+   virtual CATFrmEditor    * GetEditor();
+
+// Window name management
+// ----------------------
+/**
+ * Changes the name of window.
+ * @param iWindowName 
+ *   The new name of window.
+ */
+   virtual void      SetBaseName(const CATUnicodeString &amp; iWindowName);
+/**
+ * Returns the name of window.
+ */
+   CATUnicodeString &amp;GetBaseName();
+
+// Data persistence 
+//-----------------
+//   virtual void WriteToStream(void ** stream, unsigned long&amp; length);
+//   virtual void ReadFromStream(void * stream, unsigned long  length);
+
+/** @nodoc */
+   virtual void ReadSettings ();
+/** @nodoc */
+   virtual void WriteSettings();
+
+// Background Color
+//-----------------
+/** @nodoc */
+   virtual void SetBackgroundColor(const float R, const float G, const float B);
+
+/** 
+ * @nodoc
+ * Returns the MDI state of the window.
+ * &lt;br&gt;&lt;b&gt;Caution&lt;/b&gt;:Never try to change the MDI status of the window thanks to
+ * the Dialog Framework. You can only know the status of a &lt;tt&gt;CATFrmWindow&lt;/tt&gt;, and 
+ * you can&#x27;t change its state.
+ */
+   CATFrmWindowState GetWindowMDIState();                  // MinimizeWindow/RestoredWindow
+
+// Lowlight Management
+//--------------------
+/** @nodoc */
+  virtual int IsLowlightModeOn();
+
+// gdx. P3. Flag for switching into a immersive Look when window is maximized
+/** @nodoc */
+  void SetImmersiveUIGranted(const int YesNo);
+/** @nodoc */
+  int IsImmersiveUIGranted();
+
+ protected:
+
+//Internal use only
+//-----------------
+/** @nodoc */
+   int               GetWindowOrder();
+
+/** @nodoc */
+   void	             SetWindowMDIState(CATFrmWindowState); //(MinimizeWindow/RestoredWindow)
+
+// Degug
+/** @nodoc */
+   virtual void   Dump(const CATString &amp; str);
+
+/** @nodoc */
+  void InitViewer();
+   
+/** @nodoc */
+   virtual void  InitDuplicatedWindow(CATFrmWindow * ipDupWindow);
+
+ private:
+   int IsDispatchEventModeOn(CATCallbackEvent iEvent);
+
+   CATFrmLayout      *_currentLayout;
+   CATFrmEditor      *_currentEditor;
+   CATFrmWindowState  _currentMDIState;
+   CATViewer         *_currentViewer;
+   int                _windowOrder;
+   int                _nbrViewCommandBase;
+   CATFrmWindowCommand *_windowCmdBase[MAXWINCMD];
+
+// Icon bar
+   CATDlgFrame       *_viewerFrame;
+   int                _isCurrentWindow;
+
+// Identification
+   CATUnicodeString   _windowName;
+   CATUnicodeString   _windowTitle;
+
+   void                  AddCB();
+   void                  RemoveCB();
+   void                  Activate();
+   void                  Deactivate();
+
+// Call back
+   CATCallbackManager * _callbackManager;
+   
+   void SetCurWindowCB(CATCallbackEvent, void *, CATNotification *Event, CATSubscriberData , CATCallback);
+   void ChangeMainViewpointCB(CATCallbackEvent, void *, CATNotification *Event, CATSubscriberData , CATCallback);
+
+   void MDICB   (CATCommand*, CATNotification *, CATCommandClientData);
+   void DepthEffectPanelDestroyed  (CATCommand*, CATNotification *, CATCommandClientData);
+   void MagnifierPanelDestroyed (CATCommand*, CATNotification *, CATCommandClientData); 
+   
+// Settings panels
+   CATVisibilityPanel * _depthEffectPanel;
+   CATMagnifierPanel  * _magnifierPanel;
+
+// Closing management
+   int       _closing;
+   int       CloseWindow();
+
+// P3 Immersive UI Flag
+  CATBoolean _grantImmersiveUI;
+
+   // Aux window management
+   // ---------------------
+   CATFrmAuxWindow * _activeAuxWindow;
+   CATListPV         _auxWindowList;
+
+   HRESULT AddAuxWindow(CATFrmAuxWindow * iAuxWindow);
+   HRESULT RemoveAuxWindow(CATFrmAuxWindow * iAuxWindow);
+
+   HRESULT SetActiveAuxWindow(CATFrmAuxWindow * iAuxWindow);
+
+ public:
+    // Aux Window Management
+    //----------------------
+    /** @nodoc */
+    CATListPV GetAuxWindowList();
+    /** @nodoc */
+    CATFrmAuxWindow * GetActiveAuxWindow();
+}; 
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATFrmPalette.html">← 上一页: CATFrmPalette.h</a></div>
+        <div><a href="CATI2DCamera.html">下一页: CATI2DCamera.h →</a></div>
+    </div>
+</body>
+</html>

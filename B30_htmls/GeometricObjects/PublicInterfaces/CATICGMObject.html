@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATICGMObject.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATICGMObject.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDomainBinder.html">← 上一页: CATICGMDomainBinder.h</a></div>
+        <div><a href="CATICGMObjectHashTable.html">下一页: CATICGMObjectHashTable.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMObject_h
+#define CATICGMObject_h
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATICGMUnknown.h&quot;
+#include &quot;CATListOfCATGeometries.h&quot;
+#include &quot;CATListOfCATICGMObjects.h&quot;
+#include &quot;CATListOfCATString.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATMathDef.h&quot;
+
+class CATCloneManager;
+class CATGeometry;
+class CATGeoFactory;
+class CATCGMAttrId;
+class CATCGMAttribute;
+class CATLISTP(CATCGMAttribute);
+class CATTopData;
+class CATCGMOperator;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+
+/** @nodoc */
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATICGMObject ;
+#else
+extern &quot;C&quot; const IID IID_CATICGMObject ;
+#endif
+//CAA_Exposed 
+/**
+ * Defines how to follow the links between the CATICGMObjects.
+ * Let us illustrate each item on this example: A CATEdgeCurve is made of 
+ * two CATPCurves. Each CATPCurve lay on a CATSurface. A CATPointOnEdgeCurve
+ * is defined on the CATEdgeCurve.
+ * &lt;pre&gt;
+ *    CATPointOnEdgeCurve -&gt; CATEdgeCurve -&gt; CATPCurve1 -&gt; CATSurface1
+ *                                        -&gt; CATPCurve2 -&gt; CATSurface2
+ * &lt;/pre&gt;
+ * @param CatCGMDependancies
+ * Going forward the first level of links. Applied to the CATEdgeCurve of the 
+ * example, it returns CATPCurve1 and CATPCurve2.
+ * @param CatCGMAll
+ * Going forward and backward one level of links. Applied to the CATEdgeCurve of the
+ * example , it returns CATPCurve1, CATPCurve2 and CATPointOnEdgeCurve.
+ * @param CatCGMAllDependancies
+ * Going forward until the last level. Applied to the CATEdgeCurve of the example, 
+ * it returns CATPCurve1, CATPCurve2, CATSurface1, CATSurface2
+ */
+enum CATCGMLinkType {CatCGMDependancies = +16, CatCGMAll = +17, CatCGMAllDependancies = +18};
+
+//CAA_Exposed 
+/**
+ * Defines the type of CATGeoFactory.
+ * @param CatCGMImplicit
+ * Refers to the implicit factory
+ * @param CatCGMExplicit
+ * Refers to the explicit factory
+ */
+enum CATCGMMode     {CatCGMImplicit = +7, CatCGMExplicit = +8};
+
+
+//CAA_Exposed 
+/**
+ * Defines the kind of links that arrives to an object.
+ * @param CatCGMUseCountAllCATICGMObject
+ * Refers to all CATICGMObject of the CATGeoFactory.
+ * @param CatCGMUseCountExtendedTopology
+ * Not Yet Avalaible, Refers to topological links.
+ */
+enum CATCGMUseCountType { CatCGMUseCountAllCATICGMObject = +11, CatCGMUseCountExtendedTopology = +12};
+
+//CAA_Exposed 
+/**
+ * Interface representing the base class of all the objects of the 
+ * Catia Geometrical Modeler that
+ * can be streamed.&lt;br&gt;
+ * These objects can be geometrical objects (CATGeometry) and other objects
+ * such as a CATLaw.
+ * &lt;ul&gt;
+ * &lt;li&gt;They are identified by a persistent tag. 
+ * &lt;li&gt;They are implicit or explicit.
+ * &lt;li&gt;If they are frozen through a smart process, 
+ * they cannot be modifiable
+ * &lt;li&gt;They can point attributes. Attributes allow an application programmer 
+ * to put data on a CATICGMObject.Attributes can
+ * be streamed (CATCGMStreamAttribute) or not (CATCGMAttribute). 
+ * &lt;li&gt;They can be cloned, (i.e. duplicated with or without the objects that
+ * are forward linked) by the use of a &lt;tt&gt;CATCloneManager&lt;/tt&gt;.
+ * &lt;/ul&gt;
+ */
+
+class ExportedByCATGMGeometricInterfaces CATICGMObject : public CATICGMUnknown
+{
+  CATDeclareInterface;
+public:
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+
+/**
+  * Declares that the CATICGMObject construction is achieved. 
+  *  &lt;br&gt;This method also runs basic checks.
+  *  @param IsNoMoreModifiable     
+  *   The status of the CATICGMObject after completion.
+  *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  *   &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; To freeze the content of the CATICGMObject. Further modifications of this
+  *   object will imply that all modified elements will be copied first,
+  *   thus keeping the current object state unmodified.
+  *   &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;The CATICGMObject can be later modified.&lt;/dl&gt;
+  *  @param IdentityBuildOperator    
+  *    Internal use, to let at the default value.
+  *  @param iData
+  *    Internal use, to let at the default value.
+  */
+  virtual void Completed(CATBoolean          iIsNoMoreModifiable = FALSE,
+                         const char          iIdentityBuildOperator[] = &quot;&quot;,
+                         const CATTopData  * iData = NULL) = 0;
+ //CAA_Exposed  
+/**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATICGMObject is modifiable.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal velues&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATICGMObject is modifiable, &lt;tt&gt;0&lt;/tt&gt; otherwise.&lt;br&gt;
+  * A CATICGMObject is not modifiable when it depends on another CATICGMObject
+  * that has been frozen. This is used in the topology by the smart mechanism.  
+  */
+  virtual CATBoolean IsModifiable()  = 0;
+  
+  //----------------------------------------------------------------------
+  // General Purpose Analysis : Tag,Factory,Explicit,Links
+  //----------------------------------------------------------------------
+
+  //CAA_Exposed 
+/**
+  * Returns the number of links that arrives to &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param iUseType
+  * The kind of links that are taken into account.
+  * @return
+  * The number of links that refer to &lt;tt&gt;this&lt;/tt&gt;.
+  */
+  virtual CATULONG32  GetUseCount(CATCGMUseCountType iUseType = CatCGMUseCountAllCATICGMObject) const  = 0;
+
+    //CAA_Exposed 
+/**
+  * Returns the persistent tag of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject. 
+  * &lt;br&gt;&lt;b&gt;WARNING:&lt;/b&gt; The returned tag is not necessarily incremented each time a new
+  * object is created. 
+  * @return
+  * The tag.
+  */
+  virtual CATULONG32  GetPersistentTag() const  = 0;
+
+  //CAA_Exposed 
+  /**
+  * Returns a pointer to the CATGeoFactory of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param iThrowOnNullFactory
+  * Specify if an error must be thrown in case of a NULL return CATGeoFactory pointer.
+  * Notice that this configuration remains unsual.
+  * @param iMode
+  * The mode of the required &lt;tt&gt;CATGeoFactory&lt;/tt&gt;.
+  * @return
+  * The pointer to the CATGeoFactory.
+  */
+  virtual CATGeoFactory* GetContainer(CATBoolean iThrowOnNullFactory = TRUE, CATCGMMode iMode = CatCGMExplicit) = 0;
+
+//CAA_Exposed 
+  /**
+  * Modifies the implicit/explicit mode of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param iMode
+  * The new mode of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  */
+  virtual void SetMode(CATCGMMode iMode) = 0;
+
+//CAA_Exposed 
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATICGMObject is explicit.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATICGMObject is explicit, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual CATLONG32 IsExplicit() const = 0; 
+
+  //----------------------------------------------------------------------
+  // Attribute management: new version.
+  //----------------------------------------------------------------------
+    //CAA_Exposed 
+/**
+  * Links an attribute to &lt;tt&gt;this&lt;/tt&gt; CATIGGMObject.
+  * @param iNewAttr
+  * A pointer to the attribute to be pointed by &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @return
+  * The result of the association
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute has been successfully pointed, 
+  * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual CATLONG32         PutAttribute(CATCGMAttribute * iNewAttr)=0 ;
+
+    //CAA_Exposed 
+/** 
+  * Returns a pointer to an attribute, pointed by &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param iAttrId
+  * The attribute identifier  (given by the macro &lt;tt&gt;iAttrId=UIDName(MyAttributeClassName)&lt;/tt&gt;)
+  * @return
+  * A pointer to the attribute.
+  */
+  virtual CATCGMAttribute * GetAttribute(const CATCGMAttrId* iAttrId)=0 ;
+
+    //CAA_Exposed 
+  /**
+  * Releases an attribute so that 
+  * &lt;tt&gt;this&lt;/tt&gt; CATICGMObject no longer points to the given attribute. 
+  * The attribute is deleted if it is not pointed to by any other object.
+  * @param iAttr
+  * The pointer to the attribute 
+  * @return
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute has been successfully released, 
+  * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual CATLONG32         ReleaseAttribute(CATCGMAttribute * iAttr)=0 ;
+
+    //CAA_Exposed 
+  /**
+  * Retrieves the attributes, pointed by &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param oListOfAttr
+  * The retrieving list. Notice that all the derived attributes are also retrieved.
+  * @param iAttrId
+  * The attribute identifier to take into account. If &lt;tt&gt;NULL&lt;/tt&gt;, it retrieves all the attributes
+  * of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  */
+  virtual void        GetListAttribute(CATLISTP(CATCGMAttribute) &amp; oListOfAttr, 
+    const CATCGMAttrId* iAttrId=NULL)=0;
+
+      //CAA_Exposed 
+/**
+  * Retrieves the next attribute of &lt;tt&gt;this&lt;/tt&gt; CATICGMObject.
+  * @param iPrev
+  * A pointer to the previous attribute. &lt;tt&gt;iPrevAttr=NULL&lt;/tt&gt; for the first attribute.
+  * @param ioNextAttr
+  * A pointer to the next attribute.
+  */
+  virtual void        GetNextAttribute(CATCGMAttribute * iPrevAttr,
+    CATCGMAttribute *&amp; ioNextAttr)=0;
+  
+
+  
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+ 
+/**
+  * @nodoc
+  * Declares that the CATICGMObject construction is achieved, by sending an event. 
+  *  &lt;br&gt;This method also runs basic checks.
+  *  @param iOperator      
+  *   The pointer to the CGM operator that achieves the construction.
+  */
+  virtual void CompletedFreeze(CATCGMOperator *iOperator) = 0;
+  
+/**
+  * @nodoc
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATICGMObject has been completed as NoMoreModifiable Object in this session
+  */
+  virtual CATBoolean HasBeenCompletedAsNoMoreModifiable() const = 0;
+
+/**
+  * @nodoc
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATICGMObject has loaded otherwise created in this Session
+  */
+  virtual CATBoolean HasBeenLoaded() const = 0;
+
+/**
+  * @nodoc
+  * Retrieves the CATICGMObjects linked to &lt;tt&gt;this&lt;/tt&gt;.
+  * @param oLinks
+  * The lists of linked CATICGMObjects.
+  * @param iLinkType
+  * The type of links to follow.
+  * @param oSharedStatus
+  * &lt;dl&gt;&lt;dt&gt;2&lt;/dt&gt;&lt;dd&gt; If the linked object is the geometric representation
+  *  of a spec surface except for an offset surface. Example:
+  *&lt;pre&gt;CATFilletSurface-&gt;CATCylinder&lt;/pre&gt;
+  * Applied to a
+  * CATFilletSurface (that is a spec surface), the forward linked object
+  * is the CATCylinder and the shared status is 2.
+  *     &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;Identifies a forward linked object that cannot be
+  * shared with two pointing objects. Example: a CATPCurve cannot be shared
+  * by two different CATIntCurves, a CATGeometry cannot be shared by two offset
+  * surfaces.
+  *      &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;otherwise
+  *&lt;/dl&gt;
+  * @param oListString 
+  * The name of the type of link with &lt;tt&gt;this&lt;/tt&gt; of each CATICGMObjects of 
+  * &lt;tt&gt;oLinks&lt;/tt&gt;. 
+  */
+  virtual void GetLinks(CATLISTP(CATICGMObject) &amp;oLinks,
+    CATCGMLinkType           iLinkType     = CatCGMDependancies,
+    CATRCOLL(int)*           oSharedStatus = NULL,
+    CATLISTV(CATString)*     oLinksString  = NULL) = 0;
+  
+/**
+  * @nodoc
+  * DEBUG purpose Only : Returns the number of detected anomalies 
+  */
+  virtual int Check()=0;
+ 
+  
+ /**
+  * @nodoc
+  * Clones &lt;tt&gt;this&lt;/tt&gt; within a CATCloneManager process.&lt;br&gt;Do not direcly use
+  * to clone a CATICGMObject, especially if this CATICGMObject
+  * has forward links. 
+  * Use instead a &lt;tt&gt;CATCloneManager&lt;/tt&gt;:
+  * &lt;pre&gt;
+  * CATCloneManager MyManager(MyGeoFactory);
+  * MyManager.Add(MyCGMObject);
+  * MyManager.Run();
+  * CATICGMObject* ClonedObject=MyManager.ReadImage(MyCGMObject);
+  * &lt;/pre&gt;
+  */
+  virtual CATICGMObject* Clone(CATCloneManager&amp; iCloneManager) const = 0;
+  
+ /**
+  * @nodoc
+  * Use now &lt;tt&gt;CATICGMObject::GetLinks&lt;/tt&gt; with &lt;tt&gt;iLinkType=CatCGMAllDependancies&lt;/tt&gt;
+  */
+  virtual void GetAllLinks(CATLISTP(CATGeometry) &amp;oLinks) = 0;
+
+ /**
+  * @nodoc
+  * Use now &lt;tt&gt;CATICGMObject::SetMode&lt;/tt&gt; with &lt;tt&gt;iMode=CatCGMExplicit&lt;/tt&gt;
+  */
+  virtual void SetExplicit() = 0;
+  
+
+ /**
+  * @nodoc
+  * Defines an attribute on a CATIGGMObject (deprecated).
+  * &lt;br&gt;Use now the other signature.
+  * @param iKey
+  * The integer that characterizes the attribute. 
+  * Use the &lt;tt&gt;CATGiveUniqueAttributeKey() &lt;/tt&gt; global function to initialize
+  * &lt;tt&gt;iKey&lt;/tt&gt;.
+  * @param iBuffer
+  * The void pointer to a memory space that contains the data.
+  * @param iLength
+  * The length of &lt;tt&gt;iBuffer&lt;/tt&gt;.
+  * @param iControl
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute may not be replaced, 
+  * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  * @return
+  * &lt;tt&gt;1&lt;/tt&gt; if the attribute has been successfully created or replaced, 
+  * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual int         PutAttribute(const int iKey, void* iBuffer, const int iLength,  const int iControl) = 0;
+  
+ /**
+  * @nodoc
+  * Reads on &lt;tt&gt;this&lt;/tt&gt; the attribute of a given key  (deprecated).
+  * &lt;br&gt;Use now the other signature.
+  * @param iKey
+  * The key of the attribute to read.
+  * @param oLength
+  * The length of the returned buffer.
+  * @return
+  * The pointer to the buffer containing the CATICGMObject attribute data.
+  */
+  virtual const void* GetAttribute( const int iKey, int&amp; oLength) = 0;
+  
+  
+ /**
+  * @nodoc
+  * Deletes on &lt;tt&gt;this&lt;/tt&gt; the attribute of a given key  (deprecated).
+  * &lt;br&gt;Use now the other signature.
+  * @param iKey
+  * The key of the attribute to delete. (obsolete)
+  */
+  virtual int         DeleteAttribute( const int iKey ) = 0;
+  
+ /**
+  * @nodoc
+  * Deletes all the attributes on &lt;tt&gt;this&lt;/tt&gt;  (deprecated). 
+  * &lt;br&gt;Use now the other signature.
+  */
+  virtual void        DeleteAllAttribute() = 0;
+  
+ /**
+  * @nodoc
+  */
+  virtual void *GetImplementCGM(CATGeometricType iTypeReference) const = 0;
+
+ /**
+  * @nodoc
+  */
+  virtual int  IsImplementCGMRemoved(const CATGeometricType iTypeReference=CATGeometryType) const = 0;
+
+ /**
+  * @nodoc
+  */
+ virtual ULONG __stdcall CATAddRefFrom(void *iForDebug, CATBoolean iLockEquation = FALSE) = 0;
+
+ /**
+  * @nodoc
+  */
+ virtual ULONG __stdcall CATReleaseFrom(void *iForDebug, CATBoolean iLockEquation = FALSE) = 0;
+
+};
+
+/** @nodoc */ 
+CATDeclareHandler(CATICGMObject,CATICGMUnknown);
+
+/** @nodoc */
+ExportedByCATGMGeometricInterfaces int CATGiveUniqueAttributeKey();
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDomainBinder.html">← 上一页: CATICGMDomainBinder.h</a></div>
+        <div><a href="CATICGMObjectHashTable.html">下一页: CATICGMObjectHashTable.h →</a></div>
+    </div>
+</body>
+</html>

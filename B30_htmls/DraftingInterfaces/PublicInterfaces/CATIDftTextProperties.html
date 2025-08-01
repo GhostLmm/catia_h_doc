@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftTextProperties.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftTextProperties.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftText.html">← 上一页: CATIDftText.h</a></div>
+        <div><a href="CATIDftTextRange.html">下一页: CATIDftTextRange.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDftTextProperties_H
+#define CATIDftTextProperties_H
+//==============================================================================
+//                                   CATIA - Version 5
+//	COPYRIGHT DASSAULT SYSTEMES 1999
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+//==============================================================================
+
+// Inheritance
+#include &quot;CATIDftProperties.h&quot;
+
+// Parameters
+#include &quot;CATCORBABoolean.h&quot;
+
+// System
+#include &quot;CATBooleanDef.h&quot;
+
+// Forward definition for method SetValue
+class CATIDftTextProperties;
+class CATUnicodeString;
+
+// Enums
+#include &quot;CATDftTextParameters.h&quot;
+
+// ExportedBy
+#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftTextProperties ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftTextProperties;
+#endif
+
+/**
+* Behaviour interface to modify elements which contains Texts.
+*/
+class ExportedByDraftingItfCPP CATIDftTextProperties : public CATIDftProperties
+{
+
+  public:
+
+   /**
+   * Gets the short name of the font. 
+   * @param oFontName
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see CATFont
+   */
+   virtual HRESULT GetFontName( wchar_t **oFontName ) = 0;
+
+   /**
+   * Sets the short name of the font.
+   * @param iFontName
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see CATFont
+   */
+   virtual HRESULT SetFontName( const wchar_t *iFontName ) = 0;
+
+   /**
+   * Gets the size of the font in millimeter (mm).
+   * @param oFontSize
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetFontSize( double *oFontSize ) = 0;
+
+   /**
+   * Sets the size of the font in millimeter (mm).
+   * @param iFontSize
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetFontSize( const double iFontSize ) = 0;
+
+   /**
+   * Gets the Bold style of the font.
+   * @param oBold
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetBold( boolean *oBold ) = 0;
+
+   /**
+   * Sets the Bold style of the font.
+   * @param iBold
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetBold( const boolean iBold ) = 0;
+
+   /**
+   * Gets the Italic style of the font.
+   * @param oItalic
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetItalic( boolean *oItalic ) = 0;
+
+   /**
+   * Sets the Italic style of the font.
+   * @param iItalic
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetItalic( const boolean iItalic ) = 0;
+
+   /**
+   * Gets the Underline style of the font.
+   * &lt;br&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param oUnderline
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetUnderline( boolean *oUnderline ) = 0;
+
+   /**
+   * Sets the Underline style of the font.
+   * &lt;br&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param iUnderline
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetUnderline( const boolean iUnderline ) = 0;
+
+   /**
+   * Gets the Overline style of the font.
+   * &lt;br&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param oOverline
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetOverline( boolean *oOverline ) = 0;
+
+   /**
+   * Sets the Overline style of the font.
+   * &lt;br&gt;&lt;i&gt;Underline and Overline styles are usualy mutualy exclusive.&lt;/i&gt;
+   * @param iOverline
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetOverline( const boolean iOverline ) = 0;
+
+   /**
+   * Gets the StrikeThru style of the font.
+   * @param oStrikeThru
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetStrikeThru( boolean *oStrikeThru ) = 0;
+
+   /**
+   * Sets the StrikeThru style of the font.
+   * @param iStrikeThru
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetStrikeThru( const boolean iStrikeThru ) = 0;
+
+   /**
+   * Gets the Superscript style of the font.
+   * &lt;br&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param oSuperscript
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetSuperscript( boolean *oSuperscript ) = 0;
+
+   /**
+   * Sets the Superscript style of the font.
+   * &lt;br&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param iSuperscript
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetSuperscript( const boolean iSuperscript ) = 0;
+
+   /**
+   * Gets the Subscript style of the font.
+   * &lt;br&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param oSubscript
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetSubscript( boolean *oSubscript ) = 0;
+
+   /**
+   * Sets the Subscript style of the font.
+   * &lt;br&gt;&lt;i&gt;Superscript and Subscript styles are mutualy exclusive.&lt;/i&gt;
+   * @param iSubscript
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetSubscript( const boolean iSubscript ) = 0;
+
+   /**
+   * Gets the Justification of the text inside of its box.
+   * @param oJustification
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftJustification
+   */
+   virtual HRESULT GetJustification( DftJustification *oJustification ) = 0;
+
+   /**
+   * Sets the Justification of the text inside of its box.
+   * @param iJustification
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftJustification
+   */
+   virtual HRESULT SetJustification( const DftJustification iJustification ) = 0;
+
+   /**
+   * Gets the Kerning style of the font.
+   * @param oKerning
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetKerning( boolean *oKerning ) = 0;
+
+   /**
+   * Sets the Kerning style of the font.
+   * @param iKerning
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetKerning( const boolean iKerning ) = 0;
+
+   /**
+   * Gets the AnchorPoint of the text box.
+   * @param oAnchorPoint
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftAnchorPoint
+   */
+   virtual HRESULT GetAnchorPoint( DftAnchorPoint *oAnchorPoint ) = 0;
+
+   /**
+   * Sets the AnchorPoint of the text box.
+   * @param iAnchorPoint
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftAnchorPoint
+   */
+   virtual HRESULT SetAnchorPoint( const DftAnchorPoint iAnchorPoint ) = 0;
+
+   /**
+   * Gets the Type of the Frame surrounding the text.
+   * @param oFrameType
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT GetFrameType( DftFrameType *oFrameType ) = 0;
+
+   /**
+   * Sets the Type of the Frame surrounding the text.
+   * @param iFrameType
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT SetFrameType( const DftFrameType iFrameType ) = 0;
+
+   /**
+   * @nodoc Not implemented yet
+   * Gets the name of the frame surrounding the text.
+   * @param oFrameName
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT GetFrameName(CATUnicodeString &amp;oFrameName) = 0;
+
+   /**
+   * @nodoc Not implemented yet
+   * Sets the name of the frame surrounding the text.
+   * @param iFrameName
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT SetFrameName(const CATUnicodeString &amp;iFrameName) = 0;
+
+   /**
+   * Gets the Color of the text.
+   * @param oColor
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT GetColor( unsigned int *oColor) = 0;
+
+   /**
+   * Sets the Color of the text.
+   * @param iColor
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */
+   virtual HRESULT SetColor(const unsigned int iColor) = 0;
+
+   /**
+   * Gets the engineering symbol attached to the text.
+   * @param oSymbol
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT GetSymbol( DftGDTSymbol *oSymbol ) = 0;
+
+   /**
+   * Sets the engineering symbol attached to the text.
+   * @param iSymbol
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   * @see DftFrameType
+   */
+   virtual HRESULT SetSymbol( const DftGDTSymbol iSymbol ) = 0;
+
+   /**
+   * Gets the FontRatio value of the text.
+   * @param oFontRatio
+   *    The font ratio (width/height) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetFontRatio( double *oFontRatio ) = 0;
+
+   /**
+   * Sets the FontRatio value of the text.
+   * @param iFontRatio
+   *    The font ratio (width/height) value of the text.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetFontRatio( const double iFontRatio ) = 0;
+
+   /**
+   * Gets the character spacing of the font.
+   * @param oCharSpacing
+   *    The space between two character.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT GetCharacterSpacing( double *oCharSpacing ) = 0;
+
+   /**
+   * Sets the character spacing of the font.
+   * @param iCharSpacing
+   *    The space between two character.
+   * @return An HRESULT value.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *    &lt;dt&gt;S_OK
+   *    &lt;dd&gt;Method correctly executed. 
+   *    &lt;dd&gt;No restriction.
+   *    &lt;dt&gt;S_READONLY
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value cannot be modified, it&#x27;s read-only.
+   *    &lt;dd&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   *    &lt;dt&gt;S_UNDEFINED
+   *    &lt;dd&gt;Method correctly executed.
+   *    &lt;dd&gt;Returned value is undefined.
+   *    &lt;dd&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   *    &lt;dt&gt;E_FAIL
+   *    &lt;dd&gt;Method execution failed.
+   *    &lt;dd&gt;Reasons of the failure are not given.
+   *    &lt;dt&gt;E_IMPL
+   *    &lt;dd&gt;No implementation available for this method.
+   *    &lt;/dl&gt;
+   */
+   virtual HRESULT SetCharacterSpacing( const double iCharSpacing ) = 0;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftText.html">← 上一页: CATIDftText.h</a></div>
+        <div><a href="CATIDftTextRange.html">下一页: CATIDftTextRange.h →</a></div>
+    </div>
+</body>
+</html>

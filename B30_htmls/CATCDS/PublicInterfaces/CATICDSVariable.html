@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATCDS/PublicInterfaces/CATICDSVariable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATCDS/PublicInterfaces/CATICDSVariable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICDSUJoint.html">← 上一页: CATICDSUJoint.h</a></div>
+        <div><a href="CATICDSVertexCurvature.html">下一页: CATICDSVertexCurvature.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICDSVariable_H
+#define CATICDSVariable_H
+
+// COPYRIGHT DASSAULT SYSTEMES  2012
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATCDS.h&quot;
+
+#include &quot;CATICDSEntity.h&quot;
+#include &quot;CATCDSBoolean.h&quot;
+
+class CATICDSFactory;
+
+/**
+ * An entity representing a variable.
+ */
+class ExportedByCDSInterface CATICDSVariable : public CATICDSEntity
+{
+  CATICDSDeclareInterface(CATICDSVariable)
+
+public:
+
+  /**
+   * Sets the variable type.
+   * @param iVarType
+   *   A variable type.
+   * @see #GetVariableType
+   */
+  virtual void SetVariableType(CATCDSVariableType iVarType) = 0;
+
+  /**
+   * Retrieves the variable type.
+   * @return
+   *   A variable type.
+   * @see #SetVariableType
+   */
+  virtual CATCDSVariableType GetVariableType() const = 0;
+
+  /**
+   * Retrieves the variable tolerance.
+   * @return
+   *   A variable tolerance.
+   * @see #SetTolerance
+   */
+  virtual double GetTolerance() const = 0;
+
+  /**
+   * Sets the variable tolerance.
+   * @param iTolerance
+   *   A variable tolerance.
+   * @see #GetTolerance
+   */
+  virtual void SetTolerance(double iTolerance) = 0;
+
+  /**
+   * Sets the variable value.
+   * @param iValue
+   *   A variable value.
+   * @see #GetValue
+   */
+  virtual void SetValue(double iValue) = 0;
+
+  /**
+   * Retrieves the variable value.
+   * @return
+   *   A variable value.
+   * @see #SetValue
+   */
+  virtual double GetValue() const = 0;
+
+  /**
+   * Fixes the variable value.
+   * @see #Unfix, #IsFixed
+   */
+  virtual void Fix() = 0;
+
+  /**
+   * Unfixes the variable value.
+   * @see #Fix, #IsFixed
+   */
+  virtual void Unfix() = 0;
+
+  /**
+   * Checks whether the variable value is fixed.
+   * @return
+   *   &lt;ul&gt;
+   *     &lt;li&gt;&lt;tt&gt;TRUE&lt;/tt&gt; - if variable value is fixed
+   *     &lt;li&gt;&lt;tt&gt;FALSE&lt;/tt&gt; - otherwise
+   *   &lt;/ul&gt;
+   * @see #Fix, #Unfix
+   */
+  virtual CATCDSBoolean IsFixed() const = 0;
+
+  /**
+   * Sets limits for the variable value.
+   * @param iLow
+   *   A lower limit.
+   * @param iHigh
+   *   An upper limit.
+   * @see #GetLimits, #SetLimitsActivity
+   */
+  virtual void SetLimits(double iLow, double iHigh) = 0;
+
+  /**
+   * Retrieves limits for the variable value.
+   * @param oLow
+   *   A lower limit.
+   * @param oHigh
+   *   An upper limit.
+   * @see #SetLimits
+   */
+  virtual void GetLimits(double &amp;oLow, double &amp;oHigh) const = 0;
+
+  /**
+   * Sets activity status of limits.
+   * @param iLowActive
+   *   An activity status of the lower limit.
+   * @param iHighActive
+   *   An activity status of the upper limit.
+   * @see #GetLimitsActivity, #SetLimits
+   */
+  virtual void SetLimitsActivity(CATCDSBoolean iLowActive, CATCDSBoolean iHighActive) = 0;
+
+  /**
+   * Retrieves activity status of limits.
+   * @param oLowActive
+   *   An activity status of the lower limit.
+   * @param oHighActive
+   *   An activity status of the upper limit.
+   * @see #SetLimitsActivity
+   */
+  virtual void GetLimitsActivity(CATCDSBoolean &amp;oLowActive, CATCDSBoolean &amp;oHighActive) const = 0;
+
+  /**
+   * Creates an instance of the CATICDSVariable constraint.
+   * @param ipFactory
+   *   Pointer to the instance of CATICDSFactory to use.
+   * @param iVarType
+   *   Creates one of the three variable types:  linear, angular, or free (used to declare equations).
+   */
+  static CATICDSVariable* Create(CATICDSFactory* ipFactory,
+                                 CATCDSVariableType iVarType);
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICDSUJoint.html">← 上一页: CATICDSUJoint.h</a></div>
+        <div><a href="CATICDSVertexCurvature.html">下一页: CATICDSVertexCurvature.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATFormat.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATFormat.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATExtensionAdapter.html">← 上一页: CATExtensionAdapter.h</a></div>
+        <div><a href="CATFormats.html">下一页: CATFormats.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+
+#ifndef CATFormat_H
+#define CATFormat_H
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Virtual Format definition to support Windows Interoperability
+//
+// For all recognized formats: A Format may match another Format
+//
+//                             A Format may provide system-dependent means
+//                             to encode or decode data for exchange
+//
+//                             A Format must correspond to one and only one
+//                             proprietary CATIA Object Interface for which
+//                             data can be passed to or produced from the system
+//
+//                             A Format should be declared once in a
+//                             session with the appropriate definition
+//
+// To avoid derivation of this class, chose one
+// already derived for implementing your format.
+// Pre-existing classes may implement some system-dependent formats
+// e.g. Text, MetafilePict, ...
+//
+////////////////////////////////////////////////////////////////////////////////////////
+
+/** Link format name. */
+#define CATIA_LINK_FORMAT &quot;CATLink&quot;
+
+/** Print format name. */
+#define PRT_FORMAT &quot;CATIA_PRT&quot;
+
+/** Draw format name. */
+#define DRW_FORMAT &quot;CATIA_DRW&quot;
+
+/** Geometry format name. */
+#define GEOM_FORMAT &quot;CATIA_GEOM&quot;
+
+/** Text format name. */
+#define TEXT_FORMAT &quot;Text&quot;
+
+/** Representation format name. */
+#define REP_FORMAT  &quot;Rep&quot;
+
+/** Metafile picture format name. */
+#define METAFILEPIC_FORMAT &quot;Metafile_Picture&quot;
+
+/** CGR format name. */
+#define CGR_FORMAT  &quot;CATIA_CGR&quot;
+
+/** Electrical format name. */
+#define ELECTRICAL_FORMAT  &quot;Electrical&quot;
+
+/** Electric format name. */
+#define ELECTRIC_FORMAT  &quot;Electric&quot;
+//
+/** OLE embedded source format name. */
+#define OLE_EMBED_FORMAT  &quot;Embed Source&quot;
+
+/** OLE link source format name. */
+#define OLE_LINK_FORMAT &quot;Link Source&quot;
+
+#include &quot;CATUnicodeString.h&quot;
+
+/**
+  * Format identifier.
+  */
+typedef const char* IdFormat;
+
+/** Compare formats. */
+#define COMPARE_FORMAT(id1, id2) (id1 &amp;&amp; id2 &amp;&amp; strcmp(id1,id2)==0)
+
+#include&lt;stdlib.h&gt;
+#include&lt;CATBaseUnknown.h&gt;
+
+class CATFormat;
+class CATSystemFormat;
+
+#include&lt;CATFormats.h&gt;
+
+
+#include&lt;CP0CLIP.h&gt;
+
+/**
+* Interface to manage formats.
+* &lt;b&gt; Role:&lt;/b&gt; this interface is used during cut, copy and paste operations in order to
+*               test formats needed for specific actions.
+*/
+
+
+class ExportedByCP0CLIP CATFormat 
+{
+ public:
+
+   /** @nodoc */
+   static const CATFormat* GetRegisteredFormat(IdFormat);
+
+   /** @nodoc */
+   virtual ~CATFormat();
+   /**
+	* Returns the name of a CATFormat object.
+	*/
+   virtual IdFormat Name()const;
+   /**
+	* Compares the name of the current CATFormat object with the value passed as input.
+	* @param iFormatName 
+	*        A declared format name.
+	* @return 
+	*        1 if the two format names are not equal.
+	*   &lt;br&gt; 0 otherwise
+	*/
+   virtual int Match(IdFormat iFormatName)const;
+
+   /** @nodoc */
+   // log a new registered format, without communication capability
+   CATFormat(IdFormat name);
+
+   /** @nodoc */
+   static const CATLISTP(CATFormat)&amp; GetAllRegisteredFormats();
+   /** @nodoc */
+   CATSystemFormat* GetImpl() const;
+
+   /** @nodoc */
+   //for purify
+   static int OpenSession();
+   /** @nodoc */
+   static int CloseSession();
+
+   /** @nodoc */
+   CATUnicodeString	GetFullName()	{return _fullName;}
+   /** @nodoc */
+   void	SetFullName(CATUnicodeString name);
+
+ protected:
+   int SetImpl(CATSystemFormat*);
+   CATFormat(); // cannot create unmeaningfull format
+ private:       //  unmeaningfull operation
+   CATFormat(const CATFormat&amp;);
+   CATFormat&amp; operator =(const CATFormat&amp;);
+   friend class CATSystemFormat;
+ protected:  
+   IdFormat _name;
+   CATSystemFormat* _impl; // deleted at the end
+
+ private :
+	 CATUnicodeString	_fullName;
+};
+
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATExtensionAdapter.html">← 上一页: CATExtensionAdapter.h</a></div>
+        <div><a href="CATFormats.html">下一页: CATFormats.h →</a></div>
+    </div>
+</body>
+</html>

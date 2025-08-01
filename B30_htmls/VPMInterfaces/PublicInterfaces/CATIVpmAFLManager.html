@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmAFLManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmAFLManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmAFLLink.html">← 上一页: CATIVpmAFLLink.h</a></div>
+        <div><a href="CATIVpmAFLProduct.html">下一页: CATIVpmAFLProduct.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES	2001
+//=============================================================================
+// June 99      Creation                                            C. Cressend
+// January 01   Modification                                            S. Dami
+//              Insert CAA2 documentation                                 
+//=============================================================================
+
+#ifndef CATIVpmAFLManager_H
+#define CATIVpmAFLManager_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;GUIDVPMInterfaces.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATIVpmPredicate.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;CATListOfCATICfgNormalValue.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATIConfigurableObject.h&quot;
+#include &quot;CATTime.h&quot;
+#include &quot;CATIVpmPESomeone.h&quot;
+
+// AFL objects
+class CATIVpmAFLAction_var;
+class CATIVpmAFLAffectedObject_var;
+class CATIVpmAFLHistory_var;
+class CATIVpmAFLProductView_var;
+class CATIVpmAFLXeff_var;
+class CATIVpmAFLLink_var;
+class CATIVpmAFLResp_var;
+
+// VPM Objects
+class CATIVpmFactoryObject_var;
+class CATIVpmPredicate_var;
+class CATIConfigurableObject_var;
+class CATICfgFilter_var;
+class CATIVpmGraphMng_var;
+class CATILinkableObject_var;
+
+// Lists
+class CATListValCATIVpmFactoryObject_var;
+class CATListValCATIVpmAFLAction_var;
+class CATListValCATIVpmAFLXeff_var;
+class CATListValCATIVpmAFLHistory_var;
+class CATListValCATIVpmAFLProductView_var;
+class CATListValCATIConfigurableObject_var;
+class CATListValCATIVpmAFLAffectedObject_var;
+class CATListValCATBaseUnknown_var;
+
+
+// TEMPORARY for GENERIC QUERY DEFINITION
+#include &quot;CATListOfVPMCA.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern  ExportedByGUIDVPMInterfaces IID IID_CATIVpmAFLManager;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmAFLManager;
+#endif
+
+/**
+ * Define constant for the default Action type name used in query methods.
+ */
+#define CATVPMAFL_ENTITY &quot;AFLAction&quot;
+
+/**
+ * Define constant for the default AffectedObject type name used in query methods.
+ */
+#define CATVPMAFL_AFFOBJ &quot;AFLAffected_Object&quot;
+
+/**
+ * Class interface to the Action Flow Manager.
+ * &lt;b&gt;Role&lt;/b&gt;: Defines the interfaces to methods to manage Actions and 
+ * Action related operations.
+ */
+class ExportedByGUIDVPMInterfaces CATIVpmAFLManager: public CATBaseUnknown   
+{
+     CATDeclareInterface;
+   
+public:
+
+/**
+ * enum CATActionDate describes Action date values.
+ *
+ *&lt;p&gt; STARTDATE       :
+ *&lt;p&gt; ENDDATE         :
+ *&lt;p&gt; ACTUALSTARTDATE :
+ *&lt;p&gt; ACTUALENDDATE   :
+ *&lt;p&gt; DELINQUENCYDATE :
+ * &lt;br&gt;
+ */
+     enum CATActionDate {STARTDATE, 
+                         ENDDATE, 
+                         ACTUALSTARTDATE, 
+                         ACTUALENDDATE, 
+                         DELINQUENCYDATE
+                        };
+
+/**
+ * enum Operation describes operation values used in Affected Object queries.
+ *
+ *&lt;p&gt; Add       :
+ *&lt;p&gt; Cut       :
+ *&lt;p&gt; Replaced  :
+ *&lt;p&gt; Replacing :
+ *&lt;p&gt; Move      :
+ *&lt;p&gt; NotDef    :
+ * &lt;br&gt;
+ */
+     enum Operation {Add,
+                     Cut,
+                     Replaced,
+                     Replacing,
+                     Move,
+                     NotDef
+                    };
+
+/**
+ * enum Operation_Flag describes Operation flag values.
+ *
+ *&lt;p&gt; AFL_OP_ADD     :
+ *&lt;p&gt; AFL_OP_CUT     :
+ *&lt;p&gt; AFL_OP_REPLACE :
+ *&lt;p&gt; AFL_OP_MOVE    :
+ * &lt;br&gt;
+ */
+     enum Operation_Flag {AFL_OP_ADD     = 1 &lt;&lt; 0 ,
+                          AFL_OP_CUT     = 1 &lt;&lt; 1 ,
+                          AFL_OP_REPLACE = 1 &lt;&lt; 2 ,
+                          AFL_OP_MOVE    = 1 &lt;&lt; 3
+                         };
+
+// Be careful with NoId : mandatory unique index in database causes save errors.
+/**
+ * enum obsolete : to be removed in V5R5. Replaced by real Action name.
+ */
+     enum Generate { NoId, GenId };
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT Initialize()=0;
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT Refresh()=0;
+
+/**
+ * @nodoc
+ */
+	 virtual HRESULT CreateAction(const CATUnicodeString&amp;     iTypeAction,
+                                      CATIVpmAFLAction_var&amp;       oAction,
+                                      const CATUnicodeString&amp;     iGraphCusto=&quot;&quot;,
+                                      const CATUnicodeString&amp;     iInitialAbstract=&quot;&quot;,
+                                      const CATIVpmPESomeone_var&amp; iInitialOwner=NULL_var,
+                                      const CATUnicodeString&amp;     iActionName=&quot;&quot;)=0;       
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT CreateFromTemplate(const CATIVpmAFLAction_var&amp; iAction,
+                                        const CATUnicodeString&amp;     iTypeAction,
+                                        CATIVpmAFLAction_var&amp;       oAction,
+                                        const CATUnicodeString&amp;     iGraphCusto=&quot;&quot;,
+                                        const CATUnicodeString&amp;     iInitialAbstract=&quot;&quot;,
+                                        const CATIVpmPESomeone_var&amp; iInitialOwner=NULL_var,
+                                        const CATUnicodeString&amp;     iActionName=&quot;&quot;)=0; 
+
+/**
+ * Creates an Affected Object.
+ *  @param iTypeAffObj
+ *   The type of Affected Object.
+ *  @param iPointingObj
+ *   The reference to the actual object. 
+ *  @param oAffObj
+ *   The created Affected Object.
+ *  @param iGraphCusto
+ *   The associated custom Graph.
+ */
+     virtual HRESULT CreateAffectedObject(const CATUnicodeString&amp;       iTypeAffObj,
+                                          const CATILinkableObject_var&amp; iPointingObj,
+                                          CATIVpmAFLAffectedObject_var&amp; oAffObj,
+                                          const CATUnicodeString&amp;       iGraphCusto=&quot;&quot;)=0;
+
+/**
+ * Creates a Responsability Object.
+ *  @param oResp
+ *   The Responsability Object.
+ */
+     virtual HRESULT CreateResponsability(CATIVpmAFLResp_var&amp; oResp)=0;
+
+/**
+ * Cancels an Action.
+ *  @param iCanceled
+ *   The Action to be canceled.
+ *  @param iCanceling
+ *   The canceling Action.
+ *  @param oCancelingLink
+ *   The canceling Link.
+ */
+     virtual HRESULT Cancel(CATIVpmAFLAction_var&amp; iCanceled,
+                            CATIVpmAFLAction_var&amp; iCanceling,
+                            CATIVpmAFLLink_var&amp;   oCancelingLink)=0;
+
+/**
+ * Supersedes an Action.
+ *  @param iSuperseded
+ *   The Action to be superseded.
+ *  @param oSuperseding
+ *   The superseding Action.
+ *  @param oSupersedingLink
+ *   The superseding Link.
+ */
+     virtual HRESULT Superseed(CATIVpmAFLAction_var&amp; iSuperseded,
+                               CATIVpmAFLAction_var&amp; oSuperseding,
+                               CATIVpmAFLLink_var&amp;   oSupersedingLink)=0;
+
+// ==========================
+// Lifecycle Status Functions
+// ==========================
+
+/**
+ * Advances the Action&#x27;s status.
+ *  @param iAction
+ *   The Action.
+ *  @param iEvent
+ *   The event text.
+ */
+     virtual HRESULT StepForwardActionStatus(CATIVpmAFLAction_var&amp;   iAction,
+                                             const CATUnicodeString&amp; iEvent)=0;
+
+/**
+ * Advances the Affected Object&#x27;s status.
+ *  @param iObject
+ *   The Affected Object.
+ *  @param iEvent
+ *   The event text.
+ */
+     virtual HRESULT StepForwardObjectStatus(CATIVpmAFLAffectedObject_var&amp; iObject,
+                                             const CATUnicodeString&amp;       iEvent)=0;
+
+/**
+ * Advances the Responsability Object&#x27;s status.
+ *  @param iResp
+ *   The Responsability object.
+ *  @param iEvent
+ *   The event text.
+ */
+     virtual HRESULT StepForwardRespStatus(CATIVpmAFLResp_var&amp;     iResp,
+                                           const CATUnicodeString&amp; iEvent)=0;
+
+/**
+ * Advances the Xeff Object&#x27;s status.
+ *  @param iXeff
+ *   The Xeff object.
+ *  @param iEvent
+ *   The event text.
+ * @nodoc
+ */
+     virtual HRESULT StepForwardXeffStatus(CATIVpmAFLXeff_var&amp;     iXeff,
+                                           const CATUnicodeString&amp; iEvent)=0;
+
+
+// ==========================
+// Quey Functions
+// ==========================
+
+/**
+ * Sets the Query policy to case sensitive.
+ */
+     virtual void SetCaseSensitive()=0;
+
+/**
+ * Sets the Query policy to ignore case.
+ */
+     virtual void SetCaseUnsensitive()=0;
+
+/**
+ * Queries an Action by name.
+ *  @param iId
+ *   The Action name.
+ *  @param oAction
+ *   The Action object.
+ */
+     virtual HRESULT QueryAfl_Name(const CATUnicodeString&amp; iId,
+                                   CATIVpmAFLAction_var&amp;   oAction)=0;
+			
+/**
+ * Retrieves an Action by URL.
+ *  @param iURL
+ *   The Action URL.
+ *  @param oAction
+ *   The Action.
+ */
+     virtual HRESULT GetFromURL(const SEQUENCE(octet)&amp; iURL,
+                                CATIVpmAFLAction_var&amp;  oAction)=0;  
+
+/**
+ * Queries Actions using a predicate.
+ *  @param iPred
+ *   The query predicate.
+ *  @param oListAction
+ *   The list of Actions.
+ *  @param iEntityName
+ *   The entity name.
+ *  @param iDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAfl(const CATIVpmPredicate_var&amp;     iPred,
+                              CATLISTV(CATIVpmAFLAction_var)&amp; oListAction,
+                              const CATUnicodeString&amp;         iEntityName=CATVPMAFL_ENTITY,
+                              const CATUnicodeString&amp;         iDomain=&quot;&quot;)=0;
+  
+// Cross domain queries.  
+//-----------------------------------------------------------------------------
+// Get the Actions matching iOtherPred that configure a CO.   
+//-----------------------------------------------------------------------------
+//mono
+/**
+ * Queries Actions using a predicate and a Configurable Object.
+ *  @param iOtherPred
+ *   The query predicate.
+ *  @param iCO
+ *   The configurable object.
+ *  @param oListAction
+ *   The list of Actions.
+ *  @param iEntityName
+ *   The entity name.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAflProductView(const CATIVpmPredicate_var&amp;       iOtherPred,
+                                         const CATIConfigurableObject_var&amp; iCO,
+                                         CATListValCATIVpmAFLAction_var&amp;   oListAction,
+                                         const CATUnicodeString&amp;           iEntityName=CATVPMAFL_ENTITY,
+                                         const CATUnicodeString&amp;           iAFLDomain=&quot;&quot;)=0;
+
+/**
+ * Queries ProductViews using a predicate and a Configurable Object.
+ *  @param iOtherPred
+ *   The query predicate.
+ *  @param iCO
+ *   The configurable object.
+ *  @param oListAPV
+ *   The list of Product Views.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAflProductView(const CATIVpmPredicate_var&amp;          iOtherPred,
+                                         const CATIConfigurableObject_var&amp;    iCO,
+                                         CATListValCATIVpmAFLProductView_var&amp; oListAPV,
+                                         const CATUnicodeString&amp;              iAFLDomain=&quot;&quot;)=0 ;
+
+/**
+ * Queries Actions using a predicate and a list of Configurable Objects.
+ *  @param iOtherPred
+ *   The query predicate.
+ *  @param iCOs
+ *   The list of Configurable Objects.
+ *  @param oListAction
+ *   The list of Actions.
+ *  @param iEntityName
+ *   The entity name.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAflProductView(const CATIVpmPredicate_var&amp;                 iOtherPred,
+                                         const CATListValCATIConfigurableObject_var&amp; iCOs,
+                                         CATListValCATIVpmAFLAction_var&amp;             oListAction,
+                                         const CATUnicodeString&amp;                     iEntityName=CATVPMAFL_ENTITY,
+                                         const CATUnicodeString&amp;                     iAFLDomain=&quot;&quot;)=0 ;                                        
+   
+/**
+ * Queries Actions using an Affected Object and (optional) Configuration.
+ *  @param iAffObjId
+ *   The Affected Object.
+ *  @param oListAction
+ *   The list of Actions.
+ *  @param iOper
+ *   The operation.
+ *  @param iOtherPred
+ *   The predicate.
+ *  @param iCfgObj
+ *   The Configurable Object.
+ *  @param iNVList
+ *   The Normal value.
+ *  @param iXeffDomain
+ *   The Xeff domain.
+ *  @param iXeffStatus
+ *   The Xeff status.
+ *  @param iEntityName
+ *   The entity name.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAFLObjectAffected(const SEQUENCE(octet)&amp;                  iAffObjId,
+                                            CATListValCATIVpmAFLAction_var&amp;         oListAction,
+                                            CATIVpmAFLManager::Operation            iOper=CATIVpmAFLManager::NotDef,
+                                            const CATIVpmPredicate_var&amp;             iOtherPred=NULL_var,
+                                            const CATIConfigurableObject_var&amp;       iCfgObj=NULL_var,
+                                            const CATListValCATICfgNormalValue_var&amp; iNVList=NULL,
+                                            const CATUnicodeString&amp;                 iXeffDomain=&quot;&quot;,
+                                            const CATUnicodeString&amp;                 iXeffStatus=&quot;&quot;,      
+                                            const CATUnicodeString&amp;                 iEntityName=CATVPMAFL_ENTITY,
+                                            const CATUnicodeString&amp;                 iAFLDomain=&quot;&quot;)=0;
+
+/**
+ * Queries on Histories to retrieve a ProductView life cycle
+ *  @param iCfgObj
+ *   The Configurable Object.
+ *  @param oListHistories
+ *   The list of Histories.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAFLHistoryByCV(const CATIConfigurableObject_var&amp; iCfgObj,
+                                         CATListValCATIVpmAFLHistory_var&amp;  oListHistories,   
+                                         const CATUnicodeString&amp;           iAFLDomain=&quot;&quot;)=0;
+
+
+// Queries on histories using operations flags &amp; other predicate : should replace the previous one.
+/**
+ * Queries on Histories using Operation flags and predicate
+ *  @param iCfgObj
+ *   The Configurable Object.
+ *  @param iOtherPredicate
+ *   The predicate.
+ *  @param iOperations
+ *   The Operation flags.
+ *  @param oListHistories
+ *   The list of Histories.
+ *  @param iAFLDomain
+ *   The domain name.
+ */
+     virtual HRESULT QueryAFLHistoryByCV(const CATIConfigurableObject_var&amp; iCfgObj,
+                                         const CATIVpmPredicate_var&amp;       iOtherPredicate,
+                                         long                              iOperations,
+                                         CATListValCATIVpmAFLHistory_var&amp;  oListHistories,
+                                         const CATUnicodeString&amp;           iAFLDomain=&quot;&quot;)=0;
+
+/** @nodoc
+ * Creates a query predicate.
+ *  @param iAttrName
+ *   The attribute name.
+ *  @param iOperator
+ *   The operator.
+ *  @param iValue
+ *   The attribute value.
+ *  @param iIsNot
+ *   The negation operator.
+ *  @param oPredicate
+ *   The predicate.
+ *  @param iEntityName
+ *   The entity name.
+ */
+     virtual HRESULT CreateAflPredicate(const CATUnicodeString&amp; iAttrName,
+                                        CATVpmOperator          iOperator,
+                                        const CATUnicodeString&amp; iValue,
+                                        int                     iIsNot,
+                                        CATIVpmPredicate_var&amp;   oPredicate,
+                                        const CATUnicodeString&amp; iEntityName=CATVPMAFL_ENTITY)=0;
+
+/** @nodoc
+ * Creates a query predicate.
+ *  @param iAttrName
+ *   The attribute name.
+ *  @param iOperator
+ *   The operator.
+ *  @param iValue
+ *   The binary attribute value.
+ *  @param iIsNot
+ *   The negation operator.
+ *  @param oPredicate
+ *   The predicate.
+ *  @param iEntityName
+ *   The entity name.
+ */
+     virtual HRESULT CreateAflBinPredicate(const CATUnicodeString&amp; iAttrName,
+                                           CATVpmOperator          iOperator,
+                                           const SEQUENCE(octet)&amp;  iValue,
+                                           int                     iIsNot,
+                                           CATIVpmPredicate_var&amp;   oPredicate,
+                                           const CATUnicodeString&amp; iEntityName=CATVPMAFL_ENTITY)=0;
+
+/**
+ * Creates a Link between Actions.
+ *  @param iAction1
+ *   The first Action.
+ *  @param iAction2
+ *   The second Action.
+ *  @param oActionLink
+ *   The Link.
+ *  @param iTypeLink
+ *   The link type.
+ */
+     virtual HRESULT CreateLink(CATIVpmAFLAction_var&amp;    iAction1,
+                                CATIVpmAFLAction_var&amp;    iAction2,
+                                CATIVpmAFLLink_var&amp;      oActionLink,
+                                const CATUnicodeString&amp;  iTypeLink)=0;
+
+/**
+ * Removes an Action from memory.
+ *  @param iAction
+ *   The Action.
+ */
+     virtual HRESULT DeleteAction(CATIVpmAFLAction_var &amp;iAction)=0;
+
+/**
+ * Retrieves the Graph manager
+ *  @param iGraphName
+ *   The Graph name.
+ *  @param oGraphMgr
+ *   The Graph manager.
+ */
+     virtual HRESULT GetGraphManager(const CATUnicodeString&amp; iGraphName,
+                                     CATIVpmGraphMng_var&amp;    oGraphMgr)=0;
+
+// Helpers to chain commands : to use in your own defined commands.
+/**
+ * Assigns the last command result.
+ *  @param iResult
+ *   The result.
+ */
+     virtual HRESULT SetLastCmdResult(HRESULT iResult)=0;
+
+/**
+ * Retrieves the last command result.
+ */
+     virtual HRESULT GetLastCmdResult()=0;
+
+/**
+ * Copies ProductViews from one Action to another.
+ *  @param iFromAction
+ *   The source Action.
+ *  @param iToAction
+ *   The target Action.
+ */
+     virtual HRESULT CopyReferContext(CATIVpmAFLAction_var&amp; iFromAction,
+                                      CATIVpmAFLAction_var&amp; iToAction)=0;
+
+/**
+ * Creates a Configuration Filter.
+ *  @param iXeffDomain
+ *   The Xeff domain.
+ *  @param iCfgObj
+ *   The Configurable Object.
+ *  @param iListActions
+ *   The list of Actions.
+ *  @param oFilter
+ *   The Filter.
+ */
+     virtual HRESULT CreateFilter(const CATUnicodeString&amp;               iXeffDomain,
+                                  const CATIConfigurableObject_var&amp;     iCfgObj,
+                                  const CATLISTV(CATIVpmAFLAction_var)&amp; iListActions,
+                                  CATICfgFilter_var&amp;                    oFilter)=0;
+        
+/**
+ * Moves an object from one Action to another.
+ *  @param iObjOrig
+ *   The source object.
+ *  @param iActionDest
+ *   The target Action.
+ *  @param iDestTypeObject
+ *   The object type.
+ */
+     virtual HRESULT TransferObject(CATIVpmAFLAffectedObject_var&amp; iObjOrig,
+                                    CATIVpmAFLAction_var&amp;         iActionDest,
+                                    CATUnicodeString&amp;             iDestTypeObject)=0;
+
+/**
+ * Moves objects from one Action to another.
+ *  @param iListObjects
+ *   The source objects.
+ *  @param iActionDest
+ *   The target Action.
+ *  @param iDestTypeObjects
+ *   The type of objects.
+ */
+     virtual HRESULT TransferObjects(CATLISTV(CATIVpmAFLAffectedObject_var)&amp; iListObjects,
+                                     CATIVpmAFLAction_var&amp;                   iActionDest,
+                                     CATUnicodeString&amp;                       iDestTypeObjects)=0;
+
+/**
+ * Copies objects from one Action to another.
+ *  @param iListObjects
+ *   The source objects.
+ *  @param iActionDest
+ *   The target Action.
+ *  @param iDestTypeObjects
+ *   The type of objects.
+ */
+     virtual HRESULT CopyObjects(CATLISTV(CATIVpmAFLAffectedObject_var)&amp; iListObjects,
+                                 CATIVpmAFLAction_var&amp;                   iActionDest,
+                                 CATUnicodeString&amp;                       iDestTypeObjects)=0;
+
+/**
+ * Copies an object from one Action to another.
+ *  @param iObjOrig
+ *   The source object.
+ *  @param iActionDest
+ *   The target Action.
+ *  @param iDestTypeObject
+ *   The object type.
+ */
+     virtual HRESULT CopyObject(CATIVpmAFLAffectedObject_var&amp; iObjOrig,
+                                CATIVpmAFLAction_var&amp;         iActionDest,
+                                CATUnicodeString&amp;             iDestTypeObject)=0;
+
+// High level services.
+// Distribution : copy of objects related to the business rules
+// old services : maybe not kept.
+/**
+ * Distributes objects from one Action to another.
+ *  @param iActionOrig
+ *   The source Action.
+ *  @param iActionDest
+ *   The target Action.
+ *  @param iListObjects
+ *   The list of objects.
+ */
+     virtual HRESULT DistributeObjects(CATIVpmAFLAction_var&amp;                   iActionOrig,
+                                       CATIVpmAFLAction_var&amp;                   iActionDest,
+                                       CATLISTV(CATIVpmAFLAffectedObject_var)&amp; iListObjects)=0;
+
+/**
+ * Retrieves a list of delinquent Actions.
+ *  @param iDate
+ *   The start date.
+ *  @param iEndDate
+ *   The end date.
+ *  @param iEnumStatusName
+ *   The status name.
+ *  @param oActions
+ *   The list of Actions.
+ */
+     virtual HRESULT GetDelinquencyActions(const CATTime&amp;                  iDate,
+                                           const CATTime&amp;                  iEndDate,
+                                           const CATUnicodeString&amp;         iEnumStatusName,
+                                           CATLISTV(CATIVpmAFLAction_var)&amp; oActions)=0;
+
+/**
+ * Retrieves a list Actions.
+ *  @param iMinusDate
+ *   The start date.
+ *  @param iPlusDate
+ *   The end date.
+ *  @param iSearchDate
+ *   The search date.
+ *  @param iEnumStatusName
+ *   The status name.
+ *  @param oActions
+ *   The list of Actions.
+ */
+     virtual HRESULT GetActions(const CATTime&amp;                  iMinusDate,
+                                const CATTime&amp;                  iPlusDate,
+                                const CATActionDate             iSearchDate,
+                                const CATUnicodeString&amp;         iEnumStatusName,
+                                CATLISTV(CATIVpmAFLAction_var)&amp; oActions)=0;
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT QueryAFLAffectedObjects(const SEQUENCE(octet)&amp;                  iId,
+                                             CATListValCATIVpmAFLAffectedObject_var&amp; oListObj,
+                                             const CATIVpmPredicate_var&amp;             iOtherPred=NULL_var,
+                                             const CATUnicodeString&amp;                 iType=&quot;&quot;,
+                                             const CATUnicodeString&amp;                 iObjStatus=&quot;&quot;,
+                                             const CATIVpmPESomeone_var&amp;             iOwner=NULL_var,
+                                             const CATUnicodeString&amp;                 iEntity=CATVPMAFL_AFFOBJ,
+                                             const CATUnicodeString&amp;                 iDomain=&quot;&quot;)=0;
+
+/**
+ * @nodoc
+ */
+     virtual HRESULT QueryAFLAffectedObjects(const CORBAAny&amp;                         iId,
+                                             CATListValCATIVpmAFLAffectedObject_var&amp; oListObj,
+                                             const CATIVpmPredicate_var&amp;             iOtherPred = NULL_var,
+                                             const CATUnicodeString&amp;                 iType=&quot;&quot;,
+                                             const CATUnicodeString&amp;                 iObjStatus=&quot;&quot;,
+                                             const CATIVpmPESomeone_var&amp;             iOwner=NULL_var,
+                                             const CATUnicodeString&amp;                 iEntity=CATVPMAFL_AFFOBJ,
+                                             const CATUnicodeString&amp;                 iDomain=&quot;&quot;)=0;
+
+/**
+ * Queries for Histories by Object.
+ *  @param iId
+ *   The object identifier.
+ *  @param oListHist
+ *   The list of Histories.
+ */
+     virtual HRESULT QueryAFLHistoryByObject(const SEQUENCE(octet)&amp;           iId,
+                                             CATLISTV(CATIVpmAFLHistory_var)&amp; oListHist)=0;
+
+/**
+ * Queries for Xeffs by Configurable Objects.
+ *  @param iCO
+ *   The list of Configurable Objects.
+ *  @param oListEff
+ *   The list of Xeffs.
+ * @nodoc
+ */
+     virtual HRESULT QueryAFLXEffectivityByCO(const CATLISTV(CATIConfigurableObject_var)&amp; iCO,
+                                              CATLISTV(CATIVpmAFLXeff_var)&amp;               oListEff)=0;
+
+/**
+ * Queries for Actions by Xeffs.
+ *  @param oActions
+ *   The list of Actions
+ *  @param iEntityName
+ *   The entity name.
+ *  @param iXDomain
+ *   The domain name.
+ *  @param iORList
+ *   The list of Normal values.
+ *  @param iPred
+ *   The predicate.
+ */
+     virtual HRESULT QueryAFLActionsByXeff(CATListValCATIVpmAFLAction_var&amp;          oActions,
+                                           const CATUnicodeString&amp;                  iEntityName=&quot;&quot;,
+                                           const CATUnicodeString&amp;                  iXDomain=NULL,
+                                           const CATListValCATICfgNormalValue_var&amp;  iORList=NULL,
+                                           const CATIVpmPredicate_var&amp;              iPred=NULL_var)=0;
+
+/**
+ * Retrieves the current time from the database.
+ *  @param oTime
+ *   The time.
+ *
+ *  @param i
+ *    0 to have an interval of at least between 2 calls, 1 to have the exact date
+ */
+     virtual HRESULT GetDatabaseDate(CATTime&amp; oTime, const int i=0)=0;
+
+/**
+ * Deletes an Action.
+ *  @param iAction
+ *   The Action to delete.
+ */
+     virtual HRESULT ForceDestroyAction(const CATIVpmAFLAction_var&amp; iAction)=0; 
+
+
+// ==========================
+// Condition Functions
+// ==========================
+
+/**
+ * Check whether a lifecycle condition is satisfied or not.
+ *  @param iConditionName
+ *   The condition name declared in the lifecycle definition.
+ *  @param iGraphPredicatList
+ *   The list of predicates associated with the condition.
+ *  @param oFailingObj
+ *   If the condition is not satisfied, the object that most likely 
+ *   caused the failure is returned. 
+ */
+    virtual HRESULT CheckCondition(const CATUnicodeString&amp; iConditionName,
+                           const CATLISTV(CATBaseUnknown_var)&amp; iGraphPredicatList,
+                           CATIVpmFactoryObject_var&amp; oFailingObj)=0;
+ 
+/**
+ * Compare two values using an operator..
+ *  @param iValue1
+ *   The value to check.
+ *  @param iOp
+ *   The operator to be used for comparison.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;tt&gt;== | != | &gt;= | &lt;= | &gt; | &lt; | ISNULL | ISNOTNULL | INSIDE | NOTINS | IN_ENUM | NOT_IN_ENUM &lt;/tt&gt;
+ *  @param iValue2
+ *   The value to compare to the first value. 
+ */
+     virtual HRESULT CheckValue(CATUnicodeString&amp; iValue1,
+				                const CATUnicodeString&amp; iOp,
+				                CATUnicodeString&amp; iValue2)=0;
+     
+// ==========================
+// AFL Pool Functions
+// ==========================
+
+/**
+ * Put an object in the AFL pool.
+ *  @param iEntryKey
+ *   The entry key to the pool.
+ *  @param iObject
+ *   The object to put in the pool.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Operation succeeded &lt;/dd&gt;
+ *      &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+ *      &lt;dd&gt;The object passed is not valid &lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT PutObjectInAFLPool(const CATUnicodeString&amp; iEntryKey,
+                                        const CATIVpmFactoryObject_var&amp; iObject)=0;
+
+/**
+ * Retrieve an object from the AFL pool.
+ *  @param iEntryKey
+ *   The entry key to the pool.
+ *  @param oObject
+ *   The object.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Object is found for the entry &lt;/dd&gt;
+ *      &lt;dt&gt;S_FALSE&lt;/dt&gt;
+ *      &lt;dd&gt;Entry or object not found in the pool&lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT GetObjectFromAFLPool(const CATUnicodeString&amp; iEntryKey,
+                                          CATIVpmFactoryObject_var&amp; oObject)=0;
+
+/**
+ * Put a list of objects in the AFL pool.
+ *  @param iEntryKey
+ *   The entry key to the pool.
+ *  @param iObject
+ *   The object list to put in the pool.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Operation succeeded &lt;/dd&gt;
+ *      &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+ *      &lt;dd&gt;Object list is empty &lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT PutObjectsInAFLPool(const CATUnicodeString&amp; iEntryKey,
+                                         const CATLISTV(CATIVpmFactoryObject_var)&amp; iObjectList)=0;
+
+/**
+ * Retrieve a list of objects from the AFL pool.
+ *  @param iEntryKey
+ *   The entry key to the pool.
+ *  @param oObject
+ *   The object.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Object is found for the entry &lt;/dd&gt;
+ *      &lt;dt&gt;S_FALSE&lt;/dt&gt;
+ *      &lt;dd&gt;Entry not found in the pool&lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT GetObjectsFromAFLPool(const CATUnicodeString&amp; iEntryKey,
+                                           CATLISTV(CATIVpmFactoryObject_var)&amp; oObjectList)=0;
+
+/**
+ * Put an Action in the AFL pool.
+ *  @param oAction
+ *   The Action.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Operation succeeded &lt;/dd&gt;
+ *      &lt;dt&gt;E_INVALIDARG&lt;/dt&gt;
+ *      &lt;dd&gt;The action passed is not valid &lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT PutActionInAFLPool(const CATIVpmAFLAction_var&amp; iAction)=0;
+
+/**
+ * Retrieve an Action from the Simple variable pool.
+ *  @param oAction
+ *   The Action.
+ *  @return
+ *   A HRESULT value. 
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;dl&gt;
+ *      &lt;dt&gt;S_OK&lt;/dt&gt;
+ *      &lt;dd&gt;Action is found for the entry &lt;/dd&gt;
+ *      &lt;dt&gt;S_FALSE&lt;/dt&gt;
+ *      &lt;dd&gt;Entry or action not found in the pool&lt;/dd&gt;
+ *      &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *      &lt;dd&gt;Other problem occured during the operation &lt;/dd&gt;
+ *    &lt;/dl&gt;		
+ */
+     virtual HRESULT GetActionFromAFLSimplePool(CATIVpmAFLAction_var&amp; oAction)=0;
+
+/**
+ * Push a list of persons in the AFL pool.
+ *  @param iPoolName
+ *   The pool entry name.
+ *  @param iListObj
+ *   The list of persons to push in.
+ */
+     virtual HRESULT PutPersonsInAFLPool(const CATUnicodeString&amp; iPoolName,
+					                               const CATLISTV(CATBaseUnknown_var)&amp; iListObj)=0;
+     
+
+/**
+ * Retrieves a list of person from the AFL pool.
+ *  @param iPoolName
+ *   The pool entry name.
+ *  @param iListObj
+ *   The list of persons retrieved from the pool.
+ */
+     virtual HRESULT GetPersonsFromAFLPool(const CATUnicodeString&amp; iPoolName,
+						                               CATLISTV(CATBaseUnknown_var)&amp; oListObj)=0;
+
+/**
+ * Retrieves a Message from a Tag.
+ *  @param iTAG
+ *   The Tag.
+ *  @param oExpression
+ *   The Message.
+ */
+     virtual HRESULT GetMessageFromTag(const CATUnicodeString&amp; iTAG,
+                                       CATUnicodeString&amp;       oExpression)=0;
+
+/**
+ * Retrieves a list of Objects from a Path.
+ *  @param iPathToObjs
+ *   The Path.
+ *  @param oListObjects
+ *   The list of Objects.
+ */
+     virtual HRESULT GetObjectsFromPath(const CATUnicodeString&amp;             iPathToObjs,
+                                        CATLISTV(CATIVpmFactoryObject_var)&amp; oListObjects)=0;
+
+
+// ====================================
+// OBSOLETE IN V5R5
+// ===================================
+
+/**
+ * obsolete in V5R5  ( ASSERT ) DO NOT USE
+ * Instead use ENOVILifeCycleObject-&gt;Remove() on the link
+ **/        
+     virtual HRESULT RemoveLink(CATIVpmAFLLink_var&amp; iLink)=0 ;
+   					  
+
+/**
+ * obsolete in V5R5  ( ASSERT ) DO NOT USE
+ * Instead use ENOVILifeCycleObject-&gt;Remove() on the Action
+ **/        
+     virtual HRESULT DestroyAction(CATIVpmAFLAction_var&amp; iAction)=0 ; 
+
+/** @nodoc
+ * obsolete in V5R5  ( ASSERT ) DO NOT USE
+ * Instead use ENOVIObjectInfo interface.
+ **/        
+     virtual HRESULT GetVpmObjectAttributeNames(const CATUnicodeString&amp; iEntityName,
+                                                CATListOfVPMCA&amp;         oVPMCAList)=0;
+/**
+ * obsolete in V5R5  ( ASSERT ) DO NOT USE
+ * Instead use ENOVIObjectInfo interface.
+ **/        
+     virtual HRESULT CreateAffectedObject(const CATUnicodeString&amp;       iTypeAffObj,
+                                          CATIVpmAFLAffectedObject_var&amp; oAffObj,
+                                          const CATUnicodeString&amp;       iGraphCusto=&quot;&quot;)=0;
+
+/**
+ * Retrieves the actions using a list of mods.
+ *  @param iListMod
+ *   List of modification.
+ *  @param oLisAction
+ *   List of all the action using at least one the modification given as input.
+ */
+    virtual HRESULT GetActionFromMod(const CATListOfCATICfgModification_var &amp;iListMod, CATLISTV(CATIVpmAFLAction_var)  &amp;oListAction) const = 0;
+
+};
+CATDeclareHandler(CATIVpmAFLManager, CATBaseUnknown);
+#endif //CATIVpmAFLManager_H
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmAFLLink.html">← 上一页: CATIVpmAFLLink.h</a></div>
+        <div><a href="CATIVpmAFLProduct.html">下一页: CATIVpmAFLProduct.h →</a></div>
+    </div>
+</body>
+</html>

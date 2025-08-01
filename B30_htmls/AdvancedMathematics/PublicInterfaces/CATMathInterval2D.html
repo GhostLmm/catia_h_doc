@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvancedMathematics/PublicInterfaces/CATMathInterval2D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AdvancedMathematics/PublicInterfaces/CATMathInterval2D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathInterval.html">← 上一页: CATMathInterval.h</a></div>
+        <div><a href="CATMathIntervalND.html">下一页: CATMathIntervalND.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMATHINTERVAL2D_H
+#define CATMATHINTERVAL2D_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+/** @CAA2Required */ 
+/**
+ * Use now the CATMathIntervalND class.
+ */
+
+#include &quot;YN000FUN.h&quot;
+#include &quot;CATMathPoint2D.h&quot;
+#include &quot;CATMathInterval.h&quot;
+
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+
+
+class ExportedByYN000FUN CATMathInterval2D : public CATCGMVirtual
+{
+ private:
+  CATMathInterval x, y;
+ public:
+  CATMathInterval2D();
+
+  CATMathInterval2D(const CATMathPoint2D &amp; p, const CATMathPoint2D &amp; P):
+    x(p.GetX(),P.GetX()), y(p.GetY(),P.GetY())
+      {};
+  
+  CATMathInterval2D(const CATMathInterval &amp; _x, const CATMathInterval &amp; _y):
+    x(_x), y(_y)
+      {};
+
+  CATMathInterval2D(const CATMathInterval2D &amp; i):
+    x(i.x), y(i.y)
+      {};
+
+  CATMathInterval GetX() const { return x; };
+  CATMathInterval GetY() const { return y; };
+  CATMathPoint2D GetMax() const;
+  CATMathPoint2D GetMin() const;
+
+  void SetX(const CATMathInterval &amp; i);
+  void SetY(const CATMathInterval &amp; i);
+
+  CATLONG32 IsEmpty() const;
+  double DistanceTo(const CATMathPoint2D &amp; i) const;
+  CATMathPoint2D Center() const;
+
+//
+//- Operators
+//
+//  Intersection
+  friend ExportedByYN000FUN CATMathInterval2D operator &amp;&amp;
+    (const CATMathInterval2D &amp; i1,const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x&amp;&amp;i2.x, i1.y&amp;&amp;i2.y); }
+
+//  Union
+  friend ExportedByYN000FUN CATMathInterval2D operator ||
+    (const CATMathInterval2D &amp; i1, const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x||i2.x, i1.y||i2.y); }
+
+//  Addition
+  friend ExportedByYN000FUN CATMathInterval2D operator +
+    (const CATMathInterval2D &amp; i1, const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x+i2.x, i1.y+i2.y); }
+
+//  Substraction
+  friend ExportedByYN000FUN CATMathInterval2D operator -
+    (const CATMathInterval2D &amp; i1, const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x-i2.x, i1.y-i2.y); }
+
+//  Multiplication
+  friend ExportedByYN000FUN CATMathInterval2D operator *
+    (const CATMathInterval2D &amp; i1, const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x*i2.x, i1.y*i2.y); }
+
+//  Division
+  friend ExportedByYN000FUN CATMathInterval2D operator /
+    (const CATMathInterval2D &amp; i1, const CATMathInterval2D &amp; i2)
+      { return CATMathInterval2D(i1.x/i2.x, i1.y/i2.y); }
+
+//  Opposite
+  friend ExportedByYN000FUN CATMathInterval2D operator -
+    (const CATMathInterval2D &amp; i)
+      { return CATMathInterval2D(-i.x, -i.y); }
+
+//  Scalar Addition
+  friend ExportedByYN000FUN CATMathInterval2D operator +
+    (const CATMathPoint2D &amp; d, const CATMathInterval2D &amp; i)
+      { return CATMathInterval2D(d.GetX()+i.x, d.GetY()+i.y); }
+  friend ExportedByYN000FUN CATMathInterval2D operator +
+    (const CATMathInterval2D &amp; i, const CATMathPoint2D &amp; d)
+      { return CATMathInterval2D(i.x+d.GetX(), i.y+d.GetY()); }
+
+//  Scalar Substraction
+  friend ExportedByYN000FUN CATMathInterval2D operator -
+    (const CATMathPoint2D &amp; d, const CATMathInterval2D &amp; i)
+      { return CATMathInterval2D(d.GetX()-i.x, d.GetY()-i.y); }
+  friend ExportedByYN000FUN CATMathInterval2D operator -
+    (const CATMathInterval2D &amp; i, const CATMathPoint2D &amp; d)
+      { return CATMathInterval2D(i.x-d.GetX(), i.y-d.GetY()); }
+
+//  Scalar Multiplication
+  friend ExportedByYN000FUN CATMathInterval2D operator *
+    (const CATMathPoint2D &amp; d, const CATMathInterval2D &amp; i)
+      { return CATMathInterval2D(d.GetX()*i.x, d.GetY()*i.y); }
+  friend ExportedByYN000FUN CATMathInterval2D operator *
+    (const CATMathInterval2D &amp; i, const CATMathPoint2D &amp; d)
+      { return CATMathInterval2D(i.x*d.GetX(), i.y*d.GetY()); }
+
+//  Scalar Division
+  friend ExportedByYN000FUN CATMathInterval2D operator /
+    (const CATMathPoint2D &amp; d, const CATMathInterval2D &amp; i)
+      { return CATMathInterval2D(d.GetX()/i.x, d.GetY()/i.y); }
+  friend ExportedByYN000FUN CATMathInterval2D operator /
+    (const CATMathInterval2D &amp; i, const CATMathPoint2D &amp; d)
+      { return CATMathInterval2D(i.x/d.GetX(), i.y/d.GetY()); }
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathInterval.html">← 上一页: CATMathInterval.h</a></div>
+        <div><a href="CATMathIntervalND.html">下一页: CATMathIntervalND.h →</a></div>
+    </div>
+</body>
+</html>

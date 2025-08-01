@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTPSInterfaces/PublicInterfaces/CATITPSIndividualElementControl.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTPSInterfaces/PublicInterfaces/CATITPSIndividualElementControl.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSIndependency.html">← 上一页: CATITPSIndependency.h</a></div>
+        <div><a href="CATITPSIntersectionPlane.html">下一页: CATITPSIntersectionPlane.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATITPSIndividualElementControl_H
+#define CATITPSIndividualElementControl_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2012
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATTPSItfCPP.h&quot;
+#include &quot;CATTPSIndividualElementControl.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATTPSItfCPP IID IID_CATITPSIndividualElementControl;
+#else
+extern &quot;C&quot; const IID IID_CATITPSIndividualElementControl ;
+#endif
+
+/**
+ * This interface is implemented by CATTPSToleranceWithDRF feature.
+ * Interface to manage Individual Element Control.
+ * &lt;b&gt;Role&lt;/b&gt;: Tolerance zones apply to the full extent of the feature, unless otherwise indicated. 
+ * Where it is a requirement to control only individual line elements of a surface, a qualifying 
+ * notation, such as &quot;EACH ELEMENT&quot; or &quot;EACH RADIAL ELEMENT&quot;, is added to the annotation. This 
+ * permits control of individual elements of the surface independently in relation to the datum and 
+ * does not limit the total surface to an encompassing zone..
+ */
+
+class ExportedByCATTPSItfCPP CATITPSIndividualElementControl : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+     * Sets the control of individual elements of the surface.
+     *  @param iValue
+     *   Individual Element Control.
+     *  returns S_OK when the value has been correctly set, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT SetControl (
+                              const CATTPSIndividualElementControl iValue) = 0;
+
+    /**
+     * Retrieves the control of individual elements of the surface.
+     *  @param oValue
+     *   Individual Element Control.
+     *  returns S_OK when the value has been correctly retrieved, 
+     *  returns E_FAIL otherwise.
+     */
+    virtual HRESULT GetControl (
+                            CATTPSIndividualElementControl&amp; oValue) const = 0; 
+};
+
+CATDeclareHandler (CATITPSIndividualElementControl, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATITPSIndependency.html">← 上一页: CATITPSIndependency.h</a></div>
+        <div><a href="CATITPSIntersectionPlane.html">下一页: CATITPSIntersectionPlane.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRR.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRR.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchFrameInfo.html">← 上一页: CATISchFrameInfo.h</a></div>
+        <div><a href="CATISchGRRCntr.html">下一页: CATISchGRRCntr.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchGRR_H
+#define CATISchGRR_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISchGRR ;
+
+class CATISchAppConnectable;
+class CATISchAppConnector;
+class CATIUnknownList;
+class CATICStringList;
+
+/**
+ * Interface to manage graphic representations for Schematic basic sets 
+ * of objects. 
+ * &lt;b&gt;Role&lt;/b&gt;: To add or remove primitives (members) of a graphic 
+ * representation of a schematic object.
+ */
+class CATISchGRR : public IUnknown
+{
+
+  public:  
+
+  /**
+  * Get the schematic object that owns this graphic representation.
+  * @param oGRROwner
+  *   A schematic object that owns this graphic representation.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetSchObjOwner (CATISchAppConnectable **oGRROwner) = 0;
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATISchGRR#GetGRRName2 instead.
+  * Get current name of the GRR. 
+  * @param oGRRName
+  *   The name of this GRR. A component can be associated with more than one GRRs.
+  *   Each GRR is identified by a specific name. Valid names are specified 
+  *   by the application when building the component. Every component should have
+  *   a GRR named &quot;Primary&quot;. The GRR by this name is used in the catalog.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetGRRName (char **oGRRName) = 0;
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATISchGRR#SetGRRName2 instead.
+  * Set current name of the GRR. 
+  * @param iGRRName
+  *   The name of this GRR to be set. 
+  *   @see #GetGRRName
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetGRRName (const char *iGRRName) = 0;
+
+  /**
+  * Get the schematic objects that own this connector graphic representation.
+  * @param oCntrOwner
+  *   A schematic connector that owns this connector graphic representation.
+  * @param oGRROwner
+  *   A component or route graphic representation that owns this
+  *   connector graphic representation.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetSchCntrOwners (CATISchAppConnector **oCntrOwner,
+    CATISchGRR **oGRROwner) = 0;
+
+
+  /**
+  * Get a list of graphical objects that connects
+  * to this graphic representation.
+  * @param iGRROwner
+  *   A CATISchAppConnectable that owns this graphic representation. In
+  *   the case of GRRCntr (this object), iGRROwner is the owner
+  *   &lt;b&gt;of the owner&lt;/b&gt; of this graphic.
+  * @param oLCntrClassFilter
+  *   A list of all the class types for filtering the output application
+  *   objects list.
+  * @param oLCntbleGRRs
+  *   A list of GRRs connected to this GRR.
+  *   (members are CATISchGRR interface pointers). 
+  * @param oLCntbles
+  *   A list of application objects connected to this object.
+  *   (members are CATISchAppConnectable interface pointers). 
+  * @param oLCntrsOnThisObj
+  *   A list of connectors on this object through which 
+  *   the connection is made.
+  *   (members are CATISchAppConnector interface pointers).
+  * @param oLCntrsOnConnected
+  *   A list of connectors on the connected objects through which 
+  *   the connection is made.
+  *   (members are CATISchAppConnector interface pointers).
+  *   Members in this list corresponds to those in oLCntrsOnThisObj in
+  *   making the corresponding connections.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListConnectedGRRs (CATISchAppConnectable *iGRROwner,
+    CATICStringList *iLCntbleClassFilter, CATIUnknownList **oLCntbleGRRs,    
+    CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrsOnThisObj,
+    CATIUnknownList **oLCntrsOnConnected) = 0;
+
+
+  /**
+  * Get current name of the GRR. 
+  * @param oGRRName
+  *   The name of this GRR. A component can be associated with more than one GRRs.
+  *   Each GRR is identified by a specific name. Valid names are specified 
+  *   by the application when building the component. Every component should have
+  *   a GRR named &quot;Primary&quot;. The GRR by this name is used in the catalog.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetGRRName2 (CATUnicodeString &amp;oGRRName) = 0;
+
+  /**
+  * Set current name of the GRR. 
+  * @param iGRRName
+  *   The name of this GRR to be set. 
+  *   @see #GetGRRName
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetGRRName2 (const CATUnicodeString &amp;iGRRName) = 0;
+
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchFrameInfo.html">← 上一页: CATISchFrameInfo.h</a></div>
+        <div><a href="CATISchGRRCntr.html">下一页: CATISchGRRCntr.h →</a></div>
+    </div>
+</body>
+</html>

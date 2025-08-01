@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisResources/PublicInterfaces/CATECharacCollector.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisResources/PublicInterfaces/CATECharacCollector.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEAnalysisVisibility.html">← 上一页: CATEAnalysisVisibility.h</a></div>
+        <div><a href="CATEExpressionCollector.html">下一页: CATEExpressionCollector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+//===================================================================
+//
+// CATECharacCollector.h
+// Provide default implementation of some methods of interface
+//    CATICharacCollector for AnalysisSet and AnalysisEntity
+//
+//===================================================================
+//
+// Usage notes:
+//
+//===================================================================
+#ifndef CATECharacCollector_H
+#define CATECharacCollector_H
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATAnalysisResources.h&quot;
+#include &quot;CATAnalysisExplicitTypes.h&quot;
+
+class CATString;
+class CATSamCharacVersion;
+class CATAnalysisExplicitModel;
+class CATAnalysisExplicitParent;
+class CATAnalysisCharacCollector;
+class CATAnalysisCollectorArchiver;
+
+//------------------------------------------------------------------
+
+/**
+ * Status of the CATAnalysisCharacCollector.
+ * @param CollectorArchiveFlagRetrieved 
+ *   The CATAnalysisCharacCollector has been retreived in the model with @href CATAnalysisExplicitParent#FindCharacCollector method.
+ * @param CollectorArchiveFlagAcquired 
+ *   The CATAnalysisCharacCollector has been created and filled by your implementation of CATICharacCollector.
+ * @param CollectorArchiveFlagRetrieved 
+ *   The CATAnalysisCharacCollector has been swapped to disk and retreived through an archiver.
+ */
+
+enum CollectorArchiveFlag
+{
+  CollectorArchiveFlagRetrieved,
+  CollectorArchiveFlagAcquired,
+  CollectorArchiveFlagArchived
+} ;
+
+
+/**
+ * Adapter for the implementation of CATICharacCollector interface.
+ * It can be used for both for AnalysisSet and AnalysisEntity.
+ * @see CATICharacCollector, CATAnalysisCharacCollector, CATSamCharacVersion
+ */
+
+class ExportedByCATAnalysisResources CATECharacCollector: public CATBaseUnknown
+{
+  public:
+
+/**
+ * Default constructor.
+ */
+    CATECharacCollector();
+
+/**
+ * Destructor.
+ */
+    virtual ~CATECharacCollector();    
+
+/**
+ * Returns the list of available collector characteristic physical types for the current set.&lt;br&gt;
+ * The unit category for each physical type is also returned.&lt;br&gt;
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.&lt;br&gt;
+ * @param oNumber
+ *   The number of different physical types (can be 0).
+ * @param oPhysicalTypes[Number]
+ *   A pointer to the table of physical types.
+ * @param oUnits[Number]
+ *   A pointer to the table of unit category identifiers.
+ */
+    virtual HRESULT GetAvailablePhysicalTypes(int                       &amp; oNumber,
+                                              const CATSamPhysicalType* &amp; oPhysicalTypes,
+                                              const CATString*          &amp; oUnits) = 0 ;
+  
+/**
+ * Retrieves the list of available Entities physical types for a Charac PhysicalTypes.&lt;br&gt;
+ * @param iCharacPhysicalType
+ *   The charac physical type
+ * @param oNumber
+ *   The number of different physical types (can be 0).
+ * @param oPhysicalTypes[Number]
+ *   A pointer to the table of physical types.
+ */
+  virtual HRESULT GetAvailableEntityPhysicalTypes(CATSamPhysicalType          iCharacPhysicalType,
+                                                  int                       &amp; oNumber,
+                                                  const CATSamPhysicalType* &amp; oPhysicalTypes);
+
+/**
+ * Returns the list of versions for the current set, and a physical type.&lt;br&gt;
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.&lt;br&gt;
+ * @param iPhysicalType
+ *   The physical type
+ * @param oNumber
+ *   The number of different versions.
+ * @param oVersions[Number]
+ *   A pointer to the table of versions (&lt;b&gt;CATSamCharacVersion&lt;/b&gt; objects).
+ * @see CATSamCharacVersion
+ */
+    virtual HRESULT GetAvailableVersions(const CATSamPhysicalType     iPhysicalType,
+                                         int                        &amp; oNumber,
+                                         const CATSamCharacVersion* &amp; oVersions) = 0 ;
+
+/**
+ * Returns the list of position identifiers for the current set, physical type and version identifier.&lt;br&gt;
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.
+ * @param iPhysicalType
+ *   The physical type
+ * @param iVersion
+ *   The version identifier.
+ * @param oNumber
+ *   The number of different positions.
+ * @param oPositions[Number]
+ *   A pointer to the table of position identifiers.&lt;br&gt;
+ *   The pre-defined positions are : NONE, NODE, DOF, ELEMENT, EDGE, FACE, CENTER, NODE_OF_ELEMENT and GAUSS.
+ */
+    virtual HRESULT GetAvailablePositions(const CATSamPhysicalType    iPhysicalType,
+                                          const CATSamCharacVersion &amp; iVersion,
+                                          int                       &amp; oNumber,
+                                          const CATString*          &amp; oPositions) = 0 ;
+
+/**
+ * Returns the list of occurrences for the current set.
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.&lt;br&gt;
+ * @param oNumberOfOccurrences The number of occurrences.
+ */
+    virtual HRESULT GetNumberOfOccurrences(int &amp; oNumberOfOccurrences) = 0 ;
+
+/**
+ * Returns the current occurrence number for the current set.
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.
+ * @param oOccurrenceNumber The occurrence number.
+ */
+    virtual HRESULT GetCurrentOccurrence(int &amp; oOccurrenceNumber) = 0 ;
+
+/**
+ * Sets the current occurrence number for the current set.
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.
+ * @param iOccurrenceNumber The occurrence number.
+ */
+    virtual HRESULT SetCurrentOccurrence(const int iOccurrenceNumber) = 0 ;
+
+/**
+ * Asks to the implementing feature if a definition of a CATAnalysisCharacCollector is available.
+ * Note that a complete definition means physical type, version and position identifier.
+ * @param iPhysicalType
+ *   The physical type
+ * @param iVersion
+ *   The version (&lt;b&gt;CATSamCharacVersion&lt;/b&gt; object).
+ * @param iPosition
+ *   The position identifier.&lt;br&gt;
+ *   The pre-defined positions are : NONE, NODE, DOF, ELEMENT, EDGE, FACE, CENTER, NODE_OF_ELEMENT and GAUSS.
+ * @param oIsCollectable
+ *   The definition is availability status for the complete definition.
+ * @see CATSamCharacVersion, CATAnalysisCharacCollector.
+ */
+  virtual HRESULT IsAnAvailableDefinition(const CATSamPhysicalType            iPhysicalType,
+                                          const CATSamCharacVersion         &amp; iVersion,
+                                          const CATString                   &amp; iPosition,
+                                          CATBoolean                        &amp; oIsCollectable);
+
+/**
+ * Returns a CATAnalysisCharacCollector. 
+ * &lt;b&gt;This method must be redefined&lt;/b&gt;.
+ * @param iPhysicalType
+ *   The physical type
+ * @param iVersion
+ *   The version (&lt;b&gt;CATSamCharacVersion&lt;/b&gt; object).
+ * @param iPosition
+ *   The position identifier.&lt;br&gt;
+ *   The pre-defined positions are : NONE, NODE, DOF, ELEMENT, EDGE, FACE, CENTER, NODE_OF_ELEMENT and GAUSS.
+ * @param iEntityFlags[NbEntities]
+ *   A pointer to the table of entity flags indicating which entities should
+ *   have their values collected.&lt;br&gt;
+ *   If a CATAnalysisCharacCollector of the correct version already exists
+ *   it will be updated if it does not contain values for all of the entities.&lt;br&gt;
+ *   If this pointer is NULL, then it is assumed that values for all entities are
+ *   requested.
+ * @param oCharacCollector
+ *   A pointer to a CATAnalysisCharacCollector object.
+ * @iCollectValues
+ *   Indicates if the CATAnalysisCharacCollector object should be filled with the requested values or not.
+ * @param iEntiyPhysicalTypeToCollect
+ *   Allow to filter by physical the list of entities that are scanned for building the CATAnalysisCharacCollector.
+ *   This parameter is not taken into account for our implementations. 
+ */
+    virtual HRESULT GetCharacCollector(const CATSamPhysicalType            iPhysicalType,
+                                       const CATSamCharacVersion         &amp; iVersion,
+                                       const CATString                   &amp; iPosition,
+                                       const char* const                   iEntityFlags,
+                                       const CATAnalysisCharacCollector* &amp; oCharacCollector,
+                                       const boolean                       iCollectValues = TRUE,
+                                       const CATSamPhysicalType            iEntiyPhysicalTypeToCollect = CATSamPhysicalTypeNone) = 0 ;
+
+/**
+ * Returns an array of CATAnalysisCharacCollector describing the occurrences values.
+ * @param oNbCharacCollectors
+ *   The number of CATAnalysisCharacCollector objects.
+ * @param oCharacCollectors
+ *   An array of CATAnalysisCharacCollector objects.
+ * @iCollectValues
+ *   Indicates if the CATAnalysisCharacCollector object should be filled with the requested values or not.
+ */
+    virtual HRESULT GetCharacCollectorsForOccurrences(int                                       &amp; oNbCharacCollectors,
+                                                      const CATAnalysisCharacCollector* const * &amp; oCharacCollectors,
+                                                      const boolean                               iCollectValues = TRUE);
+
+/**
+ * Deletes an instance of CATAnalysisCharacCollector.
+ * @param iCharacCollector
+ *   The pointer on the instance of &lt;b&gt;CATAnalysisCharacCollector&lt;/b&gt; to delete.
+ */
+    virtual HRESULT DeleteCharacCollector(const CATAnalysisCharacCollector* &amp;iCharacCollector) ;
+
+/**
+ * Delete all instances of CATAnalysisCharacCollector.
+ */
+    virtual HRESULT DeleteAll() ;
+
+/**
+ * Update internal data.
+ * &lt;b&gt;This method can be redefined, in this case, this adpter must be called.
+ */
+    virtual HRESULT Update(CATBoolean iFullUpdate = TRUE) ;
+
+/**
+ * Sets context Model for collect.
+ * Defines the context for wich the CATAnalysisCharacCollector is computed.
+ * This context may influence the sequential numbering of field model entities or the value itself,
+ * (for example apply th positionning matrix of the analysis instance in an assembly)
+ * @param iModelContext
+ *   The pointer on the instance of &lt;b&gt;CATAnalysisExplicitModel&lt;/b&gt;.
+ */
+  virtual HRESULT SetContextModel(const CATAnalysisExplicitModel* iModelContext);
+
+/**
+ * Gets context Model for collect.
+ * Returns the context for wich the CATAnalysisCharacCollector is computed.
+ * This context may influence the sequential numbering of field model entities or the value itself,
+ * (for example apply th positionning matrix of the analysis instance in an assembly)
+ * @param oModelContext
+ *   The pointer on the instance of &lt;b&gt;CATAnalysisExplicitModel&lt;/b&gt;.
+ */
+  virtual HRESULT GetContextModel(const CATAnalysisExplicitModel* &amp;oModelContext);
+
+/**
+ * Return the Context.
+ * @param oContext The Context is the explicit set or entity that represent the 
+ * feature that implement the interface.
+ */
+  virtual HRESULT GetContext(CATAnalysisExplicitParent &amp;oContext);
+
+  protected:
+
+/**
+ * Check the Activity of the Feature.
+ */
+    virtual CATBoolean GetActivity();
+
+/**
+ * Get Collector archiving  autorization.
+ * &lt;b&gt;This method should be redefined to allow collector archiving&lt;/b&gt;.
+ * @param oCanArchive 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;&lt;li&gt;&lt;font color=&quot;red&quot;&gt;TRUE&lt;/font color=&quot;red&quot;&gt; Allow the archiving.&lt;/li&gt;
+ *     &lt;li&gt;&lt;font color=&quot;red&quot;&gt;FALSE&lt;/font color=&quot;red&quot;&gt; Deny the archiving. &lt;b&gt;This is the default value.&lt;/b&gt;&lt;/li&gt;&lt;/ul&gt;
+ */
+    virtual
+    HRESULT IsAuthorizedToArchiveCollectors(CATBoolean &amp; oCanArchive) const;
+
+/**
+ * Returns the associated collector archiver.
+ * @param iPhysicalType The physical type
+ * @param iVersion The version object.
+ * @param iPosition The position identifier.
+ * @param oGetCollectorArchiver The CATAnalysisCollectorArchiver object.
+ */
+    HRESULT GetCollectorArchiver(const CATSamPhysicalType        iPhysicalType,
+                                 const CATSamCharacVersion     &amp; iVersion,
+                                 const CATString               &amp; iPosition,
+                                 CATAnalysisCollectorArchiver* &amp; oGetCollectorArchiver);
+
+/**
+ * Assigns the associated collector archiver.
+ * @param iPhysicalType The physical type
+ * @param iVersion The version object.
+ * @param iPosition The position identifier.
+ * @param iSetCollectorArchiver The CATAnalysisCollectorArchiver object.
+ * &lt;b&gt;Note: &lt;/b&gt; If iSetCollectorArchiver is NULL, this will remove &lt;br&gt;
+ * the CATAnalysisCollectorArchiver associated to the definition.
+ */
+    HRESULT SetCollectorArchiver(const CATSamPhysicalType      iPhysicalType,
+                                 const CATSamCharacVersion   &amp; iVersion,
+                                 const CATString             &amp; iPosition,
+                                 CATAnalysisCollectorArchiver* iSetCollectorArchiver);
+
+/**
+ * Returns if CharacCollector has been built for all entities.
+ * @param iCharacCollector The CATAnalysisCharacCollector.
+ * @param oIsForAllEntities TRUE if the object is built for all entities.
+ */
+    HRESULT CollectorIsForAllEntities(const CATAnalysisCharacCollector* iCharacCollector,
+                                            CATBoolean                &amp; oIsForAllEntities);
+
+/**
+ * Creates the link from the XharacCollector to its archiver.
+ * @param iCharacCollector The CATAnalysisCharacCollector.
+ * @param iCollectorHadBeenAcquired The status of the archiver.
+ */
+    HRESULT AssignArchiverToCollector(const CATAnalysisCharacCollector* iCharacCollector,
+                                            CollectorArchiveFlag        iCollectorHadBeenAcquired);
+
+  private:
+/** Friend class     */
+    friend class CATESamCharacCollector;
+/** Init Storage Area for CollectorArchivers     */
+    HRESULT InitCollectorArchiversStorageArea();
+/** Locate the Collector Archiver of a CharacCollector     */
+    HRESULT LocateCollectorArchiver(const CATSamPhysicalType      iPhysicalType,
+                                    const CATSamCharacVersion   &amp; iVersion,
+                                    const CATString             &amp; iPosition,
+                                    int                         &amp; oPhysicalTypeIndex,
+                                    int                         &amp; oVersionIndex,
+                                    int                         &amp; oPositionIndex);
+/** Reset Storage Area for CollectorArchivers    */
+    HRESULT ResetCollectorArchiversStorageArea();
+/** Reset Storage Area for Numbering Dependant CollectorArchivers    */
+    HRESULT ResetNumberingDependantCollectorArchiversStorageArea();
+ 
+/**
+ * Constructors. No implementation provided. Just declared to avoid that 
+ * someone could build this class.
+ */
+    CATECharacCollector(const CATECharacCollector &amp;);
+    CATECharacCollector&amp; operator=(const CATECharacCollector &amp;);
+ 
+    // Data Members for CollectorArchiving
+    int                              _NbPhysicalTypes;
+    int*                             _NbVersions;
+    int**                            _NbPositions;
+    CATAnalysisCollectorArchiver**** _CollectorArchivers;
+    const CATAnalysisExplicitModel*  _ModelContext;
+    const CATAnalysisExplicitModel*  _LastModelContext;
+};   
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEAnalysisVisibility.html">← 上一页: CATEAnalysisVisibility.h</a></div>
+        <div><a href="CATEExpressionCollector.html">下一页: CATEExpressionCollector.h →</a></div>
+    </div>
+</body>
+</html>

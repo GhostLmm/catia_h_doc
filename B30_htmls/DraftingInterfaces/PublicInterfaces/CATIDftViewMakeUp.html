@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftViewMakeUp.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftViewMakeUp.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftViewEditor.html">← 上一页: CATIDftViewEditor.h</a></div>
+        <div><a href="CATIDftViewPanel.html">下一页: CATIDftViewPanel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 1999
+#ifndef CATIDftViewMakeUp_H
+#define CATIDftViewMakeUp_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMacForIUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATDftViewLinkType.h&quot;
+
+class CATIDftView;
+class CATIView;
+class CATIDftSheet;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftViewMakeUp ;
+#else
+extern &quot;C&quot; ExportedByDraftingItfCPP const IID IID_CATIDftViewMakeUp ;
+#endif
+
+/**
+  * Interface used to manage the make-up of the view in the sheet.
+  * &lt;b&gt;Role&lt;/b&gt;: The view make-up manages the display layout of a view 
+  * in the sheet.
+  * It manages the position, scale, orientation and other display
+  * parameters.
+  */
+class ExportedByDraftingItfCPP CATIDftViewMakeUp: public CATBaseUnknown
+{
+public:
+  
+/**
+ * Gets the sheet containing this view make-up.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oSheet
+ *   The father sheet.
+ */  
+  virtual HRESULT GetSheet(CATIDftSheet **oSheet) const = 0;
+  
+/**
+ * Gets the view scale.
+ * @param oScale
+ *   The view scale.
+ */  
+  virtual HRESULT GetScale(double *oScale) const = 0;
+  
+/**
+ * Gets the view orientation in the sheet.
+ * @param oOrientation
+ *   The view orientation.
+ */  
+  virtual HRESULT GetAngle(double *oOrientation) const = 0;
+  
+/**
+ * @nodoc
+ *  This method is now replaced by @href CATIDftViewMakeUp#GetAxisData
+ */ 
+  virtual HRESULT GetPosition(double *oX, double *oY) const = 0;
+  
+/**
+ * Sets the view scale.
+ * @param iScale
+ *   The view scale.
+ *   &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: The scale is greater than 0.
+ */  
+  virtual HRESULT SetScale(const double iScale) = 0;
+  
+/**
+ * Sets the view orientation in the sheet.
+ * @param iOrientation
+ *   The view orientation
+ */ 
+  virtual HRESULT SetAngle(const double iOrientation) = 0;
+  
+/**
+ * @nodoc
+ *  This method is now replaced by @href CATIDftViewMakeUp#SetAxisData
+ */ 
+  virtual HRESULT SetPosition(const double iX, const double iY) = 0;
+    
+/**
+ * Used to know if the dynamic frame showing the view bounding box is visible.
+ * @param oFVisu 
+ *   The frame visibility.
+ */ 
+  virtual HRESULT IsFrameVisible(boolean *oFVisu) const = 0;
+  
+/**
+ * Description : Sets the view frame visibility.
+ * @param iFVisu
+ *   The frame visibility.
+ */ 
+  virtual HRESULT SetFrameVisibility(const boolean iFVisu)  = 0;
+  
+/**
+ * Used to know if the view axis is visible.
+ * The axis is visible only when the view is in edition.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oAxisVisu 
+ *   The axis visibility.
+ */ 
+  virtual HRESULT IsAxisVisible(boolean *oAxisVisu) const = 0;
+  
+/**
+ * Description : Sets the view axis visibility.
+ * The axis is visible only when the view is in edition.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param iAxisVisu
+ *   The axis visibility.
+ */ 
+  virtual HRESULT SetAxisVisibility(const boolean iAxisVisu)  = 0;
+    
+/**
+ * Used to link the view in position with an other one.
+ * @param MotherView
+ *   The mother view (concerning positionning).
+ * @param iLinkType
+ *   The link mode.
+ * @param iPosRelation
+ *   An user defined relation (not used yet).
+ */
+  virtual HRESULT LinkWith(const CATIDftViewMakeUp *iMotherView, 
+                           const CATDftViewLinkType iLinkType = AUTOMATIC, 
+                           const IUnknown * iPosRelation = NULL) = 0;
+  
+/**
+ * Removes the view link.
+ */
+  virtual HRESULT RemoveViewLink() = 0;
+  
+/**
+ * Gets the information concerning the view position rule.
+ * @param &lt;tt&gt;CATIDftViewMakeUp **oMother&lt;/tt&gt;
+ * [out] The mother view (concerning positionning)
+ * @param &lt;tt&gt;CATDftViewLinkType *oLinkType&lt;/tt&gt;
+ * [out] The link mode
+ * @param &lt;tt&gt;IUnknown **oPosRelation&lt;/tt&gt;
+ * [out] The Poitioning relation
+ * @return
+ * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; if oMother is valuated
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; 
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetViewLink (CATIDftViewMakeUp **oMother, CATDftViewLinkType *oLinkType, 
+                               IUnknown **oPosRelation) const = 0;
+  
+/**
+ * Gets the view associated to this make-up.
+ * The view may be a drafting view or a detail.
+ * @param oView
+ *   The associated view.
+ */
+  virtual HRESULT GetView(CATIView **oView) const = 0;
+  
+/**
+ * Enables the user to get the global scale factor between the scale of the view 
+ * and the global scaling applied by the sheet to the views.
+ * The relation is viewscale = globalscaling * scalefactor.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param &lt;tt&gt;double * oScaleFactor&lt;/tt&gt;
+ * [out] The scale factor of the view.
+ * @return
+ * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; SUCCESS
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No attribute available.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetScaleFactor( double * oScaleFactor ) const = 0;
+  
+/**
+ * Returns the coordinates of the makeup coordinate system origin.
+ * It is expressed with respect to the sheet coordinate system.
+ * These coordinates, like any length, are measured in millimeters.
+ * @param &lt;tt&gt;double * oX&lt;/tt&gt;
+ * [out] The x coordinate of the makeup.
+ * @param &lt;tt&gt;double * oY&lt;/tt&gt;
+ * [out] The y coordinate of the makeup.
+ * @return
+ * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetAxisData( double * oX, double * oY ) = 0;
+  
+/**
+ * Sets the coordinates of the makeup coordinate system origin.
+ * It is expressed with respect to the sheet coordinate system.
+ * These coordinates, like any length, are measured in millimeters.
+ * @param &lt;tt&gt;const double iX&lt;/tt&gt;
+ * [in] The x coordinate of the makeup.
+ * @param &lt;tt&gt;const double iY&lt;/tt&gt;
+ * [in] The y coordinate of the makeup.
+ * @return
+ * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT SetAxisData( const double iX, const double iY ) = 0;
+  
+private :
+  CATDeclareInterface;
+};
+
+CATDeclareHandler(CATIDftViewMakeUp, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftViewEditor.html">← 上一页: CATIDftViewEditor.h</a></div>
+        <div><a href="CATIDftViewPanel.html">下一页: CATIDftViewPanel.h →</a></div>
+    </div>
+</body>
+</html>

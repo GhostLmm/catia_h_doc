@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwEltWithLeader.html">← 上一页: CATIDrwEltWithLeader.h</a></div>
+        <div><a href="CATIDrwGDT.html">下一页: CATIDrwGDT.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999
+#ifndef CATIDRWFACTORY_H
+#define CATIDRWFACTORY_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATMathVector2D.h&quot;
+
+class CATIView;
+class CATISketch;
+class CATICkeParm;
+class CATISpecObject;
+class CATMathVector2D;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwFactory ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwFactory ;
+#endif
+/**
+ * Interface implemented by the drafting container  used to create basic drawing features.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface allows feature creation into a drafing structure. 
+ * 
+ */
+
+class ExportedByDraftingItfCPP CATIDrwFactory : public CATBaseUnknown
+{
+  CATDeclareInterface;
+	
+public:	
+
+/**
+ * To create the primitve object of drawing.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The drawing
+ * @see CATIDrawing
+ */	
+	virtual HRESULT CreateDrawing( const IID &amp;iid,void ** oObj, wchar_t * iStandardName=NULL ) =0;
+
+
+/**
+ * To create a sheet.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The sheet
+ * @see CATISheet
+ */	
+	virtual HRESULT CreateSheet(const IID &amp;iid,void ** oObj) =0;
+
+
+ /**
+ * @nodoc
+ * This method is now replaced by  CATIDrwFactory#CreateViewWithMakeUp
+ * To create a view.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The view
+ * @see CATIView
+ */	
+	virtual HRESULT CreateView(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc 
+ * This method is now replaced by CATIDrwFactory#CreateViewWithMakeUp
+ * To create a generative view name from a Cke calcul.
+ * @param oObj
+ *   The viewname
+*/			
+	virtual HRESULT CreateViewName(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * To create a dressup basic object.
+ * @param oObj
+ *   The dressup
+ * @see CATIDrwDressUp
+ */	
+	virtual HRESULT CreateDressup(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * To create an object which contains the relation between mother and daughter views.
+ * &lt;br&gt;  (iXin, iYin) : mother&#x27;s position.
+ * &lt;br&gt;  (iXout, iYout) : daughter&#x27;s position.
+ * &lt;br&gt;  iAnglein : mother&#x27;s angle.
+ * &lt;br&gt;  iAngleout : daughter&#x27;s angle.
+ * &lt;br&gt;  iRelationDirection : angle of the folding line or callout direction
+ * &lt;br&gt;  igap : space which separates a mother&#x27;s view and daughter&#x27;s one.
+ * &lt;br&gt;  iangle : angle between mother&#x27;s view and daughter&#x27;s one. 
+ *                (can be different of iRelationDirection when relation mode is perpendicular)
+ * &lt;br&gt;  iOffset : distance from mother&#x27;s view origin to origin of the relation. 
+ *                 Usefull for view from plane, when projection of origin of the plane (ie origin of the relation) does not coincide with mother&#x27;s view origin.
+ * &lt;br&gt;  iRelationMode : relation should be aligned or perpendicular to relation axis
+ * @param oObj
+ *   The relation
+ * @see CATICkeRelation
+ */	
+	virtual HRESULT CreateDrwRelation(CATICkeParm* iXin,CATICkeParm* iYin,
+                                    CATICkeParm* iXout,CATICkeParm* iYout,
+                                    CATICkeParm* iAnglein,CATICkeParm* iAngleout,
+                                    double iRelationDirection, double igap, double iangle,CATMathVector2D iOffset,int iRelationMode, const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * To create an element which assigns the new parameter of a daughter view.
+ * &lt;br&gt; When the daughter view is moving, the precedent relation became false.
+ * &lt;br&gt; This object is going to refresh it.
+ * @param oObj
+ *   The controlrelation.
+ */	
+	virtual HRESULT CreateControlRelation(CATICkeParm*  iXout,CATICkeParm* iYout,
+		                                    CATICkeParm* igap,CATICkeParm* iangle,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * This method is now replaced by:
+ * Use @href CATIDftDrawingFormats#AddCustomFormat to create a customized format.
+ * Use @href CATIDftSheetFormat#SetFormat to set a standard or custom format on a sheet.
+ *
+ * To create a format used by a sheet.
+ * @param oObj
+ *   The format
+ * @see CATIDftFormatable
+ */	
+	virtual HRESULT CreateFormat(const IID &amp;iid,void ** oObj) =0; 
+	
+/**
+ * @nodoc
+ * To create a bag which contains generated elements.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The hlrview
+ */	
+	virtual HRESULT CreateHlrView(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a generic object which contains the profile,texts and arrows  of a section,or cut view.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The callout
+ *   The callout implements CATIDrwCallOut
+ */		
+	virtual HRESULT CreateCallout(CATISpecObject* iopera, int iVisibilityMode,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject from Callout specific for Detail.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; oObj is returned when the operator (iopera) is a detail.
+ * The callout implements CATIDrwDetailCallOut
+ */	
+	virtual HRESULT CreateDetailCallout(CATISpecObject* iopera, int iVisibilityMode,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject from Callout specific for Projection.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; oObj is returned when the operator (iopera) is a projection.
+ * The callout implements CATIDrwProjectionCallOut
+ */	
+	virtual HRESULT CreateProjectionCallout(CATISpecObject* iopera, int iVisibilityMode,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject from Callout specific for Section.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; oObj is returned when the operator (iopera) is a section.
+ * The callout implements CATIDrwSectionCallOut
+ */	
+	virtual HRESULT CreateSectionCallout(CATISpecObject* iopera, int iVisibilityMode,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a new projection operator.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; mother_view : input parameter of operator
+ * @param oObj
+ *   The operator
+ */		
+	virtual HRESULT CreateProjection( CATIView* mother_view,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a new section operator.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; mother_view : input parameter of operator
+ * @param oObj
+ *   The operator
+ */	
+	virtual HRESULT CreateSection( CATIView* mother_view,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a new detail operator based on the profil in input argument(isketch) .
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; mother_view : input parameter of operator
+ * @param oObj
+ *   The operator
+ */	
+	virtual HRESULT CreateDetail( CATISpecObject* isketch, CATIView* mother_view,const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a new detail operator based on the profil in input argument(isketch) .
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; mother_view : input parameter of operator
+ * @param oObj
+ *   The operator
+ */	
+	virtual HRESULT CreateQuickDetail( CATISpecObject* isketch, CATIView* mother_view,const IID &amp;iid,void ** oObj) =0;	
+	
+
+/**
+ * @nodoc
+ * To create a projected axis.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The axis
+ */	
+	virtual HRESULT CreateProjectedAxis(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * To create a projected plane.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The plane
+ */	
+	virtual HRESULT CreateProjectedPlane(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * @nodoc
+ * To create a table which contains patterns associated to a Body and a Product.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The mappingtable
+ */	
+	virtual HRESULT CreatePatternMappingTable(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a generic pattern object.
+ * @param oObj
+ *   The pattern
+ * @see CATIDftPattern
+ */	
+	virtual HRESULT CreatePattern(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject from pattern with many lines.
+ * @param oObj
+ *   The hatchingpattern
+ * @see CATIDftHatchingPattern
+ */	
+	virtual HRESULT CreateHatchingPattern(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject of pattern with many points.
+ * @param oObj
+ *   The pattern
+ * @see CATIDftDottingPattern
+ */	
+	virtual HRESULT CreateDottingPattern(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject of pattern with a specific color.
+ * @param oObj
+ *   The pattern
+ * @see CATIDftColoringPattern
+ */	
+	virtual HRESULT CreateColoringPattern(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a subobject of pattern with a specific motif.
+ * @param oObj
+ *   The pattern
+ * @see CATIDftMotifPattern
+ */	
+	virtual HRESULT CreateMotifPattern(const IID &amp;iid,void ** oObj) =0;
+
+/**
+ * To create a Detail object ready to use in Drawing.
+ * @param oObj
+ *   The ViewMakeUp associated to the detail
+ * @see CATI2DDetail, CATIDftViewMakeUp  
+ */	
+
+ virtual HRESULT  CreateDetailWithMakeUp(const IID &amp;iid,void** oObj,int Usertype = 0)=0;
+
+/**
+ * To create a view associated to a ViewMakeUp.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The ViewMakeUp associated to the view
+ * @see CATIView, CATIDftViewMakeUp  
+ */	
+
+ virtual HRESULT CreateViewWithMakeUp(const IID &amp;iid,void** oObj)=0;
+
+
+/**
+ * To create a Detail Object.
+ * @param oObj
+ *   The TheDetail
+ * @see CATI2DDetail
+ */	
+  
+	virtual HRESULT CreateDftDetail(const IID &amp;iid,void** oObj,int Usertype = 0)=0;
+
+/**
+ * @nodoc
+ * To create a ViewMakeUp.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The ViewMakup
+ * @see CATIDftViewMakeUp  
+ */	
+  virtual HRESULT CreateViewMakeUp(const IID &amp;iid,void** oObj)=0;
+
+/**
+ * To create a new BreakView operator based on the profil in input argument(isketch) .
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The operator
+ */	
+  virtual HRESULT CreateBreakView ( CATISpecObject* isketch, const IID &amp;iid,void ** oObj)=0;	
+
+/**
+ * To create a new BrokenLines operator, unitary operator defined by the both profil in input argument(liste_1 and liste_2) .
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The operator
+ */	
+  virtual HRESULT CreateBrokenLines ( CATLISTV(CATISpecObject_var) liste_1, CATLISTV(CATISpecObject_var) liste_2, const IID &amp;iid,void ** oObj)=0;	
+
+/**
+ * To create a subobject from Callout specific for Section.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * &lt;br&gt; oObj is returned when the operator (iopera) is a BreakView
+ * The callout implements CATIDrwBreakViewCallOut
+ */	
+  virtual HRESULT CreateBreakViewCallout (CATISpecObject* iopera, int iVisibilityMode,const IID &amp;iid,void ** oObj)=0;
+
+/**
+ * To create a new BreakOut operator based on the profil in input argument(isketch) .
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The operator
+ */	
+  virtual HRESULT CreateBreakOut ( CATISpecObject* isketch, const IID &amp;iid,void ** oObj)=0;
+
+/**
+  * @nodoc
+  * To create a GenViewLinks objects.
+  * This object manages the links of the generative view to the 3D document
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+  */
+  virtual HRESULT CreateGenViewLinks(const IID &amp; iIID, void ** oObj) = 0;
+
+/**
+ * @nodoc
+ * To create a Box3D operator.
+ * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+ * @param oObj
+ *   The operator
+ */	
+  virtual HRESULT CreateBox3DOperator ( const IID &amp; iIID, void** oObj) = 0;
+
+/**
+  * To create an DrwAxisSysteme objects.
+  * This object manages the links of the generative view to a 3D axis systeme
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+  */
+  virtual HRESULT CreateDrwAxisSysteme(const IID &amp; iIID, void ** oObj) = 0;
+
+/**
+  * @nodoc
+  * To create an GenDimInfo objects.
+  * This object manages some informations for the Generative Dimension
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+  */
+  virtual HRESULT CreateGenDimInfo(const IID &amp; iIID, void ** oObj) = 0;
+
+ /**
+  * @nodoc
+  * To create a TechnoLink dedicated to Drafting Needs .
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+  */
+  virtual HRESULT CreateTechnoCtor(const IID &amp; iIID, void ** oObj) = 0;
+		
+  /**
+  * @nodoc
+  * To create an DrwGenRep objects.
+  * This object manages the Generative Representation
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: This method is not available with 2D Layout for 3D Design.
+  */
+  virtual HRESULT CreateGenerativeRep(const IID &amp; iIID, void ** oObj) = 0;
+
+};
+CATDeclareHandler(CATIDrwFactory, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwEltWithLeader.html">← 上一页: CATIDrwEltWithLeader.h</a></div>
+        <div><a href="CATIDrwGDT.html">下一页: CATIDrwGDT.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATIOrientation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATIOrientation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIOmbUndoRedoEvents.html">← 上一页: CATIOmbUndoRedoEvents.h</a></div>
+        <div><a href="CATIParmProvider.html">下一页: CATIParmProvider.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIOrientation_h
+#define CATIOrientation_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;AD0XXBAS.h&quot;
+
+class CATMathPoint;
+
+extern IID ExportedByAD0XXBAS IID_CATIOrientation;
+
+/**
+ * Interface to manage access to the orientation (material inside) of a sub-element(BRep Access).
+ * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; available only on faces for the moment.
+ */
+
+class ExportedByAD0XXBAS CATIOrientation : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+	/**
+	* Returns the orientation.
+	* @param iSolid
+	*       corresponds to a body.
+	*      &lt;br&gt;if NULL, computation is done on the topological body where the sub-element is defined.
+	*      &lt;br&gt;else computation is done on this body
+	* @return 
+	*       1 if the orientation of material and geometry underlying the face are the same.
+	*  &lt;br&gt; -1 if the orientation of material and geometry underlying the face are opposite.
+	*  &lt;br&gt; 0 if the system didn&#x27;t succeed in computing the result 
+	*/
+  virtual int GetOrientation(const CATBaseUnknown_var &amp;iSolid=NULL_var)const  = 0;
+
+	/**
+	* Returns the coordinates of a characteristic point of the sub-element.
+	* @param iBody
+	*       if NULL, computation is done on the topological body where the sub-element is defined.
+	* &lt;br&gt;  else computation is done on this body.
+	*/
+  virtual CATMathPoint GetFavoritePoint(const CATBaseUnknown_var &amp;iBody=NULL_var) const = 0;
+};
+
+CATDeclareHandler(CATIOrientation,CATBaseUnknown);
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIOmbUndoRedoEvents.html">← 上一页: CATIOmbUndoRedoEvents.h</a></div>
+        <div><a href="CATIParmProvider.html">下一页: CATIParmProvider.h →</a></div>
+    </div>
+</body>
+</html>

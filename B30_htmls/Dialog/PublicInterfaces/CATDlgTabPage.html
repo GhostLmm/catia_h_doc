@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog/PublicInterfaces/CATDlgTabPage.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dialog/PublicInterfaces/CATDlgTabPage.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgTabContainer.html">← 上一页: CATDlgTabContainer.h</a></div>
+        <div><a href="CATDlgToolBar.html">下一页: CATDlgToolBar.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDLGTABPAGE_H
+#define CATDLGTABPAGE_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+
+#include &quot;CATDlgBox.h&quot;
+
+class CATString;
+class CATDlgTabContainer;
+class l_CATDlgTabPage;
+
+/**
+ * Base class for pages in a &lt;tt&gt;CATDlgTabContainer&lt;/tt&gt;.
+ */
+class ExportedByDI0PANV2 CATDlgTabPage : public CATDlgBox {
+
+	public:
+
+		/**
+		 * Constructor.
+		 * @param iParent
+		 * The parent widget.
+		 * @param iObjectName
+		 * The internal name of the tab page.
+		 * @param iStyle
+		 * The style of the tab page.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;ul&gt;
+		 * &lt;li&gt;&lt;tt&gt;default&lt;/tt&gt;: The layout of the page is done using tabulations&lt;/li&gt;
+		 * &lt;li&gt;&lt;tt&gt;CATDlgGridLayout&lt;/tt&gt;: The layout of the page is done with a grid&lt;/li&gt;
+		 * &lt;/ul&gt;
+		 */
+        CATDlgTabPage( CATDlgTabContainer *iParent, const CATString&amp; iObjectName, CATDlgStyle iStyle=NULL);
+
+		/**
+		 * Destructor.
+		 */
+        virtual ~CATDlgTabPage();
+
+		/** @nodoc
+		 * Get internal object.
+		 */
+        virtual l_CATDialog* GetLetterObject();
+
+		/** @nodoc 
+		 * Resets internal object.
+		 */
+         virtual void ResetLetterObject();
+
+		/**
+		 * Sets the default orientation of the page.
+		 * @param iOrient
+		 *  a constant describing the orientation of the page.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Vertical&lt;/tt&gt;&lt;dd&gt; The contained widgets will be positionned along a vertical line. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Horizontal&lt;/tt&gt;&lt;dd&gt; The contained widgets will be positionned along an horizontal line.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        void SetDefaultOrientation(Orientation iOrient) ;
+
+		/**
+		 * Returns the orientation of the page.
+		 * @return
+		 *  a constant describing the orientation of the page.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Vertical&lt;/tt&gt;&lt;dd&gt; The contained widgets will be positionned along a vertical line. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Horizontal&lt;/tt&gt;&lt;dd&gt; The contained widgets will be positionned along an horizontal line.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        Orientation GetDefaultOrientation() ;
+
+		/**
+		 * Causes any resizing of the tab page to be transmitted to the supplied child widget.
+		 * @param iDialog
+		 * the widget to resize when the tab page is resized.
+		 */
+        void Attach4Sides(CATDialog *iDialog) ;
+
+		/**
+		 * Removes all the attachments which cause the supplied child widget to be resized
+		 * when the tab page is resized.
+		 * @param iDialog
+		 * the widget to detach from the tab page.
+		 */
+        void ResetAttachment(CATDialog *iDialog) ;
+
+
+		/**
+		 * Attaches one or many child widgets to an invisible horizontal tabulation. 
+		 * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+		 * &lt;br&gt;Use this method to specify the way widgets should be positionned and 
+		 * resized when the tab page is resized.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iAttachment
+		 * a constant which specifies the position of the widgets with respect to the tabulation.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgUnspecified&lt;/tt&gt;&lt;dd&gt; The position of the widget with respect to the tabulation is left unspecified. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgTopOrLeft&lt;/tt&gt;&lt;dd&gt; The left side of the widget is aligned on the tabulation. 
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgTopOrLeftRelative&lt;/tt&gt;&lt;dd&gt; The left side of the widget is aligned on the tabulation. 
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgRightOrBottom&lt;/tt&gt;&lt;dd&gt; The right side of the widget is aligned on the tabulation.
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgRightOrBottomRelative&lt;/tt&gt;&lt;dd&gt; The right side of the widget is aligned on the tabulation.
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgCenter&lt;/tt&gt;&lt;dd&gt; The widget is centered on the tabulation.
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgCenterRelative&lt;/tt&gt;&lt;dd&gt; The widget is centered on the tabulation.
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 * @param iFirstDialog
+		 * the first widget of a variable list of child widgets to attach to the tabulation.
+		 */
+        void SetHorizontalAttachment(CATDlgTabIndex iIndex,
+                            CATDlgAttachment iAttachment, CATDialog *iFirstDialog, ...);
+
+		/**
+		 * Attaches one or many child widgets to an invisible vertical tabulation. 
+		 * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+		 * &lt;br&gt;Use this method to specify the way widgets should be positionned and 
+		 * resized when the tab page is resized.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iAttachment
+		 * a constant which specifies the position of the widgets with respect to the tabulation.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgUnspecified&lt;/tt&gt;&lt;dd&gt; The position of the widget with respect to the tabulation is left unspecified. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgTopOrLeft&lt;/tt&gt;&lt;dd&gt; The top side of the widget is aligned on the tabulation. 
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgTopOrLeftRelative&lt;/tt&gt;&lt;dd&gt; The top side of the widget is aligned on the tabulation. 
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgRightOrBottom&lt;/tt&gt;&lt;dd&gt; The bottom side of the widget is aligned on the tabulation.
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgRightOrBottomRelative&lt;/tt&gt;&lt;dd&gt; The bottom side of the widget is aligned on the tabulation.
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgCenter&lt;/tt&gt;&lt;dd&gt; The widget is centered on the tabulation.
+		 * The tabulation does not move when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;CATDlgCenterRelative&lt;/tt&gt;&lt;dd&gt; The widget is centered on the tabulation.
+		 * The tabulation moves to accomodate the resizing of the tab page.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 * @param iFirstDialog
+		 * the first widget of a variable list of child widgets to attach to the tabulation.
+		 */
+        void SetVerticalAttachment  (CATDlgTabIndex iIndex,
+                            CATDlgAttachment iAttachment, CATDialog *iFirstDialog, ...);
+
+
+		/**
+		 * Returns the vertical tabulation on which a widget is attached.
+		 * @param iDialog
+		 * the attached child widget.
+		 * @param iAttachment
+		 * the type of attachment of the widget.
+		 * @return
+		 * an integer which identifies the tabulation.
+		 */
+        int GetVerticalTabIndex(CATDialog *iDialog, CATDlgAttachment iAttachment);
+
+		/**
+		 * Returns the horizontal tabulation on which a widget is attached.
+		 * @param iDialog
+		 * the attached child widget.
+		 * @param iAttachment
+		 * the type of attachment of the widget.
+		 * @return
+		 * an integer which identifies the tabulation.
+		 */
+        int GetHorizontalTabIndex(CATDialog *iDialog, CATDlgAttachment iAttachment);
+
+		/**
+		 * Adds a child widget to an existing horizontal tabulation.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iDialog
+		 * the widget to attach to the tabulation.
+		 * @param iReferenceDialog
+		 * a reference widget which is already aligned on the tabulation.
+		 * @param iMode
+		 * a constant describing the insertion mode.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;After&lt;/tt&gt;&lt;dd&gt; the widget is inserted after the reference widget.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Before&lt;/tt&gt;&lt;dd&gt; the widget is inserted before the reference widget.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        void InsertAlongHorizontalTab(CATDlgTabIndex iIndex, CATDialog *iDialog,
+                                     CATDialog *iReferenceDialog, InsertionMode iMode);
+		/**
+		 * Adds a child widget to an existing vertical tabulation.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iDialog
+		 * the widget to attach to the tabulation.
+		 * @param iReferenceDialog
+		 * a reference widget which is already aligned on the tabulation.
+		 * @param iMode
+		 * a constant describing the insertion mode.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;After&lt;/tt&gt;&lt;dd&gt; the widget is inserted after the reference widget.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;Before&lt;/tt&gt;&lt;dd&gt; the widget is inserted before the reference widget.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        void InsertAlongVerticalTab(CATDlgTabIndex iIndex, CATDialog *iDialog,
+                                     CATDialog *iReferenceDialog, InsertionMode iMode);
+
+		/**
+		 * Detaches a child widget of the tab page from an horizontal tabulation.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iDialog
+		 * the widget to detach from the tabulation.
+		 */
+        void RemoveAlongHorizontalTab(CATDlgTabIndex iIndex, CATDialog *iDialog);
+
+		/**
+		 * Detaches a child widget of the tab page from an vertical tabulation.
+		 * @param iIndex
+		 * an integer which identifies the tabulation.
+		 * @param iDialog
+		 * the widget to detach from the tabulation.
+		 */
+        void RemoveAlongVerticalTab  (CATDlgTabIndex iIndex, CATDialog *iDialog);
+
+		/**
+		 * Positions a child widget at the position previously held by another child widget.
+		 * @param iNewDialog
+		 * the child widget to position.
+		 * @param iOldDialog
+		 * the child widget whose position will be occupied &lt;tt&gt;iNewDialog&lt;/tt&gt;.
+		 */
+        void ReplaceKeepAttachments(CATDialog *iNewDialog, CATDialog *iOldDialog);
+
+
+		/**
+		 * Sets whether a grid column can be resized or not.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: the &lt;tt&gt;CATDlgTabPage&lt;/tt&gt; must use the &lt;tt&gt;CATDlgGridLayout&lt;/tt&gt; style. 
+		 * @param iIndex
+		 * the index of the grid column.
+		 * @param iState
+		 * a constant describing the resizing policy for the column.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; the column has a fixed size. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; the column is resized when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        void SetGridColumnResizable(short int iIndex, int iState);
+
+		/**
+		 * Sets whether a grid row can be resized or not.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: the &lt;tt&gt;CATDlgTabPage&lt;/tt&gt; must use the &lt;tt&gt;CATDlgGridLayout&lt;/tt&gt; style. 
+		 * @param iIndex
+		 * the index of the grid row.
+		 * @param iState
+		 * a constant describing the resizing policy for the row.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; the row has a fixed size. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; the row is resized when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        void SetGridRowResizable(short int iIndex, int iState=1);
+
+		/**
+		 * Returns whether a grid column can be resized or not.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: the &lt;tt&gt;CATDlgTabPage&lt;/tt&gt; must use the &lt;tt&gt;CATDlgGridLayout&lt;/tt&gt; style. 
+		 * @param iIndex
+		 * the index of the grid column.
+		 * @return
+		 * a constant describing the resizing policy for the column.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; the column has a fixed size. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; the column is resized when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        int IsGridColumnResizable(short int iIndex);
+
+		/**
+		 * Returns whether a grid row can be resized or not.
+		 * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: the &lt;tt&gt;CATDlgTabPage&lt;/tt&gt; must use the &lt;tt&gt;CATDlgGridLayout&lt;/tt&gt; style. 
+		 * @param iIndex
+		 * the index of the grid row.
+		 * @return
+		 * a constant describing the resizing policy for the row.
+		 * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+		 * &lt;dl&gt;
+		 * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; the row has a fixed size. &lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; the row is resized when the tab page is resized.&lt;/dd&gt;&lt;/dt&gt;
+		 * &lt;/dl&gt;
+		 */
+        int IsGridRowResizable(short int iIndex);
+
+       /**
+        * @nodoc
+        * Requests the ClassName, IsA, and IsAKindOf methods to be created.
+        */
+        CATDeclareClass ;
+
+	private:
+
+		/** @nodoc
+		 * Address of internal object.
+		 */
+        l_CATDlgTabPage* _frameTabPage;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgTabContainer.html">← 上一页: CATDlgTabContainer.h</a></div>
+        <div><a href="CATDlgToolBar.html">下一页: CATDlgToolBar.h →</a></div>
+    </div>
+</body>
+</html>

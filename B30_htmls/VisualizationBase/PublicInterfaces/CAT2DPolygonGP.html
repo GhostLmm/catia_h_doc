@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT2DPolygonGP.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT2DPolygonGP.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DPointRep.html">← 上一页: CAT2DPointRep.h</a></div>
+        <div><a href="CAT2DPolygonRep.html">下一页: CAT2DPolygonRep.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT2DPolygonGP_H
+#define CAT2DPolygonGP_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATGraphicPrimitive.h&quot;
+
+class CATStreamer;
+
+#ifndef NOFILL
+/** @nodoc */
+#define NOFILL 0
+/** @nodoc */
+#define FILL   1
+#endif
+
+/**
+* Class to create the graphic primitive of a 2D polygon.
+* &lt;b&gt;Role&lt;/b&gt;: &lt;pre&gt;
+*           Example of a CAT2DPolygon with 4 points :
+*
+*             point 1 X--------------------X point 2
+*                     |                    |
+*                     |                    |
+*             point 4 X--------------------X point 3
+*              &lt;/pre&gt;
+*/
+class ExportedByCATViz CAT2DPolygonGP : public CATGraphicPrimitive
+{
+  CATDeclareClass;
+
+public :
+
+  /**
+  * Default constructor.
+  */
+  CAT2DPolygonGP ();
+
+  /**
+  * Constructs a 2D polygon graphic primitive from a list of points.
+  * The last point is linked to the first point.
+  * @param iPoints
+  *   Array containing the x, y  coordinates for
+  *   each point of the polygon. Its size is equal
+  *   to two times the number of points. So, the coordinates
+  *   x, y of the first point are respectively stored in iPoints[0], and  iPoints[1],
+  *   the coordinates x, y of the second point, in iPoints[2], iPoints[3], and so on...
+  * @param iNbPoints
+  *   The number of points used to define the polygon.
+  * @param iFill
+  *	the integer which allows to construct a 2D polygon
+  *	just with edges or filled with graphic attributes.
+  *	&lt;br&gt;&lt;b&gt;legal values&lt;/b&gt;: 
+  *	&lt;ul&gt;&lt;li&gt;NOFILL : just edges are drawn.&lt;/li&gt;
+  *	&lt;li&gt;FILL : the 2D circle arc or the 2D circle is filled
+  *				with graphic attributes.&lt;/li&gt;&lt;/ul&gt;
+  *	The default value is FILL.
+  */
+  CAT2DPolygonGP (const float iPoints[], const int iNbPoints, const int iFill = FILL);
+
+
+  /** @nodoc */
+  CAT2DPolygonGP (const int nbContour, const int *NbOfPtPerContour, const float *Coord);
+
+  /**
+  * Draws the 2D line.
+  * @param iRender
+  *    The render through which the 2D polygon is drawn.
+  */
+  virtual void Draw (CATRender &amp; iRender);   
+
+  /**
+  * Retrieves polygon parameters.
+  * @param oPoints
+  *   Array containing the x, y  coordinates for
+  *   each point of the polygon. Its size is equal
+  *   to two times the number of points. So, the coordinates
+  *   x, y of the first point are respectively stored in iPoints[0], and  iPoints[1],
+  *   the coordinates x, y of the second point, in iPoints[2], iPoints[3], and so on...
+  * @param oNbPoint
+  *   The number of points used to define the polygon.
+  * @param oFill
+  *	the integer which allows to construct a 2D polygon
+  *	just with edges or filled with graphic attributes.
+  *	&lt;br&gt;&lt;b&gt;legal values&lt;/b&gt;: 
+  *	&lt;ul&gt;&lt;li&gt;NOFILL : just edges are drawn.&lt;/li&gt;
+  *	&lt;li&gt;FILL : the 2D circle arc or the 2D circle is filled
+  *				with graphic attributes.&lt;/li&gt;&lt;/ul&gt;
+  * @param oNbTriangle
+  *	The number of group of triangles which compose the 2D polygon after the tesselation.
+  * @param oType
+  *	Array which contain the type of each group of triangles.
+  *	&lt;br&gt;&lt;b&gt;legal values&lt;/b&gt;:
+  *	&lt;ul&gt;
+  *		&lt;li&gt;0 : single triangles&lt;/li&gt;
+  *		&lt;li&gt;1 : triangle strip&lt;/li&gt;
+  *		&lt;li&gt;2 : triangle fan&lt;/li&gt;
+  *		&lt;li&gt;4 : same as 0&lt;/li&gt;
+  *		&lt;li&gt;5 : same as 1&lt;/li&gt;
+  *		&lt;li&gt;6 : same as 2&lt;/li&gt;
+  *	&lt;/ul&gt;
+  *	Its size is equal to &lt;tt&gt;oNbTriangles&lt;/tt&gt;.
+  * @param oTriangles
+  *	Array which contain the number of vertex for each group of triangles.
+  *	Its size is equal to &lt;tt&gt;oNbTriangles&lt;/tt&gt;.
+  * @param oVertex
+  *	Array of indices of vertex which compose the 2D polygon.&lt;br&gt;
+  *	This array is composed of various arrays which represent one group of triangles.
+  *	And each group of triangles have a type defined by the array &quot;oType&quot;.
+  *	&lt;ul&gt;
+  *	&lt;li&gt;
+  *		If the group is made of single triangles, indices are written 
+  *		like in the following sample :
+  *	&lt;pre&gt;
+  *	1              4
+  *	|\           /|
+  *	| \         / |
+  *	|  \       /  |
+  *	|   \     /   |
+  *	|____\   /____|
+  *	2     3  5    6  
+  *	&lt;/pre&gt;
+  *	&lt;/li&gt;
+  *	&lt;li&gt;
+  *		if the group is a triangle strip, indices are written like in the following sample :
+  *	&lt;pre&gt;
+  *	1     3      4
+  *	-------------
+  *	\     |\     |\
+  *	 \    | \    | \
+  *	  \   |  \   |  \
+  *	   \  |   \  |   \
+  *	    \ |    \ |    \
+  *	     \|_____\|_____\
+  *	      2      5       6
+  *	&lt;/pre&gt;
+  *	&lt;/li&gt;
+  *	&lt;li&gt;
+  *		if the group is a triangle fan, indices are written like in the following sample :
+  *	&lt;pre&gt;
+  *	2      1
+  *	 _______    
+  *	|     /|\
+  *	|    / | \
+  *	|   /  |  \
+  *	|  /   |   \
+  *	| /    |    \
+  *	|/_____|_____\
+  *	3      4      5
+  *	&lt;/pre&gt;
+  *	&lt;/li&gt;
+  *	&lt;/ul&gt;
+  */
+  inline void Get (float **oPoints, int *oNbPoint, int *oFill,
+    int * oNbTriangle, int ** oType, int ** oTriangles,
+    int ** oVertex) const;
+
+  /**
+  * Returns whether or not the 2D polygon is filled.
+  */
+  inline int IsFilled();
+
+  /** @nodoc */
+  virtual void GetContour(int* nbContour, int** nbPtPerContour);
+
+  /**
+  * @nodoc
+  * Streaming
+  */
+  virtual void Stream(CATStreamer&amp; oStr,int iSavetype=0);
+
+  /**
+  * @nodoc
+  * Streaming
+  */  
+  virtual void UnStream(CATStreamer&amp; iStr);
+
+  /**
+  * @nodoc
+  */
+  virtual int DetailCulling(CATRender *render);
+
+
+
+protected :
+
+  virtual ~CAT2DPolygonGP();
+
+  //--------------------------------------------------------------------------------
+
+private :
+
+  float *_points;
+  int   *_type, *_triangle, *_vertex;
+  int   _nb_points, _nb_triangle;
+  int   _fill;
+
+};
+
+//--------------------------------------------------------------------------------
+
+inline void CAT2DPolygonGP::Get(float **points, int *nb_points, int *fill, int *nb_triangle, int **type, int **triangle, int **vertex) const
+{
+  *points    = _points;
+  *nb_points = _nb_points;
+  *fill      = _fill;
+
+  *nb_triangle = _nb_triangle;
+  *type        = _type;
+  *triangle    = _triangle;
+  *vertex      = _vertex;
+}
+
+inline int CAT2DPolygonGP::IsFilled()
+{
+  return _fill;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT2DPointRep.html">← 上一页: CAT2DPointRep.h</a></div>
+        <div><a href="CAT2DPolygonRep.html">下一页: CAT2DPolygonRep.h →</a></div>
+    </div>
+</body>
+</html>

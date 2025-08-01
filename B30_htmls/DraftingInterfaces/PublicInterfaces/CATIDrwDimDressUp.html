@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwDimDressUp.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwDimDressUp.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimDimensionLineLinear.html">← 上一页: CATIDrwDimDimensionLineLinear.h</a></div>
+        <div><a href="CATIDrwDimExtensionLine.html">下一页: CATIDrwDimExtensionLine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwDimDressUp_H
+#define CATIDrwDimDressUp_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+class CATGraphicAttributeSet;
+class CATUnicodeString;
+
+#include &quot;CATIDrwDimFrame.h&quot;
+
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwDimDressUp ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwDimDressUp ;
+#endif
+
+/**
+ * Manages the dimension dressup.
+ */
+
+class ExportedByDraftingItfCPP CATIDrwDimDressUp : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+   public:
+
+    /**
+     * Gets the dimension value scoring mode.
+     *   @return
+     *    Scoring mode (see define definition file).
+     *    &lt;br&gt;Scoring mode legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimUnderScored&lt;/tt&gt; &lt;dd&gt;Underscored.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScored&lt;/tt&gt; &lt;dd&gt;Scored.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimOverScored&lt;/tt&gt; &lt;dd&gt;Overscored.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetScoringMode() const = 0;
+
+    /**
+     * Gets the scored element for main value.
+     *   @return
+     *    Scored element for main value (see define definition file).
+     *    &lt;br&gt;Scored element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreValue&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the value text only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreAll&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the whole element.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetScoredElement() const = 0;
+
+    /**
+     * Gets the scored element for dual value.
+     *   @return
+     *    Scored element for dual value (see define definition file).
+     *    &lt;br&gt;Scored element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreValue&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the value text only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreAll&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the whole element.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetScoredGroup() const = 0;
+
+    /**
+     * Gets slant.
+     *   @return
+     *    Slant value.
+     */
+     virtual double GetSlant() const = 0;
+
+    /**
+     * @nodoc
+     * Gets size.
+     *   @return
+     *    Size value.
+     */
+     virtual double GetSize() const = 0;
+
+    /**
+     * Gets spacing.
+     *   @return
+     *    Spacing value.
+     */
+     virtual double GetSpacing() const = 0;
+
+    /**
+     * Gets ratio.
+     *   @return
+     *    Ratio value.
+     */
+     virtual double GetRatio() const = 0;
+
+    /**
+     * Gets frame type.
+     *   @return
+     *    Frame type.
+     *    &lt;br&gt;Frame type legal values are (see define definition file):
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraCircle&lt;/tt&gt; &lt;dd&gt;Circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraScoredCircle&lt;/tt&gt; &lt;dd&gt;Scored circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDiamondShaped&lt;/tt&gt; &lt;dd&gt;Diamond shape.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraSquare&lt;/tt&gt; &lt;dd&gt;Square.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRectangle&lt;/tt&gt; &lt;dd&gt;Rectangle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraOblong&lt;/tt&gt; &lt;dd&gt;Oblong.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRightFlag&lt;/tt&gt; &lt;dd&gt;Right flag.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraTriangle&lt;/tt&gt; &lt;dd&gt;Triangle.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetFrameType() const = 0;
+    /**
+     * Gets frame.
+     *   @return
+     *    Frame.
+     */
+     virtual CATIDrwDimFrame_var GetFrame() const = 0;
+
+    /**
+     * @nodoc
+     * Gets text color.
+     *   @return
+     *    Color.
+     */
+	   virtual void GetTextColor(int &amp;oColor) const = 0;
+
+    /**
+     * @nodoc
+     * Gets text attributes.
+     *   @return
+     *    Text attributes.
+     */
+     virtual void GetTextAttributes(double * gtxtAttr) const = 0;
+
+    /**
+     * @nodoc
+     * Gets police name.
+     *   @return
+     *    Police name.
+     */
+     virtual CATUnicodeString GetPoliceName() const = 0;
+     
+    /**
+     * @nodoc
+     * Gets Bold info.
+     *   @return
+     *    Police name.
+     */
+     virtual boolean GetBold() const = 0;
+     
+    /**
+     * @nodoc
+     * Gets Italic info.
+     *   @return
+     *    Police name.
+     */
+     virtual boolean GetItalic() const = 0;
+
+    /**
+     * Sets the dimension value scoring mode.
+     *   @param scMode
+     *    Scoring mode (see define definition file).
+     *    &lt;br&gt;Scoring mode legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimUnderScored&lt;/tt&gt; &lt;dd&gt;Underscored.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScored&lt;/tt&gt; &lt;dd&gt;Scored.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimOverScored&lt;/tt&gt; &lt;dd&gt;Overscored.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetScoringMode(const int scMode) = 0;
+
+    /**
+     * Sets the scored element for main value.
+     *   @param iScoredElement
+     *    Scored element for main value (see define definition file).
+     *    &lt;br&gt;Scored element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreValue&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the value text only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreAll&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the whole element.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetScoredElement( const int iScoredElement ) = 0;
+
+    /**
+     * Sets the scored element for dual value.
+     *   @param iScoredGroup
+     *    Scored element for dual value (see define definition file).
+     *    &lt;br&gt;Scored element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreValue&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the value text only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimScoreAll&lt;/tt&gt; &lt;dd&gt;the scoring mode is applied to the whole element.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetScoredGroup( const int iScoredGroup ) = 0;
+
+    /**
+     * @nodoc
+     * Sets slant.
+     *   @param iSlant
+     *    Slant value.
+     */
+     virtual void SetSlant( const double iSlant ) = 0;
+
+    /**
+     * @nodoc
+     * Sets size.
+     *   @param iSize
+     *    Size value.
+     */
+     virtual void SetSize( const double iSize ) = 0;
+
+    /**
+     * Sets spacing.
+     *   @param iSpacing
+     *    Spacing value.
+     */
+     virtual void SetSpacing( const double iSpacing ) = 0;
+
+    /**
+     * Sets ratio.
+     *   @param iRatio
+     *    Ratio value.
+     */
+     virtual void SetRatio( const double iRatio ) = 0;
+
+    /**
+     * Sets frame type.
+     *   @param frType
+     *    Frame type.
+     *    &lt;br&gt;Frame type legal values are (see define definition file):
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraCircle&lt;/tt&gt; &lt;dd&gt;Circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraScoredCircle&lt;/tt&gt; &lt;dd&gt;Scored circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDiamondShaped&lt;/tt&gt; &lt;dd&gt;Diamond shape.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraSquare&lt;/tt&gt; &lt;dd&gt;Square.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRectangle&lt;/tt&gt; &lt;dd&gt;Rectangle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraOblong&lt;/tt&gt; &lt;dd&gt;Oblong.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRightFlag&lt;/tt&gt; &lt;dd&gt;Right flag.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraTriangle&lt;/tt&gt; &lt;dd&gt;Triangle.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetFrametype(const int frType) = 0;
+
+    /**
+     * @nodoc
+     * Sets text color.
+     *   @param iColor
+     *    Color.
+     */
+  	 virtual void SetTextColor(const int iColor) = 0;
+
+    /**
+     * @nodoc
+     * Sets text attributes.
+     *   @param stxtAttr
+     *    Text attributes.
+     */
+     virtual void SetTextAttributes(const double * stxtAttr) = 0;// slant, spacing et height
+
+    /**
+     * @nodoc
+     * Sets police name.
+     *   @param iPoliceName
+     *    Police name.
+     */
+     virtual void SetPoliceName( const CATUnicodeString iPoliceName ) = 0;
+
+    /**
+     * @nodoc
+     * Sets Bold info.
+     */
+     virtual void SetBold(boolean iBold) const = 0;
+
+    /**
+     * @nodoc
+     * Sets Italic info.
+     */
+     virtual void SetItalic(boolean iItalic) const = 0;
+};
+CATDeclareHandler(CATIDrwDimDressUp, CATBaseUnknown);
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimDimensionLineLinear.html">← 上一页: CATIDrwDimDimensionLineLinear.h</a></div>
+        <div><a href="CATIDrwDimExtensionLine.html">下一页: CATIDrwDimExtensionLine.h →</a></div>
+    </div>
+</body>
+</html>

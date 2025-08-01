@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATSamDimension.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATSamDimension.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamCharacVersion.html">← 上一页: CATSamCharacVersion.h</a></div>
+        <div><a href="CATSamDimensionData.html">下一页: CATSamDimensionData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATSamDimension
+//
+//=============================================================================
+//
+// Usage Notes: dimension information of a collector characteristic
+//
+//=============================================================================
+// Juin 99   Creation                                                  JND, LBK
+//=============================================================================
+#ifndef CATSamDimension_H_
+#define CATSamDimension_H_
+
+#include &quot;CATSAM0Explicit.h&quot;
+#include &quot;CATSamExplicitRoot.h&quot;
+#include &quot;CATSamDimensionData.h&quot;
+
+// Acces a CATMath
+#include &quot;CATMath.h&quot;
+
+// Acces au ExplicitTypes
+#include &quot;CATAnalysisExplicitTypes.h&quot;
+
+// Acces au CATListOfCatUnicodeString
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+class CATSamStream ;
+class CATSamDimensionData;
+class CATSamDimensionHandler;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Dimension information of a collector characteristic.
+ * The values in a CATAnalysisCharacCollector are stored as follows :
+ * &lt;dl&gt;&lt;dd&gt;Values[NbPositions][NbLamina][NbSMI][NbRepeat[IndexPosition][IndexLamina][IndexSmi]][NbComponents].&lt;br&gt;&lt;/dl&gt;
+ * However NbRepeat can be variable with the Position, Lamina and SMI number.&lt;br&gt;
+ * Let us assume NbPositions=2, NbLamina=1, NbSMI=2 and NbComponents=2, with NbRepeat configured as follows :
+ * &lt;dl&gt;&lt;dd&gt;NbRepeat[P1][L1][S1]=2, NbRepeat[P1][L1][S2]=1,&lt;br&gt;
+ *     &lt;dd&gt;NbRepeat[P2][L1][S1]=0, NbRepeat[P2][L1][S2]=3.&lt;br&gt;&lt;/dl&gt;
+ * The values in memory are stored as follows :
+ * &lt;dl&gt;&lt;dd&gt;V[P1,L1,S1,C1], V[P1,L1,S1,C2], V[P1,L1,S1,C1], V[P1,L1,S1,C2], V[P1,L1,S2,C1], V[P1,L1,S2,C2],&lt;br&gt;
+ *     &lt;dd&gt;V[P2,L1,S2,C1], V[P2,L1,S2,C2], V[P2,L1,S2,C1], V[P2,L1,S2,C2], V[P2,L1,S2,C1], V[P2,L1,S2,C2].&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;V[Pi,Lj,Sk,Cl]) : the Value of the set of Position, Lamina , SMI and Component (Pi,Lj,Sk,Cl).&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index.&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index.&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index.&lt;br&gt;
+ *          &lt;dd&gt;Cl           : the Component index.&lt;br&gt;&lt;/dl&gt;
+ */
+class ExportedByCATSAM0Explicit CATSamDimension : public CATSamExplicitRoot
+{
+  public :
+/**
+ * Default constructor.
+ */
+    CATSamDimension() ;
+/**
+ * Copy constructor
+ */
+    CATSamDimension(const CATSamDimension&amp; iDimension) ;
+/**
+ * Creates a &lt;b&gt;CATSamDimension&lt;/b&gt; object and fills it with the supplied values.
+ * @param iNbPositions
+ *   The number of positions.
+ * @param iNbLaminates
+ *   The number of laminates.
+ * @param iNbSMI
+ *   The number of positions within each laminate.
+ * @param iNbRepeats[NbGlobalPositions]
+ *   The number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iNbRepeats&lt;/b&gt; must be equal to &lt;b&gt;NbGlobalPositions&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbGlobalPositions&lt;/b&gt; = iNbPositions*iNbLaminates*iNbSMI.&lt;br&gt;
+ *   iNbRepeat is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(P0,L0,S0), Nb(P0,L0,S1), ..., Nb(P0,L0,Sk), Nb(P0,L1,S0), ......, Nb(P0,L1,Sk), ...., Nb(P0,Lj,S0), ......, Nb(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(P1,L0,S0), Nb(P1,L0,S1), ..., Nb(P1,L0,Sk), Nb(P1,L1,S0), ......, Nb(P1,L1,Sk), ...., Nb(P1,Lj,S0), ......, Nb(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(Pi,L0,S0), Nb(Pi,L0,S1), ..., Nb(Pi,L0,Sk), Nb(Pi,L1,S0), ......, Nb(Pi,L1,Sk), ...., Nb(Pi,Lj,S0), ......, Nb(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(Pi,Lj,Sk) : the repeat number of the set of Position, Lamina and SMI (Pi,Lj,Sk).&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;&lt;/dl&gt;
+ * @param iValueType
+ *   The type of value (to calculate &lt;b&gt;UnitaryValueSize&lt;/b&gt;).
+ * @param iMathType
+ *   The mathematical type (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @param iMathDimension
+ *   The mathematical dimension (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @see CATSamValue , CATSamMathType
+ */
+    CATSamDimension(int iNbPositions, int iNbLaminates, int iNbSMI, const int * const iNbRepeats,
+                    CATSamValue iValueType, CATSamMathType iMathType, int iMathDimension) ;
+
+/**
+ * Creates a &lt;b&gt;CATSamDimension&lt;/b&gt; object and fills it with the supplied values.
+ * @param iNbPositions
+ *   The number of positions.
+ * @param iPositionsNumber[&lt;b&gt;iNbPositions&lt;/b&gt;]
+ *   The positions number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iPositionsNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbPositions&lt;/b&gt;.&lt;br&gt;
+ *   If iPositionsNumber is NULL positions numbers are set to 0...iPositions-1.
+ * @param iNbLaminates
+ *   The number of laminates.
+ * @param iLaminatesNumber[&lt;b&gt;iNbLamina&lt;/b&gt;]
+ *   The laminates number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iLaminatesNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbLamina&lt;/b&gt;.&lt;br&gt;
+ *   If iLaminatesNumber is NULL laminates numbers are set to 0...iNbLamina-1.
+ * @param iNbSMI
+ *   The number of positions within each laminate.
+ * @param iSMI[&lt;b&gt;iNbSMI&lt;/b&gt;]
+ *   The positions number within each laminate.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iSMI&lt;/b&gt; must be equal to &lt;b&gt;iNbSMI&lt;/b&gt;.&lt;br&gt;
+ *   If iSMI is NULL SMI numbers are set to 0...iNbSMI-1.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; SMI numbers must match to values of the enum &lt;b&gt;CATSamApplyQualifier&lt;/b&gt;.
+ * @param iNbRepeats[&lt;b&gt;NbGlobalPositions&lt;/b&gt;]
+ *   The number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iNbRepeats&lt;/b&gt; must be equal to &lt;b&gt;NbGlobalPositions&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbGlobalPositions&lt;/b&gt; = iNbPositions*iNbLaminates*iNbSMI.&lt;br&gt;
+ *   iNbRepeat is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(P0,L0,S0), Nb(P0,L0,S1), ..., Nb(P0,L0,Sk), Nb(P0,L1,S0), ......, Nb(P0,L1,Sk), ...., Nb(P0,Lj,S0), ......, Nb(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(P1,L0,S0), Nb(P1,L0,S1), ..., Nb(P1,L0,Sk), Nb(P1,L1,S0), ......, Nb(P1,L1,Sk), ...., Nb(P1,Lj,S0), ......, Nb(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(Pi,L0,S0), Nb(Pi,L0,S1), ..., Nb(Pi,L0,Sk), Nb(Pi,L1,S0), ......, Nb(Pi,L1,Sk), ...., Nb(Pi,Lj,S0), ......, Nb(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(Pi,Lj,Sk) : the repeat number of the set of Position, Lamina and SMI (Pi,Lj,Sk).&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;&lt;/dl&gt;
+ * @param iRepeatsNumber[&lt;b&gt;NbRepeatTotal&lt;/b&gt;]
+ *   The repetion number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iRepeatsNumber&lt;/b&gt; must be equal to &lt;b&gt;NbRepeatTotal&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbRepeatTotal&lt;/b&gt; = iNbRepeat[0]+iNbRepeat[1]+..+iNbRepeat[&lt;b&gt;NbGlobalPositions-1&lt;/b&gt;].&lt;br&gt;
+ *   iRepeatsNumber is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;R0(P0,L0,S0), R1(P0,L0,S0), ..., Rx(P0,L0,S0), R0(P0,L0,S1), ......, Rx(P0,L0,S1), ...., R0(P0,L0,Sk), ......, Rx(P0,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P0,L1,S0), R1(P0,L1,S0), ..., Rx(P0,L1,S0), R0(P0,L1,S1), ......, Rx(P0,L1,S1), ...., R0(P0,L1,Sk), ......, Rx(P0,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P0,Lj,S0), R1(P0,Lj,S0), ..., Rx(P0,Lj,S0), R0(P0,Lj,S1), ......, Rx(P0,Lj,S1), ...., R0(P0,Lj,Sk), ......, Rx(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,L0,S0), R1(P1,L0,S0), ..., Rx(P1,L0,S0), R0(P1,L0,S1), ......, Rx(P1,L0,S1), ...., R0(P1,L0,Sk), ......, Rx(P1,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,L1,S0), R1(P1,L1,S0), ..., Rx(P1,L1,S0), R0(P1,L1,S1), ......, Rx(P1,L1,S1), ...., R0(P1,L1,Sk), ......, Rx(P1,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,Lj,S0), R1(P1,Lj,S0), ..., Rx(P1,Lj,S0), R0(P1,Lj,S1), ......, Rx(P1,Lj,S1), ...., R0(P1,Lj,Sk), ......, Rx(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,L0,S0), R1(Pi,L0,S0), ..., Rx(Pi,L0,S0), R0(Pi,L0,S1), ......, Rx(Pi,L0,S1), ...., R0(Pi,L0,Sk), ......, Rx(Pi,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,L1,S0), R1(Pi,L1,S0), ..., Rx(Pi,L1,S0), R0(Pi,L1,S1), ......, Rx(Pi,L1,S1), ...., R0(Pi,L1,Sk), ......, Rx(Pi,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,Lj,S0), R1(Pi,Lj,S0), ..., Rx(Pi,Lj,S0), R0(Pi,Lj,S1), ......, Rx(Pi,Lj,S1), ...., R0(Pi,Lj,Sk), ......, Rx(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Rx(Pi,Lj,Sk) : the sequential number of the Entities which contribute to the collected values.&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;
+ *          &lt;dd&gt;&lt;b&gt;NB        :&lt;/b&gt; Rx(Pi,Lj,Sk) = &lt;b&gt;-1&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iRepeatsNumber is NULL repeat numbers are set to &lt;b&gt;-1&lt;/b&gt;.
+ * @param iAggregationMode[&lt;b&gt;NbRepeatTotal&lt;/b&gt;]
+ *   The AggregationMode of the Characteristic values for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iAggregationMode&lt;/b&gt; must be equal to &lt;b&gt;NbRepeatTotal&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbRepeatTotal&lt;/b&gt; = iNbRepeat[0]+iNbRepeat[1]+..+iNbRepeat[&lt;b&gt;NbGlobalPositions-1&lt;/b&gt;].&lt;br&gt;
+ *   iAggregationMode is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;A0(P0,L0,S0), A1(P0,L0,S0), ..., Ax(P0,L0,S0), A0(P0,L0,S1), ......, Ax(P0,L0,S1), ...., A0(P0,L0,Sk), ......, Ax(P0,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P0,L1,S0), A1(P0,L1,S0), ..., Ax(P0,L1,S0), A0(P0,L1,S1), ......, Ax(P0,L1,S1), ...., A0(P0,L1,Sk), ......, Ax(P0,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P0,Lj,S0), A1(P0,Lj,S0), ..., Ax(P0,Lj,S0), A0(P0,Lj,S1), ......, Ax(P0,Lj,S1), ...., A0(P0,Lj,Sk), ......, Ax(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,L0,S0), A1(P1,L0,S0), ..., Ax(P1,L0,S0), A0(P1,L0,S1), ......, Ax(P1,L0,S1), ...., A0(P1,L0,Sk), ......, Ax(P1,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,L1,S0), A1(P1,L1,S0), ..., Ax(P1,L1,S0), A0(P1,L1,S1), ......, Ax(P1,L1,S1), ...., A0(P1,L1,Sk), ......, Ax(P1,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,Lj,S0), A1(P1,Lj,S0), ..., Ax(P1,Lj,S0), A0(P1,Lj,S1), ......, Ax(P1,Lj,S1), ...., A0(P1,Lj,Sk), ......, Ax(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,L0,S0), A1(Pi,L0,S0), ..., Ax(Pi,L0,S0), A0(Pi,L0,S1), ......, Ax(Pi,L0,S1), ...., A0(Pi,L0,Sk), ......, Ax(Pi,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,L1,S0), A1(Pi,L1,S0), ..., Ax(Pi,L1,S0), A0(Pi,L1,S1), ......, Ax(Pi,L1,S1), ...., A0(Pi,L1,Sk), ......, Ax(Pi,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,Lj,S0), A1(Pi,Lj,S0), ..., Ax(Pi,Lj,S0), A0(Pi,Lj,S1), ......, Ax(Pi,Lj,S1), ...., A0(Pi,Lj,Sk), ......, Ax(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Ax(Pi,Lj,Sk) : the AggregationMode of the Entities which contribute to the collected values.&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;
+ *          &lt;dd&gt;&lt;b&gt;NB        :&lt;/b&gt; Ax(Pi,Lj,Sk) = &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iAggregationMode is NULL aggregation modes are set to &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt;.
+ * @param iValueType
+ *   The type of value (to calculate &lt;b&gt;UnitaryValueSize&lt;/b&gt;).
+ * @param iMathType
+ *   The mathematical type (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @param iMathDimension
+ *   The mathematical dimension (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @see CATSamValue , CATSamMathType , CATSamAggregationMode , CATSamApplyQualifier
+ */
+    CATSamDimension(int iNbPositions, const int * const iPositionsNumber, int iNbLaminates, const int * const iLaminatesNumber, int iNbSMI, const int * const iSMI,
+                    const int * const iNbRepeats, const int * const iRepeatsNumber, const CATSamAggregationMode * const iAggregationMode,
+                    CATSamValue iValueType, CATSamMathType iMathType, int iMathDimension) ;
+/**
+ * Destructor.
+ */
+    virtual ~CATSamDimension() ;
+/**
+ * Copies the contents of another &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ * @param iDimension
+ *   The object which is to be copied.
+ */
+    CATSamDimension &amp;operator = (const CATSamDimension &amp;iDimension) ;
+/**
+ * Compare the contents of another &lt;b&gt;CATSamDimension&lt;/b&gt; object to the current instance.
+ * @param iDimension
+ *   The object which is to be compared.
+ */
+    CATBoolean operator == (const CATSamDimension &amp;iDimension) ;
+
+/**
+ * Fills a &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values.
+ * @param iNbPositions
+ *   The number of positions.
+ * @param iNbLaminates
+ *   The number of laminates.
+ * @param iNbSMI
+ *   The number of positions within each laminate.
+ * @param iNbRepeats[NbGlobalPositions]
+ *   The number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iNbRepeats&lt;/b&gt; must be equal to &lt;b&gt;NbGlobalPositions&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbGlobalPositions&lt;/b&gt; = iNbPositions*iNbLaminates*iNbSMI.&lt;br&gt;
+ *   iNbRepeat is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(P0,L0,S0), Nb(P0,L0,S1), ..., Nb(P0,L0,Sk), Nb(P0,L1,S0), ......, Nb(P0,L1,Sk), ...., Nb(P0,Lj,S0), ......, Nb(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(P1,L0,S0), Nb(P1,L0,S1), ..., Nb(P1,L0,Sk), Nb(P1,L1,S0), ......, Nb(P1,L1,Sk), ...., Nb(P1,Lj,S0), ......, Nb(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(Pi,L0,S0), Nb(Pi,L0,S1), ..., Nb(Pi,L0,Sk), Nb(Pi,L1,S0), ......, Nb(Pi,L1,Sk), ...., Nb(Pi,Lj,S0), ......, Nb(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(Pi,Lj,Sk) : the repeat number of the set of Position, Lamina and SMI (Pi,Lj,Sk).&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;&lt;/dl&gt;
+ * @param iValueType
+ *   The type of value (to calculate &lt;b&gt;UnitaryValueSize&lt;/b&gt;).
+ * @param iMathType
+ *   The mathematical type (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @param iMathDimension
+ *   The mathematical dimension (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @see CATSamValue, CATSamMathType
+ */
+    HRESULT Fill(int iNbPositions, int iNbLaminates, int iNbSMI, const int * const iNbRepeats,
+                 CATSamValue iValueType, CATSamMathType iMathType, int iMathDimension) ;
+
+/**
+ * Fills a &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values.
+ * @param iNbPositions
+ *   The number of positions.
+ * @param iPositionsNumber[&lt;b&gt;iNbPositions&lt;/b&gt;]
+ *   The positions number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iPositionsNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbPositions&lt;/b&gt;.&lt;br&gt;
+ *   If iPositionsNumber is NULL positions numbers are set to 0...iPositions-1.
+ * @param iNbLaminates
+ *   The number of laminates.
+ * @param iLaminatesNumber[&lt;b&gt;iNbLamina&lt;/b&gt;]
+ *   The laminates number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iLaminatesNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbLamina&lt;/b&gt;.&lt;br&gt;
+ *   If iLaminatesNumber is NULL laminates numbers are set to 0...iNbLamina-1.
+ * @param iNbSMI
+ *   The number of positions within each laminate.
+ * @param iSMI[&lt;b&gt;iNbSMI&lt;/b&gt;]
+ *   The positions number within each laminate.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iSMI&lt;/b&gt; must be equal to &lt;b&gt;iNbSMI&lt;/b&gt;.&lt;br&gt;
+ *   If iSMI is NULL SMI numbers are set to 0...iNbSMI-1.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; SMI numbers must match to values of the enum &lt;b&gt;CATSamApplyQualifier&lt;/b&gt;.
+ * @param iNbRepeats[&lt;b&gt;NbGlobalPositions&lt;/b&gt;]
+ *   The number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iNbRepeats&lt;/b&gt; must be equal to &lt;b&gt;NbGlobalPositions&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbGlobalPositions&lt;/b&gt; = iNbPositions*iNbLaminates*iNbSMI.&lt;br&gt;
+ *   iNbRepeat is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(P0,L0,S0), Nb(P0,L0,S1), ..., Nb(P0,L0,Sk), Nb(P0,L1,S0), ......, Nb(P0,L1,Sk), ...., Nb(P0,Lj,S0), ......, Nb(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(P1,L0,S0), Nb(P1,L0,S1), ..., Nb(P1,L0,Sk), Nb(P1,L1,S0), ......, Nb(P1,L1,Sk), ...., Nb(P1,Lj,S0), ......, Nb(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;Nb(Pi,L0,S0), Nb(Pi,L0,S1), ..., Nb(Pi,L0,Sk), Nb(Pi,L1,S0), ......, Nb(Pi,L1,Sk), ...., Nb(Pi,Lj,S0), ......, Nb(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Nb(Pi,Lj,Sk) : the repeat number of the set of Position, Lamina and SMI (Pi,Lj,Sk).&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;&lt;/dl&gt;
+ * @param iRepeatsNumber[&lt;b&gt;NbRepeatTotal&lt;/b&gt;]
+ *   The repetion number of another form of repetition for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iRepeatsNumber&lt;/b&gt; must be equal to &lt;b&gt;NbRepeatTotal&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbRepeatTotal&lt;/b&gt; = iNbRepeat[0]+iNbRepeat[1]+..+iNbRepeat[&lt;b&gt;NbGlobalPositions-1&lt;/b&gt;].&lt;br&gt;
+ *   iRepeatsNumber is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;R0(P0,L0,S0), R1(P0,L0,S0), ..., Rx(P0,L0,S0), R0(P0,L0,S1), ......, Rx(P0,L0,S1), ...., R0(P0,L0,Sk), ......, Rx(P0,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P0,L1,S0), R1(P0,L1,S0), ..., Rx(P0,L1,S0), R0(P0,L1,S1), ......, Rx(P0,L1,S1), ...., R0(P0,L1,Sk), ......, Rx(P0,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P0,Lj,S0), R1(P0,Lj,S0), ..., Rx(P0,Lj,S0), R0(P0,Lj,S1), ......, Rx(P0,Lj,S1), ...., R0(P0,Lj,Sk), ......, Rx(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,L0,S0), R1(P1,L0,S0), ..., Rx(P1,L0,S0), R0(P1,L0,S1), ......, Rx(P1,L0,S1), ...., R0(P1,L0,Sk), ......, Rx(P1,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,L1,S0), R1(P1,L1,S0), ..., Rx(P1,L1,S0), R0(P1,L1,S1), ......, Rx(P1,L1,S1), ...., R0(P1,L1,Sk), ......, Rx(P1,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(P1,Lj,S0), R1(P1,Lj,S0), ..., Rx(P1,Lj,S0), R0(P1,Lj,S1), ......, Rx(P1,Lj,S1), ...., R0(P1,Lj,Sk), ......, Rx(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,L0,S0), R1(Pi,L0,S0), ..., Rx(Pi,L0,S0), R0(Pi,L0,S1), ......, Rx(Pi,L0,S1), ...., R0(Pi,L0,Sk), ......, Rx(Pi,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,L1,S0), R1(Pi,L1,S0), ..., Rx(Pi,L1,S0), R0(Pi,L1,S1), ......, Rx(Pi,L1,S1), ...., R0(Pi,L1,Sk), ......, Rx(Pi,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;R0(Pi,Lj,S0), R1(Pi,Lj,S0), ..., Rx(Pi,Lj,S0), R0(Pi,Lj,S1), ......, Rx(Pi,Lj,S1), ...., R0(Pi,Lj,Sk), ......, Rx(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Rx(Pi,Lj,Sk) : the sequential number of the Entities which contribute to the collected values.&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;
+ *          &lt;dd&gt;&lt;b&gt;NB        :&lt;/b&gt; Rx(Pi,Lj,Sk) = &lt;b&gt;-1&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iRepeatsNumber is NULL repeat numbers are set to &lt;b&gt;-1&lt;/b&gt;.
+ * @param iAggregationMode[&lt;b&gt;NbRepeatTotal&lt;/b&gt;]
+ *   The AggregationMode of the Characteristic values for each set of Position, Lamina and SMI.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iAggregationMode&lt;/b&gt; must be equal to &lt;b&gt;NbRepeatTotal&lt;/b&gt;.&lt;br&gt;
+ *   With &lt;b&gt;NbRepeatTotal&lt;/b&gt; = iNbRepeat[0]+iNbRepeat[1]+..+iNbRepeat[&lt;b&gt;NbGlobalPositions-1&lt;/b&gt;].&lt;br&gt;
+ *   iAggregationMode is valued as follow :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;A0(P0,L0,S0), A1(P0,L0,S0), ..., Ax(P0,L0,S0), A0(P0,L0,S1), ......, Ax(P0,L0,S1), ...., A0(P0,L0,Sk), ......, Ax(P0,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P0,L1,S0), A1(P0,L1,S0), ..., Ax(P0,L1,S0), A0(P0,L1,S1), ......, Ax(P0,L1,S1), ...., A0(P0,L1,Sk), ......, Ax(P0,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P0,Lj,S0), A1(P0,Lj,S0), ..., Ax(P0,Lj,S0), A0(P0,Lj,S1), ......, Ax(P0,Lj,S1), ...., A0(P0,Lj,Sk), ......, Ax(P0,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,L0,S0), A1(P1,L0,S0), ..., Ax(P1,L0,S0), A0(P1,L0,S1), ......, Ax(P1,L0,S1), ...., A0(P1,L0,Sk), ......, Ax(P1,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,L1,S0), A1(P1,L1,S0), ..., Ax(P1,L1,S0), A0(P1,L1,S1), ......, Ax(P1,L1,S1), ...., A0(P1,L1,Sk), ......, Ax(P1,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(P1,Lj,S0), A1(P1,Lj,S0), ..., Ax(P1,Lj,S0), A0(P1,Lj,S1), ......, Ax(P1,Lj,S1), ...., A0(P1,Lj,Sk), ......, Ax(P1,Lj,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,L0,S0), A1(Pi,L0,S0), ..., Ax(Pi,L0,S0), A0(Pi,L0,S1), ......, Ax(Pi,L0,S1), ...., A0(Pi,L0,Sk), ......, Ax(Pi,L0,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,L1,S0), A1(Pi,L1,S0), ..., Ax(Pi,L1,S0), A0(Pi,L1,S1), ......, Ax(Pi,L1,S1), ...., A0(Pi,L1,Sk), ......, Ax(Pi,L1,Sk)&lt;br&gt;
+ *          &lt;dd&gt;A0(Pi,Lj,S0), A1(Pi,Lj,S0), ..., Ax(Pi,Lj,S0), A0(Pi,Lj,S1), ......, Ax(Pi,Lj,S1), ...., A0(Pi,Lj,Sk), ......, Ax(Pi,Lj,Sk)&lt;br&gt;&lt;/dl&gt;
+ *   With :&lt;br&gt;
+ *      &lt;dl&gt;&lt;dd&gt;Ax(Pi,Lj,Sk) : the sequential number of the Entities which contribute to the collected values.&lt;br&gt;
+ *          &lt;dd&gt;Pi           : the Position index (between 0 and iNbPositions-1).&lt;br&gt;
+ *          &lt;dd&gt;Lj           : the Lamina index (between 0 and iNbLaminates-1).&lt;br&gt;
+ *          &lt;dd&gt;Sk           : the SMI index (between 0 and iNbSMI-1).&lt;br&gt;
+ *          &lt;dd&gt;&lt;b&gt;NB        :&lt;/b&gt; Ax(Pi,Lj,Sk) = &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iAggregationMode is NULL aggregation modes are set to &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt;.
+ * @param iValueType
+ *   The type of value (to calculate &lt;b&gt;UnitaryValueSize&lt;/b&gt;).
+ * @param iMathType
+ *   The mathematical type (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @param iMathDimension
+ *   The mathematical dimension (to calculate &lt;b&gt;NbValues&lt;/b&gt;).
+ * @see CATSamValue, CATSamMathType, CATSamAggregationMode, CATSamApplyQualifier
+ */
+    HRESULT Fill(int iNbPositions, const int * const iPositionsNumber, int iNbLaminates, const int * const iLaminatesNumber, int iNbSMI, const int * const iSMI,
+                 const int * const iNbRepeats, const int * const iRepeatsNumber, const CATSamAggregationMode * const iAggregationMode,
+                 CATSamValue iValueType, CATSamMathType iMathType, int iMathDimension) ;
+
+/**
+ * Change the number of Positions of the &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values and set the positions numbers.
+ * @param iNbPositions
+ *   The number of positions.
+ * @param iPositionsNumber[&lt;b&gt;iNbPositions&lt;/b&gt;]
+ *   The positions number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iPositionsNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbPositions&lt;/b&gt;.&lt;br&gt;
+ *   If iPositionsNumber is NULL positions numbers are set to 0...iPositions-1.
+ *   If iPositions is NULL positions numbers are set to 0...iPositions-1.
+ */
+    HRESULT SetNbPositions(int iNbPositions, const int * const iPositionsNumber = NULL) ;
+
+/**
+ * Change the number of Laminates of the &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values and set the Laminates numbers.
+ * @param iNbLaminates
+ *   The number of laminates.
+ * @param iLaminatesNumber[&lt;b&gt;iNbLamina&lt;/b&gt;]
+ *   The laminates number.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iLaminatesNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbLamina&lt;/b&gt;.&lt;br&gt;
+ *   If iLaminatesNumber is NULL laminates numbers are set to 0...iNbLamina-1.
+ */
+    HRESULT SetNbLaminates(int iNbLaminates, const int * const iLaminatesNumber = NULL) ;
+
+/**
+ * Change the number of positions within each laminate of the &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values and set the SMI numbers.
+ * @param iNbSMI
+ *   The number of positions within each laminate.
+ * @param iSMI[&lt;b&gt;iNbSMI&lt;/b&gt;]
+ *   The positions number within each laminate.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iSMI&lt;/b&gt; must be equal to &lt;b&gt;iNbSMI&lt;/b&gt;.&lt;br&gt;
+ *   If iSMI is NULL SMI numbers are set to 0...iNbSMI-1.&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; SMI numbers must match to values of the enum &lt;b&gt;CATSamApplyQualifier&lt;/b&gt;.
+ */
+    HRESULT SetNbSMI(int iNbSMI, const int * const iSMI = NULL) ;
+
+/**
+ * Change the number of Repeat of the &lt;b&gt;CATSamDimension&lt;/b&gt; object for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex) with the supplied values and set the Repeat numbers.
+ * @param iPositionIndex
+ *   The Position number.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI number.
+ * @param iNbRepeats
+ *   The number of Repetition for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iRepeatsNumber[&lt;b&gt;iNbRepeats&lt;/b&gt;]
+ *   The repetion numbers for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iRepeatsNumber&lt;/b&gt; must be equal to &lt;b&gt;iNbRepeats&lt;/b&gt;.&lt;br&gt;
+ *   iRepeatsNumber is valued as follow :&lt;br&gt;
+ *     &lt;dl&gt;&lt;dd&gt;R0, R1, ..., Rx.&lt;br&gt;&lt;/dl&gt;
+ *   with :&lt;br&gt;
+ *     &lt;dl&gt;&lt;dd&gt;Rx : the sequential number of the Entities which contribute to the collected values.&lt;br&gt;
+ *         &lt;dd&gt;&lt;b&gt;NB :&lt;/b&gt; Rx = &lt;b&gt;-1&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iRepeatsNumber is NULL repeat numbers are set to &lt;b&gt;-1&lt;/b&gt;.&lt;br&gt;
+ * @param iAggregationMode[&lt;b&gt;iNbRepeats&lt;/b&gt;]
+ *   The AggregationMode of the Characteristic values for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).&lt;br&gt;
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iAggregationMode&lt;/b&gt; must be equal to &lt;b&gt;iNbRepeats&lt;/b&gt;.&lt;br&gt;
+ *   iAggregationMode is valued as follow :&lt;br&gt;
+ *     &lt;dl&gt;&lt;dd&gt;A0, A1, ..., Ax.&lt;br&gt;&lt;/dl&gt;
+ *   with :&lt;br&gt;
+ *     &lt;dl&gt;&lt;dd&gt;Ax : the aggregation mode of the Entities which contribute to the collected values.&lt;br&gt;
+ *         &lt;dd&gt;&lt;b&gt;NB :&lt;/b&gt; Ax = &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt; if collected values are combined or if their origin are unknown.&lt;br&gt;&lt;/dl&gt;
+ *   If iAggregationMode is NULL aggregation modes are set to &lt;b&gt;CATSamAggregationModeAdd&lt;/b&gt;.&lt;br&gt;
+ * @see CATSamAggregationMode
+ */
+    HRESULT SetNbRepeat(int iPositionIndex, int iLaminaIndex, int iSMIIndex, int iNbRepeats, const int * const iRepeatsNumber = NULL, const CATSamAggregationMode * const iAggregationMode = NULL) ;
+
+/**
+ * Change the number of Components of the &lt;b&gt;CATSamDimension&lt;/b&gt; object with the supplied values,
+ * and set the Components numbers.
+ * @param iNbComponents
+ *   The number of Components.
+ * @param iComponents[&lt;b&gt;iNbComponents&lt;/b&gt;]
+ *   The Components number.
+ *   &lt;b&gt;WARNING ::&lt;/b&gt; The size of the Array &lt;b&gt;iComponents&lt;/b&gt; must be equal to &lt;b&gt;iNbComponents&lt;/b&gt;.&lt;br&gt;
+ *   If iComponents is NULL positions numbers are set to 0...iNbComponents-1.
+ */
+    HRESULT SetNbComponents(int iNbComponents, const int * const iComponents = NULL) ;
+
+/**
+ * Change the size of a single value.
+ * and set the Components numbers.
+ * @param iValueType
+ *   The type of value (to calculate &lt;b&gt;UnitaryValueSize&lt;/b&gt;).
+ * @param iUnitaryValueSize
+ *   The Size of each Component.
+ */
+    HRESULT SetUnitaryValueSize(CATSamValue iValueType) ;
+
+/**
+ * Change the value size of a Component.
+ * and set the Components numbers.
+ * @param iUnitaryValueSize
+ *   The Size of each Component.
+ */
+    HRESULT SetUnitaryValueSize(int iUnitaryValueSize) ;
+
+/**
+ * Return the number of Positions of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetNbPositions() const ;
+
+/**
+ * Get the positions of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    const int* GetPositions() const ;
+
+/**
+ * Return the number of Laminates of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetNbLaminates() const ;
+              
+/**
+ * Get the Laminates of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    const int* GetLaminates() const ;
+
+/**
+ * Return the number of positions within each laminate of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetNbSMI() const ;
+              
+/**
+ * Get the positions within each laminate of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    const int* GetSMI() const ;
+
+/**
+ * Get the whole number of Repeat of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ * @return
+ *    The whole number of Repeat of the &lt;b&gt;CATSamDimension&lt;/b&gt; object computed as folow :&lt;br&gt;
+ *    &lt;dl&gt;&lt;dd&gt;&lt;b&gt;NbRepeatTotal&lt;/b&gt; = NbRepeat[0]+NbRepeat[1]+..+NbRepeat[&lt;b&gt;NbGlobalPositions-1&lt;/b&gt;].&lt;br&gt;
+ *        &lt;dd&gt;with &lt;b&gt;NbGlobalPositions&lt;/b&gt; = iNbPositions*iNbLaminates*iNbSMI.&lt;br&gt;&lt;/dl&gt;
+ */
+    int GetNbRepeatTotal() const ;
+
+/**
+ * Get the number of Repeat of the &lt;b&gt;CATSamDimension&lt;/b&gt; object for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iPositionIndex
+ *   The Position index.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI index.
+ */
+    int GetNbRepeat(int iPositionIndex, int iLaminaIndex, int iSMIIndex) const ;
+
+/**
+ * Get the Repeat of the &lt;b&gt;CATSamDimension&lt;/b&gt; object for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iPositionIndex
+ *   The Position index.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI index.
+ */
+    const int* GetRepeat(int iPositionIndex, int iLaminaIndex, int iSMIIndex) const ;
+
+/**
+ * Get the Aggregation Mode of the &lt;b&gt;CATSamDimension&lt;/b&gt; object for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iPositionIndex
+ *   The Position index.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI index.
+ * @see CATSamAggregationMode
+ */
+    const CATSamAggregationMode* GetAggregationMode(int iPositionIndex, int iLaminaIndex, int iSMIIndex) const ;
+   
+/**
+ * Obtain the Repeat configuration.&lt;br&gt;
+ * Return True if Contain variable Repeat.
+ */
+    CATBoolean HadVariableRepeat() const ;
+      
+/**
+ * Obtain the Repeat configuration.&lt;br&gt;
+ * Return True if Contain negative NbRepeat.
+ */
+    CATBoolean HadNegativeRepeat() const ;
+
+/**
+ * Get the number of Components of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetNbComponents() const ;
+              
+/**
+ * Get the Components of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    const int* GetComponents() const ;
+
+/**
+ * Return the number of values of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetNbValues() const ;
+
+/**
+ * Return the size of values of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ */
+    int GetSizeValues() const ;
+
+/**
+ * Return the number of collected values for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iPositionIndex
+ *   The Position index.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI index.
+ */
+     int GetNbValues(int iPositionIndex, int iLaminaIndex, int iSMIIndex) const ;
+
+/**
+ * Return the size of collected values for the set of Position, Lamina and SMI (iPositionIndex, iLaminaIndex, iSMIIndex).
+ * @param iPositionIndex
+ *   The Position index.
+ * @param iLaminaIndex
+ *   The Lamina index.
+ * @param iSMIIndex
+ *   The SMI index.
+ */
+    int GetSizeValues(int iPositionIndex, int iLaminaIndex, int iSMIIndex) const ;
+
+/**
+ * Get the value size of a Component.
+ */
+    int GetUnitaryValueSize() const;
+
+/**
+ * Compute the offset on Values Pointer according to the definition of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ * @param iValuePointerBase
+ *   The Pointer on Values.
+ * @param iPositionIndex
+ *   The Position Index.
+ * @param iLaminaIndex
+ *   The Lamina Index.
+ * @param iSMIIndex
+ *   The SMI Index.
+ * @param iRepeatIndex
+ *   The Repeat Index for the of Position and SMI [iPositionIndex, iSMIIndex].
+ * @param iComponentIndex
+ *   The Component Index.
+ */
+    const void* ValuesAddress(const void* iValuePointerBase, int iPositionIndex, int iLaminaIndex = 0, int iSMIIndex = 0, int iRepeatIndex = 0, int iComponentIndex = 0) const ;
+
+/**
+ * Dumps the contents of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ * @param iIndent
+ *   The indentation level (one level represents 3 spaces).
+ * @param iLoopSize
+ *   The size of loops.
+ */
+    void Dump(int iIndent = 0, int iLoopSize = 10) const ; 
+
+/**
+ * Dumps the contents of the &lt;b&gt;CATSamDimension&lt;/b&gt; object.
+ * @param oListOfString
+ *   The List of CATUnicodeString.
+ * @param iIndent
+ *   The indentation level (one level represents 3 spaces).
+ * @param iLoopSize
+ *   The size of loops.
+ */
+    void Dump(CATListValCATUnicodeString* oListOfString, int iIndent = 0, int iLoopSize = 10) const ;
+
+/**
+ * Test the type of the instance.
+ * Return True if iType = CATSamDimension
+ * @param iType
+ *   The type to test.
+ */
+    CATBoolean IsAKindOf(const CATString &amp; iType) const;
+
+/**
+ * Give a public access to the Work field.
+ */
+    int * const PublicWorkPtr ;
+
+  private :
+    // Friend Class for Private Methods
+    friend class CATSamUVWAdaptor;
+    friend class CATSamValuesAdaptor;
+    friend class CATSamDimensionAdaptor;
+    friend class CATAnalysisCharacCollector;
+    friend class CATAnalysisCharacCollectorPacked;
+    friend class CATSamCollectorBuilderForMeshSet;
+    friend class CATSamCollectorBuilderForSetCharac;
+    friend class CATSamCollectorBuilderForPreproEntity;
+    friend class CATESamCharacCollectorForCombinedEntity;
+    friend class CATESamCharacCollectorForProxyEntity;
+
+    // GetHashCode
+    unsigned int GetHashCode(unsigned int iHasherFactor);
+    // Hash
+    static unsigned int Hash(const void* iDimensionPtr, const void* iHasherFactor);
+    static unsigned int SimpleHash(void* iDimensionPtr);
+    // Compare
+    static int Compare(const void* iDimension1Ptr, const void* iDimension2Ptr);
+    static int SimpleCompare(void* iDimension1Ptr, void* iDimension2Ptr);
+    // Set/GetValuesDistributionMode.
+    inline CATSamValuesDistributionMode GetValuesDistributionMode() const;
+    inline HRESULT SetValuesDistributionMode(CATSamValuesDistributionMode iValuesDistributionMode);
+    // Stream the object.
+    // @param ioStream : The streaming buffer.
+    // @param iVersion : The version of stream.
+    HRESULT Stream(CATSamStream &amp;ioStream, int iVersion) const ;
+    // Unstream the object.
+    // @param iStream : The unstreaming buffer.
+    // @param iVersion : The version of stream.
+    HRESULT UnStream(CATSamStream &amp;iStream, int iVersion) ;
+    // Obtain the Repeat configuration.&lt;br&gt;
+    // @Return True if Contain NbRepeat greater than 1.
+    CATBoolean HadNbRepeatGreaterThanOne() const ;
+    // Obtain the Repeat configuration.&lt;br&gt;
+    // @Return True if Contain Repeat equal to 0.
+    CATBoolean HadNullRepeat() const ;
+    // Obtain the AgregationMode configuration.&lt;br&gt;
+    // @Return True if Contain negative NbRepeat.
+    CATBoolean HadReplaceAgregationMode() const ;
+    // Combine
+    HRESULT Combine(const CATSamDimension &amp;iDimensionToCombine) ;
+    // ApplyOffsetOnRepeatNumber
+    HRESULT ApplyOffsetOnRepeatNumber(int iOffset) ;
+
+  protected :
+    /** Give access for CATSamAxis et CATSamDimensionHandler*/
+    friend class CATSamAxis;
+    friend class CATSamDimensionHandler;
+    CATSamDimensionHandler* GetDimensionHandler();
+    HRESULT SetDimensionHandler(CATSamDimensionHandler* iDimensionHandler);
+
+    /** Compare the Structure of another CATSamDimension object to the current instance.*/
+    CATBoolean CompareStructure(const CATSamDimension &amp;iDimension) const;
+    // GetNbRepeatTo
+    HRESULT GetNbRepeatTo(int iPositionIndex, int iLaminaIndex, int iSMIIndex, int iRepeatIndex, int &amp;oNbRepeatTo) const ;
+
+    // DATA MEMBERS
+    int                      Work ;
+    CATSamDimensionData     _DimensionData;
+    CATSamDimensionHandler* _DimensionHandler;
+    unsigned int            _HashCode;
+
+  private :
+    // GetType
+    virtual CATSamExplicitRoot::RootType GetType() const;
+} ;
+
+inline CATSamValuesDistributionMode CATSamDimension::GetValuesDistributionMode() const { return _DimensionData.GetValuesDistributionMode(); }
+inline HRESULT CATSamDimension::SetValuesDistributionMode(CATSamValuesDistributionMode iValuesDistributionMode) { return _DimensionData.SetValuesDistributionMode(iValuesDistributionMode); }
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamCharacVersion.html">← 上一页: CATSamCharacVersion.h</a></div>
+        <div><a href="CATSamDimensionData.html">下一页: CATSamDimensionData.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATSetOfSurParams.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATSetOfSurParams.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATRevolutionSurface.html">← 上一页: CATRevolutionSurface.h</a></div>
+        <div><a href="CATSimCurve.html">下一页: CATSimCurve.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSetOfSurParams_H
+#define CATSetOfSurParams_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/** @CAA2Required */
+
+#include &quot;CATIAV5Level.h&quot;
+//#if defined ( CATIAV5R10 )
+#include &quot;ExportedByCATCGMGeoMath.h&quot;
+/*
+#else
+#include &quot;YP00IMPL.h&quot;
+#endif  
+*/
+#include &quot;CATParamData.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATSurParam;
+class CATSurParamReference;
+
+#include &quot;CATCGMNewArray.h&quot;
+
+/**
+ * Class representing a set of parameters on a same surface.
+ * &lt;br&gt;To enhance the performance, the indices of the parameters are not checked.
+ */
+
+//#if defined ( CATIAV5R10 )
+class ExportedByCATCGMGeoMath CATSetOfSurParams
+/*
+#else
+class ExportedByYP00IMPL CATSetOfSurParams
+#endif  
+*/
+{
+public:
+
+/**
+ * Constructs an empty set of CATSurParams.
+ */
+  CATSetOfSurParams();
+
+/**
+
+ * Constructs a set of a given count of CATCrvParams.
+
+ * @param iReferenceParam
+ * A curve parameter defining the curve on which all the parameters of the set will be defined. 
+ * @param iNumberOfPoints
+ * The count of parameters.
+ */
+
+  CATSetOfSurParams(const CATSurParam &amp;iReference, CATLONG32 iNumberOfPoints = 0);
+
+/**
+ * @nodoc
+ * Constructs a set from a surface reference.
+ */
+  CATSetOfSurParams(const CATSurParamReference *iReference, CATLONG32 iNumberOfPoints = 0);
+
+/**
+ * Copy constructor.
+ */
+  CATSetOfSurParams(const CATSetOfSurParams &amp;iSetToCopy);
+
+/**
+ * Destructor.
+ */
+  ~CATSetOfSurParams();
+
+//=============================================================================
+// SET AND GET METHODS
+//=============================================================================
+/**
+ * @nodoc
+ * Modifies the common reference of the CATSurParams.
+ */
+  INLINE void SetReference(const CATSurParamReference *iNewReference);
+
+/**
+ * Returns a pointer to the common reference of the CATSurParams.
+ * @return
+ * A pointer to the common surface reference.
+ */
+  INLINE const CATSurParamReference * GetReference() const;
+
+/**
+ * Modifies the size of &lt;tt&gt;this&lt;/tt&gt; CATSetOfSurParams.
+ * @param iSize
+ * The set is re-allocated if needed.
+ */
+  void SetNumberOfPoints(CATLONG32 iSize);
+
+/**
+ * Returns the size of &lt;tt&gt;this&lt;/tt&gt; CATSetOfSurParams.
+ * @return
+ * The number of points of &lt;tt&gt;this&lt;/tt&gt; set.
+ */ 
+  INLINE CATLONG32 GetNumberOfPoints() const;
+
+/**
+ * Modifies a CATSurParam from an other CATSurParam value.
+ * @param iPointIndex
+ * The index point (starting at 0) of the CATSurParam to modify.
+ * @param iNewPoint
+ * The new parameter. This parameter is not checked: in particular, 
+ * its surface reference is not checked..
+ */
+  void SetPoint(CATLONG32 iPointIndex, const CATSurParam &amp;iNewPoint);
+
+/**
+ * Modifies a CATSurParam from two values.
+ * @param iPointIndex
+ * The index point (starting at 0) of the CATSurParam to modify.
+ * @param iNewPositionU
+ * The new parameter value in the first direction of the surface.
+ * @param iNewPositionV
+ * The new parameter value in the second direction of the surface.
+ */
+  void SetPoint(CATLONG32 iPointIndex,
+		const CATParamData &amp;iNewPositionU,
+		const CATParamData &amp;iNewPositionV);
+
+/**
+ * Retrieves the CATSurParam at a given index of &lt;tt&gt;this&lt;/tt&gt; CATSetOfSurParams.
+ * @param iPointIndex
+ * The index point (starting at 0) of the CATSurParam to read.
+ * @param ioPoint
+ * The parameter. 
+ */
+  void GetPoint(CATLONG32 iPointIndex, CATSurParam &amp;ioPoint) const;
+
+/**
+ * Retrieves &lt;tt&gt;this&lt;/tt&gt; CATSetOfSurParams as an array of parameters.
+ * @param ioArrayU
+ * The corresponding array of parameter values in the first direction of the surface.
+ *&lt;br&gt;The result must not be deleted as part of the internal data of the object.
+ * @param ioArrayV
+ * The corresponding array of parameter values in the second direction of the surface.
+ *&lt;br&gt;The result must not be deleted as part of the internal data of the object.
+ */
+  void GetArrayPositions(const CATParamData * &amp;ioArrayU,
+			 const CATParamData * &amp;ioArrayV ) const;
+
+/**
+ * Releases the unused memory.
+ */
+  void Compress();
+
+/**
+ * Assignment operator.
+ */
+  const CATSetOfSurParams &amp; operator = (const CATSetOfSurParams &amp;iCopied);
+
+  /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+/**
+ * Modifies the common surface. 
+ * @param iReference
+ * A surface parameter defining the surface on which all the parameters of the set will be defined.
+ */
+  void SetReference(const CATSurParam &amp;iReference);
+//=============================================================================
+// INTERNAL DATAS
+//=============================================================================
+protected:
+// Array of positons
+  CATParamData *_UPositions;
+  CATParamData *_VPositions;
+
+// Current size of the set
+  CATLONG32          _Size;
+
+// Management datas :
+  const CATSurParamReference *_Reference;
+
+// Manages the allocation memory.
+
+  void Allocate(CATLONG32 Size);
+
+private:
+// Size of the allocated array
+  CATLONG32         _Allocated;
+
+};
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+INLINE CATLONG32 CATSetOfSurParams::GetNumberOfPoints() const
+{
+  return _Size;
+}
+
+INLINE const CATSurParamReference * CATSetOfSurParams::GetReference() const
+{
+  return _Reference;
+}
+
+INLINE void CATSetOfSurParams::SetReference(const CATSurParamReference * Reference)
+{
+  _Reference = Reference;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATRevolutionSurface.html">← 上一页: CATRevolutionSurface.h</a></div>
+        <div><a href="CATSimCurve.html">下一页: CATSimCurve.h →</a></div>
+    </div>
+</body>
+</html>

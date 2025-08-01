@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATPSpline.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATPSpline.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPParabola.html">← 上一页: CATPParabola.h</a></div>
+        <div><a href="CATParamData.html">下一页: CATParamData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPSPLINE_h
+#define CATPSPLINE_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/ 
+
+#include &quot;CATPCurve.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATCrvSide.h&quot;
+class CATSurParam;
+class CATMathVector2D;
+class CATMathSetOfPointsND;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATPSpline ;
+#else
+extern &quot;C&quot; const IID IID_CATPSpline ;
+#endif
+
+/**
+* Interface representing a curve interpolated between a set of points on surface
+* with a spline interpolation .
+*&lt;br&gt; The CATPSpline is created by the &lt;tt&gt;CreatePSpline&lt;/tt&gt;
+* method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method. 
+* It is defined with:
+*&lt;table&gt;
+* &lt;tr&gt;&lt;td&gt;CATMathSetOfPoints&lt;/td&gt;&lt;td&gt;&lt;tt&gt; Points &lt;/tt&gt;&lt;/td&gt;
+*                &lt;td&gt; The set of points on surface defining the curve&lt;/td&gt;&lt;/tr&gt;
+* &lt;tr&gt;&lt;td&gt;CATSurface&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iSupport &lt;/tt&gt;&lt;/td&gt;
+*                &lt;td&gt; The surface on which the Spline is defined &lt;/td&gt;&lt;/tr&gt;
+*&lt;/table&gt;
+*The user may define its own parameterization on the curve.
+*/
+class ExportedByCATGMGeometricInterfaces CATPSpline : public CATPCurve
+{
+  CATDeclareInterface;
+
+public :
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  /**
+  * Returns the number points defining &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @return
+  * The number of points
+  */
+  virtual CATLONG32 GetNumberOfPoints() const = 0 ;
+
+  /**
+  * Returns the parameter of a definition point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param ioParam
+  * The corresponding parameter on the underlying surface. 
+  */
+  virtual void GetOnePoint(CATLONG32 iNum, CATSurParam &amp;ioParam) const = 0 ;
+
+  /**
+  * Returns the tangent at a definition point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param ioTangentVector
+  * The corresponding tangent on the underlying surface. 
+  */
+  virtual void GetOneTangent(CATLONG32 iNum, CATMathVector2D &amp;ioTangentVector ) const = 0 ;
+
+  /**
+  * Returns the second derivative at a definition point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param ioSecondDerivativeVector
+  * The corresponding second derivative on the underlying surface. 
+  */
+  virtual void GetOneSecondDerivative(CATLONG32 iNum, CATMathVector2D &amp;ioSecondDerivativeVector ) const = 0 ;
+
+  /**
+  * Returns the global parameter of a definition point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline .
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @return
+  * The parameter value on the curve.
+  */
+  virtual double GetOneParameter(CATLONG32 iNum) const = 0 ;
+
+  /**
+  * Modifies the definition of one point of &lt;tt&gt;this&lt;/tt&gt;.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param iNewCoord
+  * The new parameter value on the surface.
+  */
+  virtual void ReplaceOnePoint(CATLONG32 iNum, const CATSurParam &amp; iNewCoord) = 0 ;
+
+
+  /**
+  * @nodoc
+  * @deprecated V5R17 ReplaceOnePoint
+  */
+  virtual void SetOnePoint(CATLONG32 iNum, const CATSurParam &amp; iNewCoord) = 0 ;
+
+  /**
+  * Modifies the tangent of one definition point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param iNewTangent
+  * The corresponding tangent on the underlying surface. 
+  */
+  virtual void ReplaceOneTangent(CATLONG32 iNum, const CATMathVector2D &amp; iNewTangent) = 0 ;
+
+
+  /**
+  * @nodoc
+  * @deprecated V5R17 ReplaceOneTangent
+  */
+  virtual void SetOneTangent(CATLONG32 iNum, const CATMathVector2D &amp; iNewTangent) = 0 ;
+
+  /**
+  * Modifies the second derivative of a point of &lt;tt&gt;this&lt;/tt&gt; CATPSpline. 
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param iSecondDerivativeVector
+  * The corresponding second derivative on the underlying surface. If the spline degree is 3, this does nothing.
+  */
+  virtual void SetOneSecondDerivative(CATLONG32 iNum, const CATMathVector2D &amp;iSecondDerivativeVector ) = 0 ;
+
+  /**
+  * Modifies &lt;tt&gt;this&lt;/tt&gt; CATPSpline definition point parameter.
+  * @param iNum
+  * The number of the definition point starting at 1.
+  * @param iNewParameter
+  * The new parameter value on the curve.
+  */
+  virtual  void ReplaceOneParameter(CATLONG32 iNum, const double &amp; iNewParameter) = 0 ;
+
+  /**
+  * @nodoc
+  * @deprecated V5R17 ReplaceOneParameter
+  */
+  virtual void SetOneParameter(CATLONG32 iNum, const double &amp; iNewParameter) = 0 ;
+
+  /**
+  * Adds a point to the definition of &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * @param iRankNumber
+  * The position of the added point
+  * (1 to be inserted between the first and the second point).
+  * @param iParam
+  * The parameter of the added point on the curve
+  * @param iPoint 
+  * The array  of the point coordinates.
+  * @param iTangent
+  * The array  of the tangent coordinates.
+  * @param iSecondDerivative
+  * The array  of the second derivative coordinates.
+  * @param iFirstCoordIndex
+  * This index is such that the point, tangent and second derivative of the
+  * first coordinate of the spline are the values of index iFirstCoordIndex
+  * @param iSecondCoordIndex
+  * Idem as iFirstCoordIndex but for the second coordinate of the spline.
+  */
+  virtual CATBoolean AddOnePoint(const CATLONG32 iRankNumber,
+                                 const double iParam,
+                                 const double * iPoint,
+                                 const double * iTangent,
+                                 const double * iSecondDerivative,
+                                 const CATLONG32 iFirstCoordIndex,
+                                 const CATLONG32 iSecondCoordIndex) = 0;
+
+  /**
+  * Get the degree of &lt;tt&gt;this&lt;/tt&gt; CATPSpline .
+  * @return
+  * The degree of &lt;tt&gt;this&lt;/tt&gt; CATPSpline .
+  */
+  virtual CATLONG32 GetDegree() const = 0 ;
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+  /**
+  * @nodoc
+  * Add points, tangents and secondderivatives to extrapol &lt;tt&gt;this&lt;/tt&gt; CATPSpline.
+  * &lt;br&gt;iParams must contain value which connect exactly with the 
+  * parameters before extrapolation.
+  * &lt;br&gt;The PSpline must be a quintic for this method to be valid.
+  */
+  virtual void Extrapol(const CATMathSetOfPointsND * iParams,
+                        const CATMathSetOfPointsND * iPoints,
+                        const CATMathSetOfPointsND * iTangents,
+                        const CATMathSetOfPointsND * iSecondDerivatives,
+                        const CATLONG32 iFirstCoordIndex,
+                        const CATLONG32 iSecondCoordIndex) = 0;
+
+
+  /** @nodoc */
+  virtual CATSurParam GetOnePoint(CATLONG32 iNum) const = 0 ;
+
+
+  /** @nodoc */
+  virtual CATMathVector2D GetOneTangent(CATLONG32 iNum) const = 0 ;
+
+  /** @nodoc */
+  virtual CATBoolean Unextrapol(const CATCrvLimits &amp;iNewLimits,CATLONG32 iSplitMode) = 0;
+
+#ifdef CATIACGMR421CAA
+  /** @nodoc */
+  virtual CATBoolean IsExtrapolated(CATCrvSide iSide) const = 0;
+#endif
+
+};
+
+CATDeclareHandler(CATPSpline,CATPCurve);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPParabola.html">← 上一页: CATPParabola.h</a></div>
+        <div><a href="CATParamData.html">下一页: CATParamData.h →</a></div>
+    </div>
+</body>
+</html>

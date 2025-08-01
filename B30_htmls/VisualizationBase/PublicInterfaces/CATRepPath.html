@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATRepPath.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATRepPath.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATRep.html">← 上一页: CATRep.h</a></div>
+        <div><a href="CATRepWeakRef.html">下一页: CATRepWeakRef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATRepPath_H
+#define CATRepPath_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+
+
+#include &quot;CATViz.h&quot;
+#include &lt;string.h&gt;
+#include &quot;list.h&quot;
+#include &quot;CATRep.h&quot;
+#include &quot;CATRepWeakRef.h&quot;
+#include &quot;RepWeakRefR10.h&quot;
+
+//System FW
+#include &quot;CATSysAllocator.h&quot;
+
+
+class CATViewpoint;
+
+
+/**
+* Interactive context description.
+*
+* @param CATNoneContext
+*        No context, graphic representation will be drawn simply.
+*
+* @param CATPreselContext
+*        Context of pre-highlight, graphic representation will be
+*        &lt;br&gt;drawn in furtive mode (faster).
+*
+* @param CATSelContext
+*        Context of hihglight, graphic reprensation will be
+*        &lt;br&gt;drawn in highlight color (orange by default).
+*
+* @see CATRepPath
+*/
+enum CATInteractiveContext
+{ 
+  CATNoneContext,
+  CATPreselContext,
+  CATSelContext,
+  CATMultiSelContext,
+  CATMultiSelContextOptim
+};
+
+
+
+/**
+* Class representing a single graphical representation within a graphical tree.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : use to identify or to draw a single graphical
+* &lt;br&gt;representation of the graphic tree or part of one.
+* &lt;br&gt;
+* &lt;br&gt;This class uses an internal index to add, remove or give
+* &lt;br&gt;graphic representation. Be carreful, when using methods
+* &lt;br&gt;that modify this index especially if one instance of CATRepPath
+* &lt;br&gt;could be use at the same time at differents places.
+* &lt;br&gt;Preferes to use methods that doesn&#x27;t use this index :
+* &lt;ol&gt;
+* &lt;li&gt;@href #Size &lt;/li&gt;
+* &lt;li&gt;@href #operator[] &lt;/li&gt;
+* &lt;/ol&gt;
+*
+*/
+class ExportedByCATViz  CATRepPath
+{
+  
+public:
+  
+  /** @nodoc */
+   void *operator new(size_t iSize,void *iAllocType=NULL,
+                      void *iAddr=NULL,int iReservedSize=0);
+   
+  /** @nodoc */
+   void operator delete(void *iAddr);
+
+#ifdef _WINDOWS_SOURCE
+  /** @nodoc */
+   void operator delete(void *iAddr,void *iAllocType,
+                        void *iRefAddr,int iReservedSize);
+#endif
+
+  /**
+  * Default constructor.
+  *
+  * @param iViewpointWherePathIsDrawn
+  *        The viewpoint in wich the graphic representation will be drawn.
+  */
+  CATRepPath (CATViewpoint *iViewpointWherePathIsDrawn = NULL);
+
+  /**
+  * Copy constructor.
+  *
+  * @param iPath
+  *        The repPath to copy.
+  */
+  CATRepPath (const CATRepPath &amp;iPath);
+
+
+  /**
+  * Operator of assignment.
+  *
+  * @param iPath
+  *        The repPath use to create a new one identical.
+  *
+  * @return
+  *        The new repPath created by assignment.
+  */
+  CATRepPath&amp; operator =(const CATRepPath &amp;iPath);
+
+
+  virtual ~CATRepPath();
+  
+  
+  /**
+  * Defines the interactive context.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : precise if the graphic representation 
+  * &lt;br&gt;must be drawn taking account the context defined in parameter.
+  *
+  * @param iContext
+  *        The context defines by @href CATInteractiveContext enum.
+  */
+  void SetInteractiveContext ( CATInteractiveContext iContext );
+
+
+  /**
+  * Gets the interactive context.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : gives the interactive context that
+  * &lt;br&gt;will be use to draw the graphic representation.
+  *
+  * @return
+  *        The @href CATInteractiveContext of the context.
+  */
+  CATInteractiveContext GetInteractiveContext () const;
+  
+
+  /**
+  * Sets the viewpoint in wich the repPath will be drawn.
+  *
+  * @param iViewpoint
+  *        The viewpoint in which graphic representation will be drawn.
+  */
+  void SetViewpoint(CATViewpoint *iViewpoint);
+
+  /**
+  * Gets the viewpoint in wich the repPath will be drawn.
+  *
+  * @return
+  *        The viewpoint in which graphic representation will be drawn.
+  */
+  CATViewpoint* GetViewpoint() const;
+
+
+  /**
+  * Adds a rep in the path.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : uses to build the path, this method
+  * &lt;br&gt;must be called as many times as the depth of the path.
+  *
+  * @param iRep
+  *        The rep to add.
+  */
+  void AddRep (CATRep &amp;iRep, int fastAdd = 0);
+
+
+  /**
+  * Removes a rep from the path.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : removes a particular rep from the path.
+  *
+  * @param iRep
+  *        The rep to remove.
+  */
+  void RemoveRep (CATRep &amp;iRep);
+
+  /**
+  * Empties the path.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : removes all reps from the path.
+  */
+  void Empty();
+
+
+  /**
+  * Gives the size of the path.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : returns the number of graphic 
+  * &lt;br&gt;representation in the path. You can use this
+  * &lt;br&gt;method to go through the path from 0 to Size-1,
+  * &lt;br&gt;using @href #operator[].
+  *
+  * @return
+  *        The size of the path.
+  */
+  int Size() const;
+
+
+  /**
+  * Gives a particular rep from the path.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : return the rep at the
+  * &lt;br&gt;position given by the index in parameter.
+  * &lt;br&gt;
+  *
+  * @param iIndex
+  *        The index of the position.
+  *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; : value of the index must
+  *        &lt;br&gt;be betwween 0 and @href #Size -1.
+  *
+  * @return
+  *        The rep at the iIndex position.
+  */
+  CATRep* operator[] (int iIndex) const;
+
+  
+  
+  /**
+  * Inits to the top rep.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : its the internal index before the first graphic
+  * &lt;br&gt;representation in the path. 
+  * &lt;br&gt;Call @href #NextChildRep to get the first rep.
+  */
+  virtual void InitToTopRep();
+
+  /**
+  * Gets the next rep.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : increment the internal cursor then gets
+  * &lt;br&gt;the graphic representation at the cursor position.
+  *
+  * @return
+  *        The next graphic representation of the path.
+  */
+  CATRep *NextChildRep();
+
+  /**
+  * Returns the internal cursor position.
+  *
+  * @return
+  *        The internal cursor value.
+  *        &lt;br&gt;This cursor could be modified by methods
+  *        &lt;br&gt;@href #InitToTopRep and @href #NextChildRep
+  */
+  int GetCursorPosition();
+
+ /**
+  * Returns the internal cursor position.
+  *
+  * @return
+  *        The internal cursor value as a const.
+  *        &lt;br&gt;@href #InitToTopRep and @href #NextChildRep
+  *        
+  */
+  int GetCursorPosition() const;
+
+  /**
+  * Gets the graphic representation at the internal cursor position.
+  *
+  * @return
+  *     The rep at the internal cursor position.   
+  */
+  CATRep* GetCurrentRep() ;
+
+  /**
+  * @nodoc
+  */
+  virtual void InitToLeafRep();
+
+  /**
+  * @nodoc
+  */
+  CATRep *NextFatherRep();
+
+  /**
+  * Checks if an other repPath is inclued in this.
+  *
+  * @param iOtherRepPath
+  *        The repPath we look for into this.
+  *
+  * @return
+  *        The result of the check.
+  */
+  int Contains ( const CATRepPath&amp; iOtherRepPath );
+  
+
+  /**
+  * @nodoc
+  */
+  int GetFurtive () const;
+
+  /**
+  * @nodoc
+  */
+  inline int GetRefNbr() const;
+
+  /**
+  * @nodoc
+  */
+  void SetFurtive (const int);
+  
+  /**
+  * Sets a list of sub-element for this repPath.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : A sub element is a value that represent
+  * &lt;br&gt;a single part of a graphic representation.
+  * &lt;br&gt;Seting a sub-element allow precise which sub-part
+  * &lt;br&gt;of the leaf graphic representation you want to describe
+  * &lt;br&gt;in the repPath.
+  *
+  * @param iSubElementList
+  *        The sub-element list : a list of index.
+  */
+  void SetSubElementList (const list&lt;int&gt; &amp;iSubElementList);
+
+  /**
+  * Gets the actual list of sub-element for this repPath.
+  *
+  * @return
+  *        The list of sub-elements : a list of index that
+  *        &lt;br&gt;indicates singles parts of the leaf graphic 
+  *        &lt;br&gt;representation in the repPath.
+  */
+  const list&lt;int&gt;&amp; GetSubElementList() const;
+
+  /**
+  * Indicates if the repPath has sub-elements.
+  *
+  * @return
+  *        The number of sub-elements, returns 0 if no sub-element.
+  */
+  int HasSubElement() const;
+  
+
+  /**
+  * @nodoc
+  */
+  CATRep *GetManipulatedRep();
+  
+  /**
+  * @nodoc
+  */
+  void SetManipulatedRep();
+
+  
+  /**
+  * @nodoc
+  */
+  void SetMesh ( int mesh );
+
+  /**
+  * @nodoc
+  */
+  int IsMesh();
+
+  /**
+ * Increments the reference count for the given object. 
+ * @return The reference count value.
+ * &lt;br&gt;This information is meant to be used for diagnostic/testing purposes only, because, in certain situations, the value may be unstable.
+  */
+  int  AddRef();
+  /**
+  * Decrements the reference count for the given object. 
+  * @return The reference count value.
+  * &lt;br&gt;This information is meant to be used for diagnostic/testing purposes only, because, in certain situations, the value may be unstable.
+  */
+  int Release();
+
+
+/**
+ * Enables to know if a CATRepPath is still valid or not.
+ * @return
+ * An &lt;tt&gt;int&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt;     &lt;dd&gt; All the @href CATRep referenced by the @href CATRepPath are still alive. The path can be used as is.
+ * &lt;dt&gt; &lt;tt&gt;0&lt;/tt&gt;     &lt;dd&gt; At least one of the referenced @href CATRep was destroyed. Therefore, the @href CATRepPath is not valid anymore.
+ */
+  int IsValid( void );
+  
+  /** @nodoc*/
+  void SetPSOFaceZ( const int);
+  
+  /** @nodoc*/
+  int GetPSOFaceZ () const;
+
+protected :
+  ///////////
+  
+  // internal method to get the next element (child or father)
+  CATRep *NextElement();
+  
+  // curseur sur representation rendue par GetRep
+  int cursor_;
+  
+  //  manipulation management
+  int _manipulatedRep;
+  
+  // sense for getting the next element.
+  int sense_;
+  
+  // number of elements, initialized before parcouring the list.
+  int size_;
+
+  // list of CATRepWeakRef.
+  // The reppath only knows weak references on reps. It enables to known if the referenced rep was deleted.
+#ifndef RepWeakRef_R10
+  list &lt;CATRep&gt; liste_;
+#else
+  list &lt;CATRepWeakRef&gt; liste_;
+#endif
+  
+  // a path of rep has an existence through a viewpoint
+  CATViewpoint *viewpoint_;
+  
+  int	furtive_;
+  
+  list&lt;int&gt;  _subElementList;
+  
+  CATInteractiveContext _interactiveContext;
+  
+  // inform if repPath has mesh to draw
+  // ----------------------------------
+  int _mesh;
+
+  /** @nodoc */
+  int _psoFaceZ;
+
+private : 
+  int _RefNbr;
+  
+};
+
+inline int CATRepPath::GetRefNbr(void) const
+{
+ return _RefNbr;
+}
+
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATRep.html">← 上一页: CATRep.h</a></div>
+        <div><a href="CATRepWeakRef.html">下一页: CATRepWeakRef.h →</a></div>
+    </div>
+</body>
+</html>

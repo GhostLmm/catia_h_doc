@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAssemblyInterfaces/PublicInterfaces/CATAsmConstraintServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAssemblyInterfaces/PublicInterfaces/CATAsmConstraintServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAsmConnectorServices.html">← 上一页: CATAsmConnectorServices.h</a></div>
+        <div><a href="CATAsmConstraintSetServices.html">下一页: CATAsmConstraintSetServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2000 
+
+#ifndef CATAsmConstraintServices_H
+#define CATAsmConstraintServices_H
+
+#include &quot;CATAssemblyInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATConstraintType.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATICst.h&quot;
+
+class CATIProduct;
+class CATICkeParm;
+class CATICst;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Creates a constraint.
+ * @param iConstraintType
+ *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeReference&lt;/tt&gt; = Fix Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeDistance&lt;/tt&gt; = Offset Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeOn&lt;/tt&gt; = Coincidence Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeAngle&lt;/tt&gt; = Angle Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypePlanarAngle&lt;/tt&gt; = Planar Angle Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeParallelism&lt;/tt&gt; = Parallelism Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypePerpendicularity&lt;/tt&gt; = Perpendicularity Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeSurfContact&lt;/tt&gt; = Surface Contact Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeLinContact&lt;/tt&gt; = Line Contact Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypePoncContact&lt;/tt&gt; = Point Contact Constraint
+ *    &lt;br&gt;&lt;tt&gt;catCstTypeAnnulContact&lt;/tt&gt; = Line (Annular) Contact Constraint
+ * @param iConnectorList
+ *    a list of connectors referencing the geometry involved in the
+ *    relation.
+ * @param iCkeValue
+ *    The value associated to the constraint (offset,angle...)
+ * @param iReferenceProduct
+ *    The product identifies the document where the constraint will be created. 
+ *    This product was used when you have created the connectors involved in 
+ *    this constraint.
+ * @param oConstraint
+ *    The resulting constraint
+ */
+ExportedByCATAssemblyInterfaces HRESULT CreateConstraint(
+   CatConstraintType iConstraintType,
+   const CATLISTV(CATBaseUnknown_var)&amp; iConnectorList,
+   CATICkeParm* iCkeValue,
+   CATIProduct* iReferenceProduct,
+   CATICst** ioConstraint);
+
+/**
+ * Class dedicated to Assembly Constraints services.
+ */
+class ExportedByCATAssemblyInterfaces CATAsmConstraintServices
+{
+  public:
+
+  /**
+   * Refreshes a constraint&#x27;s status.
+   * This method only works with the PX1 product licence.
+   * @param iConstraint
+   *    The constraint to refresh
+   * @return
+   *   &lt;dl&gt;
+   *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;if the constraint is refreshed
+   *   &lt;dt&gt;&lt;tt&gt;E_POINTER&lt;/tt&gt;     &lt;dd&gt;if iConstraint is NULL
+   *   &lt;dt&gt;&lt;tt&gt;E_NOTIMPL&lt;/tt&gt;     &lt;dd&gt;if the PX1 licence si not available
+   *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;elsewhere.
+   *   &lt;/dl&gt;
+   */
+    static HRESULT RefreshConstraint( const CATICst * iConstraint );
+
+  /**
+   * Refreshes the status of every constraint in a given product.
+   * This method is not recursive: the constraints of the sub assemblies won&#x27;t be refreshed.
+   * This method only works with the PX1 product licence.
+   * @param iProduct
+   *    The product which constraints must be refreshed
+   * @return
+   *   &lt;dl&gt;
+   *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;if at least one constraint is refreshed
+   *   &lt;dt&gt;&lt;tt&gt;E_POINTER&lt;/tt&gt;     &lt;dd&gt;if iProduct is NULL
+   *   &lt;dt&gt;&lt;tt&gt;E_NOTIMPL&lt;/tt&gt;     &lt;dd&gt;if the PX1 licence si not available
+   *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;elsewhere.
+   *   &lt;/dl&gt;
+   */
+    static HRESULT RefreshConstraintsInProduct( const CATIProduct * iProduct );
+ 
+    /**
+    * Gets the list of constraints under a given reference product.
+    * @param iProduct
+    *    The product identifies the document where the constraint were created. 
+    *    You can only get the constraints of a reference product.
+    * @param oConstraintsList
+    *    The resulting constraints list
+    * @return
+    *   &lt;dl&gt;
+    *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;if the product contains at least one constraint
+    *   &lt;dt&gt;&lt;tt&gt;E_POINTER&lt;/tt&gt;     &lt;dd&gt;if iProduct is NULL
+    *   &lt;dt&gt;&lt;tt&gt;E_INVALIDARG&lt;/tt&gt;  &lt;dd&gt;if iProduct is not a reference product
+    *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;elsewhere.
+    *   &lt;/dl&gt;
+    */
+    static HRESULT ListConstraints( const CATIProduct * iProduct, 
+                                    CATLISTV(CATICst_var) &amp; oConstraintsList );
+
+    /**
+    * Removes a constraint.
+    * @param iCst
+    *    The constraint to remove. 
+    *    You can only remove a reference constraint i.e. under a reference product.
+    * @return
+    *   &lt;dl&gt;
+    *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;if the constraint is removed
+    *   &lt;dt&gt;&lt;tt&gt;E_POINTER&lt;/tt&gt;     &lt;dd&gt;if iCst is NULL
+    *   &lt;dt&gt;&lt;tt&gt;E_INVALIDARG&lt;/tt&gt;  &lt;dd&gt;if iCst is not a reference constraint
+    *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;        &lt;dd&gt;elsewhere.
+    *   &lt;/dl&gt;
+    */
+    static HRESULT RemoveConstraint( const CATICst * iCst );
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAsmConnectorServices.html">← 上一页: CATAsmConnectorServices.h</a></div>
+        <div><a href="CATAsmConstraintSetServices.html">下一页: CATAsmConstraintSetServices.h →</a></div>
+    </div>
+</body>
+</html>

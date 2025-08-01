@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAssemblyInterfaces/PublicInterfaces/CATIAsmCstSetFeatFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAssemblyInterfaces/PublicInterfaces/CATIAsmCstSetFeatFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIAsmConstraintSettingAtt.html">← 上一页: CATIAsmConstraintSettingAtt.h</a></div>
+        <div><a href="CATIAsmCstSetFeature.html">下一页: CATIAsmCstSetFeature.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2002  
+//===================================================================
+#ifndef CATIAsmCstSetFeatFactory_H
+#define CATIAsmCstSetFeatFactory_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATAssemblyInterfaces.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATIAsmCstSetFeature.h&quot;
+
+class CATIProduct_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAssemblyInterfaces IID IID_CATIAsmCstSetFeatFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIAsmCstSetFeatFactory ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * @deprecated V5R15
+ * Factory of creation and management of Constraints&#x27; Set.
+ * Use CATAsmConstraintSetServices methods to create or manage Constraints&#x27; Set
+ */
+class ExportedByCATAssemblyInterfaces CATIAsmCstSetFeatFactory: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+     * @deprecated V5R15
+     * Use CATAsmConstraintSetServices::GetRootSet 
+     * Creation of the Root Set (corresponding to the Constraints Node).
+     *   @param iProduct
+     *      The product holding the constraints.
+     *   @param oCstSetRoot
+     *      the created set root.
+     *   @return
+     *      Error code of function.
+     */
+    virtual HRESULT CreateAsmCstSetRoot(const CATIProduct_var&amp;    iProduct,
+                                        CATIAsmCstSetFeature_var&amp; oCstSetRoot)=0; 
+
+
+    /**
+     * @deprecated V5R15
+     * Use CATAsmConstraintSetServices::GetRootSet 
+     * Get the Root Set associated to the given product
+     * (corresponding to the Constraints&#x27; Node).
+     *   @param iProduct
+     *      The product holding the constraints.
+     *   @param oCstSetRoot
+     *      the set root.
+     *   @return
+     *      Error code of function.
+     */
+    virtual HRESULT GetAsmCstSetRoot(const CATIProduct_var&amp;    iProduct,
+                                     CATIAsmCstSetFeature_var&amp; oCstSetRoot) const =0;
+
+    /**
+     * @deprecated V5R15
+     * Use CATAsmConstraintSetServices::AddNewSetChild 
+     * Add a new set child to a set.
+     *   @param iFatherSet
+     *      The set which will hold the created child
+     *   @param oNewSetChild
+     *      the new created set child
+     *   @param iPreviousSet
+     *      the new set will appear after this previous set.
+     *      By default (NULL_var), new set will appear after all other brother sets
+     *   @return
+     *      Error code of function.
+     */
+    virtual HRESULT AddNewSetChild(const CATIAsmCstSetFeature_var &amp; iFatherSet,
+                                         CATIAsmCstSetFeature_var &amp; oNewSetChild,
+                                   const CATIAsmCstSetFeature_var &amp; iPreviousSet = NULL_var)=0;
+
+    /**
+     * @nodoc
+     */
+    // define of set &quot;in Work&quot; (only Use for changeCst for the moment)
+    virtual void DefineCstSetInWork(const CATIAsmCstSetFeature_var &amp; iSetInWork = NULL_var)=0;
+    /**
+     * @nodoc
+     */
+    virtual void GetCstSetInWork(CATIAsmCstSetFeature_var &amp; oSetInWork)=0;
+    /**
+     * @nodoc
+     */
+    virtual void DefinePrevCstInWork(const CATBaseUnknown_var iPreviousCst = NULL_var)=0;
+    /**
+     * @nodoc
+     */
+    virtual void GetPrevCstInWork(CATBaseUnknown_var &amp; oPreviousCst)=0;
+
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+CATDeclareHandler( CATIAsmCstSetFeatFactory, CATBaseUnknown);
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIAsmConstraintSettingAtt.html">← 上一页: CATIAsmConstraintSettingAtt.h</a></div>
+        <div><a href="CATIAsmCstSetFeature.html">下一页: CATIAsmCstSetFeature.h →</a></div>
+    </div>
+</body>
+</html>

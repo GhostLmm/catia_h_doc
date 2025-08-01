@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerNavigator/PublicInterfaces/CATINavigateObject.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerNavigator/PublicInterfaces/CATINavigateObject.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATINavigateFilter.html">← 上一页: CATINavigateFilter.h</a></div>
+        <div><a href="CATINavigateProvider.html">下一页: CATINavigateProvider.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATINavigateObject_h
+#define CATINavigateObject_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U5
+  */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATOmnMain.h&quot;
+
+extern ExportedByCATOmnMain IID IID_CATINavigateObject;
+
+class CATListValCATBaseUnknown_var;
+class CATListValCATUnicodeString;
+
+/**
+* Interface to navigate in object tree.
+* &lt;b&gt;Role:&lt;/b&gt; This interface enables you to visualize a component in an object tree. This interface
+* implementation is mandatory, even if the component is a leaf. In this case, the @href #GetChildren method
+* returns an empty list.
+* &lt;p&gt;Once you have implemented this interface, you may customize default behaviors
+* for the node representing your component. Refer to the @href CATINavigElement  
+* and the @href CATINavigModify interfaces. Note that contrary to &lt;tt&gt;CATINavigateObject&lt;/tt&gt;, the 
+* implementation of these two interfaces is not mandatory.&lt;/p&gt;
+* This interface is called in the following contexts:
+* &lt;ul&gt;
+*   &lt;li&gt;When the node is redrawn, thanks to the @href CATIRedrawEvent interface:
+*     @href #GetIdentificators and @href #GetChildren methods are then called.&lt;/li&gt;
+*   &lt;li&gt;When the node is expanded: @href #GetChildren and
+*    @href #GetIdentificators methods are then called.&lt;/li&gt;
+*   &lt;li&gt;When the node is collapsed: only @href #GetIdentificators method is called.&lt;/li&gt;
+* &lt;/ul&gt;
+* &lt;p&gt;This interface can be also used to &quot;dump&quot; the contents of an existing object tree.
+*/
+class ExportedByCATOmnMain CATINavigateObject: public CATBaseUnknown
+{
+	CATDeclareInterface;
+public:
+	/**
+	* Retrieves the node text.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method retrieves the 
+    * text associated with the node. This text is used as reference for 
+    * the graph name criterion of the Search mechanism. Refer to 
+    * the &lt;tt&gt; CATIIniSearchGraphNameCriterion &lt;/tt&gt; interface. 
+    * @return
+    *  The text of the node. There are as many strings as lines.  
+	*/
+	virtual CATListValCATUnicodeString* GetIdentificators()=0;
+		
+	/**
+	* Retrieves list of direct childrens in the tree.
+    * @return
+    *  The children list.
+    *  &lt;br&gt;The &lt;tt&gt;CATINavigateObject&lt;/tt&gt; interface will be called for each one. This list
+    *  is empty if the node is a leaf. 
+	*/
+	virtual CATListValCATBaseUnknown_var* GetChildren()=0;
+};
+
+CATDeclareHandler ( CATINavigateObject, CATBaseUnknown );
+
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATINavigateFilter.html">← 上一页: CATINavigateFilter.h</a></div>
+        <div><a href="CATINavigateProvider.html">下一页: CATINavigateProvider.h →</a></div>
+    </div>
+</body>
+</html>

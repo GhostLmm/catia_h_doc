@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseCylinder.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseCylinder.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseCuttingPoint.html">← 上一页: CATIGSMUseCuttingPoint.h</a></div>
+        <div><a href="CATIGSMUseDirection.html">下一页: CATIGSMUseDirection.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIGSMUseCylinder_H
+#define CATIGSMUseCylinder_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATIGSMUseDirection.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID IID_CATIGSMUseCylinder;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseCylinder ;
+#endif
+
+/**
+ * Interface to cylinder feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the Cylinder feature
+ * created by using  an element, a direction and two length values
+ * @see CATIGSMUseFactory#CreateCylinder
+ */
+class ExportedByCATGSMUseItf CATIGSMUseCylinder: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+     /**
+    * Gets the center of the cylinder.
+    *   @return
+    *      Center of cylinder
+    */
+   virtual    CATIMmiMechanicalFeature_var   GetCenter() = 0;
+
+  /**
+    * Gets the cylinder direction.
+    *   @return
+    *      direction 
+    */
+   virtual    CATIGSMUseDirection_var GetDir() = 0;
+
+  /**
+    * Gets the first length value.
+    *   @param oRadius
+    *      Radius value
+    */
+   virtual    HRESULT  GetRadius(double &amp; oRadius) = 0;
+
+   /**
+    * Gets the first length value.
+    *   @param oLength1
+    *      first length value
+    */
+   virtual    HRESULT  GetFirstLimitValue(double &amp; oLength1) = 0;
+
+  /**
+    * Gets the second length value.
+    *   @param oLength2
+    *      first length value
+    */
+   virtual    HRESULT  GetSecondLimitValue(double &amp; oLength2) = 0;
+
+  /**
+    * Gets the radius value.
+    *   @param ohRadius
+    *      Radius value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT GetRadius(CATICkeParm_var&amp; ohRadius)=0;
+
+   /**
+    * Gets the first length value.
+    *   @param ohLength1
+    *      first length value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT GetFirstLimitValue(CATICkeParm_var&amp; ohLength1)=0;
+
+  /**
+    * Gets the second length value.
+    *   @param ohLength2
+    *      second length value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT GetSecondLimitValue(CATICkeParm_var&amp; ohLength2)=0;
+
+  /**
+    * Gets the orientation of the extrude.
+    *  TRUE means that the natural  orientation of the direction
+    *  is the right one. 
+    *   @param oOrient
+    *      Extrude orientation
+    */
+   virtual    HRESULT GetOrientation(CATBoolean &amp; oOrient)=0;
+
+  /**
+    * Sets the center of the cylinder.
+    *   @param ihCenter
+    *      Center of the Cylinder
+    */
+   virtual    HRESULT SetCenter  (const CATIMmiMechanicalFeature_var ihCenter) = 0;
+
+  /**
+    * Sets the direction of the cylinder.
+    *   @param ihDir
+    *      Direction of the cylinder
+    *   @see CATIGSMUseDirection
+    */
+   virtual    HRESULT SetDir  (const CATIGSMUseDirection_var ihDir) = 0;
+
+  /**
+    * Sets the radius value.
+    *   @param iRadius
+    *      New first radius
+    */
+   virtual    HRESULT SetRadius(double iRadius) = 0;
+
+  /**
+    * Sets the first length value.
+    *   @param iLength1
+    *      New first length value
+    */
+   virtual    HRESULT SetFirstLimitValue(double iLength1) = 0;
+    /**
+    * Sets the second length value.
+    *   @param iLength2
+    *      New second length value
+    */
+   virtual    HRESULT SetSecondLimitValue(double iLength2) = 0;
+
+  /**
+    * Sets the radius value.
+    *   @param ihRadius
+    *      New radius value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT SetRadius (const CATICkeParm_var ihRadius) = 0;
+
+  /**
+    * Sets the first length value.
+    *   @param ihLength1
+    *      New first length value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT SetFirstLimitValue (const CATICkeParm_var ihLength1) = 0;
+
+  /**
+    * Sets the second length value.
+    *   @param ihLength2
+    *      New second length value
+    *   @see CATICkeParm
+    */
+   virtual    HRESULT SetSecondLimitValue(const CATICkeParm_var iOfs2) = 0;
+
+   
+   /**
+    * Sets  the orientation of the extrude.
+    * &lt;br&gt;TRUE means that the direction is inverted
+    *   @param iOrient
+    *      TRUE or FALSE
+    */
+   virtual    HRESULT SetOrientation(CATBoolean iOrient)=0;
+
+  /**
+    * Inverts the orientation of the extrude.
+    * &lt;br&gt;TRUE means that the direction is inverted
+    */
+   virtual    HRESULT InvertOrientation()=0; 
+
+  /**
+	 * Sets the symmetrical extension on Cylinder Length (Lenght 2 = -Lenght 1).
+	 *   @param iSym
+	 *       Symetry flag  
+	 */
+	 virtual HRESULT SetSymmetricalExtension(CATBoolean iSym) = 0;
+
+	 /**
+	 * Gets whether the symmetrical extension on Cylinder Length is active.
+	 *   @param oSym
+	 *       Symetry flag  
+	 */
+	 virtual HRESULT GetSymmetricalExtension(CATBoolean&amp; oSym) = 0;
+};
+
+CATDeclareHandler (CATIGSMUseCylinder, CATBaseUnknown);
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseCuttingPoint.html">← 上一页: CATIGSMUseCuttingPoint.h</a></div>
+        <div><a href="CATIGSMUseDirection.html">下一页: CATIGSMUseDirection.h →</a></div>
+    </div>
+</body>
+</html>

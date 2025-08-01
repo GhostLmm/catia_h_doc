@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftPattern.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftPattern.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftMultiSheetMode.html">← 上一页: CATIDftMultiSheetMode.h</a></div>
+        <div><a href="CATIDftProperties.html">下一页: CATIDftProperties.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2001
+#ifndef CATIDftPattern_H
+#define CATIDftPattern_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;IUnknown.h&quot;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftPattern ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftPattern ;
+#endif
+
+
+/**
+ * Manage a generic pattern object.
+ * 
+ */
+class ExportedByDraftingItfCPP CATIDftPattern: public IUnknown
+{
+  
+  public:
+
+   /**
+   * Get the type of the pattern.
+   * @param oPatternType
+   * &lt;br&gt; = 0 None Pattern.
+   * &lt;br&gt; = 1 Hatching Pattern.
+   * &lt;br&gt; = 2 Dotting Pattern.
+   * &lt;br&gt; = 3 Coloring Pattern.
+   * &lt;br&gt; = 4 Cell Pattern.
+   * &lt;br&gt; = 5 Undefined Pattern.
+
+
+   * @return 
+   * S_OK : Method correctly executed. 
+   * &lt;br&gt;No restriction.
+   * &lt;br&gt;S_READONLY : Method correctly executed.
+   * &lt;br&gt;Returned value cannot be modified, it&#x27;s read-only.
+   * &lt;br&gt;&lt;i&gt;Can be usefull when the property is fixed by a standard, etc.&lt;/i&gt;
+   * &lt;br&gt;S_UNDEFINED : Method correctly executed.
+   * &lt;br&gt;Returned value is undefined.
+   * &lt;br&gt;&lt;i&gt;Case of an object having several subparts supporting the same property with a different value.&lt;/i&gt;
+   * &lt;br&gt;E_FAIL : Method execution failed.
+   * &lt;br&gt;Reasons of the failure are not given.
+   * &lt;br&gt;E_NOTIMPL : No implementation available for this method.
+   */ 
+   virtual HRESULT GetPatternType (int * oPatternType)  const = 0;
+
+};
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftMultiSheetMode.html">← 上一页: CATIDftMultiSheetMode.h</a></div>
+        <div><a href="CATIDftProperties.html">下一页: CATIDftProperties.h →</a></div>
+    </div>
+</body>
+</html>

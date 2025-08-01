@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATICGMDistanceMinPtCrv.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATICGMDistanceMinPtCrv.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDistanceMinCrvCrv.html">← 上一页: CATICGMDistanceMinCrvCrv.h</a></div>
+        <div><a href="CATICGMDistanceMinPtSur.html">下一页: CATICGMDistanceMinPtSur.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMDistanceMinPtCrv_h_
+#define CATICGMDistanceMinPtCrv_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;CATICGMOperator.h&quot;
+
+class CATCrvLimits;
+class CATCurve;
+class CATMathPoint;
+class CATPointOnCurve;
+class CATCrvParam;
+
+extern ExportedByCATGMModelInterfaces IID IID_CATICGMDistanceMinPtCrv;
+
+/**
+ * Class defining the operator of the minimum distance between
+ * a point and a curve.
+ * &lt;ul&gt;
+ *&lt;li&gt;The CATICGMDistanceMinPtCrv operator is created with the &lt;tt&gt;CATCGMCreateDistanceMin&lt;/tt&gt; method  and 
+ * directly released with the &lt;tt&gt;Release&lt;/tt&gt; method.
+ * It is is not streamable. 
+ * &lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. The advanced mode also allows you to
+ * run the same operator with different points.
+ * &lt;li&gt;In both cases, the result is accessed with specific methods.
+ * &lt;/ul&gt;
+ */
+class ExportedByCATGMModelInterfaces CATICGMDistanceMinPtCrv: public CATICGMOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMDistanceMinPtCrv();
+
+  //-----------------------------------------------------------------------
+  //- Public Interface Methods
+  //-----------------------------------------------------------------------
+  /**
+ * Returns the minimum distance between a curve and a point.
+ * @return
+ * The distance.
+ */
+  virtual double GetDistance() const = 0;
+
+  /**
+ * Returns the global parameter of the point realizing the minimum
+ * distance.
+ *&lt;br&gt;Note that only one point is proposed, even multiple solutions exist.
+ * @return
+ * The parameter on the curve.
+ */
+  virtual CATCrvParam GetCrvParam() const = 0;
+
+  /**
+ * Creates a CATPointOnCurve realizing the minimum distance.
+ *&lt;br&gt;Note that only one point is proposed, even multiple solutions exist.
+ * @return
+ * The pointer to the created point. A new point is created each time this method is called.
+ * If you do not want to keep the created point, use the @href CATICGMContainer#Remove method.
+ */
+  virtual CATPointOnCurve *GetPointOnCurve() const = 0;
+
+  /**
+ * Defines the new domain of the curve to take into account for &lt;tt&gt;this&lt;/tt&gt; operator in 
+ * &lt;tt&gt;ADVANCED&lt;/tt&gt; mode.
+ * @param iLimits
+ * The new limitations on the curve.
+ */
+  virtual void SetLimits(const CATCrvLimits &amp;iLimits) = 0;
+
+  /**
+ * Sets the new point from which the main distance with the curve is computed.
+ * @param iPoint
+ * The new point.
+ */
+  virtual void SetPoint(const CATMathPoint &amp;iPoint) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMDistanceMinPtCrv(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMDistanceMinPtCrv_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDistanceMinCrvCrv.html">← 上一页: CATICGMDistanceMinCrvCrv.h</a></div>
+        <div><a href="CATICGMDistanceMinPtSur.html">下一页: CATICGMDistanceMinPtSur.h →</a></div>
+    </div>
+</body>
+</html>

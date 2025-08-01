@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCGMStreamAttribute.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCGMStreamAttribute.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMStream.html">← 上一页: CATCGMStream.h</a></div>
+        <div><a href="CATCGMWarning.html">下一页: CATCGMWarning.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMStreamAttribute_H
+#define CATCGMStreamAttribute_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */ 
+
+
+class CATCGMAttrId;
+class CATCGMAttributeDef;
+class CATCGMStream;
+class CATICGMObject;
+class CATCGMStreamAttrData;
+
+#include &quot;YP0LOGRP.h&quot;
+#include &quot;CATCGMAttribute.h&quot;
+#include &quot;CATListOfCATICGMObjects.h&quot;
+#include &quot;CATCGMStreamVersion.h&quot;
+
+
+/**
+ * Class representing the persistent attribute that can be pointed to by one or several CATICGMObject.
+ * &lt;b&gt;Role&lt;/b&gt;: This class allows you to stream the attribute with the objects that are pointed them.
+ * If you want to create your own class, you overload the methods that are written as mandatory.
+ * If you want that your attribute points objects, use @href CATCGMAttribute#AddLink . These objects
+ * will be automatically streamed. To put an attribute on a object, use @href CATICGMObject#PutAttribute .
+ * &lt;b&gt;Rule&lt;/b&gt;When implementing by overloading this class, expected mandatory material in software delivery 
+ *   is the logical domain declaration &lt;tt&gt;MyDomainId&lt;/tt&gt; adhesion, such as :
+ *&lt;pre&gt;
+ * #include &quot;TIE_CATICGMDomainBinder.h&quot;
+ * AppDef(MyDomainId);
+ *&lt;/pre&gt;
+ *Do not forget to update of your associated ObjectModeler dictionnary.
+ */
+class ExportedByYP0LOGRP CATCGMStreamAttribute :public CATCGMAttribute 
+{
+  CATCGMDeclareAttribute (CATCGMStreamAttribute, CATCGMAttribute);
+public :
+  
+/**
+ * Translates &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute into a byte sequence 
+ * that can be later saved.
+ * &lt;br&gt;Mandatory method.
+ * @param ioStream
+ * The stream.
+ */
+  virtual void Stream(CATCGMStream &amp; ioStream) const=0;
+
+/**
+ * Copies into &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute, the translation of a byte sequence 
+ * that has been previoulsy streamed for an CATCGMStreamAttribute.
+ * &lt;br&gt;Mandatory method.
+ * @param ioStream
+ * The stream.
+ */
+  virtual void   UnStream( CATCGMStream&amp; ioStr ) = 0 ;
+
+/**
+ * Attaches CATICGMObjects to &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute.
+ * @param iObject
+ * A pointer to the CATICGMObject that will be pointed to.
+ */ 
+  void AddLink    (CATICGMObject*                 iObject);
+
+ /**
+ * Removes the link from &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute to a CATICGMObjects.
+  * @param iObject
+ * A pointer to the CATICGMObject that will be not pointed to anymore.
+ */
+  void RemoveLink (CATICGMObject*                 iObject);
+
+/** 
+*  Replaces all the links from &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute to a CATICGMObjects.
+ * @param iObjects
+ * A list of pointers to the CATICGMObjects that will be pointed to. The already existing
+ * links are removed.
+ */
+  void SetLinks   (const CATLISTP(CATICGMObject)&amp; iObjects);
+
+/** 
+*  Retrieves all the links from &lt;tt&gt;this&lt;/tt&gt; CATCGMStreamAttribute to a CATICGMObjects.
+* @param ioLinkedObjects
+* A list of pointers to the linked CATICGMObjects.
+*/
+  void GetLinks   (CATLISTP(CATICGMObject)&amp;       ioLinkedObjects);
+
+/** @nodoc */
+    virtual short IsDirty(); // For Debug Purpose
+
+ /** @nodoc */
+ virtual CATBoolean IsStreamable( const CATCGMStreamVersion iTargetVersion, CATBoolean &amp; ioReversible ) const;
+
+/**
+ * Default constructor.
+ */
+  CATCGMStreamAttribute();
+  virtual ~CATCGMStreamAttribute();
+
+ /** @nodoc */
+ void SetMustStreamForStreamCompact(int iMustStreamForStreamCompact = 1);
+
+ /** @nodoc */
+ int MustStreamForStreamCompact() const;
+
+private:
+  CATCGMStreamAttrData* _Data;
+};
+
+/**
+ * Casts a CATCGMattribute into a CATCGMStreamAttribute.
+ * @param iAttr
+ * The attribute to cast.
+ * @param ioStrAttr
+ * The streamed attribute if possible.
+ */
+extern ExportedByYP0LOGRP void CastTo(CATCGMAttribute * iAttr, CATCGMStreamAttribute *&amp; ioStrAttr);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMStream.html">← 上一页: CATCGMStream.h</a></div>
+        <div><a href="CATCGMWarning.html">下一页: CATCGMWarning.h →</a></div>
+    </div>
+</body>
+</html>

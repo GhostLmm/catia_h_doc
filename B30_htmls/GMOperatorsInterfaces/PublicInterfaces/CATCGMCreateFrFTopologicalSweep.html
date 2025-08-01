@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATCGMCreateFrFTopologicalSweep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATCGMCreateFrFTopologicalSweep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMCreateDistanceMinTopo.html">← 上一页: CATCGMCreateDistanceMinTopo.h</a></div>
+        <div><a href="CATCGMCreateGeodesicLinePtPt.html">下一页: CATCGMCreateGeodesicLinePtPt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMCreateFrFTopologicalSweep_h_
+#define CATCGMCreateFrFTopologicalSweep_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATFrFTopologicalSweepDef.h&quot;
+
+class CATBody;
+class CATCGMJournalList;
+class CATGeoFactory;
+class CATTopData;
+class CATICGMFrFTopologicalSweep;
+class CATLISTP(CATGeometry);
+
+/**
+ * Creates a topological sweep operator from a profile and a guide.
+ * &lt;br&gt;The constructor generates an &quot;unspec sweep&quot; operator.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+ * @param iGuide
+ * The pointer to the wire body defining the sweep guide.
+ * @param iProfile
+ * The pointer to the wire body defining the sweep profile.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ * @see CATICGMFrFTopologicalSweep
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMFrFTopologicalSweep *CATCGMCreateFrFTopologicalSweep(
+  CATGeoFactory               * iFactory,
+  CATTopData                  * iTopData,
+  CATBody                     * iGuide,
+  CATBody                     * iProfile);
+
+/**
+ * Creates a topological sweep operator from several profiles and guides.
+ * &lt;br&gt;This constructor generates:
+ * &lt;ul&gt;&lt;li&gt; an &quot;unspec sweep&quot; operator, if one guide and one profile.
+ *&lt;li&gt; a &quot;bi-rail sweep&quot; operator, if two guides and one profile.
+ * &lt;li&gt;a &quot;multi-profiles sweep&quot; operator, in the other cases.
+ * &lt;/ul&gt;
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+ * @param iGuides
+ * The list of the pointers to the wire bodies defining the sweep guides.
+ * @param iProfiles
+ * The list of the pointers to the wire bodies defining the sweep profiles.
+ * @param iSweepType
+ * The type of the generated sweep. &lt;br&gt;To be set to &lt;tt&gt;CATFrFTopologicalSweepType   _Multi&lt;/tt&gt; in order
+ * to force the multi-profile sweep in any cases.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator.
+ * @see CATICGMFrFTopologicalSweep
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMFrFTopologicalSweep *CATCGMCreateFrFTopologicalSweep(
+  CATGeoFactory               * iFactory,
+  CATTopData                  * iTopData,
+  CATLISTP(CATGeometry)       * iGuides,
+  CATLISTP(CATGeometry)       * iProfiles,
+  CATFrFTopologicalSweepType    iSweepType = CATFrFTopologicalSweepType_Std);
+
+/**
+ * Creates a topological segment sweep operator.
+ * &lt;br&gt;The profiles are segments between the guides.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+ * @param iLimitGuides
+ * The list of the pointers to the wire bodies defining the sweep guides. In &lt;tt&gt;BASIC&lt;/tt&gt; mode, two
+ * guides define a bi-rail segment sweep.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator.
+ * @see CATICGMFrFTopologicalSweep
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMFrFTopologicalSweep *CATCGMCreateFrFTopologicalSegmentSweep(
+  CATGeoFactory               * iFactory,
+  CATTopData                  * iTopData,
+  CATLISTP(CATGeometry)       * iLimitGuides);
+
+/**
+ * Creates a topological circle sweep operator.
+ * &lt;br&gt;The profiles are circles passing thru the guides.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+ * @param iLimitGuides
+ * The list of the pointers to the wire bodies defining the sweep guides. In &lt;tt&gt;BASIC&lt;/tt&gt; mode, three guides
+ * are needed.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator.
+ * @see CATICGMFrFTopologicalSweep
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMFrFTopologicalSweep *CATCGMCreateFrFTopologicalCircleSweep(
+  CATGeoFactory               * iFactory,
+  CATTopData                  * iTopData,
+  CATLISTP(CATGeometry)       * iLimitGuides);
+
+/**
+ * Creates a topological conic sweep operator.
+ * &lt;br&gt;The profiles are conic curves passing thru the guides.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iData
+ * The pointer to the data defining the configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+ * @param iLimitGuides
+ * The list of the pointers to the wire bodies defining the sweep guides. In &lt;tt&gt;BASIC&lt;/tt&gt; mode, five guides
+ * are needed.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ * @see CATICGMFrFTopologicalSweep
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMFrFTopologicalSweep *CATCGMCreateFrFTopologicalConicSweep(
+  CATGeoFactory               * iFactory,
+  CATTopData                  * iTopData,
+  CATLISTP(CATGeometry)       * iLimitGuides);
+
+#endif /* CATCGMCreateFrFTopologicalSweep_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMCreateDistanceMinTopo.html">← 上一页: CATCGMCreateDistanceMinTopo.h</a></div>
+        <div><a href="CATCGMCreateGeodesicLinePtPt.html">下一页: CATCGMCreateGeodesicLinePtPt.h →</a></div>
+    </div>
+</body>
+</html>

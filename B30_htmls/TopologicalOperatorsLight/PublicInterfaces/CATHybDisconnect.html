@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperatorsLight/PublicInterfaces/CATHybDisconnect.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperatorsLight/PublicInterfaces/CATHybDisconnect.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATHybBoundary.html">← 上一页: CATHybBoundary.h</a></div>
+        <div><a href="CATHybIntersect.html">下一页: CATHybIntersect.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATHybDisconnect_h
+#define CATHybDisconnect_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIACGMLevel.h&quot; // automatic treatment EB_2014_04_16
+#include &quot;CATHybBoolean.h&quot;
+#include &quot;BOHYBOPELight.h&quot;
+#include &quot;CATCGMOperatorDebug.h&quot;
+ 
+ 
+class CATExtHybDisconnect;
+
+/** @nocgmitf */
+ExportedByBOHYBOPELight CATHybDisconnect * CATCreateTopDisconnect(CATGeoFactory*     iFactory,
+                                                             CATTopData*        iData,
+                                                             CATBody*           iBodyToDisconnect,
+                                                             CATBody*           iDisconnectingBody,
+                                                             CATBody*           iCuttingBody);
+
+/**
+ * Class defining the operator that inserts vertices in a wire or skin body, or
+ * inserts edges in a skin body.
+ * It follows the general frame of all operators and satisfies the smart mechanism: the
+ * input bodies are not modified. A new resulting body is created, 
+ * possibly sharing data with the input bodies.
+ *&lt;ul&gt;
+ * &lt;li&gt;CATHybDisconnect is created with the &lt;tt&gt;CATCreateTopDisconnect&lt;/tt&gt; global function.
+ * It must be
+ * directly deleted with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator after use.
+ * It is not streamable. 
+ * &lt;li&gt;The intersection can be restricted to a given domain on each body with the methods
+ * &lt;tt&gt;SetFirstDomainToIntersect&lt;/tt&gt; and &lt;tt&gt;SetSecondDomainToIntersect&lt;/tt&gt;
+ *&lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+ * to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+ * geometric factory.
+ *&lt;/ul&gt;
+ * @see CATCreateTopDisconnect
+ */
+class ExportedByBOHYBOPELight CATHybDisconnect : public CATHybBoolean
+{
+
+   friend ExportedByBOHYBOPELight CATHybDisconnect * CATCreateTopDisconnect(CATGeoFactory*     iFactory,
+                                                             CATTopData*        iData,
+                                                             CATBody*           iBodyToDisconnect,
+                                                             CATBody*           iDisconnectingBody,
+                                                             CATBody*           iCuttingBody);
+  CATCGMVirtualDeclareClass(CATHybDisconnect);
+protected :
+   
+   /** @nodoc */
+   CATHybDisconnect(CATGeoFactory* iFactory, CATTopData* iTopData, CATExtHybDisconnect* iExtensible,
+      CATBody* iBodyToDisconnect,CATBody* iDisconnecttingBody, CATBody* iCuttingBody);	
+
+public :
+   
+   //  Destructor
+   ~CATHybDisconnect();     
+
+   /** @nodoc  */
+   #ifdef CATIACGMV5R20
+   #define CATHybDisconnectDefineRunOperator
+   #endif
+   // (Empty macro in customer release mode; no effect on generated code)
+    #ifdef CATCGMOperatorDebugMode
+   #define CATHybDisconnectDefineRunOperator
+    #endif
+   #ifdef CATHybDisconnectDefineRunOperator
+   virtual int Run() ;
+  /** @nodoc @nocgmitf */
+   virtual int RunOperator() ;
+   #endif
+
+   
+   /** 
+    * Activates the query mode.
+    * &lt;br&gt;To be called before the &lt;tt&gt;Run&lt;/tt&gt; method.
+    * @param iQueryMode
+    * The activation of the query mode.
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1 for rank + location activated (default value), 2 for rank activated, 0 for deactivated. 
+    * The deactivation gives better performance.
+    */
+   void SetQueryMode(int iQueryMode=1);
+   /** 
+    * Returns the state of the query mode.
+    * @return
+    * The activation of the query mode.
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1 for rank + location activated (default value), 2 for rank activated, 0 for deactivated. 
+   */
+   int  GetQueryMode() const;
+   
+   /** 
+   * Returns the location of the created cell.
+   * &lt;br&gt;To be called after the &lt;tt&gt;Run&lt;/tt&gt; method, if the query mode is activated.
+   * @param iCell
+   * The pointer to a created cell.
+   * @return
+   * The location of the cell with regards to the cutting body.
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if it is at the left side, 
+   * &lt;tt&gt;-1&lt;/tt&gt; if it is at the right side.
+   */
+   int GetCorrespondingSide(CATCell* iCell);  
+
+   /** 
+   * Returns the rank of a created cell.
+   * &lt;br&gt;To be called after the &lt;tt&gt;Run&lt;/tt&gt; method, if the query mode is activated.
+   * @param iCell
+   * The pointer to a created cell.
+   * @return
+   * The corresponding rank. It may happen that several cells are generated on the same side of the
+   * cutting object. If these cells are not directly connected, they are labelled by this method.
+   */
+   int GetCorrespondingPackNumber(CATCell* iCell);                
+        
+  /**
+   * @nodoc
+   * Query to the operator (internal use only).
+   */
+   CATCell* GetCorrespondingCell(CATCell* OriginalCell);                
+
+  /**
+   * @nodoc
+   * To be called before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * Activate cutting edges report (internal use only).
+   */
+   void ReportInternalEdges();
+
+#ifdef CATIACGMR418CAA
+   /**
+   * @nodoc
+   * This option is available only for the disconnect shell
+   * and should be called before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   *
+   *   @param iResultCleaning
+   *     Input flag to activate the disconnect result cleaning.
+   *   @param iTolerance
+   *     Input tolerance used in the cleaning.
+   */
+   void SetResultCleaning(CATBoolean iResultCleaning, double iTolerance);
+#endif
+
+#ifdef CATIACGMR421CAA
+   /**
+   * @nodoc
+   * Activate or deactivate  the imprint follow up mode.
+   */
+   virtual void SetImprintFollowUpMode(CATBoolean iImprintFollowUpMode);
+
+   /**
+   * @nodoc
+   * Check if the imprint follow up mode is active or not.
+   */
+   virtual CATBoolean GetImprintFollowUpMode() const;
+#endif
+
+   /** @nodoc  */
+   inline CATExtHybDisconnect* GetHybDisconnectExtensible() const;
+
+   /** @nodoc  */
+   void DumpOutput(CATCGMOutput&amp; os);
+
+#ifdef CATIACGMR217CAA
+   /**
+   * Activates tracking of disconnecting cells.
+   * Before calling Run, must be set to TRUE to be able to call GetDisconnectingCells after Run.
+   * @param iTrackDisconnectingCells
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;tt&gt;TRUE&lt;/tt&gt; to activate tracking of disconnecting cells, 
+   * &lt;tt&gt;FALSE&lt;/tt&gt; to deactivate tracking of disconnecting cells (default value).
+   */
+   void SetTrackDisconnectingCells(CATBoolean iTrackDisconnectingCells);
+
+   /**
+   * Retrieve input disconnecting cells that lead to the construction of result cell.
+   * To be called after Run, only if SetTrackDisconnectingCells(TRUE) was called before Run.
+   * @param iResultCell
+   * If the disconnecting element is a wire and the body to disconnect is a shell,
+   * iResultCell must be an edge of the result body.
+   * If the disconnecting element is a vertex and the body to disconnect is a wire,
+   * iResultCell must be a vertex of the result body.
+   * @param oDisconnectingCells
+   * The output list.
+   * If the disconnecting element is a wire and the body to disconnect is a shell,
+   * oDisconnectingCells will contain all edges of the input disconnecting body that
+   * lead to the construction of iResultCell.
+   * If the disconnecting element is a vertex and the body to disconnect is a wire,
+   * oDisconnectingCells will contain all vertices of the input disconnecting body that
+   * lead to the construction of iResultCell
+   */
+   void GetDisconnectingCells(CATCell * iResultCell, ListPOfCATCell &amp; oDisconnectingCells);
+#endif
+   
+};
+
+/** @nodoc  */
+inline CATExtHybDisconnect* CATHybDisconnect::GetHybDisconnectExtensible() const
+{
+   if (!_Extensible) CATThrowForNullPointerReturnValue(NULL);
+   return (CATExtHybDisconnect*) _Extensible;      
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATHybBoundary.html">← 上一页: CATHybBoundary.h</a></div>
+        <div><a href="CATHybIntersect.html">下一页: CATHybIntersect.h →</a></div>
+    </div>
+</body>
+</html>

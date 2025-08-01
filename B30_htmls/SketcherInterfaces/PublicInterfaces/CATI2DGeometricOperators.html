@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketcherInterfaces/PublicInterfaces/CATI2DGeometricOperators.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SketcherInterfaces/PublicInterfaces/CATI2DGeometricOperators.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DGeomReport.html">← 上一页: CATI2DGeomReport.h</a></div>
+        <div><a href="CATI2DHybConstraint.html">下一页: CATI2DHybConstraint.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATI2DGeometricOperators_h
+#define CATI2DGeometricOperators_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATSketcherInterfaces.h&quot;
+
+class CATListValCATI2DCurve_var;
+class CATListValCATBaseUnknown_var;
+
+/**
+ * Geometrical Operators Interface on 2D Geometry.
+ */
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSketcherInterfaces IID IID_CATI2DGeometricOperators;
+#else
+extern &quot;C&quot; const IID IID_CATI2DGeometricOperators;
+#endif
+
+class CATMathPoint2D;
+class CATMathDirection2D;
+
+class ExportedByCATSketcherInterfaces CATI2DGeometricOperators : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public: 
+  /**
+   * Computes the intersection points between two curves, according to an eventual tolerance.
+   *
+   * @param &lt;tt&gt;iCurve1&lt;/tt&gt;
+   * [in] Inputs the first curve.
+   * @param &lt;tt&gt;iCurve1&lt;/tt&gt;
+   * [in] Inputs the second curve.
+   * @param &lt;tt&gt;oParams1&lt;/tt&gt;
+   * [out] sorted list of parameters on iCurve1
+   * @param &lt;tt&gt;oParams2&lt;/tt&gt;
+   * [out] list of parameters on iCurve2 (corresponding to oParams1)
+   * @param &lt;tt&gt;oConfusions&lt;/tt&gt;
+   * [out] list of confusion status (corresponding to oParams1 and oParams2):
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;oConfusions[i] = 0&lt;/tt&gt; : intersection
+   * &lt;dt&gt; &lt;tt&gt;oConfusions[i] =-1&lt;/tt&gt; : (oParams1[i],oParams2[i]) begin of confusion
+   * &lt;dt&gt; &lt;tt&gt;oConfusions[i] =+1&lt;/tt&gt; : (oParams1[i],oParams2[i]) end of confusion
+   * &lt;/dl&gt;
+   * NB: if oConfusions[i] =-1, then oConfusions[i+1] =+1
+   * @param &lt;tt&gt;iLimMode&lt;/tt&gt;
+   * [in]
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt; intersection between trimmed curves
+   * &lt;dt&gt; &lt;tt&gt;0&lt;/tt&gt; intersection between curves (default)
+   * @param &lt;tt&gt;iTolPt&lt;/tt&gt;
+   * [in] Inputs the (optional) tolerance to determine if two points are identical.
+   * @param &lt;tt&gt;iTolAng&lt;/tt&gt;
+   * [in] Inputs the (optional) tolerance to determine if two vectors are identical.
+   * @return
+   * A &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt; Intersections found
+   * &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;&lt;dd&gt; No intersection found
+   * &lt;dt&gt; &lt;tt&gt;E_xxx&lt;/tt&gt;  &lt;dd&gt; Problem occured.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT Intersection(CATBaseUnknown* iCurve1,
+                               CATBaseUnknown* iCurve2,
+                               CATListOfDouble&amp; oParams1,
+                               CATListOfDouble&amp; oParams2,
+                               CATListOfInt&amp; oConfusions,
+                               const int iLimMode=0,
+                               double *iTolPt=NULL,
+                               double *iTolAng=NULL) = 0;
+
+  /**
+   * Computes the nearest intersection point from a given point between two curves.
+   * @param &lt;tt&gt;iCurve1&lt;/tt&gt;
+   * [in] Inputs the first curve.
+   * @param &lt;tt&gt;iCurve2&lt;/tt&gt;
+   * [in] Inputs the second curve.
+   * @param &lt;tt&gt;iGuessPoint&lt;/tt&gt;
+   * [in] Inputs a close point to compute the intersection.
+   * @param &lt;tt&gt;oParamOnTheGeom&lt;/tt&gt;
+   * [out] Parameter on the element to retrieve the location where the minimal distance is computed.
+   * @param &lt;tt&gt;oParamOnTheLine&lt;/tt&gt;
+   * [out] Parameter on the line to retrieve the location where the minimal distance is computed:
+   * &lt;tt&gt;CATMathPoint2D&lt;/tt&gt; PointSolution = iOrigin + (oParamOnTheLine*iDirection)
+   */
+  virtual HRESULT Intersection(CATBaseUnknown* iCurve1,
+                               CATBaseUnknown* iCurve2,
+                               const CATMathPoint2D&amp; iGuessPoint,
+                               double&amp; oParam1,
+                               double&amp; oParam2) = 0;
+
+  /**
+   * Computes the nearest intersection point from a given point between a curve and a circle.
+   * @param &lt;tt&gt;iCurve&lt;/tt&gt;
+   * [in] Inputs the curve.
+   * @param &lt;tt&gt;iCenter&lt;/tt&gt;
+   * [in] Inputs the center of the circle.
+   * @param &lt;tt&gt;iRadius&lt;/tt&gt;
+   * [in] Inputs the radius of the circle.
+   * @param &lt;tt&gt;iInit&lt;/tt&gt;
+   * [in] Inputs a close point to find the nearest intersection.
+   * @param &lt;tt&gt;oWsCurve&lt;/tt&gt;
+   * [out] Parameter (optional) on the curve of the intersection point.
+   * @param &lt;tt&gt;oWsCircle&lt;/tt&gt;
+   * [out] Parameter (optional) on the circle of the intersection point.
+   * @param &lt;tt&gt;oPt&lt;/tt&gt;
+   * [out] Intersection point (optional).
+   */
+  virtual HRESULT Intersection(CATBaseUnknown* iCurve,const CATMathPoint2D&amp; iCenter,const double iRadius,
+                               const CATMathPoint2D&amp; iInit,double *oWsCurve=NULL,double *oWsCircle=NULL,double *oPt=NULL) = 0;
+
+  /**
+   * @nodoc
+   */
+  virtual HRESULT Projection(CATBaseUnknown* iCurve,
+                             const CATMathPoint2D&amp; iPoint,const CATMathDirection2D&amp; iDir,
+                             double *oWsCurve=NULL,double *oWsLine=NULL,double *oPt=NULL) = 0;
+
+  /**
+   * Computes the distance between two geometric elements.
+   * @param &lt;tt&gt;iGeom1&lt;/tt&gt;
+   * [in] Inputs the first element (point or curve).
+   * @param &lt;tt&gt;iGeom2&lt;/tt&gt;
+   * [in] Inputs the second element (point or curve).
+   * @param &lt;tt&gt;oDistance&lt;/tt&gt;
+   * [out] Minimal distance between the element and the line.
+   * @param &lt;tt&gt;oParam1&lt;/tt&gt;
+   * [out] Parameter on the first element to retrieve the location where the minimal distance is computed.
+   * @param &lt;tt&gt;oParam2&lt;/tt&gt;
+   * [out] Parameter on the second element to retrieve the location where the minimal distance is computed.
+   */
+  virtual HRESULT Distance(CATBaseUnknown* iGeom1,
+                           CATBaseUnknown* iGeom2,
+                           double&amp; oDistance,
+                           double&amp; oParam1,
+                           double&amp; oParam2) = 0;
+
+  /**
+   * Computes the distance between two geometric elements.
+   * @param &lt;tt&gt;iGeom1&lt;/tt&gt;
+   * [in] Inputs the first element (point or curve).
+   * @param &lt;tt&gt;iGeom2&lt;/tt&gt;
+   * [in] Inputs the second element (point or curve).
+   * @param &lt;tt&gt;iDir&lt;/tt&gt;
+   * [in] Inputs the (optional) direction to compute the distance.
+   * @param &lt;tt&gt;iGuessParam1&lt;/tt&gt;
+   * [in] Inputs the (optional) help parameter on the first element to compute the distance.
+   * This argument is usefull to find a local minimal distance, and for accelerer the convergence.
+   * @param &lt;tt&gt;iGuessParam2&lt;/tt&gt;
+   * [in] Inputs the (optional) help parameter on the second element to compute the distance.
+   * This argument is usefull to find a local minimal distance, and for accelerer the convergence.
+   * @param &lt;tt&gt;oDistance&lt;/tt&gt;
+   * [out] Minimal distance between the two elements.
+   * @param &lt;tt&gt;oParam1&lt;/tt&gt;
+   * [out] Parameter on the first element to retrieve the location where the minimal distance is computed.
+   * @param &lt;tt&gt;oParam2&lt;/tt&gt;
+   * [out] Parameter on the second element to retrieve the location where the minimal distance is computed.
+   */
+  virtual HRESULT Distance(CATBaseUnknown* iGeom1,
+                           CATBaseUnknown* iGeom2,
+                           double* iDir,
+                           double* iGuessParam1,
+                           double* iGuessParam2,
+                           double&amp; oDistance,
+                           double&amp; oParam1,
+                           double&amp; oParam2) = 0;
+
+  /**
+   * Computes the distance between a geometry and a line.
+   * @param &lt;tt&gt;iGeom&lt;/tt&gt;
+   * [in] Inputs the element (point or curve).
+   * @param &lt;tt&gt;iOrigin&lt;/tt&gt;
+   * [in] A point on the line.
+   * @param &lt;tt&gt;iDirection&lt;/tt&gt;
+   * [in] The direction vector of the line.
+   * @param &lt;tt&gt;oDistance&lt;/tt&gt;
+   * [out] Minimal distance between the element and the line.
+   * @param &lt;tt&gt;oParamOnTheGeom&lt;/tt&gt;
+   * [out] Parameter on the element to retrieve the location where the minimal distance is computed.
+   * @param &lt;tt&gt;oParamOnTheLine&lt;/tt&gt;
+   * [out] Parameter on the line to retrieve the location where the minimal distance is computed:
+   * &lt;tt&gt;CATMathPoint2D&lt;/tt&gt; PointSolution = iOrigin + (oParamOnTheLine*iDirection)
+   */
+  virtual HRESULT Distance(CATBaseUnknown* iGeom,const CATMathPoint2D&amp; iOrigin,const CATMathDirection2D&amp; iDirection,
+                           double&amp; oDistance,double&amp; oParamOnTheGeom,double&amp; oParamOnTheLine) = 0;
+
+  /**
+   * @nodoc
+   */
+  virtual HRESULT IsPtInside(const double iPoint[2],
+                             CATListValCATI2DCurve_var &amp;iLoop,
+                             CATListOfDouble&amp; iStartParams,
+                             CATListOfDouble&amp; iEndParams,
+                             int&amp; oPointInside,double *iTolPt=NULL) = 0;
+
+  /*
+   * Returns a discretisation of the curve between two given parameters.
+   * The result can be in the form of parameters and/or of points.
+   * @param &lt;tt&gt;iCurve&lt;/tt&gt;
+   * [in] Inputs the curve.
+   * @param &lt;tt&gt;iParam1&lt;/tt&gt;
+   * [in] Parameter of begining of the discretisation.
+   * @param &lt;tt&gt;iParam2&lt;/tt&gt;
+   * [in] Parameter of ending of the discretisation.
+   * @param &lt;tt&gt;iTol_arrow&lt;/tt&gt;
+   * [in] Maximal arrow between two discretisation points.
+   * @param &lt;tt&gt;oNbParams&lt;/tt&gt;
+   * [out] Number of discretisation points found.
+   * @param &lt;tt&gt;oParams&lt;/tt&gt;
+   * [out] (Optional) Array of the discretisation parameters.
+   * &lt;b&gt;NOTE1 : &lt;/b&gt; This argument can be NULL if these parameters aren&#x27;t desired.
+   * &lt;b&gt;NOTE2 : &lt;/b&gt; The desallocation of this arry is in charge of the appealing software.
+   * @param &lt;tt&gt;oPoints&lt;/tt&gt;
+   * [out] (Optional) Array of the coordinates of the discretisation points.
+   * &lt;b&gt;NOTE1 : &lt;/b&gt; This argument can be NULL if these points coordinates aren&#x27;t desired.
+   * &lt;b&gt;NOTE2 : &lt;/b&gt; The desallocation of this arry is in charge of the appealing software.
+   * @return
+   * A &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt; The discretisation is computed
+   * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;  &lt;dd&gt; The provided discretisation parameters don&#x27;t define a significant interval,
+   * or no valid argument has been provided.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT Discretisation(CATBaseUnknown *iCurve,const double&amp; iParam1,const double&amp; iParam2,
+                                 const double &amp;iTolArrow,
+                                 int *oNbParams,double **oParams,double **oPoints) = 0;
+
+  /**
+   * Computes the directed projection of a point on a courbe.
+   * It is the same as computing the nearest intersection point from a given point between a curve and a line.
+   * @param &lt;tt&gt;iCurve&lt;/tt&gt;
+   * [in] Inputs the curve.
+   * @param &lt;tt&gt;iPoint&lt;/tt&gt;
+   * [in] Inputs the point to project.
+   * @param &lt;tt&gt;iDir&lt;/tt&gt;
+   * [in] Inputs the direction to project the point. Can be NULL if orthogonal projection is specified.
+   * @param &lt;tt&gt;oWsCurve&lt;/tt&gt;
+   * [out] Parameter (optional) on the curve of the projected point.
+   * @param &lt;tt&gt;oWsLine&lt;/tt&gt;
+   * [out] Parameter (optional) on the line of the projected point.
+   * @param &lt;tt&gt;oPt&lt;/tt&gt;
+   * [out] Projected point (optional).
+   */
+  virtual HRESULT Projection(CATBaseUnknown* iCurve,
+                             const CATMathPoint2D&amp; iPoint,const double* iDir,
+                             double *oWsCurve=NULL,double *oWsLine=NULL,double *oPt=NULL) = 0;
+  /**
+   * Checks if a point is inside a contour.
+   * @param &lt;tt&gt;iPoint[2]&lt;/tt&gt;
+   * [in] Inputs the Point Coordinates
+   * @param &lt;tt&gt;iLoop&lt;/tt&gt;
+   * [in] Contour defined as a list of curves
+   * @param &lt;tt&gt;iStartParams&lt;/tt&gt;
+   * [in] Start parameters of the curves
+   * @param &lt;tt&gt;iEndParams&lt;/tt&gt;
+   * [in] End parameters of the curves
+   * @param &lt;tt&gt;oPointInside&lt;/tt&gt;
+   * [out]
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt; when iPoint is inside the contour (without ambiguity),
+   * &lt;dt&gt; &lt;tt&gt;0&lt;/tt&gt; otherwise
+   * &lt;/dl&gt;
+   * @param &lt;tt&gt;iTolPt&lt;/tt&gt;
+   * [in] Inputs the (optional) tolerance to determine if the given curves are consecutive.
+   */
+  virtual HRESULT IsPtInside(const double iPoint[2],
+                             CATListValCATBaseUnknown_var &amp;iLoop,
+                             CATListOfDouble&amp; iStartParams,
+                             CATListOfDouble&amp; iEndParams,
+                             int&amp; oPointInside,double *iTolPt=NULL) = 0;
+  /**
+   * Checks if a curve is closed.
+   * @param &lt;tt&gt;iCurve&lt;/tt&gt;
+   * [in] Inputs the curve
+   * @param &lt;tt&gt;oClosed&lt;/tt&gt;
+   * [out]
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;1&lt;/tt&gt; when the curve is closed,
+   * &lt;dt&gt; &lt;tt&gt;0&lt;/tt&gt; otherwise
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT IsClosed(CATBaseUnknown *iCurve,int &amp;oClosed) = 0;
+};
+
+CATDeclareHandler(CATI2DGeometricOperators,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DGeomReport.html">← 上一页: CATI2DGeomReport.h</a></div>
+        <div><a href="CATI2DHybConstraint.html">下一页: CATI2DHybConstraint.h →</a></div>
+    </div>
+</body>
+</html>

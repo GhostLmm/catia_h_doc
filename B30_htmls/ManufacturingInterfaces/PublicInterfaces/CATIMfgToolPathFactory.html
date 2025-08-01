@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgToolPathFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgToolPathFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgToolPathCycle.html">← 上一页: CATIMfgToolPathCycle.h</a></div>
+        <div><a href="CATIMfgToolPathFeedrate.html">下一页: CATIMfgToolPathFeedrate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  1998
+//=============================================================================
+#ifndef CATIMfgToolPathFactory_H
+#define CATIMfgToolPathFactory_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATIMfgCompoundTraject.h&quot;
+#include &quot;CATIMfgPolyLineTraject.h&quot;
+#include &quot;CATIMfgCircularTraject.h&quot;
+#include &quot;CATIMfgToolPathConstantFeedrate.h&quot;
+#include &quot;CATIMfgToolPathConstantSpindle.h&quot;
+#include &quot;CATIMfgToolPathConstantToolAxis.h&quot;
+#include &quot;CATIMfgToolPathToolAssembly.h&quot;
+#include &quot;CATIMfgToolPathUserSyntax.h&quot;
+#include &quot;CATIMfgToolPathCommand.h&quot;
+#include &quot;CATIMfgToolPathCycle.h&quot;
+#include &quot;CATIMfgToolPathMotionCommand.h&quot;
+#include &quot;CATIMfgTPMultipleMotion.h&quot;
+#include &quot;CATIMfgPPCommand.h&quot;
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATIMfgTPMultipleMotionWithProfileData.h&quot;
+#include &quot;CATIMfgTPMachiningTime.h&quot;
+#include &quot;CATIMfgTPLatheMachiningTime.h&quot;
+#include &quot;CATIMfgTPNurbsDescription.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByMfgItfEnv IID_CATIMfgToolPathFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgToolPathFactory;
+#endif
+
+/**
+* Interface to create tool path objects.
+*/
+
+class ExportedByMfgItfEnv CATIMfgToolPathFactory : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+  public:
+    
+/**
+*	Creates a compound traject inside the tool path container. 
+*   @return
+* 	The compound traject object 
+**/
+  virtual CATIMfgCompoundTraject_var CreateMfgCompoundTraject ()  = 0 ;
+
+/**
+*	Creates a tool path cycle inside the tool path container.
+*   @param iUserSyntax
+*	  The list of strings describing the syntax of cycle
+*   @return
+* 	  The tool path cycle object 
+**/
+  virtual CATIMfgToolPathCycle_var	CreateMfgToolPathCycle (const CATListValCATUnicodeString&amp; iUserSyntax)  = 0;
+
+/**
+*	Creates a tool path cycle inside the tool path container.
+*   @param iCommandName
+*	  The name of NC_Command relative to the cycle
+*   @return
+* 	  The tool path cycle object 
+**/
+  virtual CATIMfgToolPathCycle_var	CreateMfgToolPathCycle (const CATUnicodeString&amp; iCommandName)  = 0;
+
+/**
+* Creates a multiple motion inside the tool path container. 
+*   @return
+* 	The multiple motion object 
+*/
+  virtual CATIMfgTPMultipleMotion_var CreateMfgTPMultipleMotion ()  = 0 ;
+
+/**
+* Creates a specialized multiple motion in which it is possible to store cutter profile datas. 
+*   @return
+* 	The multiple motion object in which it is possible to store cutter profile datas
+*/
+  virtual CATIMfgTPMultipleMotionWithProfileData_var CreateMfgTPMultipleMotionWithProfileData ()  = 0 ;
+
+/**
+*	Creates a constant feedrate inside the tool path container. 
+*   @param iFeedrate
+*	  The feedrate modelized by a @href CATICkeParm   
+*   @return
+* 	  The constant feedrate object
+**/
+  virtual CATIMfgToolPathConstantFeedrate_var	CreateMfgToolPathConstantFeedrate (const CATICkeParm_var&amp; iFeedrate)  = 0 ;
+
+
+/**
+*	Creates a constant spindle inside the tool path container. 
+*   @param iSpindle
+*	 The spindle feedrate modelied by a @href CATICkeParm    
+*   @return
+* 	 The constant spindle object
+**/
+  virtual CATIMfgToolPathConstantSpindle_var	CreateMfgToolPathConstantSpindle (const CATICkeParm_var&amp; iSpindle)  = 0 ;
+
+/**
+*	Creates a constant tool axis object inside the tool path container. 
+*   @param iToolAxis
+*     The value of tool axis
+*   @return
+* 	  The tool axis object
+**/
+  virtual CATIMfgToolPathConstantToolAxis_var	CreateMfgToolPathConstantToolAxis (CATMathVector&amp; iToolAxis)  = 0 ;
+
+/**
+*	Creates a tool assembly object inside the tool path container. 
+*   @param iToolAssembly
+*	 The tool     
+*   @return
+* 	 The tool assembly object
+**/
+  virtual CATIMfgToolPathToolAssembly_var	CreateMfgToolPathToolAssembly (CATBaseUnknown_var&amp; iToolAssembly)  = 0;
+
+
+/**
+* Creates a polyline traject inside the tool path container.&lt;br&gt;
+* PLEASE NOTE that you should use CATIMfgTPMultipleMotion interface to modelize your tool motions.&lt;br&gt;
+* CATIMfgTPMultipleMotion interface allows to store linear motions, circular motions and PP Instructions
+* (described by a string or by a NC_Command and a NC_Instruction described in PP Table). &lt;br&gt;
+* It needs less memory and CPU time.&lt;br&gt;
+* It is the recommended way to modelize tool motions.&lt;br&gt;
+* @param iTrajectType
+*   The traject type : use constants of CATMfgToolPathDefs.h
+* @param iFeedrate
+*   The traject feedrate : use constants of CATMfgToolPathDefs.h
+* @param iTipPoints
+*	 The tip points
+* @return
+* 	 The polyline traject object
+*/
+  virtual CATIMfgPolyLineTraject_var CreateMfgPolyLineTraject (const CATUnicodeString&amp; iTrajectType,
+							                                   const CATUnicodeString&amp; iFeedrate,
+							                                   CATMathSetOfPoints&amp; iTipPoints)  = 0 ;
+  
+/**
+* Creates a circular traject inside the tool path container.&lt;br&gt;
+* PLEASE NOTE that you should use CATIMfgTPMultipleMotion interface to modelize your tool motions.&lt;br&gt;
+* CATIMfgTPMultipleMotion interface allows to store linear motions, circular motions and PP Instructions
+* (described by a string or by a NC_Command and a NC_Instruction described in PP Table). &lt;br&gt;
+* It needs less memory and CPU time.&lt;br&gt;
+* It is the recommended way to modelize tool motions.&lt;br&gt;
+* @param iTrajectType
+*   The traject type : use constants of CATMfgToolPathDefs.h
+* @param iFeedrate
+*   The traject feedrate : use constants of CATMfgToolPathDefs.h
+* @param iTipPoints
+*	 The tip points
+* @param iNormale
+*	 The normal to plane containing the circle
+* @param iCenter
+*	 The coordinates of the circle&#x27;s center
+* @param iRadius
+*	 The radius of the circle
+* @return
+* 	 The circular traject object
+**/
+  virtual CATIMfgCircularTraject_var CreateMfgCircularTraject (const CATUnicodeString&amp; iTrajectType,
+									                           const CATUnicodeString&amp; iFeedrate,
+									                           CATMathSetOfPoints&amp; iTipPoints,
+									                           CATMathVector&amp; iNormale,
+															   CATMathPoint&amp; iCenter,
+															   double&amp; iRadius)  = 0 ;
+
+
+/**
+*	Creates a user syntax object inside the tool path container.&lt;br&gt; 
+* PLEASE NOTE that you should use CATIMfgTPMultipleMotion interface to modelize your tool motions.&lt;br&gt;
+* CATIMfgTPMultipleMotion interface allows to store linear motions, circular motions and PP Instructions
+* (described by a string or by a NC_Command and a NC_Instruction described in PP Table). &lt;br&gt;
+* It needs less memory and CPU time.&lt;br&gt;
+* It is the recommended way to modelize tool motions.&lt;br&gt;
+*   @param iInstruction
+*	The value of user syntax (this syntax is generated as it is in the APT file)    
+*   @return
+* 	The user syntax object
+**/
+  virtual CATIMfgToolPathUserSyntax_var	CreateMfgToolPathUserSyntax (const CATUnicodeString&amp; iInstruction)  = 0;
+
+/**
+*	Creates a PP Command object inside the tool path container.&lt;br&gt;
+* PLEASE NOTE that you should use CATIMfgTPMultipleMotion interface to modelize your tool motions.&lt;br&gt;
+* CATIMfgTPMultipleMotion interface allows to store linear motions, circular motions and PP Instructions
+* (described by a string or by a NC_Command and a NC_Instruction described in PP Table). &lt;br&gt;
+* It needs less memory and CPU time.&lt;br&gt;
+* It is the recommended way to modelize tool motions.&lt;br&gt;
+*   @param iCommandName
+*	 the name of NC_Command   
+*   @return
+* 	 the PP Command object
+**/
+  virtual CATIMfgToolPathCommand_var	CreateMfgToolPathCommand (const CATUnicodeString&amp; iCommandName)  = 0;
+
+/**
+*	@nodoc
+**/
+  virtual CATIMfgToolPathCycle_var	CreateMfgToolPathCycle (const CATIMfgPPCommand_var&amp; iPPCommand)  = 0;
+
+/**
+*	@nodoc
+**/
+  virtual CATIMfgToolPathCommand_var	CreateMfgToolPathCommand (const CATIMfgPPCommand_var&amp; iPPCommand)  = 0;
+
+/**
+*	@nodoc
+**/
+  virtual CATIMfgToolPathMotionCommand_var	CreateMfgToolPathMotionCommand (const CATIMfgPPCommand_var&amp; iPPCommand)  = 0;
+
+/**
+*	@nodoc
+**/
+  virtual CATIMfgToolPathMotionCommand_var	CreateMfgToolPathMotionCommand (const CATUnicodeString&amp; iCommandName)  = 0;
+
+/**
+ * @nodoc
+ * Create a Machining Time Object for milling operations
+ */
+
+  virtual CATIMfgTPMachiningTime_var CreateMfgTPMachiningTime() = 0;
+
+/**
+* @nodoc
+ * Create a Machining Time Object for Lathe operations
+*/
+  virtual CATIMfgTPLatheMachiningTime_var CreateMfgTPLatheMachiningTime ()  = 0 ;
+
+/**
+* @nodoc
+*/
+  virtual CATIMfgTPNurbsDescription_var CreateMfgTPNurbsDescription ()  = 0 ;
+};
+
+CATDeclareHandler(CATIMfgToolPathFactory, CATBaseUnknown);
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgToolPathCycle.html">← 上一页: CATIMfgToolPathCycle.h</a></div>
+        <div><a href="CATIMfgToolPathFeedrate.html">下一页: CATIMfgToolPathFeedrate.h →</a></div>
+    </div>
+</body>
+</html>

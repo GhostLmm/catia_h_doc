@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATRscInterfaces/PublicInterfaces/CATIRenderingShooting.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATRscInterfaces/PublicInterfaces/CATIRenderingShooting.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRenderingLightFactory.html">← 上一页: CATIRenderingLightFactory.h</a></div>
+        <div><a href="CATIRenderingShootingEffects.html">下一页: CATIRenderingShootingEffects.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIRenderingShooting_h
+#define CATIRenderingShooting_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATRscItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATRenderingEnum.h&quot;
+#include &quot;CATIRenderingEnvironment.h&quot;
+#include &quot;CATI3DCamera.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATRscItfCPP IID IID_CATIRenderingShooting;
+#else
+extern &quot;C&quot; const IID IID_CATIRenderingShooting;
+#endif
+
+/** 
+  * Interface to manage shooting objects.
+  * @see CATIRenderingShootingFactory
+  */
+
+
+class ExportedByCATRscItfCPP CATIRenderingShooting : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ *  Returns the name of a shooting object.
+ */
+    virtual CATUnicodeString GetName() const = 0;
+
+/** 
+ *  Set the name of a shooting object
+ */
+    virtual HRESULT SetName(const CATUnicodeString &amp;iName) = 0;
+
+/**
+ *  Returns the status of a shooting object.
+ * @return
+ *   An boolean value. 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;TRUE if shooting is active.
+ * &lt;br&gt;FALSE if shooting is desactivated.
+ * &lt;br&gt;
+ * N.B. Only one shooting can be activated in a document.
+ */
+    virtual CATBoolean GetStatus() const = 0;
+
+/** 
+ *  Set the status of a shooting object
+ * @param iStatus
+ *   The shooting status 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;TRUE if shooting is active.
+ * &lt;br&gt;FALSE if shooting is desactivated.
+ * &lt;br&gt;
+ * N.B. Only one shooting can be activated in a document.
+ */
+    virtual HRESULT SetStatus(const CATBoolean iStatus) = 0;
+
+/**
+ *  Returns the environment object used for the shooting.
+ * @return
+ *    The environment object
+ * &lt;br&gt;
+ * N.B. If NULL is returned, no environment is used for shooting
+ * @see CATIRenderingEnvironment
+ */
+    virtual CATIRenderingEnvironment* GetEnvironment() const = 0;
+
+/**
+ *  Sets the environment object used for the shooting.
+ * @param iEnvironment
+ *    The environment object used for the shooting
+ *    iEnvironment = NULL means that no environment is used for shooting
+ * @see CATIRenderingEnvironment
+ */
+    virtual HRESULT SetEnvironment(const CATIRenderingEnvironment* iEnvironment) = 0;
+
+/**
+ *  Returns the camera object used for the shooting.
+ * @return
+ *    The camera object
+ * &lt;br&gt;
+ * N.B. If NULL is returned, no camera is used for shooting and current model viewpoint is used
+ * @see CATI3DCamera
+ */
+    virtual CATI3DCamera* GetCamera() const = 0;
+
+/**
+ *  Sets the camera object used for the shooting.
+ * @param iCamera
+ *    The camera object used for the shooting
+ *    iCamera = NULL means that the current viewpoint is used for shooting
+ * @see CATI3DCamera
+ */
+    virtual HRESULT SetCamera(const CATI3DCamera* iCamera) = 0;
+
+/**
+ * Returns the lights used by the shooting.
+ * @return
+ *   The active lights list.
+ */
+    virtual CATListValCATBaseUnknown_var * GetLights() const = 0;
+
+/**
+ * Sets the light objects used for the shooting.
+ * @param iLightList
+ *   The list of active lights for the shooting.
+ */
+    virtual HRESULT SetLights(const CATListValCATBaseUnknown_var * iLightList) = 0;
+
+/**
+ * Render the shooting.
+ * Warning: This method sets the shooting as active in the document.
+ */
+    virtual HRESULT Render() = 0;
+
+
+};
+
+CATDeclareHandler(CATIRenderingShooting, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRenderingLightFactory.html">← 上一页: CATIRenderingLightFactory.h</a></div>
+        <div><a href="CATIRenderingShootingEffects.html">下一页: CATIRenderingShootingEffects.h →</a></div>
+    </div>
+</body>
+</html>

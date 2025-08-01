@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATIDocAlias.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATIDocAlias.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICutAndPastable.html">← 上一页: CATICutAndPastable.h</a></div>
+        <div><a href="CATIDocDescriptor.html">下一页: CATIDocDescriptor.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIDocAlias_h
+#define CATIDocAlias_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U5
+*/
+
+
+#include &quot;CATUnicodeString.h&quot;
+
+#include &quot;AD0XXBAS.h&quot;
+
+extern ExportedByAD0XXBAS IID IID_CATIDocAlias ;
+
+/**
+* Interface to manage the suffix of the document&#x27;s file names.
+* &lt;b&gt; Role: &lt;/b&gt; the string defined in the dictionnary for adhesion
+* to CATIDocAlias is the one which appears in File/New panel, it does 
+* not correspond to the late type of the document which is generally the string 
+* given by GiveDocSuffix.
+* @see CATInit, CATIPersistent
+*/
+class ExportedByAD0XXBAS CATIDocAlias : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  /**
+   * Returns the suffix of the document&#x27;s file names.
+   * &lt;br&gt;&lt;b&gt; Note: &lt;/b&gt; this suffix usually corresponds to the late type defining the
+   * document for adhesion to interfaces such as CATInit or CATIPersistent.
+   */
+ virtual CATUnicodeString GiveDocSuffix() =0 ;
+    
+};
+
+// --------------------------------------------------------------------------
+//                             Handler
+// --------------------------------------------------------------------------
+
+CATDeclareHandler( CATIDocAlias, CATBaseUnknown ) ;
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICutAndPastable.html">← 上一页: CATICutAndPastable.h</a></div>
+        <div><a href="CATIDocDescriptor.html">下一页: CATIDocDescriptor.h →</a></div>
+    </div>
+</body>
+</html>

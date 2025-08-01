@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAV4Interfaces/PublicInterfaces/CATIV4IV4WritingSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAV4Interfaces/PublicInterfaces/CATIV4IV4WritingSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIV4IV4V5SpaceSettingAtt.html">← 上一页: CATIV4IV4V5SpaceSettingAtt.h</a></div>
+        <div><a href="CATLISTP_CATV4iV4Attributes.html">下一页: CATLISTP_CATV4iV4Attributes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIV4IV4WritingSettingAtt_H
+#define CATIV4IV4WritingSettingAtt_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+
+// System framework
+#include &quot;IUnknown.h&quot;  // To derive From 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;ExportedByCATV4iSettings.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATV4IV5V4AssociativityModeEnum.h&quot;
+#include &quot;CATV4IV5V4ErrorFeatureCreationEnum.h&quot;
+#include &quot;CATV4IV5V4InternalCurveCreationEnum.h&quot;
+class CATString;
+class CATUnicodeString;
+class CATSettingInfo ;
+
+extern &quot;C&quot; ExportedByCATV4iSettings const IID IID_CATIV4IV4WritingSettingAtt;
+/** 
+ * Interface representing the Saving As V4 Data setting controller object.
+ * &lt;b&gt;Role&lt;/b&gt;: The Saving As V4 Data setting controller object deals with the setting
+ * parameters displayed in the Saving As V4 Data property page.
+ * To access this property page:
+ * &lt;ul&gt;
+ *  &lt;li&gt;Click the &lt;b&gt;Options&lt;/b&gt; command in the &lt;b&gt;Tools&lt;/b&gt; menu&lt;/li&gt;
+ *  &lt;li&gt;Click + left of &lt;/b&gt;General&lt;/b&gt; to unfold the workbench list&lt;/li&gt;   
+ *  &lt;li&gt;Click &lt;/b&gt;Compatibility&lt;/b&gt;&lt;/li&gt;
+ * &lt;/ul&gt; 
+ * &lt;br&gt;&lt;b&gt;The different options for V4/V5SPEC tab&lt;/b&gt;:
+ * &lt;table&gt;
+ *   &lt;tr&gt;&lt;td&gt;The Writing Code Page&lt;/td&gt;  
+ *   &lt;tr&gt;&lt;td&gt;The Model Dimension &lt;/td&gt; 
+ *	 &lt;tr&gt;&lt;td&gt;The Model Unit &lt;/td&gt;  
+ *	 &lt;tr&gt;&lt;td&gt;The Initial Model File Path &lt;/td&gt;  
+ *	 &lt;tr&gt;&lt;td&gt;The Associativity Mode &lt;/td&gt;  
+ *	 &lt;tr&gt;&lt;td&gt;The Layer For Non Associative Data &lt;/td&gt;
+ *	 &lt;tr&gt;&lt;td&gt;The Error Feature Creation if the Save is not complete &lt;/td&gt;
+ *	 &lt;tr&gt;&lt;td&gt;The Curves Associated To Face Boundaries Creation &lt;/td&gt; 
+ *	 &lt;tr&gt;&lt;td&gt;The V4 Model File Name In Capitals Letters &lt;/td&gt; 
+ *	 &lt;tr&gt;&lt;td&gt;The Small Edges And Faces Cleaning Tolerance &lt;/td&gt;        
+ * &lt;/table&gt;
+ */
+class ExportedByCATV4iSettings CATIV4IV4WritingSettingAtt : public CATBaseUnknown
+{
+
+	CATDeclareInterface;
+
+  public :
+	//------------------------------------------------------
+    // Writing code page setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Writing Code Page setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Writing Code Page setting parameter manages the format related with 
+	 *   the language used by the customer.
+     * @param oStateOfCpdest 
+     *   The Writing code page setting parameter value that is the selected line number of the combo box.
+     * @return
+     *   S_OK if the Writing Code page setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+
+	virtual HRESULT GetCode_page_Dest( int &amp;oStateOfCpdest)= 0 ;
+	/**
+     * Sets the Writing Code page setting parameter value.
+     * @param iStateOfCpdest
+     *   The Writing Code page setting parameter value that is the selected line number of the combo box.
+     * @return
+     *   S_OK if the Writing Code page setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+
+	virtual HRESULT SetCode_page_Dest(int iStateOfCpdest)= 0 ; 
+	/** 
+	* Retrieves information about the Code_page_Dest setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+
+	virtual HRESULT GetCode_page_DestInfo(CATSettingInfo * oInfo)= 0 ; 
+	/** 
+	* Locks or unlocks the Code_page_Dest setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+
+	virtual HRESULT SetCode_page_DestLock(unsigned char iLocked)= 0 ;
+	//------------------------------------------------------
+    // Model Dimension Value setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Model Dimension Value setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Model Dimension Value setting parameter manages the value of 
+	 *   the model dimension usually used in V4 
+     * @param oValueOfModelDim 
+     *   The Model Dimension Value setting parameter value
+     * @return
+     *   S_OK if the Model Dimension Value setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModel_Dimension(double &amp; oValueOfModelDim) =0      ;  
+	/**
+     * Sets the Model Dimension Value setting parameter value.
+     * @param iValueOfModelDim 
+     *   The Model Dimension Value setting parameter value.
+     * @return
+     *   S_OK if the Model Dimension Value setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModel_Dimension(double iValueOfModelDim)= 0 ;
+	/** 
+	* Retrieves information about the Model_Dimension setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModel_DimensionInfo(CATSettingInfo *oInfo)= 0 ;
+	/** 
+	* Locks or unlocks the Model_Dimension setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModel_DimensionLock(unsigned char iLocked)= 0 ;
+	
+	//------------------------------------------------------
+    // Model Dimension Unit setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Model Dimension Unit setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Model Dimension Unit setting parameter manages the unit used
+	 *   for save as model. As the reference unit used in CATSettings is millimeters, a factor
+	 *   to convert units chosen is necessary. This factor is the Multiplication Factor parameter.
+     * @param oDefaultModelUnit 
+     *   The Model Dimension Unit setting parameter value
+     * @return
+     *   S_OK if the Model Dimension Unit setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModel_Unit( int &amp; oDefaultModelUnit)= 0 ; 
+	/**
+     * Sets the Model Dimension Unit setting parameter value.
+     * @param iDefaultModelUnit 
+     *   The Model Dimension Unit setting parameter value that is the selected line number of the combo box.
+     * @return
+     *   S_OK if the Model Dimension Unit setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModel_Unit(int iDefaultModelUnit) = 0 ;
+	/** 
+	* Retrieves information about the Model_Unit setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModel_UnitInfo(CATSettingInfo * oInfo)= 0 ; 
+	/** 
+	* Locks or unlocks the Model_Unit setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModel_UnitLock(unsigned char iLocked )= 0 ;
+
+	//------------------------------------------------------
+    // Associativity Mode setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Associativity Mode setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Associativity Mode setting parameter manages the mode in
+	 *   which save as model will be done.
+     * @param oAssoMode 
+     *   The Associativity Mode setting parameter value
+     * @return
+     *   S_OK if the Associativity Mode setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetAsso_mode(CATV4IV5V4AssociativityModeEnum &amp; oAssoMode) = 0 ; 
+	/**
+     * Sets the Associativity Mode setting parameter value.
+     * @param iAssoMode 
+     *   The Associativity Mode setting parameter value.
+     * @return
+     *   S_OK if the Associativity Mode setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetAsso_mode(CATV4IV5V4AssociativityModeEnum iAssoMode)= 0 ;
+	/** 
+	* Retrieves information about the Asso_mode setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetAsso_modeInfo(CATSettingInfo * oInfo)= 0 ;
+	/** 
+	* Locks or unlocks the Asso_mode setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetAsso_modeLock(unsigned char iLocked)= 0 ;
+	
+	//------------------------------------------------------
+    // Layer setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Layer setting parameter value when non associative mode was chosen.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Layer setting parameter manages the layer used
+	 *   when save as model is not associative
+     * @param oDefaultLayer 
+     *   The Layer setting parameter value
+     * @return
+     *   S_OK if the Layer setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetLayer_for_No_Asso(int &amp; oDefaultLayer)= 0 ;
+	/**
+     * Sets the Layer setting parameter value.
+     * @param iDefaultLayer 
+     *   The Layer setting parameter value.
+     * @return
+     *   S_OK if the Layer setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetLayer_for_No_Asso(int iDefaultLayer)= 0 ;
+	/** 
+	* Retrieves information about the Layer_for_No_Asso setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetLayer_for_No_AssoInfo(CATSettingInfo *oInfo)= 0 ;
+	/** 
+	* Locks or unlocks the Layer_for_No_Asso setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetLayer_for_No_AssoLock(unsigned char iLocked)=0  ;    
+	//------------------------------------------------------
+    // Error Feature Display setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Error Feature Display setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Error Feature Display setting parameter manages the creation
+	 *   of an error feature when the save is not complete.
+     * @param oModeErrorDisplay 
+     *   The Error Feature Display setting parameter value
+     * @return
+     *   S_OK if the Error Feature Display setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModeErrorDisplay(CATV4IV5V4ErrorFeatureCreationEnum &amp; oModeErrorDisplay)= 0 ;
+	/**
+     * Sets the Error Feature Display setting parameter value.
+     * @param iModeErrorDisplay 
+     *   The Error Feature Display setting parameter value.
+     * @return
+     *   S_OK if the Error Feature Display setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModeErrorDisplay(CATV4IV5V4ErrorFeatureCreationEnum iModeErrorDisplay)= 0 ;
+	/** 
+	* Retrieves information about the ModeErrorDisplay setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModeErrorDisplayInfo(CATSettingInfo * oInfo)= 0 ; 
+	/** 
+	* Locks or unlocks the ModeErrorDisplay setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModeErrorDisplayLock(unsigned char iLocked )= 0 ;
+
+	//------------------------------------------------------
+    // Initial Model File Path setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Initial Model File Path setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Initial Model File Path setting parameter manages the location
+	 *   of a V4 model which will be used during save as model
+     * @param oDefaultInitialModelPath 
+     *   The Initial Model File Path setting parameter value
+     * @return
+     *   S_OK if the Initial Model File Path setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetInitial_Model_File_Path( CATUnicodeString &amp; oDefaultInitialModelPath)= 0 ;
+	/**
+     * Sets the Initial Model File Path setting parameter value.
+     * @param iDefaultInitialModelPath 
+     *   The Initial Model File Path setting parameter value.
+     * @return
+     *   S_OK if the Initial Model File Path setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetInitial_Model_File_Path( CATUnicodeString &amp;iDefaultInitialModelPath) = 0 ;
+	/** 
+	* Retrieves information about the Initial_Model_File_Path setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetInitial_Model_File_PathInfo(CATSettingInfo * oInfo)= 0 ;
+	/** 
+	* Locks or unlocks the Initial_Model_File_Path setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetInitial_Model_File_PathLock(unsigned char iLocked )= 0 ;
+
+	//------------------------------------------------------
+    // Curve Display Mode setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Curve Display Mode setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Curve Display Mode setting parameter manages the mode.
+	 *   of creation of V4 curves (between faces).
+     * @param oDefaultCreateDisplay 
+     *   The Curve Display Mode setting parameter value
+     * @return
+     *   S_OK if the Curve Display Mode setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModeCreateDisplay(CATV4IV5V4InternalCurveCreationEnum &amp; oDefaultCreateDisplay)= 0 ;
+	/**
+     * Sets the Curve Display Mode setting parameter value.
+     * @param iDefaultCreateDisplay 
+     *   The Curve Display Mode setting parameter value.
+     * @return
+     *   S_OK if the Curve Display Mode setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModeCreateDisplay(CATV4IV5V4InternalCurveCreationEnum iDefaultCreateDisplay)= 0 ;
+	/** 
+	* Retrieves information about the ModeCreateDisplay setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModeCreateDisplayInfo(CATSettingInfo * oInfo) = 0 ;
+	/** 
+	* Locks or unlocks the ModeCreateDisplay setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModeCreateDisplayLock(unsigned char iLocked)= 0 ;
+	
+	//------------------------------------------------------
+    // Multiplication Factor setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Multiplication Factor setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Multiplication Factor setting parameter manages the conversion
+	 *   of model dimension in millimeters. This parameter is used with the Model Dimension
+	 *   Unit parameter in order to stock the value in millimeter in the CATSetting. The Multiplication
+	 *   factor is the ratio between millimeters and the unit selected. For example if the unit selected
+	 *   is Meter, then the Multiplication Factor is 1000.
+     * @param DefaultModelFactor 
+     *   The Multiplication Factor setting parameter value
+     * @return
+     *   S_OK if the Multiplication Factor setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModel_Factor(double &amp; oDefaultModelFactor)= 0 ;
+	/**
+     * Sets the Multiplication Factor setting parameter value.
+     * @param iDefaultModelFactor 
+     *   The Multiplication Factor setting parameter value.
+     * @return
+     *   S_OK if the Multiplication Factor setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModel_Factor(double iDefaultModelFactor)= 0 ;
+	/** 
+	* Retrieves information about the Model_Factor setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModel_FactorInfo(CATSettingInfo * oInfo) = 0 ;
+	/** 
+	* Locks or unlocks the Model_Factor setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModel_FactorLock(unsigned char iLocked)= 0 ;
+
+	//------------------------------------------------------
+    // Capital Letters setting parameter
+    //------------------------------------------------------
+    /**
+     * Retrieves the Capital Letters setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The Capital Letters setting parameter manages the mode
+	 *   of creation of the V4 model name (in capital letters or not)
+     * @param oDefaultModelFileName 
+     *   The Capital Letters setting parameter value
+     * @return
+     *   S_OK if the Capital Letters setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetModel_File_Name(CATBoolean &amp; oDefaultModelFileName)= 0 ;
+	/**
+     * Sets the Capital Letters setting parameter value.
+     * @param iDefaultModelFileName 
+     *   The Capital Letters setting parameter value.
+     * @return
+     *   S_OK if the Capital Letters setting parameter value
+     *   is successfully set, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetModel_File_Name(CATBoolean iDefaultModelFileName)= 0 ;
+	/** 
+	* Retrieves information about the Model_File_Name setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetModel_File_NameInfo(CATSettingInfo * oInfo) = 0 ;
+	/** 
+	* Locks or unlocks the Model_File_Name setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetModel_File_NameLock(unsigned char iLocked)= 0 ;
+
+	/**
+     * Retrieves the cleaning tolerance value setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The cleaning tolerance value setting parameter manages the cleaning
+	 *   of small elements in V4 model.
+     * @param oValue
+     *   The cleaning tolerance value setting parameter value
+     * @return
+     *   S_OK if the cleaning tolerance setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetCleanTolValue(double &amp; oValue)=0; 
+	/**
+     * Sets the cleaning tolerance value setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The cleaning tolerance value setting parameter manages the cleaning
+	 *   of small elements in V4 model.
+     * @param iValue 
+     *   The cleaning tolerance setting parameter value
+     * @return
+     *   S_OK if the cleaning tolerance value setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetCleanTolValue(double iValue)=0;  
+	/** 
+	* Retrieves information about the CleanTolValue setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetCleanTolValueInfo (CATSettingInfo * oInfo)=0;  
+	/** 
+	* Locks or unlocks the CleanTolValue setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetCleanTolValueLock (unsigned char iLocked)=0;
+	
+	/**
+     * Retrieves the cleaning tolerance mode setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The cleaning tolerance mode setting parameter manages the cleaning
+	 *   of small elements in V4 model.
+     * @param oCheck 
+     *   The cleaning tolerance mode setting parameter value
+     * @return
+     *   S_OK if the cleaning tolerance mode setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT GetCleanTolCheck(CATBoolean &amp; oCheck)=0;  
+	/**
+     * Sets the cleaning tolerance mode setting parameter value.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The cleaning tolerance mode setting parameter manages the cleaning
+	 *   of small elements in V4 model.
+     * @param iValue 
+     *   The cleaning tolerance mode setting parameter value
+     * @return
+     *   S_OK if the cleaning tolerance mode setting parameter value
+     *   is successfully retrieved, and E_FAIL otherwise   
+     */
+	virtual HRESULT SetCleanTolCheck(CATBoolean iCheck)=0;  
+	/** 
+	* Retrieves information about the CleanTolCheck setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT GetCleanTolCheckInfo (CATSettingInfo * oInfo)=0;  
+	/** 
+	* Locks or unlocks the CleanTolCheck setting parameter.
+	* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+	*/
+	virtual HRESULT SetCleanTolCheckLock (unsigned char iLocked)=0; 
+};
+
+CATDeclareHandler(CATIV4IV4WritingSettingAtt, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIV4IV4V5SpaceSettingAtt.html">← 上一页: CATIV4IV4V5SpaceSettingAtt.h</a></div>
+        <div><a href="CATLISTP_CATV4iV4Attributes.html">下一页: CATLISTP_CATV4iV4Attributes.h →</a></div>
+    </div>
+</body>
+</html>

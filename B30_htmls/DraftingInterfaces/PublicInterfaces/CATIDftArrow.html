@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftArrow.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftArrow.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftAnnotation.html">← 上一页: CATIDftAnnotation.h</a></div>
+        <div><a href="CATIDftBalloon.html">下一页: CATIDftBalloon.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDftArrow_H
+#define CATIDftArrow_H
+//==============================================================================
+//                                   CATIA - Version 5
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//------------------------------------------------------------------------------
+// FILENAME    :    CATIDftArrow.h
+// LOCATION    :    DraftingInterfaces\PublicInterfaces
+// AUTHOR      :    LCF
+// DATE        :    May 2001
+//------------------------------------------------------------------------------
+// DESCRIPTION :    Definition of interface for Arrow object
+//
+// INHERITANCE :    IUnknown
+//------------------------------------------------------------------------------
+// COMMENTS    :    Creation
+//                  
+//------------------------------------------------------------------------------
+// MODIFICATIONS    user       date      purpose
+//------------------------------------------------------------------------------
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;IUnknown.h&quot;
+
+#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftArrow;
+#else
+extern &quot;C&quot; const IID IID_CATIDftArrow;
+#endif
+
+#include &quot;CATDftArrowEnum.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+/**
+* Interface which manages the arrows created in CATDrawing documnent.
+*/
+class ExportedByDraftingItfCPP CATIDftArrow : public IUnknown
+{
+  
+public:
+
+  /**
+   * Get arrow head or tail symbol.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oSymbolType &lt;/tt&gt; : Symbol type.
+   * &lt;dt&gt;&lt;tt&gt;iExtremity &lt;/tt&gt;  : Head (CATDftArrowHead) or Tail (CATDftArrowTail).
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetSymbolType (int* oSymbolType, const CATDftArrowExtremity iExtremity = CATDftArrowHead) = 0;
+
+  /**
+   * Set arrow head or tail symbol.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iSymbolType &lt;/tt&gt; : Symbol type.
+   * &lt;dt&gt;&lt;tt&gt;iExtremity &lt;/tt&gt;  : Head (CATDftArrowHead) or Tail (CATDftArrowTail).
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT SetSymbolType (const int iSymbolType, const CATDftArrowExtremity iExtremity = CATDftArrowHead) = 0;
+  
+  /**
+   * Get the number of points of arrow path.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oNbPoint &lt;/tt&gt; : Number of points of arrow path.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetNbPoint (int* oNbPoint) = 0;
+
+  /**
+   * Add a point to an arrow.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iNum &lt;/tt&gt; : Point number. Point will be inserted at iNum+1 position.
+   * &lt;dt&gt; &lt;dd&gt; - If iNum equals 0, point is inserted as first point.
+   * &lt;dt&gt; &lt;dd&gt; - If iNum equals the arrow number of points, point is inserted as last point.
+   * &lt;dt&gt;&lt;tt&gt;iPoint&lt;/tt&gt; : Point coordinates to add.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT AddPoint (const int&amp; iNum, const double iPoint[2]) = 0;
+
+  /**
+   * Remove a point from an arrow.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iNum &lt;/tt&gt; : Point number to delete.
+   * &lt;dt&gt; &lt;dd&gt; - If iNum equals to 0, all points will be removed. 
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT RemovePoint (const int iNum = 0) = 0;
+
+  /**
+   * Modify a point of an Arrow.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iNum &lt;/tt&gt; : Point number to modify.
+   * &lt;dt&gt;&lt;tt&gt;iPoint&lt;/tt&gt; : New point coordinates. 
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT ModifyPoint (const int iNum, const double iPoint[2]) = 0;
+
+  /**
+   * Get arrow path.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oPoints&lt;/tt&gt; : List of points coordinates (X1,Y1,X2,Y2,.....Xn,Yn).
+   * &lt;dt&gt;&lt;tt&gt;oNbPoints&lt;/tt&gt; : Number of points.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetPoints (double** oPoints, int* oNbPoints) = 0;
+
+  /**
+   * Get arrow point coordinates.
+   *
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iNum&lt;/tt&gt; : Point number. 
+   * &lt;dt&gt;&lt;tt&gt;oPoint  &lt;/tt&gt; : Point coordinates. 
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetPoint (const int iNum, double oPoint[2]) = 0;
+  
+  /**
+   * Set Arrow target elements.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iTarget&lt;/tt&gt; : The target element. 
+   * &lt;dt&gt;&lt;tt&gt;iPos   &lt;/tt&gt; : Position to project on the target element. 
+   * &lt;dt&gt;&lt;tt&gt;iExtremity &lt;/tt&gt;  : Head (CATDftArrowHead) or Tail (CATDftArrowTail).
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT SetTarget (IUnknown* iTarget, double iPos[2], const CATDftArrowExtremity iExtremity = CATDftArrowHead) = 0;
+
+  /**
+   * Get arrow target elements.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oTarget&lt;/tt&gt; : The target element. 
+   * &lt;dt&gt;&lt;tt&gt;iExtremity &lt;/tt&gt;  : Head (CATDftArrowHead) or Tail (CATDftArrowTail).
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetTarget (IUnknown** oTarget, const CATDftArrowExtremity iExtremity = CATDftArrowHead) = 0;
+
+  /**
+   * Add a interruption to an arrow.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iFirstPoint&lt;/tt&gt;   : First point coordinates. 
+   * &lt;dt&gt;&lt;tt&gt;iSecondPoint &lt;/tt&gt; : Second point coordinates.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT AddInterruption (const double iFirstPoint[2], const double iSecondPoint[2]) = 0;
+
+  /**
+   * Remove a interruption to an arrow.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;iNum &lt;/tt&gt; : Interruption number to delete.
+   * &lt;dt&gt; &lt;dd&gt; - If iNum equals to 0, all interruptions will be removed. 
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT RemoveInterruption (const int iNum = 0) = 0;
+
+  /**
+   * Get the number of interruptions of arrow path.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oNbInterruption &lt;/tt&gt; : Number of interruptions of arrow path.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetNbInterruption (int* oNbInterruption) = 0;
+
+  /**
+   * Get interruptions of arrow path.
+   * 
+   * @param
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;oInterruptions&lt;/tt&gt; : List of interruptions coordinates (X1,Y1,X2,Y2,.....Xn,Yn).
+   * &lt;dt&gt;&lt;tt&gt;oNbInterruptions&lt;/tt&gt; : Number of interruptions.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetInterruptions (double** oInterruptions, int* oNbInterruptions) = 0;
+
+  /**
+   * Gets the attribute scaleOnExtremities.
+   *
+   * @param oScaleOnExtremities
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; : The arrow extremites are on scale.
+   * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; : The arrow extremites are not on scale.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;S_FALSE&lt;/tt&gt; &lt;dd&gt; if the operation succeeded but the attribute was not found.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT GetScaleOnExtremities(CATBoolean &amp;oScaleOnExtremities) = 0;
+
+  /**
+   * Sets the attribute scaleOnExtremities.
+   *
+   * @param iScaleOnExtremities [in]
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; : To scale the arrow extremites.
+   * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; : To not scale the arrow extremites.
+   * &lt;/dl&gt;
+   * @return
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;S_OK   &lt;/tt&gt; &lt;dd&gt; if the operation succeeded.
+   * &lt;dt&gt;&lt;tt&gt;E_FAIL &lt;/tt&gt; &lt;dd&gt; if the operation failed.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT SetScaleOnExtremities(CATBoolean iScaleOnExtremities) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftAnnotation.html">← 上一页: CATIDftAnnotation.h</a></div>
+        <div><a href="CATIDftBalloon.html">下一页: CATIDftBalloon.h →</a></div>
+    </div>
+</body>
+</html>

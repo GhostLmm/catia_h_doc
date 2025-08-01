@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATArrangementInterfaces/PublicInterfaces/CATIArrNode.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATArrangementInterfaces/PublicInterfaces/CATIArrNode.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIArrConnectorFactory.html">← 上一页: CATIArrConnectorFactory.h</a></div>
+        <div><a href="CATIArrNodeMngt.html">下一页: CATIArrNodeMngt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIArrNode_H
+#define CATIArrNode_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATArrangementItfCPP.h&quot;
+#include &quot;CATRouNodeGeomStatus.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATCkeListOfInterface.h&quot;
+#include &quot;CATMathDef.h&quot;
+
+// Class declarations
+class CATMathPoint;
+class CATIArrSegmentsString_var;
+class CATIArrSegment_var;
+class CATIMovable_var;
+class CATUnicodeString;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATArrangementItfCPP IID IID_CATIArrNode;
+#else
+extern &quot;C&quot; const IID IID_CATIArrNode;
+#endif
+
+/**
+ * Interface on Nodes of a Segment .
+ * &lt;b&gt;Role&lt;/b&gt;: To get the node, segment data.
+ */
+
+class ExportedByCATArrangementItfCPP CATIArrNode : public CATBaseUnknown
+{
+
+  CATDeclareInterface;
+
+public:
+	  
+  /**
+   * Get Segments in this string connected at this node.
+   * @param oSegment1
+   * @param oSegment2
+   */
+  virtual HRESULT GetSegments ( CATIArrSegment_var&amp; oSegment1,
+                                CATIArrSegment_var&amp; oSegment2 ) = 0;
+  
+  
+  /**
+   * Retrieve geometry as CATMathPoint, described in a CATIMovable relative axis.
+   * @param ihRelAxis
+   *    The relative axis object (NULL_var means relative to parent).
+   * @param oPoint
+   *    The geometric argument as CATMathPoint.
+   */
+  virtual HRESULT GetPoint( const CATIMovable_var&amp; ihRelAxis, CATMathPoint&amp; oPoint ) = 0;
+  
+  
+  /**
+   * Query if this is a extremity node.
+   * @return
+   *   CATBoolean.
+   */
+  virtual HRESULT IsExtremity ( CATBoolean&amp; oStatus ) = 0;
+
+  
+  /**
+   * Query if a node is broken(not buildable).
+   * @return
+   *   CATBoolean.
+   */
+  virtual HRESULT IsBroken ( CATBoolean&amp; oStatus ) = 0;
+
+  /**
+   * GetBendRadius. Will return the default value of 0.0 if param doesn&#x27;t exist.
+   * @return
+   *   double
+   */  
+  virtual HRESULT GetBendRadius ( double&amp; oBendRadius ) = 0;
+  
+  /**
+   * GetBendRuleData. Will retrieve the turn data based on rule used.
+   * @param oUseRule
+   *    =0 override.  This is the mode for ALL spatial routing
+   *    =1 rules were used
+   * @param oBendNumberOfMiter
+   *    number of miters for this turn
+   * @param oBendDiamFactor
+   *    a multiplier to apply to the bend diameter 
+   * @param oBendPartType
+   *    =NULL string: use turn radius 
+   *    =non-NULL: use the part type defined in this string e.g. ELBOW. 
+   */  
+  virtual HRESULT GetBendRuleData ( int&amp; oUseRule, int&amp; oBendNumberOfMiter,
+                     double&amp; oBendDiamFactor, CATUnicodeString&amp; oBendPartType ) = 0;
+
+
+  
+  /**
+   * ListParams.
+   * @param oListParams
+   *   A list of CKE parameters.
+   */  
+  virtual HRESULT ListParams ( CATCkeListOf(Parm)&amp; oListParams ) = 0;
+
+ 
+  
+  /**
+   * GetCenterLinePoint.
+   * @param ihRelAxis
+   *    The relative axis object (NULL_var means relative to parent).
+   * @param oPoint1
+   *    IF CenterLines intersect
+   *      CATMathPoint at intersection of previous and next centerlines.
+   *    ELSE
+   *      CATMathPoint of node projected onto previous CenterLine.
+   * @param oPoint2
+   *    IF CenterLines intersect
+   *      CATMathPoint equal to oPoint1.
+   *    ELSE
+   *      CATMathPoint of node projected onto next CenterLine.
+   * @param oStatus
+   *    See CATRouNodeGeomStatus.h for SupportLine/CenterLine intersect values.
+   */
+  virtual HRESULT GetCenterLinePoint ( const CATIMovable_var &amp;ihRelAxis,
+                                       CATMathPoint          &amp;oPoint1,
+                                       CATMathPoint          &amp;oPoint2,
+                                       CATRouNodeGeomStatus  &amp;oStatus ) = 0;
+
+    
+  /**   
+   * CalculateAngle.
+   * @param oAngleDegree
+   *    CATAngle turn from previous Segment to next Segment.
+   * @param oStatus
+   *    See CATRouNodeGeomStatus.h for SupportLine/CenterLine intersect values.
+   */
+  virtual HRESULT CalculateAngle ( CATAngle &amp;oAngleDegree, CATRouNodeGeomStatus &amp;oStatus ) = 0;
+
+
+  /**
+   * Get SegmentString for this object.
+   * @param oArrString
+   *   CATIArrSegmentsString.
+   */
+  virtual HRESULT GetString ( CATIArrSegmentsString_var&amp; oArrString ) = 0;
+  
+};
+
+CATDeclareHandler( CATIArrNode, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIArrConnectorFactory.html">← 上一页: CATIArrConnectorFactory.h</a></div>
+        <div><a href="CATIArrNodeMngt.html">下一页: CATIArrNodeMngt.h →</a></div>
+    </div>
+</body>
+</html>

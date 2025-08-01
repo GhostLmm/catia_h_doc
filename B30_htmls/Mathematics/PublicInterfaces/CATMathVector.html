@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathVector.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathVector.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransformation2D.html">← 上一页: CATMathTransformation2D.h</a></div>
+        <div><a href="CATMathVector2D.html">下一页: CATMathVector2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathVector_H
+#define CATMathVector_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+class CATMath3x3Matrix;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+#include &quot;CATMathematics.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+ 
+#include &quot;CATMathDef.h&quot;
+
+/**
+ * Class representing a mathematical vector in dimension 3. 
+ */ 
+class ExportedByCATMathematics CATMathVector
+{
+ public:
+//=============================================================================
+//- Constructors
+//============================================================================
+/**
+ * Constructs a (0,0,0) vector.
+ */ 
+  INLINE CATMathVector ();
+
+/**
+ * Constructs a CATMathVector from three coordinates.
+ */
+  INLINE CATMathVector (const double iX,
+                  const double iY, const double iZ);
+
+/**
+ * Constructs a CATMathVector from an array of three coordinates.
+ */
+  INLINE CATMathVector (const double  iCoord[]);
+ 
+/**
+ * Copy constructor.
+ */
+  INLINE CATMathVector (const CATMathVector &amp; iVectorToCopy);
+
+//============================================================================ 
+//- Get/Set
+//============================================================================
+/**
+ * Retrieves the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE void GetCoord (double &amp; ioX, double &amp; ioY,
+                        double &amp; ioZ) const;
+
+/**
+ * Modifies the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector from 3 doubles.
+ */
+  INLINE void SetCoord (const double iX,
+                        const double iY, const double iZ);
+
+/**
+ * Retrieves the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector in an array.
+ */
+  INLINE void GetCoord (double iCoord[]) const;
+  
+/**
+ * Modifies the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector from an array of 3 doubles.
+ */
+  INLINE void SetCoord (const double iCoord[]);
+
+/**
+ * Returns the X coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE double GetX () const;
+  
+/**
+ * Modifies the X coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE void SetX (const double iX);
+
+/**
+ * Returns the Y coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE double GetY () const;
+  
+/**
+ * Modifies the Y coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE void SetY (const double iY);
+
+/**
+ * Returns the Z coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE double GetZ () const;
+
+  /**
+ * Modifies the Z coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  INLINE void SetZ (const double iZ);
+
+/**
+ * Retrieves &lt;tt&gt;this&lt;/tt&gt; CATMathVector, expressed in its spherical coordinates.
+ * &lt;br&gt;&lt;tt&gt;ioLongitudeAngle&lt;/tt&gt; and &lt;tt&gt;ioLatitudeAngle&lt;/tt&gt; 
+ * are expressed in radians.
+ */
+  void GetSphericalCoord(double &amp; ioRadius, CATAngle &amp; ioLongitudeAngle,
+                         CATAngle &amp; ioLatitudeAngle) const;
+  
+/**
+ * Modifies &lt;tt&gt;this&lt;/tt&gt; CATMathVector with its spherical coordinates.
+ * &lt;br&gt;&lt;tt&gt;iLongitudeAngle&lt;/tt&gt; and &lt;tt&gt;iLatitudeAngle&lt;/tt&gt;
+ *  are expressed in radians.
+ */
+  void SetSphericalCoord(const double  iRadius, const CATAngle iLongitudeAngle, 
+						const CATAngle  iLatitudeAngle);
+
+/**
+ * Retrieves of &lt;tt&gt;this&lt;/tt&gt; CATMathVector, expressed in its cylindrical coordinates.
+ * &lt;br&gt;&lt;tt&gt;oAngle&lt;/tt&gt; is expressed in radians.
+ */
+  void GetCylindricalCoord(double &amp; ioRadius, CATAngle &amp; ioAngle,
+                           double &amp; ioHeight) const;
+
+/**
+ * Modifies &lt;tt&gt;this&lt;/tt&gt; CATMathVector with its cylindrical coordinates.
+ * &lt;br&gt;&lt;tt&gt;iAngle&lt;/tt&gt; is expressed in radians.
+ */
+  void SetCylindricalCoord(const double iRadius, const CATAngle iAngle,
+			   const double iHeight);
+
+//============================================================================
+//- Norm
+//============================================================================
+
+/** 
+ * Normalizes &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ * &lt;/br&gt;Simply returns if &lt;tt&gt;this&lt;/tt&gt; is null.
+  */
+  void Normalize ();
+/**
+ * Returns the euclidean norm of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  double Norm () const;
+
+/**
+ * Returns the square of the euclidean norm of &lt;tt&gt;this&lt;/tt&gt; CATMathVector.
+ */
+  double SquareNorm () const;
+
+//============================================================================
+//- Angle To
+//============================================================================
+
+/**
+ * Returns the angle (between 0 and CATPI radians) with another CATMathVector.
+ * &lt;br&gt; Returns &lt;tt&gt;0&lt;/tt&gt; if the vector is null.
+ */
+  CATAngle GetAngleTo (const CATMathVector &amp; iOtherVector) const; 
+
+/**
+ * Returns the signed angle (between 0 and CAT2PI radians), with another CATMathVector,
+ *  oriented by a reference vector.
+ * &lt;br&gt; Returns &lt;tt&gt;0&lt;/tt&gt; if the vector is null.
+ */
+  CATAngle GetAngleTo (const CATMathVector &amp; iOtherVector,
+                    const CATMathVector &amp; iRefVector) const;
+
+//============================================================================
+//- Test for parallel and orthogonal vectors (with a numerical tolerence).
+//============================================================================
+/**
+ * Returns the diagnosis of parallelism.
+ * &lt;br&gt;The method uses the numerical
+ * tolerance. For a user tolerance, use the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method.
+ * @return 
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if they are parallel or one vector is null.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsParallel(const CATMathVector &amp; iOtherVector) const;
+
+/**
+ * Returns the diagnosis of orthogonality.
+  * &lt;br&gt;The method uses the numerical
+ * tolerance. For a user tolerance, use the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method.
+ * @return 
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if they are orthogonal or one vector is null.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsOrthogonal(const CATMathVector &amp; iOtherVector) const;
+
+/**
+ * Retrieves the orthogonal decomposition of a CATMathVector related to 
+ * a reference vector.
+ */
+  void OrthoComponents(const CATMathVector &amp; iRefVector,
+       CATMathVector &amp; ioParallelComponent, CATMathVector &amp; ioNormalComponent) const;
+
+
+//============================================================================
+//- Overloaded Operators
+//============================================================================
+/**
+ * Defines the addition of two CATMAthVectors.
+ * @param iVector1
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iVector2
+ * The CATMathVector of &lt;tt&gt;(v1,v2,v3)&lt;/tt&gt; coordinates.
+ * @return
+ * The CATMathVector of &lt;tt&gt;(u1+v1,u2+v2,u3+v3&lt;/tt&gt;) coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator +
+    (const CATMathVector &amp; iVector1, const CATMathVector &amp; iVector2);
+
+/**
+ * Translates a CATMathPoint by a CATMathVector.
+ * @param iPoint
+ * The CATMathPoint of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathPoint of &lt;tt&gt;(p1+u1,p2+u2,p3+u3)&lt;/tt&gt; coordinates.
+ */ 
+  INLINE friend ExportedByCATMathematics CATMathPoint operator +
+    (const CATMathPoint &amp; iPoint, const CATMathVector &amp; iVector);
+
+/**
+ * Modifies a CATMathPoint by using a tranlation by a CATMathVector.
+ * @param iPoint
+ * The CATMathPoint of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathPoint of &lt;tt&gt;(p1=p1+u1,p2=p2+u2,p3=p3+u3)&lt;/tt&gt; coordinates.
+ */  
+  INLINE friend void operator +=
+    (CATMathPoint &amp; iPoint, const CATMathVector &amp; iVector);
+
+/**
+ * Builds a CATMathVector as the difference of two CATMathPoints.
+ * &lt;br&gt; Note that the iPoint1iPoint2 vector is given by iPoint2-iPoint1.
+ * @param iPoint1
+ * The CATMathPoint of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iPoint2
+ * The CATMathPoint of &lt;tt&gt;(q1,q2,q3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(p1-q1,p2-q2,p3-q3)&lt;/tt&gt; coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator -
+    (const CATMathPoint &amp; iPoint1, const CATMathPoint &amp; iPoint2);
+
+/**
+ * Translates a CATMathPoint by a CATMathVector.
+ * @param iPoint
+ * The CATMathPoint of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathPoint of &lt;tt&gt;(p1-u1,p2-u2,p3-u3)&lt;/tt&gt; coordinates.
+ */ 
+  INLINE friend ExportedByCATMathematics CATMathPoint operator -
+    (const CATMathPoint &amp; iPoint, const CATMathVector &amp; iVector);
+
+/**
+ * Modifies a CATMathPoint by using a tranlation by a CATMathVector.
+ * @param iPoint
+ * The CATMathPoint of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathPoint of &lt;tt&gt;(p1=p1-u1,p2=p2-u2,p3=p3-u3)&lt;/tt&gt; coordinates.
+ */
+  INLINE friend void operator -=
+    (CATMathPoint &amp; iPoint, const CATMathVector &amp; iVector);
+
+
+/**
+ * Defines the substraction of two CATMAthVectors.
+ * @param iVector1
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iVector2
+ * The CATMathVector of &lt;tt&gt;(v1,v2,v3)&lt;/tt&gt; coordinates.
+ * @return
+ * The CATMathVector of &lt;tt&gt;(u1-v1,u2-v2,u3-v3&lt;/tt&gt;) coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator -
+    (const CATMathVector &amp; iVector1, const CATMathVector &amp; iVector2);
+
+/**
+ * Defines the opposite of a CATMathVector.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return
+ * The CATMathVector of &lt;tt&gt;(-u1,-u2,-u3)&lt;/tt&gt; coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator -
+    (const CATMathVector &amp; iVector);
+
+/**
+ * Defines the left scalar multiplication.
+ * @param iScalar
+ * The scalar.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(iScalar*u1,iScalar*u2,iScalar*u3)&lt;/tt&gt;
+ *  coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator *
+    (const double iScalar, const CATMathVector &amp; iVector);
+
+/**
+ * Defines the right scalar multiplication.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iScalar
+ * The scalar.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(u1*iScalar,u2*iScalar,u3*iScalar)&lt;/tt&gt;
+ *  coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator *
+    (const CATMathVector &amp; iVector, const double iScalar);
+
+/**
+ * Modifies a CATMathPoint by using the right scalar multiplication.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iScalar
+ * The scalar.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(u1=u1*iScalar,u2=u2*iScalar,u3=u3*iScalar)&lt;/tt&gt;
+ *  coordinates.
+ */ 
+  INLINE friend void operator *=
+    (CATMathVector &amp; iVector, const double iScalar);
+
+/**
+ * Defines the scalar division.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iScalar
+ * The (not null) scalar.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(u1/iScalar,u2/iScalar,u3/iScalar)&lt;/tt&gt;
+ *  coordinates.
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator /
+    (const CATMathVector &amp; iVector, const double iScalar);
+
+/**
+ * Modifies a CATMathPoint by using the scalar division.
+ * @param iVector
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iScalar
+ * The (not null) scalar.
+ * @return 
+ * The CATMathVector of &lt;tt&gt;(u1=u1/iScalar,u2=u2/iScalar,u3=u3/iScalar)&lt;/tt&gt;
+ *  coordinates.
+ */
+  INLINE friend void operator /=
+    (CATMathVector &amp; iVector, const double iScalar);
+
+/**
+ * Defines the dot product of two CATMathVectors.
+ * @param iVector1
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iVector2
+ * The CATMathVector of &lt;tt&gt;(v1,v2,v3)&lt;/tt&gt; coordinates.
+ * @return
+ * &lt;tt&gt;u1*v1 + u2*v2 + u3*v3&lt;/tt&gt;.
+ */
+  INLINE friend ExportedByCATMathematics double operator *
+    (const CATMathVector &amp; iVector1, const CATMathVector &amp; iVector2);
+
+/**
+ * Defines the cross product of two CATMathVectors.
+ * @param iVector1
+ * The CATMathVector of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates.
+ * @param iVector2
+ * The CATMathVector of &lt;tt&gt;(v1,v2,v3)&lt;/tt&gt; coordinates.
+ * @return
+ * The CATMathVector (u2*iv3-u3*v2, u3*iv1-u1*v3, u1*v2-u2*v1).
+ */
+  INLINE friend ExportedByCATMathematics CATMathVector operator ^
+    (const CATMathVector &amp; iVector1, const CATMathVector &amp; iVector2);
+
+/**
+ * Dumps the coordinates of a CATMathVector.
+ * &lt;br&gt;This writes the following line on the ostream:
+ * &lt;br&gt;&lt;tt&gt;( FirstCoord , SecondCoord , ThirdCoord )&lt;/tt&gt;
+ * @param iStream
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+/**
+ * @nodoc
+ * Use now the Dump() method.
+ */
+  friend ExportedByCATMathematics ostream&amp; operator &lt;&lt; (ostream&amp; s,
+						const CATMathVector &amp; iVector);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 GetAngleTo
+  * Use now the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method, in radian.
+ *&lt;br&gt;
+ * Returns the angle (between 0 and 180 degrees) with another CATMathVector.
+ * &lt;br&gt; Returns &lt;tt&gt;0&lt;/tt&gt; if the vector is null.
+ */
+ CATAngle AngleTo (const CATMathVector &amp; iOtherVector) const; 
+
+/**
+ * @nodoc
+ * @deprecated V5R20 GetAngleTo
+ *  Use now the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method, in radian.
+ *&lt;br&gt;
+ * Returns the angle (in degree) with another CATMathVector,
+ *  oriented by a reference vector.
+ */
+  CATAngle AngleTo (const CATMathVector &amp; iOtherVector,
+                    const CATMathVector &amp; iRefVector) const;
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ */
+  friend ExportedByCATMathematics CATMath3x3Matrix operator %
+    (const CATMathVector &amp; iVector1, const CATMathVector &amp; iVector2);
+
+//======================================================================
+// Internal data
+//======================================================================
+ protected:
+  double _x, _y, _z;
+};
+
+//======================================================================
+// INLINE IMPLEMENTATIONS
+//======================================================================
+
+INLINE CATMathVector::CATMathVector() { _x = 0.; _y = 0.; _z = 0.; }
+ 
+INLINE CATMathVector::CATMathVector (const double iX, const double iY,
+                                     const double iZ) {
+  _x = iX; _y = iY; _z = iZ;
+}
+
+INLINE CATMathVector::CATMathVector (const double iXYZ[]) {
+  if (iXYZ == 0) { _x = 0.; _y = 0.; _z = 0.; }
+  else { _x = iXYZ[0]; _y = iXYZ[1]; _z = iXYZ[2]; }
+}
+
+INLINE CATMathVector::CATMathVector (const CATMathVector &amp; iU) {
+  _x = iU._x; _y = iU._y; _z = iU._z;
+}
+ 
+INLINE void CATMathVector::GetCoord (double &amp; oX, double &amp; oY, double &amp; oZ) const { 
+  oX = _x; oY = _y; oZ = _z;
+}
+
+INLINE void CATMathVector::GetCoord (double oXYZ[]) const { 
+  oXYZ[0] = _x; oXYZ[1] = _y; oXYZ[2] = _z; 
+}
+
+INLINE double CATMathVector::GetX() const { return _x; }
+
+INLINE double CATMathVector::GetY() const { return _y; }
+
+INLINE double CATMathVector::GetZ() const { return _z; }
+
+INLINE void CATMathVector::SetCoord (const double iX,
+			             const double iY,
+			             const double iZ) { 
+  _x = iX; _y = iY; _z = iZ;
+}
+
+INLINE void CATMathVector::SetCoord (const double iXYZ[]) { 
+  _x = iXYZ[0]; _y = iXYZ[1]; _z = iXYZ[2]; 
+}
+
+INLINE void CATMathVector::SetX (const double iX) { _x = iX; }
+
+INLINE void CATMathVector::SetY (const double iY) { _y = iY; }
+
+INLINE void CATMathVector::SetZ (const double iZ) { _z = iZ; }
+
+INLINE double CATMathVector::Norm () const {return sqrt(_x*_x+_y*_y+_z*_z);}
+
+INLINE double CATMathVector::SquareNorm () const {return _x*_x+_y*_y+_z*_z;}
+
+INLINE CATMathVector operator +
+                    (const CATMathVector &amp; iU, const CATMathVector &amp; iV) { 
+  return CATMathVector (iU._x + iV._x, iU._y + iV._y, iU._z + iV._z);
+} 
+
+INLINE CATMathPoint operator +
+                    (const CATMathPoint &amp; iP, const CATMathVector &amp; iV) { 
+  return CATMathPoint (iP._x + iV._x, iP._y + iV._y, iP._z + iV._z);
+}
+
+INLINE void operator +=
+                   (CATMathPoint &amp; iP, const CATMathVector &amp; iV) {
+  iP._x += iV._x; 
+  iP._y += iV._y;
+  iP._z += iV._z;
+}
+
+INLINE CATMathVector operator -
+                    (const CATMathPoint &amp; iP, const CATMathPoint &amp; iQ) { 
+  return CATMathVector (iP._x - iQ._x, iP._y - iQ._y, iP._z - iQ._z);
+}
+
+INLINE CATMathPoint operator -
+                   (const CATMathPoint &amp; iP, const CATMathVector &amp; iV) {
+  return CATMathPoint (iP._x - iV._x, iP._y - iV._y, iP._z - iV._z);
+}
+
+INLINE void operator -=
+                   (CATMathPoint &amp; iP, const CATMathVector &amp; iV) {
+  iP._x -= iV._x; 
+  iP._y -= iV._y;
+  iP._z -= iV._z;
+}
+
+INLINE CATMathVector operator -
+                    (const CATMathVector &amp; iU, const CATMathVector &amp; iV) {
+  return CATMathVector (iU._x - iV._x, iU._y - iV._y, iU._z - iV._z);
+}
+
+INLINE CATMathVector operator -
+                     (const CATMathVector &amp; iU) {
+  return CATMathVector (-iU._x, -iU._y , -iU._z);
+}
+
+INLINE CATMathVector operator *
+                    (const double iScalar, const CATMathVector &amp; iU) { 
+  return CATMathVector (iScalar*iU._x, iScalar*iU._y, iScalar*iU._z); 
+}
+
+INLINE CATMathVector operator *
+                     (const CATMathVector &amp; iU, const double iScalar) {
+  return CATMathVector (iScalar*iU._x, iScalar*iU._y, iScalar*iU._z);
+}
+
+INLINE void operator *=
+    (CATMathVector &amp; iU, const double iScalar) {
+  iU._x *= iScalar;
+  iU._y *= iScalar;
+  iU._z *= iScalar;
+} 
+
+INLINE CATMathVector operator /
+                     (const CATMathVector &amp; iU, const double iScalar) {
+  double Invert = 1./iScalar;
+  return CATMathVector (iU._x*Invert, iU._y*Invert, iU._z*Invert);
+}
+
+INLINE void operator /=
+    (CATMathVector &amp; iU, const double iScalar) {
+  double Invert = 1./iScalar;
+  iU._x *= Invert;
+  iU._y *= Invert;
+  iU._z *= Invert;
+} 
+
+INLINE double operator *
+              (const CATMathVector &amp; iU, const CATMathVector &amp; iV) {
+  return (iU._x*iV._x + iU._y*iV._y + iU._z*iV._z);
+}
+
+INLINE CATMathVector operator ^
+                    (const CATMathVector &amp; iU, const CATMathVector &amp; iV) {
+  return CATMathVector (iU._y*iV._z-iU._z*iV._y, iU._z*iV._x-iU._x*iV._z,
+			iU._x*iV._y-iU._y*iV._x);
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransformation2D.html">← 上一页: CATMathTransformation2D.h</a></div>
+        <div><a href="CATMathVector2D.html">下一页: CATMathVector2D.h →</a></div>
+    </div>
+</body>
+</html>

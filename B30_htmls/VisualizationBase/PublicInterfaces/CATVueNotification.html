@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATVueNotification.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATVueNotification.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVue.html">← 上一页: CATVue.h</a></div>
+        <div><a href="CATWritePixelImage.html">下一页: CATWritePixelImage.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef _CATVueNotification
+#define _CATVueNotification
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATNotification.h&quot;
+#include &lt;string.h&gt;
+
+class CATPickPath;
+
+/**
+  * Class to notify an event from the user interface.
+  * &lt;b&gt;Role&lt;/b&gt;: This notification is the base class for all notification
+  * send by CATManipulator and its derived classes. They notify of the
+  * different interactions from the user.
+  */
+
+class ExportedByCATViz CATVueNotification : public CATNotification
+{
+	CATDeclareClass;
+
+  enum VueState { VueRefuse, VueAccept };
+
+  public:
+  /** 
+    * Constructs a CATVueNotification notification.
+    * @param iNotification 
+    *   The device event notification.
+    *   This notification contains the manipulation device 
+    *   parameters like mouse position and move vector.
+    */
+    CATVueNotification(CATNotification *iNotification = NULL);
+
+    virtual ~CATVueNotification();
+
+    /** @nodoc */
+    CATNotification *GetDataNotification() const;
+
+    /** @nodoc */
+    void SetDataNotification(CATNotification *);
+
+    /**
+	 * Sets the cursor on the 1st graphical element under the mouse.
+	 * This element is the 1st of a list containing the graphical elements under the mouse.
+	 * The list is sorted by the depth of element. The pick path returned by @href #GetPickPath is valuated
+	 * with the pick path of this 1st lement under the mouse.
+	 * @see CATPickPath.
+     */
+    void InitElementList();
+
+    /** 
+	 * Moves the cursor on the next element of the list containing the graphical elements under the mouse.
+	 * The list is sorted by depth and thus, the cursor will be positionned on a deeper element.
+	 * The pick path returned by @href #GetPickPath is valuated with the pick path of this next element under the mouse.
+     * @return
+     *	 1 when such a pick path exists.
+     *	 0 if there is no element deeper under the mouse.
+     */
+    int MoveToNextElement();
+
+    /**
+      * Retrieves the PickPath associated to the VueNotification.
+      *
+      * @return
+      * The CATPickPath constructed during the user interaction
+      */
+    CATPickPath *GetPickPath();
+
+    /** @nodoc */
+    void Accept();
+
+    /** @nodoc */
+    void Refuse();
+
+    /** @nodoc */
+    CATVueNotification::VueState GetState() const;
+    
+
+ protected:
+	/** @nodoc */
+    CATNotification *_notification;
+    /** @nodoc */
+    CATVueNotification::VueState _vueState;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVue.html">← 上一页: CATVue.h</a></div>
+        <div><a href="CATWritePixelImage.html">下一页: CATWritePixelImage.h →</a></div>
+    </div>
+</body>
+</html>

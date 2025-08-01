@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPModification.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPModification.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgTPMachiningTime.html">← 上一页: CATIMfgTPMachiningTime.h</a></div>
+        <div><a href="CATIMfgTPMultipleMotion.html">下一页: CATIMfgTPMultipleMotion.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+//===================================================================
+//
+// CATIMfgTPModification.h
+// Define the CATIMfgTPModification interface
+// Only for TPMultipleMotion traject&#x27;s type
+//===================================================================
+//
+// Usage notes:
+//   New interface: Cut or Translate a zone of the Tool Path
+//
+//===================================================================
+//
+//  Janvier 2000  Creation: 
+//===================================================================
+#ifndef CATIMfgTPModification_H
+#define CATIMfgTPModification_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+#include &quot;CATListOfInt.h&quot;
+
+class CATMathPoint;
+class CATMathVector;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgTPModification;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgTPModification;
+#endif
+
+/**
+* Interface usefull to manage local modifications on tool path objects.
+* &lt;b&gt;Role&lt;/b&gt;: All modifications described in this interface provide access to points.&lt;br&gt;
+*
+*/
+
+//------------------------------------------------------------------
+class ExportedByMfgItfEnv CATIMfgTPModification : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+	*   Insert a list of points.&lt;br&gt;
+	*   The point is inserted two times in the tool path.&lt;br&gt;
+	*   If you want that each point is inserted only one time, please use InsertPoints.
+	*   @param iXTipCuttingPoint
+	*      the list of X coordinates to add
+	*   @param iYTipCuttingPoint
+	*      the list of Y coordinates to add
+	*   @param iZTipCuttingPoint
+	*      the list of Z coordinates to add
+	*   @param iIndexList
+	*      the list of Index (in Tip Lists) where to add points
+	*/
+	virtual HRESULT InsertPoint( const CATListOfDouble *iXTipCuttingPoint,
+								 const CATListOfDouble *iYTipCuttingPoint,
+								 const CATListOfDouble *iZTipCuttingPoint,
+								 const CATListOfInt *iIndexList)=0;
+
+/**
+	*   Insert a list of points.&lt;br&gt;
+	*   Each point is copied N times in the tool path.&lt;br&gt;
+	*   @param iXTipCuttingPoint
+	*      the list of X coordinates to add
+	*   @param iYTipCuttingPoint
+	*      the list of Y coordinates to add
+	*   @param iZTipCuttingPoint
+	*      the list of Z coordinates to add
+	*   @param iIndexList
+	*      the list of Index (in Tip Lists) where to add points
+	*   @param iNumberOfCopy
+	*      the number of copy of each inserted point in the tool path
+	*/
+	virtual HRESULT InsertPoints(const CATListOfDouble *iXTipCuttingPoint,
+								 const CATListOfDouble *iYTipCuttingPoint,
+								 const CATListOfDouble *iZTipCuttingPoint,
+								 const CATListOfInt *iIndexList,
+								 int iNumberOfCopy=1)=0;
+
+/**
+	*   Cut a list of  points.&lt;br&gt;
+	*   @param iIndexList
+	*      the list of index point (in Tip Lists) to be cutted
+	* 
+	* The tool path is opened after CutArea
+	* 
+	*/
+	virtual HRESULT CutArea (const CATListOfInt *iIndexList)=0;
+
+/**
+	*   Translate a list of points.&lt;br&gt;
+	*   @param iIndexList
+	*      the list of index point (in Tip Lists) to be Translated
+	*   @param iDx
+	*      the translation along X axis.
+	*   @param iDy
+	*      the translation along Y axis.
+	*   @param iDz
+	*      the translation along Z axis.
+	* 
+	*/
+	virtual HRESULT TranslateArea (const CATListOfInt *iIndexList,
+										  double iDx, double iDy, double iDz) = 0;
+
+/**
+	*   Remove a list of point.&lt;br&gt;
+	*   @param iPointList
+	*      the list of index point (in Tip Lists) to be cutted
+	* 
+	* The tool path is closed after RemovePoint
+	* 
+	*/
+	virtual HRESULT RemovePoint (const CATListOfInt *iPointList)=0;
+
+/**
+* @nodoc
+*/     
+	virtual HRESULT MovePoint (const CATListOfInt *iPointList,
+									 double iDx, double iDy, double iDz)=0;
+
+/**
+  *   Insert a polyline at a given position.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param iTrajectType
+  *      the type of the traject
+  *   @param iFeedrateType
+  *      the type of the feedrate.
+  *   @param X
+  *      the list of X coordinates of the points to insert
+  *   @param Y
+  *      the list of Y coordinates of the points to insert
+  *   @param Z
+  *      the list of Z coordinates of the points to insert
+  */
+	virtual CATBoolean InsertPolyline(int numbloc,
+											const CATUnicodeString&amp; iTrajectType,
+											const CATUnicodeString&amp; iFeedrateType,
+											const CATListOfDouble&amp; X,
+											const CATListOfDouble&amp; Y,
+											const CATListOfDouble&amp; Z) = 0;
+
+/**
+  *   Insert a polyline at a given position. The first point is given.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param iTrajectType
+  *      the type of the traject
+  *   @param iFeedrateType
+  *      the type of the feedrate.
+  *   @param X
+  *      the X coordinate of the first point to insert
+  *   @param Y
+  *      the Y coordinate of the first point to insert
+  *   @param Z
+  *      the Z coordinate of the first point to insert
+  */
+  virtual CATBoolean InsertPolyline( int numbloc,
+											 const CATUnicodeString&amp; iTrajectType,
+											 const CATUnicodeString&amp; iFeedrateType,
+											 double X,double Y,double Z) = 0;
+
+/**
+  *   Insert a point at a given position in a polylone of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the X coordinate of the point to insert
+  *   @param Y
+  *      the Y coordinate of the point to insert
+  *   @param Z
+  *      the Z coordinate of the point to insert
+  */
+  virtual CATBoolean InsertTipPointInPolyline ( int numbloc,
+															double X,double Y,double Z) = 0;
+
+/**
+  *   Insert a contact point at a given position in a polylone of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the X coordinate of the contact point to insert
+  *   @param Y
+  *      the Y coordinate of the contact point to insert
+  *   @param Z
+  *      the Z coordinate of the contact point to insert
+  */
+  virtual CATBoolean InsertContactPointInPolyline( int numbloc,
+																double X,double Y,double Z) = 0;
+
+/**
+  *   Insert a normal at a given contact point in a polylone of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the X normal coordinate to insert
+  *   @param Y
+  *      the Y normal coordinate to insert
+  *   @param Z
+  *      the Z normal coordinates to insert
+  */
+  virtual CATBoolean InsertContactNormalInPolyline(int numbloc,
+																double X,double Y,double Z) = 0;
+
+/**
+  *   Insert a tool axis at a given point in a polylone of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the X tool axis coordinate to insert
+  *   @param Y
+  *      the Y tool axis coordinate to insert
+  *   @param Z
+  *      the Z tool axis coordinate to insert
+  */
+  virtual CATBoolean InsertToolAxisInPolyline ( int numbloc,
+															double X,double Y,double Z) = 0;
+
+/**
+  *   Insert a list of contact points at a given position in a polyline of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the list of X coordinates to insert
+  *   @param Y
+  *      the list of Y coordinates to insert
+  *   @param Z
+  *      the list of Z coordinates to insert
+  */
+  virtual CATBoolean InsertContactPointsInPolyline(int numbloc,
+																const CATListOfDouble&amp; X,
+	                                             const CATListOfDouble&amp; Y,
+																const CATListOfDouble&amp; Z) = 0; 
+
+/**
+  *   Insert a list of normals at a given contact point in a polyline of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the list of X normal coordinates to insert
+  *   @param Y
+  *      the list of Y normalcoordinates to insert
+  *   @param Z
+  *      the list of Z normalcoordinates to insert
+  */
+  virtual CATBoolean InsertContactNormalsInPolyline ( int numbloc,
+																	const CATListOfDouble&amp; X,
+																	const CATListOfDouble&amp; Y,
+																	const CATListOfDouble&amp; Z) = 0;
+
+/**
+  *   Insert a list of tool axis at a given position in a polyline of a tool path.&lt;br&gt;
+  *   @param numbloc
+  *      the position of insertion
+  *   @param X
+  *      the list of X tool axis coordinates to insert
+  *   @param Y
+  *      the list of Y tool axis coordinates to insert
+  *   @param Z
+  *      the list of Z tool axis coordinates to insert
+  */
+  virtual CATBoolean InsertToolAxisInPolyline ( int numbloc,
+															const CATListOfDouble&amp; X,
+															const CATListOfDouble&amp; Y,
+															const CATListOfDouble&amp; Z) = 0;
+
+
+/**
+*   Remove a polyline from a tool path.&lt;br&gt;
+*   @param numbloc
+*      the index of the polyline
+*/
+  virtual CATBoolean RemovePolyline                (int numbloc) = 0;
+
+/**
+*   Insert a circle arc.&lt;br&gt;
+*   @param numbloc
+*      the index where to insert the circle arc
+*   @param iTrajectType
+*      The type of traject
+*   @param iFeedrateType
+*      The type of feedrate
+*   @param iX,iY,iZ
+*     The coordinates of tip points (discretization of the circle arc)
+*   @param iNormale
+*     The oriented normal to the plane containing the circle arc
+*   @param iCenter
+*     The center of the circle arc
+*    @param iRadius
+*     The radius of the circle arc.
+*/
+  virtual CATBoolean InsertCircleArc(int numbloc,
+						     	     const CATUnicodeString&amp; iTrajectType,
+	 		                         const CATUnicodeString&amp; iFeedrateType,
+				                     const CATListOfDouble&amp; X,
+				                     const CATListOfDouble&amp; Y,
+				                     const CATListOfDouble&amp; Z,
+				                     const CATMathVector&amp; iNormal,
+				                     const CATMathPoint&amp; iCenter,
+		                             double iRadius)       = 0;
+
+/**
+*   Remove a circle arc.&lt;br&gt;
+*   @param numbloc
+*      the index of the circle arc
+*/
+  virtual CATBoolean RemoveCircleArc                (int numbloc) = 0;
+
+/**
+* @nodoc
+*/     
+  virtual CATBoolean DeleteDatas                   () = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIMfgTPModification, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgTPMachiningTime.html">← 上一页: CATIMfgTPMachiningTime.h</a></div>
+        <div><a href="CATIMfgTPMultipleMotion.html">下一页: CATIMfgTPMultipleMotion.h →</a></div>
+    </div>
+</body>
+</html>

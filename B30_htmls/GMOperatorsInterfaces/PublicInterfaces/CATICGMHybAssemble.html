@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMHybAssemble.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMHybAssemble.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMHealGaps.html">← 上一页: CATICGMHealGaps.h</a></div>
+        <div><a href="CATICGMHybBoolean.html">下一页: CATICGMHybBoolean.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMHybAssemble_h_
+#define CATICGMHybAssemble_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMHybOperatorImp.h&quot;
+#include &quot;CATMathConstant.h&quot;
+#include &quot;ListPOfCATCell.h&quot;
+
+class CATExtHybAssemble;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMHybAssemble;
+
+/**
+* Class defining the operator that assembles two bodies.
+*&lt;br&gt;
+* This operator operates on the 2D (CATShell), 1D (CATWire) and 0D (CATVertexInVolume)
+* domains of a CATBody.
+* It follows the general frame of all operator and satisfies to the smart mechanism: the
+* input bodies are not modified. A new resulting body is created, 
+* possibly sharing data with the input bodies.
+*&lt;ul&gt;
+* &lt;li&gt;CATICGMHybAssemble is created with the CATCGMCreateTopAssemble global function. 
+* It must be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+* It is not streamable. 
+*&lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometric factory.
+*&lt;/ul&gt;
+* @see CATCGMCreateTopAssemble
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMHybAssemble: public CATICGMHybOperatorImp
+{
+public:
+ /**
+  * Constructor
+  */
+  CATICGMHybAssemble();
+
+  virtual int Run() = 0;
+
+  /** 
+   * Activates simplify mode: operator tries to simplify result.
+   * &lt;br&gt; This option is not activated by default.
+   * @param yes_or_no
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; No simplification of result.
+   *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; Simplification of result.&lt;/dl&gt;
+   */
+  virtual void SetSimplifyMode(int yes_or_no = 1) = 0;
+
+  /**
+   * Returns simplify mode.
+   * @return 
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; No simplification of result.
+   *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; Simplification of result.&lt;/dl&gt;
+   */
+  virtual int GetSimplifyMode() const = 0;
+
+/**
+  * Activates suppress mode : in the case of invalid cells, 
+  * operator does a second pass after having removed them.
+  * Invalid cells may be retrieved with method GetSupressBody.
+  * &lt;br&gt; This option is not activated by default.
+  * @param yes_or_no
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; No assemble with invalid cells.
+  *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; Force assemble with invalid cells.&lt;/dl&gt;
+  */
+  virtual void SetSuppressMode(int yes_or_no = 1) = 0;
+
+  /**
+  * Returns the suppress mode.
+  * @return 
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; suppress mode not active.
+  *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; suppress mode is active.&lt;/dl&gt;
+  */
+  virtual int GetSuppressMode() const = 0;
+
+  /**
+   * Retrieves the suppressed cells in a body.
+  * @return
+  * The suppressed body: the body contains all suppressed cells.
+  */
+  virtual CATBody *GetSuppressBody() = 0;
+
+   /** 
+   * Retrieves merged cells in a body (to use after run).
+   * @return
+   * The body containing all merged edges.
+   */
+  virtual CATBody *GetAllMergedEdges() = 0;
+
+/**
+  * Specifies a list of cells to be merged in a local join.
+  * @param iCellsToMerge
+  * The cells to be merged.
+  */
+  virtual void SetCellsToMerge(const CATLISTP(CATCell) &amp;iListOfCells) = 0;
+
+  /**
+   * Specifies border cells of different skins to assemble to match up,
+	 * in order to avoid unnecessary calculations.
+	 * @param iMatchingCells
+   * The border cells of the skins that are matching together.
+   */
+  virtual void SetMatchingCells(const CATLISTP(CATCell) &amp;iMatchingCells) = 0;
+
+  /**
+   * Activates Volume creation mode: if the resulting skin is closed,
+   * operator creates and returns the volume bounded by this skin.
+	 * @param iVolumeCreation
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; No volume creation.
+   *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt; Volume creation if result is closed.&lt;/dl&gt;
+   */
+  virtual void SetVolumeCreationMode(CATBoolean iVolumeCreation = FALSE) = 0;
+
+   /**
+   * Activates SeparateBodies mode : in the case of more than one resulting domain,
+   * each domain is returned in a different body.
+   * Resulting bodies may be retrieved calling &lt;tt&gt;NextResult&lt;/tt&gt; before each call to GetResult.
+   * &lt;br&gt; This option is not activated by default.
+   * @param iSeparateBodiesMode
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; All domains will be in the same body.
+   *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt; One body for each domain.&lt;/dl&gt;
+   */
+   virtual void SetReturnSeparateBodies(CATBoolean iSeparateBodiesMode) = 0;
+
+   
+#ifdef CATIACGMR421CAA
+   /**
+   * Option to split edges according to the convexity.  
+   * &lt;br&gt; This option is activated by default.  Deactivating it improves performance.
+   * @param iConvexitySplitter
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; Edges will not be split according to the convexity.  This should improve performance.
+   *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt;  Edges will be split according to the convexity.&lt;/dl&gt;
+   */
+   virtual void SetConvexitySplitter(CATBoolean iConvexitySplitter) = 0;
+
+   /**
+   * Option to populate output journals.
+   * &lt;br&gt; This option is activated by default.  Deactivating it improves performance.
+   * @param iJournalsRequired
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; We will not populate the output journals.  This should improve performance.
+   *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt;  We populate the output journals.&lt;/dl&gt;
+   */
+   virtual void SetJournalsRequired(CATBoolean iJournalsRequired) = 0;
+
+   /*
+   * Option to record the merged edges.
+   * &lt;br&gt; This option is activated by default.  Deactivating it improves performance.   
+   * @param iAllMergedEdgesRequired
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; We will not record the merged edges.  This should improve performance.
+   *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt;  We record edges that have been merged.&lt;/dl&gt;
+   */
+   virtual void SetAllMergedEdgesRequired(CATBoolean iAllMergedEdgesRequired) = 0;
+#endif
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMHybAssemble(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMHybAssemble_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMHealGaps.html">← 上一页: CATICGMHealGaps.h</a></div>
+        <div><a href="CATICGMHybBoolean.html">下一页: CATICGMHybBoolean.h →</a></div>
+    </div>
+</body>
+</html>

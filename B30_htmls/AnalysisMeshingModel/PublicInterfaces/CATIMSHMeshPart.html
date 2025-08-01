@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnalysisMeshingModel/PublicInterfaces/CATIMSHMeshPart.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AnalysisMeshingModel/PublicInterfaces/CATIMSHMeshPart.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMSHMeshManager.html">← 上一页: CATIMSHMeshManager.h</a></div>
+        <div><a href="CATIMSHMesher.html">下一页: CATIMSHMesher.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMSHMeshPart_h 
+#define CATIMSHMeshPart_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1 
+ * @CAA2Usage U3 
+ */
+
+#include &quot;MSHModel.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+class CATIMSHMeshManager;
+class CATILinkableObject;
+class CATIMSHMeshPartContainer;
+class CATUnicodeString;
+class CATISpecObject;
+class CATMSHElement;
+class CATIProduct;
+class CATMathTransformation;
+class CATMSHMeshDomain;
+class CATMSHMeshPart;
+class CATISamAnalysisConnector;
+class CATIMSHMesher;
+class CATIMSHLocalSpecification;
+class CATMSHListOfMeshPart;
+
+extern ExportedByMSHModel IID IID_CATIMSHMeshPart;
+
+/**
+ * Describe the status of an external reference, such as geometry for support of the &lt;b&gt;Mesh Part&lt;/b&gt;. 
+ * @param CATMSHRefNotDefined
+ *   External reference is not defined.
+ * @param CATMSHRefDeleted
+ *   External reference has been defined but has been deleted since then.
+ * @param CATMSHRefNotLoaded
+ *   External reference can not be solved as corresponding document is not loaded in session.
+ * @param CATMSHRefLoaded
+ *   &lt;External reference has been solved.
+ */
+enum CATMSHExternalReferenceStatus
+{
+   CATMSHRefNotDefined      =0,
+   CATMSHRefDeleted         =1,
+   CATMSHRefNotLoaded       =2,
+   CATMSHRefLoaded          =3
+};
+
+/**
+ * Interface representing a &lt;b&gt;Mesh Part&lt;/b&gt;.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface should be used to access all data associated to a &lt;b&gt;Mesh Part&lt;/b&gt;, 
+ * such as global and local mesh specifications or geometry to be meshed (supports).
+ * &lt;p&gt;A Mesh Part is an &lt;b&gt;Analysis Set&lt;/b&gt; which has some specific attributes (global specifications
+ * and supports) and can contain &lt;b&gt;Analysis Entities&lt;/b&gt; which represent local mesh specifications.
+ * &lt;p&gt;Associated to each &lt;b&gt;Mesh Part&lt;/b&gt;, there is a &lt;b&gt;Mesher&lt;/b&gt; which is called to check the supports and
+ * to build the mesh, see @href CATIMSHMesher.
+ */
+
+class ExportedByMSHModel CATIMSHMeshPart : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  /**
+   * Returns the number of supports defined.
+   */
+  virtual int GetNumberOfSupports () = 0;
+  /**
+   * Retreives a support from it&#x27;s number.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A support is defined by a product instance which is use for positionning the mesh and
+   * a geometric support which is handled by its CATILinkableObject interface.
+   * @param oProduct [out, CATBaseUnknown#Release]
+   *   The product instance which contains the support.
+   * @param oSupport [out, CATBaseUnknown#Release]
+   *   CATILinkableObject interface of the geometric support.
+   * @param iNumber
+   *   Number of the requested support 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; between 1 and the number of supports.
+   * @param oStatus
+   *   The status explaining failure causes:
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;CATMSHRefNotDefined&lt;/dt&gt;&lt;dd&gt;The support has not been defined.
+   *   &lt;dt&gt;CATMSHRefDeleted&lt;/dt&gt;&lt;dd&gt;The support has been deleted.
+   *   &lt;dt&gt;CATMSHRefNotLoaded&lt;/dt&gt;&lt;dd&gt;The support is not loaded.
+   *   &lt;dt&gt;CATMSHRefLoaded&lt;/dt&gt;&lt;dd&gt;The support has been retreived, execution successful.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The support has been successfully retreived.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The support can not be retreived for this &lt;b&gt;Mesh Part&lt;/b&gt;. See Status output argument for a more detailed explanation.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT GetSupport ( CATIProduct *&amp; oProduct , CATILinkableObject *&amp; oSupport , int iNumber = 1 , CATMSHExternalReferenceStatus * oStatus = NULL ) = 0;
+  /**
+   * Defines a support.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A support is defined by a product instance which is use for positionning the mesh and
+   * a geometric support which is handled by its CATILinkableObject interface.
+   * @param iProduct
+   *   The product instance which contains the support.
+   * @param iSupport
+   *   CATILinkableObject interface of the geometric support.
+   * @param iMode
+   *   The mode used to define support.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;the support is defined as a single support.
+   *   &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;the support is added to exising supports.
+   *   &lt;dt&gt;2&lt;/dt&gt;&lt;dd&gt;switch, ie. added if new, suppressed if already existing.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The support has been successfully created.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The support is not allowed for this &lt;b&gt;Mesh Part&lt;/b&gt;.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT SetSupport ( CATIProduct * iProduct , CATILinkableObject * iSupport , int iMode = 0 ) = 0;
+  /**
+   * Check the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The &lt;b&gt;Mesh Part&lt;/b&gt; is analysed to see if the supports are still valid.
+   * &lt;br&gt;The Check method is also called at the end of the SetSupport method.
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The supports are still valid
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The supports are no longer valid, the &lt;b&gt;Mesh Part&lt;/b&gt; can no longer be updated.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT Check () = 0;
+  /**
+   * Remove the mesh corresponding to the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Deletes all the nodes and elements that have been generated by the &lt;b&gt;Mesher&lt;/b&gt; corresponding to the 
+   * &lt;b&gt;Mesh Part&lt;/b&gt;. 
+   */
+  virtual void RemoveMesh () = 0;
+  /**
+   * Returns the &lt;b&gt;Mesh Manager&lt;/b&gt; corresponding to the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @return CATBaseUnknown#Release
+   */
+  virtual CATIMSHMeshManager * GetMeshManager () = 0;
+  /**
+   * Returns the number of finite elements belonging to the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   */
+  virtual int GetNumberOfElements () = 0;
+  /**
+   * Valuates a global mesh specification to a real double value.
+   * @param iName
+   *   Name of the global specification. 
+   * @param iValue
+   *   Real double value to be used for the specification. 
+   *   ( In case of Length, iValue is evaluated in millimeters ).
+   */
+  virtual void SetGlobalSpecification ( const CATUnicodeString &amp;iName , double iValue ) = 0;
+  /**
+   * Retreives the real double value of a global mesh specification.
+   * @param iName
+   *   Name of the global specification. 
+   * @param oValue
+   *   Real double value of the specification.
+   *   ( In case of Length, oValue is evaluated in millimeters ).
+   */
+  virtual void GetGlobalSpecification ( const CATUnicodeString &amp;iName , double &amp;oValue ) = 0;
+  /**
+   * Valuates a global mesh specification to a integer value.
+   * @param iName
+   *   Name of the global specification. 
+   * @param iValue
+   *   Integer value to be used for the specification. 
+   */
+  virtual void SetGlobalSpecification ( const CATUnicodeString &amp;iName , int iValue ) = 0;
+  /**
+   * Retreives the integer value of a global mesh specification.
+   * @param iName
+   *   Name of the global specification. 
+   * @param oValue
+   *   Integer value of the specification. 
+   */
+  virtual void GetGlobalSpecification ( const CATUnicodeString &amp;iName, int &amp;oValue ) = 0;
+  /**
+   * Valuates a global mesh specification to a character value.
+   * @param iName
+   *   Name of the global specification. 
+   * @param iValue
+   *   Character value to be used for the specification. 
+   */
+  virtual void SetGlobalSpecification ( const CATUnicodeString &amp;iName, const CATUnicodeString &amp;iValue ) = 0;
+  /**
+   * Retreives the character value of a global mesh specification.
+   * @param iName
+   *   Name of the global specification. 
+   * @param oValue
+   *   Character value of the specification. 
+   */
+  virtual void GetGlobalSpecification ( const CATUnicodeString &amp;iName, CATUnicodeString &amp;oValue ) = 0;
+  /**
+   * Retreives the CATISpecObject value of a global mesh specification.
+   * @param iName
+   *   Name of the global specification. 
+   * @param oValue [out, CATBaseUnknown#Release]
+   *   CATISpecObject value of the specification. 
+   */
+  virtual void GetGlobalSpecification ( const CATUnicodeString &amp;iName, CATISpecObject * &amp;oValue ) = 0;
+  /**
+   * Creates a new local specification within the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This methods creates local specification within the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @param iType
+   *   Type of the local specification (Late type of the local specification). 
+   * @param iName
+   *   Name of the local specification. 
+   * @param LocalSpec [out, CATBaseUnknown#Release]
+   *   Pointer on the created local specification. 
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The local specification has been successfully set.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The local specification was not created.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT CreateLocalSpecification ( const CATUnicodeString &amp;iType , const CATUnicodeString &amp;iName, CATIMSHLocalSpecification * &amp; LocalSpec ) = 0;
+  /**
+   * Query the &lt;b&gt;Mesh Part&lt;/b&gt; about the type of mesh generated.
+   * @param iType
+   *   String representing the query made to the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;&quot;1D&quot;&lt;/dt&gt;&lt;dd&gt;Is the &lt;b&gt;Mesh Part&lt;/b&gt; generating 1D finite elements?
+   *   &lt;dt&gt;&quot;2D&quot;&lt;/dt&gt;&lt;dd&gt;Is the &lt;b&gt;Mesh Part&lt;/b&gt; generating 2D finite elements?
+   *   &lt;dt&gt;&quot;3D&quot;&lt;/dt&gt;&lt;dd&gt;Is the &lt;b&gt;Mesh Part&lt;/b&gt; generating 3D finite elements?
+   *   &lt;dt&gt;&quot;Connection&quot;&lt;/dt&gt;&lt;dd&gt;Is the &lt;b&gt;Mesh Part&lt;/b&gt; generating connecting elements between meshes?&lt;/dl&gt;
+	 * @return
+	 *   The result of the query.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The answer is yes.
+	 *   &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The answer is no.
+	 *   &lt;/dl&gt;
+   */
+  virtual int IsOfType ( const CATUnicodeString &amp;iType ) = 0;
+  /**
+   * Retreives the parent &lt;b&gt;Mesh Parts&lt;/b&gt; of the part.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A parent &lt;b&gt;Mesh Part&lt;/b&gt;
+   * is a &lt;b&gt;Mesh Part&lt;/b&gt; that should updated before the actual mesh. For example, in
+   * the case of a mesher connecting to geometric parts, the parents &lt;b&gt;Mesh Parts&lt;/b&gt; are the one corresponding
+   * to these two parts (see @href CATIMSHMesher ).
+   * @param  oParents
+   *   The list of parent &lt;b&gt;Mesh Parts&lt;/b&gt;. 
+   * @param oStatus
+   *   The status explaining failure causes:
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dt&gt;CATMSHRefNotLoaded&lt;/dt&gt;&lt;dd&gt;At leat one parent &lt;b&gt;Mesh Parts&lt;/b&gt; is not loaded.
+   *   &lt;dt&gt;CATMSHRefLoaded&lt;/dt&gt;&lt;dd&gt;Parent &lt;b&gt;Mesh Parts&lt;/b&gt; have been retreived, execution successful.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The list has been successfully retreived.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The operation failed.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT GetParentMeshParts ( CATMSHListOfMeshPart * &amp;oParents , CATMSHExternalReferenceStatus * oStatus = NULL) = 0;
+  /**
+   * Retreives the list of finite elements belonging to the &lt;b&gt;Mesh Parts&lt;/b&gt;.
+   * @param oElements
+   *   Array containing pointers on all elements belonging to the &lt;b&gt;Mesh Parts&lt;/b&gt;.
+	 * @return
+   *   The number of finite elements belonging to the &lt;b&gt;Mesh Parts&lt;/b&gt;.
+   */
+  virtual int GetElements ( CATMSHElement ** &amp;oElements ) = 0;
+  /**
+   * Copy the content (nodes &amp; elements) of a &lt;b&gt;Mesh Part&lt;/b&gt; into the current one.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method should be used only to copy nodes and elements of a &lt;b&gt;Mesh Part&lt;/b&gt;
+   * while implementing a &lt;b&gt;Mesher&lt;/b&gt;. See @href CATIMSHMesher#Mesh method.
+   * @param iMeshPart
+   *   &lt;b&gt;Mesh Parts&lt;/b&gt; containing nodes and elements to copy.
+   * @param iTransfo
+   *   Transformation to be applied during copy.
+   * @param iDoNotCopyAssociativity
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Nodes and elements associativity is copied.
+	 *   &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;Nodes and elements associativity is not copied.
+	 *   &lt;/dl&gt;
+   */
+  virtual void Copy ( CATIMSHMeshPart * iMeshPart , CATMathTransformation * iTransfo = NULL , int iDoNotCopyAssociativity = 0 ) = 0;
+  /**
+   * Returns the first &lt;b&gt;Mesh Domain&lt;/b&gt; of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;See @href CATMSHMeshDomain#Next method to scan the other &lt;b&gt;Mesh Domains&lt;/b&gt;.
+   */
+  virtual CATMSHMeshDomain * GetFirstMeshDomain () =0;
+  /**
+   * Returns the last &lt;b&gt;Mesh Domain&lt;/b&gt; of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;See @href CATMSHMeshDomain#Previous method to scan the other &lt;b&gt;Mesh Domains&lt;/b&gt;.
+   */
+  virtual CATMSHMeshDomain * GetLastMeshDomain () =0;
+  /**
+   * @nodoc 
+   */
+  virtual CATMSHMeshPart * GetImplementation () =0;
+  /**
+   * Returns a CATISamAnalysisConnector interface on a &lt;b&gt;Mesh Part&lt;/b&gt; geometric support.
+   * @return CATBaseUnknown#Release
+   * @param iNumber 
+   *   Number of the requested support 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; between 1 and the number of supports.
+   */
+  virtual CATISamAnalysisConnector * GetSupportConnector ( int Number = 1 ) =0;
+  /**
+   * Returns the current state of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+	 * &lt;br&gt;&lt;b&gt;Possible values&lt;/b&gt;:
+	 * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;&lt;b&gt;Mesh Part&lt;/b&gt; is not active.
+	 * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;&lt;b&gt;Mesh Part&lt;/b&gt; is active.
+	 * &lt;/dl&gt;
+	 * &lt;br&gt;When a &lt;b&gt;Mesh Part&lt;/b&gt; is active, all its elements are visible and will be taken into account for computation.
+	 * &lt;br&gt;When a &lt;b&gt;Mesh Part&lt;/b&gt; is not active, all its elements are not visible and will be ignored in any computation.
+   */
+  virtual int GetActivity () =0;
+  /**
+   * Set the current state of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @param iActivity
+	 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;to set the &lt;b&gt;Mesh Part&lt;/b&gt; unactive.
+	 * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;to set the &lt;b&gt;Mesh Part&lt;/b&gt; active.
+	 * &lt;/dl&gt;
+   */
+  virtual void SetActivity ( int iActivity ) =0;
+  /**
+   * Returns the next &lt;b&gt;Mesh Part&lt;/b&gt; of the &lt;b&gt;Mesh&lt;/b&gt;.
+   * This method should be used with the @href CATIMSHMesh#GetFirstMeshPart method to scan all &lt;b&gt;Mesh Parts&lt;/b&gt;.
+   * Take care of the fact that the order in which &lt;b&gt;Mesh Parts&lt;/b&gt; are returned is arbitrary qnd
+   * that only &lt;b&gt;Mesh Parts&lt;/b&gt; containing elements are returned.
+   * @return CATBaseUnknown#Release
+   */
+  virtual CATIMSHMeshPart * Next () =0;
+  /**
+   * Check if the &lt;b&gt;Mesh Part&lt;/b&gt; contains a given finite element.
+   * @param iElement
+   *   The finite element to be checked.
+	 * @return
+	 *   An integer value:.
+	 * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;if the &lt;b&gt;Mesh Part&lt;/b&gt; contains the finite element.
+	 * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;otherwise.
+	 * &lt;/dl&gt;
+   */
+  virtual int Contains ( CATMSHElement * iElement ) =0;
+  /**
+   * Set the list of candidate &lt;b&gt;Mesh Parts&lt;/b&gt; for capture. 
+   * @param iParents
+	 *   List of candidate &lt;b&gt;Mesh Parts&lt;/b&gt; for capture.
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;Operation successfull.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;Operation failed.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT SetMeshPartsToCapture ( CATMSHListOfMeshPart * iParents ) =0;
+  /**
+   * Enter the &lt;b&gt;Mesh Part&lt;/b&gt; into edition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method should be called before editing the content of the &lt;b&gt;Mesh Part&lt;/b&gt;,
+   * i.e. before modifying nodes and elements independently from the mesher of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @param iInvalidateOperators
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;&quot;TRUE&quot;&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Operators&lt;/b&gt; are invalidated and will be re-updated when existing from the edition modeas up to date at the end of edition.
+   *   &lt;dt&gt;&quot;FALSE&quot;&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Operators&lt;/b&gt; are not invalidated.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The edition mode have been successfully activated.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;Unable to enter in edition mode.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT OpenEdition ( CATBoolean iInvalidateOperators = TRUE ) =0;
+  /**
+   * Exit the &lt;b&gt;Mesh Part&lt;/b&gt; from the edition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method should be called after editing the content of the &lt;b&gt;Mesh Part&lt;/b&gt;,
+   * i.e. after modifying nodes and elements independently from the meshser of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @param iUpTodate
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;&quot;TRUE&quot;&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; should be considered as up to date at the end of edition.
+   *   &lt;dt&gt;&quot;FALSE&quot;&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; is not up to date at the end of edition.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The edition mode have been successfully exited.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;Some problems encountered while exiting the edition mode.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT CloseEdition ( CATBoolean iUpTodate = TRUE ) =0;
+  /**
+   * Check if the &lt;b&gt;Mesh Part&lt;/b&gt; is in edition mode.
+   * Returns:
+	 * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;if the &lt;b&gt;Mesh Part&lt;/b&gt; is in edition.
+	 * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;if the &lt;b&gt;Mesh Part&lt;/b&gt; is not in edition.
+	 * &lt;/dl&gt;
+	 * &lt;br&gt;When a &lt;b&gt;Mesh Part&lt;/b&gt; is active, all its elements are visible and will be taken into account for computation.
+	 * &lt;br&gt;When a &lt;b&gt;Mesh Part&lt;/b&gt; is not active, all its elements are not visible and will be ignored in any computation.
+	 *   &lt;/dl&gt;
+   */
+  virtual int IsInEdition () =0;
+  /**
+   * Creates a new local specification within the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A local mesh specification is an &lt;b&gt;Analysis Entity&lt;/b&gt; which is 
+   * created in the &lt;b&gt;Analysis Set&lt;/b&gt; corresponding to the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @param iType
+   *   Type of the local specification (Late type of the &lt;b&gt;Analysis Entity&lt;/b&gt;). 
+   * @param iName
+   *   Name of the local specification. 
+   * @param iNumber
+   *   Number of the requested reference 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; between 1 and the number of references.
+	 * @return
+   *   The created local specification. 
+   */
+  virtual CATISpecObject * CreateLocalSpecification ( const CATUnicodeString &amp;iType , const CATUnicodeString &amp;iName ) = 0;
+  /**
+   * Retreive an external reference in a global mesh specification.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: An external reference is defined by a product instance which is use for positionning the mesh and
+   * an external object which is handled by its CATILinkableObject interface.
+   * @param iName
+   *   Name of the global mesh specification. 
+   * @param oProduct [out, CATBaseUnknown#Release]
+   *   The product instance which contains the reference.
+   * @param oReference [out, CATBaseUnknown#Release]
+   *   CATILinkableObject interface of the reference.
+   * @param oStatus
+   *   The status explaining failure causes:
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;CATMSHRefNotDefined&lt;/dt&gt;&lt;dd&gt;The external reference has not been defined.
+   *   &lt;dt&gt;CATMSHRefDeleted&lt;/dt&gt;&lt;dd&gt;The external reference has been deleted.
+   *   &lt;dt&gt;CATMSHRefNotLoaded&lt;/dt&gt;&lt;dd&gt;The external reference is not loaded.
+   *   &lt;dt&gt;CATMSHRefLoaded&lt;/dt&gt;&lt;dd&gt;The external reference has been retreived, execution successful.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The external reference has been successfully retreived.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt; The external reference has not been retreived.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT GetExternalReference ( const CATUnicodeString &amp;iName, CATIProduct *&amp; oProduct, CATILinkableObject *&amp; oReference , int iNumber = 1 , CATMSHExternalReferenceStatus * oStatus = NULL ) = 0;
+  /**
+   * Valuates a global mesh specification with external reference.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: An object is defined by a product instance which is use for positionning the mesh and
+   * a geometric support which is handled by its CATILinkableObject interface.
+   * @param iName
+   *   Name of the global mesh specification. 
+   * @param iProduct
+   *   The product instance of the external reference.
+   * @param iReference
+   *   CATILinkableObject interface of the external reference.
+   * @param iMode
+   *   The mode used to valuate the reference global specification.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;the global specification is defined as a single reference.
+   *   &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;the global specification is added to exising references.&lt;/dl&gt;
+	 * @return
+	 *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The external reference has been successfully created.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The external reference is not allowed for this local specification.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT SetExternalReference ( const CATUnicodeString &amp;iName, CATIProduct * iProduct, CATILinkableObject * iSupport , int iMode = 0 ) = 0;
+  /**
+   * Returns the number of references defined in a global mesh specification.
+   * @param iName
+   *   Name of the global mesh specification. 
+	 * @return
+	 *   the number of references defined.
+   */
+  virtual int GetNumberOfExternalReferences ( const CATUnicodeString &amp;iName ) = 0;
+  /**
+   * Sets the &lt;b&gt;Mesh Part&lt;/b&gt; visualization status.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Hide / Show the mesh part.
+   * @param iVisibility
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+   *   &lt;dl&gt;&lt;dt&gt;FALSE&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; is not visible
+   *   &lt;dt&gt;TRUE&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; is visible
+   *   &lt;/dl&gt;
+	 * @return
+   *   An HRESULT.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The mesh visibility status has been set.
+	 *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The mesh visibility status cannot be set.
+	 *   &lt;/dl&gt;
+   */
+  virtual HRESULT SetMeshVisibility(CATBoolean iVisibility) = 0;
+  /**
+   * Retrieves the visibility status of the &lt;b&gt;Mesh Part&lt;/b&gt;.
+   * @return 
+	 *   A CATBoolean.
+	 *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	 *   &lt;dl&gt;&lt;dt&gt;FALSE&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; is not visible.
+	 *   &lt;dt&gt;TRUE&lt;/dt&gt;&lt;dd&gt;The &lt;b&gt;Mesh Part&lt;/b&gt; is visible.
+	 *   &lt;/dl&gt;
+   */
+  virtual CATBoolean GetMeshVisibility () = 0;
+
+
+};
+
+CATDeclareHandler ( CATIMSHMeshPart, CATBaseUnknown );
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMSHMeshManager.html">← 上一页: CATIMSHMeshManager.h</a></div>
+        <div><a href="CATIMSHMesher.html">下一页: CATIMSHMesher.h →</a></div>
+    </div>
+</body>
+</html>

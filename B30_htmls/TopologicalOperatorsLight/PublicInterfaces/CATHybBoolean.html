@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperatorsLight/PublicInterfaces/CATHybBoolean.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperatorsLight/PublicInterfaces/CATHybBoolean.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATHybAssemble.html">← 上一页: CATHybAssemble.h</a></div>
+        <div><a href="CATHybBoundary.html">下一页: CATHybBoundary.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATHybBoolean_h
+#define CATHybBoolean_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+
+#include &quot;CATHybOperatorImp.h&quot;
+#include &quot;ListPOfCATCell.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;ListPOfCATBody.h&quot;
+#include &quot;BOHYBOPELight.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+class CATSmartBodyDuplicator;
+class CATTopOpInError;
+
+
+class CATExtHybBoolean;
+
+/**
+* Class defining the operator that performs Boolean operations on two bodies.
+*&lt;br&gt;
+* This operator operates on the 2D (CATShell), 1D (CATWire) and 0D (CATVertexInVolume)
+* domains of a CATBody.
+* It follows the general frame of all operators and satisfies the smart mechanism: the
+* input bodies are not modified. A new resulting body is created, 
+* possibly sharing data with the input bodies.
+*&lt;ul&gt;
+* &lt;li&gt;&lt;tt&gt;CATHybBoolean&lt;/tt&gt; is created with the &lt;tt&gt;CATCreateTopTrim&lt;/tt&gt; or &lt;tt&gt;CATCreateTopSplit&lt;/tt&gt; global functions.
+* It must be
+* directly deleted with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator after use.
+* It is not streamable. 
+*&lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometric factory.
+*&lt;/ul&gt;
+* @see CATCreateTopSplit , CATCreateTopTrim
+*/
+class ExportedByBOHYBOPELight CATHybBoolean : public CATHybOperatorImp
+{
+
+  CATCGMVirtualDeclareClass(CATHybBoolean);
+protected:
+   
+   /** @nodoc */
+   CATHybBoolean(CATGeoFactory* iFactory, CATTopData* iTopData, CATExtHybBoolean* iExtensible);
+
+public :
+   
+   //  Destructor
+   ~CATHybBoolean();     
+   
+  /** 
+  * @nodoc
+  * Removes an input body from the container (for example the cutting body in a split operation).
+  * @param iRemoveBody
+  * The body to be removed.
+  */
+   void SetRemoveBody(CATBody* iRemoveBody);
+   
+  /** 
+  * @nodoc
+  */
+   void SetErrorBody(CATBody* iErrorBody);
+   
+  /**
+  * @nodoc
+  * Extrapolates the intersection on the first element.
+  * @param yes_or_no
+  * &lt;ul&gt;
+  * &lt;li&gt;0: no extrapolation mode 
+  * &lt;li&gt;1: extrapolation mode is activated.
+  * &lt;/ul&gt;
+  */
+   void SetExtrapolMode(int yes_or_no=1);
+  /** 
+  * @nodoc
+  * Retrieves the extrapolation mode.
+  * @return
+  * &lt;ul&gt;
+  * &lt;li&gt;0: no extrapolation mode 
+  * &lt;li&gt;1: extrapolation mode is activated.
+  * &lt;/ul&gt;
+  */
+   int  GetExtrapolMode() const;
+   
+  /** 
+  * Returns the number of ambiguous cells.
+  * In some cases, the operator is unable to detect which cells
+  * have to be removed. The operation completes, but the generated
+  * body generally contains all the input cells. 
+  * When there are ambiguous cells, the application must specify which
+  * cells are to be kept or removed by using the &lt;tt&gt;SetSelectedCells&lt;/tt&gt; methods.
+  * @return
+  * The number of ambiguous cells.
+  */
+   int  GetNbAmbiguousCells() const;
+  /**
+  * Returns the list of ambiguous cells.
+  * In some cases, the operator is unable to detect which cells
+  * have to be removed. The operation completes, but the generated
+  * body generally contains all the input cells. 
+  * When there are ambiguous cells, the application must specify which
+  * cells are to be kept or removed by using the &lt;tt&gt;SetSelectedCells&lt;/tt&gt; methods.
+  * @param oListOfCells
+  * The list of ambiguous cells.
+  * @return
+  * The number of ambiguous cells.
+  */
+   int  GetAmbiguousCells(ListPOfCATCell&amp; oListOfCells) const;
+  /** 
+  * Returns the number of overlapping cells.
+  * In some cases, the operator is unable to detect which cells
+  * have to be removed. The operation completes, but the generated
+  * body generally contains all the input cells. 
+  * When there are overlapping cells, the application must specify which
+  * cells are to be kept or removed by using the &lt;tt&gt;SetSelectedCells&lt;/tt&gt; methods.
+  * @return
+  * The number of overlapping cells.
+  */
+   int  GetNbConfusionCells() const;
+  /**
+  * Returns the list of overlapping cells.
+  * In some cases, the operator is unable to detect which cells
+  * have to be removed. The operation completes, but the generated
+  * body generally contains all the input cells. 
+  * When there are overlapping cells, the application must specify which
+  * cells are to be kept or removed by using the &lt;tt&gt;SetSelectedCells&lt;/tt&gt; methods.
+  * @param oListOfCells
+  * The list of overlapping cells.
+  * @return
+  * The number of overlapping cells.
+  */
+   int  GetConfusionCells(ListPOfCATCell&amp; oListOfCells) const;
+     
+   // Analyze result according Tangent Design
+ /** 
+  * (De)activates the detection of cells which are tangent to each other.
+  * The tangent cells are retrieved by using the &lt;tt&gt;GetTangentDesignCells&lt;/tt&gt; method.
+  * &lt;pre&gt;
+  * pIntersectOpe-&gt;SetWarningOnTangentDesign(1);
+  * ...
+  * pIntersectOpe-&gt;Run(); 
+  * CATBody *pBody =  pIntersectOpe-&gt;GetResult();
+  * if  (pIntersectOpe-&gt;IsResultTangentDesign())  
+  *	{  
+  *	  ListPOfCATCell  ListOfCells;  
+  *	  pIntersectOpe-&gt;GetTangentDesignCells(ListOfCells); 
+  *   ...
+  * }
+  * &lt;/pre&gt;
+  * @param yes_or_no
+  * &lt;ul&gt;
+  * &lt;li&gt;0: deactivates the &quot;tangent design&quot; mode
+  * &lt;li&gt;1: activates the &quot;tangent design&quot; mode.
+  * &lt;/ul&gt;
+  */
+   void  SetWarningOnTangentDesign(int yes_or_no=1);
+  /** 
+  * Retrieves the tangent design mode.
+  * @return
+  * &lt;ul&gt;
+  * &lt;li&gt;0: the &quot;tangent design&quot; mode is not activated
+  * &lt;li&gt;1: the &quot;tangent design&quot; mode is activated.
+  * &lt;/ul&gt;
+  */
+   int  GetTangentDesignMode() const;
+  /** 
+  * Retrieves the result of the tangent design analysis.
+  * @return 
+  * &lt;ul&gt;
+  * &lt;li&gt;0: no tangent cells have been detected
+  * &lt;li&gt;1: tangent cells have been detected.
+  * &lt;/ul&gt;
+  */
+   int  IsResultTangentDesign() const;
+  /** 
+  * Retrieves the list of tangent cells.
+  * &lt;pre&gt;
+  * pIntersectOpe-&gt;SetWarningOnTangentDesign(1);
+  * ...
+  * pIntersectOpe-&gt;Run(); 
+  * CATBody *pBody =  pIntersectOpe-&gt;GetResult();
+  * if  (pIntersectOpe-&gt;IsResultTangentDesign())  
+  *	{  
+  *	  ListPOfCATCell  ListOfCells;  
+  *	  pIntersectOpe-&gt;GetTangentDesignCells(ListOfCells); 
+  *   ...
+  * }
+  * &lt;/pre&gt;
+  * @param oListOfCells
+  * The list of tangent cells.
+  * @return
+  * &lt;ul&gt;
+  * &lt;li&gt;0: no tangent cells have been detected
+  * &lt;li&gt;1: tangent cells have been detected.
+  * &lt;/ul&gt;
+  */
+   int  GetTangentDesignCells(ListPOfCATCell&amp; oListOfCells) const;
+   
+
+/**
+* Specifies the cells to be kept and the cells to be removed in the operation.
+* At least one of the lists must be filled in. 
+* The operator throws an exception when: 
+* &lt;ul&gt;
+*    &lt;li&gt;both lists are empty
+*    &lt;li&gt;the specified cells do not belong to the input bodies
+*    &lt;li&gt;some cells to be cut are specified in either list. 
+*    A cell to be cut should not be added to any list
+*    &lt;li&gt;the list contents is not consistent with respect to the sides definition. 
+*    For example,  if a cell to be removed and a cell to be 
+*    kept should not be located on the same side.
+* &lt;/ul&gt;
+* More generally, the operator throws when the lists which are specified do not allow the operator to
+* compute in an unambiguous way the pieces to be kept or removed.
+* @param iCellsToRemove
+* The list of cells to be removed.
+* @param iCellsToKeep
+* The list of cells to be kept.
+*/
+   void SetSelectedCells (CATLISTP(CATCell) &amp; iCellsToRemove, 
+                          CATLISTP(CATCell) &amp; iCellsToKeep);
+   
+  /**
+  * When the cells specified in the SetSelectedCells method do not
+  * belong to the input bodies, the boolean operation cannot complete.
+  * When the cells specified in the SetSelectedCells methods are vertices,
+  * you can use &lt;tt&gt;SetSelectedCellsByLayDownMode&lt;/tt&gt; to define the side to be kept or removed.
+  * If the vertices are not ON the cells to be kept or removed, the operator
+  * projects them onto the cells to be kept or removed. 
+  * This method applies to vertices only.
+  * By default (0), the cells are assumed to belong to the input bodies
+  * and are not &quot;laid down&quot; (projected).
+  * @param yes_or_no
+  * &lt;ul&gt;
+  * &lt;li&gt;0: the &quot;lay down&quot; mode is not activated
+  * &lt;li&gt;1: the &quot;lay down&quot; mode is activated.
+  * &lt;/ul&gt;
+  */
+   void SetSelectedCellsByLayDownMode(int yes_or_no=1);
+  /** 
+  * Returns the number of cells kept or removed by using the SetSelectedCellsByLayDownMode method.
+  * &lt;pre&gt;
+  * CATHybSplit*  pSplitOpe =  CATCreateTopSplitShellWithKeepRemove(piGeomFactory,&amp;topdata,ToBeSplit,SplittingBody);   
+  * pSplitOpe-&gt;SetSelectedCellsByLayDownMode(1);  
+  * CATLISTP(CATCell) cellsToRemove ;
+  * CATLISTP(CATCell) cellsToKeep ;
+  * cellsToKeep.Append(listOfVertex[1]);
+  * pSplitOpe-&gt;SetSelectedCells(cellsToRemove,cellsToKeep); 
+  * pSplitOpe  -&gt;  Run();  
+  *	int nbCells = pSplitOpe-&gt;GetSelectedCellsByLayDownMode();
+  * &lt;/pre&gt;
+  * @return
+  * Number of cells kept or removed.
+  */
+   int  GetSelectedCellsByLayDownMode() const;
+
+   // treatment with Wire Positionning (to use before run)
+  /** 
+  * @nodoc 
+  */
+   void SetWirePositionningMode(int yes_or_no=1);
+  /** 
+  * @nodoc 
+  */
+   int  GetWirePositionningMode() const;
+
+  /** 
+  * @nodoc 
+  * INTERNAL USE ONLY.
+  * USED TO EXTEND THE BEHAVIOUR OF CATHybBoolean.h
+  */
+   inline CATExtHybBoolean* GetHybBooleanExtensible() const;
+   
+};
+
+/** @nodoc  */
+inline CATExtHybBoolean* CATHybBoolean::GetHybBooleanExtensible() const
+{
+   if (!_Extensible) CATThrowForNullPointerReturnValue(NULL);
+   return (CATExtHybBoolean*) _Extensible;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATHybAssemble.html">← 上一页: CATHybAssemble.h</a></div>
+        <div><a href="CATHybBoundary.html">下一页: CATHybBoundary.h →</a></div>
+    </div>
+</body>
+</html>

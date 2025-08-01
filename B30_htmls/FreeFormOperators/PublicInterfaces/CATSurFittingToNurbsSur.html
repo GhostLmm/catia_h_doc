@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeFormOperators/PublicInterfaces/CATSurFittingToNurbsSur.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FreeFormOperators/PublicInterfaces/CATSurFittingToNurbsSur.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSurDegreeModification.html">← 上一页: CATSurDegreeModification.h</a></div>
+        <div><a href="CreateConvertSurToNurbsSur.html">下一页: CreateConvertSurToNurbsSur.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSurFittingToNurbsSur_H
+#define CATSurFittingToNurbsSur_H
+
+// COPYRIGHT DASSAULT SYSTEMES  2001
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+class CATNurbsSurface;
+class CATFrFNurbsBipar;
+class CATSurParam;
+class CATSoftwareConfiguration;
+
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;CreateSurFittingToNurbsSur.h&quot;
+#include &quot;FrFOpeSur.h&quot;
+
+#include &quot;CATCGMOperator.h&quot;
+
+/**
+ * Class defining a geometric operator that computes a (possibly approximated) NURBS representation of a CATSurface.
+ * &lt;br&gt;If a surface has no corresponding NURBS representation, the operator uses a fitting operation to
+ * compute the best approximating NURBS representation. Hence, a maximum deviation must be given as input of 
+ * the operator. 
+ * &lt;ul&gt;
+ * &lt;li&gt;An input CATNurbsSurface is directly output: 
+ * the &lt;tt&gt;GetResult&lt;/tt&gt; method outputs the same pointer.
+ * &lt;li&gt;Some canonic surfaces will be transformed into rational 
+ * CATNurbsSurface. However, setting &lt;tt&gt;iRationalAllowed = 0&lt;/tt&gt; at the operator creation 
+ * or using the @href CATCrvFittingToNurbsCrv#SetRationalAllowed method, 
+ * will force the fitting into a non rational surface (default is &lt;tt&gt;iRationalAllowed = 1&lt;/tt&gt;).
+ * &lt;/ul&gt;
+ * The CATSurFittingToNurbsSur operator follows the global frame of the geometric operators: 
+ *&lt;ul&gt;
+ * &lt;li&gt;A CATSurFittingToNurbsSur operator is created with the &lt;tt&gt;CATCreateSurFittingToNurbsSur&lt;/tt&gt; global function 
+ * and must be directly deleted with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator after use.
+ * It is is not streamable. 
+ *&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+ *&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;Getxxx&lt;/tt&gt; methods. 
+ * If a surface does not need to be converted because it already is of the required type, the same pointer 
+ * is returned. In this case, using the @href CATICGMContainer#Remove method on the result surface
+ * will remove the input surface, because they are the same.
+ *&lt;/ul&gt;
+ */
+
+class ExportedByFrFOpeSur CATSurFittingToNurbsSur : public CATCGMOperator
+{
+  CATCGMVirtualDeclareClass(CATSurFittingToNurbsSur);
+  public :
+
+  virtual ~CATSurFittingToNurbsSur();
+
+protected:
+  /** 
+   * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode. 
+   */
+  virtual int RunOperator()=0;
+
+public:
+  /**
+   * Defines whether the result NURBS representation can be rational.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iAllowRational
+   * &lt;tt&gt;1&lt;/tt&gt; if the result surface can be rational (default value when the method is not called), 
+   * &lt;tt&gt;0&lt;/tt&gt; if the result surface must not be rational.
+   */
+  virtual void SetRationalAllowed(CATLONG32 iAllowRational)=0;
+
+  /**
+   * Declares that the result surface must have the same parameterization than the input surface to fit.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   */
+  virtual void ImposeSameParametrization()=0;
+
+  /**
+   * Declares that the result NURBS must not be periodic.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   */
+  virtual void ForbidPeriodicity()=0;
+
+  /**
+   * @nodoc
+   * Defines the maximum limits to take into account on the input surface.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxLimits
+   * The maximum limits.
+   */
+  virtual void SetMaxLimits(const CATSurLimits *iLimitsToFit)=0;
+
+/** 
+ * @nodoc 
+ * Do not use. Use the SetMaxLimits
+ */
+  virtual void SetLimitsToFit(CATSurLimits *iLimitsToFit)=0;
+
+  /**
+   * @nodoc
+   * Defines the maximum deviation between the input surface and the result surface.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxDeviation
+   * The maximum deviation value.
+   */
+  virtual void SetMaxDeviation(double iMaxDeviation)=0;
+
+  /**
+   * Defines the minimal length of an internal arc of the result surface.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iInternalMinLength
+   * The minimum length value.
+   */
+  virtual void SetInternalMinLength(double iInternalMinLength)=0;
+ 
+  /**
+   * Forces the computation of an approximation even if the input surface already match the fitting criteria.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   */
+  virtual void ForceFitting()=0;
+
+  /**
+   * Defines the maximum degree of the result NURBS representation in the first direction of the surface.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxDegree
+   * The degree maximum value. 
+   */  
+  virtual void SetMaxDegreeU(CATLONG32 iMaxDegree)=0;
+
+  /**
+   * Defines the maximum number of arcs of the result NURBS representation in the first direction of the surface. 
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxArcs
+   * The maximum number of arcs. If &lt;tt&gt;SetMaxDegreeU&lt;/tt&gt; and &lt;tt&gt;SetMaxArcsV&lt;/tt&gt; are both used, 
+   * the operator tries to get as few arcs as possible, even with a larger number of arcs with
+   * &lt;tt&gt;iMaxDegree&lt;/tt&gt;.
+   */ 
+  virtual void SetMaxSegmentsU(CATLONG32 iMaxArcs)=0;
+
+  /**
+   * Defines the maximum degree of the result NURBS representation in the second direction of the surface.
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxDegree
+   * The degree maximum value. 
+   */   
+  virtual void SetMaxDegreeV(CATLONG32 iMaxDegree)=0;
+
+  /**
+   * Defines the maximum number of arcs of the result NURBS representation in the second direction of the surface. 
+   * &lt;br&gt;To call in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode before the &lt;tt&gt;Run&lt;/tt&gt; method.
+   * @param iMaxArcs
+   * The maximum number of arcs. If &lt;tt&gt;SetMaxDegreeV&lt;/tt&gt; and &lt;tt&gt;SetMaxArcsV&lt;/tt&gt; are both used, 
+   * the operator tries to get as few arcs as possible, even with a larger number of arcs with
+   * &lt;tt&gt;iMaxDegree&lt;/tt&gt;.
+   */ 
+  virtual void SetMaxSegmentsV(CATLONG32 iMaxArcs)=0;
+
+ /**
+  * Returns the maximum deviation computed for the result surface.
+  * &lt;br&gt; To call after the operator ran.
+  * @return
+  * The maximum deviation value.
+  */
+  virtual double GetMaxDeviation()=0;
+
+  /**
+   * Returns whether the transformation between the input and output surfaces is exact.
+   * &lt;br&gt; To call after the operator ran.
+   * @return
+   * &lt;tt&gt;1&lt;/tt&gt; if the transformation is exact, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+   */
+  virtual CATLONG32 IsExactTransformation()=0;
+
+ /**
+  * Maps a parameter on the initial surface to the corresponding parameter on the computed NURBS representation.
+  * &lt;br&gt; To call after the operator ran.
+  * @param iParamOnSurface
+  * The parameter on the initial surface.
+  * @return
+  * The parameter on the computed NURBS representation.
+  */
+  virtual CATSurParam ComputeNewParameter(const CATSurParam &amp;iParamOnSurface)= 0;
+
+//
+// ................................
+//  --&gt; Result (Nurbs Surfaces) 
+// ................................
+/**
+ * Returns the result CATNurbsSurface.
+ * @return
+ * The pointer to the created CATNurbsSurface. Use the @href CATICGMContainer#Remove if you do not want
+ * to keep it in the geometric factory.
+ */
+  virtual CATNurbsSurface *GetNurbsSurface() =0;
+//
+// ............................................
+//  --&gt; Bipar Result 
+// ............................................
+  /** @nodoc */
+  virtual CATFrFNurbsBipar *GetNurbsBipar() =0;
+
+/** @nodoc */
+virtual void SetMaxDegreeForExactTransformation(CATLONG32 iMaxDegreeForExactTransformation) = 0;
+/** @nodoc */
+virtual void SetInternalContinuity(int iInternalContinuity) = 0;
+/** @nodoc */
+virtual void SetKindOfFit(int iKindOfFit) = 0;//  0 -&gt; Lissage V5 , 1 -&gt; Lissage V4 (defaut), 4 -&gt; Lissage DSP
+/** @nodoc */
+virtual int CheckResult(int iPrint = 0) = 0;
+/** 
+ * Returns a diagnosis about the fitting process.
+ * &lt;br&gt;To call after the &lt;tt&gt;Run&lt;/tt&gt; method.
+ * @return
+ * 1 if a correct result could not be computed because it would have produced small patches
+ * 0 otherwise
+ */
+virtual CATLONG32 GetDiagnosis() = 0;
+
+/**
+ * @nodoc
+ * By Default: either no desextrapolation or complete desextrapolation (original state restored).
+ * If this method is called: allow to remove only one or several patches;
+ */
+  virtual void AllowPartialDesextrapolation() = 0;
+
+/**
+ * Specifies a continuity constraint along the borders of the surface.
+ * &lt;ul&gt;
+ * &lt;li&gt; 0 for C0 (default)
+ * &lt;li&gt; 1 for C1
+ * &lt;li&gt; 2 for C2
+ * &lt;/ul&gt;
+ * @param iSideContinuityU
+ * The continuity along U. 
+ * @param iSideContinuityV
+ * The continuity along V. 
+ */
+virtual void SetSideContinuity(int iSideContinuityU, int iSideContinuityV) = 0;
+
+/** @nodoc */
+virtual void SetTrimOption(CATBoolean iTrimToLimits) = 0;
+
+/**
+ *@nodoc
+ *Set the maximum useful deviation.
+ *Must be greater than the tolerance.
+ *If during the approximation algorithm, we realize that it is not possible to find a result
+ *achieving a deviation smaller than iMaxUsefulDeviation while complying with the specifications
+ *(max degrees, max arcs, ...), then the algorithm is stopped and the current result is 
+ *returned, without exhausting the maximum number of arcs.
+ *The purpose of this option is to avoid CATLONG32 CPU time while trying to approximate invalid or
+ *too complex surfaces when we know that the result will be useless anyway.
+ *
+ *Default: -1. (inactive)
+ */
+virtual void SetMaxUsefulDeviation(double iMaxUsefulDeviation) = 0;
+
+
+/**
+ * @nodoc
+*/
+virtual void SetOriginalLimitsMode() = 0;
+
+protected:
+CATSurFittingToNurbsSur(CATGeoFactory *iFactory);
+private :
+CATSurFittingToNurbsSur(const CATSurFittingToNurbsSur &amp;);
+void operator = (const CATSurFittingToNurbsSur &amp;);
+
+
+};
+
+/**
+ * @deprecated V5R21 CATCreateSurFittingToNurbsSur(CATGeoFactory  *, CATSoftwareConfiguration * ,
+ * Creates the geometric operator that computes a (possibly approximated) NURBS representation of a CATSurface.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iSurface
+ * The pointer to the surface to convert.
+ * @param iLimits
+ * The limits defining the portion of the input surface to be converted into a NURBS. These limits are
+ * not necessarily the maximum limits.
+ * @param iMaxDeviation
+ * The maximum deviation between the input and result surfaces.
+ * @param iRationalAllowed
+ * &lt;tt&gt;1&lt;/tt&gt; if the result surface can be rational, 
+ * &lt;tt&gt;0&lt;/tt&gt; if the result surface must not be rational.
+ * @param iMode
+ * The mode of use.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator afer use.
+ * @see CATSurFittingToNurbsSur
+ */
+ExportedByFrFOpeSur
+CATSurFittingToNurbsSur*  CATCreateSurFittingToNurbsSur(CATGeoFactory      *iFactory,
+                                                        const CATSurface   *iSurface,
+                                                        const CATSurLimits &amp;iLimits,
+                                                        double              iMaxDeviation,
+                                                        CATLONG32           iRationalAllowed = 1,
+                                                        CATSkillValue       iMode = BASIC);
+
+/**
+ * Creates the geometric operator that computes a (possibly approximated) NURBS representation of a CATSurface.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iSoftwareConfiguration
+ * The pointer to the software configuration
+ * @param iSurface
+ * The pointer to the surface to convert.
+ * @param iLimits
+ * The maximum limits to take into account on the input surface.
+ * @param iMaxDeviation
+ * The maximum deviation between the input and result surfaces.
+ * If less than the resolution, quality of result is not guarenteed.
+ * @param iRationalAllowed
+ * &lt;tt&gt;1&lt;/tt&gt; if the result surface can be rational, 
+ * &lt;tt&gt;0&lt;/tt&gt; if the result surface must not be rational.
+ * @param iMode
+ * The mode of use.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator afer use.
+ * @see CATSurFittingToNurbsSur
+ */
+ExportedByFrFOpeSur
+CATSurFittingToNurbsSur*  CATCreateSurFittingToNurbsSur(CATGeoFactory      *iFactory,
+                                                        CATSoftwareConfiguration * iSoftwareConfiguration,
+                                                        const CATSurface   *iSurface,
+                                                        const CATSurLimits &amp;iLimits,
+                                                        double              iMaxDeviation,
+                                                        CATLONG32           iRationalAllowed = 1,
+                                                        CATSkillValue       iMode = BASIC);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSurDegreeModification.html">← 上一页: CATSurDegreeModification.h</a></div>
+        <div><a href="CreateConvertSurToNurbsSur.html">下一页: CreateConvertSurToNurbsSur.h →</a></div>
+    </div>
+</body>
+</html>

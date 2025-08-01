@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNBHumanModelingInterfaces/PublicInterfaces/SWKIIKManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DNBHumanModelingInterfaces/PublicInterfaces/SWKIIKManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SWKIIKConstraint.html">← 上一页: SWKIIKConstraint.h</a></div>
+        <div><a href="SWKIIKManagerKineo.html">下一页: SWKIIKManagerKineo.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+
+#ifndef _SWKIIKManager_h
+#define _SWKIIKManager_h
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+// *****************************************************************************
+// Framework DNBHumanModelingInterfaces
+// Copyright Safework Inc.
+// *****************************************************************************
+//  Abstract:
+//  ---------
+//
+//    SWKIIKManager interface.
+//    This interface offers non-IDL IKManager services.
+//    It is the IK solver of the manikin is it attached to.
+//    A pointer to this interface can be obtained via
+//    a call to method &lt;code&gt;SWKIManikin::GetIKManager()&lt;/code&gt;.
+//
+// *****************************************************************************
+//  Usage:
+//  ------
+//
+// *****************************************************************************
+//  Inheritance:
+//  ------------
+//
+//    CATBaseUnknown
+//
+// *****************************************************************************
+//  Main Methods:
+//  -------------
+//
+//    SetInternalIKManager
+//    GetManikin
+//    GetNumberOfConstraints
+//    GetConstraintAtIndex
+//    GetConstraint
+//    AddConstraint
+//    SearchConstraintsOnIKChain
+//    RemoveConstraint
+//    RemoveConstraintAtIndex
+//    RemoveAllConstraints
+//    Resolve
+//    ResolveRootWithFixedFeet
+//    ResolveConstraints
+//    SetMemo
+//    GetMemo
+//    DirectionReach
+//    DirectionReachWithOffset
+//    Reach
+//    AdjustElbow
+//    SetBehavior
+//    GetBehavior
+//    SetTolerance
+//    GetTolerance
+//    Synchronize
+//    GetUnsolvedConstraints
+//    GetStartSegmentShortName
+// *****************************************************************************
+//  History
+//  -------
+//
+//  Author: Jean-Guy AUGUSTIN
+//  Date  : 00/09/29
+//  Goal  : Creation
+// *****************************************************************************
+//
+// --- System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATListOfCATString.h&quot;
+//
+// --- DNBHumanModelingInterfaces
+#include &quot;SWShortNames.h&quot;
+//
+// --- DNBHumanModeling
+class SWIKManager;
+//
+// --- DNBHumanModelingInterfaces
+class SWKIBodyElement;
+class SWKIIKConstraint;
+class SWKIManikin;
+class SWKISegment;
+//
+// --- Mathematics
+class CATMathAxis;
+//
+// --- System
+class CATUnicodeString;
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __SWKHumanModelingItf
+#define ExportedBySWKHumanModelingItf __declspec(dllexport)
+#else
+#define ExportedBySWKHumanModelingItf __declspec(dllimport)
+#endif
+#else
+#define ExportedBySWKHumanModelingItf
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySWKHumanModelingItf IID IID_SWKIIKManager;
+#else
+extern &quot;C&quot; const IID IID_SWKIIKManager;
+#endif
+
+class ExportedBySWKHumanModelingItf SWKIIKManager : public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+ public:
+
+	/**
+	  * Initialize the internal IKManager.
+	  * &lt;strong&gt;This method is to be called by the system only&lt;/strong&gt;.
+	  **/
+	virtual HRESULT SetInternalIKManager(SWIKManager * piInternalIKManager) = 0;
+
+	/**
+	  * @return The manikin owning this IK manager.
+	  **/
+	virtual SWKIManikin * GetManikin() const = 0;
+
+	/**
+	  * @return The total number of constraints on the manikin.
+	  **/
+	virtual unsigned GetNumberOfConstraints() const = 0;
+
+	/**
+	  * Return the constraint at index piIndex.
+	  *
+	  * @param piIndex the index of the constraint to return.
+	  * First element is at index &lt;code&gt;0&lt;/code&gt;.
+	  *
+	  * @return The desired constraint, or &lt;code&gt;NULL&lt;/code&gt; if
+	  * the index goes out of bounds.&lt;br&gt;
+	  **/
+	virtual SWKIIKConstraint * GetConstraintAtIndex(unsigned piIndex) const = 0;
+
+	/**
+	  * @param piID the UUID of the constraint to return.
+	  *
+	  * @return A constraint from a specific ID, or &lt;code&gt;NULL&lt;/code&gt;
+	  * if no constraint is found.
+	  **/
+	virtual SWKIIKConstraint * GetConstraint(const CATString &amp; piID) const = 0;
+
+	/**
+	  * Add a constraint with the given end effector and type.
+	  *
+	  * @param piEndEff The driven element of the manikin
+	  * (i.e. the end of the IK chain, or end effector).
+	  *
+	  * @param piStartSegment The first segment to be driven by the constraint
+	  * (i.e. the start of the chain).
+	  *
+	  * @param piType The type of the constraint (position, orientation, etc.)
+	  * This parameter can take one of the &lt;code&gt;SWK_IKCONSTRAINT_xxx&lt;/code&gt;
+	  * defined in file &lt;strong&gt;SWKIIKConstraint.h&lt;/strong&gt;.
+	  *
+	  * @param poCreatedConstraint The constraint created.
+	  *
+	  * @param piDisplayInSpecTree This parameter must be set to
+	  * &lt;code&gt;TRUE&lt;/code&gt; if the constraint is to be disaplayed
+	  * below the manikin, in the specificaton tree.  The default
+	  * behavior is that the constraint is not displayed in the TREE.
+	  *
+	  * @return A status code indicating success or failure.
+	  **/
+	virtual HRESULT AddConstraint(SWShortName piEndEffector,
+								  SWShortName piStartSegment, int piType,
+								  SWKIIKConstraint *&amp; poCreatedConstraint,
+								  boolean piDisplayInSpecTree = FALSE) = 0;
+
+	/**
+	  * Add a constraint to this manikin from the specifications
+	  * of an existing constraint.
+	  * 
+	  * @param piConstraint The constraint to copy from.
+	  *
+	  * @param poCreatedConstraint The constraint created.
+	  *
+	  * @param piDisplayInSpecTree This parameter must be set to
+	  * &lt;code&gt;TRUE&lt;/code&gt; if the constraint is to be disaplayed
+	  * below the manikin, in the specificaton tree.  The default
+	  * behavior is that the constraint is not displayed in the TREE.
+	  *
+	  * @return A status code indicating success or failure.
+	  **/
+	virtual HRESULT AddConstraint(SWKIIKConstraint * piConstraint,
+								  SWKIIKConstraint *&amp; poCreatedConstraint,
+								  boolean piDisplayInSpecTree = FALSE) = 0;
+
+	/**
+	  * Search constraint on the given IK chain.
+	  *
+	  * @param piStartSegment The start element of the IK chain
+	  *
+	  * @return The constraint on the IK chain.
+	  **/
+	virtual SWKIIKConstraint * SearchConstraintsOnIKChain(SWShortName piSegment) = 0;
+
+	/**
+	  * Remove the given constraint.
+	  *
+	  * @param piConstraintToRemove The constraint to remove.
+	  *
+	  * @return A status code indicating success or failure.
+	  **/
+	virtual HRESULT RemoveConstraint(SWKIIKConstraint * piConstraintToRemove) = 0;
+
+	/**
+	  * Remove the constraint at the specified index.
+	  *
+	  * @param piIndex The index of the constraint to remove.
+	  * First constraint is at index 0.
+	  *
+	  * @return A status code indicating success or failure.
+	  **/
+	virtual HRESULT RemoveConstraintAtIndex(unsigned piIndex = 0) = 0;
+
+	/**
+	  * Remove all existing constraints on the manikin.
+	  *
+	  * @return A status code indicating success or failure.
+	  **/
+	virtual HRESULT RemoveAllConstraints() = 0;
+
+	/**
+	  * Launch the IK solver to minimize the potential functions of &lt;br&gt;
+	  * the constraints (i&amp;#x2e;e&amp;#x2e; reach all defined targets).
+	  * This method performs a multi-constraint resolution.
+	  **/
+	virtual HRESULT Resolve() = 0;
+
+	/**
+	  * Resolve manikin&#x27;s root (pelvis) with feet fixed.
+	  * This method performs a multi-constraint resolution.
+	  * @param piPointToReach The axis expressing the point to reach,
+	  * in global coordinates.&lt;br&gt;
+	  * The coordinates are expressed in millimeters.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on success, and another error code on failure.
+	  **/
+	virtual HRESULT ResolveRootWithFixedFeet(const CATMathAxis &amp; piPointToReach,
+		boolean piRecomputeClash = TRUE) = 0;
+
+	/**
+	  * Launch the IK solver to minimize the potential functions of &lt;br&gt;
+	  * the selected constraints (i&amp;#x2e;e&amp;#x2e;).
+	  * This method performs a multi-constraints resolution.
+	  * @param piConsIDList The constraints need be solved,
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on success, and another error code on failure.
+	  **/
+	virtual HRESULT ResolveConstraints(CATListOfCATString&amp; piConsIDList) = 0;
+
+	/**
+	  * Assign a memo to the IK.
+	  * @param piMemo The text of the memo to assign to the part.
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; on success, and another error code on failure.
+	  **/
+	virtual HRESULT SetMemo(const CATUnicodeString &amp; piMemo) = 0;
+
+	/**
+	  * @return The memo previously assigned to the IK.
+	  **/
+	virtual CATUnicodeString GetMemo() const = 0;
+
+	/**
+	  * Make the hands reach a specified point.
+	  *
+	  * @param piEndEffector The short name of the end effector.
+	  * Since this is a hand reach, this parameter must be either
+	  * &lt;code&gt;SWRSHaCPr&lt;/code&gt; or &lt;code&gt;SWLSHaCPr&lt;/code&gt;.
+	  *
+	  * @param piStartSegment The starting segment, which will be starting point
+	  * of the IK resolution.  This start segment must be a ancestor of the
+	  * end effector.
+	  *
+	  * @param piPointToReach The axis expressing the point to reach,
+	  * in global coordinates.&lt;br&gt;
+	  * The coordinates are expressed in millimeters.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the point could be reached,
+	  * &lt;code&gt;&lt;E_FAIL&gt;&lt;/code&gt; otherwise.
+	  **/
+	virtual HRESULT DirectionReach(SWShortName piEndEffector,
+						SWKISegment * piStartSegment,
+						const CATMathAxis &amp; piPointToReach) = 0; 
+
+	/**
+	  * Make the manikin reach a point in Z direction.
+	  *
+	  * @param piEndEffector The first part of the body to reach the target.
+	  * @param piStartSegment The first segment of the kinematic chain.
+	  * @param piOffset The offset attached to the end effector.
+	  * @param piPointToReach The position of the target.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the point could be reached,
+	  * &lt;code&gt;&lt;E_FAIL&gt;&lt;/code&gt; otherwise.
+	  **/
+	virtual HRESULT DirectionReachWithOffset(SWShortName piEndEffector,
+						SWKISegment * piStartSegment,
+						const CATMathAxis &amp; piOffset,
+						const CATMathAxis &amp; piPointToReach) = 0; 
+
+	/**
+	  * Make a particular body element reach a specified point.
+	  *
+	  * @param piEndEffector The end effector, i.e. the segment or line of sight&lt;br&gt;
+	  * which will have to reach the specified point.
+	  *
+	  * @param piStartSegment The starting segment, which will be starting point
+	  * of the IK resolution.  This start segment must be a ancestor of the
+	  * end effector.
+	  *
+	  * @param piPointToReach The axis expressing the point to reach,
+	  * in global coordinates.&lt;br&gt;
+	  * The coordinates are expressed in millimeters.
+	  *
+	  * @param piRecomputeClash &lt;code&gt;TRUE&lt;/code&gt; if the clash must be
+	  * recomputed after the reach, &lt;code&gt;FALSE&lt;/code&gt; otherwise.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the point could be reached, &lt;code&gt;&lt;E_FAIL&gt;&lt;/code&gt;
+	  * otherwise.
+	  **/
+	virtual HRESULT Reach(SWKIBodyElement * piEndEffector,
+						  SWKISegment * piStartSegment,
+						  const CATMathAxis &amp; piPointToReach,
+						  boolean piRecomputeClash = TRUE) = 0;
+
+	/**
+	  * Adjust the manikin&#x27;s arm (rotate around axis from shoulder to elbow), while
+	  * keeping the hand at a fixed location.
+	  *
+	  * @param piSegment The short name of the segment.
+	  * Since this must be an arm, this parameter must be either
+	  * &lt;code&gt;SWRSArAr&lt;/code&gt; or &lt;code&gt;SWLSArAr&lt;/code&gt;.
+	  *
+	  * @param piAngle The rotation increment of the arm.&lt;br&gt;
+	  * This value is expressed in radians.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the rotation is done, &lt;code&gt;&lt;E_FAIL&gt;&lt;/code&gt;
+	  * otherwise.
+	  **/
+	virtual HRESULT AdjustElbow(SWShortName piSegment, double piAngle) = 0;
+
+	/**
+	  * Set an IK behavior to the manikin
+	  * This behavior will affect the way the inverse kinematics is resolved.
+	  *
+	  * @param piNewBehavior The new behavior
+	  * The value of this parameter must be constructed from the
+	  * &#x27;IK behavior&#x27; constants defined above.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the new behavior is accepted, or an error
+	  * code in case it is rejected.
+	  **/
+	virtual HRESULT SetBehavior(int piNewBehavior) = 0; 
+
+	/**
+	  * @return The current IK behavior of the manikin.
+	  **/
+	virtual int GetBehavior() const = 0; 
+
+	/**
+	  * Set the tolerance of the IK solver.
+	  * @param piTolerance to assign to the IK solver.
+	  *
+	  * @return &lt;code&gt;S_OK&lt;/code&gt; if the new tolerance is accepted, or an error
+	  * code in case it is rejected.
+	  **/
+	virtual HRESULT SetTolerance(double piNewTolerance) = 0;
+
+	/**
+	  * @return The current IK solver tolerance of the manikin.
+	  **/
+	virtual double  GetTolerance() const = 0;
+
+	/**
+	  * Synchronize the list of IK constraints after an Undo event.
+	  * This method is to be called by the system only.
+	  **/
+	virtual void Synchronize() = 0;
+
+	/**
+	  * Get the list of unsolved IK constraints after IK resolve failed
+	  *
+	  **/
+	virtual void GetUnsolvedConstraints(CATListOfCATString &amp; poConsIDList) const = 0; 
+
+	/**
+	  * @param piSegment The end effector of the IK chain.
+	  *
+	  * @return the start segment of the IK chain for the given end effector
+	  **/
+	virtual SWShortName GetStartSegmentShortName(const SWShortName piSegment) const = 0;
+};
+
+CATDeclareHandler(SWKIIKManager, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="SWKIIKConstraint.html">← 上一页: SWKIIKConstraint.h</a></div>
+        <div><a href="SWKIIKManagerKineo.html">下一页: SWKIIKManagerKineo.h →</a></div>
+    </div>
+</body>
+</html>

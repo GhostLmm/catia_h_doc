@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModeler/PublicInterfaces/CATMmrAlgoConfigServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModeler/PublicInterfaces/CATMmrAlgoConfigServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMfCkeServices.html">← 上一页: CATMfCkeServices.h</a></div>
+        <div><a href="CATMmrApplicativeAttributes.html">下一页: CATMmrApplicativeAttributes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMmrAlgoConfigServices_H  
+#define CATMmrAlgoConfigServices_H
+
+// COPYRIGHT Dassault Systemes 2004
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CATMechanicalModeler.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+class CATISpecObject;
+class CATSoftwareConfiguration;
+  
+ 
+/**  
+* Class providing services to manage the mechanical feature versionning.&lt;br&gt;
+* &lt;br&gt;
+* &lt;b&gt;Role:&lt;/b&gt;
+* &lt;ul&gt;
+* This class is used to manage the @href CATSoftwareConfiguration that is needed to version a mechanical feature.&lt;br&gt;
+* But this class doesn&#x27;t provide services that modify the CATSoftwareConfiguration.
+* 
+* &lt;p&gt;At the end of the first build, the configuration must be stored thanks to the @href #StoreConfiguration method.
+* After this storage, the configuration can not be modified anymore. It is impossible to by-pass this restriction
+* thanks to a new call of the &quot;store&quot; method with a different configuration. It&#x27;s the only way to assure that the
+* configuration used during the following builds will be the same that during the first one.
+* So if you use these methods correctly, your feature will have the same behavior update after update.&lt;p&gt;
+* &lt;/ul&gt;
+* &lt;br&gt;
+* &lt;b&gt;Note about the different methods provided by this class and when to use them:&lt;/b&gt;
+* &lt;br&gt;
+* &lt;ul&gt;
+*   &lt;li&gt;
+*     The @href #CreateConfigurationData method must be called in your factory implementation.&lt;br&gt;
+*     It allows to initialize an internal mechanical data needed to manage the configuration.&lt;br&gt;
+*     If this method is not properly used, the rest of the methods of this class will have a bad behavior.&lt;br&gt;
+*   &lt;/li&gt;
+*   &lt;li&gt;
+*     The @href #GetConfiguration and @href #StoreConfiguration methods must be used during the build,
+*     in the @href CATIBuild interface implementation of your feature.&lt;br&gt;
+*     Like the configuration is a common data that allows to version the different softwares (DS softwares and
+*     your owns) called during the build, the @href #GetConfiguration method must be called at the begining of
+*     the build, and the @href #StoreConfiguration method at its ends.&lt;br&gt;
+*   &lt;/li&gt;
+* &lt;/ul&gt;
+* &lt;br&gt;
+* See the CAA article entitled &lt;b&gt;&quot;Integrating a New Geometrical Feature in the Update Mechanism&quot;&lt;/b&gt; for an example
+* of the use of the methods of this class.&lt;br&gt;
+* &lt;br&gt;
+*/
+
+  
+class ExportedByCATMechanicalModeler CATMmrAlgoConfigServices  
+{  
+  public:
+    
+    /**  
+    *  Initializes a data needed to store the configuration of the feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;
+    *  This method initializes a data needed to store the configuration that allows to version your feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Note:&lt;/b&gt;
+    *  &lt;ul&gt;          
+    *    &lt;li&gt;
+    *      This method must be called in the method instanciating the feature. More generally in the factory
+    *      implementation.
+    *    &lt;/li&gt;
+    *    &lt;li&gt;
+    *      If this method is not properly used, the rest of the methods of this class will have a bad behavior.
+    *    &lt;/li&gt;
+    *  &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  @param   iFeature
+    *    The mechanical feature to version.
+    *  &lt;br&gt;
+    *  @return 
+    *    &lt;ul&gt;
+    *      &lt;li&gt;
+    *        S_OK if the data has been correctly initialized.
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_INVALIDARG if &lt;tt&gt;iFeature&lt;/tt&gt;:
+    *        &lt;ul&gt;
+    *          &lt;li&gt;is NULL&lt;/li&gt;
+    *          &lt;li&gt;is not a mechanical feature&lt;/li&gt;
+    *        &lt;/ul&gt;
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_FAIL for all other problems.
+    *      &lt;/li&gt;
+    *    &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  &lt;br&gt;
+    */  
+    static HRESULT CreateConfigurationData(const CATISpecObject *iFeature);
+  
+    /**  
+    *  Reads the configuration stored on a mechanical feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;
+    *  This method reads the configuration stored on the mechanical feature.&lt;br&gt;
+    *  It must be called at the beginning of the build of your feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Note:&lt;/b&gt;
+    *  &lt;ul&gt;          
+    *    &lt;li&gt;
+    *      If the @href #CreateConfigurationData method has not been correctly called on the feature (because
+    *      it&#x27;s an old feature not versionned, or because you made an error in the use of this method), an empty
+    *      configuration is provided. This configuration can not be valuated.&lt;br&gt; 
+    *      In this case the &lt;b&gt;oIsConfigToStore&lt;/b&gt; parameter shows that it&#x27;s useless to store the configuration.
+    *    &lt;/li&gt;
+    *    &lt;li&gt;
+    *      If your feature has not been builded yet, like it has no configuration at this step, an empty
+    *      configuration is provided. This configuration can be valuated.&lt;br&gt;
+    *      In this case the &lt;b&gt;oIsConfigToStore&lt;/b&gt; parameter shows that the configuration must be stored,
+    *      and so you will have to store it at the end of the build of your feature, thanks to the @href
+    *      #StoreConfiguration method.
+    *    &lt;/li&gt;
+    *    &lt;li&gt;
+    *      If the feature has already been builded one time, it&#x27;s the configuration stored at the end of the first
+    *      build that is provided. This configuration can not be valuated or modified.&lt;br&gt;
+    *      In this case the &lt;b&gt;oIsConfigToStore&lt;/b&gt; parameter shows that it&#x27;s useless to store the configuration.
+    *    &lt;/li&gt;
+    *  &lt;/ul&gt;          
+    *  &lt;br&gt;
+    *  @param   iFeature
+    *    The feature on which you want to read the configuration.
+    *  @param   oConfig
+    *    The configuration read (or created if the feature has no configuration stored) on the feature.&lt;br&gt;
+    *    &lt;b&gt;This object must be released at the end of the treatement!&lt;/b&gt;
+    *  @param   oIsConfigToStore
+    *    This integer allows to know if the configuration provided must be stored on the feature.&lt;br&gt;
+    *    &lt;ul&gt;
+    *      &lt;li&gt;
+    *        oIsConfigToStore = 1, the configuration must be stored.
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        oIsConfigToStore = 0, the configuration must not be stored.
+    *      &lt;/li&gt;
+    *    &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *    &lt;ul&gt;
+    *      &lt;li&gt;
+    *        S_OK if the configuration has been correctly read on the feature (or created if no configuration is
+    *        stored on the feature).
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        S_FALSE if &lt;tt&gt;iFeature&lt;/tt&gt; is an old created feature which does not have any configuration yet.
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_INVALIDARG if &lt;tt&gt;iFeature&lt;/tt&gt;:
+    *        &lt;ul&gt;
+    *          &lt;li&gt;is NULL&lt;/li&gt;
+    *          &lt;li&gt;is not a mechanical feature&lt;/li&gt;
+    *        &lt;/ul&gt;
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_FAIL for all other problems.
+    *      &lt;/li&gt;
+    *    &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  &lt;br&gt;
+    */  
+    static HRESULT GetConfiguration(const CATISpecObject *iFeature,CATSoftwareConfiguration *&amp;oConfig,int &amp;oIsConfigToStore);
+    
+    /**  
+    *  Stores a configuration on a mechanical feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role:&lt;/b&gt;&lt;br&gt;
+    *  This method stores the configuration that allow to version your mechanical feature.&lt;br&gt;
+    *  It must be called at the end of the build of your feature. Check the value of the &lt;b&gt;oIsConfigToStore&lt;/b&gt;
+    *  parameter of the @href #GetConfiguration method to know when it&#x27;s usefull to call this method.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Note:&lt;/b&gt;&lt;br&gt;
+    *  &lt;ul&gt;          
+    *    &lt;li&gt;
+    *      If the @href #CreateConfigurationData method has not been correctly called on the feature (because it&#x27;s
+    *      an old feature not versionned, or because you made an error in the use of this method), nothing is done.
+    *    &lt;/li&gt;
+    *    &lt;li&gt;
+    *      The configuration that is passed must be the same configuration that the one provided by the
+    *      @href #GetConfiguration method.
+    *    &lt;/li&gt;
+    *    &lt;li&gt;
+    *      The method checks that the configuration must effectively be stored. If it&#x27;s not the case, nothing is done.
+    *    &lt;/li&gt;
+    *  &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  @param   iFeature
+    *    The feature that stores the configuration.
+    *  @param   iConfig
+    *    The configuration that must be stored on the feature.&lt;br&gt;
+    *    &lt;b&gt;The configuration is not released if the store is done. The release must be done by the user!&lt;/b&gt;&lt;br&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *    &lt;ul&gt;
+    *      &lt;li&gt;
+    *        S_OK if the configuration has been correctly stored on the feature, or if it was useless to call this method
+    *        (because the configuration is already stored on the feature).
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_INVALIDARG if &lt;tt&gt;iFeature&lt;/tt&gt;:
+    *        &lt;ul&gt;
+    *          &lt;li&gt;is NULL&lt;/li&gt;
+    *          &lt;li&gt;is not a mechanical feature&lt;/li&gt;
+    *        &lt;/ul&gt;
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_INVALIDARG if &lt;tt&gt;iConfig&lt;/tt&gt;:
+    *        &lt;ul&gt;
+    *          &lt;li&gt;is NULL&lt;/li&gt;
+    *          &lt;li&gt;is not the same configuration that the one provided by the @href #GetConfiguration method&lt;/li&gt;
+    *        &lt;/ul&gt;
+    *      &lt;/li&gt;
+    *      &lt;li&gt;
+    *        E_FAIL for all other problems.
+    *      &lt;/li&gt;
+    *    &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  &lt;br&gt;
+    */  
+    static HRESULT StoreConfiguration(const CATISpecObject *iFeature,CATSoftwareConfiguration *iConfig);
+
+
+  private:
+    
+    CATMmrAlgoConfigServices();  
+    ~CATMmrAlgoConfigServices();     
+};  
+#endif  
+     
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMfCkeServices.html">← 上一页: CATMfCkeServices.h</a></div>
+        <div><a href="CATMmrApplicativeAttributes.html">下一页: CATMmrApplicativeAttributes.h →</a></div>
+    </div>
+</body>
+</html>

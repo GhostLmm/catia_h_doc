@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnalysisMeshingToolsItf/PublicInterfaces/CATMSHCustomHighlight.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AnalysisMeshingToolsItf/PublicInterfaces/CATMSHCustomHighlight.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMSHTopology.html">← 上一页: CATIMSHTopology.h</a></div>
+        <div><a href="CATMSHExtIOpenSmartSurf.html">下一页: CATMSHExtIOpenSmartSurf.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMSHCustomHighlight_h
+#define CATMSHCustomHighlight_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2005
+/**
+ * @CAA2Level L1 
+ * @CAA2Usage U1 
+ */
+#include &quot;MSHUITools.h&quot;
+#include &quot;CATAcquisitionFilter.h&quot;
+#include &lt;stddef.h&gt;
+
+class CATMSHElement;
+class CATMSHNode;
+class CAT3DCustomRep;
+
+/**
+ * Customized method which be called for the highlight.
+ * @param iRep
+ *   The CustomRep used to adds a graphic primitive to the list of managed graphic 
+     primitives (see @see CAT3DCustomRep object)
+ * @param iHData
+ *   The data associated to the implementation of customized highlight method. 
+ */
+typedef HRESULT (*CATMSHMethodHilight) (CAT3DCustomRep * iRep, CATBaseUnknown * iEntity, void * iHData);
+
+/**
+ * Interface representing a pre-highlight and highlight of a finite element entity.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface provides a customization of the highlight behavoiur
+ * on : element, node, finite element&#x27;s edge, finite element&#x27;s face.
+ * &lt;br&gt;
+ */
+class ExportedByMSHUITools CATMSHCustomHighlight : public CATAcquisitionFilter
+{
+public:
+/**
+  * Creates an object which defines custom hiligth method an associated data.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This object creates a link to the custimzed method which should be
+  * called to highlight a FEM entity.
+  * @param iMethod
+  *   The customized service to call in the hiligth. The parameters of this service
+  *   are defined by the typedef described below.
+  * @param iHData
+  *   The data associated to the customized implementation of highlight. 
+  */
+  CATMSHCustomHighlight ( CATMSHMethodHilight iMethod = NULL , void * iHData = NULL );
+/**
+ * Defines the default hiligth behaviour of finite element.
+ * @param iRep
+ *   The rep associated to element for hiligth.
+ * @param iElement
+ *   The finite element object to hiligth.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The hiligth is succesfull.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The hiligth failed.
+ *   &lt;/dl&gt;
+ */
+  static HRESULT HighlightElement ( CAT3DCustomRep * iRep, CATMSHElement * iElement );
+/**
+ * Defines the default hiligth behaviour for the face of finite element.
+ * @param iRep
+ *   The rep associated to the hiligth of a face of finite element.
+ * @param iElement
+ *   The finite element object whose the face is to hiligth.
+ * @param iFace
+ *   The finite element face number to hiligth.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The hiligth is succesfull.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The hiligth failed.
+ *   &lt;/dl&gt;
+ */
+  static HRESULT HighlightFace ( CAT3DCustomRep * iRep, CATMSHElement * Element , int iFace );
+/**
+ * Defines the default hiligth behaviour for the edge of finite element.
+ * @param iRep
+ *   The rep associated to the hiligth of a edge of finite element.
+ * @param iElement
+ *   The finite element object whose the edge is to hiligth.
+ * @param iEdge
+ *   The finite element edge number to hiligth.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The hiligth is succesfull.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The hiligth failed.
+ *   &lt;/dl&gt;
+ */
+  static HRESULT HighlightEdge ( CAT3DCustomRep * iRep, CATMSHElement * Element , int iEdge );
+/**
+ * Defines the default hiligth behaviour for a node.
+ * @param iRep
+ *   The rep associated to the hiligth of a edge of finite element.
+ * @param iNode
+ *   The finite element node object to hiligth.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The hiligth is succesfull.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The hiligth failed.
+ *   &lt;/dl&gt;
+ */
+  static HRESULT HighlightNode ( CAT3DCustomRep * iRep, CATMSHNode * iNode );
+/** 
+ *  @nodoc 
+ *   This method is called in the highlight step
+ * @return
+ *   The result of the test.
+ */
+  boolean GetStatus ();
+
+protected:
+/**
+ * @nodoc
+ */
+  virtual ~CATMSHCustomHighlight ();
+
+private:
+
+  CATMSHMethodHilight _HMethod;
+  void *              _HData;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMSHTopology.html">← 上一页: CATIMSHTopology.h</a></div>
+        <div><a href="CATMSHExtIOpenSmartSurf.html">下一页: CATMSHExtIOpenSmartSurf.h →</a></div>
+    </div>
+</body>
+</html>

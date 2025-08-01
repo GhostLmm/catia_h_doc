@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgORExpression.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgORExpression.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgNormalValue.html">← 上一页: CATICfgNormalValue.h</a></div>
+        <div><a href="CATICfgProductType.html">下一页: CATICfgProductType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICfgORExpression_h
+#define CATICfgORExpression_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3 
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATListOfCATICfgANDExpression.h&quot;
+
+class CATICfgANDExpression_var;
+class CATICfgORExpression_var;
+class CATICfgNormalValue_var;
+class CATICfgEffectivity_var;
+class CATICfgInterval_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgORExpression ;
+#else
+extern &quot;C&quot; const IID IID_CATICfgORExpression ;
+#endif
+
+//=============================================================================
+
+/**
+ * Class to manage operations on ORExpressions.
+ * &lt;b&gt;Role&lt;/b&gt;: A ORExpression is a logical expression constituted of one
+ * or several ANDExpression. The ANDExpressions are linked with the OR logical operator. 
+ * An ORExpression is used in the context of Configuration.
+ * It serves to give an effectivitity to a part Instance, based on ranges, dates, specifications and milestones.
+ * Example of ORExpression : &quot;(R(10,20) AND SpecA) OR (Date1)&quot;.
+ * Examples of ANDExpression:  &quot;R(10,20) AND SpecA&quot; ,   &quot; Date1&quot;.
+ * Examples of Normal Values : &quot;R(10,20)&quot; ,  &quot;SpecA&quot;; &quot;Date1&quot;.
+ * @see CATICfgNormalValue, CATICfgEffectivity,  CATICfgANDExpression
+ */
+class ExportedByGUIDVPMInterfaces CATICfgORExpression : public CATBaseUnknown {
+
+     CATDeclareInterface;
+
+public:
+
+/**
+ * Add a single Normal Value to an ORExpression.
+ * @param iValue
+ *   The Normal Value to add. I nfact, an ANDExpression limited to a normal value will be added. 
+ */	 
+     virtual void Add(const CATICfgNormalValue_var &amp;iValue) = 0;
+     
+/**
+ * Add an ANDExpression to an ORExpression.
+ * @param iValue
+ *   The ANDexpression to add. 
+ */	
+     virtual void Add(const CATICfgANDExpression_var &amp;iValue) = 0;
+ 
+/**
+ * Add an ANDExpression to an ORExpression. 
+ * @param iValue
+ *   The ANDexpression to add. 
+ */
+     virtual void Add(const CATICfgORExpression_var &amp;iValue) = 0;
+        
+/**
+ * Get the number of Normal Values contained in a  ORExpression.
+ * @param oNbValues
+ *   Number of  Normal Values. 
+ */	        
+     virtual HRESULT GetNbOfValues(long &amp;oNbValues) const = 0;  
+ 
+/**
+ *  Get the ANDExpressions in  an  ORExpression.
+ * @param oList
+ *   List of ANDExpression.
+ */	  
+     virtual void GetValues(CATListOfCATICfgANDExpression_var &amp;oList) const = 0;
+
+/**
+ *  Substract an ORExpression from another one.
+ * @param iToRemove
+ *   The ORExpression to substract.
+ * @param oResult
+ *   The ORexpression obtained after substraction.
+ *    Example : ORexp1  = R(10,20) &amp; Spec1.
+ *              ORexp2  = R(7,15) .
+ *              Resulting ORExp = R(16,20) &amp; Spec1.
+ */	
+     virtual HRESULT Remove(const CATICfgORExpression_var &amp;iToRemove, CATICfgORExpression_var &amp;oResult) const = 0;
+
+/** @nodoc 
+ *  Check the inclusion of another ORExpression into an ORexpression.
+ * @return
+ *  An HRESULT value.
+ *    S_OK   : &quot;this&quot; is included in iORExp.
+ *    S_FALSE: &quot;this&quot; is not included in iORExp.
+ *    E_FAIL : An error has occured (consult VPMInfo).
+ * @param iORExp
+ *   The inclusion of iORExp into &quot;this&quot; will be checked.
+ * @param oResult
+ *   The ORexpression obtained after Remove.
+ */	
+     virtual HRESULT IsFullyIncludedIn(const CATICfgORExpression_var &amp;iORExp) const = 0;
+
+/** @nodoc */         
+     virtual HRESULT SetLiteralValue(CATUnicodeString &amp; LiteralValue) const = 0;
+
+/** @nodoc */ 
+     virtual HRESULT GetLiteralValue(CATUnicodeString &amp; LiteralValue) const = 0;
+
+/**
+ * Inverse an ORExpression.
+ * @param oExpression.
+ *   Resulting ORExpression.
+ *   Example:  A, B , C ,D are single specs. 
+ *   ORExp1 = (A AND B) OR ( C ).
+ *   Resulting ORExp is : (!A AND !C) OR (!B AND !C )
+ */	
+     virtual HRESULT Inverse(CATICfgORExpression_var &amp;oExpression) const = 0;
+ 
+/**
+ * Search an ANDexpression in an ORExpression.
+ * @return
+ *    An integer.
+ * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: 0 = Found ,  1 = not Found. 
+ * @param iANDExp
+ *   ANDExpression to search
+ */	       
+     virtual int SeekForANDExp(const CATICfgANDExpression_var &amp;iANDExp) const = 0;
+
+/**
+ * Compare two ORExpressions.
+ * @return
+ *    An integer.
+ * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: 0 means EQUAL, 1 means DIFFERENT. 
+ * @param iORExpression
+ *   ORExpression to compare with &quot;this&quot;.
+ */	 
+     virtual int IsEqual(const CATICfgORExpression_var &amp;iORExpression) const = 0;
+
+/**
+ * Compute &quot;AND&quot; logical operation  between two ORExpressions
+ * @param iORExpression
+ *   ORExpression to compare with &quot;this&quot;.
+ * @param oExpression
+ *   Computed ORExpression.
+ *   Example:  A, B, C, D are single specs. 
+ *    ORExp1 = A OR B  ; ORExp2 = C.
+ *    Resulting ORExp = (A AND B) OR (B AND C). 
+ */	
+     virtual HRESULT And(const CATICfgORExpression_var &amp;iExpression, CATICfgORExpression_var &amp;oExpression) const = 0;
+
+/**
+ * Simplify an ORExpression.
+ * @param oORExp
+ *    The simplified ORExpression. 
+ *    Example : OrExp1 = (A AND B) OR (A AND B AND C) OR D 
+ *           Resulting oORExp = (A AND B) OR D  
+ */
+     virtual HRESULT Simplify(CATICfgORExpression_var &amp;oORExp) const = 0;
+
+/**
+ * Copy an ORExpression.
+ * @param oExpression
+ *   Copy of the ORExpression. 
+ */	 
+     virtual HRESULT CopyMe( CATICfgORExpression_var &amp;oExpression) = 0;
+	
+
+/** @nodoc
+ *	// Methode permettant de dupliquer une ORExpression
+ *	// en modifiant ventuellement sa liste de NormalValue
+ *	// cf Mapping des Effs dans la copie des CVs 
+ */
+     virtual HRESULT CopyMe(CATListOfCATICfgNormalValue_var &amp;iNewValueList,
+			    CATListOfCATICfgNormalValue_var &amp;iOldValueList, CATICfgORExpression_var &amp;oExpression)=0;
+
+/**
+ * Clean the ANDExpression by Removing Normal Values.
+ */	 	        
+     virtual void Empty() = 0;
+        
+/**
+ * Dump informations on an ANDExpression.
+ */	
+     virtual void Dump() const = 0;
+
+/**
+ * Build a String representing an ORExpression.
+ * @param oOrExp
+ *    The String representing the ORExpression. This string includes parenthesis, and key-words like OR , AND.
+ *    This string is dedicated to user interface&#x27;s  usage.
+ */     
+     virtual HRESULT toString(CATUnicodeString &amp;oOrExp)=0;
+     
+/**
+ * Translates an ORexp (this) to a list of list of Effectivity.
+ *  @param oList.
+ *    The list of effectivities translated.
+ */
+     virtual HRESULT TranslateToEffectivity(CATICfgEffectivity_var&amp; oEffectivity) = 0;
+
+};
+
+// Handler definition 
+CATDeclareHandler(CATICfgORExpression, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgNormalValue.html">← 上一页: CATICfgNormalValue.h</a></div>
+        <div><a href="CATICfgProductType.html">下一页: CATICfgProductType.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchDisplay.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchDisplay.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchCutAndPaste.html">← 上一页: CATISchCutAndPaste.h</a></div>
+        <div><a href="CATISchDocFrmXml.html">下一页: CATISchDocFrmXml.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchDisplay_H
+#define CATISchDisplay_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATPathElement.h&quot;
+#include &quot;CATRepPath.h&quot;
+
+class CATRep;
+class CATISchGRR;
+
+extern &quot;C&quot; const IID IID_CATISchDisplay ;
+
+/**
+ * Interface to manage the &quot;look&quot; of a graphic representation of 
+ * Schematic basic set of objects. 
+ * &lt;b&gt;Role&lt;/b&gt;: To modify the visualization attributes such 
+ * as highlight and show-hide
+ */
+class CATISchDisplay : public IUnknown
+{
+  public:   
+  
+  /**
+  * Highlight or de-highlight an object&#x27;s graphic representation.
+  * @param iBOn
+  *   if TRUE, highlight. Else de-highlight.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Highlight (CATBoolean iBOn) = 0;
+
+  /**
+  * Show or hide an object&#x27;s graphic representation.
+  * @param iBOn
+  *   if TRUE, show the graphic representation. Else hide it.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Show (CATBoolean iBOn) = 0;
+
+  /**
+  * Get the bounding box of the graphic representation.
+  * @param oDb4BoxCorner
+  *   An array of 4 doubles. 
+  *   member 1-2 is the X-Y coordinates of the lower left corner
+  *   point of the bounding box.
+  *   member 3-4 is the X-Y coordinates of the upper right corner
+  *   point of the bounding box. 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetBoundingBox (double *oDb4BoxCorner) = 0;
+
+  /**
+  * Get the display of the graphic representation.
+  * @see CATI2DGeoVisu#BuildRep
+  * @param oRep
+  *   pointer to CATRep of the display.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT BuildRep (CATRep **oRep) = 0;
+
+  //---------------------------------------------------------------------------
+  // BuildHighlightLook should be implemented only on the &quot;Route&quot; object.
+  //                                          ****
+  // History: VSO (1/11/01)
+  //   To resolve problem with highlighting route in a trap box under SELECT.
+  //   We want the GRRCntr and GRRRoute to be both highlighted when a route
+  //   is selected anywhere (at the connector or at the line itself). The 
+  //   easiest way is to intercept the BuildHighlightLook on the &quot;Route&quot;
+  //   and not to propagate down the leaf of the CATPathElement. That way,
+  //   the rep of the route (being a CAT2DBagRep with the rep of GRRCntr and
+  //   the rep of GRRRoute) will become the leaf of the CATRepPath, and both
+  //   the GRRCntr and GRRRoute will be highlighted.
+  //   We do not need this for the component, because when a component is 
+  //   trapped, the ditto is highlighted by the drafting.
+  //---------------------------------------------------------------------------
+  
+  /**
+  * Get the display of the graphic representation.
+  * @see CATI2DGeoVisu#BuildHighlightLook
+  * @param iModelPath
+  *   CATPathElement of the selected object
+  * @param oRepPath
+  *   CATRepPath of the selected object
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT BuildHighlightLook (
+      const CATPathElement &amp;iModelPath, CATRepPath &amp;oRepPath) = 0;      
+  
+  /**
+  * Set the color of the graphic representation of objects.
+  * @param iRed
+  * The red component of the color.
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;iRed&lt;/tt&gt; ranges from 0 to 255.
+  * @param iGreen
+  * The green component of the color.
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;iGreen&lt;/tt&gt; ranges from 0 to 255.
+  * @param iBlue
+  * The blue component of the color.
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;iBlue&lt;/tt&gt; ranges from 0 to 255.
+  * @param iGRR
+  * The specific graphic image to change graphic properties. If 
+  * NULL, all the images associated with the object will be changed.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetColor (int iRed,  int iGreen,  int iBlue,
+    CATISchGRR *iGRR=NULL) = 0; 
+
+  /**
+  * Get the color of the graphic representation of objects.
+  * @param iGRR
+  * The specific graphic image to get the graphic properties from. If
+  * NULL, the first image associated with the object will be used.
+  * @param oRed
+  *   Red component of color
+  * @param oGreen
+  *   Green component of color
+  * @param oBlue
+  *   Blue component of color
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetColor (CATISchGRR *iGRR,
+    int *oRed, int *oGreen, int *oBlue) = 0; 
+
+  /**
+  * Set the line type of the graphic representation of objects.
+  * @param iLinetype
+  * The line type.
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;iLinetype&lt;/tt&gt; ranges from 1 to 63.&lt;ul&gt;
+  * &lt;li&gt;1 = Solid.
+  * &lt;li&gt;2 = Dotted.
+  * &lt;li&gt;3 = Dashed. 
+  * &lt;li&gt;4 = Dot-dashed.
+  * &lt;li&gt;5 = Phantom.
+  * &lt;li&gt;6 = Small-dotted.
+  * &lt;li&gt;7 = JIS Axis.
+  * &lt;li&gt;8 to 63 = Solid or application dependant.&lt;/ul&gt;
+  * @param iGRR
+  * The specific graphic image to change graphic properties. If 
+  * NULL, all the images associated with the object will be changed.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetLineType (int iLinetype, CATISchGRR *iGRR=NULL) = 0;
+
+  /**
+  * Get the line type of the graphic representation of objects.
+  * @param iGRR
+  * The specific graphic image to get the graphic properties from. If
+  * NULL, the first image associated with the object will be used.
+  * @param oLinetype
+  * The line type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetLineType (CATISchGRR *iGRR, int *oLineType) = 0;
+
+  /**
+  * Set the line thickness of the graphic representation of objects.
+  * @param iThickness
+  * The thickness index.
+  * &lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;iThickness&lt;/tt&gt; range from 1 to 16.
+  */
+  virtual HRESULT SetThickness (int iThickness, CATISchGRR *iGRR=NULL) = 0;
+
+  /**
+  * Get the line thickness of the graphic representation of objects.
+  * @param iGRR
+  * The specific graphic image to get the graphic properties from. If
+  * NULL, the first image associated with the object will be used.
+  * @param oThickness
+  * The thickness index.
+  */
+  virtual HRESULT GetThickness (CATISchGRR *iGRR, int *oThichness) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchCutAndPaste.html">← 上一页: CATISchCutAndPaste.h</a></div>
+        <div><a href="CATISchDocFrmXml.html">下一页: CATISchDocFrmXml.h →</a></div>
+    </div>
+</body>
+</html>

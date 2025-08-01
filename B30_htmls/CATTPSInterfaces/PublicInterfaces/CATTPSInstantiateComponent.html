@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTPSInterfaces/PublicInterfaces/CATTPSInstantiateComponent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTPSInterfaces/PublicInterfaces/CATTPSInstantiateComponent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTPSIndividualElementControl.html">← 上一页: CATTPSIndividualElementControl.h</a></div>
+        <div><a href="CATTPSItfCPP.html">下一页: CATTPSItfCPP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTPSInstantiateComponent_H
+#define CATTPSInstantiateComponent_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATTPSItfCPP.h&quot;
+#include &quot;IUnknown.h&quot;
+
+/**
+ * Enum that identify components that are provided for TPS manipulation.
+ */
+enum CATTPSComponent
+{
+  DfTPS_ItfTPSServices               =  0,     // CATITPSServices
+  DfTPS_ItfTTRSServices              =  1,     // CATITPSTTRSServices
+  DfTPS_ItfTPSPropTBManager          =  2,     // CATITPSPropTBManager -- Obsolete
+
+  DfTPS_ItfPointVectorOperator       =  3,     // CATITPSOperatorPtVector
+  DfTPS_ItfAnnotationPlaneOperator   =  4,     // CATITPSOperatorAnnotPlane
+  DfTPS_ItfClashOperator             =  5,     // CATITPSOperatorClash
+  DfTPS_ItfZDiagnostic               =  6,     // CATITPSOperatorZConv
+  DfTPS_ItfAnnotationPlaneDiagnostic =  7,     // CATITPSOperatorPlaneConv
+  DfTPS_ItfViewPlaneOperator         =  8,     // CATITPSOperatorViewPlane
+
+  DfTPS_ItfTPSServicesForV4Data      =  9,     // CATITPSV4Services
+  DfTPS_ItfV4SpecificServices        = 10,     // CATITPSSpecific
+  DfTPS_ItfV4GeometricAccess         = 11,     // CATITPSFsurServices
+  DfTPS_ItfRetrieveServices          = 12,     // CATITPSRetrieveServices
+  DfTPS_ItfTPSFactoryAdvanced        = 13,     // CATITPSFactoryAdvanced
+
+  DfTPS_ItfV4TPSServices             = 14,     // CATITPSServices
+  DfTPS_ItfV5TPSServices             = 15,     // CATITPSServices
+  DfTPS_ItfV4TTRSServices            = 16,     // CATITPSTTRSServices
+  DfTPS_ItfV5TTRSServices            = 17,     // CATITPSTTRSServices
+
+  DfTPS_ItfTolerancingExpert         = 18,   // CATITPSTolerancingExpert
+  DfTPS_ItfExpertUpgrade             = 19,   // CATITPSExpertUpgrade
+  DfTPS_ItfExpertDatum               = 20,   // CATITPSExpertDatum
+  DfTPS_ItfRefFrameTTRS              = 21,   // CATITPSRefFrameTTRS
+  DfTPS_ItfExpertValuateFromAnnot    = 22,   // CATITPSExpertValuateFromAnnot
+  DfTPS_ItfTPSServicesContainer      = 23,   // CATITPSServicesContainers
+  DfTPS_ItfTPSUpdateServices         = 24,   // CATITPSUpdateServices
+  DfTPS_ItfTPSOperatorServices       = 25,   // CATITPSOperatorServices
+  DfTPS_ItfTPSUIServices             = 26,   // CATITPSUIServices
+  DfTPS_ItfTPSAnnotationServices     = 27,   // CATITPSAnnotationServices
+  DfTPS_ItfTPSAssociativeServices    = 28,   // CATITPSAssociativeServices
+  DfTPS_ItfTPSExpertAdvisor          = 29,   // CATITPSExpertAdvisor
+  DfTPS_ItfTPSDuplicator             = 30,   // CATITPSDuplicator
+  DfTPS_ItfTPSOperatorDistPtTTRS     = 31,   // CATITPSOperatorDistPtTTRS
+  DfTPS_ItfTPSFactoryTTRS            = 32,   // CATITPSFactoryTTRS
+  DfTPS_ItfTPSOperatorPlaneOfDimOnGSM= 33,   // CATITPSOperatorPlaneOfDimOnGSM
+  DfTPS_ItfTPSCaptureServices        = 34,   // CATITPSCaptureServices
+  DfTPS_ItfTPSClippingPlaneServices  = 35,   // CATITPSClippingPlaneServices
+  DfTPS_ItfTPSAnnotDuplicatorV4      = 36,   // CATITPSAnnotDuplicatorV4
+  DfTPS_ItfTPSOperatorIncludedTTRS   = 37,   // CATITPSOperatorIncludedTTRS
+  DfTPS_ItfTPSOperatorPlaneOfDimOnFillet= 38,// CATITPSOperatorPlaneOfDimOnFillet
+  DfTPS_ItfTPSOperatorPoint          = 39,   // CATITPSOperatorPoint
+  DfTPS_ItfConstructedGeomServices   = 40,   // CATITPSConstructedGeomServices
+  DfTPS_ItfTPSViewServices           = 41,   // CATITPSViewServices
+  DfTPS_ItfTPSCATITPSDimServices     = 42,   // CATITPSDimServices
+  DfTPS_ItfTPSOperatorDimGeomUpdate  = 43,   // CATITPSOperatorDimGeomUpdate
+  DfTPS_ItfTPSDimFactoryAdvanced     = 44,   // CATITPSDimFactoryAdvanced
+  DfTPS_ItfTPSExtractionViewServices = 45,   // CATITPSExtractionViewServices
+  //IFB IR:- A0567364 05:02:2007 
+  //For getting the Dimension Type (Linear or Angular)
+  // DfTPS_ItfFTAServices            = 56,   // CATIFTAServices
+  // DfTPS_ItfV4FTAServices          = 57,   // CATIFTAServices
+  // DfTPS_ItfV5FTAServices          = 58,   // CATIFTAServices
+  DfTPS_ItfTPSIDServices             = 59    // CATITPSIDServices
+  // DfTPS_ItfFTAResultSetServices   = 60,   // CATIFTAResultSetServices
+  // DfTPS_ItfFTASetCacheMngtSinglServices = 61, // CATIFTASetCacheMngtSinglServices
+  // DfTPS_ItfFTAReorderServices     = 62,   // CATIFTAReorderServices
+  // DfTPS_ItfFTAThumbnailServices   = 63    // CATIFTAThumbnailServices
+};
+
+
+/**
+ * Creates a TPS component from its identificator defined as a value
+ * of enum CATTPSComponent.
+ * @param iComp
+ *   The component identificator for which an instance is requested.
+ * @param oppv
+ *   The address where the returned pointer to the interface is located.
+ * @return
+ *   &lt;dl&gt;
+ *   &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;          &lt;dd&gt;if the query succeeds
+ *   &lt;dt&gt;&lt;tt&gt;E_UNEXPECTED&lt;/tt&gt;  &lt;dd&gt;for an unexpected failure
+ *   &lt;dt&gt;&lt;tt&gt;E_NOINTERFACE&lt;/tt&gt; &lt;dd&gt;if the interface does not exist
+ *   &lt;/dl&gt;
+ */
+HRESULT ExportedByCATTPSItfCPP 
+CATTPSInstantiateComponent (CATTPSComponent iComp, void ** opiComp);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTPSIndividualElementControl.html">← 上一页: CATTPSIndividualElementControl.h</a></div>
+        <div><a href="CATTPSItfCPP.html">下一页: CATTPSItfCPP.h →</a></div>
+    </div>
+</body>
+</html>

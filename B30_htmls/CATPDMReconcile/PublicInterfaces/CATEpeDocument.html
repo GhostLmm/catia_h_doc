@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPDMReconcile/PublicInterfaces/CATEpeDocument.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPDMReconcile/PublicInterfaces/CATEpeDocument.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIUExitPVRCommands.html">← 上一页: TIE_CATIUExitPVRCommands.h</a></div>
+        <div><a href="CATEpeFirstLevelInstance.html">下一页: CATEpeFirstLevelInstance.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  CATEpeDocument_h
+#define  CATEpeDocument_h
+// Infrastructure
+// Version 1 Release 0
+// COPYRIGHT DASSAULT SYSTEMES 2004-2010
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+// *****************************************************************
+//
+//   Identification :
+//   ---------------
+//
+//      RESPONSIBLE : Jean-Luc MEDIONI
+//      FUNCTION    : Reconciliator
+//      USE         : CATIA &amp; ENOVIA
+//
+// *****************************************************************
+//
+//   Description :
+//   ------------
+//
+//    Class that represents a CATIA document
+//
+// *****************************************************************
+//
+//   Remarks :
+//   ---------
+//
+//
+// ****************************************************************
+//
+//   Story :
+//   -------
+//
+//    Revision 1.0  Dec 2004  Author:  Jean-Luc MEDIONI
+//                            Purpose: CAA exposition
+//
+// ****************************************************************
+//
+// INSIDE class:
+// -------------
+//
+//
+//
+// ****************************************************************
+// Abstract class    : No
+// Template code     : No
+// Ilined   Function : No
+// ****************************************************************
+
+#include &quot;CATPDMReconcileModel.h&quot;
+
+// --- Forward declaration
+
+class CATScmDocument ;
+
+// --- Header that need to be referenced
+
+#include &quot;CATEpeObject.h&quot;
+
+// --- Class definition
+
+/**
+  * Class representing a CATIA document.
+  *
+  * &lt;b&gt;Role&lt;/b&gt;:
+  * Define a CATIA document in a reconciliation session. Document to be
+  * mapped on VPDM repository for reload/New/Overwrite operation.
+  */
+
+class ExportedByCATPDMReconcileModel CATEpeDocument : public CATEpeObject
+{
+   // ----------------------------------------------------------
+   // --- C++ standard methods (Constructor / Destructor...)
+   // ----------------------------------------------------------
+
+   public:
+
+   /** @nodoc
+     * Constructs a CATIA Document.
+     * 
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Constructs a CATIA document object in Reconciliation sesion.
+     * (This object need to have an adhesion to CATIDocument)
+     */
+      CATEpeDocument() ;
+
+      // --- Destructeur 
+
+   /** @nodoc
+     * Destructor.
+     * 
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Destructor.
+     */
+      ~CATEpeDocument() ;
+
+      // --- Copy-constructor
+
+    /** @nodoc
+      * Copy constructor.
+      * 
+      * @param ixNode
+      * Object to be duplicated.
+      */
+      CATEpeDocument( const CATEpeDocument &amp; ixNode ) ;
+
+      // --- Operateur d&#x27;affectation
+
+    /** @nodoc
+      * Assignment operator from another object node.
+      * 
+      * @param ixNode
+      * Object used as reference for the assignment.
+      */
+      CATEpeDocument &amp; operator=( const CATEpeDocument &amp; ixNode ) ;
+
+    // -----------------------------------------
+    // --- General management
+    // -----------------------------------------
+
+    /**
+      * Access to CAA reconciliator object from other reconciliator objects.
+      *
+      * &lt;b&gt;Role:&lt;/b&gt; Access to CAA reconciliator object from other reconciliator objects.
+      * 
+      * @return
+      * Method return code 
+      * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;NULL&lt;/i&gt;&lt;/b&gt; if one error occur, otherwise provide access
+      * associated &lt;b&gt;&lt;i&gt;CATEpeNode&lt;/i&gt;&lt;/b&gt;. 
+      * 
+      * @param ixObj
+      *  Internal session entity.
+      */
+       static CATEpeDocument * GetExposedEntity( const CATScmDocument * ixObj ) ;
+
+    /**
+      * Access to object reconciliator internal object.
+      *
+      * &lt;b&gt;Role:&lt;/b&gt; Access to object reconciliator internal object..
+      * 
+      * @return
+      * Method return code 
+      * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;NULL&lt;/i&gt;&lt;/b&gt; if one error occur, otherwise provide access
+      * associated  &lt;b&gt;&lt;i&gt;CATScmDocument&lt;/i&gt;&lt;/b&gt;. 
+      */
+       CATScmDocument * GetExposedEntity() const ;
+
+   // -----------------------------------------------
+   // --- Access to document information
+   // -----------------------------------------------
+
+   /**
+     * Gets CATIA display name.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets CATIA display name
+     * 
+     * @return
+     *  String that represents the CATIA document name.
+     * 
+     */
+     CATUnicodeString GetCatiaName() const ;
+
+   /**
+     * Gets directory path of the not loaded CATIA document.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets directory path of the not loaded CATIA document.
+     * 
+     * @return
+     *  String that represents the directory path.
+     * 
+     */
+      CATUnicodeString GetDirectoryPath() const ;
+
+   /**
+     * Gets document type.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets document type of the not loaded CATIA document.
+     * 
+     * @return
+     *  String that represents the document type.
+     * 
+     */
+      CATUnicodeString GetDocumentType() const ;
+
+      // -------------------------------------------
+      // --- Applicative container save management
+      // -------------------------------------------
+
+   /**
+     * Gets Applicative container save mode.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets Applicative container save mode.
+     * This option is* only valid for CATProduct document.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param onMode
+     *  Defines if an application container must be saved.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;0&lt;/i&gt;&lt;/b&gt; if an &lt;b&gt;&lt;i&gt;Applicative container&lt;/b&gt;&lt;/i&gt; has not to be saved.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;1&lt;/i&gt;&lt;/b&gt; if an &lt;b&gt;&lt;i&gt;Applicative container&lt;/b&gt;&lt;/i&gt; has to be saved.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param ocName
+     * Name of this application container.
+     */
+      HRESULT GetApplicativeContainerMode( int &amp; onMode , CATUnicodeString &amp; ocName ) const ;
+
+   /**
+     * Sets Applicative container save mode.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets Applicative container save mode.
+     * This option is only valid for CATProduct document.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns &lt;b&gt;&lt;i&gt;S_OK&lt;/i&gt;&lt;/b&gt; if operation runs well. 
+     *
+     * @param inMode
+     *  Defines if an application container must be saved.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;0&lt;/i&gt;&lt;/b&gt; if an &lt;b&gt;&lt;i&gt;Applicative container&lt;/b&gt;&lt;/i&gt; has not to be saved.&lt;/li&gt;
+     * &lt;li&gt;&lt;b&gt;&lt;i&gt;1&lt;/i&gt;&lt;/b&gt; if an &lt;b&gt;&lt;i&gt;Applicative container&lt;/b&gt;&lt;/i&gt; has to be saved.&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param icName
+     * Name of this application container.
+     */
+      HRESULT SetApplicativeContainerMode( int inMode  , CATUnicodeString &amp; icName ) ;
+
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_CATIUExitPVRCommands.html">← 上一页: TIE_CATIUExitPVRCommands.h</a></div>
+        <div><a href="CATEpeFirstLevelInstance.html">下一页: CATEpeFirstLevelInstance.h →</a></div>
+    </div>
+</body>
+</html>

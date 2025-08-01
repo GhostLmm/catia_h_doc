@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMmiPartInfrastructurePreferencesAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMmiPartInfrastructurePreferencesAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMmiOrderedGeometricalSet.html">← 上一页: CATIMmiOrderedGeometricalSet.h</a></div>
+        <div><a href="CATIMmiPartInfrastructureSettingAtt.html">下一页: CATIMmiPartInfrastructureSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+//===================================================================
+// COPYRIGHT Dassault Systemes 2005
+//===================================================================
+//
+// CATIMmiPartInfrastructurePreferencesAtt.h
+//
+//===================================================================
+//
+// Usage notes:
+//   This interface gathers methods to access preferences managed
+//   by MechanicalModeler.
+//
+//===================================================================
+//
+#ifndef CATIMmiPartInfrastructurePreferencesAtt_H
+#define CATIMmiPartInfrastructurePreferencesAtt_H
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATEventSubscriberTypedefs.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMmiPartInfrastructurePreferencesAtt;
+#else
+extern &quot;C&quot; const IID IID_CATIMmiPartInfrastructurePreferencesAtt;
+#endif
+
+class CATUnicodeString;
+
+/**
+ * Interface to retrieve application preferences related to Part Infrastructure.
+ * &lt;b&gt;Role:&lt;/b&gt; This interface describes all the application preferences related 
+ * to Part infrastructure. 
+ * Preferences are not displayed in Tools/Options and are not administered. They 
+ * are stored in .CATPreferences files.
+ * &lt;br/&gt;Here under is an example on how to retrieve a pointer to this interface:
+ * &lt;code&gt;&lt;pre&gt;
+ * #include &quot;CATInstantiateComponent.h&quot; //System
+ * #include &quot;CATIMmiPartInfrastructurePreferencesAtt.h&quot;  //MecModInterfaces
+ * { 
+ *  ...
+ *  CATIMmiPartInfrastructurePreferencesAtt *pIPreferencesController=NULL;
+ *  CATCallbackEvent event;
+ *  if(SUCCEEDED(::CATInstantiateComponent(&quot;CATMmuPartInfrastructurePreferencesCtrl&quot;, 
+ *               IID_CATIMmiPartInfrastructurePreferencesAtt,(void**)&amp;pIPreferencesController)))
+ *    {
+ *     &lt;b&gt;//insert your code here&lt;/b&gt;
+ *     pIPreferencesController-&gt;Release(); pIPreferencesController=NULL;
+ *    }
+ *  ...
+ *  }
+ * &lt;/pre&gt;&lt;/code&gt;
+ * &lt;br/&gt;Values are saved into the PartInfrastructure.CATPreferences file at the end of 
+ * the application session.
+ */
+class ExportedByMecModItfCPP CATIMmiPartInfrastructurePreferencesAtt: public CATBaseUnknown
+{
+  /**
+   * Macro for interface declaration.
+   */
+  CATDeclareInterface;
+
+public:
+  /**
+   * List of types for modes.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The modes are used in the following values of the preferences.
+   * @param NoMode
+   *     The preference is not set.
+   * @param PermanentMode
+   *     The preference is set and stays set unless unset.
+   *     &lt;br/&gt; Note: This state corresponds to a double click on the linked command button.
+   * @param TemporaryMode 
+   *     The preference is set for one use, and then resetted to NoMode as soon as the ValidateXxMode method is called.
+   *     &lt;br/&gt; Note: This state corresponds to a single click on the linked command button.
+   */
+  enum PreferenceMode {NoMode=0,PermanentMode=1,TemporaryMode=2} ;
+  
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+  /**
+   * Retrieves the Datum mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The datum mode determines if created components do not remain associative. This means 
+   * that there are no links to the other entities that were used to create that component.
+   * &lt;br/&gt;This mode is displayed and changeable through the &quot;Create Datum&quot; command (GSD/Part/FreeStyle/...). 
+   * @param oMode 
+   *   The possible values are:
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;NoMode&lt;/code&gt;, when created components are procedural (or associative). This is the classic instantiation mode.&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;PermanentMode&lt;/code&gt;, for components to keep being created in a datum mode (i.e. non associative),&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;TemporaryMode&lt;/code&gt;, for a component to be created in a datum mode. A call to @href #ValidateDatumMode will set the mode to NoMode.&lt;/li&gt;
+   *      &lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetDatumMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode&amp; oMode) = 0;
+
+  /**
+   * Sets the Datum mode.
+   * @param iMode 
+   *   The possible values are &lt;code&gt;NoMode&lt;/code&gt;, &lt;code&gt;PermanentMode&lt;/code&gt;, and 
+   *   &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   *   &lt;br/&gt;If &lt;code&gt;TemporaryMode&lt;/code&gt; mode is set, a call to @href #ValidateDatumMode will set the 
+   *   mode to NoMode.
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetDatumModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetDatumMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sets the mode to &lt;code&gt;NoMode&lt;/code&gt; if it is set to &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; If the mode is set to &lt;code&gt;TemporaryMode&lt;/code&gt;, a call to this function 
+   * will set it to &lt;code&gt;NoMode&lt;/code&gt;, and send the event if asked to. 
+   * @param iSendEvent
+   *   To send an event if the mode is reverted to &lt;code&gt;NoMode&lt;/code&gt;.
+   * @return
+   *   S_OK if the call to the method was processed without errors.
+   */
+  virtual HRESULT ValidateDatumMode(CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+	*   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.  
+   */
+  virtual HRESULT GetDatumModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+  /**
+   * Retrieves the Insert mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The Insert mode determines if a created element will be inserted 
+   * within the specification tree, at its logical positioning (mode on) and not its 
+   * chronological positioning (mode off).
+   * &lt;br/&gt;The logical position within the specification tree is next to its main parents.
+   * &lt;br/&gt;This mode is displayed and changeable through the &quot;Insert Mode&quot; command (GSD/Part/FreeStyle/...). 
+   * @param oMode 
+   *   The possible values are:
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;NoMode&lt;/code&gt;, when created components are inserted chronologically,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;PermanentMode&lt;/code&gt;, when created components are inserted logically,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;TemporaryMode&lt;/code&gt;, when created components are inserted logically. 
+   *      A call to @href #ValidateDatumMode will set the mode to NoMode.&lt;/li&gt;
+   *      &lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetInsertMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode &amp;oMode) = 0;
+
+  /**
+   * Sets the Insert mode.
+   * @param iMode 
+   *   The possible values are &lt;code&gt;NoMode&lt;/code&gt;, &lt;code&gt;PermanentMode&lt;/code&gt;, and 
+   *   &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   *   &lt;br/&gt;If &lt;code&gt;TemporaryMode&lt;/code&gt; mode is set, a call to @href #ValidateInsertMode will set the 
+   *   mode to NoMode.
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetInsertModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetInsertMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sets the mode to &lt;code&gt;NoMode&lt;/code&gt; if it is set to &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; If the mode is set to &lt;code&gt;TemporaryMode&lt;/code&gt;, a call to this function 
+   * will set it to &lt;code&gt;NoMode&lt;/code&gt;, and send the event if asked to. 
+   * @param iSendEvent
+   *   To send an event if the mode is reverted to &lt;code&gt;NoMode&lt;/code&gt;.
+   * @return
+   *   S_OK if the call to the method was processed without errors.
+   */
+  virtual HRESULT ValidateInsertMode(CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetInsertModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the &quot;GridFilter&quot; mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This mode enables to select sub-elements from the grid (3D-support).
+   * &lt;br/&gt;This mode is displayed and changeable through the &quot;Work on Support&quot; command located in the &quot;User Selection Filter&quot; toolbar.
+   * @param oMode 
+   *   The possible values are:
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;NoMode&lt;/code&gt;, when the mode is not active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;PermanentMode&lt;/code&gt;, when the mode is permanently active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;TemporaryMode&lt;/code&gt;, when the mode is temporarily active.
+   *      A call to @href #ValidateGridFilterMode will set the mode to NoMode.&lt;/li&gt;
+   *      &lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetGridFilterMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode &amp;oMode) = 0;
+
+  /**
+   * Sets the &quot;Grid Filter&quot; mode.
+   * @param iMode 
+   *   The possible values are &lt;code&gt;NoMode&lt;/code&gt;, &lt;code&gt;PermanentMode&lt;/code&gt;, and 
+   *   &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   *   &lt;br/&gt;If &lt;code&gt;TemporaryMode&lt;/code&gt; mode is set, a call to @href #ValidateGridFilterMode will set the 
+   *   mode to NoMode.
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetGridFilterModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetGridFilterMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sets the mode to &lt;code&gt;NoMode&lt;/code&gt; if it is set to &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; If the mode is set to &lt;code&gt;TemporaryMode&lt;/code&gt;, a call to this function 
+   * will set it to &lt;code&gt;NoMode&lt;/code&gt;, and send the event if asked to. 
+   * @param iSendEvent
+   *   To send an event if the mode is reverted to &lt;code&gt;NoMode&lt;/code&gt;.
+   * @return
+   *   S_OK if the call to the method was processed without errors.
+   */
+  virtual HRESULT ValidateGridFilterMode(CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetGridFilterModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+  /**
+   * Retrieves the &quot;Intersection Edge&quot; mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The role of this mode is extensively described in @href #CATIMfIntersectionEdge .
+   * &lt;br/&gt;This mode is displayed and changeable through the dedicated command located in the 
+   * &quot;User Selection Filter&quot; toolbar.
+   * @param oMode 
+   *   The possible values are:
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;NoMode&lt;/code&gt;, when the mode is not active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;PermanentMode&lt;/code&gt;, when the mode is permanently active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;TemporaryMode&lt;/code&gt;, when the mode is temporarily active.
+   *      A call to @href #ValidateIntersectionEdgeMode will set the mode to NoMode.&lt;/li&gt;
+   *      &lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetIntersectionEdgeMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode &amp;oMode) = 0;
+  /**
+   * Sets the &quot;Intersection Edge&quot; mode.
+   * @param iMode 
+   *   The possible values are &lt;code&gt;NoMode&lt;/code&gt;, &lt;code&gt;PermanentMode&lt;/code&gt;, and 
+   *   &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   *   &lt;br/&gt;If &lt;code&gt;TemporaryMode&lt;/code&gt; mode is set, a call to @href #ValidateIntersectionEdgeMode will set the 
+   *   mode to NoMode.
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetIntersectionEdgeModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetIntersectionEdgeMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sets the mode to &lt;code&gt;NoMode&lt;/code&gt; if it is set to &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; If the mode is set to &lt;code&gt;TemporaryMode&lt;/code&gt;, a call to this function 
+   * will set it to &lt;code&gt;NoMode&lt;/code&gt;, and send the event if asked to. 
+   * @param iSendEvent
+   *   To send an event if the mode is reverted to &lt;code&gt;NoMode&lt;/code&gt;.
+   * @return
+   *   S_OK if the call to the method was processed without errors.
+   */
+  virtual HRESULT ValidateIntersectionEdgeMode(CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetIntersectionEdgeModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+  /**
+   * Retrieves the &quot;Intersection C1Edge&quot; mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The role of this mode is extensively described in @href #CATIMfIntersectionEdge .
+   * &lt;br/&gt;This mode is displayed and changeable through the dedicated command located in the 
+   * &quot;User Selection Filter&quot; toolbar.
+   * @param oMode 
+   *   The possible values are:
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;NoMode&lt;/code&gt;, when the mode is not active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;PermanentMode&lt;/code&gt;, when the mode is permanently active,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;TemporaryMode&lt;/code&gt;, when the mode is temporarily active.
+   *      A call to @href #ValidateIntersectionEdgeMode will set the mode to NoMode.&lt;/li&gt;
+   *      &lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetIntersectionC1EdgeMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode &amp;oMode) = 0;
+  /**
+   * Sets the &quot;Intersection C1Edge&quot; mode.
+   * @param iMode 
+   *   The possible values are &lt;code&gt;NoMode&lt;/code&gt;, &lt;code&gt;PermanentMode&lt;/code&gt;, and 
+   *   &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   *   &lt;br/&gt;If &lt;code&gt;TemporaryMode&lt;/code&gt; mode is set, a call to @href #ValidateIntersectionC1EdgeMode will set the 
+   *   mode to NoMode.
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetIntersectionC1EdgeModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetIntersectionC1EdgeMode(CATIMmiPartInfrastructurePreferencesAtt::PreferenceMode iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sets the mode to &lt;code&gt;NoMode&lt;/code&gt; if it is set to &lt;code&gt;TemporaryMode&lt;/code&gt;.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; If the mode is set to &lt;code&gt;TemporaryMode&lt;/code&gt;, a call to this function 
+   * will set it to &lt;code&gt;NoMode&lt;/code&gt;, and send the event if asked to. 
+   * @param iSendEvent
+   *   To send an event if the mode is reverted to &lt;code&gt;NoMode&lt;/code&gt;.
+   * @return
+   *   S_OK if the call to the method was processed without errors.
+   */
+  virtual HRESULT ValidateIntersectionC1EdgeMode(CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetIntersectionC1EdgeModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the &quot;ImportRepRep&quot; mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This mode enables to copy an element from a .CATPart document 
+   * into an other one without using the ProductStructure context.
+   * @param oMode 
+   *   Current &quot;ImportRepRep&quot; mode
+   *      &lt;ul&gt;&lt;li&gt;TRUE if the mode is active,&lt;/li&gt;
+   *      &lt;li&gt;FALSE otherwise.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetImportRepRepMode(CATBoolean&amp; oMode) = 0;
+
+  /**
+   * Sets the &quot;ImportRepRep&quot; mode.
+   * @param iMode
+   *   &quot;ImportRepRep&quot; mode
+   *      &lt;ul&gt;&lt;li&gt;TRUE to activate it,&lt;/li&gt;
+   *      &lt;li&gt;FALSE to deactivate it.&lt;/li&gt;&lt;/ul&gt;
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;TRUE so that the event defined in @href #GetImportRepRepModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;FALSE for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetImportRepRepMode(CATBoolean iMode, CATBoolean iSendEvent=TRUE) = 0;
+  
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;
+   * Here is a coding sample for the use of this event:&lt;code&gt;&lt;pre&gt;
+   *  #include &quot;CATInstantiateComponent.h&quot; //System
+   *  #include &quot;CATIMmiPartInfrastructurePreferencesAtt.h&quot; //MecModInterfaces
+   *  { //Subscription
+   *   CATIMmiPartInfrastructurePreferencesAtt *pIPreferencesCtrl=NULL;
+   *   CATCallbackEvent eventName=&quot;&quot;; //CATCallbackEvent = const char*
+   *   if(SUCCEEDED(::CATInstantiateComponent(&quot;CATMmuPartInfrastructurePreferencesCtrl&quot;, 
+   *                IID_CATIMmiPartInfrastructurePreferencesAtt,(void**)&amp;pIPreferencesCtrl)))
+   *    {
+   *     if(SUCCEEDED(pIPreferencesCtrl-&gt;Get&lt;b&gt;&lt;i&gt;PreferenceName&lt;/i&gt;&lt;/b&gt;Event(eventName)))
+   *         _callbackId=AddCallback(this, pIPreferencesCtrl, eventName,
+   *                                 (CATSubscriberMethod)&amp;MyClass::OnPreferenceChange,NULL);
+   * 
+   *     pIPreferencesCtrl-&gt;Release(); pIPreferencesCtrl=NULL;
+   *    }
+   *  }
+   *  
+   *  { //Unsubscription
+   *  CATIMmiPartInfrastructurePreferencesAtt *pIPreferencesCtrl=NULL;
+   *  if(_callbackId &amp;&amp; 
+   *     SUCCEEDED(::CATInstantiateComponent(&quot;CATMmuPartInfrastructurePreferencesCtrl&quot;, IID_CATIMmiPartInfrastructurePreferencesAtt, (void**)&amp;pIPreferencesCtrl)))
+   *    {
+   *     RemoveCallback(this, pIPreferencesCtrl, _callback);
+   *     pIPreferencesCtrl-&gt;Release(); pIPreferencesCtrl=NULL;
+   *    }
+   *  }
+   * &lt;/pre&gt;&lt;/code&gt;
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetImportRepRepModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the &quot;Under axis system&quot; mode.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This mode determines whether the axis systems are to be created under 
+   * the &quot;Axis System&quot; tree node or under the node of the current CATIGSMTool.
+   * @param oMode 
+   *   &lt;code&gt;TRUE&lt;/code&gt; if axis systems are created under the &quot;Axis System&quot; tree node.
+   *   &lt;code&gt;FALSE&lt;/code&gt; if axis systems are created under the node of the current CATIGSMTool.
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetUnderAxisSystemsNodeMode(CATBoolean&amp; oMode) = 0;
+
+  /**
+   * Sets the &quot;Under axis system&quot; mode.
+   * @param iMode 
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; if axis systems are created under the &quot;Axis System&quot; tree node.&lt;/li&gt;
+   *   &lt;ul&gt;&lt;code&gt;FALSE&lt;/code&gt; if axis systems are created under the node of the current CATIGSMTool.&lt;/li&gt;&lt;/ul&gt;
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetUnderAxisSystemsNodeModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetUnderAxisSystemsNodeMode(CATBoolean iMode, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+	* @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.  
+   */
+  virtual HRESULT GetUnderAxisSystemsNodeModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the visibility of the &quot;Historical graph&quot; panel.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The Part Editor is a special viewer launched in GSD through Tools/Historical graph.
+   * @param oOffOrOn 
+   *   Current &quot;Historical graph&quot; panel visibility
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt;if the viewer is visible,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; if the viewer is invisible.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetHistoricalGraphDisplayState(CATBoolean &amp;oOffOrOn) = 0;
+
+  /**
+   * Sets the &quot;Historical graph&quot; display state.
+   * @param iOffOrOn
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; to hide it,&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; to display it.&lt;/li&gt;
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetHistoricalGraphDisplayStateEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetHistoricalGraphDisplayState(CATBoolean iOffOrOn, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Sends the &quot;Historical graph&quot; event.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; Sends the event retrieved through @href #GetHistoricalGraphDisplayStateEvent..
+   * @return
+   *   Always S_OK.
+   */
+  virtual HRESULT SendHistoricalGraphDisplayStateEvent() = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetHistoricalGraphDisplayStateEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the visibility of the &quot;Parametrization Analysis&quot; panel.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The Parametrization Analysis panel is launched in Part/GSD/... through the 
+   * Tools/Parametrization Analysis command.
+   * @param oOffOrOn 
+   *   Current &quot;Parametrization Analysis&quot; panel visibility
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt;if the viewer is visible,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; if the viewer is invisible.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetSketchAnalysisDisplayState(CATBoolean &amp;oOffOrOn) = 0;
+
+  /**
+   * Sets the &quot;SketchAnalysisDisplay&quot; state.
+   * @param iOffOrOn
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; to hide it,&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; to display it.&lt;/li&gt;
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetSketchAnalysisDisplayStateEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetSketchAnalysisDisplayState(CATBoolean iOffOrOn, CATBoolean iSendEvent=TRUE) = 0;
+  
+  /**
+   * Sends the &quot;SketchAnalysisDisplay&quot; event. retrieved through @href #GetScanGraphPanelModeEvent.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; Sends the event retrieved through @href #GetScanGraphPanelModeEvent.
+   * @return
+   *   Always S_OK.
+   */
+  virtual HRESULT SendSketchAnalysisDisplayStateEvent() = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetSketchAnalysisDisplayStateEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the visibility of the &quot;Scan graph&quot; panel.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; The Scan graph is a special viewer linked to the Scan command.
+   * &lt;br/&gt;There is a possibility for the user to display or not this dedicated viewer 
+   * in addition to the Scan command.
+   * @param oVisible 
+   *   Current &quot;Scan graph&quot; panel visibility
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt;if the viewer is visible when launching the Scan command,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; if the viewer is not visible.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetScanGraphPanelMode(CATBoolean &amp;oVisible) = 0;
+
+  /**
+   * Sets the visibility of the &quot;Scan graph&quot; panel.
+   * @param iVisible 
+   *      &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt;if the viewer is to be visible when launching the Scan command,&lt;/li&gt;
+   *      &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; if the viewer is to not be displayed.&lt;/li&gt;&lt;/ul&gt;
+   * @param iSendEvent
+   *   &lt;ul&gt;&lt;li&gt;&lt;code&gt;TRUE&lt;/code&gt; so that the event defined in @href #GetScanGraphPanelModeEvent is sent. 
+   *   &lt;br/&gt;This happens only if the value is different from the one stored in the preference.&lt;/li&gt;
+   *   &lt;li&gt;&lt;code&gt;FALSE&lt;/code&gt; for no event to be sent.&lt;/li&gt;&lt;/ul&gt;
+   * @return
+   *   S_OK if the parameter is correctly set, E_FAIL otherwise.
+   */
+  virtual HRESULT SetScanGraphPanelMode(CATBoolean iVisible, CATBoolean iSendEvent=TRUE) = 0;
+
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetScanGraphPanelModeEvent(CATCallbackEvent&amp; oEvent) = 0;
+
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  /**
+   * Retrieves the society identifier related to a caa partner&#x27;s startup.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This preference is only to be used for UserFeatures type.
+   * @param oSocietyId 
+   *   The society identifier.
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetSocietyIdentifier(CATUnicodeString &amp;oSocietyId) = 0;
+
+  /**
+   * Sets the society identifier.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This preference is only to be used for UserFeatures type.
+   * @param iSocietyId 
+   *   The society identifier.
+   * @param iSendEvent
+   *   Code to manage events.
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT SetSocietyIdentifier(const CATUnicodeString &amp;iSocietyId, CATBoolean iSendEvent=TRUE) = 0;
+
+  /**
+   * Retrieves the name of the event class dispatched when a change of value is made.
+   * &lt;br/&gt;&lt;b&gt;Role:&lt;/b&gt; This method enables an application to be warned whenever a change of value occurs.
+   * &lt;br/&gt;Refer to comments in @href #GetImportRepRepModeEvent for a code sample.
+   * @param oEvent
+   *   The event class. 
+   * @return
+   *   S_OK if the parameter is correctly retrieved, E_FAIL otherwise.
+   */
+  virtual HRESULT GetSocietyIdentifierEvent(CATCallbackEvent&amp; oEvent) = 0;
+};
+
+CATDeclareHandler(CATIMmiPartInfrastructurePreferencesAtt,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMmiOrderedGeometricalSet.html">← 上一页: CATIMmiOrderedGeometricalSet.h</a></div>
+        <div><a href="CATIMmiPartInfrastructureSettingAtt.html">下一页: CATIMmiPartInfrastructureSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

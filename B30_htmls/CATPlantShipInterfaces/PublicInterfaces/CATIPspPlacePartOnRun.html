@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspPlacePartOnRun.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspPlacePartOnRun.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspPlacePart.html">← 上一页: CATIPspPlacePart.h</a></div>
+        <div><a href="CATIPspResource.html">下一页: CATIPspResource.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspPlacePartOnRun_H
+#define CATIPspPlacePartOnRun_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2007
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+#include &quot;CATIPspPlacePart.h&quot;
+
+class CATIUnknownList;
+class CATUnicodeString;
+class CATMathDirection;
+class CATMathPoint;
+
+extern &quot;C&quot; const IID IID_CATIPspPlacePartOnRun ;
+
+/**
+ * Interface to place physical parts on runs.
+ * &lt;b&gt;Role&lt;/b&gt;: Equipment and Systems applications are used to layout 3D AEC designs. 
+ * Fluid flow routes are defined using runs. Further detail is provided by adding
+ * parts to runs. This interface is used to perform the placement of parts on runs.
+ */
+
+class CATIPspPlacePartOnRun : public CATIPspPlacePart
+{
+  public:  
+  
+  /**
+  * Fetches the catalog description that matches the input part number.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The part placement routines derive a part instance from an input reference.
+  * This method can be used to provide that reference.
+  * It gets the catalog description for a part with the given catalog part number 
+  * from the part catalog defined in the Equipment and Systems environment.
+  *   @param iuStandard
+  *      Standard for application attribute values.
+  *   @param iuSpecName
+  *      Name of spec catalog. Null string uses full part catalog.
+  *   @param iuPartType
+  *     The part type under which to search for the part.
+  *   @param iuPartNumber
+  *     The catalog part number of the desired part.
+  *   @param ipiPhysicalParentProduct
+  *     In design model, the parent of the part that will be placed.
+  *     Having this object helps with efficiency. It may be set to &lt;tt&gt;NULL&lt;/tt&gt; and 
+  *     the method will still function correctly.
+  *   @param opiReferencePart
+  *     The reference part.
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK catalog descruption successfully retrieved.&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+    virtual HRESULT GetReferencePartFromCatalog(const CATUnicodeString &amp;iuStandard, 
+                                                const CATUnicodeString &amp;iuSpecName, 
+                                                const CATUnicodeString &amp;iuPartType, 
+                                                const CATUnicodeString &amp;iuPartNumber, 
+                                                const IUnknown *ipiPhysicalParentProduct, 
+                                                IUnknown *&amp;opiReferencePart) = 0;
+
+ /**
+  * Fetches the catalog part that matches the input part number.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The part placement routines derive a part instance from an input reference.
+  * This method can be used to provide that reference.
+  * It gets the catalog part with the given catalog part number 
+  * from the part catalog defined in the Equipment and Systems environment.
+  *   @param iuStandard [in]
+  *      Standard for application attribute values.
+  *   @param iuSpecName [in]
+  *      Name of spec catalog. Null string uses full part catalog.
+  *   @param iuPartType [in]
+  *     The part type under which to search for the part.
+  *     A null string will search the entire catalog.
+  *   @param iuPartNumber [in]
+  *     The catalog part number of the desired part.
+  *   @param ipiPhysicalParentProduct [in]
+  *     In design model, the parent of the part that will be placed.
+  *     Having this object helps with efficiency. It may be set to NULL and 
+  *     the method will still function correctly.
+  *   @param opiReferencePart [out CATBaseUnknown]
+  *     The reference part.
+  *   @param ouCatalogPartName [out]
+  *     The catalog part name of the reference part.
+  *   @return HRESULT
+  *     &lt;ul&gt;
+  *       &lt;li&gt;S_OK: Reference part successfully retrieved.&lt;/li&gt;
+  *       &lt;li&gt;E_FAIL: Otherwise.&lt;/li&gt;
+  *     &lt;/ul&gt;
+  */
+    virtual HRESULT GetReferencePartFromCatalog(const CATUnicodeString &amp;iuStandard, 
+                                                const CATUnicodeString &amp;iuSpecName, 
+                                                const CATUnicodeString &amp;iuPartType, 
+                                                const CATUnicodeString &amp;iuPartNumber, 
+                                                const IUnknown *ipiPhysicalParentProduct, 
+                                                IUnknown *&amp;opiReferencePart, 
+                                                CATUnicodeString &amp;ouCatalogPartName) = 0;
+
+ /**
+  * Places a part on a segment of a run.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A part instance is derived from the given reference and placed on the given run segment.
+  * The Part Placement engine will search for neighgoring parts on the run (or any connected runs)
+  * and adjust the placement location and connect as needed. 
+  * Part is placed non-spec.
+  *   @param iuStandard
+  *      The standard for application attribute values.
+  *   @param iuFunctionType
+  *      The type of function (e.g. block valve, branch).
+  *   @param ipiReferencePart
+  *      The reference part from which to derive the instance part.
+  *   @param ipiRunSegment
+  *      The run segment on which the part will be placed.
+  *   @param ipiLogicalLine
+  *      The logical line (e.g. piping line) which contains the instance part.
+  *      If &lt;tt&gt;NULL&lt;/tt&gt; the part is put in the logical line of the run.
+  *   @param iuPlacedPartID
+  *      The name of the placed part in the design model. 
+  *      &lt;tt&gt;NULL&lt;/tt&gt; uses the standard ID generated by the part placement engine.
+  *   @param iPosition
+  *      The position of the part on the segment.
+  *      The list has three values which represent the x, y and z values of a position in space.
+  *      Value is relative to the parent of the run and is in millimeters.
+  *   @param opiInstancePart
+  *      The placed instance part.
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK part successfully placed.&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+
+    virtual HRESULT PlacePartOnRunSegment (const CATUnicodeString &amp;iuStandard, 
+                                           const CATUnicodeString &amp;iuFunctionType, 
+                                           const IUnknown *ipiReferencePart, 
+                                           const IUnknown *ipiRunSegment, 
+                                           const IUnknown *ipiLogicalLine, 
+                                           const CATUnicodeString &amp;iuPlacedPartID, 
+                                           const CATMathPoint &amp;iPosition, 
+                                           IUnknown *&amp;opiInstancePart) = 0;
+
+  /**
+  * Places a non-string part on a node of a run.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A part instance is derived from the given reference and placed on the given run node.
+  * The Part Placement engine will search for neighgoring parts on the run (or any connected runs)
+  * and connect as needed. 
+  * Part is placed non-spec.
+  *   @param iuStandard
+  *      The standard for application attribute values.
+  *   @param iuFunctionType
+  *      The type of function (e.g. block valve, branch).
+  *   @param ipiReferencePart
+  *      The reference part from which to derive the instance part.
+  *   @param ipiRunNode
+  *      The run node on which the part will be placed.
+  *   @param ipiLogicalLine
+  *      The logical line (e.g. piping line) which contains the instance part.
+  *      If &lt;tt&gt;NULL&lt;/tt&gt; the part is put in the logical line of the run.
+  *   @param iuPlacedPartID
+  *      The name of the placed part in the design model. 
+  *      Null string uses the standard ID generated by the part placement engine.
+  *   @param opiInstancePart
+  *      The placed instance part.
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK reference .&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+
+    virtual HRESULT PlacePartOnRunNode (const CATUnicodeString &amp;iuStandard, 
+                                        const CATUnicodeString &amp;iuFunctionType, 
+                                        const IUnknown *ipiReferencePart, 
+                                        const IUnknown *ipiRunNode, 
+                                        const IUnknown *ipiLogicalLine, 
+                                        const CATUnicodeString &amp;iuPlacedPartID, 
+                                        IUnknown *&amp;opiInstancePart) = 0;
+
+  /**
+  * Places a non-string part on a part connector.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A part instance is derived from the given reference and placed on the given part connector.
+  * The Part Placement engine will search for neighgoring parts on the run (or any connected runs)
+  * and connect as needed. 
+  * Part is placed non-spec.
+  *   @param iuStandard
+  *      The standard for application attribute values.
+  *   @param iuFunctionType
+  *      The type of function (e.g. block valve, branch).
+  *   @param ipiReferencePart
+  *      The reference part from which to derive the instance part.
+  *   @param ipiPartConnector
+  *      The run node on which the part will be placed.
+  *   @param ipiLogicalLine
+  *      The logical line (e.g. piping line) which contains the instance part.
+  *      If &lt;tt&gt;NULL&lt;/tt&gt; the part is put in the logical line of the run.
+  *   @param iuPlacedPartID
+  *      The name of the placed part in the design model. 
+  *      Null string uses the standard ID generated by the part placement engine.
+  *   @param opiInstancePart
+  *      The placed instance part.
+  *   @param iReconnectRun
+  *      0 If a run is connected to ipiPartConnector, place the part on the connector. Do not alter the run connection.
+  *      1 Position the part at the connector as a free space part. If a run is connected to ipiPartConnector, constrain
+  *        the two parts and reconnect the run to the other connector of the newly placed part. If a run is not connected
+  *        to ipiPartConnector, break and trim the run around the part and connect the two parts.
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK part successfully placed.&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+
+    virtual HRESULT PlacePartOnPartConnector (const CATUnicodeString &amp;iuStandard, 
+                                              const CATUnicodeString &amp;iuFunctionType, 
+                                              const IUnknown *ipiReferencePart, 
+                                              const IUnknown *ipiPartConnector, 
+                                              const IUnknown *ipiLogicalLine, 
+                                              const CATUnicodeString &amp;iuPlacedPartID, 
+                                              IUnknown *&amp;opiInstancePart,
+                                              int iReconnectRun = 0 ) = 0;
+
+  /**
+  * Flip an instance part which has been placed using the Part Placement Engine.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: When a part is placed on a part connector or on a run there is
+  * often more than one possible way to connect the part being placed. When there 
+  * is more than one such connection geometry the PP engine attempts to pick the 
+  * best one. This method allows the part to &quot;flip&quot; between the possible connection
+  * geometries when more than one exists.
+  * Part is placed non-spec.
+  *   @param ipiPlacedInstancePart
+  *      The placed instance part to be flipped.
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK part successfully flipped.&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+
+    virtual HRESULT FlipPlacedPart (const IUnknown *ipiPlacedInstancePart) = 0;
+
+ /**
+  * Set catalog part name on an instance part.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: During interactive part placement the catalog part name
+  * is stored with the instance part. The place methods in this interface
+  * do not set it because they were designed to be able to use any reference
+  * part, whether or not it came from a catalog. Use the override of GetReferencePartFromCatalog
+  * that returns catalog part name and then use this method to set the returned value
+  * after the part is placed.
+  *   @param ipiPlacedInstancePart [in]
+  *      The placed instance part on which to set the catalog part name.
+  *   @param iuCatalogPartName [in]
+  *     The catalog part name to set on the instance part.
+  *   @return HRESULT
+  *     &lt;ul&gt;
+  *       &lt;li&gt;S_OK: part successfully flipped.&lt;/li&gt;
+  *       &lt;li&gt;E_FAIL: Otherwise.&lt;/li&gt;
+  *     &lt;/ul&gt;
+  */
+
+    virtual HRESULT SetCatalogPartName (const IUnknown *ipiPlacedInstancePart, 
+                                        const CATUnicodeString &amp;iuCatalogPartName) = 0;
+
+ /**
+  * Breakes the Run at the placed part ipiPartToSplitRun.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+  *   Breakes the Run at the placed part.
+  *   @param ipiPartToSplitRun [in]
+  *      The placed instance part where the run (underneath) to be splitted.
+  *   @param opiRun1 [out]
+  *      The resulting splitted first run.
+  *   @param opiRun2 [out]
+  *      The resulting splitted second run.
+  *   @return HRESULT
+  *     &lt;ul&gt;
+  *       &lt;li&gt;S_OK: Run successfully splitted.&lt;/li&gt;
+  *       &lt;li&gt;E_FAIL: Otherwise.&lt;/li&gt;
+  *     &lt;/ul&gt;
+  */
+    virtual HRESULT BreakAndTrimRuns ( const IUnknown *ipiPartToSplitRun, 
+                                       IUnknown *&amp;opiRun1,
+                                       IUnknown *&amp;opiRun2)  = 0;
+
+ /**
+  * Connect Run ipiRun to the part ipiPart
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+  *   Connect Run to the part.
+  *   @param ipiRun [in]
+  *      Run to connect.
+  *   @param ipiPart [in]
+  *      Part to connect. 
+  *   @return HRESULT
+  *     &lt;ul&gt;
+  *       &lt;li&gt;S_OK: Run successfully connected to the part.&lt;/li&gt;
+  *       &lt;li&gt;E_FAIL: Otherwise.&lt;/li&gt;
+  *     &lt;/ul&gt;
+  */
+    virtual HRESULT ConnectRunToPart ( const IUnknown *ipiRun,
+                                       IUnknown *ipiPart)  = 0;
+ 
+ /**
+  * Places a string (bendable or stretchable) part on a run.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A part instance is derived from the given reference and placed on the run.
+  * Multiple string parts will be placed if parts are already placed on the run. The Part  
+  * Placement engine will:
+  *   - connect the string parts to its neighboring parts on the run as needed.
+  *   - generate the string part IDs.
+  *   - add the string parts to the same logical line as the run.
+  * No auto parts will be placed between the string part and its neighboring part.
+  * The ID of the string part is generated by the part placement engine.
+  *   @param iuStandard
+  *      The standard for application attribute values.
+  *   @param iuFunctionType
+  *      The type of function.
+  *   @param iuPartNumber
+  *     The catalog part number of the desired part.
+  *   @param ipiReferencePart
+  *      The reference part from which to derive the instance part.
+  *   @param ipiRun
+  *      The run on which the part will be placed.
+  *   @param iopiInstanceParts [out CATBaseUnknown]
+  *      The placed instance parts
+  *   @param iSpecFromLocation
+  *      1: Get specification from run. 0: String is placed non-spec.
+  *      Spec must be provided for HVAC
+  *   @return
+  *       &lt;ul&gt;&lt;li&gt;S_OK reference placed&lt;/li&gt; 
+  *       &lt;li&gt;E_FAIL otherwise.&lt;/li&gt;
+  */
+
+    virtual HRESULT PlaceStringsOnRun (const CATUnicodeString &amp;iuStandard, 
+                                      const CATUnicodeString &amp;iuFunctionType, 
+                                      const CATUnicodeString &amp;iuPartNumber,
+                                      const IUnknown *ipiReferencePart, 
+                                      const IUnknown *ipiRun, 
+                                      CATIUnknownList *&amp;iopiInstanceParts,
+                                      int iSpecFromLocation=1) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspPlacePart.html">← 上一页: CATIPspPlacePart.h</a></div>
+        <div><a href="CATIPspResource.html">下一页: CATIPspResource.h →</a></div>
+    </div>
+</body>
+</html>

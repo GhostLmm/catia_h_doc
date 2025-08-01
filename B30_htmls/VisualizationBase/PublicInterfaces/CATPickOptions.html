@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATPickOptions.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATPickOptions.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPathElement.html">← 上一页: CATPathElement.h</a></div>
+        <div><a href="CATPickPath.html">下一页: CATPickPath.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPickOptions_H
+#define CATPickOptions_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+// COPYRIGHT DASSAULT SYSTEMES 2008
+
+#include &quot;CATViz.h&quot;
+
+/** @nodoc */
+#define CATViz_Pick_SubElementsLevel                        (0x0)
+/** @nodoc */
+#define CATViz_Pick_SubSubElementsLevelFor3DPoints          (0x1)
+/** @nodoc */
+#define CATViz_Pick_SubSubElementsLevelFor3DLines           (0x2)
+/** @nodoc */
+#define CATViz_Pick_SubSubElementsLevelFor3DTriangles       (0x4)
+
+/**
+* Class representing the pick options within a visualized viewer.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : it describes the pick options associated to a viewer.
+* 
+*/
+class ExportedByCATViz CATPickOptions
+{
+public :
+
+  /**
+   * Default constructor.
+   */
+  CATPickOptions ();
+
+  virtual ~CATPickOptions ();
+  
+  /**
+   * Sets the window size for simple pick in pixels.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : sets the picking window width and height for simple pick.
+   *
+   * @param iPixelSize
+   *        The pixel size.
+   */
+  void SetSimplePickWindowSize (int iPixelSize);
+
+  /**
+   * Gets the window size for simple pick in pixels.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : gets the picking window width and height for simple pick.
+   *
+   * @param oPixelSize
+   *        The pixel size.
+   */
+  void GetSimplePickWindowSize (int&amp; oPixelSize) const;
+
+  /**
+   * Sets the sub sub elements mode for simple pick
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : sets if simple pick uses sub elements level or a sub sub element level
+   * &lt;br&gt;for specific sub sub element
+   *
+   * @param iSubSubElementsMode
+   * The sub sub elements mode.
+   */
+  void SetSubSubElementsModeForSimplePick (const int iSubSubElementsMode);
+
+  /**
+   * Gets the sub sub elements mode for simple pick
+   * @param oSubSubElementsMode
+   * The sub sub elements mode.
+   */
+  void GetSubSubElementsModeForSimplePick (int&amp; oSubSubElementsMode) const;
+
+protected :
+  
+  //  sub sub element picking mode
+  //  ----------------------------
+  int _subSubElementsMode;   
+
+private :
+
+  /**
+   * Copy constructor.
+   *
+   * @param iPickOptions
+   *        The pick options to copy.
+   */
+  CATPickOptions (const CATPickOptions&amp; iPickOptions);
+
+  /**
+   * Operator of assignment.
+   *
+   * @param iPickOptions
+   *        The pick options use to create a new one identical.
+   *
+   * @return
+   *        The new pick options created by assignment.
+   */
+  CATPickOptions &amp; operator = (const CATPickOptions&amp; iPickOptions);
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPathElement.html">← 上一页: CATPathElement.h</a></div>
+        <div><a href="CATPickPath.html">下一页: CATPickPath.h →</a></div>
+    </div>
+</body>
+</html>

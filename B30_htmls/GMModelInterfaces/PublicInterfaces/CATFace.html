@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATFace.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATFace.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEdgeDomain.html">← 上一页: CATEdgeDomain.h</a></div>
+        <div><a href="CATFilletDefine.html">下一页: CATFilletDefine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATFace_H
+#define CATFace_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;CATCell.h&quot;
+
+class CATDomain;
+class CATSurface;
+class CATBoundaryIterator;
+class CATBoundedCellsIterator;
+class CATSurLimits;
+class CATSurParam;
+class CATMathBox;
+class CATMathVector;
+class CATShell;
+class CATCGMJournalList;
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMModelInterfaces IID IID_CATFace ;
+#else
+extern &quot;C&quot; const IID IID_CATFace ;
+#endif
+
+/**
+ * Interface representing a topological face.
+ * &lt;br&gt;A face is a topological cell which geometry 
+ * is a surface. A face is bounded by edges (these edges are put together in
+ * loops) and immersed vertices (a vertex immersed in a face must be put in a 
+ * CATVertexInFace domain).
+ * A CATFace is oriented with regards to its
+ * underlying geometry:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATOrientationNegative&lt;/tt&gt;&lt;dd&gt; the cell orientation is reversed
+ * with regards to the standard orientation.
+ *     &lt;dt&gt;&lt;tt&gt;CATOrientationPositive&lt;/tt&gt;&lt;dd&gt; the cell orientation is the 
+ * standard orientation.
+ *     &lt;dt&gt;&lt;tt&gt;CATOrientationUnknown&lt;/tt&gt;&lt;dd&gt; the cell orientation is not
+ * defined.&lt;/dl&gt;
+ * &lt;br&gt;A CATFace is created with the @href CATBody#CreateCell or @href CATBody#CreateFace methods and
+ * deleted with the @href CATICGMContainer#Remove method.
+ */ 
+class ExportedByCATGMModelInterfaces CATFace : public CATCell
+{
+
+  CATDeclareInterface;
+
+  public :
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * Sets the geometric surface of &lt;tt&gt;this&lt;/tt&gt; CATFace.
+ * @param iSurface
+ * The pointer to the geometry of the face.
+ * @param iOrientation
+ * The relative orientation of &lt;tt&gt;this&lt;/tt&gt; with regards to its geometry.
+ */
+  virtual void SetSurface( CATSurface * iSurface,
+			 CATOrientation iOrientation=CATOrientationPositive)=0;
+
+/**
+ * Returns the geometric surface of &lt;tt&gt;this&lt;/tt&gt; CATFace.
+ * @param ioOrientation
+ * The relative orientation of &lt;tt&gt;this&lt;/tt&gt; with regards to its geometry. If &lt;tt&gt;NULL&lt;/tt&gt;, this
+ * argument is not filled out.
+ * @return
+ * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt; CATFace. 
+ */
+  virtual CATSurface * GetSurface(CATOrientation * ioOrientation=NULL)=0;
+
+/**
+ * Returns the 3D bounding box of &lt;tt&gt;this&lt;/tt&gt; CATFace. 
+ * @return
+ * The 3D bounding box.
+ */
+  virtual const CATMathBox * Get3DBoundingBox()=0;
+
+/**
+ * Returns the 2D bounding box of &lt;tt&gt;this&lt;/tt&gt; CATFace on its surface. 
+ * @return
+ * The 2D bounding box.
+ */
+  virtual const CATSurLimits * Get2DBoundingBox()=0;
+
+/**
+ * Retrieves a point belonging to &lt;tt&gt;this&lt;/tt&gt; CATFace.
+ * @param oCenterParam
+ * The estimated center of &lt;tt&gt;this&lt;/tt&gt; CATFace.
+ */
+  virtual void EstimateCenterParam(CATSurParam&amp; oCenterParam) const = 0;
+
+/**
+ * Computes the normal vector on &lt;tt&gt;this&lt;/tt&gt; CATFace at a given point.
+ *&lt;br&gt; This takes into account the face orientation versus its surface. 
+ * @param iSurParam
+ * The point where to compute the normal.
+ * This does not check if &lt;tt&gt;iSurParam&lt;/tt&gt; is inside the face.
+ * @param ioNormal
+ * The computed normal
+ * @param iNormalization
+ * The mode of normalization.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt; TRUE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;if &lt;tt&gt;ioNormal&lt;/tt&gt; must be  normalized.
+ *     &lt;dt&gt;&lt;tt&gt; FALSE &lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; otherwise.&lt;/dl&gt; 
+ * @return
+ * The diagnosis of the evaluation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/td&gt;&lt;dd&gt;if &lt;tt&gt;ioNormal&lt;/tt&gt; is not null
+ *     &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/td&gt;&lt;dd&gt;otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean  EvalNormal(CATSurParam&amp;   iSurParam,
+				   CATMathVector&amp; ioNormal, CATBoolean     iNormalization=TRUE)=0;
+
+
+ /**
+ * @nodoc
+ * @deprecated V5R14 @href CATDynMassProperties3D#GetWetArea
+ */
+  virtual double CalcArea() = 0;
+
+  
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+ /** @nodoc */ 
+  virtual CATFace* SmartDuplication(CATBody* iBody, CATShell* iOldShell, CATShell* iShell, CATCGMJournalList* iJournal=NULL) = 0;
+
+ /** @nodoc */ 
+	virtual CATFace* SmartDuplicationReplace(CATBody* iBody, CATShell* iShell, CATCGMJournalList* iJournal=NULL) = 0;
+};
+
+CATDeclareHandler(CATFace,CATCell);
+
+#endif // CATFace_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEdgeDomain.html">← 上一页: CATEdgeDomain.h</a></div>
+        <div><a href="CATFilletDefine.html">下一页: CATFilletDefine.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteractiveInterfaces/PublicInterfaces/CATIFmuDialogFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InteractiveInterfaces/PublicInterfaces/CATIFmuDialogFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIFmuDialogBox.html">← 上一页: CATIFmuDialogBox.h</a></div>
+        <div><a href="CATIFmuDocChooser.html">下一页: CATIFmuDocChooser.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2002
+#ifndef _CATIFmuDialogFactory_h
+#define _CATIFmuDialogFactory_h
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+#include &quot;CATInteractiveInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATFmuDocChooserEnvironment.h&quot;
+
+class CATIFmuDocChooser;
+class CATIFmuDialogBox;
+class CATDialog;
+class CATString;
+class CATIDocId;
+class CATCommand;
+class CATDocument;
+
+/**
+ * Interface to create file or document related dialog boxes.
+ *
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Two distinct dialogs can be created using this factory.
+ * A file or folder selection box on one side and a multi-environment document chooser 
+ * on the other side. The second one lets the user choose between the available
+ * environments (File, ENOVIA, SmarTeam...) and even documents in session 
+ * and/or catalog browser if required.&lt;br&gt;
+ * You require an interface from CATApplicationFrame::GetFrame(). With the returned interface, you can create a file, folder or document chooser.&lt;br&gt;
+ * Sample:&lt;pre&gt;
+ *  CATApplicationFrame *pApplicationFrame = CATApplicationFrame::GetFrame();
+ *  if (pApplicationFrame != NULL)
+ *    hr = pApplicationFrame-&gt;QueryInterface(IID_CATIFmuDialogFactory, (void**)&amp;pDocEnvChooserFactory);&lt;/pre&gt;
+ * This interface is implemented. Don&#x27;t implement it again.
+ */
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATInteractiveInterfaces IID IID_CATIFmuDialogFactory;
+#else
+extern &quot;C&quot; const IID IID_CATIFmuDialogFactory;
+#endif
+
+class ExportedByCATInteractiveInterfaces CATIFmuDialogFactory : public CATBaseUnknown
+{
+  CATDeclareInterface;
+public:
+
+  /**
+   * Creates a dialog box of the File menu in the curent document environment.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Creates a dialog box of the file menu.
+   * @param ipDlgParent
+   *   The parent class in the CATCommand agregation
+   *   hierarchy. The parent must be an instance of a class that derives
+   *   from CATDlgInteractiveApplication or CATDlgDocument.
+   *   The notifications are first sent to it.&lt;br&gt;
+   *   If the caller is a @href CATCommand and not a @href CATDialog , you should call&lt;pre&gt;
+   *      CATCommand *pCmd = pDlgBox-&gt;GetEventPublisher(); 
+   *      pCmd-&gt;SetFather(&lt;the caller&gt;);&lt;/pre&gt;
+   *   in order to let the caller recieve the notifications.
+   * @param iDialogObjectName
+   *   The dialog object name.
+   * @param iStyle
+   *   The application window styles. You can cumulate several
+   *   styles using a logical or.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;NULL (default)&lt;/tt&gt; so that the
+   *   file window features the OK and Cancel push buttons (it is dedicated
+   *   to opening files), or &lt;tt&gt;CATDlgWndModal&lt;/tt&gt; if, in addition to the default
+   *   style, the file window is modal (that is, no interaction is possible outside
+   *   this window as long as it is displayed), or &lt;tt&gt;CATDlgWndAPPLY&lt;/tt&gt;
+   *   if, in addition to the default style, the file window features
+   *   the Apply push button, or &lt;tt&gt;CATDlgWndHELP&lt;/tt&gt;
+   *   if, in addition to the default style, the file window features
+   *   the Help push button, or &lt;tt&gt;CATDlgFileMultisel&lt;/tt&gt;
+   *   if the file window enables the file multiple selection.
+   *   or &lt;tt&gt;CATDlgFileSave&lt;/tt&gt; if the file window is dedicated to saving files.
+   *   (the Open push button is replaced by the Save push button),
+   *   or &lt;tt&gt;CATDlgFolderChooser&lt;/tt&gt; if the file window is dedicated
+   *   to select a Folder. Notice that CATDlgFileSave and CATDlgFolderChooser
+   *   styles are mutually exclusive
+   * @param oDialogBox [out, CATBaseUnknown#Release]
+   *    The created dialog box.
+   * @param iDocumentToSave
+   *  The document to save in case of a save dialog box else NULL
+   * @return
+   * The status call
+   * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: S_OK, E_FAIL,
+   */
+  virtual HRESULT CreateFileDialogBox(CATDialog *ipDlgParent,
+    const CATString&amp; iDialogObjectName,
+    unsigned long iStyle,
+    CATIFmuDialogBox*&amp; oDialogBox,
+    CATDocument* iDocumentToSave=NULL)=0;
+
+  /**
+   * Starts a document selection command.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The document chooser is created and launched.
+   *
+   * @param ipDlgParent
+   *   The parent in dialog tree. 
+   *   The notifications are first sent to it.&lt;br&gt;
+   *   If the caller is a @href CATCommand and not a @href CATDialog, you should call&lt;pre&gt;
+   *      CATCommand *pCmd = NULL;
+   *      HRESULT hr = pDocChooser-&gt;GetEventPublisher(pCmd);
+   *      if (SUCCEEDED(hr) &amp;&amp; CATSysCheckExpression(pCmd != NULL))
+   *        pCmd-&gt;SetFather(&lt;the caller&gt;);&lt;/pre&gt;
+   *   in order to let the caller recieve the notifications.
+   * @param iIdentifier
+   *   The command identifier.
+   * @param iEnvOptions
+   *   If you want the document chooser to offer the documents opened in the session and/or the catalog access,
+   *   you have to specify &lt;tt&gt; @href CATDocChooserInSession &lt;/tt&gt; and/or &lt;tt&gt; @href CATDocChooserCatalogBrowser &lt;/tt&gt;.
+   *   Use the operator OR (|) to separate options.&lt;br&gt;
+   * @param iStyle
+   *   Dialog options for acquisition management. Use the operator OR (|) to separate options.&lt;br&gt;
+   *   &lt;dl&gt;
+   *   &lt;dt&gt;&lt;tt&gt;CATDlgFileMultisel&lt;/tt&gt;&lt;/dt&gt;
+   *     &lt;dd&gt;Multi-selection (the default is only one selection),&lt;/dd&gt;
+   *   &lt;/dl&gt;
+   * @param ipDefaultDocId
+   *   If the method is called in order to find or replace a document, &lt;tt&gt;ipDefaultDocId&lt;/tt&gt; indicates
+   *   where the user may look first. For example, with a file environment, the current directory and the file name can be set.
+   * @param opDocChooser [out, CATBaseUnknown#Release]
+   *   Created CATIFmuDocChooser for acquisition.&lt;br&gt;
+   *   If the method succeeds, the pointer must be not NULL, and you&#x27;ll have to run &lt;tt&gt;Release&lt;/tt&gt;.
+   *
+   * @return
+   * Error code
+   */
+  virtual HRESULT CreateDocumentChooser(
+    CATDialog *ipDlgParent,
+    const CATString &amp;iIdentifier,
+    CATFmuDocChooserEnvOptions iEnvOptions,
+    unsigned long iStyle,
+    CATIDocId *ipDefaultDocId,
+    CATIFmuDocChooser *&amp;opDocChooser) = 0;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIFmuDialogBox.html">← 上一页: CATIFmuDialogBox.h</a></div>
+        <div><a href="CATIFmuDocChooser.html">下一页: CATIFmuDocChooser.h →</a></div>
+    </div>
+</body>
+</html>

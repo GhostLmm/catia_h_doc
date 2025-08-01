@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathVectorf.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathVectorf.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathVector2Df.html">← 上一页: CATMathVector2Df.h</a></div>
+        <div><a href="CATMathematicType.html">下一页: CATMathematicType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMATHVECTORF_H
+#define CATMATHVECTORF_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;YN000MFL.h&quot;
+
+class CATMathPointf;
+class CATMathVector;
+class CATMathDirectionf;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+
+#if defined(_DARWIN_SOURCE) || defined(_AIX_SOURCE) &amp;&amp; (__xlC__ &gt;= 0x0500)
+class CATMathVectorf;
+/** @nodoc */
+extern float operator*(const CATMathVectorf&amp; Vector1 ,
+                       const CATMathVectorf&amp; Vector2 );
+
+/** @nodoc */
+extern CATMathVectorf operator*(const float iScalar , const CATMathVectorf&amp; iVector );
+
+/** @nodoc */
+extern CATMathVectorf operator^(const CATMathVectorf&amp; iVector1, const CATMathVectorf&amp; iVector2 );
+
+#endif
+
+
+
+
+/**
+ * Class representing a temporary vector in dimension 3 in float precision.
+ */ 
+class ExportedByYN000MFL CATMathVectorf
+{
+public:
+  /** @nodoc */
+  float x, y, z ;
+//============================================================================
+//- Constructors
+//============================================================================
+/**
+ * Constructs a (1,0,0) vector in float precision.
+ */ 
+  CATMathVectorf( float iFirstCoord = 1. , float iSecondCoord = 0. ,
+                  float iThirdCoord= 0. );
+
+/**
+ * Copy constructor.
+ */
+  CATMathVectorf( const CATMathVectorf&amp; iVectorToCopy );
+
+/**
+ * Constructs from a CATMathVector.
+ */ 
+  CATMathVectorf( const CATMathVector&amp; iVectorInDouble );
+
+/**
+ * Constructs from an array[3] of float coordinates.
+ */
+  CATMathVectorf( const float iCoord[] );
+
+/**
+ * Constructs the CATMathVectorf as the difference of two CATMathPointfs.
+ * @return
+ * The CATMathVectorf &lt;tt&gt;iPoint2 - iPoint1&lt;/tt&gt;.
+ */
+  CATMathVectorf( const CATMathPointf&amp; iPoint1, const CATMathPointf&amp; iPoint2 );
+
+/**
+ * Constructs from a CATMathDirectionf.
+ */
+  CATMathVectorf( const CATMathDirectionf&amp; iDirectionToCopy );
+
+  //======================================================================
+  // For Debug
+  //======================================================================
+/**
+ * @nodoc
+ * Dumps the coordinates of a CATMathVectorf.
+ * &lt;br&gt;This writes the following line on the ostream:
+ * &lt;br&gt;&lt;tt&gt;( FirstCoord , SecondCoord , ThirdCoord )&lt;/tt&gt;
+ * @param iStream
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+//===========================================================================
+//- Operators
+//===========================================================================
+/**
+ * Defines the addition of two CATMathVectorfs.
+ */
+  CATMathVectorf operator+( const CATMathVectorf&amp; iVectorToAdd ) const;
+
+/**
+ * Defines the translation of a  CATMathPointf.
+ */
+  CATMathPointf operator+( const CATMathPointf&amp; iPointToTranslate ) const;
+
+/**
+ * Defines the substraction of CATMathVectorfs.
+ */
+  CATMathVectorf operator-( const CATMathVectorf&amp; iVectorToSubstract ) const;
+
+/**
+ * Defines the opposite of a CATMathVectorf.
+ */
+  CATMathVectorf operator-() const;
+
+/**
+ * Defines the division by a scalar.
+ */
+  CATMathVectorf operator/( const float iScalar ) const;
+
+// Multiplication by a scalar
+/**
+ * Defines the right side multiplication by a scalar.
+ */
+  CATMathVectorf operator*( const float iScalar ) const;
+
+/**
+ * Defines the dot product.
+ */
+  friend ExportedByYN000MFL float operator*( const CATMathVectorf&amp; Vector1 ,
+                                             const CATMathVectorf&amp; Vector2 );
+/**
+ * Defines the left side multiplication by a scalar.
+ */
+  friend ExportedByYN000MFL CATMathVectorf operator*(
+             const float iScalar , const CATMathVectorf&amp; iVector );
+
+// Vectorial product
+/**
+ * Defines the cross product.
+ */
+  friend ExportedByYN000MFL CATMathVectorf operator^(
+              const CATMathVectorf&amp; iVector1, const CATMathVectorf&amp; iVector2 );
+
+//===========================================================================
+// Methods
+//===========================================================================
+/**
+ * Retrieves a CATMathVectorf as a CATMathVector.
+ */
+  void GetValue(CATMathVector &amp;ioVectorInDouble) const;
+  
+/**
+ * Returns the cartesian norm.
+ */  
+  float Norm() const; 
+
+/**
+ * Returns the angle (between 0 and pi radians) with another CATMathVectorf.
+ * &lt;br&gt; Returns &lt;tt&gt;0&lt;/tt&gt; if the vector is null.
+ */
+  double AngleTo( const CATMathVectorf&amp; iOtherVector );
+
+/**
+ * Returns the angle expressed in radians with another CATMathVectorf,
+ *  oriented by a reference vector.
+ */
+  double AngleTo( const CATMathVectorf&amp; iOtherVector,
+                  const CATMathVectorf&amp; iRefVector  );
+
+/**
+ * Normalizes a CATMathVectorf.
+ *&lt;br&gt; Sets to (1,0,0) if null vector.
+ */
+  void Normalize();
+};
+
+/** @nodoc */
+extern ExportedByYN000MFL const CATMathVectorf CATMathNullVectorf;
+/** @nodoc */
+extern ExportedByYN000MFL const CATMathVectorf CATMathVectorIf;
+/** @nodoc */
+extern ExportedByYN000MFL const CATMathVectorf CATMathVectorJf;
+/** @nodoc */
+extern ExportedByYN000MFL const CATMathVectorf CATMathVectorKf;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathVector2Df.html">← 上一页: CATMathVector2Df.h</a></div>
+        <div><a href="CATMathematicType.html">下一页: CATMathematicType.h →</a></div>
+    </div>
+</body>
+</html>

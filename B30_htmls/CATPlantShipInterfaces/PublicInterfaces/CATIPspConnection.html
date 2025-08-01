@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspConnection.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspConnection.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspConnectable.html">← 上一页: CATIPspConnectable.h</a></div>
+        <div><a href="CATIPspConnector.html">下一页: CATIPspConnector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspConnection_H
+#define CATIPspConnection_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+class CATIPspConnector;
+class CATIUnknownList;
+class CATICStringList;
+
+extern &quot;C&quot; const IID IID_CATIPspConnection ;
+
+/**
+ * Interface to mangage connection object behaviors. 
+ * &lt;b&gt;Role&lt;/b&gt;: To specify  connection behaviors such as
+ * adding a connector and removing a connector.
+ */
+
+class CATIPspConnection : public IUnknown
+{
+  public:  
+  
+  /**
+  * Find all the connectors included in this connection.
+  * @param iLCntrClassFilter
+  *   A list of all the class types for filtering the output connector
+  *   list.
+  * @param oLCntrs [out, IUnknown#Release]
+  *   A list of connectors included in this connection.
+  *   (members are CATIPspConnector interface pointers).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListConnectors (CATICStringList *iLCntrClassFilter,
+    CATIUnknownList **oLCntrs) = 0;
+
+  /**
+  * Find all the object connected to this connection through
+  * their connectors.
+  * @param iLCntbleClassFilter
+  *   A list of all the class types for filtering the output 
+  *   objects list.
+  * @param oLCntbles [out, IUnknown#Release]
+  *   A list of  objects connected to this connection.
+  *   (members are CATIPspConnectable interface pointers). 
+  * @param oLCntrs [out, IUnknown#Release]
+  *   A list of connectors through which this connection is made.
+  *   (members are CATIPspConnector interface pointers).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListConnectables (CATICStringList *iLCntbleClassFilter,
+    CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrs) = 0;
+
+  /**
+	* @nodoc
+  * Add a connector.
+  * @param iCntrToAdd
+  *   The Connector to be added to the 
+  *   connection
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AddConnector (CATIPspConnector *iCntrToAdd) = 0;
+
+  /**
+	* @nodoc
+  * Add a connector.
+  * @param ipiCntrToAdd
+  *   The Connector to be added to the 
+  *   connection
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AddConnector (const IUnknown *ipiCntrToAdd) = 0;
+
+  /**
+	* @nodoc
+  * Remove a connector.
+  * @param iCntrToRemove
+  *    The Connector to be removed 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT RemoveConnector (CATIPspConnector *iCntrToRemove) = 0;
+
+  /**
+	* @nodoc
+  * Remove a connector.
+  * @param iCntrToRemove
+  *    The Connector to be removed 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT RemoveConnector (const IUnknown *ipiCntrToRemove) = 0;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspConnectable.html">← 上一页: CATIPspConnectable.h</a></div>
+        <div><a href="CATIPspConnector.html">下一页: CATIPspConnector.h →</a></div>
+    </div>
+</body>
+</html>

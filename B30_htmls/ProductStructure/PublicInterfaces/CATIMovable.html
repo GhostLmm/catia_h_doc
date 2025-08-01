@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductStructure/PublicInterfaces/CATIMovable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ProductStructure/PublicInterfaces/CATIMovable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICustomName.html">← 上一页: CATICustomName.h</a></div>
+        <div><a href="CATIPrdObjectPublisher.html">下一页: CATIPrdObjectPublisher.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATI_MOVABLE__H
+#define CATI_MOVABLE__H
+// COPYRIGHT DASSAULT SYSTEMES 1998
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATCORBABoolean.h&quot;
+
+#include &quot;AS0STARTUP.h&quot;
+#include &quot;CATPrdDecls.h&quot;
+extern ExportedByAS0STARTUP  IID IID_CATIMovable ;
+
+class CATMathTransformation;
+class CATIMovable_var;
+
+/**
+* Interface to manage the movable object.
+* &lt;b&gt;Role:&lt;/b&gt; a Movable is an object that is intended to define 
+* its coordinates in a particular coordinates 3D-space.
+* &lt;br&gt;This interface provides methods to retrieve or set the relative position
+* of the item, in the coordinate space of the &quot;context&quot;. The context can be
+* a Movable. There are two particular contexts : the default one and the
+* global one (which is not a movable).
+* @see CATMathTransformation
+*/
+
+class ExportedByAS0STARTUP CATIMovable : public CATBaseUnknown
+{
+	CATDeclareInterface;
+	
+public:
+  /**
+   * Retrieves position in given context.
+   * @param iPosObj
+   *    Movable context to define position.
+   *    &lt;br&gt;If NULL, it uses default context.
+   * @param Id
+   *    don&#x27;t use it. Always 3D.
+   * @param iInCtxt
+   *    don&#x27;t use it. Always TRUE.
+   * @return
+   *     a CATMathTransformation which is a matrix
+   */
+  virtual CATMathTransformation GetPosition(
+	const CATIMovable_var&amp; iPosObj,
+	const CATRepMode &amp; Id = CATPrd3D,
+	const CATBoolean iInCtxt = TRUE) const=0;
+
+  /**
+   * Retrieves position in global context.
+   * @param oPos  
+   *     matrix
+   */
+  virtual HRESULT GetAbsPosition(
+		CATMathTransformation &amp; oPos ) const = 0;
+	
+  /**
+   * Sets the relative position in given context.
+   * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; If iPosObj is NULL, it uses default context.
+   * @param iTransfo
+   *        transformation to set.
+   * @param iPosObj
+   *    Movable context to define position.
+   *    &lt;br&gt;If NULL, it uses default context.
+   * @param Id
+   *    don&#x27;t use it. Always 3D.
+   * @param InCtxt
+   *    don&#x27;t use it. Always TRUE.
+  */
+  virtual HRESULT SetPosition(
+		const CATMathTransformation&amp; iTransfo,
+		const CATIMovable_var&amp; iPosObj,
+		const CATRepMode &amp; Id = CATPrd3D,
+		const CATBoolean InCtxt = TRUE) const=0;
+
+  /**
+   * Sets position in absolute 3D-coordinate space (global context).
+   * @param iPos
+   *        transformation to set.
+   */
+  virtual HRESULT SetAbsPosition(
+		const CATMathTransformation &amp; iPos ) = 0;
+	
+  /**
+   * Applies a transformation in coordinate space of the context.
+   * @param iTransfo
+   *        transformation to set.
+   * @param iPosObj
+   *    Movable context to define position.
+   *    &lt;br&gt;If NULL, it uses default context.
+   * @param Id
+   *    don&#x27;t use it. Always 3D.
+   * @param iInCtxt
+   *    don&#x27;t use it. Always TRUE.
+   */
+  virtual HRESULT ApplyTransformation(
+		const CATMathTransformation &amp; iTransfo,
+		const CATIMovable_var&amp; iPosObj,
+		const CATRepMode &amp; Id = CATPrd3D,
+		const CATBoolean iInCtxt = TRUE) const=0;
+	
+};
+CATDeclareHandler(CATIMovable,CATBaseUnknown); 
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICustomName.html">← 上一页: CATICustomName.h</a></div>
+        <div><a href="CATIPrdObjectPublisher.html">下一页: CATIPrdObjectPublisher.h →</a></div>
+    </div>
+</body>
+</html>

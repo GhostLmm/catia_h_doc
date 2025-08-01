@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATHashTable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATHashTable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATHashDico.html">← 上一页: CATHashDico.h</a></div>
+        <div><a href="CATI18NTypes.html">下一页: CATI18NTypes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  CATHashTable_h
+#define  CATHashTable_h
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+* Type to use to pass the key value of the element of the HashTable.
+*/
+typedef unsigned int CATHashKey; 
+
+#include  &quot;CATCollec.h&quot;
+#include  &quot;CATHashCodeCollec.h&quot;
+#include  &quot;CATListPV.h&quot;
+#include  &quot;CO0HTAB.h&quot;
+
+// forward declarations
+class CATHashTable ;
+#ifdef _CAT_ANSI_STREAMS
+/** @c++ansi aew 2004-08-02.20:05:14 [Replace forward declaration of standard streams with iosfwd.h] **/
+ #include &quot;iosfwd.h&quot; 
+#else //!_CAT_ANSI_STREAMS 
+class ostream ;
+#endif //_CAT_ANSI_STREAMS
+
+/** @nodoc */
+ExportedByCO0HTAB ostream&amp; operator&lt;&lt; ( ostream&amp; ioOS, const CATHashTable&amp; iHT );
+
+/**
+* Class to define a hash table.
+* &lt;b&gt;Role&lt;/b&gt;:The class collection you will obtain will gain benefits of C++
+* strong type checking, but its designed to reduce executable code size and
+* to fasten heavily used operations. This table is not ordered, contains
+* no duplicate elements and no null elements. 
+* &lt;br&gt;It is up to you to provide the dimension, the hash-code function and the
+* compare function for each instance of hash table. Only the underlying 
+* infrastructure is offered. 
+*/
+class ExportedByCO0HTAB CATHashTable : public CATHashCodeCollec
+{
+  public :
+
+	/**
+	* Constructs an empty hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Constructs an empty hash table of dimension iDimension.
+	* &lt;br&gt;The hash table contains X buckets, X is defined from iDimension. An item
+	* is inserted in a bucked according to its key hash value. A bucket can contain
+	* several items with not the same key.
+	* @param iPFH
+	*  Pointeur on a global hashing function. This function must returned a
+	*  key of each element of the table.
+	* @param iPFC
+    *  Pointeur on a global comparison function. This function must return 0
+	*  if both instance of the table are equal.
+	* @param iDimension
+	*  Helps specifying the number of bucket (cells receiving 0 to N items) and
+	*  this number will not vary up to the destruction of the hash table.
+	*  &lt;br&gt;&lt;b&gt;Default value&lt;/b&gt;:10
+	*/
+    CATHashTable ( CATCollec::PFHash iPFH, CATCollec::PFCompare iPFC, int iDimension = 10 );
+
+	/** 
+	* Constructs a new hash table from an another one.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This new table as same characteristics and
+	* contents is copied.
+	* @param iCopy
+	* The hash table to duplicate
+	*/
+    CATHashTable ( const CATHashTable&amp; iCopy );
+
+    ~CATHashTable ();
+
+    /** @nodoc */
+    CATHashTable&amp; operator = ( const CATHashTable&amp; iCopy );
+
+
+	/** 
+	* Inserts an item in the hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Inserts an item according to its key in the table. The key
+	* is computed with the provided hash-code function with iAdd as argument.
+    * @param iAdd
+	*  Item to insert 
+	* @return
+	* If the key already exists, nothing is inserted and 0 is returned else iAdd is
+	* inserted in a bucket and 1 is returned.
+	*/
+    int Insert ( void* iAdd );
+
+	/** 
+	* Returns the number of bucket in the hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:This number is also the maximum number of items without
+	* collisions.
+	*/
+    int Dimension () const  { return _Dimension ; }
+
+	/**
+	* Returns the count of item in the hash table..
+    */
+    int Size () const { return _Size ; }
+
+	/**
+	* Returns the count of item not directly accessible in a hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Item directly accessible are those at the first position 
+	* in a bucket.
+	*/
+    int Collisions () const 
+      { int collisions = _Size - (_Dimension-_Unused); return collisions ; }
+
+	/**
+	* Returns the count of unused buckets in an hash table.
+	*/
+    int Unused () const { return _Unused ; }
+
+	/** @nodoc */
+    void PrintStats ( ostream&amp; ) const ;
+
+	/**
+	* Returns the item with has a given hash value key.
+	* @param iKey
+	* Hash value key.
+	* @return 
+	* The item which has iKey hash table key value, or NULL if not found.
+	*/
+    void* KeyLocate ( CATHashKey iKey ) const ;
+
+	/**
+	* Returns the item with has a given hash value key.
+	* @param iKey
+	*  Hash value key.
+	* @param oBucket
+	* the bucket of the item
+	* @param oPosition
+	* The position of this item in the bucket.
+	* @return 
+	* The item which has iKey hash table key value, or NULL if not found.
+	*/
+    void* KeyLocatePosition ( CATHashKey iKey, int&amp; oBucket, int&amp; oPosition ) const ;
+
+	/** 
+	* Returns an item from a key corresponding to an another item.
+	* @param iLocate
+	* We used it&#x27;s key .
+	* @return 
+	* The item having a key corresponding to iLocate key&#x27;s or NULL if not found.
+	*/
+    void* Locate ( void* iLocate ) const ;
+
+	/** 
+	* Returns an item from a key corresponding to an another item.
+	* @param iLocate
+	*  The element to find in the table.
+	* @param oBucket
+	*  The bucket of the returned item
+	* @param oPosition
+	*  The position in the bucket of the returned item
+	* @return 
+	* The item having a key corresponding to iLocate key&#x27;s or NULL if not found.
+	*/
+    void* LocatePosition ( void* iLocate, int&amp; oBucket, int&amp; oPosition ) const ;
+
+	/** 
+	* Retrieves an item from its Bucket and Position in a hash table.
+	* @param iBucket
+	* The bucket of the returned item
+	* @param iPosition
+	* The position in the bucket of the returned item
+	* @return 
+	* Returns the item having position descibed by the couple of integer (iBucket,iPosition) 
+	*/
+    void* Retrieve ( int iBucket, int iPosition ) const ;
+
+	/** @nodoc */
+    void* operator[] ( const CATHashCodeIter&amp; iIter ) const ; 
+
+
+	/** @nodoc */
+    void* NextItem( int&amp;  ioBucket, int&amp; ioPosition ) const ;
+
+	/**
+	* Returns the next item given a position in a hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Iterator of the hash table. To start a loop on all items set 
+	* ioBucket to 1 and ioPosition to 0. If the returned value is NULL, you have reached 
+	* the end of the table.
+	* @param ioBucket
+	* The bucket used to find the next item
+	* @param ioPosition
+	* The position in the  ioBucket used to find the next item
+	* @return 
+	* The next item next to the given position (iBucket, iPosition).
+	*/
+    void* Next    ( int&amp;  ioBucket, int&amp; ioPosition ) const ;
+
+	/**
+	* Returns the next item given a key in a hash table.
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Iterator of the hash table. To start a loop on all items set 
+	* iFrom to NULL. If the returned value is NULL, you have reached 
+	* the end of the table.
+	* @param iFrom
+	* The returned value is the next item of iFrom
+	* @return 
+	* The next item after iFrom
+	*/
+    void* Next    ( void* iFrom ) const ;
+
+
+	/** 
+	* Removes an item in the hash table.
+	* @param iRemove
+	* The element to remove
+	* @return 
+	*  The element removed or NULL if not exists
+	*/
+    void* Remove  ( void* iRemove );
+
+	/** 
+	* Removes an item in the hash table.
+	* @return 
+	*  The element removed or NULL if not exists
+	*/
+    void* RemovePosition ( int iBucket, int iPosition );
+
+
+	/** 
+	* Removes all elements in the hash table.
+	*/
+    void  RemoveAll ();
+
+
+	/** 
+	* @nodoc 
+    * the size of lists is the first differentiator,
+    * then each element is compared one to one (ordered test)
+	*/
+    int operator == ( const CATHashTable&amp; iHT ) const ;
+
+	/** @nodoc */
+    int operator != ( const CATHashTable&amp; iHT ) const ;
+
+
+	/** @nodoc 
+	* Apply 
+	*/
+    typedef int (*PtrGlbFunct) (void*) ;
+
+	/** @nodoc */
+    int ApplyGlobalFunct ( PtrGlbFunct iPF  ,
+                           void* iFrom = 0  ,
+                           void** iPLast = 0,
+                           int* iPRC = 0    ) const ;
+
+	/** @nodoc */
+    friend ExportedByCO0HTAB
+      ostream&amp; operator&lt;&lt; ( ostream&amp; ioOS, const CATHashTable&amp; iHT );
+
+  private :
+
+    // DATA MEMBERS
+    CATCollec::PFHash        _PFH ;
+    CATCollec::PFCompare     _PFC ;
+    // list of buckets (i.e. list of pointers to lists of void pointers)
+    void**                   _Lbuckets ;
+    // list of flags on buckets (0:no item / 1:one item alone / 2:list of items)
+    unsigned char*           _Lflags ;
+    // number of buckets inside the table
+    int                      _Dimension ;
+    // items inside the table
+    int                      _Size ;
+    // unsed buckets
+    int                      _Unused ;
+
+    void*&amp; GetItemFromBucket( unsigned int i ) { return (void*&amp;) _Lbuckets[i]; } 
+    void*  GetItemFromBucket( unsigned int i ) const { return _Lbuckets[i]; } 
+    //
+    CATListPV*&amp; GetListFromBucket( unsigned int i )
+                             { return (CATListPV*&amp;) _Lbuckets[i]; } 
+    CATListPV*  GetListFromBucket( unsigned int i ) const
+                             { return (CATListPV*) _Lbuckets[i]; }
+};
+
+//
+// Macro to help iterations on hash tables
+//
+#include  &quot;CATHashCodeIter.h&quot;
+
+/** @nodoc */
+#define CATHTAB_START_LOOP( H, ITR )                 \
+{                                                    \
+  CATHashCodeIter ITR = (H).CreateIterator();        \
+  while ( ITR++ != NULL )
+
+#define CATHTAB_END_LOOP   }
+
+#endif                /* CATHashTable_h */
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATHashDico.html">← 上一页: CATHashDico.h</a></div>
+        <div><a href="CATI18NTypes.html">下一页: CATI18NTypes.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCylinder.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCylinder.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCurve.html">← 上一页: CATCurve.h</a></div>
+        <div><a href="CATEdgeCurve.html">下一页: CATEdgeCurve.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCylinder_h
+#define CATCylinder_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATBaseUnknown.h&quot;
+class CATSurParam ;
+#include &quot;CATElementarySurface.h&quot;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCylinder ;
+#else
+extern &quot;C&quot; const IID IID_CATCylinder ;
+#endif
+
+/**
+ * Interface representing a geometric cylinder.
+ * &lt;br&gt; The CATCylinder is created by the &lt;tt&gt;CreateCylinder&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method. 
+ * It derives from the &lt;tt&gt;CATElementarySurface&lt;/tt&gt; and is defined by:
+ * &lt;ul&gt;
+ * &lt;li&gt;a CATMathAxis for the axis system in which the third
+ * direction is the cylinder direction&lt;/li&gt;
+ * &lt;li&gt;a double for the radius &lt;/li&gt;
+ * &lt;li&gt;a CATAngle for the start angle. Positive angles comply with the right-hand rule. If angle values are
+ *  too large or inconsistent, a 2*Pi surface is created.&lt;/li&gt;
+ * &lt;li&gt;a CATAngle for the end angle. Positive angles comply with the right-hand rule. If angle values are
+ *  too large or inconsistent, a 2*Pi surface is created.&lt;/li&gt;
+ * &lt;li&gt;a double for the start limit in the third direction of the CATMathAxis &lt;/li&gt;
+ * &lt;li&gt;a double for the end limit in the third direction of the CATMathAxis &lt;/li&gt;
+ * &lt;/ul&gt; 
+ */
+class ExportedByCATGMGeometricInterfaces CATCylinder : public CATElementarySurface
+{
+  CATDeclareInterface;
+
+public:
+/**
+ * Returns the radius of &lt;tt&gt;this&lt;/tt&gt; CATCylinder.
+ * @return
+ * The radius value.
+ */
+  virtual double GetRadius()const =0;
+
+/**
+ * Returns the low length limitation of &lt;tt&gt;this&lt;/tt&gt; CATCylinder .
+ * @return
+ * The low length limitation value.
+ */ 
+  virtual double GetStartLength()const =0;
+
+/**
+ * Returns the high limitation on &lt;tt&gt;this&lt;/tt&gt; CATCylinder.
+ * @return
+ * The high length limitation value.
+ */ 
+  virtual double GetEndLength()const =0;
+ 
+/**
+ * Returns the low angle limitation of &lt;tt&gt;this&lt;/tt&gt; CATCylinder .
+ * @return
+ * The low angle limitation value, measured from the first direction of the axes system. 
+ * Positive angles comply with the right-hand rule
+ */
+  virtual CATAngle GetStartAngle()const =0;
+
+/**
+ * Returns the high angle limitation of &lt;tt&gt;this&lt;/tt&gt; CATCylinder .
+ * @return
+ * The high angle limitation value, measured from the first direction of the axes system. 
+ * Positive angles comply with the right-hand rule
+ */ 
+  virtual CATAngle GetEndAngle()const =0;
+  
+/**
+ * Modifies the radius of &lt;tt&gt;this&lt;/tt&gt; CATCylinder.
+ * @param iRadius
+ * The new radius value.
+ */
+  virtual void SetRadius(double iRadius)=0;
+
+/**
+ * Modifies the length limitations of &lt;tt&gt;this&lt;/tt&gt; CATCylinder.
+ * @param iStartLength
+ * The start limitation of the length.
+ * @param iEndLength
+ * The end limitation of the length.
+ */ 
+  virtual void SetLength(double iStartLength, double iEndLength)=0;
+  
+/**
+ * Modifies the angle limitations of &lt;tt&gt;this&lt;/tt&gt; CATCylinder.
+ * @param iStartAngle
+ * The new start angle limitation. The angle reference is the first direction of the cylinder axis.
+ * @param iEndAngle
+ * The new end angle limitation. The angle reference is the first direction of the cylinder axis.
+ */ 
+  virtual void SetAngle(CATAngle iStartAngle, CATAngle iEndAngle)=0;
+
+
+
+
+//#if defined ( CATIAV5R14 )
+ /** @nodoc */
+  virtual void GetCylinderParam(double &amp; iUnitU,double &amp; iMinParam,double &amp; iStartParam,double &amp; iEndParam) = 0;
+ /** @nodoc */
+  virtual void SetCylinderParam(double iUnitU,double iMinParam,double iStartParam,double iEndParam) = 0;
+//#endif
+
+};
+  CATDeclareHandler(CATCylinder,CATElementarySurface);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCurve.html">← 上一页: CATCurve.h</a></div>
+        <div><a href="CATEdgeCurve.html">下一页: CATEdgeCurve.h →</a></div>
+    </div>
+</body>
+</html>

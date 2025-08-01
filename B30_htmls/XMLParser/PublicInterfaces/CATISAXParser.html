@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATISAXParser.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATISAXParser.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXLocator.html">← 上一页: CATISAXLocator.h</a></div>
+        <div><a href="CATISAXXMLFilter.html">下一页: CATISAXXMLFilter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATISAXParser_h
+#define CATISAXParser_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+class CATISAXInputSource_var;
+class CATISAXDocumentHandler_var;
+class CATISAXDTDHandler_var;
+class CATISAXEntityResolver_var;
+class CATISAXErrorHandler_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATISAXParser;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATISAXParser ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+ /**
+  * Interface for SAX (Simple API for XML) parsers.
+  *
+  * All SAX parsers must implement this basic interface: it allows
+  * applications to register handlers for different types of events
+  * and to initiate a parse from a URI, or a character stream.
+  *
+  * All SAX parsers must also implement a zero-argument constructor
+  * (though other constructors are also allowed).
+  *
+  * SAX parsers are reusable but not re-entrant: the application
+  * may reuse a parser object (possibly with a different input source)
+  * once the first parse has completed successfully, but it may not
+  * invoke the @href #Parse methods recursively within a parse.
+  *
+  * @see CATISAXEntityResolver, CATISAXDTDHandler, CATISAXDocumentHandler, CATISAXErrorHandler, CATSAXHandlerBase, CATISAXInputSource
+  */
+class ExportedByXMLParserItf CATISAXParser : public CATBaseUnknown {
+	CATDeclareInterface;
+	
+	public:
+		
+		/**
+		 * Parses an XML document.
+		 *
+		 * The application can use this method to instruct the SAX parser
+		 * to begin parsing an XML document from any valid input
+		 * source (a character stream, a byte stream, or a URI).
+		 *
+		 * Applications may not invoke this method while a parse is in
+		 * progress (they should create a new @href CATISAXParser instead for each
+		 * additional XML document).  Once a parse is complete, an
+		 * application may reuse the same Parser object, possibly with a
+		 * different input source.
+		 *
+		 * @param iInputSource The input source for the top-level of the
+		 *               XML document.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an error (such as a not well formed XML document) occurs during parse&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2001&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an I/O error occurs during parse&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATISAXInputSource, #SetEntityResolver, #SetDTDHandler, #SetDocumentHandler, #SetErrorHandler
+		 */
+		virtual HRESULT Parse(
+			const CATISAXInputSource_var&amp; iInputSource) = 0;
+		
+		/**
+		 * Parses an XML document from a system identifier (URI).
+		 *
+		 * This method is a shortcut for the common case of reading a
+		 * document from a system identifier. If the system identifier is a URL, it must be fully resolved
+		 * by the application before it is passed to the parser.
+		 *
+		 * @param iSystemId
+		 * The system identifier (URI).
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2000&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an error (such as a not well formed XML document) occurs during parse&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATSAXException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2001&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;If an I/O error occurs during parse&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 * 
+		 *
+		 * @see #Parse
+		 */
+		virtual HRESULT Parse(
+			const CATUnicodeString &amp; iSystemId) = 0;
+		
+		/**
+		 * Allows an application to register a document event handler.
+		 *
+		 * If the application does not register a document handler, all
+		 * document events reported by the SAX parser will be silently
+		 * ignored (this is the default behaviour implemented by
+		 * @href CATSAXHandlerBase ).
+		 *
+		 * Applications may register a new or different handler in the
+		 * middle of a parse, and the SAX parser must begin using the new
+		 * handler immediately.
+		 *
+		 * @param iDocumentHandler
+		 * The document handler.
+		 * @see CATISAXDocumentHandler, CATSAXHandlerBase
+		 */
+		virtual HRESULT SetDocumentHandler(
+			const CATISAXDocumentHandler_var&amp; iDocumentHandler) = 0;
+		
+		/**
+		 * Allows an application to register a DTD event handler.
+		 *
+		 * If the application does not register a DTD handler, all DTD
+		 * events reported by the SAX parser will be silently ignored (this
+		 * is the default behaviour implemented by @href CATSAXHandlerBase ).
+		 *
+		 * Applications may register a new or different handler in the middle
+		 * of a parse, and the SAX parser must begin using the new handler
+		 * immediately.
+		 *
+		 * @param iDTDHandler
+		 * The DTD handler.
+		 *
+		 * @see CATISAXDTDHandler, CATSAXHandlerBase
+		 */
+		virtual HRESULT SetDTDHandler(
+			const CATISAXDTDHandler_var&amp; iDTDHandler) = 0;
+		
+		/**
+		 * Allows an application to register a custom entity resolver.
+		 *
+		 * If the application does not register an entity resolver, the
+		 * SAX parser will resolve system identifiers and open connections
+		 * to entities itself (this is the default behaviour implemented in
+		 * @href CATSAXHandlerBase ).
+		 *
+		 * Applications may register a new or different entity resolver
+		 * in the middle of a parse, and the SAX parser must begin using
+		 * the new resolver immediately.
+		 *
+		 * @param iEntityResolver
+		 * The object for resolving entities.
+		 * @see CATISAXEntityResolver, CATSAXHandlerBase
+		 */
+		virtual HRESULT SetEntityResolver(
+			const CATISAXEntityResolver_var&amp; iEntityResolver) = 0;
+		
+		/**
+		 * Allows an application to register an error event handler.
+		 *
+		 * If the application does not register an error event handler,
+		 * all error events reported by the SAX parser will be silently
+		 * ignored, except for @href CATISAXErrorHandler#FatalError, which will raise a @href CATSAXException
+		 * error (this is the default behaviour implemented by @href CATSAXHandlerBase ).
+		 *
+		 * Applications may register a new or different handler in the
+		 * middle of a parse, and the SAX parser must begin using the new
+		 * handler immediately.
+		 *
+		 * @param handler The error handler.
+		 * @see CATISAXErrorHandler, CATSAXException, CATSAXHandlerBase
+		 */
+		virtual HRESULT SetErrorHandler(
+			const CATISAXErrorHandler_var&amp; iErrorHandler) = 0;
+};
+
+CATDeclareHandler(CATISAXParser, CATBaseUnknown);
+
+#endif // CATISAXParser_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXLocator.html">← 上一页: CATISAXLocator.h</a></div>
+        <div><a href="CATISAXXMLFilter.html">下一页: CATISAXXMLFilter.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectSpecsLegacy/PublicInterfaces/CATIOsmExtension.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectSpecsLegacy/PublicInterfaces/CATIOsmExtension.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIOsmExtendable.html">← 上一页: CATIOsmExtendable.h</a></div>
+        <div><a href="CATIOsmUpdate.html">下一页: CATIOsmUpdate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2004
+//===================================================================
+//
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#ifndef CATIOsmExtension_H
+#define CATIOsmExtension_H
+
+#include &quot;AC0SPEXT.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+extern ExportedByAC0SPEXT IID IID_CATIOsmExtension ;
+
+//------------------------------------------------------------------
+
+/**
+ * Interface to manipulate feature extensions.
+ * &lt;b&gt;Role&lt;/b&gt;: CATIOsmExtension is implemented by all extension features.
+ * This interface aims to retrieve the identifier type of an extension and the base feature that has been extended.&lt;/br&gt;
+ * Each feature implements @href CATIOsmExtendable to retrieve its extensions features.&lt;/br&gt;
+ * An extension feature is a feature therefore it implements @href CATISpecObject.&lt;/br&gt;
+ */
+class ExportedByAC0SPEXT CATIOsmExtension: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+
+	/**
+	  * Returns the extension&#x27;s identifier type. This type is specified at creation in CATIOsmExtendable#AddExtension method.
+		* @param oExtensionId
+	  *        The extension&#x27;s idetifier type 
+    * @return
+    *      S_OK if succeeded &lt;br&gt;
+    *      E_FAIL if oExtensionId is not NULL
+    */
+    virtual HRESULT GetID(char* &amp; oExtensionId) const =0;
+
+   /**
+    * Retrieves the base feature.
+	  * @param iIID
+	  *        The IID of the requested interface 
+	  * @param oObj  [out, CATBaseUnknown#Release]
+	  *        The pointer to the base feature
+    */
+    virtual HRESULT QueryBaseObject(const IID &amp;iIID, void** oObj) const =0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIOsmExtension, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIOsmExtendable.html">← 上一页: CATIOsmExtendable.h</a></div>
+        <div><a href="CATIOsmUpdate.html">下一页: CATIOsmUpdate.h →</a></div>
+    </div>
+</body>
+</html>

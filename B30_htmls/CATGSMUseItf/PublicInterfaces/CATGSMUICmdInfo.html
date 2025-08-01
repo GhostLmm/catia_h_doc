@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATGSMUICmdInfo.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATGSMUICmdInfo.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATGSMTrimDef.html">← 上一页: CATGSMTrimDef.h</a></div>
+        <div><a href="CATGSMUseItfExportedBy.html">下一页: CATGSMUseItfExportedBy.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#ifndef CATGSMUICmdInfo_H_
+#define CATGSMUICmdInfo_H_
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+/**
+ * Class to define informations  for running contextual GSD command. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to choose some paramerters when running GSD contextual commands. 
+ *  @see CATIGSMUIFactory 
+ */
+
+class CATPathElement;
+class ExportedByCATGSMUseItf CATGSMUICmdInfo
+{
+   public:
+       
+       //   Constructeur/Destructeur
+       //---------------------------
+       /** 
+        * Constructor. 
+        */ 
+       CATGSMUICmdInfo();
+       /** 
+        * Destructor. 
+        */ 
+       ~CATGSMUICmdInfo();
+       
+       
+       // StartUp Name of GSD Contextual feature 
+       // -----------------------------------------------------------
+       /** 
+       * Sets the startUp name for the Command to be launch. 
+       *  @param StartUpName
+       *      Interface name of the element to create, 
+	   * &lt;br&gt;  List of available commands :
+	   * &lt;pre&gt;
+	   *     Command                         StartUp Name                Icon Name          
+	   *   ------------------------------------------------------------------------------
+	   *   Point interactive command       &quot;GSMPoint&quot;                  &quot;I_Point&quot;
+	   *   MidPoint                        &quot;GSMMidPoint&quot;               &quot;I_Midpoint&quot;
+	   *   EndPoint                        &quot;GSMEndPoint&quot;               &quot;I_Endpoint&quot;
+	   *   Line interactive command        &quot;GSMLine&quot;                   &quot;I_Line&quot;
+	   *   Plane interactive command       &quot;GSMPlane&quot;                  &quot;I_Plane&quot;
+	   *   Intersect interactive command   &quot;GSMIntersect&quot;              &quot;I_Intersection&quot;
+	   *   Project interactive command     &quot;GSMProject&quot;                &quot;I_Project&quot;
+	   *   Join interactive command        &quot;GSMAssemble&quot;               &quot;I_AssembleBipar&quot;
+	   *   Boundary interactive command    &quot;GSMBoundary&quot;               &quot;I_Boundary&quot;
+	   *   Extract interactive command     &quot;GSMExtract&quot;                &quot;I_Extract&quot;
+	   *   Extrapol interactive command    &quot;GSMExtrapol&quot;               &quot;I_Extrapol&quot;
+	   *   Law  interactive command        &quot;GSMLaw&quot;                    &quot;I_Law&quot;
+	   *   Extremum interactive command    &quot;GSMExtremum&quot;               &quot;I_Extremum&quot;
+	   *   CurveSmooth interactive command &quot;GSMCurveSmooth&quot;            &quot;I_CurveSmooth&quot;
+	   *   Spine interactive command       &quot;GSMSpine&quot;                  &quot;I_Spine&quot;
+	   *   Loft interactive command        &quot;GSMLoft&quot;                   &quot;I_Loft&quot;
+	   *   Blend interactive command       &quot;GSMBlend&quot;                  &quot;I_Blend&quot;
+	   *   Multiple Pt interactive command &quot;GSMMultiplePoint&quot;          &quot;I_MultiplePoint&quot;
+	   *   Trim  interactive command       &quot;GSMTrim&quot;                   &quot;I_Trim&quot;	
+	   *   Spline interactive command      &quot;GSMCurve&quot;                  &quot;I_Curve&quot;
+	   *   Polyline interactive command    &quot;GSMLineCorner&quot;             &quot;I_LineCorner&quot;
+	   *   Near  interactive command       &quot;GSMNear&quot;                   &quot;I_Near&quot;
+	   *   3D Curve offset interactive cmd &quot;GSM3DurveOffset&quot;           &quot;I_3DCurveOffset&quot;
+	   *   Sketch command				   &quot;PRTSketch&quot;				   &quot;I_Sketcher&quot;
+	   *   Axis System interactive command &quot;AxisSystem&quot;				   &quot;I_3DAxisSystemGSD&quot;
+	   *   3D Curve interactive command	   &quot;St3DCurveFeature&quot;		   &quot;I_St3DCurve&quot;
+	   *  &lt;/pre&gt;        
+       */
+       
+       void SetStartUpName(CATUnicodeString StartUpName);
+       /** 
+        * Gets the startUp name for the Command to be launch.  
+        */ 
+       CATUnicodeString GetStartUpName();
+       
+       // Datum Mode 
+       //   -----------------------------------------------------------
+       /** 
+        * Sets he datum mode for creation in context.  
+        *   @param iDatumMode
+        *     Mode = 0 / Creation of feature 
+        *     Mode = 1 / creation in datuim mode 
+        *	  &lt;br&gt;	if DatumMode=1, the command is started in datum mode (no history) otherwise 
+        *		it is started in procedural mode
+        *		&lt;br&gt; Note: Default is procedural mode
+        */
+       void SetDatumMode(int mode);
+       /** 
+        * Gets he datum mode for creation in context.
+        *   @return 
+        *     Mode = 0 / Creation of feature 
+        *     Mode = 1 / creation in datuim mode 
+        *	  &lt;br&gt;	if DatumMode=1, the command is started in datum mode (no history) otherwise 
+        *		it is started in procedural mode
+        *		&lt;br&gt; Note: Default is procedural mode
+        */ 
+        int GetDatumMode();
+       
+       // Additionnal for some StartUp Name 
+       // ------------------------------------------------------------------
+       /** 
+       * Sets the contextual additionnal information.
+       *  @param ContextualItem
+       *         Item to precise when running the start up
+       * &lt;br&gt; used to element to create on the fly 
+       * &lt;pre&gt;
+       *     Command           StartUp Name           Item                   Icon Name  
+       *     -----------------------------------------------------------------------------
+       *     X Axis             &quot;GSMRefElementOnFly&quot;   ItemX_AxisCreate       &quot;I_LineXAxis&quot; 
+       *     Y Axis             &quot;GSMRefElementOnFly&quot;   ItemY_AxisCreate       &quot;I_LineYAxis&quot; 
+       *     Z Axis             &quot;GSMRefElementOnFly&quot;   ItemZ_AxisCreate       &quot;I_LineZAxis&quot; 
+       *     X Axis (Current)   &quot;GSMRefElementOnFly&quot;   ItemLocalX_AxisCreate  &quot;I_LineXAxis&quot; 
+       *     Y Axis (Current)   &quot;GSMRefElementOnFly&quot;   ItemLocalY_AxisCreate  &quot;I_LineYAxis&quot; 
+       *     Z Axis (Current)   &quot;GSMRefElementOnFly&quot;   ItemLocalZ_AxisCreate  &quot;I_LineZAxis&quot; 
+       *     XY Plane           &quot;GSMRefElementOnFly&quot;   ItemXYPlaneCreate      &quot;I_LineXAxis&quot; 
+       *     YZ Plane           &quot;GSMRefElementOnFly&quot;   ItemYZPlaneCreate      &quot;I_LineYAxis&quot; 
+       *     ZX Plane           &quot;GSMRefElementOnFly&quot;   ItemZXPlaneCreate      &quot;I_LineZAxis&quot; 
+       *     XY Plane (Current) &quot;GSMRefElementOnFly&quot;   ItemLocalXYPlaneCreate &quot;I_LineXAxis&quot; 
+       *     YZ Plane (Current) &quot;GSMRefElementOnFly&quot;   ItemLocalYZPlaneCreate &quot;I_LineYAxis&quot; 
+       *     ZX Plane (Current) &quot;GSMRefElementOnFly&quot;   ItemLocalZXPlaneCreate &quot;I_LineZAxis&quot; 
+       *  &lt;/pre&gt;     
+       */
+       void SetSelectorContextualItem(CATUnicodeString ContextualItem);
+       
+       /** 
+       * Gets the contextual additionnal information. 
+       *  @return 
+       *         Item to precise when running the start up 
+       */ 
+       CATUnicodeString GetSelectorContextualItem ();
+       
+       // Aggregation mode 
+       //  ------------------------------------------------------------------
+       /** 
+       * Sets the aggregate mode for generated featuree in context. 
+       *  @param iMode 
+       * &lt;br&gt; mode = 0 Normal     / feature is insert in OpenBody at creation  (default and standard mode CAA) 
+       * &lt;br&gt; mode = 1 Aggregated / feature is inserted in open body and tag to be aggreagated == Internal Use Only ==
+       *  The feature has to be re-aggregated in the Activate method of the caller command (Chage father)
+       *  &lt;br&gt; Note: It is reauire to perform the re-aggregation coirrectly other wise model if garbaged 
+       *  @see CATIMmiContextualManager 
+       */ 
+       void SetContextualFeaturesAggregMode(int mode);
+       /** 
+       * Gets the aggregate mode for generated feature in context. 
+       *  @return  
+       * &lt;br&gt; mode = 0 Normal     / feature is insert in OpenBody at creation  (default and standard mode CAA) 
+       * &lt;br&gt; mode = 1 Aggregated / feature is inserted in open body and tag to be aggreagated == Internal Use Only ==
+       */
+       int GetContextualFeaturesAggregMode();
+       
+
+       // DMU context / activation of a GSD command whithin a  given part  
+       //   -----------------------------------------------------------
+       /** 
+       *  Sets the class name corresponding to GSD command.
+       * &lt;br&gt; note : Used in DMU context / activation of a GSD command whithin a given part  
+       *   @param ClassName 
+       *      Class Name  string  of the element to create, 
+       */
+       void SetClassName(char* ClassName);
+       /* 
+       *  Gets the class name correspondintd to GSD command. 
+       *   @return 
+       *      Class Name  string  of the element to create, 
+       */
+       char* GetClassName();
+       
+       /** 
+       * Sets the working part. 
+       *   @param iWorkingPart
+       *		The complete path to the CATPart in which one the new geometrical element will be created.
+       *		If set, the UI-Active element does not have to be a CATPart.
+       *		&lt;br&gt; Note: Default is NULL
+       */
+       void SetWorkingPart(CATPathElement* WorkingPart);
+       /** 
+       * Gets the working part. 
+       *   @return  
+       *		The complete path to the CATPart in which one the new geometrical element will be created.
+       *		If set, the UI-Active element does not have to be a CATPart.
+       *		&lt;br&gt; Note: Default is NULL
+       */ 
+       CATPathElement* GetWorkingPart();
+       
+       // InsertAfterCurrentFeatMode
+       //  ------------------------------------------------------------------
+       /** 
+       * Sets the insertion position for generated feature. 
+       *  @param iInsertAfterCurrentFeatMode 
+       * &lt;br&gt; iInsertAfterCurrentFeatMode = 0 If the tool is Hybrid Body or OGS the new feature would be inserted before current feature
+       * &lt;br&gt; iInsertAfterCurrentFeatMode = 1 If the tool is Hybrid Body or OGS the new feature would be inserted after current feature
+       * &lt;br&gt; Note: By default the value of &quot;iInsertAfterCurrentFeatMode&quot; is 0
+       */ 
+       void SetInsertAfterCurrentFeatMode(int iInsertAfterCurrentFeatMode);
+       /** 
+       * Gets the insertion position for generated feature. 
+       *  @return  
+       * &lt;br&gt; mode = 0 If the tool is Hybrid Body or OGS the new feature would be inserted before current feature
+       * &lt;br&gt; mode = 1 If the tool is Hybrid Body or OGS the new feature would be inserted after current feature
+       */
+       int GetInsertAfterCurrentFeatMode();
+
+    
+   private:
+        CATGSMUICmdInfo( const CATGSMUICmdInfo&amp; );
+        void	operator=( const CATGSMUICmdInfo&amp; );
+        
+        char*						_ClassName;
+        CATUnicodeString			_StartUpName;
+        int						_DatumMode;
+        CATPathElement*			_WorkingPart;
+        CATUnicodeString		_ContextualItem;
+        int						_CtxAggregMode;
+        int           _insertAfterCurrentFeatMode;        
+        
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATGSMTrimDef.html">← 上一页: CATGSMTrimDef.h</a></div>
+        <div><a href="CATGSMUseItfExportedBy.html">下一页: CATGSMUseItfExportedBy.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIPrtCenterCurve.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIPrtCenterCurve.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtCDSHoleManagement.html">← 上一页: CATIPrtCDSHoleManagement.h</a></div>
+        <div><a href="CATIPrtCfgAddin.html">下一页: CATIPrtCfgAddin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPrtCenterCurve_H
+#define CATIPrtCenterCurve_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+
+class CATISpecObject_var;
+class CATGeometry_var;
+class CATBody_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIPrtCenterCurve;
+#else
+extern &quot;C&quot; const IID IID_CATIPrtCenterCurve;
+#endif
+
+/**
+ * Interface which provides a center curve  management behavior to a feature center curve.
+ * &lt;b&gt;Role&lt;/b&gt;: Some features contain a center curve component which allows users to 
+ * define and use a center curve. The center curve internal feature is managed through 
+ * this interface.
+ */
+
+class ExportedByPartItf CATIPrtCenterCurve : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+  
+/**
+* Set a new element to the specifications of the center curve. 
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: If there is already an element it is replaced 
+* @param ihElt
+*   The new element.
+  */
+  virtual void SetElement(const CATISpecObject_var&amp; ihElt) = 0;
+  
+  /**
+  * Gets the specificaton element of the center curve.
+  * @param ohElt
+  *   The required element.
+  */
+  virtual void GetElement(CATISpecObject_var&amp; ohElt) const = 0;
+  
+  /**
+  * Gets the geometrical support of the center curve.
+  * @param ohGeom
+  *   The returned support.
+  */
+  virtual void GetGeomSupport(CATGeometry_var&amp; ohGeom) const = 0;
+  
+  /**
+  * Gets the topological body corresponding to the center curve.
+  * @param ohBody
+  *   The returned body.
+  */
+  virtual void GetBody(CATBody_var&amp; ohBody) const = 0;
+  
+  /**
+  * @nodoc
+  */
+  virtual int TestValidity(int Context, int&amp; ErrorType) const = 0;
+};
+
+CATDeclareHandler (CATIPrtCenterCurve, CATBaseUnknown); 
+
+#endif // CATIPrtCenterCurve_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtCDSHoleManagement.html">← 上一页: CATIPrtCDSHoleManagement.h</a></div>
+        <div><a href="CATIPrtCfgAddin.html">下一页: CATIPrtCfgAddin.h →</a></div>
+    </div>
+</body>
+</html>

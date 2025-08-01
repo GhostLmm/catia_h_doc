@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftDrawing.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftDrawing.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftDottingPattern.html">← 上一页: CATIDftDottingPattern.h</a></div>
+        <div><a href="CATIDftDrawingFormats.html">下一页: CATIDftDrawingFormats.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 1999 
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIDftDrawing_H
+#define CATIDftDrawing_H
+
+#include &quot;IUnknown.h&quot;
+#include &quot;CATMacForIUnknown.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+class CATLISTV(CATISpecObject_var);
+
+class CATIDftSheet;
+class CATIDftView;
+class CATIUnknownList;
+
+#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftDrawing ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftDrawing ;
+#endif
+
+/**
+ * Interface of the drawing object.
+ * &lt;b&gt;Role&lt;/b&gt;: The drawing is the root feature of a CATDrawing Document.
+ * It manages the sheets.
+ */
+class ExportedByDraftingItfCPP CATIDftDrawing : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+   
+   /**
+   * This method is used to create a sheet in the drawing.
+   * @param oSheet
+   *   The new sheet to create
+   * @param iName
+   *   The sheet name, automatic if NULL pointer (default)
+   * @param iSheetBefore
+   *   The sheet XXXXXXXXXXXXXXXX: (NOT IMPLEMENTED)
+   * @param iSheetAfter
+   *   The sheet XXXXXXXXXXXXXXXX: (NOT IMPLEMENTED)
+   * @param ibDetailSheet
+   *   If true the sheet created is a detail sheet
+   */
+   virtual HRESULT AddSheet    (CATIDftSheet **oSheet,
+                                const wchar_t *iName = NULL,
+                                const CATIDftSheet *iSheetBefore = 0,
+                                const CATIDftSheet *iSheetAfter  = 0,
+								const CATBoolean ibDetailSheet = FALSE) = 0;
+
+   /**
+   * this method is used to remove a sheet in the drawing.
+   * @param iSheet
+   *   Sheet to remove
+   */
+   virtual HRESULT RemoveSheet (const CATIDftSheet *iSheet) = 0;
+
+   /**
+    * Validates that the given ordered list can be used as an input
+    * for ReorderSheet.
+    * i.e. validates that:
+    * iOrderedSheets is the result of a permutation applied to 
+    * the list of &lt;b&gt;all&lt;/b&gt; the sheets of this drawing, with the following 
+    * constraint: for every non-detail sheet, there isnt any detail sheet 
+    * appearing before in iOrderedSheets.
+    * @param iOrderedSheets
+    * The list of sheets to validate.
+    * @return
+    * An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;
+    * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; iOrderedSheets is a valid input.
+    * &lt;dt&gt; &lt;tt&gt;E_XXX&lt;/tt&gt;   &lt;dd&gt; iOrderedSheet is not a valid input.
+    * &lt;/dl&gt;
+    */
+   virtual HRESULT ValidateSheetOrder(const CATLISTV(CATISpecObject_var) &amp;iOrderedSheets)=0;
+
+   
+  /**
+  * Change the positions of the sheets in a drawing according to the given 
+  * ordered list.
+  * @param &lt;tt&gt;const CATLISTV(CATISpecObject_var) &amp;iOrderedSheets&lt;/tt&gt;
+  * [in] The ordered list of the sheets in this drawing.
+  * &lt;b&gt;Preconditions&lt;b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt; ValidateSheetOrder(iOrderedSheets) must succeed. @see ValidateSheetOrder.
+  * &lt;/dl&gt;
+  * @return
+  * A &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;         &lt;dd&gt; Sheets were reordered.
+  * &lt;dt&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt; &lt;dd&gt; Preconditions not met.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;       &lt;dd&gt; Internal error.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT ReorderSheets(const CATLISTV(CATISpecObject_var) &amp;iOrderedSheets)=0;
+
+   /**
+   * @deprecated V5R18 use #ReorderSheets
+   * this method is used to move a sheet in the drawing.
+   * @param iSheet
+   *   Sheet to remove
+   * @param iSheetBefore
+   *   The sheet XXXXXXXXXXXXXXXX
+   * @param iSheetBefore
+   *   The sheet XXXXXXXXXXXXXXXX
+   */
+   virtual HRESULT MoveSheet (const CATIDftSheet *iSheet,
+                              const CATIDftSheet *iSheetBefore = 0,
+                              const CATIDftSheet *iSheetAfter  = 0) = 0;
+
+
+   /**
+   * Gets the active view in the drawing.
+   * &lt;BR&gt;The active view is the view in edition.
+   * @param oView
+   *   The active view in the drawing.
+   */
+   virtual HRESULT GetActiveView(CATIDftView **oView) const = 0;
+
+   /**
+   * Gets the active sheet in the drawing.
+   * &lt;BR&gt;The active sheet is the working sheet.
+   * @param oSheet
+   *   The active sheet in the drawing.
+   */
+   virtual HRESULT GetActiveSheet(CATIDftSheet **oView) const = 0;
+
+   /**
+   * Returns the sheets referenced by the drawing.
+   * @param oLstResult
+   *   Founded sheets are added to the list
+   */
+   virtual HRESULT GetSheets(CATIUnknownList **oLstResult) const = 0;
+
+   /**
+   * Description : returns the views referenced by the drawing.
+   * @param oLstResult : 
+   *   Founded views are added to the list
+   */
+   virtual HRESULT GetViews(CATIUnknownList **oLstResult) const = 0;
+
+};
+CATDeclareHandler(CATIDftDrawing, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftDottingPattern.html">← 上一页: CATIDftDottingPattern.h</a></div>
+        <div><a href="CATIDftDrawingFormats.html">下一页: CATIDftDrawingFormats.h →</a></div>
+    </div>
+</body>
+</html>

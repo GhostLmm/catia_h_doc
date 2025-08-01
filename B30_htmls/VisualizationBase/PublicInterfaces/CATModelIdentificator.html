@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATModelIdentificator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATModelIdentificator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATModelForRep.html">← 上一页: CATModelForRep.h</a></div>
+        <div><a href="CATMotionEvent.html">下一页: CATMotionEvent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATModelIdentificator_H
+#define CATModelIdentificator_H
+//Ia64+
+#include &quot;CATDataType.h&quot;
+//Ia64-
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+/**
+  * Class to create a model identifier.
+  * &lt;b&gt;Role&lt;/b&gt;:
+  * This class is dedicated to be the only link between the graphical representations and 
+  * their corresponding objects. Refer to @href CATIVisu to understand how one object can be visualized.
+  * This identifier is designed to make graphical representations (that is the &quot;visualization world&quot;) independent
+  * from their object  (that is the &quot;applicative world&quot;) and make the link consistent. 
+  * &lt;p&gt;
+  * The identifier can be seen either as an integer, or as a pointer to one object, or as a generic pointer .
+  * &lt;p&gt;
+  * Such an identifier is set on each graphical representation built from the @href CATIVisu#BuildRep() method .
+  * The enclosed identifier refers to the object that implements a 
+  * specialized visualization interface so as to find out the &quot;model&quot; associated with the graphical representation.
+  * 
+  *
+  * @see CATIVisu
+  */
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+
+class ExportedByCATViz CATModelIdentificator : public CATBaseUnknown 
+{
+  /** @nodoc */
+  CATDeclareClass;
+
+  /** @nodoc */
+  friend class CATMarshallableModelIdentificator;
+
+  public:
+
+    /**
+      * Default constructor.
+      */
+       CATModelIdentificator();
+
+     /**
+       * Constructs an identifier from an integer.
+       * @param iV
+       *    the number.
+       */
+//Ia64C         CATModelIdentificator(int iV );
+//Ia64+
+        CATModelIdentificator(CATINTPTR iV );
+//Ia64-
+
+     /**
+       * Constructs an identifier from a pointer.
+       * @param iP
+       *    the pointer.
+       */
+       CATModelIdentificator(void *iP);
+
+    /**
+      * Constructs an identifier from a pointer to one object.
+      * @param iObj
+      *    the pointer to one object.
+      */
+      CATModelIdentificator(CATBaseUnknown *iObj);
+
+    /**
+      * Copy constructor.
+      * @param iIdentifier
+      *   the model identifier to clone.
+      */
+      CATModelIdentificator(const CATModelIdentificator &amp;iIdentifier);
+
+
+  ~CATModelIdentificator();
+   
+   /**
+     * Returns the identifier as a number.
+     */
+//Ia64C      int  GetIntId( ) const ;
+//Ia64+
+     CATINTPTR  GetIntId( ) const ;
+//Ia64-
+
+
+   /**
+     * Returns the identifier as a pointer.
+     */
+     void * GetVoidId() const;
+
+
+   /**
+     * Returns the identifier as a pointer to one object.
+     */
+    CATBaseUnknown * GetId() const;
+
+   
+
+   /**
+     * Sets the identifier from a number.
+     * @param iId
+     * the number.
+     */
+//Ia64C      void SetModelId(int iId);
+//Ia64+
+     void SetModelId(CATINTPTR iId);
+//Ia64-
+
+   /**
+     * Sets the identifier from a pointer.
+     * @param iId
+     * the pointer.
+     */
+    void SetModelId(void *iId);
+  
+   /**
+     * Sets the identifier from a pointer to one object.
+     * @param iId
+     * the pointer to one object.
+     */
+     void SetModelId(CATBaseUnknown *iId); 
+
+  protected:
+
+   /** @nodoc */ 
+   union 
+  {
+//Ia64C      int val;
+//Ia64+
+     CATINTPTR val;
+//Ia64-
+     void *pval;
+     CATBaseUnknown *object;
+   } _Identificator;
+
+};
+#endif 
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATModelForRep.html">← 上一页: CATModelForRep.h</a></div>
+        <div><a href="CATMotionEvent.html">下一页: CATMotionEvent.h →</a></div>
+    </div>
+</body>
+</html>

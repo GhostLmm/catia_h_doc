@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductStructure/PublicInterfaces/CATIPrdObjectPublisher.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ProductStructure/PublicInterfaces/CATIPrdObjectPublisher.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMovable.html">← 上一页: CATIMovable.h</a></div>
+        <div><a href="CATIPrdProperties.html">下一页: CATIPrdProperties.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPrdObjectPublisher_H
+#define CATIPrdObjectPublisher_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//===================================================================
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;AS0STARTUP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATUnicodeString;
+class CATISpecObject;
+class CATListValCATUnicodeString;
+class CATListValCATBaseUnknown_var;
+
+extern ExportedByAS0STARTUP IID IID_CATIPrdObjectPublisher ;
+
+//------------------------------------------------------------------
+
+/**	
+* Interface to create and manage publications on a Product.
+*/
+
+class ExportedByAS0STARTUP CATIPrdObjectPublisher: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+	  /** Creates a new publication.
+	    * @param iName
+		*        The name of the new publication.
+		* @param iObject
+		*        The object being published. If none, the publication is not valuated.
+		* @return
+		*        1: The publication is OK.&lt;br&gt;
+		*        0: The publication already exists.
+	    */
+	  virtual int  Publish   (  const CATUnicodeString&amp; iName 
+		                      , const CATBaseUnknown*   iObject = NULL ) = 0;
+
+	  /** Deletes an existing publication.
+	    * @param iName
+		*        The name of the publication to be deleted.
+		* @return
+		*        1: The publication is deleted.&lt;br&gt;
+		*        0: The publication name is not found.
+	    */
+	  virtual int  Unpublish ( const CATUnicodeString&amp; iName ) = 0;
+
+      /** Retrieves the final publication object.
+	    * @param iName
+		*        The name of the publication referring to the final object
+		*        that is to be retrieved.
+		* @return
+		*        If NULL: The publication is not valuated.&lt;br&gt;
+		*        Otherwise: The final publication object.
+		*/ 
+	  virtual CATBaseUnknown*  GetFinalObject(  const CATUnicodeString&amp; iName ) = 0;
+
+	  /** Retrieves the direct publication object.
+	    * @param iName
+		*        The name of the publication referring to the direct object
+		*        that is to be retrieved.
+        * @param oObjectOrSubPublisher
+		*        If Return = 1, this is the direct publication object. Otherwise, if
+		*        Return = 2, this is the sub-publisher, a pointer to another publication.
+		* @param oSubPublicationName
+		*        If Return = 2, this is the name of the publication pointed to by the
+		*        sub-publisher.
+		* @return
+		*        0: The publication is not valuated.&lt;br&gt;
+		*        1: The direct publication object is returned.&lt;br&gt;
+		*        2: The direct publication object is a pointer to another publication. 
+		*/   
+	  virtual int GetDirectObject (  const CATUnicodeString&amp; iName
+		                           , CATBaseUnknown   *&amp;  oObjectOrSubPublisher
+								   , CATUnicodeString  &amp;  oSubPublicationName) = 0;
+
+	  /** Valuates a publication directly with the object being published.
+	    * @param iName
+		*        The name of the publication to be valuated.
+        * @param iObject
+		*        The publication object.
+		* @return
+		*        0: The publication name is not found.&lt;br&gt;
+		*        1: The publication is valuated OK.
+		*/ 
+	  virtual int  Valuate (  const CATUnicodeString&amp; iName
+		                    , const CATBaseUnknown * iObject) = 0;
+
+	  /** Valuates a publication with another publication object.
+	    * @param iName
+		*        The name of the publication to be valuated.
+        * @param iSubPublisher
+		*        The publication object referencing the object being published.
+		* @param iSubName
+		*        The name of the referencing publication.
+		* @return
+		*        0: The publication name is not found.&lt;br&gt;
+		*        1: The publication is valuated OK.
+		*/ 
+	  virtual int  Valuate (  const CATUnicodeString      &amp; iName
+		                    , const CATIPrdObjectPublisher* iSubPublisher
+							, const CATUnicodeString      &amp; iSubName ) = 0;
+
+      /** Deletes a publication&#x27;s valuation.
+	    * @param iName
+		*        The name of the publication whose valuation is to be deleted.
+        */ 
+	  virtual int  Unvaluate ( const CATUnicodeString&amp; iName ) = 0;
+
+	  /** Retrieves the list of an object&#x27;s publications.
+	    * @param iObject
+		*        The object whose publications are to be retrieved.
+        * @param oListOfNames
+		*        The list of publications for the given object.
+		* @return
+		*        0: The object is not published.&lt;br&gt;
+		*        1: The object is published and a list of names has been retrieved.
+		*/ 
+	  virtual int  IsPublished(  const CATBaseUnknown* iObject
+		                       , CATListValCATUnicodeString*&amp; oListOfNames ) = 0;
+
+      /** Retrieves the list of an object&#x27;s publications.
+	    * @param iSubPublisher
+		*        The sub-publication object referencing the object whose publications
+		*        are to be retrieved.
+		* @param iName
+		*        The name of the publication of the sub-publication object referencing
+		*        the object whose publications are to be retrieved.
+        * @param oListOfNames
+		*        The list of publications for the referenced object.
+		* @return
+		*        0: The object is not published.&lt;br&gt;
+		*        1: The object is published and a list of names has been retrieved.
+		*/ 
+	  virtual int  IsPublished(  const CATIPrdObjectPublisher* iSubPublisher
+		                       , const CATUnicodeString&amp; iName
+		                       , CATListValCATUnicodeString*&amp; oListOfNames ) = 0;
+
+	  /** Retrieves the list of the publication objects referencing a given publication object.
+	    * @param iObject
+		*        The object whose referencing publications (sub-publications) are to be retrieved.
+        * @param oSubPublishers
+		*        The list of sub-publishers of the given publication object.
+		* @param oSubPublicationNames
+		*        The list of the sub-publication names.
+		* @return
+		*        0: The object is not published.&lt;br&gt;
+		*        1: The object is published and a list of names has been retrieved.
+		*/ 
+      virtual int  IsFinallyPublished ( const CATBaseUnknown* iObject
+                                       ,CATListValCATBaseUnknown_var *&amp; oSubPublishers
+                                       ,CATListValCATUnicodeString   *&amp; oSubPublicationNames ) = 0;
+      
+	  /** Retrieves the list of the publication objects referencing a given publication object.
+	    * @param iSubPublisher
+		*        The sub-publisher whose publications are to be retrieved.
+        * @param iName
+		*        The name of the sub-publication.  
+        * @param oSubPublishers
+		*        The list of sub-publishers of the given publication object.
+		* @param oSubPublicationNames
+		*        The list of the sub-publication names.
+		* @return
+		*        0: The object is not published.&lt;br&gt;
+		*        1: The object is published and a list of names has been retrieved.
+		*/ 
+	  virtual int  IsFinallyPublished ( CATIPrdObjectPublisher* iSubPublisher
+                                       ,const CATUnicodeString&amp;       iName
+                                       ,CATListValCATBaseUnknown_var *&amp; oSubPublishers
+                                       ,CATListValCATUnicodeString   *&amp; oSubPublicationNames ) = 0;
+	  
+      /** Retrieves the list of the publications of the current product.
+	    * @param oListOfPublications
+		*        The list of publication names of the current product.
+        * @return
+		*        =0: No publications found.&lt;br&gt;
+		*        &gt;1: The number of publications found.
+		*/ 
+	  virtual int  ListPublications ( CATListValCATUnicodeString*&amp; oListOfPublications ) = 0;
+
+	  /** @nodoc
+	    * Retrieves the object publication in the container of publications
+		* to make a CATIPrdPublication index give its rank.
+	    */
+	  virtual void  FindPublication (const CATUnicodeString&amp; iName
+					,CATISpecObject*&amp; oResult
+					,int&amp; oIndex  ) = 0;
+
+      /** @nodoc */
+	  virtual void  MakeInverseLink (CATISpecObject* iPointing
+									 ,const CATUnicodeString&amp; iPubName,int depth) = 0;
+
+      /** @nodoc */
+      virtual void  RemoveInverseLink (CATISpecObject* iPointing
+									   ,const CATUnicodeString&amp; iPubName) = 0;
+	  /** @nodoc 
+	    * @return
+		*      1: Publication OK
+		*      0: Publication already exists
+	    */
+	  virtual int  Rename   (  CATUnicodeString&amp; OldName 
+		                     , CATUnicodeString&amp; NewName) = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIPrdObjectPublisher, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMovable.html">← 上一页: CATIMovable.h</a></div>
+        <div><a href="CATIPrdProperties.html">下一页: CATIPrdProperties.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATRscInterfaces/PublicInterfaces/CATIRenderingLight.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATRscInterfaces/PublicInterfaces/CATIRenderingLight.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRenderingEnvironmentWall.html">← 上一页: CATIRenderingEnvironmentWall.h</a></div>
+        <div><a href="CATIRenderingLightFactory.html">下一页: CATIRenderingLightFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIRenderingLight_h
+#define CATIRenderingLight_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATRscItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATRenderingEnum.h&quot;
+
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATRscItfCPP IID IID_CATIRenderingLight;
+#else
+extern &quot;C&quot; const IID IID_CATIRenderingLight;
+#endif
+
+/** 
+  * Interface to manage light objects.
+  * @see CATIRenderingLightFactory
+  */
+
+
+class ExportedByCATRscItfCPP CATIRenderingLight : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ *  Returns the name of a light object.
+ */
+    virtual CATUnicodeString GetName() const = 0;
+
+/** 
+ *  Set the name of a light object
+ */
+    virtual HRESULT SetName(const CATUnicodeString &amp;iName) = 0;
+
+/**
+ *  Returns the type of a light object.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;SpotLight for a spot light.
+ * &lt;br&gt;PointLight for a point light.
+ * &lt;br&gt;DirectionalLight for a directionnal light.
+ * &lt;br&gt;RectangleAreaLight for a rectangle area light.
+ * &lt;br&gt;DiskAreaLight for a disk area light.
+ * &lt;br&gt;SphereAreaLight for a spherical area light.
+ * &lt;br&gt;CylindricAreaLight for a cylindrical area light.
+ */
+    virtual CATRenderingLightType GetType() const = 0;
+
+/**
+ *  Sets the type of a light object.
+ * @param iType
+ *   The light type 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;SpotLight for a spot light.
+ * &lt;br&gt;PointLight for a point light.
+ * &lt;br&gt;DirectionalLight for a directionnal light.
+ * &lt;br&gt;RectangleAreaLight for a rectangle area light.
+ * &lt;br&gt;DiskAreaLight for a disk area light.
+ * &lt;br&gt;SphereAreaLight for a spherical area light.
+ * &lt;br&gt;CylindricAreaLight for a cylindrical area light.
+ */
+    virtual HRESULT SetType(const CATRenderingLightType iType) const = 0;
+/**
+ *  Returns the mode of a light object.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;1: Light is linked to the viewpoint.
+ * &lt;br&gt;2: Light is linked to the model.
+ */
+    virtual int GetMode() const = 0;
+
+/**
+ *  Sets the mode of a light object.
+ * @param iMode
+ *   The light mode 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;1: Light is linked to the viewpoint.
+ * &lt;br&gt;2: Light is linked to the model.
+ */
+    virtual HRESULT SetMode(const int iMode) const = 0;
+
+/**
+ *  Returns the status of a light object.
+ * @return
+ *   An boolean value. 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;TRUE if light is active.
+ * &lt;br&gt;FALSE if light is desactivated.
+ */
+    virtual CATBoolean GetStatus() const = 0;
+
+/** 
+ *  Set the status of a light object
+ * @param iStatus
+ *   The light status 
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;TRUE if light is active.
+ * &lt;br&gt;FALSE if light is desactivated.
+ */
+    virtual HRESULT SetStatus(const CATBoolean iStatus) = 0;
+
+/**
+ *  Returns the origin coordinates of a light object.
+ * @return
+ *   Double values. 
+ */
+    virtual void GetOrigin(double &amp;oXcoordinate, double &amp;oYcoordinate, double &amp;oZcoordinate) const = 0;
+
+/**
+ *  Sets the origin coordinates of a light object.
+ * @param iXcoordinate
+ *   X coordinate of the origin point 
+ * @param iYcoordinate
+ *   Y coordinate of the origin point 
+ * @param iZcoordinate
+ *   Z coordinate of the origin point 
+ */
+    virtual HRESULT SetOrigin(const double iXcoordinate, const double iYcoordinate, const double iZcoordinate) const = 0;
+
+/**
+ *  Returns the target coordinates of a light object.
+ * @return
+ *   Double values. 
+ */
+    virtual void GetTarget(double &amp;oXcoordinate, double &amp;oYcoordinate, double &amp;oZcoordinate) const = 0;
+
+/**
+ *  Sets the target coordinates of a light object.
+ * @param iXcoordinate
+ *   X coordinate of the target point 
+ * @param iYcoordinate
+ *   Y coordinate of the target point 
+ * @param iZcoordinate
+ *   Z coordinate of the target point 
+ * N.B. The target coordinates are useless for point lights or spherical area lights.
+ */
+    virtual HRESULT SetTarget(const double iXcoordinate, const double iYcoordinate, const double iZcoordinate) const = 0;
+
+/**
+ *  Returns the (r,g,b) color components of a light object.
+ * @return
+ *   Integer values. Each component is a value between 0 and 255. 
+ */
+    virtual void GetColor(int &amp;oRcomponent, int &amp;oGcomponent, int &amp;oBcomponent) const = 0;
+
+/**
+ *  Sets the (r,g,b) color components of a light object.
+ * @param iRcomponent
+ *   Red component of the color (value between 0 and 255)
+ * @param iGcomponent
+ *   Green component of the color (value between 0 and 255)
+ * @param iBcomponent
+ *   Blue component of the color (value between 0 and 255)
+ */
+    virtual HRESULT SetColor(const int iRcomponent, const int iGcomponent, const int iBcomponent) const = 0;
+
+/**
+ *  Returns the intensity parameters of a light object.
+ * @return
+ *   Double values
+ *   oIntensity: The intensity of the light (value between 0 and 4)
+ *   oAmbient  : Ambient coefficient of the light (value between 0 and 1)
+ *   oDiffuse  : Diffuse coefficient of the light (value between 0 and 1)
+ *   oSpecular : Specular coefficient of the light (value between 0 and 1)
+ *   
+ */
+    virtual void GetIntensity(double &amp;oIntensity, double &amp;oAmbient, double &amp;oDiffuse, double &amp;oSpecular) const = 0;
+
+/**
+ *  Sets the intensity parameters of a light object.
+ * @param iIntensity
+ *   The intensity of the light (value between 0 and 4)
+ * @param iAmbient
+ *   Ambient coefficient of the light (value between 0 and 1)
+ * @param iDiffuse
+ *   Diffuse coefficient of the light (value between 0 and 1)
+ * @param iSpecular
+ *   Specular coefficient of the light (value between 0 and 1)
+ */
+    virtual HRESULT SetIntensity(const double iIntensity, const double iAmbient, const double iDiffuse, const double iSpecular) const = 0;
+
+/**
+ *  Returns the angle value (in degrees) of a spot light object.
+ * @return
+ *   Double value
+ *   
+ */
+    virtual double GetAngle() const = 0;
+
+/**
+ *  Sets the angle value (in degrees) of a spot light object.
+ * @param iAngle
+ *   The angle of the spot light (value between 0 and 180)
+ */
+    virtual HRESULT SetAngle(const double iAngle) const = 0;
+
+/**
+ *  Returns the attenuation parameters of a light object.
+ * @return
+ *    oType       : The light falloff type
+ *           &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *                 &lt;br&gt;0 for no attenuation (light energy does not fall off with distance)
+ *                 &lt;br&gt;1 for a linear falloff
+ *                 &lt;br&gt;2 for a exponential falloff (physically correct)
+ *    oEndDistance: The light maximum distance of illumination (Objects farther than this distance are not affected by the light)
+ *    oStartRatio : It represents the fraction of the end distance where the light intensity starts to attenuate.
+ *    oAngleRatio : It represents the fraction of the light angle where the illumination starts to attenuate.
+ */
+    virtual void GetAttenuation(int &amp;oType, double &amp;oEndDistance, double &amp;oStartRatio, double &amp;oAngleRatio) const = 0;
+
+/**
+ *  Sets the attenuation parameters of a light object.
+ * @param iType
+ *   The light falloff type
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;0 for no attenuation (light energy does not fall off with distance)
+ *   &lt;br&gt;1 for a linear falloff
+ *   &lt;br&gt;2 for a exponential falloff (physically correct)
+ * @param iEndDistance
+ *   The light maximum distance of illumination (Objects farther than this distance are not affected by the light)
+ * @param iStartRatio
+ *   The fraction of the end distance where the light intensity starts to attenuate (value between 0.. and 1.)
+ * @param iAngleRatio
+ *   The fraction of the light angle where the illumination starts to attenuate (value between 0. and 1.)
+ */
+    virtual HRESULT SetAttenuation(const int iType, const double iEndDistance, const double iStartRatio, const double iAngleRatio) const = 0;
+
+/**
+ *  Returns a size value of an area light object.
+ * @param iSizeType
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;Length for a rectangle area light.
+ * &lt;br&gt;Width for rectangle area light.
+ * &lt;br&gt;Radius for disk, spherical or cylindrical area lights.
+ * &lt;br&gt;Height for a cylindrical area light.
+ * @return
+ *    oSize: The size value.
+ */
+    virtual void GetAreaSize(CATRenderingSize iSizeType, double &amp;oSize) const = 0;
+
+/**
+ *  Sets a size value of an area light object.
+ * @param iSizeType
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;br&gt;Length for a rectangle area light.
+ * &lt;br&gt;Width for rectangle area light.
+ * &lt;br&gt;Radius for disk, spherical or cylindrical area lights.
+ * &lt;br&gt;Height for a cylindrical area light.
+ * @param iSize
+ *   The size value.
+ */
+    virtual HRESULT SetAreaSize(CATRenderingSize iSizeType, const double iSize) const = 0;
+
+/**
+ *  Returns the parameters of an area light object.
+ * @return
+ *    oUSamples: The number of samples taken in the U direction.
+ *    oVSamples: The number of samples taken in the V direction.
+ *    oShowArea: The light area visibility status for rendering.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  light area is rendered
+ *          &lt;br&gt;FALSE light area is not rendered
+ */
+    virtual void GetAreaParameters(int &amp;oUSamples, int &amp;oVSamples, CATBoolean &amp;oShowArea) const = 0;
+
+/**
+ *  Sets the indirect illumination parameters of a light object.
+ * @param iUSamples
+ *   The number of samples taken in the U direction (value between 1 and 40).
+ * @param iVSamples
+ *   The number of samples taken in the V direction (value between 1 and 40).
+ * @param iShowArea
+ *   The light area visibility status for rendering.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  light area is rendered
+ *          &lt;br&gt;FALSE light area is not rendered
+ */
+    virtual HRESULT SetAreaParameters(const int iUSamples, const int iVSamples, const CATBoolean iShowArea) const = 0;
+
+/**
+ *  Returns the shadows status of a light object.
+ * @return
+ *    oRayTracedStatus: The shadow status for rendering calculation.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  the light casts shadows
+ *          &lt;br&gt;FALSE the light does not cast shadows
+ *    oRealTimeStatus: The shadow status for real time visualization.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  shadows are displayed
+ *          &lt;br&gt;FALSE no shadows are displayed
+ */
+    virtual void GetShadowsStatus(CATBoolean &amp;oRayTracedStatus, CATBoolean &amp;oRealTimeStatus) const = 0;
+
+/**
+ *  Sets the shadows status of a light object.
+ * @param iRayTracedStatus
+ *   The shadow status for rendering calculation.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  the light casts shadows
+ *          &lt;br&gt;FALSE the light does not cast shadows
+ * @param iRealTimeStatus
+ *   The shadow status for real time visualization.
+ *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *          &lt;br&gt;TRUE  shadows are displayed
+ *          &lt;br&gt;FALSE no shadows are displayed
+ */
+    virtual HRESULT SetShadowsStatus(const CATBoolean iRayTracedStatus, const CATBoolean iRealTimeStatus) const = 0;
+
+/**
+ *  Returns the realtime shadow parameters of a light object.
+ * @return
+ *    oSmoothing: Smoothing of the shadow limits (value between 0 and 10)
+ *    oRcomponent: red component of the shadow color (value between 0 and 255)
+ *    oGcomponent: green component of the shadow color (value between 0 and 255)
+ *    oBcomponent: blue component of the shadow color (value between 0 and 255)
+ *    oTransparency: Transparency coefficient of the shadow color (value between 0 and 255)
+ */
+    virtual void GetShadowsParameters(int &amp;oSmoothing, int &amp;oRComponent, int &amp;oGComponent, int &amp;oBComponent, int &amp;oTransparency) const = 0;
+
+/**
+ *  Sets the shadows status of a light object.
+ * @param iSmoothing
+ *   The smoothing of the shadow limits (value between 0 and 10)
+ * @param oRComponent
+ *   The red component of the shadow color (value between 0 and 255)  
+ * @param oGComponent
+ *   The green component of the shadow color (value between 0 and 255)  
+ * @param oBComponent
+ *   The blue component of the shadow color (value between 0 and 255)  
+ * @param Transparency
+ *   The transparency coefficient of the shadow color (value between 0 and 255)  
+ */
+    virtual HRESULT SetShadowsParameters(const int iSmoothing, const int oRComponent, const int oGComponent, const int oBComponent, const int oTransparency) const = 0;
+
+/**
+ *  Returns the indirect illumination parameters of a light object.
+ * @return
+ *    oStatus                    : The indirect illumination status for the light
+ *                          &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *                                   &lt;br&gt;TRUE: The indirect illumination is activated
+ *                                   &lt;br&gt;FALSE: The indirect illumination status is desactivated
+ *    oIntensity                 : The intensity of the indirect illumination
+ *    oGlobalIlluminationPhotonNb: The number of photons for global illumination
+ *    oCausticPhotonNb           : The number of photons for caustics
+ */
+    virtual void GetIndirectIllumination(CATBoolean &amp;oStatus, double &amp;oIntensity, int &amp;oGlobalIlluminationPhotonNb, int &amp;oCausticPhotonNb) const = 0;
+
+/**
+ *  Sets the indirect illumination parameters of a light object.
+ * @param iStatus
+ *   The indirect illumination status for the light
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;TRUE if indirect illumination is activated
+ *   &lt;br&gt;FALSE if indirect illumination status is desactivated
+ * @param iIntensity
+ *   The intensity of indirect illumination (value between 0 and 100.)
+ * @param oGlobalIlluminationPhotonNb
+ *   The number of photons for global illumination (value between 10000. and 1000000.)
+ * @param iCausticPhotonNb
+ *   The number of photons for caustics (value between 10000. and 1000000.)
+ */
+    virtual HRESULT SetIndirectIllumination(const CATBoolean iStatus, const double iIntensity, const int iGlobalIlluminationPhotonNb, const int iCausticPhotonNb) const = 0;
+
+};
+
+CATDeclareHandler(CATIRenderingLight, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRenderingEnvironmentWall.html">← 上一页: CATIRenderingEnvironmentWall.h</a></div>
+        <div><a href="CATIRenderingLightFactory.html">下一页: CATIRenderingLightFactory.h →</a></div>
+    </div>
+</body>
+</html>

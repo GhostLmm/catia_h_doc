@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAApplicationFrame/PublicInterfaces/CATFrmGraphAnd3DWindow.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAApplicationFrame/PublicInterfaces/CATFrmGraphAnd3DWindow.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATFrmGraphAnd2DWindow.html">← 上一页: CATFrmGraphAnd2DWindow.h</a></div>
+        <div><a href="CATFrmNavigGraphicWindow.html">下一页: CATFrmNavigGraphicWindow.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATFrmGraphAnd3DWindow_H_
+#define CATFrmGraphAnd3DWindow_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;CD0STWIN.h&quot;
+#include &quot;CATFrmNavigGraphicWindow.h&quot;
+#include &quot;CATBaseUnknown_var.h&quot;
+#include &quot;list.h&quot;
+#include &quot;CATString.h&quot;
+
+class  CATFrmEditor;
+class  CATViewer;
+class  CATNavigation3DViewer;
+class  CATFrmWindow;
+class  CATVisManager;
+class  CATPathElement;
+
+/**
+* Class providing a standard window with a graph and a 3D viewer.
+* &lt;b&gt;Role&lt;/b&gt;: This standard window offers a graph and a 3D geometric viewer.
+* It supplies standard functionnalities on these viewers.
+* Instantiate this inside your editor&#x27;s @href CATIDocumentEdit#CreateDefaultWindow method
+*/
+class ExportedByCD0STWIN CATFrmGraphAnd3DWindow: public CATFrmNavigGraphicWindow
+{
+   public:
+   /**
+   * Constructs a CATFrmGraphAnd3DWindow.
+   * @param iWindowTag 
+   *   The window name.
+   *   This name is the base of displayed window title.
+   * @param iModel 
+   *   The root object of the model.
+   *   If this object implements the @href CATINavigateObject then
+   *   a specification graph of the model can be constructed automatically.
+   * @param iEditor 
+   *   The editor of the document.
+   *   By default there is no editor.
+   * @param iGraphDuplicate 
+   *   The parameter of the graph navigator indicates if a node in the 
+   *   graph will be duplicated when it is instanciated more than one time.
+   *   &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+   *   &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt; the nodes are not duplicated (it&#x27;s the default value)&lt;/li&gt;
+   *   &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt; otherwise&lt;/li&gt;.
+   * @param iLodMode 
+   *   The level of detail mode.
+   *   The default value is set to 0 (LOD mode is set to off).
+   * @param iNavigatorDepth 
+   *   The parameter of the graph navigator indicates the maximum number of
+   *   visible levels in the graph.
+   *   This parameter can be set to any positive integer value.
+   *   The default value is set to -1 (no limit for the visible graph level).
+      */
+      CATFrmGraphAnd3DWindow(const CATString        &amp; iWindowTag,
+                             CATBaseUnknown_var       iModel,
+                             CATFrmEditor           * iEditor = 0,
+                             int                      iGraphDuplicate = 0,
+                             int                      iLodMode = 0,
+                             int                      iNavigatorDepth = -1);
+      virtual ~CATFrmGraphAnd3DWindow();
+      
+      /**
+      * Deletes the window.
+      * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Calls this method in place of the destructor.
+      */
+      virtual void  DeleteWindow();
+      
+      
+      /**
+      * Creates a clone window.
+      * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method creates a new instance of this class. It&#x27;s called
+      * to create a new window of the same document.
+      */
+      virtual CATFrmWindow* DuplicateWindow ();
+      
+      /**
+      * Returns the 3D Navigation viewer. 
+      */
+      virtual CATViewer   * GetGraphicViewer ();
+      
+   protected:
+      int _GraphDuplicate;
+      int _LodMod;
+      int _NavigatorDepth;
+      
+      virtual void  InitDuplicatedWindow(CATFrmWindow * ipDupWindow);
+
+   private:
+      CATNavigation3DViewer     *_3DViewer;
+      CATBaseUnknown_var         _Part;
+      static int                 duplicate;
+      
+      CATVisManager         *_visuManager;
+      CATPathElement        *_path;
+      list&lt;IID&gt;              _listIID ;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATFrmGraphAnd2DWindow.html">← 上一页: CATFrmGraphAnd2DWindow.h</a></div>
+        <div><a href="CATFrmNavigGraphicWindow.html">下一页: CATFrmNavigGraphicWindow.h →</a></div>
+    </div>
+</body>
+</html>

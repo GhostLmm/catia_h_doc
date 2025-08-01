@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATICGMObjectsPersistency.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATICGMObjectsPersistency.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMObjectHashTable.html">← 上一页: CATICGMObjectHashTable.h</a></div>
+        <div><a href="CATICGMOperator.html">下一页: CATICGMOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMObjectsPersistency_h
+#define CATICGMObjectsPersistency_h
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATListOfCATICGMObjects.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;ExportedByGeometricObjects.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATCGMStreamVersion.h&quot;
+ 
+class CATICGMObject;
+class CATCGMStream;
+class CATGeoFactory;
+
+enum CATCGMObjectsUnserialize
+{
+  CatCGMObjectsUnserialize_Full,
+  CatCGMObjectsUnserialize_Partial,
+  CatCGMObjectsUnserialize_Complementary
+};
+
+
+#if defined ( CATIACGMV5R22 ) 
+// @nodoc  enum does not work for forward declaration
+#define CATCGMObjectsVersion int 
+
+enum CATICGMObjectsSaveDiagnosis
+{
+  NoError,
+  UnknownError,
+  NotEnoughMemory,
+  IncompatibleData
+};
+#endif
+
+
+/**
+ * Symetric Save/Load to manage a set of geometrical objects belonging to the same CATGeoFactory.
+ */
+
+/**
+ * Saves list of CGM Objects belonging to the same geofactory into a CATCGMStream .
+ */
+class ExportedByGeometricObjects CATICGMObjectsSave
+{
+public :
+  /**
+  * Constructs an CATICGMObjectsSave operator.
+  * @param ioStreamArea
+  *   The stream on which the factory is saved.
+  */
+  CATICGMObjectsSave(CATCGMStream &amp; ioStreamArea);
+   /** 
+   * Destructor
+   */
+  ~CATICGMObjectsSave();
+
+#if defined ( CATIACGMV5R22 ) 
+  /** 
+   * @nodoc
+   *  To be used only as part of specific BackSave process
+   */
+  void SetTargetVersion(CATCGMStreamVersion &amp; iTargetVersion);
+
+  /** 
+   * @nodoc
+   *  Get Short enumeration of some usefull failures occuring during save attempt 
+   */
+  CATICGMObjectsSaveDiagnosis GetDiagnosis();
+
+#endif
+
+
+/**
+ * Run Save.
+ * @param iFullFederatorObjects
+ *   Set of objects to Save. 
+ *   Each Object must be a non null value and all objects must be contained in the same CATGeoFactory. 
+ * @param iLightSubsetObjects
+ *   Light subset of objects that may be loaded partially afterwards. 
+ *   List may be empty. 
+ *   Each Object must be a non null value and all objects must be contained in the same CATGeoFactory. 
+ *   Each Object must be equals or contained in previous list of &lt;tt&gt;iFullFederatorObjects&lt;/tt&gt;. 
+ * @return
+ * The result of the operation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt; if operation succeed.
+ * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt; if operation fails.
+ *&lt;/dl&gt;
+ */
+  HRESULT   Save(const CATLISTP(CATICGMObject) &amp; iFullFederatorObjects,
+                 const CATLISTP(CATICGMObject) * iLightSubsetObjects = NULL);
+
+private :
+  CATCGMStream * _StreamArea;
+#if defined ( CATIACGMV5R22 ) 
+  CATCGMStreamVersion _TargetVersion;
+  CATICGMObjectsSaveDiagnosis _Diagnosis;
+#endif
+
+  //------------------------------------------------------------------------
+  // Forbidden (Declared, Not Defined) : Constructor by copy  et   operator =
+  //------------------------------------------------------------------------
+  CATICGMObjectsSave(const CATICGMObjectsSave &amp;iCopy);
+  CATICGMObjectsSave&amp; operator=(const CATICGMObjectsSave &amp;iCopy);
+};
+
+
+/**  
+ * Load list of CGM Objects belonging to the same geofactory from a CATCGMStream .
+ */
+class ExportedByGeometricObjects CATICGMObjectsLoad
+{
+public :
+  /**
+  * Constructs an CATICGMObjectsLoad operator.
+  * @param iStreamArea
+ *   The stream from which the factory is read.
+  */
+  CATICGMObjectsLoad(CATCGMStream &amp; iStreamArea);
+   /** 
+   * Destructor
+   */
+  ~CATICGMObjectsLoad();
+
+/**
+ * Run Load.
+ * @param ioCATGeoFactory
+ *   The pointer to the geometrical factory to be loaded.
+ *   it must be defined as non null input if &lt;tt&gt;iHowToLoad&lt;/tt&gt; is set to &lt;tt&gt;CatCGMObjectsUnserialize_Complementary&lt;/tt&gt;.
+ * @param ioFullFederatorObjects
+ *   The set to the loaded federating geometrical objects.
+ *   it is not defined if &lt;tt&gt;iHowToLoad&lt;/tt&gt; is set to &lt;tt&gt;CatCGMObjectsUnserialize_Complementary&lt;/tt&gt;.
+ * @param iHowToLoad
+ *    The pointer to the geometrical factory to be loaded.
+ * @return
+ * The result of the operation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt; if operation succeed.
+ * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt; if operation fails.
+ *&lt;/dl&gt;
+ */
+  HRESULT   Load(CATGeoFactory           * &amp; ioCATGeoFactory,
+                 CATLISTP(CATICGMObject)   &amp; ioFullFederatorObjects,
+                 CATCGMObjectsUnserialize    iHowToLoad = CatCGMObjectsUnserialize_Full);
+
+private :
+  CATCGMStream * _StreamArea;
+  //------------------------------------------------------------------------
+  // Forbidden (Declared, Not Defined) : Constructor by copy  et   operator =
+  //------------------------------------------------------------------------
+  CATICGMObjectsLoad(const CATICGMObjectsLoad &amp;iCopy);
+  CATICGMObjectsLoad&amp; operator=(const CATICGMObjectsLoad &amp;iCopy);
+};
+
+  
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMObjectHashTable.html">← 上一页: CATICGMObjectHashTable.h</a></div>
+        <div><a href="CATICGMOperator.html">下一页: CATICGMOperator.h →</a></div>
+    </div>
+</body>
+</html>

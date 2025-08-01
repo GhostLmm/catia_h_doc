@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseLawDistProj.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseLawDistProj.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseInverse.html">← 上一页: CATIGSMUseInverse.h</a></div>
+        <div><a href="CATIGSMUseLine.html">下一页: CATIGSMUseLine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUseLawDistProj_H
+#define CATIGSMUseLawDistProj_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+class CATICkeParm_var;
+class CATUnicodeString;
+class CATMathVector;
+// class CATIMmiMechanicalFeature_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID IID_CATIGSMUseLawDistProj ;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseLawDistProj ;
+#endif
+
+/**
+  * Interface to law feature. 
+  * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of a law feature created by using two curves : 
+  * a reference and a definition curve.
+  * @see CATIGSMUseFactory
+  */
+
+class ExportedByCATGSMUseItf CATIGSMUseLawDistProj: public CATBaseUnknown
+{
+	CATDeclareInterface;
+	
+public:
+	/**
+	* Gets the reference curve.
+	*   @param oElem
+	*      reference curve.
+    */
+	virtual    HRESULT GetReferenceElement(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+	
+	/**
+    * Sets the reference curve.
+    *   @param iElem
+    *      reference curve.
+    */
+	virtual    HRESULT SetReferenceElement(const CATIMmiMechanicalFeature_var iElem) = 0;
+	
+	/**
+    * Gets the definition curve.
+    *   @param oElem
+    *      definition curve.
+    */
+	virtual    HRESULT GetDefinitionElement(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+	
+	/**
+	* Sets the definition curve.
+	*   @param iElem
+	*      definition curve.
+	*/
+	virtual    HRESULT SetDefinitionElement(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+	/**
+    * Queries whether evolution parameter is on reference curve (default) or on definition curve. 
+	*   @param oParameterOnDefinition
+	*      Flag for parameter type 
+    *      &lt;br&gt;TRUE: Parameter on definition curve
+	*      &lt;br&gt;FALSE: Parameter on reference curve
+    */
+	virtual    HRESULT IsParameterOnDefinition(CATBoolean &amp; oParameterOnDefinition)= 0;
+	
+	/**
+    * Sets evolution parameter on reference curve  or on definition curve.
+    *   @param iParameterOnDefinition
+	*      Flag for parameter type
+	*     &lt;br&gt; TRUE: Parameter on definition curve
+	*     &lt;br&gt; FALSE: Parameter on reference curve
+    */
+	virtual    HRESULT SetParameterOnDefinition(CATBoolean iParameterOnDefinition) = 0;
+
+    /**
+    * Sets the scaling value of the law.
+    *   @param iScale
+    *      New scaling value
+    *   @see CATICkeParm
+    */
+    virtual    HRESULT SetScalingValue (const CATICkeParm_var &amp; iScale) = 0;
+
+   /**
+    * Sets the scaling value of the law.
+    *   @param iScale
+    *      New scaling value
+    */
+    virtual    HRESULT SetScalingValue (const double iScale) = 0;
+
+    /**
+    * Gets the scaling value of the law.
+    *   @param oScale
+    *      New scaling value
+    *   @see CATICkeParm
+    */
+    virtual    HRESULT GetScalingValue (CATICkeParm_var&amp; oScale) = 0;
+
+   /**
+    * Gets the scaling value of the law.
+    *   @param oScale
+    *      New scaling value
+    */
+    virtual    HRESULT GetScalingValue (double&amp; oScale) = 0;
+
+    /**
+    * Returns if law heterogeneous.
+    *   @param IsHeterogeneousLaw
+    *      TRUE or FALSE 
+    */
+    virtual    HRESULT IsHeterogeneousLaw (CATBoolean &amp; IsHeterogeneousLaw) = 0;
+
+	/**
+    * Sets the symbol of the applied unit of the law.
+    *   @param iUnitSymbol
+    */
+    virtual    HRESULT SetAppliedUnitSymbol (const CATUnicodeString &amp; iUnitSymbol) = 0;
+
+    /**
+    * Sets the symbol of the measure unit of the law.
+    *   @param iUnitSymbol
+    */
+    virtual    HRESULT SetMeasureUnitSymbol (const CATUnicodeString &amp; iUnitSymbol) = 0;
+
+    /**
+    * Gets the symbol of the applied unit of the law.
+	* If the returned string is empty there is no applied unit (case of Ratio Law)
+    *   @param oUnitSymbol
+	*
+    * NB : If you want to get the CATICkeUnit corresponding to this symbol
+	* you can do it the following way :
+	* 	CATIParmDictionary_var parmDictionary = CATCkeGlobalFunctions::GetParmDictionary();
+	*	CATICkeUnit_var	Unit=parmDictionary-&gt;FindUnitFromSymbol(oUnitSymbol);
+    */
+    virtual    HRESULT GetAppliedUnitSymbol (CATUnicodeString &amp; oUnitSymbol) = 0;
+
+    /**
+    * Gets the symbol of the measure unit of the law.
+	* If the returned string is empty the law is homogeneous
+    *   @param oUnitSymbol
+	*
+    * NB : If you want to get the CATICkeUnit corresponding to this symbol
+	* you can do it the following way :
+	* 	CATIParmDictionary_var parmDictionary = CATCkeGlobalFunctions::GetParmDictionary();
+	*	CATICkeUnit_var	Unit=parmDictionary-&gt;FindUnitFromSymbol(oUnitSymbol);
+    */
+    virtual    HRESULT GetMeasureUnitSymbol (CATUnicodeString &amp; oUnitSymbol) = 0;
+	
+	/** 
+	* Get the Normal of the plane support of inputs curve.
+	*   @param oNormal
+	*    CATMathVector
+	*/
+	virtual    HRESULT  GetPlaneNormal (CATMathVector &amp; oNormal) = 0;
+	
+	/**  
+	* Set the Normal of the plane support of inputs curve.
+	*   @param iNormal
+	*    CATMathVector
+	*/
+	virtual    HRESULT  SetPlaneNormal (const CATMathVector &amp; iNormal) = 0;
+
+   /**
+   * Sets the direction of Law positive values. 
+   *   @param Ori 
+   *      -1 to invert the orientation of the positive direction
+   *	   O : Unknown Orientation
+   *
+   *	PositiveLawDirection=Ori * PlaneNormal ^ TangentRefCurve.
+   */
+   virtual    HRESULT SetPositiveDirectionOrientation  (int Ori) = 0;
+
+   /**
+   * Gets the direction of Law positive values. 
+   *   @param Ori
+   *      -1 to invert the orientation of the positive direction
+   *	   O : Unknown Orientation
+   *
+   *	PositiveLawDirection=Ori * PlaneNormal ^ TangentRefCurve.
+   */
+   virtual    HRESULT GetPositiveDirectionOrientation  (int &amp; Ori) = 0;
+
+};
+CATDeclareHandler (CATIGSMUseLawDistProj, CATBaseUnknown);
+//------------------------------------------------------------------
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseInverse.html">← 上一页: CATIGSMUseInverse.h</a></div>
+        <div><a href="CATIGSMUseLine.html">下一页: CATIGSMUseLine.h →</a></div>
+    </div>
+</body>
+</html>

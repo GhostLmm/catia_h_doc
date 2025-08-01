@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATCommandHeader.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATCommandHeader.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCmdWorkshop.html">← 上一页: CATCmdWorkshop.h</a></div>
+        <div><a href="CATCommandHeaderWithSDO.html">下一页: CATCommandHeaderWithSDO.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCommandHeader_H 
+#define CATCommandHeader_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+#include &quot;CD0FRAME.h&quot; 
+
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATCommand.h&quot;
+#include &quot;CATEventSubscriber.h&quot;
+#include &quot;CATListOfCATString.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATMsg.h&quot;
+#include &quot;CATMsgCatalog.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATMetaObject.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+class CATCmdAccess;
+class CATCmdStarter;
+class CATCommandHeaderList;
+class CATDialog;
+class CATNotification;
+class l_CATCmdHeader;
+class l_CATCommandHeader;
+class CATCmdRep;
+class CATFrmEditor;
+#ifdef AfrCAA2
+class CATAfrGen;
+#endif
+
+class CATLISTP(CATCommand);
+
+/**
+* Command Header Availability.
+* @param CATFrmUnavailable
+*    The command is not accessible: the starter is disabled and its icon is greyed.
+* @param CATFrmAvailable
+*    The command is  accessible: the starter is available and its icon is normal. 
+*
+*/
+enum CATFrmState { CATFrmUnavailable = 0,
+               CATFrmAvailable   = 1 };
+
+/**
+* @nodoc 
+* Command Header Activity.
+* &lt;b&gt;Role&lt;/b&gt;: Internal usage. Used  in the Callback methods set on the CATCommand event.
+* @param CATFrmCmdNo
+*    The command is Canceled 
+* @param CATFrmCmdAct
+*    The command is Activated
+* @param CATFrmCmdDeact
+*    The command is Deactivated
+*/
+enum CATFrmCmdState { CATFrmCmdNo,
+                  CATFrmCmdAct,
+                  CATFrmCmdDeact };
+
+/**
+* @nodoc 
+* Command Header Availabilities.
+* &lt;b&gt;Role&lt;/b&gt;: Command Header availability types.
+*/
+typedef unsigned int CATAfrAvailabilityType;
+
+/** @nodoc */
+#define CATAfrNormalAvailability       (1 &lt;&lt; 0)
+/** @nodoc */
+#define CATAfrCommandSetAvailability   (1 &lt;&lt; 1)
+/** @nodoc */
+#define CATAfrEditabilityAvailability  (1 &lt;&lt; 2)
+/** @nodoc */
+#define CATAfrSmallScaleAvailability   (1 &lt;&lt; 3)
+/** @nodoc */
+#define CATAfrLargeScaleAvailability   (1 &lt;&lt; 4)
+
+/** @nodoc */
+typedef int (* CATCmdRepEnabler) (void);
+
+/**
+* Class to create a command header.
+* &lt;b&gt;Role&lt;/b&gt;: Each command you want to make available in your workshop or workbench 
+* must have a command header. It holds the necessary information to load the command, 
+* such as the name of the shared library in which the 
+* command&#x27;s executable code is located, the name of the command class, and the data to pass 
+* to the command&#x27;s code when this command becomes the current one. 
+* &lt;p&gt;The command header has 
+* resources for each command  to display, such as the command name shown to the end user, 
+* its ToolTip displayed in a balloon, it help message, and its icon. This enables the 
+* workshop or workbench to be  displayed, that is loaded in memory, without any of its 
+* commands being itself loaded, except the default one, spares memory space, and improves 
+* performance. The end user can  see the icons in the toolbars, the items in the menu bar, 
+* can ask for help on a given command, without the command being loaded. It is only when 
+* he/she clicks on the menu item or on the icon that the command code is actually loaded.&lt;/p&gt;
+* 
+* &lt;p&gt;You cannot directly instanciate a &lt;tt&gt;CATCommandHeader&lt;/tt&gt;, you must derive 
+* this class. The easiest way is using the @href MacDeclareHeader macro such that:
+* &lt;pre&gt;
+*    #include &quot;CATCommandHeader.h&quot;
+*    MacDeclareHeader(MyHeader);
+* &lt;/pre&gt;
+* &lt;tt&gt;MyHeader&lt;/tt&gt; is a command header class always available and with a
+* default representation: a push button in a toolbar, and a push item is the menu bar or
+* in a contextual menu. In most cases it is sufficient. However you can create a &lt;b&gt;customized 
+* command header&lt;/b&gt; for two reasons:
+* &lt;ul&gt;
+* &lt;li&gt;To manage the command availability with respect to what 
+* the end user does, or what exists in the document.&lt;/li&gt;
+*  &lt;br&gt;The new class must at least derive from &lt;tt&gt;CATCommandHeader&lt;/tt&gt;
+* &lt;li&gt;To customize the command header representation.&lt;/li&gt;
+* &lt;br&gt;The new class must at least derive from @href CATAfrDialogCommandHeader 
+* &lt;/ul&gt;
+* Creating a customized command header implies to have (or overwrite) at least
+* the following methods:
+* &lt;ul&gt;
+*   &lt;li&gt;In public&lt;/li&gt;
+*    &lt;ul&gt;
+*   &lt;li&gt;Constructor calling the base class constructor&lt;/li&gt;
+*   &lt;li&gt;Destructor&lt;/li&gt;
+*   &lt;li&gt;@href #Clone which calls the constructor class&lt;/li&gt;
+*   &lt;/ul&gt;
+*   &lt;li&gt;In private - to implement&lt;/li&gt;
+*    &lt;ul&gt;
+*   &lt;li&gt;Constructor, with a &lt;tt&gt;CATCommandHeader&lt;/tt&gt; pointer as argument, and 
+*    calling the constructor with a &lt;tt&gt;CATCommandHeader&lt;/tt&gt; of
+*    the base class&lt;/li&gt;
+*    &lt;/ul&gt;
+*   &lt;li&gt;In private - not implemented&lt;/li&gt;
+*    &lt;ul&gt;
+*   &lt;li&gt;Defauft constructor&lt;/li&gt;
+*   &lt;li&gt;Copy constructor&lt;/li&gt;
+*   &lt;li&gt;Assignment operator &lt;/li&gt;
+*    &lt;/ul&gt;
+* &lt;/ul&gt;
+* The customized command header (named &lt;tt&gt;MyHeader&lt;/tt&gt;) must be a &lt;b&gt;component&lt;/b&gt; to implement 
+* any kind interfaces, so it must contain the following macros:
+*   &lt;ul&gt;
+*   &lt;li&gt;in header file: @href CATDeclareClass &lt;/li&gt;
+*   &lt;li&gt;in source file: @href CATImplementClass with the following arguments: 
+*      &lt;pre&gt;(MyHeader, Implementation,CATBaseUnknown,CATNull)&lt;/pre&lt;/li&gt;                
+*   &lt;/ul&gt;
+* To assign &lt;b&gt;resources&lt;/b&gt; to the command header,
+* it must contain the following macros:
+*   &lt;ul&gt;
+*   &lt;li&gt;in header file: @href CATDeclareHeaderResources ;&lt;/li&gt;
+*   &lt;li&gt;in source file: @href CATImplementHeaderResources with the following arguments:
+*                  &lt;pre&gt;(MyHeader, BaseClass,MyHeaderResourceFile)&lt;/pre&gt; &lt;/li&gt;               
+*   &lt;/ul&gt; 
+* &lt;b&gt;Where&lt;/b&gt; to create command header instances ? 
+* Generaly, you create instances in the following methods: 
+* &lt;ul&gt;
+* &lt;li&gt;@href CATIWorkshop#CreateCommands &lt;/li&gt;
+* &lt;li&gt;@href CATIWorkbench#CreateCommands &lt;/li&gt;
+* &lt;li&gt;@href CATIWorkbenchAddin#CreateCommands &lt;/li&gt;
+* &lt;/ul&gt;
+* In this case, the command header instance, identified by the first argument of the constructor 
+* class, is &lt;b&gt;associated with a starter&lt;/b&gt; thanks to the 
+* @href SetAccessCommand macro &lt;/p&gt;
+* You can also create command header instances to set in the &quot;Tools Palette&quot; toolbar. It is
+* a specific toolbar which can be filled, for a specific workbench by implementing 
+* @href CATIAfrPaletteOptions, or/and for a specific command thanks @href CATIAfrCmdPaletteOptions .
+* In these two cases, before creating a command header instance, you must check that the
+* instance does not already exist in the current editor. It is possible thanks to the
+* @href CATAfrGetCommandHeader global function. 
+* &lt;p&gt;Who &lt;b&gt;delete&lt;/b&gt; command header instances ? 
+* &lt;br&gt;Each command header instance is kept in a list by the @href CATFrmEditor associated 
+*  with the document to edit. The editor manages the command header deletion. You must never 
+* delete a command header instance.  &lt;/p&gt;
+*/
+
+class ExportedByCD0FRAME CATCommandHeader: public CATEventSubscriber
+{
+
+public:
+
+  
+  /** @nodoc */
+  CATDeclareCBEvent(CommandStarted);
+      /** @nodoc */
+  CATDeclareCBEvent(BecomeAvailableEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(BecomeUnavailableEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(Cancel);
+    /** @nodoc */
+  CATDeclareCBEvent(Delete);
+    /** @nodoc */
+  CATDeclareCBEvent(Activate);
+    /** @nodoc */
+  CATDeclareCBEvent(Deactivate);
+    /** @nodoc */
+  CATDeclareCBEvent(CommandFailed);
+    /** @nodoc */
+  CATDeclareCBEvent(SetIconEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(SetTitleEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(SetAcceleratorEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(SetUserAliasEvent);
+    /** @nodoc */
+  CATDeclareCBEvent(HeaderDeleted);
+    /** @nodoc */
+  CATDeclareCBEvent(Generic);
+
+
+  /** @nodoc */
+  CATDeclareKindOf;
+  
+    /*---------------------------------*/
+    //     CONSTRUCTORS  
+    /*---------------------------------*/
+
+  /** @nodoc */
+  CATCommandHeader ();
+
+  /** @nodoc */
+  void Initialize(const CATString &amp; HeaderID,
+      const CATString &amp; loadName,
+      const CATString &amp; className);
+  /** @nodoc */
+  void Initialize(const CATString &amp; HeaderID,
+      const CATString &amp; ClsidName);
+
+  /** @nodoc */
+  CATCommandHeader (const CATString &amp; HeaderID,
+        int state = CATFrmAvailable);
+
+  /** @nodoc */
+  CATCommandHeader (const CATString &amp; HeaderID,
+        const CATString &amp; loadName,
+        int state = CATFrmAvailable);
+
+  /** @nodoc */
+  CATCommandHeader (const CATString &amp; HeaderID,
+        const CATString &amp; loadName,
+        const CATString &amp; argument,
+        int state = CATFrmAvailable);
+
+  /** @nodoc */
+  CATCommandHeader (const CATString &amp; HeaderID,
+        const CATString &amp; loadName,
+        const CATString &amp; className,
+        const CATString &amp; argument,
+        int state = CATFrmAvailable);
+  
+
+  /**
+  * Constructs a command header. 
+  * @param iHeaderID
+  *     The identifier of the header. It iss the &lt;tt&gt;command&lt;/tt&gt; argument of the &lt;tt&gt;
+  *     SetAccessCommand &lt;/tt&gt; macro.It iss used for NLS resources.
+  * @param iLoadName
+  *    The name of the shared library where &lt;tt&gt;iClassName&lt;/tt&gt; is.
+  * @param iClassName
+  *    The name of the &lt;tt&gt; CATCommand &lt;/tt&gt; class.
+  * @param iArgument
+  *    The argument of the &lt;tt&gt; CATCommand &lt;/tt&gt; class.
+  * @param iState
+  *    The CATCommandHeader state.
+  *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  *       &lt;li&gt; CATFrmAvailable (The default value) &lt;/li&gt;
+  *       &lt;li&gt; CATFrmUnavailable &lt;/li&gt;
+  * 
+  * @see CATCommand, SetAccessCommand, CATFrmState
+  */
+  CATCommandHeader (const CATString &amp; iHeaderID,
+                const CATString &amp; iLoadName,
+                const CATString &amp; iClassName,
+                           void * iArgument,
+                              int iState = CATFrmAvailable);
+  
+  virtual ~CATCommandHeader ();
+  
+  /**   
+  * Clones the command header.
+  * &lt;br&lt;b&gt;Role:&lt;/b&gt;This method calls the constructor with a &lt;tt&gt;CATCommandHeader&lt;/tt&gt; 
+  *  pointer as argument. In your derived class overwrite this method such that:
+  *  
+  * &lt;pre&gt;
+  * CATCommandHeader * MyHeader::Clone ()                                  
+  * { 
+  *   return new MyHeader(this); 
+  * }   
+  * &lt;/pre&gt;
+  * You must never call a &lt;tt&gt;Clone&lt;/tt&gt; method. This method is called by the &quot;frame&quot;.
+  * Today, it is called for your CAA instances in only one case: when the command header 
+  * instance is created in an Add-in of the General workshop, refer to the 
+  * @href CATIAfrGeneralWksAddin interface for more details about these Add-ins. 
+  * @return 
+  *  The new command header instance.
+  */
+  virtual CATCommandHeader * Clone();
+  
+    /*---------------------------------*/
+    //     STATISTIQUES
+    /*---------------------------------*/
+  /**
+  * @nodoc
+  * Returns the last statistique identifier .
+  * &lt;b&gt;Role&lt;/b&gt;: This id can be used by a undefined command to supend/resume
+  * the header command statistique time.
+  */
+  int GetLastStatisticIdentifier();
+  
+    /*---------------------------------*/
+    //     COMMAND HEADER MANAGMENT  
+    /*---------------------------------*/
+  
+  /**
+  * @nodoc
+  * Returns the header identifier.
+  * &lt;b&gt;Role&lt;/b&gt;: 
+  */
+  const char * GetID ();
+
+   /**
+  * @nodoc
+  * Returns the header Alias.
+  * &lt;b&gt;Role&lt;/b&gt;: The alias id of a header can be defined in a CATRsc file. The name
+  * of this file depends on the workshop or workbench or addin origin of the header.
+  */
+  const char * GetAlias ();
+
+  /**
+  * Returns the header visibility in the Tools/Customize command.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method returns if the command header is visible or not
+  * in the Tools/Customize command.
+  * @return
+  *  The header visibility in the Tools/Customize command.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; Visible, &lt;tt&gt;0&lt;/tt&gt; : invisible
+  */
+  virtual int GetVisibility      ();
+
+  /**
+  * Sets the header visibility in the Tools/Customize command.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method enables you to hide or show the 
+  * command header instance in the Tools/Customize command. It can be interesting
+  * to hide some command header instances, when you do not want that the end user 
+  * drag and drop your command in a toolbar. 
+  * @param iIsVisible
+  * The header visibility in the Tools/Customize command.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; Visible, &lt;tt&gt;0&lt;/tt&gt; : invisible
+  */
+  void        SetVisibility(int iIsVisible);
+  
+    /*---------------------------------*/
+    //     NLS-RSC
+    /*---------------------------------*/
+  
+  /** @nodoc */
+  enum CATIconState { NormalIcon = 0, GreyedIcon = 1,
+                      PressedIcon = 2, GreyedPressedIcon = 3,
+                      FocusedIcon = 4 };
+  /**
+  * @nodoc
+  * @param iState
+  *    use a combination of NormalIcon, GreyedIcon
+  *    and PressedIcon with | for state
+  */
+  void         SetIconName (const CATString &amp; iconName, int iState = 0);
+                              
+  /** @nodoc */
+  void         SetAccelerator(const CATUnicodeString &amp;accelerator);
+  /** @nodoc */
+  void         SetCategory2(const CATUnicodeString &amp;category);
+
+  /** @nodoc */
+  virtual void SetUserAlias(const CATUnicodeString &amp; userAlias);
+
+  /** @nodoc */
+  virtual void SetTitle    (const CATUnicodeString &amp; nlsCommandName);
+  /** @nodoc */
+  void         SetHelp     (const CATUnicodeString &amp; help);
+  /** @nodoc */
+  void         SetShortHelp(const CATUnicodeString &amp; help);
+  /** @nodoc */
+  void         SetDialogLongHelp(const CATUnicodeString &amp; help);
+
+  /** @nodoc */
+  CATUnicodeString         &amp; GetAccelerator     ();
+
+  /** @nodoc */
+  CATUnicodeString         &amp; GetDefaultAccelerator();
+
+  /** @nodoc */
+  CATUnicodeString         &amp; GetUserAlias       ();
+
+  /** @nodoc */
+  CATUnicodeString         &amp; GetDefaultUserAlias       ();
+
+  /** @nodoc */
+  CATUnicodeString         &amp; GetCategory2       ();
+  /** @nodoc */
+  virtual CATUnicodeString &amp; GetHelp            ();
+  /**
+  * @nodoc
+  * Returns an icon&#x27;s name .
+  * @param iIconType
+  * Type of the icon. Used a value defined in @href CATIconState
+  */
+  virtual CATString          GetIconName        (int iIconType = 0);
+
+  /** @nodoc */
+  CATString                  GetDefaultIconName (int iIconType = 0);
+
+  /** @nodoc */
+  virtual CATUnicodeString &amp; GetShortHelp       ();
+  /** @nodoc */
+  virtual CATUnicodeString &amp; GetTitle           ();
+
+  /** @nodoc */
+  CATUnicodeString &amp; GetDefaultTitle            ();
+
+  /** @nodoc */
+  virtual void               ShowLongHelp       ();
+  /** @nodoc */
+  virtual CATUnicodeString &amp; GetContextualHelp  ();
+  /** @nodoc */
+  virtual void               SetContextualHelp  (CATUnicodeString);
+  /** @nodoc */
+  virtual CATUnicodeString &amp; GetDialogLongHelp  ();
+
+  /** @nodoc */
+  virtual CATString GetResourceFile(int depth);
+  /** @nodoc */
+  virtual int       GetResourceValue (const CATString  &amp; key,
+                              CATUnicodeString &amp; resource);
+  /** @nodoc */
+  virtual int       GetResourceValue (const CATString &amp; key,
+                              CATString &amp; resource);
+  
+    /*---------------------------------*/
+    //     NLS-RSC
+    /*---------------------------------*/
+  /** @nodoc */
+  virtual CATCmdRep * CreateMenuRep     (CATCmdStarter *, CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyMenuRep    (CATCmdStarter *);
+  /** @nodoc */
+  virtual CATCmdRep * CreateToolbarRep  (CATCmdStarter *, CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyToolbarRep (CATCmdStarter *);
+  /** @nodoc */
+  virtual void        SetDragDropModeForCommand(CATDialog *parent, CATCmdRep *rep);
+  /** @nodoc */
+  virtual void        UnsetDragDropModeForCommand(CATCmdRep *rep);
+  /** @nodoc */
+  virtual CATCmdRep * CreateCtxMenuRep  (CATCmdStarter *, CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyCtxMenuRep (CATCmdStarter *);
+  
+  /** @nodoc */
+  void AddRep();
+  /** @nodoc */
+  void ReleaseRep();
+
+  /** @nodoc */
+  int NbRep() const;
+
+  /** @nodoc */
+  int                 CanCreateRep      () const;
+  
+  /** @nodoc */
+  void                SetRepEnabler     (CATCmdRepEnabler);
+
+  /** @nodoc */
+  static int          OleRepDisable     ();
+
+
+    /*---------------------------------*/
+    //     CATCOMMAND&#x27;s PART 
+    /*---------------------------------*/
+
+  /** @nodoc */
+  virtual void SetName     (const CATString &amp; loadName);
+
+  /** @nodoc */
+  virtual CATString        &amp; GetClass           ();
+  /** @nodoc */
+  virtual CATString        &amp; GetClsidName       ();
+  /** @nodoc */
+  virtual CATString        &amp; GetName            ();
+  /** @nodoc */
+  virtual CATString        &amp; GetOptionPage      ();
+
+  /** @nodoc */
+  CATString GetArgument();
+
+  /** @nodoc */
+  void * GetPtrArgument();
+
+  /** @nodoc */
+  void         SetArgument (const CATString &amp; argument);
+
+  /** @nodoc */
+  void         SetArgument (void * argument);
+  /** @nodoc */
+  void         SetCharArgument (const CATString &amp; argument);
+  /** @nodoc */
+  CATString &amp;  GetCharArgument ();
+
+    /*---------------------------------*/
+    //     COMMAND HEADER  ACTIVITY
+    /*---------------------------------*/
+  /** @nodoc */
+  int            GetCmdState      ();
+
+  /** @nodoc */
+  int HasCommand();
+
+  /**
+  * @nodoc
+  * Starts the command.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The CATCommand associated to the header is created and launched. 
+  * If you overwrite this method, think to do :
+  * &lt;ul&gt;
+  * &lt;li&gt;&lt;/li&gt; Tests if the command is available: @href IsAvailable, and returns NULL if it&#x27;s not
+  * the case.
+  * &lt;li&gt;&lt;/li&gt; Sets the cursor Busy 
+  * &lt;li&gt;&lt;/li&gt; Sets callbacks on the activate, delete, cancel and desactivate event of 
+  * the CATCommand.
+  * &lt;/ul&gt;
+  */
+  virtual CATCommand * StartCommand       ();
+  /** @nodoc */
+  virtual CATCommand * ExecuteCommand     ();
+  /** @nodoc */
+  static  CATCommand * StartCommand       (const CATString &amp; commandName);
+  /** @nodoc */
+  void                 StopCommand        ();
+  /** @nodoc */
+  static void          StopCommand        (const CATString &amp; commandName);
+
+  /**
+  * Retrieves the argument of the header.
+  */
+  static CATString   &amp; GetCurrentArgument ();
+  
+    /*---------------------------------*/
+    //     COMMAND HEADER AVAILABILITY 
+    /*---------------------------------*/
+  /** @nodoc */
+  int                IsAvailable ();
+  
+  /** 
+  * Makes the command Available.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The command of the header becomes available. The icon switches from
+  * the grayed to the normal state.  
+  */
+  virtual void               BecomeAvailable   ();
+  
+  /** 
+  * Makes the command Unavailable.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The command of the header becomes unavailable. The icon switches from
+  * the normal to the grayed state.  
+  */
+  virtual void               BecomeUnavailable ();
+  
+    /*---------------------------------*/
+    //     COMMAND HEADER REPEATABILITY
+    /*---------------------------------*/
+
+  /** @nodoc */
+  void SetRepeatability(int CanBeRepeated); // 1 for true, 0 for false
+  /** 
+  * @nodoc 
+  * @return 
+  * 1 for true, 0 for false
+  */
+  int  GetRepeatability();  
+  /** @nodoc */
+  virtual void Repeat();
+  
+    /*---------------------------------*/
+    //     RESEARCH COMMAND HEADER BY ID
+    /*---------------------------------*/
+
+  /** @nodoc */
+  static int                GetHeaderCount   (const CATBoolean forceWorkbenchesLoad = TRUE);
+
+  /** @nodoc */
+  static CATCommandHeader * GetHeaderFromList(const
+                CATString &amp; commandHeaderID, const CATBoolean forceWorkbenchesLoad = TRUE);
+
+  /** @nodoc */
+  static CATCommandHeader * GetHeaderFromList(int position);
+
+  /**
+  * @nodoc
+  * Researchs an instance by its ID .
+  * &lt;b&gt;Role&lt;b&gt;: Necessary when the current editor is not the editor of the
+  * command to activate. Not used.
+  */
+  static CATCommandHeader * GetHeaderFromNoCurrentList(
+    const CATString &amp; iCommandHeaderID, CATFrmEditor    * iEditor, const CATBoolean forceWorkbenchesLoad = TRUE);
+  
+ 
+    /*---------------------------------*/
+    //     Callbacks
+    /*---------------------------------*/
+
+  /** @nodoc */
+  virtual void DeleteCB     (CATCallbackEvent, void *, CATNotification *,
+           CATSubscriberData, CATCallback);
+  /** @nodoc */
+  virtual void CancelCB     (CATCallbackEvent, void *, CATNotification *,
+           CATSubscriberData, CATCallback);
+  /** @nodoc */
+  virtual void ActivateCB   (CATCallbackEvent, void *, CATNotification *,
+           CATSubscriberData, CATCallback);
+  /** @nodoc */
+  virtual void DeactivateCB (CATCallbackEvent, void *, CATNotification *,
+           CATSubscriberData, CATCallback);
+
+  /** @nodoc */
+  void         lSetIconCB       (CATCallbackEvent, void *, CATNotification *,
+         CATSubscriberData, CATCallback);
+  /** @nodoc */
+  void         lSetAcceleratorCB(CATCallbackEvent, void *, CATNotification *,
+         CATSubscriberData, CATCallback);
+  /** @nodoc */
+  void         lSetUserAliasCB(CATCallbackEvent, void *, CATNotification *,
+         CATSubscriberData, CATCallback);
+  /** @nodoc */
+  void         lSetTitleCB      (CATCallbackEvent, void *, CATNotification *,
+         CATSubscriberData, CATCallback);
+  
+    /*---------------------------------*/
+    //     LICENSING
+    /*---------------------------------*/
+  
+  /** @nodoc */
+  virtual const char * GetFW();
+  
+  /** @nodoc */
+  void SetAuthorizationLevel(int level);
+  /** @nodoc */
+  int  GetAuthorizationLevel();
+  
+
+    /*---------------------------------*/
+    //     FOR INTERNAL USAGE 
+    /*---------------------------------*/
+  /** @nodoc */
+  l_CATCmdHeader     * GetCmdLetterObject();
+  /** @nodoc */
+  l_CATCommandHeader * GetLetterObject ();
+  /** @nodoc */
+  const CATString &amp; GetOrigin() const;
+  /** @nodoc */
+  static CATString LastCommandName;
+  /** @nodoc */
+  static CATString LastCommandArgument;
+  /** @nodoc */
+ 
+    /*---------------------------------*/
+    //     CREATION BY CLSID 
+    /*---------------------------------*/
+#ifdef AfrCAA2
+  /** @nodoc */
+  virtual void SaveAsXml (CATAfrGen * Gen, int depth);
+  /** @nodoc */
+  void SetWorkElement (const CATString &amp; type);
+  /** @nodoc */
+  int  GetWorkElement (CATString &amp; WorkElement);
+  /** @nodoc */
+  void SetHdrLib (const CATString &amp; iLib);
+  /** @nodoc */
+  void SetHdrClass (const CATString &amp; iClass);
+  /** @nodoc */
+  void SetHdrClsidName (const CATString &amp; iClsid);
+  /** @nodoc */
+  void SetHdrCharArgument(const CATString&amp; iArg);
+  /** @nodoc */
+  CATString &amp; GetHdrCharArgument();
+#endif
+
+  /**
+  * @nodoc
+  * method  to override for first traitments
+  */
+  virtual HRESULT LogicalBirth();  
+  /**
+  * @nodoc
+  * method  to override symetric as @href #LogicalBirth
+  */
+  virtual HRESULT LogicalDeath();     
+
+  /** @nodoc */
+  void SetAvailability (CATAfrAvailabilityType, CATFrmState);
+
+  /** @nodoc */
+  CATFrmState GetAvailability (CATAfrAvailabilityType);
+
+  /**
+    * @nodoc
+    * This is an internal method. Do not use it. Only one special mechanism uses it.
+    */
+  void SetLockUnavailable (CATClassId classId, CATBoolean locked);
+
+  /** @nodoc */
+  void SetLockUnavailable (CATBoolean locked);
+
+  /** @nodoc */
+  void SetOption (const char * opt);
+  /** @nodoc */
+  const char * GetOption () const;
+  
+protected:
+  /**
+  * Constructs a command header instance.
+  * &lt;br&lt;b&gt;Role:&lt;/b&gt;This method calls the copy constructor. 
+  * In your derived class overwrite this method such that:
+  * 
+  * &lt;pre&gt;
+  * MyHeader::MyHeader(CATCommandHeader * iHeaderToCopy):
+  *                           CATCommandHeader(iHeaderToCopy)
+  * {
+  * }   
+  * &lt;/pre&gt;
+  * This method is called by the @href #Clone method.
+  * @param iHeaderToCopy
+  * The header to copy. 
+  */
+  CATCommandHeader (CATCommandHeader * header);
+  
+  /** @nodoc */
+  virtual void DoShow();
+  /** @nodoc */
+  virtual void DoHide();
+  
+  /** 
+  * @nodoc 
+  * Use ONLY inside StartCommand !
+  * See SetArgument otherwise
+  */
+  void SetCurrentArgument ();   
+    
+  /** @nodoc */
+  CATString _Argument;
+  /** @nodoc */
+  CATCommandMode           _Mode;
+  /** @nodoc */
+  CATLISTP(CATCommand)   * _CommandList;
+  /** @nodoc */
+  CATFrmEditor           * _Editor     ;   // Creation&#x27;s editor 
+  /** @nodoc */
+  CATCmdRepEnabler         _cmdRepEnabler;
+    
+  /** @nodoc */
+  virtual void Init      (const CATString &amp; HeaderID,
+      const CATString &amp; LoadName,
+      const CATString &amp; ClassName);
+private:
+
+  // Copy constructor (not implemented)
+  CATCommandHeader(const CATCommandHeader&amp;);
+  
+  // Assignment operator (not implemented)
+  CATCommandHeader&amp; operator=(const CATCommandHeader&amp;);
+
+  
+  void lGenericCB(CATCallbackEvent, void *, CATNotification *,
+              CATSubscriberData, CATCallback);
+  
+  int          _State;
+  unsigned int _Availability;
+  CATListOfCATString _LockIds;
+  CATListOfInt       _LockStates;
+
+  int         _CommandState;
+  void      * _pArgument;
+  CATString * _charArg;
+
+#ifdef AfrCAA2
+  CATString _HdrCharArg;
+#endif
+  
+
+  
+  l_CATCmdHeader       * _CmdLetter;
+  l_CATCommandHeader   * _Letter;
+  CATCommandHeaderList * _List;
+  
+  int _level;
+  int _nbRep;
+  
+  static CATString     _CurrentArgument;
+  static CATCommand  * _NotifSender;
+
+  CATString _originAccess;
+
+#ifdef AfrCAA2
+  CATString  _HdrLib;
+  CATString  _HdrClass;
+  CATString  _HdrClsid;
+  //  CATString * _WorkElement;
+#endif
+  int _cmd;
+  
+  CATString  * _Option;
+
+    // To manage statistic
+  int                     _LastEventID ;
+  static CATUnicodeString _CATCommandHeaderEmptyCUS;
+  static CATString        _CATCommandHeaderEmptyCS;
+
+  protected :
+  /** @nodoc */
+  CATBoolean  _repeatCmdAllowed;
+
+  private:
+  CATBoolean  _LockedUnavailable;
+
+};
+
+//-----------------------------------------------------------------------------
+/**
+* Defines a method to get the header&#x27;s resource file.
+* &lt;b&gt;Role&lt;/b&gt;: Insert this macro in the header file (.h) of your header class 
+* and Use it in conjunction with @href CATImplementHeaderResources in the .cpp file.
+*/
+
+#define CATDeclareHeaderResources         \
+public:                 \
+                    \
+  virtual const char * GetFW();           \
+  virtual CATString GetResourceFile(int depth)
+
+/** @nodoc */
+#define MkHeaderStr(x)  #x
+/** @nodoc */
+#define XMkHeaderStr(x) MkHeaderStr(x)
+
+/**
+*  Implements the methods to get the header&#x27;s resource file.
+*  @param DerivedHeader
+*      Command header class name 
+*  @param BaseHeader
+*      Base class of your header class. 
+*  @param Rsrc
+*      Resource file name
+*      There is a Nls resources file , where each part must be translated
+*      and there is a Rsc file. &lt;tt&gt;HeaderID&lt;/tt&gt; is the identifier of the
+*      header, in other words the first argument of the command header constructor class.
+*     &lt;dl&gt;
+*     &lt;dt&gt;In the &lt;tt&gt;Rsrc.CATNls&lt;/tt&gt; file you find:
+*     &lt;br&gt;
+*     &lt;ul&gt;
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;Title&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;dt&gt;Text displayed in the menu bar for the command
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;Help&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;dt&gt;Text displayed in the status bar as the command help 
+*     message when the mouse moves over   the command 
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;ShortHelp&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt; 
+*     &lt;dt&gt;Text displayed in a balloon as the command short help message 
+*      when the mouse moves over the command. 
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;LongHelp&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;dt&gt;Text displayed in a balloon when the end user clicks on the help command, 
+*     which turns the mouse cursor as a question mark, 
+*     and then clicks on the icon representing the command.
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;Category&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;dt&gt;In Tools/Customize/Command, its a means to sort commands. 
+*     &lt;/ul&gt;
+*     &lt;br&gt;
+*     &lt;dt&gt;In this &lt;tt&gt;Rsrc.CATRsc&lt;/tt&gt; file you find:
+*     &lt;ul&gt;
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;Icon.Normal&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;LongHelpId&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt; 
+*     &lt;dt&gt;Identifier to associate a URL with the command. The URL is stored in a .map file 
+*     &lt;li&gt;&lt;tt&gt;Rsrc.HeaderID.&lt;b&gt;Accelerator&lt;/b&gt;&lt;/tt&gt;&lt;/li&gt;
+*     &lt;dt&gt;A combination of keys, such as &quot;Ctrl+character&quot;, used to activate the command 
+*     directly (known as shortcut in Microsoft publications.) 
+*     &lt;/ul&gt;
+*     &lt;/dl&gt;
+*  @see CATDeclareHeaderResources
+*/
+#define CATImplementHeaderResources(DerivedHeader, BaseHeader, Rsrc)  \
+                  \
+const char * DerivedHeader::GetFW()         \
+{                 \
+  return XMkHeaderStr(_MK_FWNAME_);         \
+}                 \
+                  \
+CATString DerivedHeader::GetResourceFile(int depth)                     \
+{                 \
+  static CATString rsrc(#Rsrc);           \
+  return (depth &lt;= 0) ? rsrc : BaseHeader::GetResourceFile(depth - 1);  \
+}
+// Attention! La mise de la variable static implique que tous les headers 
+// doivent tre drivs.
+
+
+/**
+ * Defines a method to get the header&#x27;s resource file, in a special way.
+ * &lt;b&gt;Role&lt;/b&gt;: When the role of the header is defined in its constructor, 
+ * insert this macro in its header file (.h)
+ * and use it in conjunction with @href CATImplementHeaderSpecialResources 
+ * in the .cpp file.
+ * &lt;br&gt;&lt;br&gt;
+ * The difference with CATDeclareHeaderResources is that the resources files 
+ * for different instances of this header, have a different name.
+ * &lt;br&gt;Thus, if the role of the header is defined in its constructor, one needs 
+ * to define specialized resources attached to every instance of this header. 
+ * This is all the more true, when the different instanciations are made from 
+ * different frameworks.
+ * &lt;br&gt;&lt;br&gt;
+ * &lt;b&gt;Important points&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;Once &lt;tt&gt;CATDeclareHeaderSpecialResources&lt;/tt&gt; has been used in a class D1, 
+ * all derived classes from D1 must exclusively use this macro, and not 
+ * &lt;strike&gt;CATDeclareHeaderResources&lt;/strike&gt;.&lt;/li&gt;
+ * &lt;li&gt;When using this macro, a &lt;tt&gt;&lt;b&gt;_ResourceFileNamePrefix&lt;/b&gt;&lt;/tt&gt; CATString data 
+ * member is thus defined. It &lt;b&gt;must&lt;/b&gt; be valuated through in the class 
+ * constructor.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * Refer to @href CATImplementHeaderSpecialResources for more details, 
+ * and an implementation example.
+ */
+
+#define CATDeclareHeaderSpecialResources          \
+public:                                           \
+  virtual const char * GetFW();                   \
+  virtual CATString GetResourceFile(int depth);   \
+  virtual CATString GetSpecialResourcesFile(const CATString&amp; iSuffix);\
+protected:                                        \
+  CATString _ResourcesFileNamePrefix
+
+
+/**
+ * Implements the methods to get the header&#x27;s resource file. 
+ * &lt;br&gt;&lt;br&gt;
+ * The difference with CATImplementHeaderResources is that the resources 
+ * files have a different name, which is useful if your header or any directly 
+ * derived class can be instanciated from different frameworks.
+ * &lt;br&gt;&lt;br&gt;
+ * Indeed, there can be only one resources file of the same name, whereever in 
+ * the code. A more detailed explanation follows in the parameters&#x27; descriptions.
+ * &lt;br&gt;&lt;br&gt;
+ * &lt;b&gt;Let us imagine the following scenario:&lt;/b&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt; a BaseHeader using CATDeclareHeaderResources and 
+ * CATImplementHeaderResources(BaseHeader, BaseBaseHeader, BaseRsc). &lt;br&gt;&lt;br&gt;&lt;/li&gt;
+ * &lt;li&gt; a DerivedHeader1 deriving from BaseHeader, and
+ * &lt;ol&gt;&lt;li&gt;which role is specific for every instanciation, and therefore is 
+ * using CATDeclareHeaderSpecialResources and 
+ * CATImplementHeaderSpecialResources(&lt;b&gt;DerivedHeader1&lt;/b&gt;, BaseHeader, &lt;b&gt;DerivedRsc1&lt;/b&gt;) 
+ * macros. &lt;/li&gt;
+ * &lt;li&gt; which constructors is of the following kind:&lt;br&gt;
+ * &lt;tt&gt;DerivedHeader1(const CATString&amp; iHeaderId,&lt;/tt&gt;&lt;i&gt;arguments for role definition&lt;/i&gt;, 
+ * &lt;tt&gt;&lt;b&gt;const CATString&amp; iResourcesFileNamePrefix1&lt;/b&gt;);&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt; where &lt;tt&gt;&lt;b&gt;iResourcesFileNamePrefix1&lt;/b&gt;&lt;/tt&gt; is stored in the 
+ * &lt;tt&gt;&lt;b&gt;_ResourcesFileNamePrefix&lt;/b&gt;&lt;/tt&gt; 
+ * data declared by the &lt;tt&gt;CATDeclareHeaderSpecialResources&lt;/tt&gt; macro.
+ * &lt;/li&gt;&lt;/ol&gt;&lt;br&gt;&lt;br&gt;&lt;/li&gt;
+ * &lt;li&gt; a DerivedHeader2 deriving from DerivedHeader1, and 
+ * &lt;ol&gt;&lt;li&gt;which role is specific for every instanciation, and therefore is 
+ * using CATDeclareHeaderSpecialResources and 
+ * CATImplementHeaderSpecialResources(&lt;b&gt;DerivedHeader2&lt;/b&gt;, BaseHeader, &lt;b&gt;DerivedRsc2&lt;/b&gt;) 
+ * macros. &lt;/li&gt;
+ * &lt;li&gt; which constructors is of the following kind:&lt;br&gt;
+ * &lt;tt&gt;DerivedHeader2(const CATString&amp; iHeaderId2,&lt;/tt&gt;&lt;i&gt;arguments for role definition&lt;/i&gt;, 
+ * &lt;tt&gt;&lt;b&gt;const CATString&amp; iResourcesFileNamePrefix2&lt;/b&gt;);&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt; where &lt;tt&gt;&lt;b&gt;iResourcesFileNamePrefix2&lt;/b&gt;&lt;/tt&gt; is stored in the 
+ * &lt;tt&gt;&lt;b&gt;_ResourcesFileNamePrefix&lt;/b&gt;&lt;/tt&gt;
+ * data declared by the &lt;tt&gt;CATDeclareHeaderSpecialResources&lt;/tt&gt; macro.&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * When an application is instanciating DerivedHeader2 classes, through:&lt;br&gt;
+ * &lt;tt&gt;new DerivedHeader2(&quot;MyDerivedHeader2&quot;, ..., &quot;MyFilePrefix_&quot;);&lt;/tt&gt;
+ * &lt;br&gt;the resources for this header will be looked for:
+ * &lt;ul&gt;&lt;li&gt;first in &quot;MyFilePrefix_DerivedRsc2&quot; .CATNls and .CATRsc files&lt;/li&gt;
+ * &lt;li&gt;then in &quot;MyFilePrefix_DerivedRsc1&quot; .CATNls and .CATRsc files.&lt;/li&gt;
+ * &lt;li&gt;and at last in &quot;BaseHeader&quot; .CATNls and .CATRsc files.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;br&gt;&lt;br&gt;
+ *  @param DerivedHeader
+ *      Command header class name. 
+ *  @param BaseHeader
+ *      Base class of your header class.
+ *  @param Rsrc
+ *      Resources file name
+ * &lt;br&gt;&lt;br&gt;
+ * The keys to be filled are the same as for the @href CATImplementHeaderResources macro.
+ * &lt;br&gt;
+ * They are all starting this way: &lt;tt&gt;FilePrefix_BaseRsc.HeaderId&lt;/tt&gt;
+ * &lt;br&gt;&lt;br&gt;
+ * @see CATDeclareHeaderSpecialResources, CATImplementHeaderResources.
+*/
+#define CATImplementHeaderSpecialResources(DerivedHeader, BaseHeader, Rsrc) \
+                                                                            \
+const char * DerivedHeader::GetFW()                                         \
+{                                                                           \
+  return XMkHeaderStr(_MK_FWNAME_);                                         \
+}                                                                           \
+                                                                            \
+CATString DerivedHeader::GetResourceFile(int depth)                         \
+{                                                                           \
+  CATString rsrc(DerivedHeader::GetSpecialResourcesFile(#Rsrc));      \
+  return (depth &lt;= 0) ? rsrc : BaseHeader::GetResourceFile(depth - 1);      \
+}                                                                           \
+                                                                            \
+CATString DerivedHeader::GetSpecialResourcesFile(const CATString&amp; iSuffix)   \
+{                                                                           \
+  return (_ResourcesFileNamePrefix+iSuffix);                                 \
+}
+
+//Ici pas de static, car les headers ne sont pas drivs (but de la macro 
+//HeaderSpecialResources).
+
+
+
+/*
+//-----------------------------------------------------------------------------
+#define CATHeaderDeclareResources(DerivedHeader, BaseHeader, Rsrc)          \
+int DerivedHeader::GetResourceValue (const CATString &amp; key,                 \
+                     CATUnicodeString &amp; resource)           \
+{                                                                           \
+  return 1;                                                                 \
+}                                                                           \
+                                                                            \
+int DerivedHeader::GetResourceForClass (const CATString &amp; key,              \
+                        CATUnicodeString &amp; resource)        \
+{                                                                           \
+  return 1;                                                                 \
+}                                                                           \
+                                                                            \
+CATMsgCatalog * DerivedHeader::_Resources = NULL;                           \
+                                                                            \
+int DerivedHeader::_hasResources = 1;
+
+*/
+
+//---------------------------------------------------------------------------
+
+#ifndef HeaderExportedBy
+/** @nodoc */
+#define HeaderExportedBy
+#endif
+
+//---------------------------------------------------------------------------
+/**
+*  @nodoc 
+*  Declares a header class.
+*  @param DerivedHeader
+*     Command header class name 
+*     
+*/
+#define MacDefineHeader(DerivedHeader)                                      \
+class HeaderExportedBy DerivedHeader : public CATCommandHeader              \
+{                                                                           \
+ public:                                                                    \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+    int state = CATFrmAvailable);                               \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+                const CATString &amp; argument,                                 \
+    int state = CATFrmAvailable);                               \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+                const CATString &amp; ClassName,                                \
+                void * Argument,                                            \
+    int state = CATFrmAvailable);                               \
+  virtual ~DerivedHeader();                                                 \
+                                                                            \
+  virtual CATCommandHeader * Clone();                                       \
+                                                                            \
+ protected:                                                                 \
+                                                                            \
+  DerivedHeader(CATCommandHeader * header);                                 \
+                                                                            \
+  CATDeclareKindOf;                                                         \
+                                                                            \
+  CATDeclareHeaderResources;                                                \
+};
+
+//---------------------------------------------------------------------------
+/**
+*  @nodoc 
+*  Implement a header class.
+*  @param DerivedHeader
+*     Command header class name 
+*     
+*/
+#define MacImplementHeader(DerivedHeader)                                   \
+CATImplementKindOf(DerivedHeader, Implementation, CATCommandHeader,CATNull);\
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            int state):                                   \
+  CATCommandHeader(HeaderID, LoadName, state)                               \
+{}                                                                          \
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            const CATString &amp; argument,                   \
+            int state):                                   \
+  CATCommandHeader(HeaderID, LoadName, argument, state)                     \
+{}                                                                          \
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            const CATString &amp; ClassName,                  \
+            void * Argument,                              \
+            int state):                                   \
+  CATCommandHeader(HeaderID, LoadName, ClassName, Argument, state)          \
+{}                                                                          \
+                                                                            \
+DerivedHeader::DerivedHeader (CATCommandHeader * header):                   \
+  CATCommandHeader(header)                                                  \
+{}                                                                          \
+                                                                            \
+DerivedHeader::~DerivedHeader ()                                            \
+{}                                                                          \
+                                                                            \
+CATCommandHeader * DerivedHeader::Clone ()                                  \
+{ return new DerivedHeader(this); }                                         \
+                                                                            \
+CATImplementHeaderResources(DerivedHeader, CATCommandHeader, DerivedHeader)
+
+//---------------------------------------------------------------------------
+/**
+*  Declares and defines a header class.
+*  @param DerivedHeader
+*     Command header class name 
+*     
+*/
+#define MacDeclareHeader(DerivedHeader)                                     \
+MacDefineHeader(DerivedHeader);                                             \
+MacImplementHeader(DerivedHeader);
+
+//---------------------------------------------------------------------------
+/** @nodoc */
+#define MacDefineDerivedHeader(DerivedHeader, BaseHeader)                   \
+class HeaderExportedBy DerivedHeader : public BaseHeader                    \
+{                                                                           \
+ public:                                                                    \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+    int state = CATFrmAvailable);                               \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+                const CATString &amp; argument,                                 \
+    int state = CATFrmAvailable);                               \
+  DerivedHeader(const CATString &amp; HeaderID,                                 \
+                const CATString &amp; LoadName,                                 \
+                const CATString &amp; ClassName,                                \
+                void * Argument,                                            \
+    int state = CATFrmAvailable);                               \
+  virtual ~DerivedHeader();                                                 \
+                                                                            \
+  virtual CATCommandHeader * Clone();                                       \
+                                                                            \
+ protected:                                                                 \
+                                                                            \
+  DerivedHeader(CATCommandHeader * header);                                 \
+                                                                            \
+  CATDeclareKindOf;                                                         \
+                                                                            \
+  CATDeclareHeaderResources;                                                \
+};
+
+//---------------------------------------------------------------------------
+/** @nodoc */
+#define MacImplementDerivedHeader(DerivedHeader, BaseHeader)                \
+CATImplementKindOf(DerivedHeader, Implementation, BaseHeader, CATNull);     \
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            int state):                                   \
+  BaseHeader(HeaderID, LoadName, state)                                     \
+{}                                                                          \
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            const CATString &amp; argument,                   \
+            int state):                                   \
+  BaseHeader(HeaderID, LoadName, argument, state)                           \
+{}                                                                          \
+                                                                            \
+DerivedHeader::DerivedHeader (const CATString &amp; HeaderID,                   \
+            const CATString &amp; LoadName,                   \
+            const CATString &amp; ClassName,                  \
+            void * Argument,                              \
+            int state):                                   \
+  BaseHeader(HeaderID, LoadName, ClassName, Argument, state)                \
+{}                                                                          \
+                                                                            \
+                                                                            \
+DerivedHeader::DerivedHeader (CATCommandHeader * header):                   \
+  BaseHeader(header)                                                        \
+{}                                                                          \
+                                                                            \
+DerivedHeader::~DerivedHeader ()                                            \
+{}                                                                          \
+                                                                            \
+CATCommandHeader * DerivedHeader::Clone ()                                  \
+{ return new DerivedHeader(this); }                                         \
+                                                                            \
+CATImplementHeaderResources(DerivedHeader, BaseHeader, DerivedHeader)
+
+//---------------------------------------------------------------------------
+/**
+*  Declares and defines a header class.
+*  @param DerivedHeader
+*     Command header class name 
+*  @param BaseHeader
+*     Command header base class name 
+*     
+*/
+#define MacDeclareDerivedHeader(DerivedHeader, BaseHeader)                  \
+MacDefineDerivedHeader(DerivedHeader, BaseHeader);                          \
+MacImplementDerivedHeader(DerivedHeader, BaseHeader);
+
+/**
+ * @nodoc
+ */
+#define MacSetHeaderOption(hdr, opt)\
+  if (hdr)\
+    hdr-&gt;SetOption (#opt)
+//---------------------------------------------------------------------------
+
+/*
+#define MacCreateHeader(DerivedHeader, Load, Identifier)                    \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load);
+
+//---------------------------------------------------------------------------
+#define MacCreateUnHeader(DerivedHeader, Load, Identifier)                  \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load,           \
+                 CATFrmUnavailable);
+
+//---------------------------------------------------------------------------
+#define MacCreateHeaderWithArg(DerivedHeader, Load, Identifier, Argument)   \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load,           \
+                                                           #Argument);
+
+//---------------------------------------------------------------------------
+#define MacCreateUnHeaderWithArg(DerivedHeader, Load, Identifier, Argument) \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load,           \
+                                                           #Argument,       \
+                 CATFrmUnavailable);
+
+//
+// New macro : you can access multiple commands in one load
+//---------------------------------------------------------------------------
+#define CATCreateHeader(DerivedHeader, Load, Class, Identifier)             \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load,           \
+                 #Class,          \
+                 (void *)NULL);
+
+//---------------------------------------------------------------------------
+#define CATCreateUnHeader(DerivedHeader, Load, Class, Identifier)           \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+                 #Load,           \
+                 #Class,          \
+                 (void *)NULL,    \
+                 CATFrmUnavailable);
+
+//---------------------------------------------------------------------------
+#define CATCreateHeaderWithArg(DerivedHeader, Load, Class, Identifier, Arg) \
+static CATString static_CATString_##Identifier(#Arg);                       \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+        #Load,                                      \
+        #Class,                                     \
+        (void *)&amp;static_CATString_##Identifier);
+
+//---------------------------------------------------------------------------
+#define CATCreateUnHeaderWithArg(DerivedHeader, Load, Class, Identifier,Arg)\
+static CATString static_CATString_##Identifier(#Arg);                       \
+static DerivedHeader static_##DerivedHeader##_##Identifier(#Identifier,     \
+        #Load,                                      \
+        #Class,                                     \
+        (void *)&amp;static_CATString_##Identifier,     \
+        CATFrmUnavailable);
+
+*/
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCmdWorkshop.html">← 上一页: CATCmdWorkshop.h</a></div>
+        <div><a href="CATCommandHeaderWithSDO.html">下一页: CATCommandHeaderWithSDO.h →</a></div>
+    </div>
+</body>
+</html>

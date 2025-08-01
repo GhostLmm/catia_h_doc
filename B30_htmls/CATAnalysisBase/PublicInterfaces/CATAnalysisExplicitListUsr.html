@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitListUsr.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitListUsr.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitListATo.html">← 上一页: CATAnalysisExplicitListATo.h</a></div>
+        <div><a href="CATAnalysisExplicitModel.html">下一页: CATAnalysisExplicitModel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitListUsr
+//
+//=============================================================================
+//
+// Usage Notes: services linked to the apply lists of the field model.
+//
+//=============================================================================
+// Octobre 99   Creation                                                    
+//=============================================================================
+#ifndef CATAnalysisExplicitListUsr_H_
+#define CATAnalysisExplicitListUsr_H_
+
+#include &quot;CATAnalysisExplicitList.h&quot;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Field model user list.
+ * This object provides services for user lists of the field model.
+ */
+class ExportedByCATSAM0Explicit CATAnalysisExplicitListUsr : public CATAnalysisExplicitList
+{
+   private :
+ 
+      HRESULT Init(const CATAnalysisExplicitData &amp;iData) ;
+
+   public :
+/**
+ * Default constructor.
+ */
+      CATAnalysisExplicitListUsr() ;
+
+/**
+ * Copy constructor.
+ */
+      CATAnalysisExplicitListUsr(const CATAnalysisExplicitListUsr &amp;iList) ;
+
+/**
+ * Copy constructor.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitListUsr(const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Assignment operator.
+ */
+      CATAnalysisExplicitListUsr &amp;operator = (const CATAnalysisExplicitListUsr &amp;iList) ;
+
+/**
+ * Assignment operator.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitListUsr &amp;operator = (const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Creates a user list in the field model.
+ * @param iModel
+ *   A pointer to the field model into which the list will be created.
+ * @see CATAnalysisExplicitModel
+ */
+      HRESULT CreateList(const CATAnalysisExplicitModel *iModel) ;
+
+/**
+ * Deletes a user list from the field model.
+ */
+      HRESULT Delete() ;
+
+/**
+ * Inserts a new object in the list after the current position.
+ * The current position of the list points on the inserted object.
+ * @param iChild
+ *   The object to insert in the list.
+ * @param iBefore
+ *   If TRUE, then the object is inserted before the current position. If FALSE
+ *   then the object is inserted after the current position.
+ * @see CATAnalysisExplicitChild
+ */
+      HRESULT Insert(const CATAnalysisExplicitChild &amp;iChild, CATBoolean iBefore = FALSE) ;
+
+/**
+ * Inserts a list of new objects in the list after the current position.
+ * The current position of the list points on the last inserted object.
+ * @param iList
+ *   The list of objects to insert in the list.
+ * @param iBefore
+ *   If TRUE, then the objects are inserted before the current position. If FALSE
+ *   then the objects are inserted after the current position.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT Insert(CATAnalysisExplicitList &amp;iList, CATBoolean iBefore = FALSE) ;
+
+/**
+ * Inserts a list of new objects in the list after the current position using a filter.
+ * The current position of the list points on the last inserted object.
+ * @param iList
+ *   The list of objects to insert in the list.
+ * @param iCompareType
+ *   The filter criteria.
+ * @param iCompareValue
+ *   A pointer to the value used by the filter criteria.
+ * @param iBefore
+ *   If TRUE, then the objects are inserted before the current position. If FALSE
+ *   then the objects are inserted after the current position.
+ * @see CATAnalysisExplicitList, CATSamCompareType
+ */
+      HRESULT Insert(CATAnalysisExplicitList &amp;iList, CATSamCompareType iCompareType,
+                     const void *iCompareValue, CATBoolean iBefore = FALSE) ;
+
+/**
+ * Inserts a new object in the list after the current position.
+ * The current position of the list points on the inserted object.
+ * @param iChild
+ *   The object to insert in the list.
+ * @see CATAnalysisExplicitChild
+ */
+      void operator+=(const CATAnalysisExplicitChild &amp;iChild) ;
+
+/**
+ * Inserts a list of new objects in the list after the current position.
+ * The current position of the list points on the last inserted object.
+ * @param iList
+ *   The list of objects to insert in the list.
+ * @see CATAnalysisExplicitList
+ */
+      void operator+=(CATAnalysisExplicitList &amp;iList) ;
+
+/**
+ * Removes an object from the list.
+ * The current position of the list points to the previous object (or to the first
+ * one in the list).
+ * @param iAll
+ *   If TRUE, then the list is completely emptied.
+ */
+      HRESULT Remove(CATBoolean iAll = FALSE) ;
+
+/**
+ * Removes a list of objects from the list.
+ * The current position of the list points to the first object in the list.
+ * @param iList
+ *   The list of objects to remove from the list.
+ * @param iSort
+ *   If TRUE, then both lists will be sorted using the &lt;b&gt;CATSamCompareTypePointer&lt;/b&gt; criteria
+ *   before any processing.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT Remove(CATAnalysisExplicitList &amp;iList, CATBoolean iSort = FALSE) ;
+
+/**
+ * Removes all objects from the list which satisfy a particular filter.
+ * @param iCompareType
+ *   The filter criteria.
+ * @param iCompareValue
+ *   A pointer to the value used by the filter criteria.
+ */
+      HRESULT Remove(CATSamCompareType iCompareType, const void *iCompareValue) ;
+
+/**
+ * Removes a list of objects from the list (use Remove() for a more optimized version).
+ * The current position of the list points to the first object in the list.
+ * @param iList
+ *   The list of objects to remove from the list.
+ * @see CATAnalysisExplicitList
+ */
+      void operator-=(CATAnalysisExplicitList &amp;iList) ;
+
+/**
+ * Moves to the first position of the list.
+ * @param iLinkToListModel.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; TRUE  : The object at the first location will be linked to the creation field model of the list.
+ *	   &lt;li&gt; FALSE : The object at the first location will be linked to its own creation field model.
+ */
+      CATAnalysisExplicitListUsr &amp;First(CATBoolean iLinkToListModel = TRUE) ;
+
+/**
+ * Moves to the last position of the list.
+ * @param iLinkToListModel.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; TRUE  : The object at the last location will be linked to the creation field model of the list.
+ *	   &lt;li&gt; FALSE : The object at the last location will be linked to its own creation field model.
+ */
+      CATAnalysisExplicitListUsr &amp;Last(CATBoolean iLinkToListModel = TRUE) ;
+
+/**
+ * Moves to the next position of the list.
+ * @param iLinkToListModel.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; TRUE  : The object at the next location will be linked to the creation field model of the list.
+ *	   &lt;li&gt; FALSE : The object at the next location will be linked to its own creation field model.
+ */
+      CATAnalysisExplicitListUsr &amp;Next(CATBoolean iLinkToListModel = TRUE) ;
+
+/**
+ * Moves to the previous position of the list.
+ * @param iLinkToListModel.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; TRUE  : The object at the previous location will be linked to the creation field model of the list.
+ *	   &lt;li&gt; FALSE : The object at the previous location will be linked to its own creation field model.
+ */
+      CATAnalysisExplicitListUsr &amp;Previous(CATBoolean iLinkToListModel = TRUE) ;
+
+/**
+ * @deprecated V5R16.
+ * Moves to the next position of the list.
+ */
+      CATAnalysisExplicitListUsr &amp;operator++() ;
+
+/**
+ * @deprecated V5R16.
+ * Moves to the previous position of the list.
+ */
+      CATAnalysisExplicitListUsr &amp;operator--() ;
+
+/**
+ * Searches from the current position for data in a list.&lt;br&gt;
+ * &lt;font color=&quot;red&quot;&gt; Warning! Since V5R17, parameter iLinkToListModel is mandatory. &lt;/font&gt;
+ * @param iCompareType
+ *   The search criteria. 
+ * @param iSorted
+ *   If TRUE, then the list is sorted using the search criteria.
+ * @param iWhat
+ *   A pointer to the value being searched for.
+ * @param iLinkToListModel.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ * &lt;ul&gt;&lt;li&gt; TRUE  : The founded object will be linked to the creation field model of the list.
+ *	   &lt;li&gt; FALSE : The founded object will be linked to its own creation field model.
+ */
+      CATAnalysisExplicitListUsr &amp;Find(CATSamCompareType iCompareType, CATBoolean iSorted, const void *iWhat, CATBoolean iLinkToListModel = TRUE) ;
+
+/**
+ * Sorts the list using two criterias.
+ * @param iCompareType1
+ *   The first criteria.
+ * @param iCompareType2
+ *   The second criteria.
+ * @see CATSamCompareType
+ */
+      HRESULT Sort(CATSamCompareType iCompareType1, CATSamCompareType iCompareType2) ;
+
+} ;
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitListATo.html">← 上一页: CATAnalysisExplicitListATo.h</a></div>
+        <div><a href="CATAnalysisExplicitModel.html">下一页: CATAnalysisExplicitModel.h →</a></div>
+    </div>
+</body>
+</html>

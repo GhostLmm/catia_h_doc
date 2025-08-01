@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATSamDocNotification.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATSamDocNotification.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamDefs.html">← 上一页: CATSamDefs.h</a></div>
+        <div><a href="CATSamDocumentTools.html">下一页: CATSamDocumentTools.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSamDocNotification_h
+#define CATSamDocNotification_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//   
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+// 
+//===========================================================================
+//  Inheritance:
+//  ------------
+//            CATNotification  ( System Framework)
+//               CATBaseUnknown (System Framework).
+//
+//===========================================================================
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U1
+  */
+
+// System Framework
+#include &quot;CATNotification.h&quot;    // Needed to derive from CATNotification
+#include &quot;CATAnalysisToolkit.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATDocument;
+
+/**
+ * Identifies events on analysis document.
+ * &lt;p&gt;
+ * These kind of events are:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;b&gt;SamBeforeSave&lt;/b&gt;      : Send before the document saving.&lt;/li&gt; 
+ * &lt;li&gt;&lt;b&gt;SamAfterSave&lt;/b&gt;       : Send after the document saving.&lt;/li&gt; 
+ * &lt;li&gt;&lt;b&gt;SamBeforeUnload&lt;/b&gt;    : Send before the document unloading.&lt;/li&gt; 
+ * &lt;li&gt;&lt;b&gt;SamAfterReload&lt;/b&gt;     : Send after the document reloading.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;SamBeforChildRemove&lt;/b&gt;: Send before an analysis document of the assembly is removed.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;SamAssemblyRemove&lt;/b&gt;  : Send when an Analysis is removed from Assembly definition.&lt;/li&gt;
+ * &lt;li&gt;&lt;b&gt;SamRename&lt;/b&gt;			 : Send when an Analysis is renamed.&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+
+enum CATSamDocActionType 
+{
+    SamBeforeSave, 
+    SamAfterSave,
+	SamBeforeUnload,
+	SamAfterReload,
+	SamBeforChildRemove,
+	SamAssemblyRemove,
+	SamRename
+};     
+
+/**
+  * Class representing a notification send when the analysis document is
+  * loaded of saved.
+  * &lt;b&gt;Role&lt;/b&gt;: An instance of this class is sent by the CATAnalysis document 
+  * when the load or save operation are performed.
+  * @see CATSamDocActionType
+  */
+
+class ExportedByCATAnalysisToolkit CATSamDocNotification : public CATNotification
+{
+  CATDeclareClass;
+  
+  public:
+
+
+    CATSamDocNotification(CATSamDocActionType iActionType,CATDocument *iDocument);
+	CATSamDocNotification(CATSamDocActionType iActionType,CATDocument *iDocument, CATUnicodeString iOldName, CATUnicodeString iNewName);
+ 
+    virtual ~CATSamDocNotification();
+
+/**
+  * Returns the action type.
+  * @return action type.
+  */
+    CATSamDocActionType  GetActionType();
+/**
+  * Returns the document involved.
+  * @return the analysis document.
+  */
+    CATDocument*         GetDocument();
+
+/**
+  * Returns the old name of the document before a renaming.
+  */
+	CATUnicodeString		GiveOldName();
+
+/**
+  * Returns the new name of the document after a renaming.
+  */
+    CATUnicodeString        GiveNewName();
+
+  protected :
+    friend class CATSamDocumentTools;
+
+	void OnDocumentNameNotificationCB(CATCallbackEvent,void* idata,CATNotification *notif,
+                                    CATSubscriberData,CATCallback);
+  private:
+    
+    CATSamDocNotification(const CATSamDocNotification &amp;iObjectToCopy);
+    CATSamDocNotification &amp; operator = (const CATSamDocNotification &amp;iObjectToCopy);
+
+    CATSamDocActionType		_ActionType;
+    CATDocument*			_Document;
+    CATUnicodeString        _OldName;
+	CATUnicodeString        _NewName;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamDefs.html">← 上一页: CATSamDefs.h</a></div>
+        <div><a href="CATSamDocumentTools.html">下一页: CATSamDocumentTools.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATForeignCurveData.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATForeignCurveData.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATExtClonableManager.html">← 上一页: CATExtClonableManager.h</a></div>
+        <div><a href="CATForeignGeometryData.html">下一页: CATForeignGeometryData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATForeignCurveData_H
+#define CATForeignCurveData_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */ 
+
+#include &quot;YP00IMPL.h&quot;                        
+#include &quot;CATForeignGeometryData.h&quot;                                
+
+
+class CATCrvParam;
+class CATCrvEvalCommand;
+class CATCrvEvalResult;
+class CATCrvEvalLocal;
+class CATCrvLimits;
+class CATMathTransformation;
+class CATMathTransformation1D;
+class CATCurve;
+class CATKnotVector;
+class CATMathPoint;
+class CATMathFunctionX;
+class CATMathCurve;
+class CATSurParamReference;
+
+#include &quot;CATCurve.h&quot;
+/**
+ * Base class of the attributes defining the data of a foreign curve.
+ *&lt;br&gt;A foreign curve is introduced into CGM by filling the CATIForeignCurve object data
+ * with a CATForeignCurveData. Then, it is automatically integrated into CGM, and
+ * can be used as any CATCurve by the operators and the topology.
+ * To create your own curve type, you have to derive the CATForeignCurveData
+ * class, and re-write the methods that are associated with.
+ */
+class ExportedByYP00IMPL CATForeignCurveData : public CATForeignGeometryData
+{
+  public :
+/** @nodoc */
+  CATCGMDeclareAttribute (CATForeignCurveData,CATForeignGeometryData);
+/**
+ * Evaluates a CATIForeignCurve and its derivatives.
+ * @param iPoint
+ * The parameter of the point to evaluate.
+ * @param iCommand
+ * The type of evaluation.
+ * @param ioResult.
+ * The object containing the results.
+ */
+  virtual void Eval(const CATCrvParam       &amp; iPoint,
+		            const CATCrvEvalCommand &amp; iCommand,
+		            CATCrvEvalLocal         &amp; ioResult) const ;
+/**
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATCurve and its derivatives inside a domain.
+ * @param iDomainToEvaluate
+ * The limits inside which the domain is to be evaluated.
+ * @param iNbOfPoints
+ * The number of equally spaced points of &lt;tt&gt;iDomainToEvaluate&lt;/tt&gt;.
+ * @param iCommand
+ * The type of evaluation.
+ * @param ioResult.
+ * The object containing the results.
+ */
+  virtual void Eval(const CATCrvLimits      &amp; iDomainToEvaluate,
+		            const CATLONG32                iNbOfPoints,
+		            const CATCrvEvalCommand &amp; iCommand,
+		            CATCrvEvalResult        &amp; ioResult) const ;
+
+/**
+ * Returns the knot vector associated with a CATIForeignCurve.
+ * @return
+ * The knot vector.
+ */
+  virtual const CATKnotVector * GetKnotVector() const = 0 ;
+
+/**
+ * Modifies the limitations of a CATIForeignCurve.
+ * @param iLimits
+ * The new current limitations.
+ */
+  virtual void SetLimits(const CATCrvLimits &amp; iCurrentLimits) = 0 ;
+
+/**
+ * Returns the limitations of a CATIForeignCurve.
+ * @param ioCurrentLimits
+ * The current limitations.
+ */
+  virtual void GetLimits(CATCrvLimits &amp; ioCurrentLimits) const = 0 ;
+
+/**
+ * Returns the maximum limitations of a CATIForeignCurve.
+ *&lt;br&gt;This does not take into account the current limitations of the
+ * curve. This maximum
+ * limits can be the creation limits or the limits that are obtained by 
+ * extrapolation, depending on the types of geometric objects.
+ * @param ioMaxLimits
+ * The maximum limits.
+ */
+  virtual void GetMaxLimits(CATCrvLimits &amp; ioMaxLimits) const = 0 ;
+
+/**
+ * Returns the limitations of an arc of a CATIForeignCurve.
+ *&lt;br&gt;This does not take into account the current limitations of the
+ * curve.
+ * @param iArc
+ * The arc number.
+ * @param ioInternalMaxLimits
+ * The corresponding limitations.
+ */
+  virtual void GetInternalMaxLimits(const CATLONG32 iArc, CATCrvLimits &amp; ioInternalMaxLimits) const = 0 ;
+
+/**
+ * Returns the limitations of an arc of a CATIForeignCurve.
+ *&lt;br&gt;This takes into account the current limitations of the
+ * curve.
+ * @param iArc
+ * The arc number.
+ * @param ioInternalMaxLimits
+ * The corresponding limitations.
+ */
+  virtual void GetInternalLimits(const CATLONG32 iArc, CATCrvLimits &amp; ioInternalLimits) const = 0 ;
+
+/**
+ * Tests whether a CATIForeignCurve is periodic.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curve.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;If the CATIForeignCurve is not periodic.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the CATIForeignCurve is periodic.  &lt;/dl&gt;
+ */
+  virtual CATBoolean IsPeriodic() const = 0 ;
+
+/**
+ * Tests whether a CATIForeignCurve is invariant.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curve.
+ * @param oTransfo1D
+ * The 1D-transformation defining the change of parametrization between 
+ * the CATIForeignCurve and the transformation of
+ * &lt;tt&gt;this&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not set.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of the CATIForeignCurve is geometrically the same as itself.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean IsInvariant(const CATMathTransformation &amp; iTransfo,
+			                     CATMathTransformation1D* oTransfo1D = NULL) const ;
+/**
+ * Tests whether a CATIForeignCurve is confused with another curve.
+ *&lt;br&gt;This method does not take into account the current limitations of 
+ * the curves.
+ * @param oTransfo1D
+ * The 1D-transformation defining the change of parametrization between the transformation of 
+ * the CATIForeignCurve and &lt;tt&gt;iTCurve&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not set.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If the transformation of the CATIForeignCurve is geometrically the same as &lt;tt&gt;iTCurve&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */
+  virtual CATBoolean IsConfused(const CATMathTransformation   &amp; iTransfo,
+				                const CATCurve                * iTCurve,
+				                CATMathTransformation1D       * oTransfo1D ) const = 0 ;
+
+/**
+ * Returns a pointer to the mathematical representation of &lt;tt&gt;this&lt;/tt&gt; CATCurve.
+ *&lt;br&gt; The CATMathCurve . 
+ * @return 
+ * The associated mathematical curve, that belongs to this CATCurve.If the
+ * mathematical representation does not exist, the method returns a
+ *&lt;tt&gt;NULL&lt;/tt&gt; pointer.
+ */
+  virtual CATMathCurve* GetMathCurve() const ;
+/**
+ * Tests whether a CATIForeignCurve has a mathematical representation.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;:
+ *&lt;dl&gt; &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt; &lt;dd&gt;If a CATIForeignCurve has a mathematical representation.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt; &lt;dd&gt;Otherwise.&lt;/dl&gt;
+ */ 
+  virtual CATBoolean HasMathCurve() const ;
+
+/**
+ * Retrieves the CATCrvParam on a CATIForeignCurve corresponding to a given CATMathPoint.
+ * &lt;br&gt;This transformation is only available
+ * on canonical objects such as planes, lines, conics.
+ * @param iPoint
+ * The CATMathPoint which coordinates are to be transformed as CATCrvParam.
+ * @param ioParam
+ * The first corresponding CATCrvParam on the curve. 
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ */
+  virtual CATCurve::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,CATCrvParam  &amp; ioParam) const ;
+  
+/**
+ * Retrieves the CATCrvParam on a CATIForeignCurve corresponding to a CATMathPoint
+ * inside limitations.
+ *&lt;br&gt;This transformation is only available
+ * on canonical objects such as lines and conics.
+ * @param iPoint
+ * The CATMathPoint whose coordinates are to be transformed as a CATCrvParam.
+ * @param ioParam
+ * The first corresponding CATCrvParam on the curve.
+ * @param iInside
+ * The CATCrvLimits to take into account for trimming the curve.
+ * @return
+ * The diagnosis of the number of parameters that can be evaluated on this point.
+ */
+	virtual CATCurve::CATSolutionDiagnostic GetParam(const CATMathPoint &amp; iPoint,
+		          		       	                   CATCrvParam  &amp; ioParam ,
+						                           const CATCrvLimits &amp; iInside  ) const ;
+
+/**
+ * Retrieves the mathematical equation associated with an arc of
+ * a CATIForeignCurve.
+ * &lt;br&gt;The retrieved equations are created by the method, and must not be deleted,
+ * as part of the object.
+ * @param iIndex
+ * The arc number.
+ * @param oFx
+ * A pointer to the equation of the first coordinate &lt;tt&gt;X=oFx(w)&lt;/tt&gt;.
+ * @param oFy
+ * A pointer to the equation of the second coordinate &lt;tt&gt;Y=oFy(w)&lt;/tt&gt;.
+ * @param oFz
+ * A pointer to the equation of the third coordinate &lt;tt&gt;Z=oFy(w)&lt;/tt&gt;.
+ */
+  virtual void CreateLocalEquation(const CATLONG32 iIndex, 
+			                       const CATMathFunctionX * &amp; oFx,
+			                       const CATMathFunctionX * &amp; oFy,
+			                       const CATMathFunctionX * &amp; oFz) = 0 ;
+
+/**
+ * @nodoc
+ * Returns a pointer to the reference of a CATIForeignCurve.
+ * @return
+ * The pointer to the reference of the curve that has &lt;tt&gt;this&lt;/tt&gt; CATForeignCurveData.
+ */
+  const CATCrvParamReference* GetParamReference() const;
+
+/**
+ * Default constructor.
+ */
+  CATForeignCurveData() ;
+  virtual ~CATForeignCurveData() ;
+
+  /** @nodoc */
+  CATCrvParamReference* _ParamReference ;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATExtClonableManager.html">← 上一页: CATExtClonableManager.h</a></div>
+        <div><a href="CATForeignGeometryData.html">下一页: CATForeignGeometryData.h →</a></div>
+    </div>
+</body>
+</html>

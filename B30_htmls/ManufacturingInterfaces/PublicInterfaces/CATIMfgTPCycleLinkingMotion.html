@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPCycleLinkingMotion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgTPCycleLinkingMotion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgStrategyActivity.html">← 上一页: CATIMfgStrategyActivity.h</a></div>
+        <div><a href="CATIMfgTPDuplicate.html">下一页: CATIMfgTPDuplicate.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  2002
+//=============================================================================
+#ifndef CATIMfgTPCycleLinkingMotion_H
+#define CATIMfgTPCycleLinkingMotion_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+class CATUnicodeString;
+class CATMathVector;
+class CATMathPoint;
+class CATIMfgToolPathFeedrate_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgTPCycleLinkingMotion;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgTPCycleLinkingMotion;
+#endif
+
+/**
+* Interface to manage linking motions between cycle location points.
+* This interface is available on @href CATIMfgToolPathCycle object.&lt;br&gt;
+* A linking motion has an index which is the number of relative cycle location point.&lt;br&gt;
+* The linking motion index &#x27;i&#x27; describes the linking traject between the cycle location point index &#x27;i&#x27; and
+* the cycle location point index &#x27;i+1&#x27;.&lt;br&gt;
+* The linking motion index &#x27;0&#x27; describes the approach traject to the first cycle location point.&lt;br&gt;
+* The linking motion index &#x27;N&#x27; with &#x27;N&#x27; equal to the last cycle location point number is the retract traject
+*  from the last location point.&lt;br&gt;
+* A linking motion can be composed of several &#x27;polylines&#x27; (linear motions), &#x27;circle arcs&#x27; (circular motions) and
+*  syntaxes.&lt;br&gt;
+* If the linking motion index &#x27;i&#x27; exists, it means that, in APT file, current CYCLE/ statement has to be stopped 
+*  on cycle location point index &#x27;i&#x27;, that the linking motion has to be generated (with GOTO/,... statements) and
+*  a new CYCLE/ statement has to be generated on cycle location point index &#x27;i+1&#x27;.&lt;br&gt; 
+*
+* @see CATIMfgToolPathCycle
+*/
+
+class ExportedByMfgItfEnv CATIMfgTPCycleLinkingMotion : public CATBaseUnknown
+{
+  CATDeclareInterface ;
+  
+  public :
+
+/**
+*   Adds a sub-motion describing a &quot;Polyline&quot; (set of linear motions).
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param iX,iY,iZ
+*     The coordinates of tip points
+**/
+	  virtual CATBoolean AddAPolylineSubMotion        (int                     iLocationPoint,
+									                   const CATUnicodeString&amp; iTrajectType,
+									                   const CATUnicodeString&amp; iFeedrateType,
+									                   const CATListOfDouble&amp;  iX,
+									                   const CATListOfDouble&amp;  iY,
+									                   const CATListOfDouble&amp;  iZ) = 0;
+
+/**
+*   Adds a sub-motion describing a &quot;Circle Arc&quot; (circular motion).
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param iX,iY,iZ
+*     The coordinates of tip points (discretization of the circle arc)
+*   @param iNormal
+*     The oriented normal to the plane containing the circle arc
+*   @param iCenter
+*     The center of the circle arc
+*    @param iRadius
+*     The radius of the circle arc.
+**/
+	  virtual CATBoolean AddACircleArcSubMotion       (int                     iLocationPoint,
+									                   const CATUnicodeString&amp; iTrajectType,
+									                   const CATUnicodeString&amp; iFeedrateType,
+									                   const CATListOfDouble&amp;  iX,
+									                   const CATListOfDouble&amp;  iY,
+									                   const CATListOfDouble&amp;  iZ,
+													   const CATMathVector&amp;    iNormal,
+												       const CATMathPoint&amp;     iCenter,
+												       double            iRadius) = 0;
+/**
+*   Adds a sub-motion describing a &quot;PP command&quot;.
+*   A PP Syntax is a &quot;NC Command&quot; described in PP Table and evaluated from it during generation of APT file.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iPPCommand
+*      The name of &quot;NC Command&quot;
+*   @param iSequenceNumber
+*      The number of sequence in the PP Table
+**/
+	  virtual CATBoolean AddAPPCommandSubMotion       (int                     iLocationPoint,
+										               const CATUnicodeString&amp; iPPCommand,
+		                                               int                     iSequenceNumber = 1) = 0;
+/**
+*   Adds a sub-motion describing a &quot;user syntax&quot;.
+*   A user syntax is a string generated as it is in APT file.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iUserSyntax
+*      The user syntax
+**/
+	  virtual CATBoolean AddAUserSyntaxSubMotion      (int                     iLocationPoint,
+										               const CATUnicodeString&amp; iUserSyntax) = 0;
+
+
+/**
+*   Adds tool axis on each point for a &quot;Polyline&quot; or a &quot;Circle arc&quot; for 5 Axis machining.
+*   This method should be called just after &quot;AddAPolylineSubMotion&quot; or &quot;AddACircleArcSubMotion&quot; in 5 Axis Machining.
+*   @param iX,iY,iZ
+*      The tool axis values
+**/
+	  virtual CATBoolean AddToolAxisInSubMotion       (const CATListOfDouble&amp;  iX,
+										               const CATListOfDouble&amp;  iY,
+										               const CATListOfDouble&amp;  iZ) = 0;
+/**
+*   Sets a local feedrate on a sub-motion.
+*   The sub-motion must be a &quot;Polyline&quot; or a &quot;Circle Arc&quot;.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*	   The number of sub-motion
+*   @param iFeedrate
+*	   The local feedrate
+**/
+      virtual CATBoolean SetSpecificFeedrate          (int                          iLocationPoint,
+													   int                          iSubMotion,
+		                                               CATIMfgToolPathFeedrate_var&amp; iFeedrate) =0 ;
+
+/**
+*   Sets a ratio on the feedrate of a sub-motion.
+*   The sub-motion must be a &quot;Polyline&quot; or a &quot;Circle Arc&quot;.
+*   The feedrate must be a symbolic one.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*	   The number of sub-motion
+*   @param iRatio
+*	   The ratio to apply to the symbolic feedrate
+**/
+	  virtual CATBoolean SetRatioOnFeedrate           (int                          iLocationPoint,
+													   int                          iSubMotion,
+		                                               double                       iRatio) =0 ;
+
+/**
+*   Sets a symbolic feedrate on a sub-motion.
+*   The sub-motion must be a &quot;Polyline&quot; or a &quot;Circle Arc&quot;.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*	   The number of sub-motion
+*   @param iFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+**/
+	  virtual CATBoolean SetSymbolicFeedrate          (int                          iLocationPoint,
+													   int                          iSubMotion,
+		                                               const CATUnicodeString&amp;      iFeedrateType) =0 ;
+
+/**
+*   Retrieves if at least a location point owns linking sub-motions.
+*   @return
+* 	   The return code
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt; 0 : no location point owns linking sub-motions &lt;/li&gt;
+*      &lt;li&gt; &gt;0 : at least one location point owns one or several linking sub-motions &lt;/li&gt;
+*      &lt;/ul&gt;
+**/
+	  virtual int AreThereLinkingMotions              () = 0;
+
+/**
+*   Retrieves the number of linking sub-motions for a location point.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param oNumberOfMotions
+*      The number of linking sub-motions
+**/
+	  virtual CATBoolean GetNumberOfSubMotions        (int                     iLocationPoint,
+		                                               int&amp;                    oNumberOfMotions) = 0;
+
+/**
+*   Retrieves the type of a sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*    @param iSubMotion
+*      The index of sub-motion
+*    @param oMotionType
+*      The type of sub-motion
+**/
+	  virtual CATBoolean GetSubMotionType             (int                     iLocationPoint,
+													   int                     iSubMotion,
+													   int&amp;                    oMotionType) = 0;
+
+/**
+*   The type of sub-motion.
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;Polyline : sub-motion describing a &quot;polyline&quot; (Set of linear motions)&lt;/li&gt;
+*      &lt;li&gt;Circle : sub-motion describing a &quot;circle arc&quot; (circular motion)  &lt;/li&gt;
+*      &lt;li&gt;PPCommand : sub-motion describing a &quot;PP command&quot; &lt;/li&gt;
+*      &lt;li&gt;UserSyntax : sub-motion describing a &quot;user syntax&quot; &lt;/li&gt;
+*      &lt;/ul&gt;
+*/  
+      enum SubMotionType {PolyLine=0, Circle=1, PPCommand=2, UserSyntax=3};
+
+/**
+*   Retrieves the characteristics of a &quot;polyline&quot; sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*    @param iSubMotion
+*      The index of sub-motion (must be a &quot;polyline&quot; one)
+*   @param oTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param oFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param oX,oY,oZ
+*     The coordinates of tip points
+*/  
+	  virtual CATBoolean GetPolylineCharacteristics   (int                     iLocationPoint,
+													   int                     iSubMotion,
+													   CATUnicodeString&amp;       oTrajectType,
+									                   CATListOfDouble&amp;        oX,
+									                   CATListOfDouble&amp;        oY,
+									                   CATListOfDouble&amp;        oZ) = 0;
+
+/**
+*   Retrieves the characteristics of a &quot;circle arc&quot; sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*    @param iSubMotion
+*      The index of sub-motion (must be a &quot;circle arc&quot; one)
+*   @param oTrajectType
+*      The type of traject
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachTraject&quot; : approach traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPMachiningTraject&quot; : machining traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPRetractTraject&quot; : retract traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPLinkingTraject&quot; : linking traject &lt;/li&gt;
+*      &lt;li&gt;&quot;TPBetweenPathTraject&quot; : traject between path &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param oFeedrateType
+*      The type of feedrate
+*       &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param oX,oY,oZ
+*     The coordinates of tip points
+*   @param oNormal
+*     The oriented normal to the plane containing the circle arc
+*   @param oCenter
+*     The center of the circle arc
+*    @param oRadius
+*     The radius of the circle arc.
+*/  
+	  virtual CATBoolean GetCircleArcCharacteristics   (int                    iLocationPoint,
+													    int                    iSubMotion,
+													    CATUnicodeString&amp;      oTrajectType,
+									                    CATListOfDouble&amp;       oX,
+									                    CATListOfDouble&amp;       oY,
+									                    CATListOfDouble&amp;       oZ,
+														CATMathVector&amp;         oNormal,
+		                                                CATMathPoint&amp;          oCenter,
+		                                                double&amp;                oRadius) = 0;
+
+/**
+*   Evaluates syntax relative to a &quot;PP command&quot; sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*     The index of sub-motion (must be a &quot;PP command&quot; one)
+*   @param oSyntax
+*	 The value of syntax 
+**/
+  virtual CATBoolean GetCommandEvaluation (int                         iLocationPoint,
+										   int                         iSubMotion,
+										   CATListValCATUnicodeString&amp; oSyntax) =0 ;
+
+/**
+*   Retrieves the characteristics of a &quot;PP command&quot; sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*     The index of sub-motion (must be a &quot;PP command&quot; one)
+*   @param oPPCommand
+*      The name of &quot;NC Command&quot;
+*   @param oSequenceNumber
+*      The number of sequence in the PP Table
+*/  
+	  virtual CATBoolean GetPPCommandCharacteristics   (int                    iLocationPoint,
+													    int                    iSubMotion,
+													    CATUnicodeString&amp;      oPPCommand,
+		                                                int&amp;                   oSequenceNumber) = 0;
+/**
+*   Retrieves the characteristics of a &quot;User syntax&quot; sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*     The index of sub-motion (must be a &quot;user syntax&quot; one)
+*   @param oUserSyntax
+*      The user syntax
+*/  
+	  virtual CATBoolean GetUserSyntaxCharacteristics  (int                    iLocationPoint,
+													    int                    iSubMotion,
+														CATUnicodeString&amp;      oUserSyntax) = 0;
+/**
+*   Retrieves the tool axis stored on a sub-motion.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*     The index of sub-motion (must be a &quot;polyline&quot; or a &quot;circle&quot; one)
+*   @param oX,oY,oZ
+*     The tool axis values
+*   @return
+* 	   The return code
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt; FALSE : no tool axis stored for the sub-motion&lt;/li&gt;
+*      &lt;/ul&gt;
+*/  
+	  virtual CATBoolean GetToolAxis                   (int                    iLocationPoint,
+														int                    iSubMotion,
+														CATListOfDouble&amp;       oX,
+									                    CATListOfDouble&amp;       oY,
+									                    CATListOfDouble&amp;       oZ) = 0;
+
+/**
+*   Retrieves the feedrate stored on a sub-motion.
+*   The sub-motion must be a &quot;Polyline&quot; or a &quot;Circle Arc&quot;.
+*   The feedrate must not be a local one.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*	   The number of sub-motion
+*   @param oFeedrate
+*	   The feedrate
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;&quot;TPApproachFeedrate&quot; : approach feedrate
+*      &lt;li&gt;&quot;TPMachiningFeedrate&quot;: machining feedrate
+*      &lt;li&gt;&quot;TPRetractFeedrate&quot; : retract feedrate
+*      &lt;li&gt;&quot;TPRapidFeedrate&quot; : rapid feedrate
+*      &lt;li&gt;&quot;TPFinishingFeedrate&quot; : finishing feedrate
+*      &lt;li&gt;&quot;TPChamferingFeedrate&quot; : chamfering feedrate
+*      &lt;li&gt;&quot;TPPlungeFeedrate&quot; : plunge feedrate
+*      &lt;/ul&gt;
+*   @param oRatio
+*	   The ratio value
+*   @return
+* 	   The return code
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;FALSE : the feedrate is a local one (use &quot;GetSpecificFeedrate&quot; method)
+*      &lt;/ul&gt;
+**/
+	  virtual CATBoolean GetSymbolicFeedrate		  (int                          iLocationPoint,
+													   int                          iSubMotion,
+		                                               CATUnicodeString&amp;            oFeedrate,
+													   double&amp;                      oRatio) =0 ;
+
+/**
+*   Retrieves the local feedrate stored on a sub-motion.
+*   The sub-motion must be a &quot;Polyline&quot; or a &quot;Circle Arc&quot;.
+*   The feedrate must be a local one.
+*   @param iLocationPoint
+*      The index of location point
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;0 : approach traject to the first location point &lt;/li&gt;
+*      &lt;li&gt;last location point index : retract traject from the last location point&lt;/li&gt;
+*      &lt;li&gt;i : linking traject from the location point index i to the location point index i+1 &lt;/li&gt;
+*      &lt;/ul&gt;
+*   @param iSubMotion
+*	   The number of sub-motion
+*   @param oFeedrate
+*	   The feedrate
+*   @return
+* 	   The return code
+*      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+*      &lt;ul&gt;
+*      &lt;li&gt;FALSE : the feedrate is a not a local one (use &quot;GetSymbolicFeedrate&quot; method) &lt;/li&gt;
+*      &lt;/ul&gt;
+**/
+	  virtual CATBoolean GetSpecificFeedrate		  (int                          iLocationPoint,
+													   int                          iSubMotion,
+		                                               CATIMfgToolPathFeedrate_var&amp; oFeedrate) =0 ;
+};
+
+CATDeclareHandler(CATIMfgTPCycleLinkingMotion, CATBaseUnknown);
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgStrategyActivity.html">← 上一页: CATIMfgStrategyActivity.h</a></div>
+        <div><a href="CATIMfgTPDuplicate.html">下一页: CATIMfgTPDuplicate.h →</a></div>
+    </div>
+</body>
+</html>

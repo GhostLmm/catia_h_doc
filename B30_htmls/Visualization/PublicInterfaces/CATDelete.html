@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATDelete.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATDelete.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCsoNotification.html">← 上一页: CATCsoNotification.h</a></div>
+        <div><a href="CATDisplayType.html">下一页: CATDisplayType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDelete_h
+#define CATDelete_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CATVisualization.h&quot;
+#include &quot;CATModelEntityNotification.h&quot;
+
+
+/**
+ * Class representing a visualization event dedicated to delete any graphical representations of one object.
+ * &lt;b&gt;Role&lt;/b&gt;: providing a visualization event which holds all the information required to destroy all the graphical
+ * representations of one object within any opened documents where it is visualized.
+ * To achieve this goal, one has only to send a @href CATDelete event.
+ * Refer to the @href CATIModelEvents
+ * interface to have details about the visualization events management and their mechanism.
+ * 
+ *
+ * @see CATModelEntityNotification
+ */
+class ExportedByCATVisualization CATDelete : public CATModelEntityNotification
+{
+  CATDeclareClass;
+
+  public:
+
+    /** @nodoc */
+    CATDelete(void *iModelId);
+
+   /** 
+     * Constructs the Class.
+     * @param iObject
+     *    a pointer to the object one wants to delete its graphical representations.
+     */
+    CATDelete(CATBaseUnknown *iObject);
+
+    virtual ~CATDelete();
+
+  /** 
+     * Returns a pointer to a new CATDelete event which is the clone of the current one.
+     */
+  virtual CATModelNotification* Clone ();
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCsoNotification.html">← 上一页: CATCsoNotification.h</a></div>
+        <div><a href="CATDisplayType.html">下一页: CATDisplayType.h →</a></div>
+    </div>
+</body>
+</html>

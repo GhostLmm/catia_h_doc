@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImageFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImageFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamImageDisplayManager.html">← 上一页: CATISamImageDisplayManager.h</a></div>
+        <div><a href="CATISamImageFilters.html">下一页: CATISamImageFilters.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamImageFactory_H
+#define CATISamImageFactory_H
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=============================================================================
+//
+// CATISamImageFactory : interface designed to create &quot;images&quot;
+//
+//=============================================================================
+// June 2002 : Creation
+//=============================================================================
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+// prereqs  System
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+class CATUnicodeString;
+class CATString;
+
+// prereqs SamVisuIterfaces 
+class CATISamImage;
+
+#include &quot;CATSamVisuUUID.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISamImageFactory;
+
+/**
+ * Analysis &quot;images&quot; creation.
+ * &lt;b&gt;Role: &lt;/b&gt; Analysis &lt;i&gt;Images&lt;/i&gt; are 3D representation of analysis data.&lt;br&gt;
+ * &lt;i&gt;Images&lt;/i&gt; are defined in one or several XML files that describe :&lt;br&gt;
+ * &lt;li&gt; allowed analysis data ( physical types, value type, ...)
+ * &lt;li&gt; filters ( component, layer, ...)
+ * &lt;li&gt; dress up attributes
+ * &lt;li&gt; ...
+ * Query this interface on the post-pro container to create new images&lt;br&gt;
+ * or to add/remove XML image description files.
+ * &lt;br&gt;&lt;u&gt;Note :&lt;/u&gt;&lt;/b&gt; if an image file named &lt;i&gt;MyFile.xml&lt;/i&gt; is added, &lt;br&gt;
+ * the images NLS names will be searched in the file &lt;i&gt;MyFile.CATNls&lt;/i&gt;.
+ */ 
+
+class ExportedByCATSamVisuUUID CATISamImageFactory : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+  
+   /**
+    * Add an XML image description file. &lt;br&gt;
+    * If not called, the image description will be searched in the default files. 
+    * @param iFilePath
+    *   The path to the file to be added.
+    */
+    virtual HRESULT AddImageFile ( const CATUnicodeString &amp; iFilePath ) = 0;
+
+   /**
+    * Remove an XML image description file.
+    * @param iFilePath
+    *   The path to the file to be removed.
+    */
+    virtual HRESULT RemoveImageFile ( const CATUnicodeString &amp; iFilePath ) = 0;
+    
+   /**
+    * Retrieve the list of loaded image files.
+    * @param oNbImageFiles
+    *   The number of loaded files
+    * @param oFilePathes
+    *   The pathes of loaded files
+    */
+    virtual HRESULT GetImageFiles ( int &amp; oNbImageFiles , const CATUnicodeString * &amp; oFilePathes ) = 0;
+
+   /**
+    * Create a new image.
+    * @param iImageIdentifier
+    *   the image&#x27;s identifier (as found in the XML files).
+    * @param iOwner
+    *   the analysis set or entity under which the image will be plugged, and the created image
+    *   will be added in the current Image Model.
+    *   If NULL, &lt;i&gt;iValuesProviders&lt;/i&gt; has to be specified and the created image will not be added 
+    *   in the Image Model.
+    * @param oNewImage
+    *   the newly created image.
+    * @param iValuesProviders
+    *   the list of objects from which the values will be retrieved with the &lt;br&gt;
+    *   CATICharacCollector interface. &lt;br&gt;
+    *   If not specified (default), values will be retrieved from the &lt;i&gt;iOwner&lt;/i&gt; parameter.
+    * @param iDisplacementsProviders
+    *   the list of objects from which the displacements will be retrieved with the &lt;br&gt;
+    *   CATICharacCollector interface.
+    *   If not specified (default), displacements will be retrieved from the &lt;i&gt;iOwner&lt;/i&gt; parameter.
+    * @param iUpdate
+    *   specifies if the new created image must be updated or not.
+    *   By default, the image will be updated.
+    * @see CATISamImage
+    * @see CATICharacCollector
+    */
+    virtual HRESULT CreateImage ( const CATString &amp; iImageIdentifier ,
+                                  const CATBaseUnknown * iOwner ,
+                                  CATISamImage * &amp; oNewImage ,
+                                  const CATLISTP(CATBaseUnknown) * iValuesProviders = NULL ,
+                                  const CATLISTP(CATBaseUnknown) * iDisplacementsProviders = NULL  ,
+                                  const CATBoolean iUpdate = TRUE ) = 0;
+};
+
+CATDeclareHandler(CATISamImageFactory, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamImageDisplayManager.html">← 上一页: CATISamImageDisplayManager.h</a></div>
+        <div><a href="CATISamImageFilters.html">下一页: CATISamImageFilters.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIShapeFeatureBody.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIShapeFeatureBody.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRSur.html">← 上一页: CATIRSur.h</a></div>
+        <div><a href="CATIShapeFeatureProperties.html">下一页: CATIShapeFeatureProperties.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIShapeFeatureBody_h
+#define CATIShapeFeatureBody_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot; 
+#include &quot;CATMfDefs.h&quot; 
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+class CATListValCATISpecObject_var;
+class CATListValCATISpecAttribute_var; 
+class CATListValCATBaseUnknown_var;
+class CATISpecAttribute_var ;
+class CATIShapeFeatureBody_var;
+class CATBody_var;
+class CATProcReport;
+class CATCGMJournalList;
+
+//-----------------------------------------------------------------------------
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIShapeFeatureBody;
+#else
+extern &quot;C&quot; const IID IID_CATIShapeFeatureBody;
+#endif
+
+
+/**
+ * Interface to manage solid features.
+ * &lt;b&gt;Role&lt;/b&gt;: A solid feature (@href CATIShapeFeatureProperties ) is a geometrical feature 
+ * which is aggregated by a MechanicalTool (@href CATIMechanicalTool ) feature. This aggregation, done by the
+ * @href CATIPrtProceduralView interface and not by the @href CATIDescendants interface, 
+ * enables you to assure the procedural build of the MechanicalTool.
+ * &lt;br&gt;&lt;br&gt;
+ * The first methods of this interface enables you to retrieve data on the solid feature which 
+ * are used for the build of the MechanicalTool (and the solid feature itself of course):
+ * &lt;ul&gt;
+ * &lt;li&gt;The &lt;b&gt;ResultIN&lt;/b&gt; and the &lt;b&gt;ResultOUT&lt;/b&gt; attributes  of the solid feature&lt;/li&gt;
+ * &lt;p&gt;There are specific attributes used by the procedural build of the MechanicalTool feature.
+ * They are named so in all the documentation, but it is not necessarily their name.&lt;/p&gt; 
+ * &lt;p&gt;The ResultOUT attribute value of the a solid feature will be the value of the ResultIN 
+ * attribute of its next solid in the MechanicalTool.
+ * 
+ * &lt;p&gt;The two methods to retrieve these attributes are  @href #GetBodyINAttributes 
+ * and @href #GetResultOUT &lt;/p&gt;
+ * &lt;li&gt;The &lt;b&gt;topology&lt;/b&gt; (&lt;tt&gt;CATBody&lt;/tt&gt;) associated with these attributes&lt;/li&gt;
+ * &lt;p&gt;The dedicated methods are @href #GetBodyIN and @href #GetBodyOUT &lt;/p&gt;
+ * &lt;li&gt;The &lt;tt&gt;CATBody&lt;/tt&gt; associated to the form of the solid&lt;/li&gt;
+ * &lt;p&gt;The @href #GetShape method is interesting for the form feature. For
+ * those features, this method returns the topological object which represents the form
+ * of the feature: a cylinder for the Hole feature for example. This topology is built by the 
+ * @href CATIBuildShape#Build method. &lt;/p&gt;
+ * &lt;/ul&gt;
+ * The four last methods (from @href #GetNextShape to @href #ListNextShapeFeatures ) enable you
+ * to browse the procedural view of the MechanicalTool feature.
+ * 
+ */
+class ExportedByMecModItfCPP CATIShapeFeatureBody : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  public:
+
+/**
+ * Returns the ResultOUT attribute value.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This methods returns the internal feature aggregated by the internal feature which
+ * holds the topological result of the solid feature. To retrieve this topological result (a CATBody)
+ * you have two means:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href CATIGeometricalElement#GetBodyResult on the returned value &lt;/li&gt;
+ * &lt;li&gt;Retrieve the first element in the list generated by the @href #GetBodyOUT method&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+  virtual CATISpecObject_var GetResultOUT() = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual CATListValCATISpecAttribute_var*  GetBodyOUTAttributes() = 0 ;
+
+/**
+ * Returns the topological result associated with the ResultOUT attribute.
+ * @param iInterfaceName
+ * Use the CATBody interface 
+ * @return 
+ * This method returns a list with only one element, the CATBody associated to the
+ * value of the ResultOUT attribute.
+  */  
+  virtual CATListValCATBaseUnknown_var* GetBodyOUT(CATClassId iInterfaceName ) = 0 ;
+
+ /**
+ * Returns the topology associated with the feature.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method is equivalent to the @href CATIGeometricalElement#GetBodyResult
+ * method. 
+ * @param iInterfaceName
+ * Use CATBody as interface name.
+ */ 
+  virtual CATListValCATBaseUnknown_var* GetShape (CATClassId iInterfaceName) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int  SetBodyOUT( CATListValCATBaseUnknown_var* valuation_list) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int  SetBodyOUT( CATBaseUnknown_var valuation ) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int  SetShape ( CATListValCATBaseUnknown_var* valuation_list) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int  SetShape ( CATBaseUnknown_var valuation ) = 0 ;
+
+  /**
+ * Returns the topological result associated with the ResultIN attribute.
+ * @param iInterfaceName
+ * Use the CATBody interface 
+ * @return 
+ * This method returns a list with only one element, the CATBody associated to the
+ * value of the ResultIN attribute.
+  */  
+  virtual CATListValCATBaseUnknown_var* GetBodyIN (CATClassId iInterfaceName) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int SetBodyIN( CATISpecAttribute_var attr_out ) = 0 ;
+
+/**
+ * @nodoc.
+ */
+  virtual int SetBodyIN( CATISpecObject_var valuation ) = 0 ;
+
+
+  /**
+ * Returns the ResultIN attribute.
+ * @return 
+ * This method returns a list with only one element, the ResultIN attribute.
+ */
+  virtual  CATListValCATISpecAttribute_var* GetBodyINAttributes() = 0 ;
+
+
+/**
+ * Returns the solid feature following the current feature in the procedural view.
+ */
+  virtual CATIShapeFeatureBody_var GetNextShape() = 0 ;
+
+/**
+ * Returns the solid feature prior to the current feature in the procedural view.
+ */
+  virtual CATIShapeFeatureBody_var GetPreviousShape() = 0 ;
+
+/**
+ * Returns all the solid features prior to the current feature in the procedural view.
+ */
+  virtual CATLISTV(CATISpecObject_var) ListPreviousShapeFeatures() = 0 ;
+
+/**
+ * Returns all the solid features following the current feature in the procedural view.
+ */
+  virtual CATLISTV(CATISpecObject_var) ListNextShapeFeatures() = 0 ; 
+
+  
+};
+
+CATDeclareHandler( CATIShapeFeatureBody, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRSur.html">← 上一页: CATIRSur.h</a></div>
+        <div><a href="CATIShapeFeatureProperties.html">下一页: CATIShapeFeatureProperties.h →</a></div>
+    </div>
+</body>
+</html>

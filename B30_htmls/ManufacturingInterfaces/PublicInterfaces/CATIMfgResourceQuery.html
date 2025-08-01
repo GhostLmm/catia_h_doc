@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgResourceQuery.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgResourceQuery.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgResourceImportDB.html">← 上一页: CATIMfgResourceImportDB.h</a></div>
+        <div><a href="CATIMfgResourceQueryCatalog.html">下一页: CATIMfgResourceQueryCatalog.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMfgResourceQuery_H
+#define CATIMfgResourceQuery_H
+
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2000
+//=============================================================================
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+// module
+#include &quot;MfgItfEnv.h&quot;
+
+// inheritance
+#include &quot;CATBaseUnknown.h&quot;
+
+// Forwards 
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATIDocId.h&quot;
+#include &quot;CATDocument.h&quot;
+
+// OLE iid
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgResourceQuery;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgResourceQuery;
+#endif
+
+/**   
+ * Interface dedicated to resource query management.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface offers services to manage the queries 
+ *              for resource objects (i.e tools, machines, ...)&lt;br&gt;
+ * 
+ * Implementing this interface will allow customer to connect its own database
+ * for managing resources into CATIA V5 Manufacturing products.&lt;br&gt;
+ * 
+ * Common attributes are declared in CATMfgResourceConstant.&lt;br&gt;
+ * Common attributes are declared in CATMfgToolConstant.&lt;br&gt;
+ * Common attributes are declared in CATMfgInsertConstant.&lt;br&gt;
+ * Common attributes are declared in CATMfgMachineConstant.&lt;br&gt;
+ * 
+ */
+
+class ExportedByMfgItfEnv CATIMfgResourceQuery : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+  public:
+
+/**
+ * Defines the type of resource on which we want to add constraints.
+ * @param MfgCurrent
+ * The constraint we are defining works on the current type of resource defined with Initialize. 
+ * @param MfgTool
+ * The constraint we are defining works on the tool component. 
+ * @param MfgInsert
+ * The constraint we are defining works on the insert component. 
+ */
+  enum MfgResourceQueryType { MfgCurrent, MfgTool, MfgInsert };
+
+ /**
+ * Initializes the connection to the repository for query execution.
+ */
+   virtual HRESULT InitConnection ()=0;
+
+/**
+ * Resets the connection to the repository for query execution.
+ */
+   virtual HRESULT ResetConnection ()=0;
+
+/**
+ * Retrieves the names of query location to display in the selection panels.
+ * @param oListNames
+ *     The list of names to display (describing the database or catalog names)
+ */
+   virtual HRESULT GetNamesToDisplay  (CATListOfCATUnicodeString &amp;oListNames)=0;
+
+ /**
+ * Initializes the query on the resource object.
+ * @param iName
+ *     The name of the database or catalog.
+ * @param iType
+ *     The family of the searched object (ex:End Mill Tool)
+ */
+   virtual HRESULT Initialize  (const CATUnicodeString &amp;iName, 
+								                const CATUnicodeString &amp;iType)=0;
+
+/**
+ * Defines the type of resource on which we want to add constraints.
+ * Only used for Tool Assembly queries
+ * @param iResourceType
+ *     The type of resource (MfgTool or MfgInsert).
+ * @param iFamily
+ *     The family of the resource (MfgEndMillTool, MfgRoundInsert...), defined in 
+ *     CATMfgToolConstant &amp; CATMfgInsertConstant
+ */
+   virtual HRESULT AddSubComponentTypeConstraint (CATIMfgResourceQuery::MfgResourceQueryType  iResourceType,
+                                                  const CATUnicodeString                     &amp;iFamily)=0;
+
+/**
+ * Defines one simple constraint for query on &quot;Name&quot; attribute.
+ * For example, searches for object whose &quot;Name&quot; is &quot;Sample&quot;.
+ * @param iValue
+ *    The reference name
+ */
+   virtual HRESULT AddNameLikeConstraint  (const CATUnicodeString   &amp;iValue,
+                                           CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Defines one simple constraint for query on &quot;Diameter&quot; attribute.
+ * For example, searches for object whose &quot;Diameter&quot; value is between 10.0mm and 20.0mm.
+ * @param iMinValue
+ *     The diameter minimum value
+ * @param iMaxValue
+ *     The diameter maximum value
+ * @param iUnit 
+ *     The unit name 
+ */
+   virtual HRESULT AddDiameterBetweenConstraint  (const double             &amp;iMinValue,
+												                          const double             &amp;iMaxValue,
+                                                  const CATUnicodeString   &amp;iUnit,
+                                                  CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Defines one constraint for query on integer attribute.
+ * For example, searches for object whose attribute &quot;Number&quot; is greater than 0.
+ * @param iAttribute
+ *     The attribute name 
+ * @param iOperator
+ *     The operator
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:Equal&lt;/li&gt;
+ *     &lt;li&gt;1:Not Equal&lt;/li&gt;
+ *     &lt;li&gt;2:Less&lt;/li&gt;
+ *     &lt;li&gt;3:Greater&lt;/li&gt;
+ *     &lt;li&gt;4:Less or Equal&lt;/li&gt;
+ *     &lt;li&gt;5:Greater Or Equal&lt;/li&gt;
+ *     &lt;li&gt;6:Not Less&lt;/li&gt;
+ *     &lt;li&gt;7:Not Greater&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iIntValue
+ *     The integer value
+ */
+   virtual HRESULT AddConstraint  (const CATUnicodeString   &amp;iAttribute, 
+								                   const int                &amp;iOperator,
+                                   const int                &amp;iValue,
+                                   CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Defines one constraint for query on double attribute.
+ * For example, searches for object whose attribute &quot;Diameter&quot; is greater than 0.0 mm.
+ * @param iAttribute
+ *     The attribute name
+ * @param iOperator
+ *     The operator
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:Equal&lt;/li&gt;
+ *     &lt;li&gt;1:Not Equal&lt;/li&gt;
+ *     &lt;li&gt;2:Less&lt;/li&gt;
+ *     &lt;li&gt;3:Greater&lt;/li&gt;
+ *     &lt;li&gt;4:Less or Equal&lt;/li&gt;
+ *     &lt;li&gt;5:Greater Or Equal&lt;/li&gt;
+ *     &lt;li&gt;6:Not Less&lt;/li&gt;
+ *     &lt;li&gt;7:Not Greater&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iValue
+ *     The double value
+ * @param iUnit
+ *     The unit name 
+ */
+   virtual HRESULT AddConstraint  (const CATUnicodeString   &amp;iAttribute, 
+								                   const int                &amp;iOperator,
+                                   const double             &amp;iValue,
+                                   const CATUnicodeString   &amp;iUnit,
+                                   CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Defines one constraint for query on string attribute.
+ * For example, searches for object whose &quot;Name&quot; attribute equals &quot;TOTO&quot;.
+ * @param iAttribute
+ *     The attribute name 
+ * @param iOperator
+ *     The operator
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:Equal&lt;/li&gt;
+ *     &lt;li&gt;10:Like&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iValue
+ *     The string value
+ */
+   virtual HRESULT AddConstraint  (const CATUnicodeString   &amp;iAttribute, 
+								                   const int                &amp;iOperator,
+                                   const CATUnicodeString   &amp;iValue,
+                                   CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Defines several constraints for query on a specific attribute.
+ * For example, searches for object where &quot;Diameter&quot; attribute value is greater than 10.0mm 
+ *        and &quot;Diameter&quot; attribute value is less than 50.0mm.
+ * @param iAttribute
+ *     The attribute name
+ * @param iUnit
+ *     The unit name (for example, &quot;mm&quot;)
+ * @param iTypeValue
+ *     The type of value of the attribute  
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:Boolean value (Yes/No)&lt;/li&gt;
+ *     &lt;li&gt;1:Integer value&lt;/li&gt;
+ *     &lt;li&gt;2:Double value&lt;/li&gt;
+ *     &lt;li&gt;3:String value&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iOperators
+ *     The list of operators
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:Equal (for integer, double and string)&lt;/li&gt;
+ *     &lt;li&gt;1:Not Equal (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;2:Less (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;3:Greater (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;4:Less or Equal (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;5:Greater Or Equal (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;6:Not Less (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;7:Not Greater (for integer and double)&lt;/li&gt;
+ *     &lt;li&gt;10:Like (for string only)&lt;/li&gt;
+ *     &lt;/ul&gt;
+ * @param iIntValues
+ *     The list of integers values (if iTypeValue = 0 or 1)
+ * @param iDblValues
+ *     The list of double values (if iTypeValue = 2)
+ * @param iStrValues
+ *     The list of string values (if iTypeValue = 3)
+ * @param iLogLinks
+ *     The list of integer values describing logical links between constraints
+ *     &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *     &lt;ul&gt;
+ *     &lt;li&gt;0:AND&lt;/li&gt;
+ *     &lt;li&gt;1:OR&lt;/li&gt;
+ *     &lt;/ul&gt;
+ */
+   virtual HRESULT AddConstraints  (const CATUnicodeString            &amp;iAttribute, 
+								                    const CATUnicodeString            &amp;iUnit,
+                                    const int                         &amp;iTypeValue,
+                                    const CATListOfInt                &amp;iOperators,
+                                    const CATListOfInt                &amp;iIntValues,
+                                    const CATListOfDouble             &amp;iDblValues,
+                                    const CATListOfCATUnicodeString   &amp;iStrValues,
+                                    const CATListOfInt                &amp;iLogLinks,
+                                    CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Executes the defined query.
+ */
+   virtual HRESULT Execute()=0;
+
+/**
+ * Retrieves the result size of the defined query.
+ */
+   virtual HRESULT GetResultSize(int &amp;oNbElem,
+                                 CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Retrieves the values of an object responding to the defined query.
+ * @param iElem
+ *    The object number
+ * @param oAttributes
+ *    List containing attributes of the object
+ * @param oTypeValues
+ *    List containing types of values of the attributes
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;ul&gt;
+ *   &lt;li&gt;0: boolean&lt;/li&gt;
+ *   &lt;li&gt;1: integer&lt;/li&gt;
+ *   &lt;li&gt;2: double&lt;/li&gt;
+ *   &lt;li&gt;3: string&lt;/li&gt;
+ *   &lt;/ul&gt;
+ * @param oNbValues
+ *    List containing number of values for each attribute
+ * @param oIntValues
+ *    List containing integer type values
+ * @param oDblValues
+ *    List containing double type values
+ * @param oStrValues
+ *    List containing string type values
+ */
+   virtual HRESULT GetDescription (const int                  &amp;iElem, 
+					 			                   CATListOfCATUnicodeString  &amp;oAttributes, 
+								                   CATListOfInt               &amp;oTypeValues, 
+								                   CATListOfInt               &amp;oNbValues,
+                                   CATListOfInt               &amp;oIntValues,
+                                   CATListOfDouble            &amp;DblValues, 
+                                   CATListOfCATUnicodeString  &amp;StrValues,
+                                   CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Retrieves the Tool or Insert name defined on the tool assembly, and its index.
+ * @param iNumElem
+ *    integer representating the index of the tool assembly
+ * @param oCompName
+ *    The component name
+ * @param oCompNumElem
+ *    integer representing the index of the tool assembly component,
+ *    use GetDescription with same MfgResourceQueryType and this index to get its values
+ * @param iResourceType
+ *    type of resources to retrieve (MfgTool or MfgInsert)
+ */
+   virtual HRESULT GetComponentNameAndIndex(const int        &amp;iNumElem,
+                                            CATUnicodeString &amp;oCompName,
+                                            int              &amp;oCompNumElem,
+                                            CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Retrieves the correctors information.
+ * @param iElem
+ *     The object number 
+ * @param oListPoints       : List of type point as CATUnicodeString (Ex: P1, ..., P9) 
+ * @param oListNumber       : List of corrector number as Integer 
+ * @param oListLengthNumber : List length Corrector number as Integer 
+ * @param oListRadiusNumber : List radius Corrector number as Integer 
+ * @param oListDiameter     : List tool diameter for this point as Double 
+ */
+   virtual HRESULT GetCorrectors (const int                 &amp;iElem,
+                                  CATListOfCATUnicodeString &amp;oListPoints,
+                                  CATListOfInt              &amp;oListNumber,
+                                  CATListOfInt              &amp;oListLengthNumber,
+                                  CATListOfInt              &amp;oListRadiusNumber,
+                                  CATListOfDouble           &amp;oListDiameter,
+                                  CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Retrieves the representation of an object responding to the defined query.
+ * @param iElem
+ *     The object number 
+ * @param oPathName
+ *     The path to the external file (for example, CATPart document) containing the 
+ *                    representation of the object
+ */
+   virtual HRESULT GetRepresentation  (const int         &amp;iElem,
+  								                     CATUnicodeString  &amp;oPathName,
+                                       CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+/**
+ * Retrieves the representation of an object responding to the defined query.
+ * @param iElem
+ *     The object number 
+ * @param oDocId
+ *     The CATIDocId to the external file (for example, CATPart document) containing the 
+ *                    representation of the object
+ */
+   virtual HRESULT GetRepresentation  (const int         &amp;iElem,
+  								                     CATIDocId         *&amp;oDocId,
+                                       CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent)=0;
+
+/**
+ * Instanciate the resource in the document.
+ * @param iElem
+ *     The object number 
+ * @param hBUResources
+ *     The handler on the created resource
+ * @param piDoc
+ *     The CATDocument where the resource has to be instantiated
+ */
+   virtual HRESULT InstantiateResourceInDocument (const int          &amp;iElem,
+                                                  CATBaseUnknown_var &amp;hBUResources,
+                                                  CATIMfgResourceQuery::MfgResourceQueryType iResourceType=MfgCurrent,
+                                                  CATDocument *piDoc = NULL)=0;
+
+};
+CATDeclareHandler(CATIMfgResourceQuery, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgResourceImportDB.html">← 上一页: CATIMfgResourceImportDB.h</a></div>
+        <div><a href="CATIMfgResourceQueryCatalog.html">下一页: CATIMfgResourceQueryCatalog.h →</a></div>
+    </div>
+</body>
+</html>

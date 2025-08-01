@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConstraintModeler/PublicInterfaces/CATMfPossibleCst.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ConstraintModeler/PublicInterfaces/CATMfPossibleCst.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDegreesOfFreedom.html">← 上一页: CATIDegreesOfFreedom.h</a></div>
+        <div><a href="MF0CST.html">下一页: MF0CST.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMfPossibleCst_h
+#define CATMfPossibleCst_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;MF0CST.h&quot;
+#include &quot;CATCstDefs.h&quot;
+
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATListOfDouble.h&quot;
+
+#include &quot;CATICstData.h&quot;
+
+/**
+ * @deprecated V5R15
+ * do not use
+ * Class representing a constraint definition.
+ * &lt;b&gt;Role&lt;/b&gt;: A constraint definition can be used to create a constraint.
+ * Distance values are in millimeters, angle values are in degrees.
+ * @see CATICst, CATICstFactory
+ */
+
+class ExportedByMF0CST CATMfPossibleCst
+{
+  public:
+
+/**
+ * Constructs an empty constraint definition.
+ */
+    CATMfPossibleCst(); 
+
+/**
+ * Copy constructor.
+ */
+    CATMfPossibleCst(const CATMfPossibleCst&amp; iCst); 
+
+/**
+ * Constructs a constraint definition.
+ * @param iElem1
+ * The first element.
+ * @param iElem2
+ * The second element, equal to NULL_var if not defined.
+ * @param iElem3
+ * The third element, equal to NULL_var if not defined.
+ * @param iCstData
+ * The constraint type.
+ * @param iStatus
+ * The constraint status.
+ * @param iListOfAttributeNames
+ * The list of attribute names.
+ * @param iListOfAttributeValues
+ * The list of attribute values.
+ * @param iDistanceOrAngle
+ * The first numerical value, a distance or an angle.
+ * @param iListOfDoubles
+ * The list of numerical values.
+ */
+    CATMfPossibleCst(const CATBaseUnknown_var&amp; iElem1,
+		     const CATBaseUnknown_var&amp; iElem2,
+		     const CATBaseUnknown_var&amp; iElem3,
+		     const CATICstData_var&amp; iCstData,
+		     const CATCstStatus iStatus,
+		     const CATListOfCATUnicodeString iListOfAttributeNames,
+ 		     const CATListOfCATUnicodeString  iListOfAttributeValues,
+		     const double iDistanceOrAngle=0,
+		     const CATListOfDouble iListOfDoubles=NULL 
+		     ); 
+
+    ~CATMfPossibleCst();
+
+/**
+ * Retrieves definition.
+ * @param oCstData
+ * The constraint type.
+ * @param oStatus
+ * The constraint status.
+ * @param oDistancceOrAngle
+ * The first numerical value, a distance or an angle.
+ * @param oListOfAttributeNames
+ * The list of attribute names.
+ * @param oListOfAttributeValues
+ * The list of attribute values.
+ */
+
+    void Read(CATICstData_var&amp; oCstData,
+	   CATCstStatus&amp; oStatus,
+	   double&amp; oDistanceOrAngle,
+	   CATListOfCATUnicodeString&amp; oListOfAttributeNames,
+	   CATListOfCATUnicodeString&amp; oListOfAttributeValues) const; 
+
+    
+/**
+ * Returns a constrained element.
+ * @param iElemNumber
+ * The number of the element.
+ */
+    CATBaseUnknown_var GetElement(const int iElemNumber) const;
+
+/**
+ * Returns type.
+ */
+    CATICstData_var  GetCstData() const;
+
+/**
+ * Returns status.
+ */
+    CATCstStatus GetStatus() const;
+
+/**
+ * Returns the first numerical value, a distance or an angle.
+ */
+    double GetDistanceOrAngle() const;
+
+/**
+ * Retrieves attributes names and attributes values.
+ * @param oListOfAttributeNames
+ * The list of attributes names.
+ * @param oListOfAttributeValues
+ * The list of attributes values.
+ */
+    void GetAttributes(CATListOfCATUnicodeString&amp; oListOfAttributeNames,
+                       CATListOfCATUnicodeString&amp; oListOfAttributeValues) 
+      const;
+
+/**
+ * Returns numerical values.
+ */
+    CATListOfDouble GetDoubles() const;
+
+/**
+ * Dumps the constraint definition.
+ */
+    int Dump() const;
+
+  private:
+
+/**
+ * @nodoc
+ * Constrained elements.
+ */
+    CATBaseUnknown_var _elem1;
+    CATBaseUnknown_var _elem2;
+    CATBaseUnknown_var _elem3;
+
+/**
+ * @nodoc
+ * Type of the constraint.
+ */
+    CATICstData_var _cstData;
+    
+/**
+ * @nodoc
+ * Status of the constraint.
+ */
+    CATCstStatus _status;
+
+/**
+ * @nodoc
+ * Value of the distance or angle.
+ */
+    double _distanceOrAngle;
+
+/**
+ * @nodoc
+ * List of the attributes which exist on the constraint.
+ */
+    CATListOfCATUnicodeString _listOfAttributeNames ;
+    
+/**
+ * @nodoc
+ * List of the values of the attributes.
+ */
+    CATListOfCATUnicodeString _listOfAttributeValues ;
+  
+/**
+ * @nodoc
+ * List of the values.
+ */
+    CATListOfDouble _listOfDoubles;
+    
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDegreesOfFreedom.html">← 上一页: CATIDegreesOfFreedom.h</a></div>
+        <div><a href="MF0CST.html">下一页: MF0CST.h →</a></div>
+    </div>
+</body>
+</html>

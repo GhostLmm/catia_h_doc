@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENOVIAPlugIn/PublicInterfaces/ENOVPublishStream.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ENOVIAPlugIn/PublicInterfaces/ENOVPublishStream.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVPublishObjectNode.html">← 上一页: ENOVPublishObjectNode.h</a></div>
+        <div><a href="ENOVPublishedBy.html">下一页: ENOVPublishedBy.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  ENOVPublishStream_h
+#define  ENOVPublishStream_h
+// EAPS
+// Version 1 Release 0
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+// *****************************************************************
+//
+//   Identification :
+//   ---------------
+//
+//      RESPONSIBLE :  Jean-Luc MEDIONI
+//      FUNCTION    :  Publish information from ENOVIA to External system
+//      USE         :  ENOVIA V5 Life Cycle Application
+//
+// *****************************************************************
+//
+//   Description :
+//   ------------
+//
+//    Master class for ENOVIA publishing stream component
+//
+/**
+ * Class enabling to manage publishing stream.
+ *
+ * &lt;b&gt;Role&lt;/b&gt;: This class enables to manage the publishing stream. The
+ * publishing stream is a technique that enables, for an external application, 
+ * to view, modify and keep an extract of some ENOVIA Objects.
+ * For example, we use this technique in CATIA V4 integration in which
+ * we expose, at CATIA model load time, information relative to document management
+ * (such as Document Master, Revision and iteration). This enables the application to 
+ * use this information as input for their design (for instance for title block)
+ * and potentially to update it at any save time.
+ * &lt;br&gt;Information is exposed as a tree structure of information where each node is typed
+ * and on which you can valuate some tags. 
+ * &lt;br&gt;Publishing Stream node is a root of this tree structure.
+ * &lt;br&gt;&lt;b&gt;Tags define on Publishing stream&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;Version&lt;/tt&gt; Software level used to generate the stream (&quot;1&quot; for the current version).&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;Localization&lt;/tt&gt; ENOVIA repository location (For future use).&lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;TimeStamp&lt;/tt&gt; Date &amp; time of the publishing stream.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * This Publishing stream will also enable to expose back information to ENOVIA LCA.
+ */
+//
+// *****************************************************************
+//
+//   Remarks :
+//   ---------
+//
+//    Enable an external application to view, modify and keep an extract
+//    of some ENOVIA Objects
+//
+// ***************************************************************
+//
+//   Story :
+//   -------
+//
+//   Revision 1.0  25/05/2000   JLM : Initial Revision
+//   Revision 1.1  15/02/2001   JLM : introduce new attribute to support meta-data
+//   Revision 1.2  20/03/2002   JLM : Support NLS encoding througth UTF8
+//
+// ****************************************************************
+//
+// INSIDE class:
+// -------------
+//
+//
+//
+// ****************************************************************
+// Abstract class    : No
+// Template code     : No
+// Ilined   Function : No
+// ****************************************************************
+
+#include &quot;ENOVIAPubStream.h&quot;
+
+// --- List of referenced classes
+
+class ENOVPublishStream     ;
+class ENOVPublishXMLHandler ;
+
+// --- Header that need to be referenced
+
+#include &quot;ENOVPublishObject.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+// --- Class definition
+
+class ExportedByENOVIAPubStream ENOVPublishStream : public ENOVPublishObject
+{
+   public:
+
+      // --- Stream constructor
+      // --- * Initialize a Publishing stream 
+
+    /**
+     * Constructs a Publishing stream.
+     * 
+     * @param icLocalization
+     * Define ENOVIA repository name (this information is optional and not
+     * used in current version).
+     */
+      ENOVPublishStream( const char * icLocalization = NULL ) ;
+
+      // --- Destructeur 
+
+      virtual ~ENOVPublishStream() ;
+
+      // --- Copy-constructor
+
+    /**
+     * Copy constructor.
+     * 
+     * @param ixStream
+     * Object to be duplicated.
+     */
+      ENOVPublishStream( const ENOVPublishStream &amp; ixStream ) ;
+
+      // --- Operateur d&#x27;affectation
+
+    /**
+     * Assignment operator from another object node.
+     * 
+     * @param ixStream
+     * Object used as reference for the assignment.
+	 */
+      const ENOVPublishStream &amp; operator=( const ENOVPublishStream &amp; ixStream ) ;
+
+      // --- Load a stream from a buffer
+      // --- * In case of lReplace is true,
+      // ---   all children previously load are deleted
+
+    /**
+     * Loads a stream from a buffer.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Loads a stream from a buffer.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param icContent
+     * XML stream that contains information of the publishing stream.
+     * 
+     * @param ilReplace
+     * Define what happens against previous information in this Publishing stream
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: If lReplace is true, all children previously load are deleted. 
+     */
+      int LoadStream( const char * icContent , int ilReplace = 1 ) ;
+
+      // --- Load a stream from a file
+      // --- * In case of lReplace is true,
+      // ---   all children previously load are deleted
+
+    /**
+     * Loads a stream from a file.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Loads a stream from a file.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param icFilePath
+     * XML File to be read to load information of the publishing stream.
+     * 
+     * @param ilReplace
+     * Define what happens against previous information in this Publishing stream
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: If lReplace is true, all children previously load are deleted. 
+     */
+      int LoadStreamFromFile( const char * icFilePath , int ilReplace = 1 ) ;
+
+      // --- Build a stream from published information
+
+    /**
+     * Builds a stream from published information.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Builds a stream from published information.
+     * 
+     * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;: If operation does not succeed, the output text
+     * will be unallocated and set to NULL.
+     *
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocContent
+     * Memory area allocated by this method and that contains a XML stream equivalent
+     * to information defined in the Publishing Stream object.
+     * 
+     * @param onLengthContent
+     * Length in byte of the XML publishing stream. 
+     */
+      int GetStream( const char * &amp; ocContent , int &amp; onLengthContent ) ;
+
+      // --- Build a stream from published information
+
+    /**
+     * Builds a stream from published information.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Builds a stream from published information.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param icFilePath
+     * File name where to store information of the publishing stream as 
+     * an XML stream.
+     */
+      int SaveStreamAsFile( const char * icFilePath ) ;
+
+      // --- Get Object Attribute
+
+    /**
+     * Returns software level used to generate this publishing stream.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns level of software used to build this object.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param onVersion
+     *  Define software version of this Publishing stream (Current value is 1).
+     */
+      int GetVersion( int &amp; onVersion ) const ;
+
+   /** @nodoc
+     * Returns localization information used to generate this publishing stream.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns localization information used to build this object.
+     * (This information could be used in case of multi-site.)
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocLocalization
+     *  Define localization information.
+     */
+      int GetLocalization( const char * &amp; ocLocalization ) const ;
+
+    /**
+     * Returns date &amp; time of the publishing stream.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to know at what date this information has been
+     * generated.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocTimeStamp
+     *  Date &amp; time information.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Date is expressed using one ISO 8601 format called
+     * Extended format for ordinal date and time of the day (Application will used
+     * Coordinated Universal Time UTC)  
+     * &lt;table&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DDThh:mm:ss&lt;/b&gt;&lt;/td&gt; &lt;td&gt;&quot;2000-00-01T00:00:01&quot;&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DDThh:mm&lt;/b&gt;&lt;/td&gt;    &lt;td&gt;&quot;2000-00-01T00:00&quot;&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DD&lt;/b&gt;&lt;/td&gt;          &lt;td&gt;&quot;2000-00-01&quot; No time information set to 00:00:00&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh:mm:ss&lt;/b&gt;&lt;/td&gt;            &lt;td&gt;&quot;12:00:00&quot; means today at noon&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh:mm&lt;/b&gt;&lt;/td&gt;               &lt;td&gt;&quot;14:00&quot;  means today at 2 pm&lt;/td&gt;&lt;/tr&gt;
+     * &lt;/table&gt;
+     * &lt;br&gt;Where:
+     * &lt;table&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CC&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the century component&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;YY&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the year within century&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;MM&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents months starting with January [1, 12]&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;DD&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the day in the month [1, 31]&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents hours from beginning of days&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;mm&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents minutes&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;ss&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents seconds&lt;/td&gt;&lt;/tr&gt;
+     * &lt;/table&gt;
+     * &lt;/dl&gt;
+     */
+      int GetTimeStamp( const char * &amp; ocTimeStamp ) const ;
+
+      // --- Set Object Attribute
+
+   /** @nodoc
+     * Sets localization information used to generate this publishing stream.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets localization information used to build this object.
+     * (This information could be used in case of multi-site.)
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param icLocalization
+     *  Value that will be used to set localization information.
+     */
+      int SetLocalization( const char * icLocalization ) ;
+
+   /** @nodoc
+     * Sets date &amp; time of the publishing stream.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets the date at which this information has been generated.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param icTimeStamp
+     *  Date &amp; time information.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Date is expressed using one ISO 8601 format called
+     * Extended format for ordinal date and time of the day (Application will used
+     * Coordinated Universal Time UTC)  
+     * &lt;table&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DDThh:mm:ss&lt;/b&gt;&lt;/td&gt; &lt;td&gt;&quot;2000-00-01T00:00:01&quot;&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DDThh:mm&lt;/b&gt;&lt;/td&gt;    &lt;td&gt;&quot;2000-00-01T00:00&quot;&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CCYY-MM-DD&lt;/b&gt;&lt;/td&gt;          &lt;td&gt;&quot;2000-00-01&quot; No time information set to 00:00:00&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh:mm:ss&lt;/b&gt;&lt;/td&gt;            &lt;td&gt;&quot;12:00:00&quot; means today at noon&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh:mm&lt;/b&gt;&lt;/td&gt;               &lt;td&gt;&quot;14:00&quot;  means today at 2 pm&lt;/td&gt;&lt;/tr&gt;
+     * &lt;/table&gt;
+     * &lt;br&gt;Where:
+     * &lt;table&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;CC&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the century component&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;YY&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the year within century&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;MM&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents months starting with January [1, 12]&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;DD&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents the day in the month [1, 31]&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;hh&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents hours from beginning of days&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;mm&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents minutes&lt;/td&gt;&lt;/tr&gt;
+     *    &lt;tr&gt;&lt;td&gt;&lt;b&gt;ss&lt;/b&gt;&lt;/td&gt;  &lt;td&gt;represents seconds&lt;/td&gt;&lt;/tr&gt;
+     * &lt;/table&gt;
+     * &lt;/dl&gt;
+      */
+      int SetTimeStamp( const char * icTimeStamp ) ;
+
+      // --- Test a basic predicate type Name = Value
+
+   /** @nodoc
+     */
+      virtual int CheckPredicate( const char * cInTag
+                                , const char * cInValue ) const ;
+
+      // --- Unstream information from an XML stream
+
+   /** @nodoc
+     */
+      virtual int GetFromStream( ENOVPublishXMLHandler &amp; xHandler
+                               , AttributeList         &amp; xAttributes ) ;
+
+      // --- Build a stream from published information
+
+   /** @nodoc
+     */
+      virtual int AddInStream( const char * icContent , int inLength ) ;
+
+   /** @nodoc
+     */
+      virtual int AddInStream( const unsigned char * icContent , int inLength ) ;
+
+    /**
+     * @nodoc
+     */
+      virtual int AddInStream( const CATUnicodeString &amp; cContent ) ;
+
+      // --- Stream information into an XML stream
+
+   /** @nodoc
+     */
+      virtual int PutToStream( ENOVPublishObject * ixStream ) ;
+
+      // --- Print attribute identity card
+
+    /**
+     * Print a report on standard output.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Print the content of this node and its children.
+     * 
+     * @param inLevel
+     * Enable to have an indented presentation according to the tree depth of the node.
+     */
+      virtual void Print( int inLevel = 0 ) const ;
+
+      // --- Current Attribute information
+
+    protected :
+      int               _nVersion      ;
+      CATUnicodeString  _cTimeStamp    ;
+      CATUnicodeString  _cLocalization ;
+
+      // --- Manage XML stream
+
+      char * _cStreamContent       ;
+      char * _cStreamCursor        ;
+      int    _nLengthStreamContent ;
+      int    _nLengthStreamMax     ;
+
+      // --- To accelerate CATUnicodeString encoding in UTF8
+
+      char * _cString          ;
+      int    _nLengthStringMax ;
+
+      // --- XML stream buffer management
+
+      int _prepareAddInStream( int nLength ) ;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVPublishObjectNode.html">← 上一页: ENOVPublishObjectNode.h</a></div>
+        <div><a href="ENOVPublishedBy.html">下一页: ENOVPublishedBy.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENOUPSInterfaces/PublicInterfaces/ENOIUPSUserExitsBase.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ENOUPSInterfaces/PublicInterfaces/ENOIUPSUserExitsBase.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_ENOIUPSUserExitsBase_v2.html">← 上一页: TIE_ENOIUPSUserExitsBase_v2.h</a></div>
+        <div><a href="ENOIUPSUserExitsBase_v2.html">下一页: ENOIUPSUserExitsBase_v2.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2013
+//===================================================================
+//
+// ENOIUPSUserExitsBase.h
+// Each CAD Integration needs to derive its Interface from this Interface.
+//
+//===================================================================
+//
+// Usage notes:
+//     CAD Integrations should derive their CAD specific interface from this.
+//     
+//===================================================================
+#ifndef ENOIUPSUserExitsBase_H
+#define ENOIUPSUserExitsBase_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U6
+ */
+
+#include &quot;ExportedByENOUPSInterfaces.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATListOfInt.h&quot;
+
+extern ExportedByENOUPSInterfaces IID IID_ENOIUPSUserExitsBase;
+
+
+/**
+ * Base Interface for all CAD specific interfaces.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * Each CAD Integration needs to derive its Interface from this Interface.
+ * This derivation should be C++ and OM derivation.
+ */
+
+class ExportedByENOUPSInterfaces ENOIUPSUserExitsBase: public CATBaseUnknown
+{
+    CATDeclareInterface;
+
+public:
+
+    /**
+    * UESelectionStatus.
+    * @param NotSet
+    *   When no action is set the object.
+    *   This is the default.
+    * @param Included
+    *   When object is included in Save scope.
+    *   In case of Interactive Save, this can be altered.
+    * @param IncludedForced
+    *   When object is forced included in Save scope.
+    *   Once set, this can&#x27;t be altered.
+    * @param Excluded
+    *   When object is excluded from Save scope.
+    *   In case of Interactive Save, this can be altered.
+    * @param ExcludedForced
+    *   When object is forced excluded from Save scope.
+    *   Once set, this can&#x27;t be altered.
+    */
+    enum UESelectionStatus
+    {
+        NotSet = 0,
+        Included = 1,
+        IncludedForced = 2,
+        Excluded = 3,
+        ExcludedForced = 4
+    } ;
+
+
+
+    /**
+    * User exit is called before actual login.
+    *  @return
+    *   HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+    */
+    virtual HRESULT ConnectPre() = 0;
+
+
+
+    /**
+    * User exit is called after login is successfully completed.
+    */
+    virtual void ConnectPost() = 0;
+
+
+
+    /**
+    * User exit is called after login is successfully completed User exit is called before documents/objects that come under the save scope are calculated.
+    *  @return
+    *   HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+    */
+
+    virtual HRESULT SaveStartPre() = 0;
+
+
+    
+    /**
+	 * User exit is called after Scope for the save is calculated. 
+     * Takes input as lists which correspond to documents/objects that come under the save scope.
+     * All lists have same size.
+     * List contains both included &amp; excluded nodes.
+     * In case of advanced save, user exit is called before the dialog is displayed.
+	 * @param ilType
+	 *   List of Type For documents/objects.
+	 * @param ilName
+	 *   List of Type For documents/objects.
+     * @param ilRevision
+	 *   List of Revision For documents/objects.
+     * @param ilFullPath
+	 *   List of Revision For documents/objects.
+     *   For embedded components, it contains parent file full path.
+     * @param iolIncluded
+     *   Input and Output argument for method.
+     *
+     *   Input contains action (Included or Excluded) set on objects by integration.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::Included &lt;/dt&gt;
+     *     &lt;dd&gt;Object is included in save scope by integration.&lt;/dd&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::Excluded &lt;/dt&gt;
+     *     &lt;dd&gt;Object is excluded from save scope by integration.&lt;/dd&gt;
+     *
+     *   Output contains action (Included or Excluded) set on objects by integration.
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::Included &lt;/dt&gt;
+     *     &lt;dd&gt;Object is included in save scope by User Exit.&lt;/dd&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::IncludedForced &lt;/dt&gt;
+     *     &lt;dd&gt;Object is forced included in save scope by User Exit.&lt;/dd&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::Excluded &lt;/dt&gt;
+     *     &lt;dd&gt;Object is excluded from save scope by User Exit.&lt;/dd&gt;
+     *     &lt;dt&gt;ENOIUPSUserExitsBase::ExcludedForced &lt;/dt&gt;
+     *     &lt;dd&gt;Object is forced excluded from save scope by User Exit.&lt;/dd&gt;
+     *
+     *  @return
+     *   HRESULT value. 
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *     &lt;dt&gt;S_OK&lt;/dt&gt;
+     *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+     *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+     *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+     *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+     *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+     */
+    virtual HRESULT SaveScopePost(
+        const CATListValCATUnicodeString &amp;ilType,
+        const CATListValCATUnicodeString &amp;ilName,
+        const CATListValCATUnicodeString &amp;ilRevision,
+        const CATListValCATUnicodeString &amp;ilFullPath,
+        CATListOfInt                     &amp;iolIncluded
+        ) = 0;
+
+
+
+     /**
+	 * User exit is called after selection of objects for Save is Validated,
+     * Takes input as lists which correspond to documents/objects that are selected and validated for save.
+     * All lists have same size.
+     * @param ilType
+	 *   List of Type For documents/objects.
+	 * @param ilName
+	 *   List of Type For documents/objects.
+     * @param ilRevision
+	 *   List of Revision For documents/objects.
+     * @param ilFullPath
+	 *   List of Revision For documents/objects.
+     *
+     *
+     * @return
+     *   HRESULT value. 
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *     &lt;dt&gt;S_OK&lt;/dt&gt;
+     *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+     *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+     *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+     *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+     *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+     */
+    virtual HRESULT SaveFinalPre(
+        const CATListValCATUnicodeString &amp;ilType,
+        const CATListValCATUnicodeString &amp;ilName,
+        const CATListValCATUnicodeString &amp;ilRevision,
+        const CATListValCATUnicodeString &amp;ilFullPath
+        ) = 0;
+
+    /**
+    * User exit is called at beginning of the Open operation,
+    * Takes input as lists which correspond to unique objects selected on the open or partial open panel.
+    * All lists have same size.
+    * @param ilType
+    *   List of Type For documents/objects.
+    * @param ilName
+    *   List of Name For documents/objects.
+    * @param ilRevision
+    *   List of Revision For documents/objects.
+    *
+    *
+    * @return
+    *   HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+    */
+    virtual HRESULT OpenDownloadPre(
+        const CATListValCATUnicodeString &amp;ilType,
+        const CATListValCATUnicodeString &amp;ilName,
+        const CATListValCATUnicodeString &amp;ilRevision
+        ) = 0;
+
+    /**
+    * User exit is called after Open operation but before opening documents in session,
+    * Takes input as lists which correspond to objects of complete downloaded structure .
+    * All lists have same size.
+    * @param ilType
+    *   List of Type For documents/objects.
+    * @param ilName
+    *   List of Name For documents/objects.
+    * @param ilRevision
+    *   List of Revision For documents/objects.
+    * @param ilFullPath
+    *   List of Full Path For documents/objects.
+    *
+    *
+    * @return
+    *   HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;The method succeeds.&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and Error is displayed by method itself.&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+    *     &lt;dd&gt;The method fails and retuns error.&lt;/dd&gt;
+    */
+    virtual HRESULT OpenDownloadPost(
+        const CATListValCATUnicodeString &amp;ilType,
+        const CATListValCATUnicodeString &amp;ilName,
+        const CATListValCATUnicodeString &amp;ilRevision,
+        const CATListValCATUnicodeString &amp;ilFullPath
+        ) = 0;
+
+    /**
+    * User exit is called after document is loaded in session,
+    * Takes input as lists which correspond to loaded root documents.
+    * All lists have same size.
+    * @param ilType
+    *   List of Type For documents/objects.
+    * @param ilName
+    *   List of Name For documents/objects.
+    * @param ilRevision
+    *   List of Revision For documents/objects.
+    *
+    *
+    */
+    virtual void OpenPost(
+        const CATListValCATUnicodeString &amp;ilType,
+        const CATListValCATUnicodeString &amp;ilName,
+        const CATListValCATUnicodeString &amp;ilRevision
+        ) = 0;
+
+};
+
+CATDeclareHandler(ENOIUPSUserExitsBase, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_ENOIUPSUserExitsBase_v2.html">← 上一页: TIE_ENOIUPSUserExitsBase_v2.h</a></div>
+        <div><a href="ENOIUPSUserExitsBase_v2.html">下一页: ENOIUPSUserExitsBase_v2.h →</a></div>
+    </div>
+</body>
+</html>

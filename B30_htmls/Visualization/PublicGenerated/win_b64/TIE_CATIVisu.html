@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicGenerated/win_b64/TIE_CATIVisu.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicGenerated/win_b64/TIE_CATIVisu.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIVisProperties.html">← 上一页: TIE_CATIVisProperties.h</a></div>
+        <div><a href="../../PublicInterfaces/CAT2DViewer.html">下一页: CAT2DViewer.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIVisu
+#define __TIE_CATIVisu
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATIVisu.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIVisu */
+#define declare_TIE_CATIVisu(classe) \
+ \
+ \
+class TIECATIVisu##classe : public CATIVisu \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIVisu, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual CATRep * BuildRep () ; \
+      virtual CATRep * GiveRep () ; \
+      virtual HRESULT GiveContextualRep( CATVisRepContext &amp; iContext, CATRep *&amp; oRep ) ; \
+      virtual int ModifyRep ( const CATNotification &amp; iInfo ) ; \
+      virtual void UnreferenceRep () ; \
+      virtual HRESULT BuildRepPath(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep ) ; \
+      virtual HRESULT BuildHighlightLook(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep ) ; \
+      virtual HRESULT DecodeGraphic(const CATPickPath &amp;iPickPath, CATPathElement &amp;ioPathElt ) ; \
+      virtual CATRep * GetRep () ; \
+      virtual HRESULT IsHighlightValid(CATPathElement &amp; iPathElt) ; \
+      virtual HRESULT SetVisuRep(CATRep * iRep) ; \
+      virtual void SetRepNotUpToDate() ; \
+      virtual int IsRepUpToDate() ; \
+};
+
+
+
+#define ENVTIEdeclare_CATIVisu(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual CATRep * BuildRep () ; \
+virtual CATRep * GiveRep () ; \
+virtual HRESULT GiveContextualRep( CATVisRepContext &amp; iContext, CATRep *&amp; oRep ) ; \
+virtual int ModifyRep ( const CATNotification &amp; iInfo ) ; \
+virtual void UnreferenceRep () ; \
+virtual HRESULT BuildRepPath(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep ) ; \
+virtual HRESULT BuildHighlightLook(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep ) ; \
+virtual HRESULT DecodeGraphic(const CATPickPath &amp;iPickPath, CATPathElement &amp;ioPathElt ) ; \
+virtual CATRep * GetRep () ; \
+virtual HRESULT IsHighlightValid(CATPathElement &amp; iPathElt) ; \
+virtual HRESULT SetVisuRep(CATRep * iRep) ; \
+virtual void SetRepNotUpToDate() ; \
+virtual int IsRepUpToDate() ; \
+
+
+#define ENVTIEdefine_CATIVisu(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+CATRep *  ENVTIEName::BuildRep ()  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)BuildRep ()); \
+} \
+CATRep *  ENVTIEName::GiveRep ()  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)GiveRep ()); \
+} \
+HRESULT  ENVTIEName::GiveContextualRep( CATVisRepContext &amp; iContext, CATRep *&amp; oRep )  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)GiveContextualRep(iContext,oRep )); \
+} \
+int  ENVTIEName::ModifyRep ( const CATNotification &amp; iInfo )  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)ModifyRep (iInfo )); \
+} \
+void  ENVTIEName::UnreferenceRep ()  \
+{ \
+ (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)UnreferenceRep ()); \
+} \
+HRESULT  ENVTIEName::BuildRepPath(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep )  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)BuildRepPath(iPathElt,ioPathRep )); \
+} \
+HRESULT  ENVTIEName::BuildHighlightLook(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep )  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)BuildHighlightLook(iPathElt,ioPathRep )); \
+} \
+HRESULT  ENVTIEName::DecodeGraphic(const CATPickPath &amp;iPickPath, CATPathElement &amp;ioPathElt )  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)DecodeGraphic(iPickPath,ioPathElt )); \
+} \
+CATRep *  ENVTIEName::GetRep ()  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)GetRep ()); \
+} \
+HRESULT  ENVTIEName::IsHighlightValid(CATPathElement &amp; iPathElt)  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)IsHighlightValid(iPathElt)); \
+} \
+HRESULT  ENVTIEName::SetVisuRep(CATRep * iRep)  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)SetVisuRep(iRep)); \
+} \
+void  ENVTIEName::SetRepNotUpToDate()  \
+{ \
+ (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)SetRepNotUpToDate()); \
+} \
+int  ENVTIEName::IsRepUpToDate()  \
+{ \
+return (ENVTIECALL(CATIVisu,ENVTIETypeLetter,ENVTIELetter)IsRepUpToDate()); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIVisu(classe)    TIECATIVisu##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIVisu(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIVisu, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIVisu, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIVisu, classe, 1) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIVisu, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIVisu, classe) \
+ \
+CATRep *  TIECATIVisu##classe::BuildRep ()  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;BuildRep ()); \
+} \
+CATRep *  TIECATIVisu##classe::GiveRep ()  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GiveRep ()); \
+} \
+HRESULT  TIECATIVisu##classe::GiveContextualRep( CATVisRepContext &amp; iContext, CATRep *&amp; oRep )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GiveContextualRep(iContext,oRep )); \
+} \
+int  TIECATIVisu##classe::ModifyRep ( const CATNotification &amp; iInfo )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;ModifyRep (iInfo )); \
+} \
+void  TIECATIVisu##classe::UnreferenceRep ()  \
+{ \
+   ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;UnreferenceRep (); \
+} \
+HRESULT  TIECATIVisu##classe::BuildRepPath(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;BuildRepPath(iPathElt,ioPathRep )); \
+} \
+HRESULT  TIECATIVisu##classe::BuildHighlightLook(const CATPathElement &amp; iPathElt, CATRepPath &amp; ioPathRep )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;BuildHighlightLook(iPathElt,ioPathRep )); \
+} \
+HRESULT  TIECATIVisu##classe::DecodeGraphic(const CATPickPath &amp;iPickPath, CATPathElement &amp;ioPathElt )  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;DecodeGraphic(iPickPath,ioPathElt )); \
+} \
+CATRep *  TIECATIVisu##classe::GetRep ()  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetRep ()); \
+} \
+HRESULT  TIECATIVisu##classe::IsHighlightValid(CATPathElement &amp; iPathElt)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsHighlightValid(iPathElt)); \
+} \
+HRESULT  TIECATIVisu##classe::SetVisuRep(CATRep * iRep)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;SetVisuRep(iRep)); \
+} \
+void  TIECATIVisu##classe::SetRepNotUpToDate()  \
+{ \
+   ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;SetRepNotUpToDate(); \
+} \
+int  TIECATIVisu##classe::IsRepUpToDate()  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsRepUpToDate()); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIVisu(classe) \
+ \
+ \
+declare_TIE_CATIVisu(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIVisu##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIVisu,&quot;CATIVisu&quot;,CATIVisu::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIVisu(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIVisu, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIVisu##classe(classe::MetaObject(),CATIVisu::MetaObject(),(void *)CreateTIECATIVisu##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIVisu(classe) \
+ \
+ \
+declare_TIE_CATIVisu(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIVisu##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIVisu,&quot;CATIVisu&quot;,CATIVisu::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIVisu(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIVisu, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIVisu##classe(classe::MetaObject(),CATIVisu::MetaObject(),(void *)CreateTIECATIVisu##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIVisu(classe) TIE_CATIVisu(classe)
+#else
+#define BOA_CATIVisu(classe) CATImplementBOA(CATIVisu, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIVisProperties.html">← 上一页: TIE_CATIVisProperties.h</a></div>
+        <div><a href="../../PublicInterfaces/CAT2DViewer.html">下一页: CAT2DViewer.h →</a></div>
+    </div>
+</body>
+</html>

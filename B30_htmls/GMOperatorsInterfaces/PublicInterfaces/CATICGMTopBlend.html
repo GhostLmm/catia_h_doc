@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopBlend.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopBlend.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMThickenOp.html">← 上一页: CATICGMThickenOp.h</a></div>
+        <div><a href="CATICGMTopBodyExtremum.html">下一页: CATICGMTopBodyExtremum.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopBlend_h_
+#define CATICGMTopBlend_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &quot;CATTopBlendCouplingMode.h&quot;
+
+class CATFrFSweepChecker;
+class CATLaw;
+class CATLISTP(CATGeometry);
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopBlend;
+
+/**
+  * Class defining the topological operator that connects two wires with a skin.
+  * &lt;br&gt; Continuity criteria can be precised: G0, G1 or G2 if the supporting surfaces of the wires
+  * are given, G0 otherwise.
+  * &lt;br&gt;The CATICGMTopBlend operator creates the resulting blend
+  * separately from the inputs: the topology of the input bodies is not used to define the topology
+  * of the resulting body.  
+  *&lt;ul&gt;
+  * &lt;li&gt;A CATICGMTopBlend operator is created with the &lt;tt&gt;CATCGMCreateTopBlend&lt;/tt&gt; global method;
+  * it must be directly released with the &lt;tt&gt;Release&lt;/tt&gt; method after use. It is is not streamable. 
+  *&lt;li&gt;Options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+  * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+  * &lt;li&gt;The resulting body is retrieved with the &lt;tt&gt;GetResult&lt;/tt&gt; method.
+  *&lt;/ul&gt;
+  */
+class ExportedByCATGMOperatorsInterfaces CATICGMTopBlend: public CATICGMTopOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopBlend();
+
+  /**
+  * Defines the continuity criteria to take into account for a given wire (&lt;tt&gt;ADVANCED mode&lt;/tt&gt;).
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @param iTransitionContinuity
+  * The continuity criteria.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; for G0 continuity, &lt;tt&gt;1&lt;/tt&gt; for G1 continuity, 
+  * &lt;tt&gt;2&lt;/tt&gt; for G2 continuity.
+  */
+  virtual void SetTransitionContinuity(
+    int iWhichWire,
+    int iTransitionContinuity) = 0;
+
+  /**
+  * Defines the orientation of the wire to be used by &lt;tt&gt;this&lt;/tt&gt; operator(&lt;tt&gt;ADVANCED mode&lt;/tt&gt;).
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @param iWireOrientation
+  * The orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the natural orientation of the &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual void SetWireOrientation(int iWhichWire, int iWireOrientation) = 0;
+
+  /**
+  * Returns the orientation of the wire used by &lt;tt&gt;this&lt;/tt&gt; operator.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @return 
+  * The orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the natural orientation of the &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual int GetWireOrientation(int iWhichWire) = 0;
+
+  /**
+  * Retrieves the default WireOrientation defined by &lt;tt&gt;this&lt;/tt&gt; operator.
+  * &lt;br&gt;The operator does an analysis of the inputs, in order to avoid twisted surfaces for examples.
+  * This method returns the orientation found after this analysis.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @return
+  * The default wire orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the natural orientation of the &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual int GetDefaultWireOrientation(int iWhichWire) = 0;
+
+  /**
+  * Set the TransitionOrientation used by &lt;tt&gt;this&lt;/tt&gt; operator.
+  * Let &lt;tt&gt;T&lt;/tt&gt; be the tangent to the wire, 
+  * and &lt;tt&gt;N&lt;/tt&gt; be the normal to the skin body.
+  * The transition orientation defines how the blend goes from the initial wires: it takes the 
+  * direction of &lt;tt&gt;oTransitionOrientationSide*(T^N)&lt;/tt&gt;, where &lt;tt&gt;^&lt;/tt&gt; is the vectorial product.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @param TransitionOrientation
+  * The transition orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the direction of &lt;tt&gt;oTransitionOrientationSide*(T^N)&lt;/tt&gt; 
+  * &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual void SetTransitionOrientation(
+    int iWhichWire,
+    int TransitionOrientation) = 0;
+
+  /**
+  * Get the TransitionOrientation used by &lt;tt&gt;this&lt;/tt&gt; operator.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @return
+  * The transition orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the direction of &lt;tt&gt;oTransitionOrientationSide*(T^N)&lt;/tt&gt; 
+  * &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual int GetTransitionOrientation(int iWhichWire) = 0;
+
+  /**
+  * Retrieves the default TransitionOrientation defined by &lt;tt&gt;this&lt;/tt&gt; operator.
+  * &lt;br&gt;The operator does an analysis of the inputs, in order to avoid twisted surfaces for examples.
+  * This method returns the orientation found after this analysis.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire.
+  * @return
+  * The default transition orientation.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; the direction of &lt;tt&gt;oTransitionOrientationSide*(T^N)&lt;/tt&gt; 
+  * &lt;tt&gt;iWhichWire&lt;/tt&gt; wire is used,
+  * &lt;tt&gt;-1&lt;/tt&gt; for the opposite orientation.
+  */
+  virtual int GetDefaultTransitionOrientation(int iWhichWire) = 0;
+
+  /**
+  * Specifies where the blend boundaries are to be tangent to 
+  * the support boundaries.
+  * &lt;br&gt;Warning: This 
+  * method is inoperative when the wires to be connected are not layed down onto their supports. 
+  * To lay down the wires onto their supports, you must use either the CATICGMHybProject or CATICGMLayDownOperator operators.
+  * @param iWhichWire
+  * The first (1) or the second (2) input wire. 
+  * If the coupling mode is set to CATTopBlendCouplingMode_Develop, iWhichWire is the guide number 
+  * whose extremity vertex relimits the coupling (the extremity on the other guide is free).
+  * @param iStartEnd
+  * The start (1) or the end (2) extremity where the border mode is to be applied.
+  * @param iMode
+  * &lt;dl&gt;
+  * &lt;dt&gt;1
+  * &lt;dd&gt;tangent mode.
+  * &lt;dt&gt;2
+  * &lt;dd&gt;normal mode.
+  * &lt;/dl&gt;
+  * If the coupling mode is set to CATTopBlendCouplingMode_Develop:
+  * &lt;dl&gt;
+  * &lt;dt&gt;0
+  * &lt;dd&gt;until extremity vertices on all guides.
+  * &lt;dt&gt;1
+  * &lt;dd&gt;until extremity vertex of iWhichWire.
+  * &lt;dt&gt;2
+  * &lt;dd&gt;the best solution.
+  * &lt;/dl&gt;
+  */
+  virtual void SetBorderMode(int iWhichWire, int iStartEnd, int iMode = 1) = 0;
+
+  /**
+ * Defines the coupling mode.
+ * @param iMode
+ * The coupling mode.
+ */
+  virtual void SetCouplingMode(CATTopBlendCouplingMode iMode) = 0;
+
+  /**
+ * Defines coupling lines.
+ * @param iCouplingLines
+ * The list of pointers to the coupling lines (wire bodies).
+ */
+  virtual void SetCouplingLines(CATLISTP(CATGeometry) *iCouplingLines) = 0;
+
+  /**
+ * Defines a smooth option for moving frame, coupling and comb extraction.
+ * @param iSmoothOption
+ * The smoothing option
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; no smoothing will be done
+ * &lt;tt&gt;1&lt;/tt&gt; smoothing will be done.
+ * (default mode at operator creation),
+ */
+  virtual void SetSmoothOption(CATLONG32 iSmoothOption = 1) = 0;
+
+  /**
+ * Defines the smooth angle threshold. 
+ * @param iSmoothAngleThreshold
+ * The threshold for smooth (in radian); any angle below this value will be smoothed
+ * if smooth option has been activated by SetSmoothOption method.
+ */
+  virtual void SetSmoothAngleThreshold(double iAngleThreshold) = 0;
+
+  /**
+ * Defines clean guides option, and clean parameter values. Pointers
+ * to parameter values are to be given only when corresponding parameter
+ * is redefined, otherwise, standard parameter value will be used. Pointers
+ * may contain addresses of local variables that will be lost after call: 
+ * parameter values will be copied by this method.
+ * @param iCleanOption
+ * The cleaning option
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; no cleaning will be done
+ * (default mode at operator creation),
+ * &lt;tt&gt;1&lt;/tt&gt; cleaning will be done.
+ * @param iCleanMaxDeformation
+ * The pointer to max deformation authorized.
+ * @param iCleanSmallCurvesMaxLength
+ * The pointer to maximum length of curves to be kept.
+ * @param iCleanCurvatureThreshold
+ * The pointer to the curvature threshold.
+ */
+  virtual void SetCleanGuidesOption(
+    CATLONG32 iCleanOption = 0,
+    double *iCleanMaxDeformation = NULL,
+    double *iCleanSmallCurvesMaxLength = NULL,
+    double *iCleanCurvatureThreshold = NULL) = 0;
+
+  /**
+ * Asks for topological lay down to be done internally for all guides with support
+ * surfaces.
+ * @param iLayDownTolerance
+ * The pointer to the lay down tolerance (maximum distance between wire to be laid down
+ * and its support surface).
+ */
+  virtual void SetLayDownRequest(double *iLayDownTolerance = NULL) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopBlend(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMTopBlend_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMThickenOp.html">← 上一页: CATICGMThickenOp.h</a></div>
+        <div><a href="CATICGMTopBodyExtremum.html">下一页: CATICGMTopBodyExtremum.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMHelix.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMHelix.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMHealing.html">← 上一页: CATIGSMHealing.h</a></div>
+        <div><a href="CATIGSMIntegratedLaw.html">下一页: CATIGSMIntegratedLaw.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMHelix_H
+#define CATIGSMHelix_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATICkeParm.h&quot;
+#include &quot;CATGSMBasicLawDef.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMHelix;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMHelix;
+#endif
+/**
+ * Interface to helix feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the Helix feature created by using 
+ * an axis, a starting point, a pitch, a height and 2 angle values.
+ * @see CATIGSMFactory#CreateHelix
+ */
+class ExportedByCATGitInterfaces CATIGSMHelix : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+    /**
+     * Gets the helix axis.
+     * T&lt;br&gt; Note: he starting point must not be on the helix axis
+     *   @return
+     *      The helix axis
+     */
+   virtual    CATISpecObject_var        GetAxis() = 0;
+    /**
+     * Gets the orientation.
+     *   @param oInvert
+     *      &lt;br&gt;: FALSE   means that there is no invertion (natural orientation)
+     *      &lt;br&gt;: TRUE    to invert this orientation
+     */
+   virtual    HRESULT    GetInvertAxis(CATBoolean &amp; oInvert) = 0;
+    /**
+     * Gets the starting point of the helix.
+     * &lt;br&gt; Note: The starting point must not be on the helix axis
+     *   @return
+     *     The starting point
+     */
+   virtual    CATISpecObject_var GetStartingPoint()= 0;
+    /**
+     * Gets the profile of the helix.
+     *   @return
+     *     The profile
+     */
+   virtual    CATISpecObject_var GetProfile()= 0;
+    /**
+     * Gets the pitch of the helix.
+     *   @param oPitch
+     *      The helix pitch.
+     */
+   virtual    HRESULT   GetPitch( double &amp; oPitch) = 0;
+    /**
+     * Gets the pitch of the helix.
+     *   @param oPitch
+     *      The helix pitch.
+     */
+   virtual    HRESULT                          GetPitch(CATICkeParm_var &amp; oPitch) = 0;
+    /**
+     * Gets the second pitch of the helix.
+     *   @param oPitch
+     *      The helix second pitch.
+     */
+   virtual    HRESULT   GetPitch2( double &amp; oPitch) = 0;
+    /**
+     * Gets the second pitch of the helix.
+     *   @param oPitch
+     *      The helix second pitch.
+     */
+   virtual    HRESULT                          GetPitch2(CATICkeParm_var &amp; oPitch) = 0;
+   /**
+    * Gets pitch law type.
+    *   @param oType
+    *      Type of law (from CATGSMBasicLawType enumeration).
+    *   @see CATGSMBasicLawType
+    */
+ virtual HRESULT GetPitchLawType(enum CATGSMBasicLawType &amp; oType) = 0;
+    /**
+     * Gets the height of the helix.
+     *   @param oHeight
+     *      The helix height.
+     */
+   virtual    HRESULT   GetHeight( double &amp; oHeight) = 0;
+    /**
+     * Gets the height of the helix.
+     *   @param oHeight
+      *      The helix height.
+     */
+   virtual    HRESULT                          GetHeight(CATICkeParm_var &amp; oHeight) = 0;
+    /**
+     * Gets the revolution number of the helix.
+     *   @param oRevolutions
+     *      Revolutions.
+     */
+   virtual    HRESULT   GetRevolutions( double &amp; oRevolutions) = 0;
+    /**
+     * Gets the revolution number of the helix.
+     *   @param oRevolutions
+     *      Revolutions.
+     */
+   virtual    HRESULT                          GetRevolutions(CATICkeParm_var &amp; oRevolutions) = 0;
+    /**
+     * Gets the sense of revolutions.
+     *   @param oClockwise
+     *      &lt;br&gt;: FALSE   means that revolutions are counter-clockwise
+     *      &lt;br&gt;: TRUE    means that revolutions are clockwise
+     */
+   virtual    HRESULT    GetClockwiseRevolution(CATBoolean &amp; oClockwise) = 0;
+    /**
+     * Gets the helix starting angle.
+     *   @param oStartingAngle
+     *      The starting angle.
+     */
+   virtual    HRESULT   GetStartingAngle( double &amp; oStartingAngle) = 0;
+    /**
+     * Gets the helix starting angle.
+     *   @param oStartingAngle
+     *      The starting angle.
+     */
+   virtual    HRESULT   GetStartingAngle(CATICkeParm_var &amp; oStartingAngle) = 0;
+    /**
+     * Gets the helix taper angle.
+     *   @param oTaperAngle
+     *      The taper angle.
+     */
+   virtual    HRESULT   GetTaperAngle( double &amp; oTaperAngle) = 0;
+    /**
+     * Gets the helix taper angle.
+     *   @param oTaperAngle
+     *     The taper angle.
+     */
+   virtual    HRESULT                          GetTaperAngle(CATICkeParm_var &amp; oTaperAngle) = 0;
+    /**
+     * Gets the taper angle sense of variation.
+     *   @param oTaperOutward
+     *      &lt;br&gt;: FALSE   means that helix radius decreases
+     *      &lt;br&gt;: TRUE    means that helix radius increases
+     */
+   virtual    HRESULT    GetTaperOutward(CATBoolean &amp; oTaperOutward) = 0;
+    /**
+     * Sets the helix axis.
+     *   @param iElem1
+     *      The new helix axis.
+     */
+   virtual    HRESULT SetAxis(const CATISpecObject_var iElem1) = 0;
+    /**
+     * Sets the starting point.
+     *   @param iElem1
+     *      New starting point.
+     */
+   virtual    HRESULT SetStartingPoint(const CATISpecObject_var iElem1) = 0;
+    /**
+     * Sets the profile.
+     *   @param iElem1
+     *      New profile.
+     * &lt;br&gt; Note: iElem1 = NULL_var unsets the profile.
+     */
+   virtual    HRESULT SetProfile(const CATISpecObject_var iElem1) = 0;
+    /**
+     *  Sets the helix pitch.
+     *   @param iPitch
+     *      The new pitch value.
+     */
+   virtual    HRESULT SetPitch(double iPitch) = 0;
+    /**
+     *  Sets the helix pitch.
+     *   @param iPitch
+     *      The new second pitch value.
+     */
+   virtual    HRESULT SetPitch(const CATICkeParm_var iPitch) = 0;
+    /**
+     *  Sets the helix second pitch.
+     *   @param iPitch
+     *      The new second pitch value.
+     */
+   virtual    HRESULT SetPitch2(double iPitch) = 0;
+    /**
+     *  Sets the helix second pitch.
+     *   @param iPitch
+     *      The new second pitch value.
+     */
+   virtual    HRESULT SetPitch2(const CATICkeParm_var iPitch) = 0;
+   /**
+    * Sets pitch law type.
+    *   @param iType
+    *      Type of law (from CATGSMBasicLawType enumeration): &lt;BR&gt;
+    *       - CATGSMBasicLawType_Constant, &lt;BR&gt;
+    *       - CATGSMBasicLawType_SType.
+    *   @see CATGSMBasicLawType
+    */
+    virtual HRESULT SetPitchLawType(const enum CATGSMBasicLawType iType) = 0;
+    /**
+     * Sets the helix height.
+     *   @param iHeight
+     *      The new height value.
+     */
+   virtual    HRESULT SetHeight(double iHeight) = 0;
+    /**
+     * Sets the helix height.
+     *   @param iHeight
+     *      The new height value.
+     */
+   virtual    HRESULT SetHeight(const CATICkeParm_var iHeight) = 0;
+    /**
+     * Sets the revolution number.
+     *   @param iRevolutions
+     *      The new revolutions value.
+     */
+   virtual    HRESULT SetRevolutions(double iRevolutions) = 0;
+    /**
+     * Sets the revolution number.
+     *   @param iRevolutions
+     *      The new revolutions value.
+     */
+   virtual    HRESULT SetRevolutions(const CATICkeParm_var iRevolutions) = 0;
+    /**
+     * Sets the starting angle.
+     *   @param iStartingAngle
+     *      The new starting angle value.
+     */
+   virtual    HRESULT SetStartingAngle(double iStartingAngle) = 0;
+    /**
+     * Sets the starting angle.
+     *   @param iStartingAngle
+     *      The new starting angle value.
+     */
+   virtual    HRESULT SetStartingAngle(const CATICkeParm_var iStartingAngle) = 0;
+    /**
+     * Sets the taper angle.
+     *   @param iTaperAngle
+     *      The new taper angle value.
+     */
+   virtual    HRESULT SetTaperAngle(double iTaperAngle) = 0;
+    /**
+     * Sets the taper angle.
+     *   @param iTaperAngle
+     *      The new taper angle value.
+     */
+   virtual    HRESULT SetTaperAngle(const CATICkeParm_var iTaperAngle) = 0;
+    /**
+     * Sets the orientation. 
+     *   @param iInvert
+     *    &lt;br&gt; :  FALSE means that there is no invertion of the natural orientation 
+     *    &lt;br&gt; :  TRUE  to invert this orientation
+     */
+     virtual    HRESULT SetInvertAxis (CATBoolean iInvert) = 0;
+    /**
+     * Inverts the orientation of the axis.
+     */
+   virtual    HRESULT InvertAxis()=0; 
+    /**
+     * Sets the sense of revolutions.
+     *   @param iClockwise
+     *     &lt;br&gt; : FALSE   means that revolutions are counter-clockwise
+     *     &lt;br&gt; : TRUE    means that revolutions are clockwise
+     */
+   virtual    HRESULT    SetClockwiseRevolution(CATBoolean iClockwise) = 0;
+   /**
+     * Sets the taper angle sense of variation. 
+     *   @param iTaperOutward
+     *     &lt;br&gt; : FALSE   means that helix radius decreases
+     *     &lt;br&gt; : TRUE    means that helix radius increases
+     */
+   virtual    HRESULT    SetTaperOutward(CATBoolean iTaperOutward) = 0;
+     /**
+     *  Sets the helix Panel Type.
+     *   @param iPanelType
+     *      The new helix Type.
+     */
+   virtual    HRESULT SetHelixType(int iPanelType) = 0;
+     /**
+     *  Gets the helix Panel Type.
+     *   @param oPanelType
+     *      The new helix Type.
+     */
+   virtual    HRESULT GetHelixType(int &amp; oPanelType) = 0;
+
+};
+CATDeclareHandler (CATIGSMHelix, CATBaseUnknown);
+#endif // CATIGSMHelix_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMHealing.html">← 上一页: CATIGSMHealing.h</a></div>
+        <div><a href="CATIGSMIntegratedLaw.html">下一页: CATIGSMIntegratedLaw.h →</a></div>
+    </div>
+</body>
+</html>

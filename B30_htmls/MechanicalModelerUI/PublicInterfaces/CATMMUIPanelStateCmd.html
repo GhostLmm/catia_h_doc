@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModelerUI/PublicInterfaces/CATMMUIPanelStateCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModelerUI/PublicInterfaces/CATMMUIPanelStateCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtWksConfiguration.html">← 上一页: CATIPrtWksConfiguration.h</a></div>
+        <div><a href="CATMMUIStateCommand.html">下一页: CATMMUIStateCommand.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMMUIPanelStateCmd_h
+#define CATMMUIPanelStateCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATMMUIStateCommand.h&quot;
+#include &quot;CATCustomizableState.h&quot;
+#include &quot;CATMechanicalModelerUI.h&quot;
+
+/**
+ * Base class for mechanical feature creation and edition commands.
+ * &lt;b&gt;Role&lt;/b&gt;: Derives this class to implement your command.
+ * Overrides the &lt;tt&gt;GiveMyPanel&lt;/tt&gt; method to return the dialog box
+ * associated with your command.
+ * Overrides the &lt;tt&gt;OkAction&lt;/tt&gt;, &lt;tt&gt;ApplyAction&lt;/tt&gt;,... to customize
+ * the actions on click button events.
+ */
+
+class ExportedByCATMechanicalModelerUI CATMMUIPanelStateCmd : public CATMMUIStateCommand
+{
+public:
+
+  CmdDeclareResource(CATMMUIPanelStateCmd,CATMMUIStateCommand)
+
+    /**
+    * Constructs the commands.
+    * @param iName
+    *   as in CATStateCommand.
+    * @param iBehavior
+    *   as in CATStateCommand.
+    * @param iStatus
+    *   as in CATStateCommand.
+    * @param iCreateCommand
+    *   The command mode: 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;ul&gt;&lt;li&gt;0: edition mode.
+    *   &lt;li&gt;1: creation mode.&lt;/ul&gt;
+    * @see CATStateCommand
+    */
+   CATMMUIPanelStateCmd(const CATString &amp;iName,
+                        CATDlgEngBehavior iBehavior = NULL, 
+                        CATCommandMode iStatus = CATCommandModeExclusive,
+                        int iCreateCommand = 0,
+                        const CATPathElement* iWorkingPath = 0,
+                        const CATPathElement* iActiveObjectPath = 0);
+
+   /**
+   * Deletes the command.
+   * If the command has been constructed with the third argument iStatus equal to CATCommandModeUndefined, 
+   * it must be deleted by calling the method RequestDelayedDestruction. 
+   * In the other cases, it it will be automatically deleted.
+   * Never call a delete on it.
+   */
+   virtual ~CATMMUIPanelStateCmd();
+
+   /**
+    * Builds the command graph.
+    * @see CATStateCommand
+    */
+   virtual void BuildGraph();
+
+   /**
+    * Cancels the command.
+    * @see CATCommand
+	 * @param iCmd
+    *   The command that requests to cancel the current one
+	 * @param iNotif
+    *   The notification sent
+    */
+   virtual CATStatusChangeRC Cancel(CATCommand* iCmd, CATNotification* iNotif);
+
+   /**
+    * Creates a CATCustomizableState associated with your dialog box.
+    * @param iId
+    *   The resource identifier used to retrieve the state prompt in the command
+    *   message file.
+    * @return
+    * The created CATCustomizableState.
+    * Do not release the return value.
+    */
+   CATCustomizableState * AddPanelState (const CATString &amp;iId);
+
+   /**
+    * Returns the first CATCustomizableState associated with your dialog box.
+    * @param iId
+    *   The resource identifier used to retrieve the state prompt in the command
+    *   message file.
+    * @return
+    * The first CATCustomizableState.
+    * Do not release the return value.
+    */
+   CATCustomizableState * GetInitialPanelState (const CATString &amp;iId);
+
+   /**
+    * Deals with Ok button click event.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean OkAction(void *iData);
+
+   /**
+    * Deals with Appply button click event.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean ApplyAction (void *iData);
+
+   /**
+    * Deals with Cancel button click event.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean CancelAction(void *iData);
+
+   /**
+    * Deals with Ok button click event. Update is OK.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean UpdateOKAction(void *iData);
+
+   /**
+    * Deals with Ok button click event. Update is KO.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean UpdateKOAction(void *iData);
+
+   /**
+    * Deals with Preview button click event.
+	 * @param iData
+    *   An object that can be useful for the action.
+    */
+   virtual CATBoolean PreviewAction(void *iData);
+
+   /** @nodoc 
+   Allows the derived command to execute code when entering the user state returned by @href GetInitialPanelState .
+   */
+   virtual CATBoolean EnterFirstStateAction (void *);
+ 
+   /** @nodoc 
+   Condition when ending the command from the update state.
+   It is TRUE if the created or edited feature has got no update error.
+   */
+   virtual CATBoolean UpdateOK(void *);
+
+   /** @nodoc 
+   Returns the update state of the command. 
+   */
+   CATDialogState* GetUpdateState();
+   
+    /** @nodoc 
+   Returns the current state of the command when OK is pressed. 
+   */
+   CATDialogState* GetOKState(); 
+ 
+   /**
+    * Gets the dialog box.
+    * Override this method to return your own dialog box.
+    * @return
+    * The dialog box associated with the command.
+    */
+   virtual CATDlgDialog* GiveMyPanel() = 0;
+
+   /**
+    * Gets the command mode.
+    * @return
+    *   The value.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;0 edit mode.&lt;/li&gt;
+    *   &lt;li&gt;1 create mode.&lt;/li&gt;&lt;/ul&gt;
+    */
+   virtual int GetMode(); 
+
+protected:
+
+   CATBoolean _InterruptedUpdate;
+
+private:
+   // associates the actions on OK, Apply, Cancel, UpdateKO and Preview to the transitions of the user state
+   void FillPanelState (CATCustomizableState * PanelState);
+   // The command mode: edit or create. 0: edition mode. 1: creation mode.
+   int _CreateCommand;   
+   // the update state 
+   CATDialogState* _UpdateState;    
+   // the state that is current when Ok is pressed
+   CATDialogState* _CurrentOkState;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtWksConfiguration.html">← 上一页: CATIPrtWksConfiguration.h</a></div>
+        <div><a href="CATMMUIStateCommand.html">下一页: CATMMUIStateCommand.h →</a></div>
+    </div>
+</body>
+</html>

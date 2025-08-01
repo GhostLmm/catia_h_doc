@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATLevelOfDetail.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATLevelOfDetail.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATKeyboardEvent.html">← 上一页: CATKeyboardEvent.h</a></div>
+        <div><a href="CATListOfCATPathElement.html">下一页: CATListOfCATPathElement.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT_LEVEL_OF_DETAIL_H
+#define CAT_LEVEL_OF_DETAIL_H
+
+/* COPYRIGHT DASSAULT SYSTEMES 1999 */
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+/** 
+ * Structure used in Level of Detail of graphic representation.
+ * &lt;b&gt;Role&lt;/b&gt;: This Structur is used in the @href MakeLods and
+ * @href ClearLods global functions.
+ */
+typedef struct lodData
+{
+  float *vertex;		 /* Point array.                              */
+  int nb_vertex;		 /* Number of points (3 coordinates/vertex).  */
+  float *normal;		 /* Normal array.                             */
+  int nb_normal;		 /* Number of normals (3 coordinates/normal). */
+  float *texture;    /* Texture array.                            */
+  int nb_tri;			 /* Number of defined triangles.              */
+  int *tri;			 /* Indexes defining triangles.               */
+  int nb_strip;			 /* The number of defined strips.             */
+  int *strip_size;		 /* The size of each strip.                   */
+  int *strip_index;		 /* Indexes of the points defining strips.    */
+  int nb_fan;			 /* The number of defined fans.               */
+  int *fan_size;		 /* The size of each fan.                     */
+  int *fan_index;		 /* Indexes of the points defining fans.      */
+
+#ifdef __cplusplus
+  lodData()
+  {
+     vertex = NULL;
+     nb_vertex = 0;
+     normal = NULL;;
+     nb_normal = 0;
+     texture = NULL;
+     nb_tri = 0;
+     tri = NULL;
+     nb_strip = 0;
+     strip_size = NULL;
+     strip_index = NULL;
+     nb_fan = 0;
+     fan_size = NULL;
+     fan_index = NULL;
+  }
+#endif
+} LodData;
+
+
+#include &quot;CATViz.h&quot;
+
+/** Function to provide mesh simplification.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This single function provides mesh simplification mechanism for both)
+ *       surfaces and solids. The number of level of details and the simplifica-
+ *       tion rate for each level are to be defined by the user.
+ *         - Solids  : The global solid geometry will be modified and the 
+ *                     topology won&#x27;t be left intact unless the simplification
+ *                     ratios are extremely low.
+ *         - Surfaces: The surface edges are left unchanged at low ratios.
+ *                     Only the inner surface parts will be modified. At higher
+ *                     levels, boundary edges are being modified.
+ *       The number of returned lods may be different than the wanted one. The
+ *       simplification ratios can be different from the given values.
+ *       This function returns at least one level of detail for each input part,
+ *       when working normally. Some parts are too small to be simplified. In
+ *       this case, no level of details are ever computed.
+ *       The function returns sags defining the precision rate of each level of
+ *       detail. The user has to give the sag of the initial geometry to be
+ *       simplified.
+ *
+ *  Input parameters are made of CAT3DFaceGP parameters, converted into a 
+ *  LodData structure:
+ *  
+ * 
+ * @param input
+ *  Pointer to the LodData structure.
+ * @param number_of_lods
+ *  The number of wanted LOD&#x27;s (will be used as output parameter too).        
+ * @param lod_step       
+ *  The simplification ratio for each lod (defined by
+ *  a simplification percentage relative to the number
+ *  of triangles).
+ * @param initial_sag  
+ *  The precision of the given original geometry.
+ *  The simplification process will compute
+ *  an approximative sag from the tesselation when
+ *  the &lt;sag_approx&gt; value is set to 1.
+ * @param sag_approx     
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ol&gt;
+ * &lt;li&gt; 0: Automatical sag computation is disabled.&lt;/li&gt;
+ * &lt;li&gt; 1: Automatical sag computation is enabled.&lt;/li&gt;
+ * &lt;/ol&gt;
+ *
+ * Output parameters are the following:
+ * @param number_of_lods
+ *  The real number of computed lods.
+ * @param sag 
+ *  Sag&#x27;s of the different levels of detail.
+ * @param output      
+ *  Array of LodData of &lt;number_of_lods&gt; size.
+ *  &lt;*output&gt; is the adress to a pointer list to the
+ *  LodData, (*output)[i] is the adress of the i-th
+ *  lod information LodData.
+ * @param initial_sag 
+ *  When the &lt;sag_approx&gt; is turned to 1, the value
+ *  of it is updated with the automatically computed sag.
+ *
+ * @return
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;1 in case of success&lt;/tt&gt;
+ * &lt;tt&gt;0 for failure&lt;/tt&gt;
+ *
+ */
+ExportedByCATViz int MakeLods (LodData *input,
+	      int *number_of_lods,
+	      double *lod_step,
+	      double *initial_sag,
+	      int sag_approx,
+	      double **sag,
+	      LodData ***output);
+
+/** Function to free useless memory.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This function is to be used after a call to MakeLods, in order to free
+ *  useless memory in the LodData &lt;***output&gt; and &lt;**sag&gt; arguments of 
+ *  MakeLods.
+ *
+ * @param ldata
+ *  Array of LodData parameters to be cleared (same format as
+ *  MakeLods).
+ * @param sdata
+ *  Array of sags allocated by the previous routine.
+ * @param  size
+ *  Number of LodData to be cleared.
+ *
+ */
+ExportedByCATViz void ClearLods (LodData ***ldata,double **sdata,int size);
+
+/**
+ * @nodoc
+ */
+ExportedByCATViz int MakeStripAndFan (LodData *input, LodData **output);
+
+/**
+ * @nodoc
+ */
+ExportedByCATViz void ClearStripAndFanStructure (LodData **ldata);
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATKeyboardEvent.html">← 上一页: CATKeyboardEvent.h</a></div>
+        <div><a href="CATListOfCATPathElement.html">下一页: CATListOfCATPathElement.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DLightSourceRep.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DLightSourceRep.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DLightSourceGP.html">← 上一页: CAT3DLightSourceGP.h</a></div>
+        <div><a href="CAT3DLineGP.html">下一页: CAT3DLineGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DLightSourceRep_H
+#define CAT3DLightSourceRep_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CAT3DRep.h&quot;
+#include &quot;CAT3DLightSourceGP.h&quot;
+#include &quot;CATViz.h&quot;
+
+#include &quot;CATIAV5Level.h&quot;
+
+class CATTexturePixelImage;
+
+#include &quot;CAT4x4Matrix.h&quot;
+
+/**
+ * Class to create light source representations.
+ * &lt;b&gt;Role&lt;/b&gt;: A light source representation indicates the position
+ * and orientation of lights in the viewer. A light source representation
+ * can be of two different types :
+ * &lt;ol&gt;
+ * &lt;li&gt;&lt;tt&gt;LS_INFINITE&lt;/tt&gt; infinitely distant like the sun, &lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;LS_SPOT&lt;/tt&gt; spotlight with a cutoff angle between 0 and 90 degrees,
+ *                     or equal to 180 degrees (lightbulb equivalent) &lt;/li&gt;
+ * &lt;/ol&gt;
+ * A light source representation can be of two differents modes :
+ * &lt;ol&gt;
+ * &lt;li&gt;&lt;tt&gt;Local&lt;/tt&gt; attached to the viewpoint &lt;/li&gt;
+ * &lt;li&gt;&lt;tt&gt;Global&lt;/tt&gt; attached to the model &lt;/li&gt;
+ * &lt;/ol&gt;
+ * By default, one light source is created and activated. A viewer can handle
+ * a maximum of eight light source representations.
+ */
+class ExportedByCATViz CAT3DLightSourceRep : public CAT3DRep
+{
+  friend class CATDmuStream3DLightSourceRep;
+  // macros
+  CATDeclareClass;
+
+public:
+  virtual ~CAT3DLightSourceRep();
+#ifdef CATIAV5R26
+  /** Constructs an empty light source graphic representation. */
+  static CAT3DLightSourceRep* CreateRep();
+
+  /**
+   * Constructs the representation of a light source.
+   * @param iType
+   * The type of the light source.
+   * @param iMode
+   * The mode of the light source.
+   * @param iOrigin
+   * The location of the light source.
+   * @param iDirection
+   * The direction of the light source.
+   * @param iSpotAngle
+   * The cutoff angle of a spotlight.
+   * &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: in the range [0,90] or 180.
+   * &lt;br&gt;&lt;b&gt;Default Value&lt;/b&gt;: 180. This constructs an equivalent to a lightbulb.
+   */
+  static CAT3DLightSourceRep* CreateRep(const CATLightSourceType       iType,
+		      const CATLightSourceMode       iMode,
+		      const CATMathPointf       &amp; iOrigin,
+		      const CATMathDirectionf   &amp; iDirection,
+		      const float                 iSpotAngle = 180.f);
+
+  /**
+   * Copy constructor.
+   * @param iLightSourceRep
+   * The light source representation to be duplicated
+   */
+  static CAT3DLightSourceRep* CreateRep(const CAT3DLightSourceRep &amp; iLightSourceRep);
+#endif
+
+  /** Constructs an empty light source graphic representation. */
+  CAT3DLightSourceRep();
+
+  /**
+   * Constructs the representation of a light source.
+   * @param iType
+   * The type of the light source.
+   * @param iMode
+   * The mode of the light source.
+   * @param iOrigin
+   * The location of the light source.
+   * @param iDirection
+   * The direction of the light source.
+   * @param iSpotAngle
+   * The cutoff angle of a spotlight.
+   * &lt;br&gt;&lt;b&gt;Legal Values&lt;/b&gt;: in the range [0,90] or 180.
+   * &lt;br&gt;&lt;b&gt;Default Value&lt;/b&gt;: 180. This constructs an equivalent to a lightbulb.
+   */
+  CAT3DLightSourceRep(const CATLightSourceType       iType,
+		      const CATLightSourceMode       iMode,
+		      const CATMathPointf       &amp; iOrigin,
+		      const CATMathDirectionf   &amp; iDirection,
+		      const float                 iSpotAngle = 180.f);
+
+  /**
+   * Copy constructor.
+   * @param iLightSourceRep
+   * The light source representation to be duplicated
+   */
+  CAT3DLightSourceRep(const CAT3DLightSourceRep &amp; iLightSourceRep);
+  /**
+   * Assignement operator.
+   * @param iLightSourceRep
+   * The light source representation to be copied
+   */
+  CAT3DLightSourceRep &amp; operator = (const CAT3DLightSourceRep &amp; iLightSourceRep);
+
+  /**
+   * Retrieves the type of the light source.
+   * @param oType
+   * The type of the light source representation.
+   */
+  void GetType(CATLightSourceType       &amp; oType);
+
+  /**
+   * Sets the type of the light source representation.
+   * @param iType
+   * The type of the light source representation.
+   */
+  void SetType(const CATLightSourceType   iType);
+
+  /**
+   * Retrieves the mode of the light source.
+   * @param oMode
+   * The mode of the light source representation.
+   */
+  void GetMode(CATLightSourceMode       &amp; oMode);
+
+  /**
+   * Sets the mode of the light source representation.
+   * @param iMode
+   * The mode of the light source representation.
+   */
+  void SetMode(const CATLightSourceMode iMode);
+
+
+  /**
+   * Retrieves the color components of the light source representation.
+   * All float values are in [0,1].
+   * @param oAmbient
+   * Red, green, blue and alpha values of ambient component.
+   * @param oDiffuse
+   * Red, green, blue and alpha values of diffuse component.
+   * @param oSpecular
+   * Red, green, blue and alpha values of specular component.
+   */
+  void GetColorParameters(const float ** oAmbient,
+                          const float ** oDiffuse,
+                          const float ** oSpecular) const;
+  /**
+   * Sets the color components of the light source representation.
+   * All float values are in [0,1].
+   * @param iAmbient
+   * Red, green, blue and alpha values of ambient component (array of four floats).
+   * @param iDiffuse
+   * Red, green, blue and alpha values of diffuse component (array of four floats).
+   * @param iSpecular
+   * Red, green, blue and alpha values of specular component (array of four floats).
+   */
+  void SetColorParameters(const float  * iAmbient,
+                          const float  * iDiffuse,
+                          const float  * iSpecular);
+
+  /**
+   * Retrieves the location and direction of a light source representation.
+   * @param oOrigin
+   * The point where the light source is located. This parameter has
+   * no meaning for &lt;tt&gt;LS_INFINITE&gt;/tt&gt; light source representations.
+   * @param oDirection
+   * The direction of the light source.
+   */
+  void GetLocationParameters(CATMathPointf     &amp; oOrigin,
+                             CATMathDirectionf &amp; oDirection) const;
+
+  /**
+   * Sets the location and direction of a light source representation.
+   * This method has no meaning for &lt;tt&gt;LS_INFINITE&lt;/tt&gt; light source representations.
+   * @param iOrigin
+   * The point where the light source is located. This parameter has
+   * no meaning for &lt;tt&gt;LS_INFINITE&lt;/tt&gt; light source representations.
+   * @param iDirection
+   * The direction of the light source.
+   */
+  void SetLocationParameters(const CATMathPointf     &amp; iOrigin,
+                             const CATMathDirectionf &amp; iDirection);
+
+  /**
+   * Retrieves the specific parameters of a spotlight source representation.
+   * This method has no meaning for &lt;tt&gt;LS_INFINITE&lt;/tt&gt; light source representations.
+   * @param oSpotAngle
+   * The half-angle aperture of the cone of the spotlight.
+   * @param oSpotExponent
+   * The exponent value used for specular component calculations.
+   */
+  void GetSpotLightParameters(float &amp; oSpotAngle, float &amp; oSpotExponent) const;
+
+  /**
+   * Sets the specific parameters of a spotlight source representation.
+   * @param iSpotAngle
+   * The half-angle aperture of the cone of the spotlight.
+   * @param iSpotExponent
+   * The exponent value used for specular component calculations.
+   */
+  void SetSpotLightParameters(const float iSpotAngle, const float iSpotExponent);
+
+  /**
+   * Retrieves the attenuation parameters of the light source representation.
+   * @param oConstant
+   * The constant factor of the attenuation function.
+   * @param oLinear
+   * The light factor of the attenuation function.
+   * @param oQuadratic
+   * The quadratic factor of the attenuation function.
+   */
+  void GetAttenuationParameters(float &amp; oConstant,
+                                float &amp; oLinear,
+                                float &amp; oQuadratic) const;
+  /**
+   * Sets the attenuation parameters of the light source representation.
+   * @param iConstant
+   * The constant parameter of the attenuation function
+   * @param iLinear
+   * The light parameter of the attenuation function
+   * @param iQuadratic
+   * The quadratic parameter of the attenuation function
+   */
+  void SetAttenuationParameters(const float iConstant,
+                                const float iLinear,
+                                const float iQuadratic);
+
+  /** @nodoc */
+  void DrawShading(CATRender &amp; iRender, int iInside);
+
+  /** @nodoc */
+  inline int IsActive() {return _active;};
+
+  /** @nodoc */
+  inline void SetActive(int active) {_active = active;};
+  
+  /** @nodoc*/
+  CATTexturePixelImage *GetShadowTextureToModify();
+  /** @nodoc*/
+  void SetShadowTexture(CATTexturePixelImage *i_pShadowDepthTexture);
+
+  /** @nodoc*/
+  void SetProjectionMatrix(CAT4x4Matrix &amp;);
+  /** @nodoc*/
+  CAT4x4Matrix GetProjectionMatrix();
+
+  /** @nodoc*/
+  void SetModelviewMatrix(CAT4x4Matrix &amp;);
+  /** @nodoc*/
+  CAT4x4Matrix GetModelviewMatrix();
+
+  /** @nodoc */
+  void SetRefreshShadowMapFlag(int i_flag);
+  /** @nodoc */
+  int GetRefreshShadowMapFlag();
+
+  /** @nodoc NOT_USED_ANYMORE*/
+  void SetNothingInLightFlag(int i_flag){};
+  /** @nodoc NOT_USED_ANYMORE*/
+  int GetNothingInLightFlag(){return 0;};
+
+  /** @nodoc*/
+  void SetNear(float i_near);
+  /** @nodoc */
+  float GetNear();
+  
+  /** @nodoc*/
+  void SetAutomaticNearPlanFlag(short i_automaticNearPlanFlag);
+  /** @nodoc */
+  short GetAutomaticNearPlanFlag();
+  
+  /** @nodoc */
+  void SetApplicativeMode(unsigned int iMode);
+
+  /** @nodoc */
+  CAT3DLightSourceRep(const LightSourceType      type,
+                      const LightSourceMode      mode,
+                      const CATMathPointf      &amp; origin,
+                      const CATMathDirectionf  &amp; direction,
+                      const CATMathDirectionf  &amp; up,
+                      const CATMathDirectionf  &amp; right,
+                      const float              * ambient,
+                      const float              * diffuse,
+                      const float              * specular,
+                      const float                spotAngle,
+                      const float                spotExponent,
+                      const float                spotInnerAngle,
+                      const float                constantAttenuation,
+                      const float                linearAttenuation,
+                      const float                quadraticAttenuation,
+                      const float                axialFalloffStart,
+                      const float                axialFalloffEnd,
+                      const float                areaType,
+                      const float                areaStatus,
+                      const float              * areaGeometry);
+
+
+  /** @nodoc */
+  void GetSpotLightInnerParameters(float &amp; oSpotInnerAngle) const;
+
+  /** @nodoc */
+  void SetSpotLightInnerParameters(const float iSpotInnerAngle);
+
+  /** @nodoc */
+  void GetAreaParameters(float &amp; oAreaType, float &amp; oAreaStatus, float ** oAreaGeometry) const;
+
+  /** @nodoc */
+  void SetAreaParameters(const float iAreaType, float  iAreaStatus, float * iAreaGeometry);
+
+  /** @nodoc */
+  void GetUpAndRightParameters(CATMathDirectionf &amp; oUp,
+                               CATMathDirectionf &amp; oRight) const;
+
+  /** @nodoc */
+  void SetUpAndRightParameters(const CATMathDirectionf &amp; iUp,
+                               const CATMathDirectionf &amp; iRight);
+
+  /** @nodoc */
+  void GetFalloffParameters(float &amp; oAxialFalloffStart,
+                            float &amp; oAxialFalloffEnd) const;
+
+  /** @nodoc */
+  void SetFalloffParameters(const float iAxialFalloffStart,
+                            const float  iAxialFalloffEnd);
+
+private :
+
+  /** @nodoc */
+  void BuildGP();
+
+  // data
+  CATLightSourceType _type;
+  CATLightSourceMode _mode;
+  CATMathPointf      _origin;
+  CATMathDirectionf  _direction;
+  CATMathDirectionf  _up;
+  CATMathDirectionf  _right;
+  float              _spotInnerAngle;
+  float              _spotAngle;
+  float              _spotExponent;
+  float              _axialFalloffStart;
+  float              _axialFalloffEnd;
+  float              _constantAttenuation;
+  float              _linearAttenuation;
+  float              _quadraticAttenuation;
+  float              _areaType;
+  float              _areaStatus;
+  float              _areaGeometry[2];
+  float              _ambient[4];
+  float              _diffuse[4];
+  float              _specular[4];
+  int                _active;
+
+  CAT3DLightSourceGP * _gp;                   // light source graphic primitive
+
+  CATTexturePixelImage *_pShadowDepthTexture;
+  CAT4x4Matrix  _projectionMatrix;
+  CAT4x4Matrix  _modelviewMatrix;
+  int           _needShadowDepthMapUpdate; /** @win64 fbq : 64-bit structure padding **/
+  int           _nothingInLight;
+  float         _nearPlan;  
+  short         _automaticNearPlanFlag;
+
+  unsigned int  _applicativeMode;
+};
+
+#endif // CAT3DLightSourceRep_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DLightSourceGP.html">← 上一页: CAT3DLightSourceGP.h</a></div>
+        <div><a href="CAT3DLineGP.html">下一页: CAT3DLineGP.h →</a></div>
+    </div>
+</body>
+</html>

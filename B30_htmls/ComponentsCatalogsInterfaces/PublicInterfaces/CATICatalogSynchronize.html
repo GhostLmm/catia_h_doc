@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogSynchronize.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogSynchronize.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogQueryResult.html">← 上一页: CATICatalogQueryResult.h</a></div>
+        <div><a href="CATListValCATICatalogChapter_var.html">下一页: CATListValCATICatalogChapter_var.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATICatalogSynchronize_H
+#define CATICatalogSynchronize_H
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+
+#include &quot;CATCclInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATICkeType.h&quot;
+
+class CATPixelImage;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATCclInterfaces IID IID_CATICatalogSynchronize;
+#else
+extern &quot;C&quot; const IID IID_CATICatalogSynchronize;
+#endif
+
+//------------------------------------------------------------------
+/**
+ * Interface for catalog component synchronisation.
+ * &lt;b&gt;Role:&lt;/b&gt;
+ * This interface enables to components to update their attributes in catalog
+ * like name, preview and keyword values.
+ * This interface is used during the synchronization step in Edit/Links.
+  * &lt;br&gt;This interface can be implemented (it is not mandatory) on a component 
+  * when it must be integrated
+  * into a catalog document. To integrate a new type of component in a catalog document there
+ * are two others interfaces to considere:
+ * &lt;ul&gt;
+ *  &lt;li&gt;@href CATICatalogEnable : Interface to authorize a component (only for
+ *  features) to be integrated into a catalog &lt;/li&gt;
+  *  &lt;li&gt;@href CATICatalogInstantiation : Interface to provide the interactive command
+ *  to instantiate in context the component&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+class ExportedByCATCclInterfaces CATICatalogSynchronize: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+   /**
+     * Retrieves the display name of the description.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the display name of the description
+     * ( @href CATICatalogDescription ) which contains a links towards an 
+     * instance of the component. In other words, the name of the description,
+     * returned by the @href CATICatalogDescription#GetName method is those 
+     * returned by this method.
+     * &lt;br&gt;The name of the description is also the value of the &lt;tt&gt;Name&lt;/tt&gt;
+     * keyword.
+     *   @param oAlias
+     *      The display name of the description.
+     */
+   virtual HRESULT GetAlias(CATUnicodeString&amp; oAlias) = 0;
+   /**
+     * Retrieves embedded preview.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+     * This method is called only if a previous embedded preview was stored in the catalog.
+     *   @param oImage  [out, CATBaseUnknown#Release]
+     *      A CATPixelImage with 130*110 size.
+     */
+   virtual HRESULT GetEmbeddedPreview(CATPixelImage** oImage) = 0;
+   /**
+     * Retrieves an integer keyword value.
+     *   @param iKeywordName
+     *      The name of the keyword.
+     *   @param oKeywordValue
+     *      The value of the keyword in MKS Unit.
+     */
+   virtual HRESULT GetKeywordValue(const CATUnicodeString&amp; iKeywordName,
+                                   int&amp; oKeyWordValue) = 0;
+   /**
+     * Retrieves a double keyword value.
+     *   @param iKeywordName
+     *      The name of the keyword.
+     *   @param iKeywordType
+     *      The type of the keyword, usefull for MKS units.
+     *   @param oKeywordValue
+     *      The value of the keyword in MKS Unit.
+     */
+   virtual HRESULT GetKeywordValue(const CATUnicodeString&amp; iKeywordName,
+                                   const CATICkeType* iKeywordType,
+                                   double&amp; oKeyWordValue) = 0;
+   /**
+     * Retrieves a boolean keyword value.
+     *   @param iKeywordName
+     *      The name of the keyword.
+     *   @param oKeywordValue
+     *      The value of the keyword in MKS Unit.
+     */
+   virtual HRESULT GetKeywordValue(const CATUnicodeString&amp; iKeywordName,
+                                   CATCke::Boolean &amp; oKeyWordValue) = 0;
+   /**
+     * Retrieves a string keyword value.
+     *   @param iKeywordName
+     *      The name of the keyword.
+     *   @param oKeywordValue
+     *      The value of the keyword in MKS Unit.
+     */
+   virtual HRESULT GetKeywordValue(const CATUnicodeString&amp; iKeywordName,
+                                   CATUnicodeString&amp; oKeyWordValue) = 0;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+//------------------------------------------------------------------
+CATDeclareHandler(CATICatalogSynchronize,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogQueryResult.html">← 上一页: CATICatalogQueryResult.h</a></div>
+        <div><a href="CATListValCATICatalogChapter_var.html">下一页: CATListValCATICatalogChapter_var.h →</a></div>
+    </div>
+</body>
+</html>

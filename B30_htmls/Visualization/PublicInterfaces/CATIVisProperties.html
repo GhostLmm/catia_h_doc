@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATIVisProperties.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATIVisProperties.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectShow.html">← 上一页: CATISelectShow.h</a></div>
+        <div><a href="CATIVisPropertiesAbstract.html">下一页: CATIVisPropertiesAbstract.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIVisProperties_H
+#define CATIVisProperties_H
+
+//
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//
+
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4  CATExtIVisProperties
+ */
+
+#include &quot;CATIVisPropertiesAbstract.h&quot;
+
+
+#include &quot;CATVisualization.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATVisualization IID IID_CATIVisProperties;
+#else
+extern &quot;C&quot; const IID IID_CATIVisProperties;
+#endif
+
+
+/**
+ * Interface to manage graphic properties.
+ * &lt;b&gt;Role&lt;/b&gt;:Your component has a set of &quot;objects&quot; , line, surface, ..., 
+ * which are defined by their @href CATVisGeomType. 
+ * Each &quot;object&quot; has a set of graphic properties. With this 
+ * interface you read / write these &quot;objects&quot;. 
+ * &lt;br&gt;
+ * You should implement this interface in a data extension of the component that implements
+ * an interface which derives from @href CATIVisu, such as @href CATI3DGeoVisu or @href
+ * CATI2DGeoVisu. This data extension should derive from the supplied @href CATExtIVisProperties
+ * adapter class. 
+ * &lt;br&gt;
+ * To store properties on your component there is the @href CATIProperty. When you set 
+ * graphic properties thanks to &lt;tt&gt;CATIVisProperties&lt;/tt&gt;, you also modify the value in 
+ * &lt;tt&gt;CATIProperty&lt;/tt&gt;. So your component must implement these 2 interfaces to have
+ * graphic properties.
+ * &lt;br&gt;
+ * All methods of this interface are defined in the 
+ * @href CATIVisPropertiesAbstract base interface.
+ * In this base class you find the methods to manage the graphic 
+ * properties on your component.
+ * &lt;ul&gt;
+ * &lt;li&gt; @href CATIVisPropertiesAbstract#SetPropertiesAtt &lt;/li&gt;
+ * &lt;br&gt;To set a graphic property
+ * &lt;li&gt; @href CATIVisPropertiesAbstract#GetPropertiesAtt &lt;/li&gt;
+ * &lt;br&gt;To retrieve a graphic property
+ * &lt;li&gt; @href CATIVisPropertiesAbstract#ResetPropertiesAtt &lt;/li&gt;
+ * &lt;br&gt;To reset a graphic property to the standard, 
+ * &lt;li&gt; @href CATIVisPropertiesAbstract#IsGeomTypeDefined &lt;/li&gt;
+ * &lt;br&gt;To know if your component is assigned a valid geometry type
+ * &lt;/ul&gt;
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface can be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page. 
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ * @see CATVisPropertiesValues, CATVisGeomType, CATVisPropertyType 
+ */
+
+class ExportedByCATVisualization CATIVisProperties : public CATIVisPropertiesAbstract
+{
+  // macros
+  CATDeclareInterface;
+
+public:
+
+
+};
+
+
+/** @nodoc */
+
+CATDeclareHandler(CATIVisProperties,CATBaseUnknown);
+
+#endif // CATIVisProperties
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectShow.html">← 上一页: CATISelectShow.h</a></div>
+        <div><a href="CATIVisPropertiesAbstract.html">下一页: CATIVisPropertiesAbstract.h →</a></div>
+    </div>
+</body>
+</html>

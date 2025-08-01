@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATISAXAttributes.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATISAXAttributes.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXAttributeList.html">← 上一页: CATISAXAttributeList.h</a></div>
+        <div><a href="CATISAXContentHandler.html">下一页: CATISAXContentHandler.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATISAXAttributes_h
+#define CATISAXAttributes_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATISAXAttributes;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATISAXAttributes ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+
+/**
+ * Interface for a list of XML attributes.
+ * 
+ * &lt;p&gt;This interface allows access to a list of attributes in three different ways:&lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;by attribute index;&lt;/li&gt;
+ * &lt;li&gt;by Namespace-qualified name; or&lt;/li&gt;
+ * &lt;li&gt;by qualified (prefixed) name.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * 
+ * &lt;p&gt;The list will not contain attributes that were declared
+ * &lt;tt&gt;#IMPLIED&lt;/tt&gt; but not specified in the start tag.  It will also not
+ * contain attributes used as Namespace declarations (xmlns*) unless
+ * the &lt;tt&gt;http://xml.org/sax/features/namespace-prefixes&lt;/tt&gt; 
+ * feature is set to &lt;tt&gt;TRUE&lt;/tt&gt; (it is &lt;tt&gt;FALSE&lt;/tt&gt; by 
+ * default).&lt;/p&gt;
+ * 
+ * &lt;p&gt;If the namespace-prefixes feature (see above) is &lt;tt&gt;FALSE&lt;/tt&gt;, 
+ * access by qualified name may not be available; if the 
+ * &lt;tt&gt;http://xml.org/sax/features/namespaces&lt;/tt&gt;
+ * feature is &lt;tt&gt;FALSE&lt;/tt&gt;, access by Namespace-qualified names 
+ * may not be available.&lt;/p&gt;
+ * 
+ * &lt;p&gt;This interface replaces the SAX1 @href CATISAXAttributeList interface, which does not 
+ * contain Namespace support.  In addition to Namespace support, it 
+ * adds the @href #GetIndex methods (below).&lt;/p&gt;
+ * 
+ * &lt;p&gt;The order of attributes in the list is unspecified, and will
+ * vary from implementation to implementation.&lt;/p&gt;
+ *
+ * @see CATISAXXMLReader#SetFeature 
+ */
+
+class ExportedByXMLParserItf CATISAXAttributes : public CATBaseUnknown {
+	CATDeclareInterface;
+	
+	public:
+		
+		/**
+		 * Retrieves the index of an attribute by XML 1&amp;middot;0 qualified name.
+		 *
+		 * @param iQualifiedName
+		 * The qualified (prefixed) name.
+		 * @param oIndex
+		 * The index of the attribute.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the attribute is not in the list, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 */
+		virtual HRESULT GetIndex(
+			const CATUnicodeString&amp; iQualifiedName, 
+			unsigned int &amp; oIndex) = 0;
+
+		/**
+		 * Retrieves the index of an attribute by Namespace name.
+		 *
+		 * @param iURI
+		 * The Namespace URI, or the empty string if the name has no Namespace URI.
+		 * @param iLocalName
+		 * The attribute&#x27;s local name.
+		 * @param oIndex
+		 * The index of the attribute.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the attribute is not in the list, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 */
+		virtual HRESULT GetIndex(
+			const CATUnicodeString&amp; iURI, 
+			const CATUnicodeString&amp; iLocalName, 
+			unsigned int &amp; oIndex) = 0;
+
+		/**
+		 * Retrieves the number of attributes in this list.
+		 *
+		 * Once you know the number of attributes, you can iterate through the list.
+		 *
+		 * @param oLength
+		 * The number of attributes in the list.  
+		 */
+		virtual HRESULT GetLength(
+			unsigned int &amp; oLength) = 0;
+
+		/**
+		 * Retrieves an attribute&#x27;s XML 1&amp;middot;0 local name by index.
+		 *
+		 * @param iPosition 
+		 * The attribute index (zero-based).
+		 * @param oName
+		 * The local name, or the empty string if Namespace processing is not being performed.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the index is out of range, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetLength 
+		 */
+		virtual HRESULT GetLocalName(
+			const unsigned int iPosition, 
+			CATUnicodeString &amp; oName) = 0;
+
+		/**
+		 * Retrieves an attribute&#x27;s XML 1&amp;middot;0 qualified name by index.
+		 *
+		 * @param iPosition 
+		 * The attribute index (zero-based).
+		 * @param oName
+		 * The XML 1&amp;middot;0 qualified name, or the empty string if none is available.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the index is out of range, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetLength 
+		 */
+		virtual HRESULT GetQName(
+			const unsigned int iPosition, 
+			CATUnicodeString &amp; oName) = 0;
+		
+		/**
+		 * Retrieves the type of an attribute (by position).
+		 *
+		 * The attribute type is one of the strings &lt;tt&gt;&quot;CDATA&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;ID&quot;&lt;/tt&gt;,
+		 * &lt;tt&gt;&quot;IDREF&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;IDREFS&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;NMTOKEN&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;NMTOKENS&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;ENTITY&quot;&lt;/tt&gt;, &lt;tt&gt;&quot;ENTITIES&quot;&lt;/tt&gt;,
+		 * or &lt;tt&gt;&quot;NOTATION&quot;&lt;/tt&gt; (always in upper case).
+		 *
+		 * If the parser has not read a declaration for the attribute,
+		 * or if the parser does not report attribute types, then it must
+		 * return the value &lt;tt&gt;&quot;CDATA&quot;&lt;/tt&gt; as stated in the XML 1&amp;middot;0 Recommentation
+		 * (clause 3.3.3, &quot;Attribute-Value Normalization&quot;).
+		 *
+		 * For an enumerated attribute that is not a notation, the
+		 * parser will report the type as &lt;tt&gt;&quot;NMTOKEN&quot;&lt;/tt&gt;.
+		 *
+		 * @param iPosition
+		 * The index of the attribute in the list (starting at 0).
+		 * @param oType
+		 * The attribute type as a string.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the index is out of range, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetLength, #GetType
+		 */		
+		virtual HRESULT GetType(
+			const unsigned int iPosition, 
+			CATUnicodeString &amp; oType) = 0;
+		
+		/**
+		 * Retrieves the type of an attribute (by XML 1&amp;middot;0 qualified name).
+		 *
+		 * The return value is the same as the return value for
+		 * @href #GetType.
+		 *
+		 * @param iQualifiedName 
+		 * The XML 1&amp;middot;0 qualified name.
+		 * @param oType
+		 * The attribute type as a string.
+ 		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if no such attribute exists, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetType
+		 */
+		virtual HRESULT GetType(
+			const CATUnicodeString &amp; iQualifiedName, 
+			CATUnicodeString &amp; oType) = 0;
+				
+
+		/**
+		 * Retrieves the type of an attribute (by Namespace name).
+		 *
+		 * The return value is the same as the return value for
+		 * @href #GetType.
+		 *
+		 * @param iURI
+		 * The Namespace URI, or the empty string if the name has no Namespace URI.
+		 * @param iLocalName
+		 * The attribute&#x27;s local name.
+		 * @param oType
+		 * The attribute type as a string.
+ 		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if no such attribute exists, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetType
+		 */
+		virtual HRESULT GetType(
+			const CATUnicodeString&amp; iURI, 
+			const CATUnicodeString&amp; iLocalName, 
+			CATUnicodeString &amp; oType) = 0;
+
+		/**
+		 * Retrieves an attribute&#x27;s Namespace URI by index.
+		 *
+		 * @param iPosition 
+		 * The attribute index (zero-based).
+		 * @param oURI
+		 * The Namespace URI, or the empty string if none is available.
+		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the index is out of range, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetLength 
+		 */
+		virtual HRESULT GetURI(
+			const unsigned int iPosition, 
+			CATUnicodeString &amp; oURI) = 0;
+
+		/**
+		 * Retrieves the value of an attribute (by position).
+		 *
+		 * If the attribute value is a list of tokens (IDREFS,
+		 * ENTITIES, or NMTOKENS), the tokens will be concatenated
+		 * into a single string separated by whitespace.
+		 *
+		 * @param iPosition
+		 * The index of the attribute in the list (starting at 0).
+		 * @param oValue
+		 * The attribute value as a string
+ 		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if the index is out of range, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetLength, #GetValue
+		 */
+		virtual HRESULT GetValue(
+			const unsigned int iPosition, 
+			CATUnicodeString &amp; oValue) = 0;
+		
+		/**
+		 * Retrieves the value of an attribute (by XML 1&amp;middot;0 qualified name).
+		 *
+		 * The return value is the same as the return value for
+		 * @href #GetValue.
+		 *
+		 * @param iQualifiedName
+		 * The XML 1&amp;middot;0 qualified name.
+		 * @param oValue
+		 * The attribute value as a string, or null if no such attribute exists.
+ 		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if no such attribute exists, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetValue
+		 */
+		virtual HRESULT GetValue(
+			const CATUnicodeString &amp; iQualifiedName, 
+			CATUnicodeString &amp; oValue) = 0;
+
+		/**
+		 * Retrieves the value of an attribute (by Namespace name).
+		 *
+		 * The return value is the same as the return value for
+		 * @href #GetValue.
+		 *
+		 * @param iURI
+		 * The Namespace URI, or the empty string if the name has no Namespace URI.
+		 * @param iLocalName
+		 * The attribute&#x27;s local name.
+		 * @param oValue
+		 * The attribute value as a string, or null if no such attribute exists.
+ 		 * @return
+		 * The method returns &lt;tt&gt;E_FAIL&lt;/tt&gt; if no such attribute exists, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise.
+		 *
+		 * @see #GetValue
+		 */
+		virtual HRESULT GetValue(
+			const CATUnicodeString&amp; iURI, 
+			const CATUnicodeString&amp; iLocalName, 
+			CATUnicodeString &amp; oValue) = 0;
+};
+
+CATDeclareHandler(CATISAXAttributes, CATBaseUnknown);
+
+#endif // CATISAXAttributes_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXAttributeList.html">← 上一页: CATISAXAttributeList.h</a></div>
+        <div><a href="CATISAXContentHandler.html">下一页: CATISAXContentHandler.h →</a></div>
+    </div>
+</body>
+</html>

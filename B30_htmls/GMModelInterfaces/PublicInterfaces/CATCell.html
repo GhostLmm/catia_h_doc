@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATCell.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATCell.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMTessellateParam.html">← 上一页: CATCGMTessellateParam.h</a></div>
+        <div><a href="CATCellHashTable.html">下一页: CATCellHashTable.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCell_H
+#define CATCell_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/ 
+
+#include &quot;CATTopObject.h&quot;
+//#include &quot;CATTopDef.h&quot;
+#include &quot;CATTopDefine.h&quot;
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;ListPOfCATCell.h&quot;
+#include &quot;ListPOfCATTopology.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;ListVOfLong.h&quot;
+ 
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMModelInterfaces IID IID_CATCell ;
+#else
+extern &quot;C&quot; const IID IID_CATCell ;
+#endif
+
+class CATBody;
+class CATDomain;
+class CATBoundaryIterator;
+class CATBoundedCellsIterator;
+class CATMathPoint;
+
+/**
+* Interface representing a topological cell.
+* &lt;br&gt;A cell represents a geometry of a given dimension
+* bounded by cells of lower dimension. A cell is oriented with regards to an
+* underlying geometry:
+* &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;CATOrientationNegative&lt;/tt&gt;&lt;dd&gt; the cell orientation is reversed
+* with regards to the standard orientation.
+*     &lt;dt&gt;&lt;tt&gt;CATOrientationPositive&lt;/tt&gt;&lt;dd&gt; the cell orientation is the 
+* standard orientation.
+*     &lt;dt&gt;&lt;tt&gt;CATOrientationUnknown&lt;/tt&gt;&lt;dd&gt; the cell orientation is not
+* defined.&lt;/dl&gt;
+* The cell CATSide defines the matter side on a bounding cell of a cell:
+* &lt;table border=1&gt;
+* &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;th&gt;CATFace&lt;/th&gt;&lt;th&gt;CATEdge&lt;/th&gt;&lt;th&gt;CATVertex&lt;/th&gt;&lt;/tr&gt;
+* &lt;tr&gt;&lt;th&gt;CATVolume&lt;/th&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideLeft&lt;/tt&gt;: the face normal points inside the volume&lt;br&gt;
+*         &lt;tt&gt;CATSideRight&lt;/tt&gt;: the face normal points outside the volume&lt;br&gt;
+*         &lt;tt&gt;CATSideFull&lt;/tt&gt;: the face is immersed into the volume&lt;/td&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideFull&lt;/tt&gt;: the edge is immersed into the volume&lt;/td&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideFull&lt;/tt&gt;: the vertex is immersed into the volume&lt;/td&gt;
+*&lt;/tr&gt;
+* &lt;tr&gt;&lt;th&gt;CATFace&lt;/th&gt;
+*     &lt;td&gt;  &lt;/td&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideleft&lt;/tt&gt;: when the observation direction is opposite 
+* to the face normal and the edge is run with its own orientation, the matter
+* is on the edge left&lt;br&gt;
+*         &lt;tt&gt;CATSideRight&lt;/tt&gt;: when the observation direction is opposite 
+* to the face normal and the edge is run with its own orientation, the matter
+* is on the edge right&lt;br&gt;
+*         &lt;tt&gt;CATSideFull&lt;/tt&gt;: the edge is immersed into the face&lt;/td&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideFull&lt;/tt&gt;: the vertex is immersed into the face&lt;/td&gt;
+*&lt;/tr&gt;
+* &lt;tr&gt;&lt;th&gt;CATEdge&lt;/th&gt;
+*     &lt;td&gt;  &lt;/td&gt;  &lt;td&gt;&lt;/td&gt;
+*     &lt;td&gt;&lt;tt&gt;CATSideLeft&lt;/tt&gt;: the vertex is at the edge beginning &lt;br&gt;
+*         &lt;tt&gt;CATSideRight&lt;/tt&gt;: the vertex is at the edge end&lt;br&gt;
+*         &lt;tt&gt;CATSideFull&lt;/tt&gt;: impossible&lt;/td&gt;
+*&lt;/tr&gt;
+*&lt;/table&gt;
+* If the cell bounds the domain twice, it is set to &lt;tt&gt;CATSideUnknown&lt;/tt&gt;.
+* &lt;br&gt; A CATCell is created with the @href CATBody#CreateCell method, and deleted with the
+* @href CATICGMContainer#Remove method. By default, this deletion is not recursive at the topological level:
+* the domains of the cells are
+* not deleted. However, the geometry of the cell, if not used by another object, is also deleted.
+*/
+
+class ExportedByCATGMModelInterfaces CATCell : public CATTopObject
+{
+  
+  CATDeclareInterface;
+  
+public :
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  
+  /**
+  * Adds a CATDomain to &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * &lt;br&gt;For volumes and faces only.
+  * @param iDomain
+  * The pointer to the domain to add.
+  * @param iLocation
+  * The location of the domain to bound &lt;tt&gt;this&lt;/tt&gt;.
+  */
+  virtual void AddDomain( CATDomain * iDomain, CATLocation iLocation = CATLocationUnknown  )=0;
+  
+  
+  /**
+  * Returns the number of internal CATDomains of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  *&lt;br&gt;This method performs a recursive scan.
+  * @return
+  * The number of internal domains.
+  */
+  virtual CATLONG32 GetNbInternalDomains()=0;
+  
+  /**
+  * Returns the dimension of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * @return
+  * The dimension.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt; for a vertex.
+  * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt; for an edge.
+  * &lt;dt&gt;2&lt;/dt&gt;&lt;dd&gt; for a face.
+  * &lt;dt&gt;3&lt;/dt&gt;&lt;dd&gt; for a volume.
+  * &lt;/dl&gt;
+  */
+  virtual short GetDimension()=0;
+  
+  /**
+  * Adds a CATCell to the boundary of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * &lt;br&gt; The cells dimensions must match the domain low and high dimensions.
+  * @param iBoundingCell
+  * The pointer to the cell to add to the boundary of &lt;tt&gt;this&lt;/tt&gt;.
+  * @param iSideOrientation
+  * The side of the matter when walking along the natural orientation of &lt;tt&gt;iBoundingCell&lt;/tt&gt;.
+  * @param iDomain
+  * The pointer to the domain that will contain the added cell.
+  * &lt;br&gt;If not &lt;tt&gt;NULL&lt;/tt&gt;, the bounding cell is also added to the domain.
+  * @param iWithGeometry
+  * The pointer to the underlying geometry ( a CATPCurve for an
+  *  Edge-Bounding-Face, a CATPointOnEdgeCurve for a Vertex-Bounding-Edge, ..)
+  *&lt;br&gt;If not &lt;tt&gt;NULL&lt;/tt&gt; at the method call, the geometry is associated with
+  * &lt;tt&gt;iBoundingCell&lt;/tt&gt;.
+  */
+  virtual void AddBoundingCell   ( CATCell * iBoundingCell, CATSide iSideOrientation, 
+    CATDomain * iDomain=NULL,   CATGeometry* iWithGeometry=NULL )=0;
+  
+#if defined ( CATIACGMV5R21 )
+    /**
+    * Removes a CATCell from the boundary of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+    * @param iCellToRemove
+    * The pointer to the cell to remove. 
+    * The cell is detached from the boundary, but still exists in the CATGeoFactory.
+    * @param iRemoveFromFactory
+    * The action on the detached cell &lt;tt&gt;iDomainToDetach&lt;/tt&gt;.
+    * Dedicated to the case where no more CATDomain refers to &lt;tt&gt;iCellToDetach&lt;/tt&gt;.
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; the &lt;tt&gt;iCellToDetach&lt;/tt&gt; remains in the factory
+    *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; the &lt;tt&gt;iCellToDetach&lt;/tt&gt; is removed from the factory with RemoveDependancies management&lt;/dl&gt;
+    */
+  virtual void RemoveBoundingCell( CATCell * iCellToRemove, CATBoolean iRemoveFromFactory = FALSE )=0;
+#else
+    /**
+    * Removes a CATCell from the boundary of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+    * @param iCellToRemove
+    * The pointer to the cell to remove. 
+    * The cell is detached from the boundary, but still exists in the CATGeoFactory.
+  */
+  virtual void RemoveBoundingCell( CATCell * iCellToRemove )=0;
+#endif
+  
+  
+  /**
+  * Defines the geometry of &lt;tt&gt;this&lt;/tt&gt; CATCell. 
+  * @param iGeometry
+  * The pointer to the geometry to associate with &lt;tt&gt;this&lt;/tt&gt;.
+  * &lt;ul&gt;&lt;li&gt;The geometry of a CATFace is a CATSurface.
+  * &lt;li&gt;The geometry of a CATEdge is a CATEdgeCurve.
+  * &lt;li&gt;The geometry of a CATVertex is a CATMacroPoint.
+  * &lt;li&gt;&lt;tt&gt;SetGeometry&lt;/tt&gt; is not used in case of a CATVolume,
+  * as the geometry of a CATVolume always is the 3D space. 
+  *&lt;/ul&gt;
+  * @param iOrientation
+  * The relative orientation of the cell with regards to the geometry.
+  */
+  virtual void SetGeometry(CATGeometry * iGeometry,
+                           CATOrientation iOrientation=CATOrientationPositive )=0;
+  
+    /**
+    * Modifies the orientation of &lt;tt&gt;this&lt;/tt&gt; CATCell with regards to its geometry.
+    * &lt;br&gt;For faces and edges.
+    * @param iNewOrientation
+    * The new relative orientation.
+  */
+  virtual void  SetGeometryOrientation(CATOrientation iNewOrientation)=0;
+  
+  /**
+  * Returns the geometry of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * @param  ioOrientation
+  * The relative orientation between &lt;tt&gt;this&lt;/tt&gt; and its geometry.
+  * If &lt;tt&gt;NULL&lt;/tt&gt;, the orientation is not filled out.
+  * @return
+  * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt;.
+  */
+  virtual CATGeometry  * GetGeometry(CATOrientation * ioOrientation=NULL)=0;
+  
+  /**
+  * Returns the orientation of &lt;tt&gt;this&lt;/tt&gt; CATCell with regards to its geometry.
+  * @return
+  * The relative orientation between &lt;tt&gt;this&lt;/tt&gt; and its geometry.
+  */
+  virtual CATOrientation GetGeometryOrientation() = 0;
+  
+  /**
+  * Sets the geometry of &lt;tt&gt;this&lt;/tt&gt; CATCell with respect to a bounded cell.
+  * @param iBoundedCell
+  * The pointer to the cell bounded by &lt;tt&gt;this&lt;/tt&gt;.
+  * @param iSide
+  * The matter side attribute of &lt;tt&gt;this&lt;/tt&gt;, as bounding &lt;tt&gt;iBoundedCell&lt;/tt&gt;.
+  * @param iGeomOnSupport
+  * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt;.
+  * &lt;ul&gt;&lt;li&gt; If &lt;tt&gt;this&lt;/tt&gt; is a CATEdge, &lt;tt&gt;iBoundedCell&lt;/tt&gt; is a CATFace, 
+  * and &lt;tt&gt;iGeomOnSupport&lt;/tt&gt; is a CATPCurve.
+  * &lt;li&gt; If &lt;tt&gt;this&lt;/tt&gt; is a CATVertex, &lt;tt&gt;iBoundedCell&lt;/tt&gt; is a CATEdge, 
+  * and &lt;tt&gt;iGeomOnSupport&lt;/tt&gt; is a CATPointOnEdgeCurve.
+  * &lt;/ul&gt;
+  */
+  virtual void           SetGeometryOnCell(CATCell     * iBoundedCell, 
+    CATSide       iSide,
+    CATGeometry * iGeomOnSupport)=0;
+  
+    /**
+    * Returns the geometry of &lt;tt&gt;this&lt;/tt&gt; CATCell with respect to a bounded cell.
+    * @param iBoundedCell
+    * The pointer to the cell bounded by &lt;tt&gt;this&lt;/tt&gt;.
+    * @param iSide
+    * The matter side attribute of &lt;tt&gt;this&lt;/tt&gt;, as bounding &lt;tt&gt;iBoundedCell&lt;/tt&gt;.
+    * @param ioOrientation
+    * A pointer to the cell orientation with regards to the geometry.
+    * If &lt;tt&gt;NULL&lt;/tt&gt;, the orientation is not filled out.
+    * @return
+    * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt;.
+    * &lt;ul&gt;&lt;li&gt; If &lt;tt&gt;this&lt;/tt&gt; is a CATEdge, &lt;tt&gt;iBoundedCell&lt;/tt&gt; is a CATFace, 
+    * and &lt;tt&gt;iGeomOnSupport&lt;/tt&gt; is a CATPCurve.
+    * &lt;li&gt; If &lt;tt&gt;this&lt;/tt&gt; is a CATVertex, &lt;tt&gt;iBoundedCell&lt;/tt&gt; is a CATEdge, 
+    * and &lt;tt&gt;iGeomOnSupport&lt;/tt&gt; is a CATPointOnEdgeCurve.
+    * &lt;/ul&gt;
+  */
+  virtual CATGeometry  * GetGeometryOnCell(CATCell        * iBoundedCell, 
+    CATSide          iSide, 
+    CATOrientation * ioOrientation=NULL )=0;
+  
+    /**
+    * Creates an iterator on the boundary of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+    * @return
+    * The pointer to the created iterator. You must &lt;tt&gt;delete&lt;/tt&gt; this operator after use. 
+  */
+  virtual CATBoundaryIterator     * CreateBoundaryIterator()=0;
+  
+  /**
+  * Creates an iterator on the  CATCells bounded by &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * @param iInBody
+  * The pointer to the body in which the bounded cells are searched. Recall
+  * that a same CATCell can be used by several bodies.
+  * @return
+  * The pointer to the created iterator. If not &lt;tt&gt;NULL&lt;/tt&gt;, you must &lt;tt&gt;delete&lt;/tt&gt; this operator after use.
+  *  &lt;ul&gt;&lt;li&gt;If &lt;tt&gt;this&lt;/tt&gt; CATCell is inside &lt;tt&gt;iInBody&lt;/tt&gt;, iterator is created.
+  * &lt;li&gt;If &lt;tt&gt;this&lt;/tt&gt; CATCell does not belongs to &lt;tt&gt;iInBody&lt;/tt&gt;, &lt;tt&gt;NULL&lt;/tt&gt; is output.
+  * &lt;/ul&gt;
+  */
+  virtual CATBoundedCellsIterator * CreateBoundedCellsIterator(CATBody* iInBody)=0;
+  
+  /**
+  * Returns the number of cells bounded by &lt;tt&gt;this&lt;/tt&gt; cell.
+  * @param iInBody
+  * The pointer to the body in which the bounded cells are searched. Recall
+  * that a same CATCell can be used by several bodies.
+  * @param iDifferentiateMatterSide
+  * Defines whether a cell that is many times bounded by the same cell with different matter sides
+  * must be counted once or twice. Notice that this configuration remains unsual.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; if each cell only occurs once in the result (default mode)
+  *     &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; each distinct matter side for the same bounding cell occurs in the result &lt;/dl&gt;
+  * @return
+  * The number of bounded cells.
+  */
+  virtual CATULONG32  GetNbBoundedCells(CATBody*   inBody, CATBoolean iDifferentiateMatterSide = FALSE) = 0;
+  
+ /**
+  * Defines &lt;tt&gt;this&lt;/tt&gt; CATCell as infinite.
+  *&lt;br&gt; All the cells are bordered, 
+  *           but one can consider a cell as infinite by applying this method.
+  * @param iYesOrNo
+  * The infinity mode of &lt;tt&gt;this&lt;/tt&gt;.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;TRUE&lt;/tt&gt;, if &lt;tt&gt;this&lt;/tt&gt; must be considered as infinite, 
+  * &lt;tt&gt;FALSE&lt;/tt&gt; if it is finite (default mode).
+  */
+  virtual void       SetInfinite(CATBoolean iYesOrNo)=0;
+  
+  /**
+  * Returns the infinite property of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * @return
+  * The infinity mode of &lt;tt&gt;this&lt;/tt&gt;.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;TRUE&lt;/tt&gt;, if &lt;tt&gt;this&lt;/tt&gt; must be considered as infinite, 
+  * &lt;tt&gt;FALSE&lt;/tt&gt; if it is finite (default mode).
+  */
+  virtual CATBoolean GetInfinite() const =0;
+  
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCell bounds a given cell of upper dimension.
+  * @param iUpperDimCell
+  * The pointer to the cell of upper dimension.
+  * @param ioSide
+  * A pointer to the matter side of the bouding cell.
+  * If &lt;tt&gt;NULL&lt;/tt&gt;, the side is not filled out.
+  * &lt;br&gt;Warning: &lt;tt&gt;ioSide=CATSideUnknown&lt;/tt&gt;: 
+  * &lt;ul&gt;
+  * &lt;li&gt;either if the difference of dimensions is greater than 1
+  * &lt;li&gt;or if &lt;tt&gt;this&lt;/tt&gt; bounds UpperDimCell twice (Left and Right)
+  * &lt;/ul&gt;
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; if &lt;tt&gt;this&lt;/tt&gt; does not bound 
+  * &lt;tt&gt;iUpperDimCell&lt;/tt&gt;
+  *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; if &lt;tt&gt;this&lt;/tt&gt; bounds &lt;tt&gt;iUpperDimCell&lt;/tt&gt;&lt;/dl&gt;
+  */
+  virtual CATBoolean  IsOnBorder(CATCell* iUpperDimCell, CATSide* ioSide=NULL) = 0;
+  
+    /**
+    * Returns the matter side of &lt;tt&gt;this&lt;/tt&gt; CATCell with regards to a bounding cell of 
+    * upper dimension.
+    * @param iUpperDimCell
+    * The pointer to the cell of higher dimension.
+    * @return
+    * The side attribute.
+    * @exception
+    * If the difference of dimensions is greater than 1, 
+    * or if &lt;tt&gt;this&lt;/tt&gt; does not bound &lt;tt&gt;iUpperDimCell&lt;/tt&gt;.
+  */
+  virtual CATSide     GetMatterSide(CATCell* iUpperDimCell) = 0;
+  
+
+  
+#if defined ( CATIACGMV5R23 )
+
+    /**
+  * Retrieves the adjacent cells of &lt;tt&gt;this&lt;/tt&gt; on the other side of a border cell.
+  * @param iBorderCell
+  * The pointer to the bounding cell.
+  * @param iInBody
+  * The pointer to the body in which the bounded cells are searched. Recall
+  * that a same CATCell can be used by several bodies.
+  * @param ioNeighborCells
+  *  The pointer to the other bounded cell, Empty if &lt;tt&gt;iBorderCell&lt;/tt&gt; only bounds &lt;tt&gt;this&lt;/tt&gt;.
+  * @param ioRelativeOrientations
+  * The relative orientation of the found cells with regards to &lt;tt&gt;this&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument
+  * is not output.
+  * @return
+  *   An HRESULT value. 
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;The query succeeds.&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+  *     &lt;dd&gt;The &lt;tt&gt;inBody&lt;/tt&gt; is not valid, or &lt;tt&gt;this&lt;/tt&gt; CATCell does not belongs to &lt;tt&gt;iInBody&lt;/tt&gt;&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT  GetNeighborCells(CATCell*           iBorderCell,       CATBody*     iInBody,
+                                    CATLISTP(CATCell)&amp; ioNeighborCells,   CATListOfLong * ioRelativeOrientations =NULL ) = 0;
+ 
+#endif
+  
+  
+  /**
+  * Retrieves the adjacent cell of &lt;tt&gt;this&lt;/tt&gt; on the other side of a border cell.
+  * @param iBorderCell
+  * The pointer to the bounding cell.
+  * @param iInBody
+  * The pointer to the body in which the bounded cells are searched. Recall
+  * that a same CATCell can be used by several bodies.
+  * @param ioRelativeOrientation
+  * The relative orientation of the found cell with regards to &lt;tt&gt;this&lt;/tt&gt;. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument
+  * is not output.
+  * @return
+  * The pointer to the other bounded cell, &lt;tt&gt;NULL&lt;/tt&gt; if &lt;tt&gt;iBorderCell&lt;/tt&gt; only bounds &lt;tt&gt;this&lt;/tt&gt;.
+  * @exception 
+  * If the result is not unique.
+  */
+  virtual CATCell*    GetNeighborCell(CATCell*     iBorderCell,
+    CATBody*     iInBody,
+    short*       ioRelativeOrientation =NULL) = 0;
+
+
+    /**
+    * Retrieves the cells of a given dimension  bounding &lt;tt&gt;this&lt;/tt&gt; and an another cell. 
+    * @param iCell
+    * The pointer to the other cell, of same dimension as &lt;tt&gt;this&lt;/tt&gt;.
+    * @param iMaxDepthSearch
+    * The range of dimensions between the  &lt;/tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iCell&lt;/tt&gt;. For example, 
+	* if &lt;/tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iCell&lt;/tt&gt; are faces, specifying 1 returns the common edges, specifying 2
+	* returns the common edges plus the common vertices.
+    * Current limitation: &lt;tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iCell&lt;/tt&gt; must have the same dimension.
+    * @param ioResultCells
+    * The list of pointers to the found cells.
+    * @param iResultCellsDimension
+    * The dimension &lt;tt&gt;(0,1,2,3)&lt;/tt&gt; of the searched cells, &lt;tt&gt;-1&lt;/tt&gt; for all the dimensions.
+  */
+  virtual void GetCommonBorderCells( CATCell*           iCell, 
+    short              iMaxDepthSearch,
+    CATLISTP(CATCell)&amp; ioResultCells,
+    short              iResultCellsDimension = -1) = 0;
+
+  /**
+    * Retrieves a point belonging to &lt;tt&gt;this&lt;/tt&gt; CATCell.
+    * @param ioResult
+    * The estimated center of &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  */
+  virtual void EstimateCenter(CATMathPoint&amp; ioResult) const = 0;
+  
+  /**
+  * Retrieves the CATCells on which &lt;tt&gt;this&lt;/tt&gt; is directly lying on.
+  * @param ioSupports
+  * The list of the pointers to the supporting cells.
+  * @param iInBody
+  * The pointer to the body in which the cells are searched. Recall
+  * that a same CATCell can be used by several bodies. 
+  * If &lt;tt&gt;NULL&lt;/tt&gt;, the search is done among all the bodies.
+  */
+  virtual void         GetLyingOn         (CATLISTP(CATCell)&amp; ioSupports,CATBody* iInBody) = 0;
+  
+  /**
+  * Returns the geometry of &lt;tt&gt;this&lt;/tt&gt; as a geometry lying on the geometry of another cell.
+  * @param iSupport
+  * The pointer to the supporting cell.
+  * @return
+  * The pointer to the geometry of &lt;tt&gt;this&lt;/tt&gt; lying on &lt;tt&gt;iSupport&lt;/tt&gt;.
+  */
+  virtual CATGeometry* GetLyingGeometryOn (CATCell* iSupport) = 0;
+  
+  /**
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCell is lying (directly or indirectly) on another topological object.
+  * @param iContainerOfSupportingCell
+  * The pointer to another topological object.
+  * @param ioSupports
+  * The pointer to the list of supporting cells.
+  * @param ioGeomSupports
+  * The pointer to the list of the geometry of supporting cells.
+  * @return
+  * The result of the test.
+  */
+  virtual CATBoolean   IsLyingOn(CATTopology           *iContainerOfSupportingCell, 
+                                 CATLISTP(CATCell)     *ioSupports = NULL, 
+                                 CATLISTP(CATGeometry) *ioGeomSupports = NULL)    = 0;
+
+
+  
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  
+  /**
+  * @nodoc
+  * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCell is candidate for report in &lt;tt&gt;CATCGMJournalList&lt;/tt&gt; of a Body construction.
+  * @param iInBody
+  * The pointer to the body construction which contains &lt;tt&gt;this&lt;/tt&gt; CATCell.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;TRUE&lt;/tt&gt;, if &lt;tt&gt;this&lt;/tt&gt; CATCell is a face, a free edge or a free vertex inside &lt;tt&gt;iInBody&lt;/tt&gt;.
+  * &lt;tt&gt;FALSE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATCell must not be logged as a new or kept cell.
+  */
+  virtual CATBoolean IsCandidateForReporting(CATBody* inBody)  =0;
+
+  /**
+  * @nodoc
+  *  Retrieve the adjacent cell(s) inside the Body
+  * @param iInBody
+  * The pointer to the body in which the adjacent cells are searched. 
+  ** Recall that a same CATCell can be used by several bodies.
+  * @param oNeighbourCells
+  * The list of the resulting cells. Each cell only occurs once in the list.
+  * @return
+  *   An HRESULT value. 
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;The query succeeds.&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL &lt;/dt&gt;
+  *     &lt;dd&gt;The &lt;tt&gt;inBody&lt;/tt&gt; is not valid, or &lt;tt&gt;this&lt;/tt&gt; CATCell does not belongs to &lt;tt&gt;iInBody&lt;/tt&gt;&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT CellNeighbours( CATBody *inBody, ListPOfCATCell  &amp;oNeighbourCells) =0;
+
+ 
+  /**
+  * @nodoc
+  * Returns the list of the pointers to the supporting geometries. 
+  * @param iSupport
+  * The pointer to the supporting cell.
+  * @param ioSupports
+  * The list of the pointers to the supporting geometries.
+  */
+  virtual void GetLyingGeometriesOn(CATCell* iSupport , CATLISTP(CATGeometry)&amp; ioGeomSupports) = 0;
+
+  /**
+  * @nodoc
+  * Retrieves the federating topology on which &lt;tt&gt;this&lt;/tt&gt; is directly lying on.
+  * @param iInBody
+  * The pointer to the body in which the cells are searched. Recall
+  * that a same CATCell can be used by several bodies. 
+  * If &lt;tt&gt;NULL&lt;/tt&gt;, the search is done among all the bodies.
+  * @param ioSupports
+  * The list of the pointers to the supporting topologies.
+  */
+  virtual void  GetFederatorsLyingOn(CATBody* iInBody, CATLISTP(CATTopology) &amp; ioFederatorsSupport) = 0;
+
+  
+  /**
+  * @nodoc
+  */
+  virtual void         SetLyingOn         (CATCell* iSupport,CATGeometry* iWithAssociatedGeometry=NULL) = 0;
+  /**
+  * @nodoc
+  */  
+  virtual void         UnsetLyingOn       (CATCell* iSupport) = 0;
+
+};
+ 
+CATDeclareHandler(CATCell,CATTopObject);
+ 
+#endif
+ 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMTessellateParam.html">← 上一页: CATCGMTessellateParam.h</a></div>
+        <div><a href="CATCellHashTable.html">下一页: CATCellHashTable.h →</a></div>
+    </div>
+</body>
+</html>

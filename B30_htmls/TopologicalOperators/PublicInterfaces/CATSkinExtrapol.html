@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperators/PublicInterfaces/CATSkinExtrapol.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperators/PublicInterfaces/CATSkinExtrapol.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATRemoveFace.html">← 上一页: CATRemoveFace.h</a></div>
+        <div><a href="CATSolidCuboid.html">下一页: CATSolidCuboid.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSkinExtrapol_h
+#define CATSkinExtrapol_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/ 
+
+
+#include &quot;Thick.h&quot;
+#include &quot;CATGeoToTopOperator.h&quot;
+#include &quot;ListPOfCATEdge.h&quot;
+#include &quot;CATListOfCATCells.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATTopOperator.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+class CATGeoFactory;
+class CATBody;
+class CATCGMJournalList;
+class CATTopData;
+class CATVertex;
+class CATCurve;
+
+/**
+ * Class representing an operator that extrapolates a shell body.
+ *&lt;br&gt;The edges to extrapolate must be on the boundary of the shell, or 
+ * must lie on a bounding edge of the shell.
+ *&lt;br&gt;The extrapolation values can be different for each edge. A positive
+ * value defines an extrapolation along the outside direction of the shell.
+ *&lt;br&gt;The extrapolation gives a result that is continuous in curvature.
+ * To use it:
+ * &lt;ul&gt;
+ * &lt;li&gt;Create it with the &lt;tt&gt;CATCreateSkinExtrapol&lt;/tt&gt; global function.
+ * &lt;li&gt;Tune it with appropriate options, using the &lt;tt&gt;SetXxx&lt;/tt&gt; methods. 
+ * &lt;li&gt;Run it
+ * &lt;li&gt;Get the resulting body, using the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+ * to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+ * geometric factory, after the operator deletion.
+ *&lt;li&gt;Delete it after use  with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator.
+ *&lt;/ul&gt; 
+ */
+class ExportedByThick CATSkinExtrapol : public CATTopOperator
+{
+  CATCGMVirtualDeclareClass(CATSkinExtrapol);
+public:
+
+  /** @nodoc */
+  CATSkinExtrapol(CATBody* iSkin, CATCGMJournalList* iJournal=NULL);
+    /** @nodoc */
+  CATSkinExtrapol(CATGeoFactory * iFactory, CATBody * iSkin, CATTopData * iTopData);
+  ~CATSkinExtrapol();
+
+  /**
+   * Sets the ability to later modify the resulting body.
+   * @param iFreezeMode
+   * The freeze mode.
+   */
+  void SetFreezeMode(CATBodyFreezeMode iFreezeMode);
+  
+  /**
+   * Appends a list of edges to extrapolate.
+   * It replaces the current value of an already selected edges by &lt;tt&gt;iExtrapolValue&lt;/tt&gt;.
+   * @param iBoundaryEdges
+   * The list of edges to append.
+   * @param iExtrapolValue
+   * The common extrapolation value for all the edges of the &lt;tt&gt;iBoundaryEdges&lt;/tt&gt; list.
+   */
+#ifdef CATIACGMV5R21
+  void Append(const CATLISTP(CATEdge) &amp; iBoundaryEdges, CATLength iExtrapolValue ) ;
+#else
+  void Append(CATLISTP(CATEdge) iBoundaryEdges, CATLength iExtrapolValue ) ;
+#endif
+
+  /**
+   * Appends an edge to extrapolate.
+   * It replaces the current value of an already selected edges by &lt;tt&gt;iExtrapolValue&lt;/tt&gt;.
+   * @param iBoundaryEdge
+   * The edge to append.
+   * @param iExtrapolValue
+   * The extrapolation value for the &lt;tt&gt;iBoundaryEdge&lt;/tt&gt; edge.
+   */
+  void Append(CATEdge* iBoundaryEdge, CATLength iExtrapolValue ) ;
+
+  /**
+   * Selects all the edges of the shell boundary and sets to them a common extrapolation value.
+   * @param iExtrapolValue
+   * The new current extrapolation value of the already selected edges.
+   */
+  void SetDefaultExtrapolationValue( CATLength iExtrapolValue );
+  
+  /**
+   * Defines the propagation mode of the extrapolation value.
+   * @param iPropagationMode
+   *&lt;dl&gt;
+   *&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; No propagation of the extrapolation value.
+   *&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Defines the automatic definition of the extrapolation value on an edge
+   * to the one of its tangential adjacent edges.
+   * This mode is used by default at the creation of the operator.
+   *&lt;/dl&gt;
+   */
+  void SetPropagationMode(int iPropagationMode);
+
+  /**
+   * Defines the relimitation mode for all boundary extremities affected by the operator.
+   * @param iNormalMode
+   *&lt;dl&gt;
+   *&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Extrapolate adjacent edges to cut the offset boundary.
+   * This mode is enabled by default at the creation of the operator.
+   *&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; Add junction edges in the normal direction of boundary extremities.
+   *&lt;/dl&gt;
+   */
+  void SetExtremitiesMode(int iNormalMode);
+
+#ifdef CATIACGMR217CAA
+  /**
+  * @nodoc
+  * Defines whether the result should contain the whole extrapolated surface or only the extrapolated area.
+  * @param iKeepOnlyExtrapolatedArea
+  *&lt;dl&gt;
+  *&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The whole extrapolated surface is returned.
+  * This mode is used by default at the creation of the operator.
+  *&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt; The result contains the extrapolated area only.
+  *&lt;/dl&gt;
+  */
+  void SetKeepOnlyExtrapolatedArea(short iKeepOnlyExtrapolatedArea);
+
+  /**
+   * @nodoc
+   * Enables or disables deviation checking.
+   * @param iWithDeviation
+   * &lt;dl&gt;
+   * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;&lt;dd&gt; Check if surface deviations are below maximum value.
+   * This value can be provided by the user through &lt;tt&gt;SetDeviationAllowed&lt;/tt&gt; method.
+   * Default value is the factory resolution
+   * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;&lt;dd&gt; No deviation checking is performed
+   * This mode is used by default at the creation of the operator.
+   * &lt;/dl&gt;
+   **/
+  void SetDeviationMode(short iDeviationMode);
+
+  /**
+   * @nodoc
+   * Defines the maximum deviation value allowed by the user.
+   * @param iDeviation
+   * The value of the deviation. This value must be positive.
+   */
+  void SetDeviationAllowed(CATLength iMaxDeviation);
+#endif /* CATIACGMR217CAA */
+
+  /**
+   * @nodoc
+   * Do not use.
+   */
+  void SetExtremitySpecification(CATVertex * iVtxExtremity,
+                                 int iSpecifiedMode, 
+                                 CATCurve * iGuideCurve=NULL);
+
+  /**
+   * Returns the pointer to the resulting body.
+   */
+  CATBody * GetResult();
+  
+  /**
+   * Returns a pointer to the topological journal dedicated to &lt;tt&gt;this&lt;/tt&gt; CATSkinExtrapol operator.
+   * &lt;br&gt;Only available if a journal was given at the creation of the operator.
+   */
+  CATCGMJournalList * GetJournal();
+
+
+  /**
+   * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+   */
+  int Run();
+
+#if defined CATIAR206
+    /**
+    * @nodoc @nocgmitf
+    * Internal use. internal run
+    */
+  virtual int RunOperator();
+
+    /**
+    * @nodoc @nocgmitf
+    * Internal use.
+    */
+   void RequireDefinitionOfInputAndOutputObjects();
+#endif
+
+  /** @nodoc */
+  virtual void SetSoftwareConfiguration( CATSoftwareConfiguration * iNewConfig );
+
+protected:
+  /** @nodoc */
+  void          * _implementation;
+  CATTopData    * _CreatedTopData;
+};
+
+
+/**
+ * Creates a skin extrapolation operator.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iTopData
+ * The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+ * @param iSkin
+ * The pointer to the skin body to extrapolate.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ &lt;tt&gt;delete&lt;/tt&gt; operator after use.
+ */
+ExportedByThick CATSkinExtrapol * CATCreateSkinExtrapol( CATGeoFactory * iFactory, 
+                                                         CATTopData    * iTopData, 
+                                                         CATBody       * iSkin );
+                                                        
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATRemoveFace.html">← 上一页: CATRemoveFace.h</a></div>
+        <div><a href="CATSolidCuboid.html">下一页: CATSolidCuboid.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATOMBaseTrace.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATOMBaseTrace.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMacForInterfaces.html">← 上一页: CATMacForInterfaces.h</a></div>
+        <div><a href="CATObject.html">下一页: CATObject.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/** @CAA2Required */
+//**********************************************************************
+//* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS *
+//* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME *
+//**********************************************************************
+
+#ifndef OMBASE_TRACE_H_
+#define OMBASE_TRACE_H_
+
+#include &quot;CATTraMacro.h&quot;
+#include &quot;AD0XXBAS.h&quot;
+#include &quot;CATTrace.h&quot;
+
+// ----------------------------------------------------------------------------
+//                     Pour les traces du framework ObjectModelerBase
+//
+//      level =  10 --&gt; CastTo des handlers
+//               11 --&gt; Construction/Effacement TIE, Extension, Implementation
+//               12 --&gt; AddRef/Release et Compteurs de references
+//               13 --&gt; Construction/Effacement Handlers
+// ----------------------------------------------------------------------------
+
+extern ExportedByAD0XXBAS int* OMBaseTrace_Ptr ;
+extern ExportedByAD0XXBAS int  OMBaseTrace_Desc ;
+//extern ExportedByAD0XXBAS int  OMBaseTrace_Activated ;
+
+
+
+#define OMBASE_TRACE1(level, message)                             \
+if ( *OMBaseTrace_Ptr )                                           \
+  {traprint(  OMBaseTrace_Desc, level , message ) ;               \
+  traflush(  OMBaseTrace_Desc, &quot;STDOUT&quot;, 50 ) ;}                  \
+
+#define OMBASE_TRACE2(level, message, parm1 )                     \
+if ( *OMBaseTrace_Ptr )                                           \
+  {traprint(  OMBaseTrace_Desc, level , message, parm1 ) ;        \
+  traflush(  OMBaseTrace_Desc, &quot;STDOUT&quot;, 50 ) ;}      
+
+#define OMBASE_TRACE3(level, message, parm1, parm2 )              \
+if ( *OMBaseTrace_Ptr )                                           \
+  {traprint(  OMBaseTrace_Desc, level , message, parm1, parm2 ) ; \
+  traflush(  OMBaseTrace_Desc, &quot;STDOUT&quot;, 50 ) ;}      
+
+// Traces for undo/redo
+extern ExportedByAD0XXBAS CATTrace UndoTracer ;
+
+/* Traces for Load/Unload
+   Level 2 : OMB macro traces (document removal etc)
+         3 : Command level traces (e.g. Edit/Unload command)
+         4 : OMB detailed traces
+	 5 : SpecsModeler traces
+*/
+extern ExportedByAD0XXBAS CATTrace UnloadTracer ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMacForInterfaces.html">← 上一页: CATMacForInterfaces.h</a></div>
+        <div><a href="CATObject.html">下一页: CATObject.h →</a></div>
+    </div>
+</body>
+</html>

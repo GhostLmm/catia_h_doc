@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMAttributes.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMAttributes.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAssemble.html">← 上一页: CATIGSMAssemble.h</a></div>
+        <div><a href="CATIGSMAxisExplicit.html">下一页: CATIGSMAxisExplicit.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2006
+//===================================================================
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+//
+// CATIGSMAttributes.h
+// Define the CATIGSMAttributes interface
+//
+//===================================================================
+//
+// Usage notes:
+//  Interface to manage attribute settings of type CATISpecObject on feature derivating from GSMGeom
+//
+//===================================================================
+#ifndef CATIGSMAttributes_H
+#define CATIGSMAttributes_H
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATISpecAttrKey.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID IID_CATIGSMAttributes;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMAttributes ;
+#endif
+
+
+class CATISpecObject_var;
+class CATListValCATBaseUnknown_var;
+
+/**
+* Interface to manage attribute settings of type CATISpecObject on feature derivating from GSMGeom.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Handle the different rules to set up attributes on GSMGeom late Type Features.
+* &lt;p&gt;&lt;b&gt; Following inputs used can be:&lt;/b&gt; 
+* &lt;ul&gt;
+* &lt;li&gt;BRep Features  &lt;/li&gt;
+* &lt;li&gt;Contextual features   &lt;/li&gt;
+* &lt;li&gt;Literal features   &lt;/li&gt;
+* &lt;li&gt;Non already aggregated features  &lt;/li&gt;
+* &lt;/ul&gt;
+* &lt;/p&gt;
+* 
+* &lt;p&gt;&lt;b&gt; Workflow : Setting attribute strategy  Setting / Remove / Replace :&lt;/b&gt;   
+* &lt;pre&gt;
+* - First ( Setting / Remove / Replace) : 
+*    --&gt; Identify if attribute was previously setted 
+*    If No  ?  Continue 
+*    If Yes ?  &quot;Remove previous Input&quot; :   Perform acurate modifications,handling on the previous object if needed 
+* - Second (Setting / Replace) :
+*    &quot;Add an input&quot; taking into account different context of the input 
+* &lt;/pre&gt;
+* &lt;/p&gt; 
+* 
+* &lt;p&gt; &lt;b&gt;Algorithm&lt;/b&gt;  
+* &lt;br&gt; When adding a CATISpecObject attributes as input of a GSMGeom type feature, this interface will check the input 
+* and perform data model management that make feature implementation consistant with GSMGeom generic behaviors:
+* &lt;pre&gt; 
+* Check Inputs : 
+* - All input feature should be aggregated somewhere in data model (at list under a  tk_component attributes type) 
+* -&gt; If Input feature is  not already aggregated previously,  the current interface aggregates  it under current feature 
+* -&gt; If Input feature is  a contextual feature and identified as to be re-aggregate: aggregate it under current feature 
+* 
+* GSMGeom generic behaviors  : 
+* 1/  Display/no display  of aggregate features in graph and in 3D (default implemetation of CATINavigateObject, CATIVisuChildren)
+*  -&gt; BRep feature are not seen neither in graph nor in 3D 
+*  -&gt; Contextual feature are displayed in Graph and in 3D can be selected and reused in other feature 
+*  -&gt; Aggregated feature on the fly are not seen neither in graph nor in 3D, considered as private to the current feature 
+* 2/ Management the change of an input if the attribute was previously seted, and replace by new ones
+*  -&gt; Old BRep are removed 
+*  -&gt; Contextual input are extracted  and reaggregate under the current tool 
+*  -&gt; Private feature deleted , if not used elsewhere 
+* &lt;/pre&gt; 
+* &lt;br&gt;&quot;Add An Input&quot;: 
+* &lt;pre&gt;
+*   Case BREP Feature :  
+*        BRep feature can be used  as input for GSMGeom derivate type features 
+*        BRep feature are automatic generated feature by selection agent CATFeatureImportAgent when a subelement is selected
+*        BRep feature are &quot;exclusive&quot; inputs  for the current feature , 
+*        - They cannot be re-used elsewhere
+*        - They are aggregated to the current feature , not seen in 3D nor in Graph 
+*        BREP feature are aggregated to the feature using  GSMGeom private attribut name &quot;Component&quot; name (type tk_list of tk_component)  
+*   Case Contextual feature : 
+*        Contextual feature are aggregated under feature list , Feature list is the standard attribut for all 
+*        mechanical feature and is handle by the CATIDescendant interface 
+*        Contextual feature are input identified  as &quot;IsFtrToAggregate&quot; by CATIMmiContextualManager Interfaces when there a setted 
+*        At attribute setting, the input feature aggregation is modified : He is re-aggregate under current feature on the feature list 
+*   Case of non-already aggregated 
+*        It can occured that input feature is not already aggregated 
+*        To avoid to reference in &quot;key&quot; a feature non aggregated , and is automatically aggregated when set 
+*        using GSMGeom private attribut name &quot;Component&quot; name (type tk_list of tk_component)  
+*        Note : Typically this case is reserved to CAA specific design 
+*        CAA command may need to have internal feature aggregated not necessary seen in 3D and/or in Graph
+*            (Display in graph and 3D is managed by CATINavigateObject and CATIVisuChildren  respectively ) 
+* &lt;/pre&gt;
+* &lt;br&gt;&quot;Remove previous Input&quot;:  
+* &lt;pre&gt;
+*   Case BREP Feature : 
+*        Is not and cannot be re- used, thus it is deleted and remove freom &quot;Component&quot; private attribute 
+*   Case Contextual feature : 
+*        Contextual feature are aggregated under feature list, but can be used in other features  
+*        Contextual feature are automatically re-aggregated in the tool of current feature
+*        It is re-aggregated tool at a position just before current feature 
+*   Case of non aggregated  
+*        Either it is already used by another feature :
+*             Need to keep it for associativity ,
+*             it is then reaggregated under the current tool at a position just before current
+*        Or is not used : 
+*             it is removed from &quot;component&quot; attribute, and is deleted 
+* &lt;/pre&gt;
+* &lt;/p&gt;
+* @example
+*  &lt;pre&gt; 
+*  CATISpecObject_var spCurrent = ...; 
+*  CATISpecAttrAccess_var spCurrentAttrAccess = spCurrent;
+*  CATISpecAttrKey_var pInputSpecObjectKey  = NULL_var ;
+*  if (!!spCurrentAttrAccess) {
+*     pInputSpecObjectKey = spCurrentAttrAccess -&gt;GetAttrKey(&quot;MyKeyName&quot;);
+*     if (!!pInputSpecObjectKey) {
+*        CATIGSMAttributes* pGsmSpecAttrMngt  = NULL;
+*         rc = spCurrent-&gt;QueryInterface(IID_CATIGSMAttributes,(void**) &amp;amp;pGsmSpecAttrMngt );
+*         if (NULL!=  pGsmSpecAttrMngt) { 
+*           rc = pGsmSpecAttrMngt -&gt; SetAttrSpecObject(pInputSurfaceSpecAttrKey,ispCurveRef);
+*           pGsmSpecAttrMngt -&gt; Release () ; pGsmSpecAttrMngt=NULL: 
+*         } 
+*      }
+*   }
+* &lt;/pre&gt;
+* @see CATINavigateObject,CATIVisuChildren,CATIMmiContextualManager,CATIDescendants
+*/
+class ExportedByCATGitInterfaces CATIGSMAttributes: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+ //----------------------------------------------------------------
+ // Sets or Gets Attribute value 
+ //----------------------------------------------------------------
+ /** 
+  * Sets an object on a given &quot;key&quot;  attribute.
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param ispSpecObj 
+  *  index   of the object (default =0 : insert at first position , or for no list type attribute) 
+  * @see CATIAttrSpecAccess 
+  */ 
+ virtual HRESULT SetAttrSpecObject(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int iIndex = 0) = 0;
+ /** 
+  * Gets an object on a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ospSpecObj 
+  *  Object  
+  * @param iIndex 
+  *  index   of the object (default =0 : insert at first position , or for no list type attribute) 
+  */ 
+ virtual HRESULT GetAttrSpecObject(const CATISpecAttrKey * ikey, CATISpecObject_var &amp; ospSpecObj, int iIndex = 0) = 0;
+
+ //----------------------------------------------------------------
+ // Attribute Remove 
+ //----------------------------------------------------------------
+ /** 
+  * Removes all valuated objects of a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  */ 
+ virtual HRESULT RemoveAttrAll(const CATISpecAttrKey * ikey) = 0;
+ /** 
+  * Removes object  of a &quot;key&quot; attribute at a given position.  
+  * @param ikey
+  *  Attribut key 
+  * @param iIndex 
+  *  index  of the object (index =0 : for non list type attribute) 
+  */ 
+ virtual HRESULT RemoveAttrPosition(const CATISpecAttrKey * ikey, int iIndex) = 0;
+
+ /** 
+  * Removes object of a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  */ 
+ virtual HRESULT RemoveAttrSpecObject(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj) = 0;
+
+ /** 
+  * Unsets  object of a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  */ 
+ virtual HRESULT UnsetAttrValue(const CATISpecAttrKey * ikey) = 0;
+
+ //----------------------------------------------------------------
+ // Attributes of type List management 
+ //----------------------------------------------------------------
+ 
+ /** 
+  * Gets list Size for a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param  oSize  
+  *    list Size 
+  */ 
+ virtual HRESULT GetAttrListSize(const CATISpecAttrKey * ikey,int &amp; oSize) = 0;
+
+ /** 
+  * Gets object at  a position for a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param oIndex 
+  *    position 
+  */ 
+ virtual HRESULT GetAttrPosition(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int &amp; oIndex ) = 0;
+ /** 
+  * Inserts before a position an object for a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param iPos   
+  *    last position before inserting  
+  */ 
+ virtual HRESULT InsertAttrBeforePos(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int iPos) = 0;
+ /** 
+  * Inserts after a position an object for a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param iPos   
+  *    insert after position
+  */ 
+ virtual HRESULT InsertAttrAfterPos(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int iPos) = 0;
+ /** 
+  * Replaces at a position an object for a &quot;key&quot; attribute. 
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param iPos   
+  *    replace at position
+  */ 
+ virtual HRESULT ReplaceAttrPos(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int iPos) = 0;
+ /** 
+  * Changes position of an object for a &quot;key&quot; attribute.
+  * @param ikey
+  *  Attribut key 
+  * @param ispSpecObj 
+  *  Object  
+  * @param iNewPos   
+  *    new position 
+  */ 
+ virtual HRESULT ChangeAttrPosition(const CATISpecAttrKey * ikey, const CATISpecObject_var &amp; ispSpecObj, int iNewPos) = 0;
+
+
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+CATDeclareHandler(CATIGSMAttributes, CATBaseUnknown);
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMAssemble.html">← 上一页: CATIGSMAssemble.h</a></div>
+        <div><a href="CATIGSMAxisExplicit.html">下一页: CATIGSMAxisExplicit.h →</a></div>
+    </div>
+</body>
+</html>

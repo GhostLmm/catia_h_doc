@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATMoldTechnoResultInterfaces/PublicInterfaces/CATIMldTechResHole.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATMoldTechnoResultInterfaces/PublicInterfaces/CATIMldTechResHole.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMldTechRes.html">← 上一页: CATIMldTechRes.h</a></div>
+        <div><a href="CATIMldTechResThread.html">下一页: CATIMldTechResThread.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+/**
+  * @CAA2Level L0
+  * @CAA2Usage U3
+  */
+
+// COPYRIGHT Dassault Systemes 2007
+//===================================================================
+//
+// CATIMldTechResHole.h
+// Define the CATIMldTechResHole interface
+//
+//===================================================================
+//
+// Usage notes:
+//    Interface to manage a Hole Technological Result
+//
+//===================================================================
+
+#ifndef CATIMldTechResHole_H
+#define CATIMldTechResHole_H
+
+#include &quot;CATMldTechnoResultItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATIMldTechResThread;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATMldTechnoResultItfCPP IID IID_CATIMldTechResHole;
+#else
+extern &quot;C&quot; const IID IID_CATIMldTechResHole ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+*  Interface representing a Hole Technological Result 
+*/
+class ExportedByCATMldTechnoResultItfCPP CATIMldTechResHole: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**   
+		*	  Retrieve the associated Thread Technological Result from this Hole Technological Result
+		*	  @param opiTRThread
+		*				the Thread Technological Result 
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+		virtual HRESULT GetAssociatedTRThread(CATIMldTechResThread **opiTRThread)  = 0;
+      
+		/**   
+		*	  Retrieve the Type attribute of the Hole Technological Result 
+		*    @param oType
+		*				Hole Type (Simple, Tapered, CounterSunk CounterBored, CounterDrilled)
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleType(int &amp;oType)  = 0;
+
+		/**   
+		*	  Retrieve the Diameter attribute of the Hole Technological Result 
+		*     @param oDiameter
+		*				Hole diameter
+		*     @param oDiameterUpTol
+		*				Hole diameter upper tolerance
+		*     @param oDiameterDownTol
+		*				Hole diameter lower tolerance
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleDiameter(double &amp;oDiameter, 
+                                      double &amp;oDiameterUpTol, 
+                                      double &amp;oDiameterDownTol)  = 0;
+
+		/**   
+		*	  Retrieve the BottomType attribute of the Hole Technological Result 
+		*    @param oBottomType
+		*				Hole Bottom type (Flat, VBottom, Trimmed)
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleBottomType(int &amp;oBottomType)  = 0;
+
+		/**   
+		*	  Retrieve the BottomLimitLength attribute of the Hole Technological Result 
+		*    @param oBottomLimitLength
+		*				Hole bottom length
+		*    @param oBottomLimitLengthUpTol
+		*				Hole bottom length Upper Tolerance
+		*    @param oBottomLimitLengthDownTol
+		*				Hole bottom length Lower Tolerance
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleBottomLimitLength(double &amp;oBottomLimitLength,
+                                               double &amp;oBottomLimitLengthUpTol,
+                                               double &amp;oBottomLimitLengthDownTol)  = 0;
+
+		/**   
+		*	  Retrieve the Type attribute of the Hole Technological Result 
+		*    @param oBottomLimitAngle
+		*				Hole bottom angle
+		*    @param oBottomLimitAngleUpTol
+		*				Hole bottom angle Upper Tolerance
+		*    @param oBottomLimitAngleDownTol
+		*				Hole bottom angle Down Tolerance
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleBottomLimitAngle(double &amp;oBottomLimitAngle,
+                                              double &amp;oBottomLimitAngleUpTol,
+                                              double &amp;oBottomLimitAngleDownTol)  = 0;
+
+		/**   
+		*	  Retrieve the Angle attribute of the Hole Technological Result 
+		*	  @param oAngle
+		*				Angle (for Tapered, CounterSunk, CounterDrilled)
+		*    @param oAngleUpTol
+		*				Angle Upper Tolerance
+		*    @param oDownAngle
+		*				Angle lower tolerance
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleAngle(double &amp;oAngle,
+                                   double &amp;oAngleUpTol,
+                                   double &amp;oDownAngle)  = 0;
+
+		/**   
+		*	  Retrieve the CounterDepth attribute of the Hole Technological Result 
+		*     @param oCounterDepth
+		*				Counter Depth ( for CounterSunk, CounterDrilled, CounterBored)
+		*     @param oCounterDepthUpTol
+		*				Counter Depth upper tolerance
+		*     @param oCounterDepthDownTol
+		*				Counter Depth lower tolerance
+		*     @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleCounterDepth(double &amp;oCounterDepth,
+                                          double &amp;oCounterDepthUpTol,
+                                          double &amp;oCounterDepthDownTol)  = 0;
+
+		/**   
+		*	  Retrieve the CounterDiameter attribute of the Hole Technological Result 
+		*	  @param oCounterDiameter 
+		*				Counter diameter ( for CounterSunk, CounterDrilled, CounterBored)
+		*     @param oCounterDiameterUpTol
+		*				Counter diameter upper tolerance
+		*     @param oCounterDiameterDownTol
+		*				Counter diameter lower tolerance
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleCounterDiameter(double &amp;oCounterDiameter,
+                                             double &amp;oCounterDiameterUpTol,
+                                             double &amp;oCounterDiameterDownTol)  = 0;
+
+		/**   
+		*	  Retrieve the AnchorType attribute of the Hole Technological Result 
+		*	  @param oAnchorType
+		*				Hole anchor mode (Extreme or Middle)
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleAnchorType(int &amp;oAnchorType)  = 0;
+
+		/**   
+		*	  Retrieve the IsThreaded attribute of the Hole Technological Result 
+		*	  @param oIsThreaded 
+		*				hole threaded or not
+		*    @return
+		*    An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+		*    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+		*    &lt;dl&gt;
+		*    &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Retrieving parameters succeeds.
+		*    &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No parameters.
+		*    &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Failure to retrieve the parameters.
+		*    &lt;/dl&gt;
+		*/
+      virtual HRESULT GetHoleIsThreaded(int &amp;oIsThreaded)  = 0;
+
+};
+CATDeclareHandler( CATIMldTechResHole, CATBaseUnknown );
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMldTechRes.html">← 上一页: CATIMldTechRes.h</a></div>
+        <div><a href="CATIMldTechResThread.html">下一页: CATIMldTechResThread.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAASystem.edu/CAASysCryptedILB.m/LocalInterfaces/CAASysFileFunctions.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAASystem.edu/CAASysCryptedILB.m/LocalInterfaces/CAASysFileFunctions.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAASysCryptedILB.html">← 上一页: CAASysCryptedILB.h</a></div>
+        <div><a href="../../CAASysDerivationOM.m/LocalInterfaces/CAAESysCreateInstanceForRevolSurface.html">下一页: CAAESysCreateInstanceForRevolSurface.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===========================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2004                                          
+//===========================================================================
+//                                                                           
+//  Compound Files                                                     
+//                                                                           
+//  Usage Notes: Services functions
+//===========================================================================
+//  Creation aout 2004                                 adt              
+//===========================================================================
+#ifndef __CAASYSFILEFUNC
+#define __CAASYSFILEFUNC
+
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;time.h&gt;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATIUExitCryptedILockBytes.h&quot;
+
+
+
+#ifdef _WINDOWS_SOURCE
+#define ERRNO		GetLastError()
+#define SEEKSET		FILE_BEGIN
+#define SEEKCUR		FILE_CURRENT
+#define SEEKEND		FILE_END
+#else
+#define ERRNO		errno
+#define SEEKSET		SEEK_SET
+#define SEEKCUR		SEEK_CUR
+#define SEEKEND		SEEK_END
+#endif
+
+
+// some macros 
+#ifdef _WINDOWS_SOURCE
+#define FILEWRITE( fd, buf, length) 	   CAASysFileWrite ( fd, buf, length)
+#define FILEREAD( fd, buf, length) 	   CAASysFileRead ( fd, buf, length)
+#define FILESEEK( fd, Offset, Pos)	   CAASysFileSeek ( fd, Pos, Offset)
+#define FILECLOSE( fd)			   CAASysFileClose(fd)
+#else
+#define FILEWRITE( fd, buf, length)	write(fd, buf, length)
+#define FILEREAD( fd, buf, length)	read(fd, buf, length)
+#define FILESEEK( fd, Offset, Pos)	lseek64 ( fd, Offset.QuadPart, Pos)
+#define FILECLOSE( fd)			close (fd)
+#endif
+
+
+#ifdef _WINDOWS_SOURCE
+long CAASysFileWrite (HANDLE  fd, const char* buf, ULONG ToWrite);
+long CAASysFileRead (HANDLE  fd, char* buf, ULONG ToRead);
+long CAASysFileSeek (HANDLE  fd, DWORD Pos, ULARGE_INTEGER Offset);
+HRESULT CAASysFileFlush ( HANDLE fh);
+HRESULT CAASysFileOpen( const CATUnicodeString *iPath,  
+			CATSysOpenMode iOpenMode, 
+			CATSysSharing iSharingMode, 
+			CATSysCreateMode iOpenFlag, 
+			CATSysCloseMode iCloseFlag,
+			HANDLE &amp;fh); 
+
+HRESULT CAASysFileClose ( HANDLE fh);
+HRESULT CAASysFileResize ( HANDLE  fd, ULARGE_INTEGER iOffset);
+
+#else
+HRESULT CAASysFileOpen ( const CATUnicodeString *iPath, 
+			 CATSysOpenMode iOpenMode, 
+			 CATSysSharing iSharingMode, 
+			 CATSysCreateMode iOpenFlag, 
+			 CATSysCloseMode iCloseFlag,
+			 int &amp;fd);
+
+HRESULT CAASysFileResize ( int  fd, ULARGE_INTEGER iOffset);
+HRESULT CAASysFileFlush ( int fd);
+
+void CAASysConvertTime( time_t iS, FILETIME *otime);
+#endif
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAASysCryptedILB.html">← 上一页: CAASysCryptedILB.h</a></div>
+        <div><a href="../../CAASysDerivationOM.m/LocalInterfaces/CAAESysCreateInstanceForRevolSurface.html">下一页: CAAESysCreateInstanceForRevolSurface.h →</a></div>
+    </div>
+</body>
+</html>

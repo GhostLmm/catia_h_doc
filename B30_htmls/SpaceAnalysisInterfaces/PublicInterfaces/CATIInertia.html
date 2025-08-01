@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceAnalysisInterfaces/PublicInterfaces/CATIInertia.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SpaceAnalysisInterfaces/PublicInterfaces/CATIInertia.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDistance.html">← 上一页: CATIDistance.h</a></div>
+        <div><a href="CATIMeasurableInContext.html">下一页: CATIMeasurableInContext.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+//===================================================================
+//
+// CATIInertia.h
+//   This interface allows the query of inertia data.
+//
+//===================================================================
+#ifndef CATIInertia_H
+#define CATIInertia_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;SpaceAnalysisItf.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySpaceAnalysisItf IID IID_CATIInertia ;
+#else
+extern &quot;C&quot; const IID IID_CATIInertia ;
+#endif
+
+
+
+
+//------------------------------------------------------------------
+
+/**
+ * Gets inertia data of a product controlling the density.
+ * &lt;p&gt;
+ * This interface enables to get the inertia data of a product:
+ * &lt;ul&gt;
+ * &lt;li&gt; mass
+ * &lt;li&gt; position of the center of gravity
+ * &lt;li&gt; inertia matrix
+ * &lt;li&gt; components of principal axes
+ * &lt;li&gt; principal moments values
+ * &lt;/ul&gt;
+ * All the coordinates are expressed with respect to the product axis system.
+ * &lt;p&gt;
+ * The density is managed :
+ * &lt;ul&gt;
+ * &lt;li&gt; as input the density is not null : this value is used for the computation.
+ * &lt;li&gt; as input the density is null and a density is attached to the product : it is used and ouput.
+ * &lt;li&gt; as input the density is null and the product has no density : a default value is used and ouput.
+ * &lt;/ul&gt;
+ * If the product is made of non homogeneous material the output density is set to -1.
+ * &lt;p&gt;
+ * UNITS : 
+ * &lt;ul&gt;
+ * &lt;li&gt; Mass                      Kg     ( Kilogram )
+ * &lt;li&gt; InertiaWetArea            M^2    ( square meter )
+ * &lt;li&gt; InertiaVolume             M^3    ( cubic meter )
+ * &lt;li&gt; COGPosition               M      ( meter )
+ * &lt;li&gt; InertiaMatrix             KgM2   ( square Kilogram meter )
+ * &lt;li&gt; PrincipalMoments          KgM2   ( square Kilogram meter )
+ * &lt;li&gt; Density                   Kg/M^3 ( kilogram per cubic meter )
+ * &lt;/ul&gt;
+ */
+
+
+//------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------
+
+
+class ExportedBySpaceAnalysisItf CATIInertia: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    /**
+     * Gets inertia data of a product controlling the density.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oMass
+     *    The mass of the product.
+     * @param oPosition
+     *    Position of the center of gravity with respect to the product axis system.
+     * @param oMatrix
+     *    Inertia matrix.
+     * @param oComponents
+     *    Components of principal axes.
+     * @param oValues
+     *    Principal moments values.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetInertia (double* ioDensity,
+                                double* oMass,
+                                double  oPosition[3],
+                                double  oMatrix[9],
+                                double  oComponents[9],
+                                double  oValues[3] ) const=0;
+
+    /**
+     * Gets mass of a product controlling the density.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oMass
+     *    The mass of the product.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetMass (double* ioDensity, double* oMass) const=0;
+
+    /**
+     * Gets the position of the center of gravity of a product.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oPosition
+     *    Position of the center of gravity with respect to the product axis system.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetCOGPosition (double oPosition[3]) const=0;
+
+    /**
+     * Gets inertia matrix of a product controlling the density.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oMatrix
+     *    Inertia matrix.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetInertiaMatrix (double* ioDensity, double oMatrix[9]) const=0;
+
+    /**
+     * Gets principal axes of a product.
+     * @param oComponents
+     *    Components of principal axes.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetPrincipalAxes (double oComponents[9]) const=0;
+
+    /**
+     * Gets principal moments of a product controlling the density.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oValues
+     *    Principal moments values.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetPrincipalMoments (double* ioDensity, double oValues[3]) const=0;
+
+
+    /**
+     * Gets inertia volume of a product
+     * @param oInertiaVolume
+     *    The inertia volume of the product.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetInertiaVolume (double* oInertiaVolume) const=0;
+
+    /**
+     * Gets inertia area of a product
+     * @param oInertiaArea
+     *    The inertia area of the product.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetInertiaArea (double* oInertiaArea) const=0;
+
+    /**
+     * Gets inertia data ( with inertia volume and area) of a product controlling the density.
+     * @param ioDensity
+     *    The density of the product.
+     * @param oMass
+     *    The mass of the product.
+     * @param oPosition
+     *    Position of the center of gravity with respect to the product axis system.
+     * @param oMatrix
+     *    Inertia matrix.
+     * @param oComponents
+     *    Components of principal axes.
+     * @param oValues
+     *    Principal moments values.
+     * @param oInertiaVolume
+     *    The inertia volume of the product.
+     * @param oInertiaArea
+     *    The inertia area of the product.
+     * @return
+     *    HRESULT
+     */
+    virtual HRESULT GetInertia (double* ioDensity,
+                                double* oMass,
+                                double  oPosition[3],
+                                double  oMatrix[9],
+                                double  oComponents[9],
+                                double  oValues[3],
+                                double* oInertiaVolume,
+                                double* oInertiaArea) const=0;
+
+    /**
+     * Sets equivalent mode of a product
+     * @param iEquivalentMode
+     *    1 -- If a product have some Equivalent, the computation work with
+     *    0 -- no equivalent in computation
+     * @return
+     *    HRESULT
+     */
+
+    virtual HRESULT SetEquivalentMode (int iEquivalentMode) const=0;
+
+    /**
+     * Gets equivalent mode of a product
+     * @param oEquivalentMode
+     *    1 -- If a product have some Equivalent, the computation work with
+     *    0 -- no equivalent in computation
+     * @return
+     *    HRESULT
+     */
+
+    virtual HRESULT GetEquivalentMode (int * oEquivalentMode) const=0;
+
+    /**
+     * Gets equivalent of a product
+     * @param oEquivalentMode
+     *    1 -- If the computation of a product have some Equivalent
+     *    0 -- no equivalent in computation
+     * @return
+     *    HRESULT
+     */
+
+    virtual HRESULT GetEquivalent (int * oIsEquivalent) const=0;
+
+    /**
+	 * @deprecatedCXR29SetInertiaParameters  
+     * Sets granularity mode of a product ( with Part )
+     * @param iGranularityMode
+     *    0 -- Only the main body in Inertia computation
+     *    1 -- All body for Inertia computation
+     * @return
+     *    HRESULT
+     */
+
+    virtual HRESULT SetGranularityMode (int iGranularityMode) const=0;
+
+   /** 
+	* Sets granularity mode of a product(with Part)
+	* @param iGranularityMode
+	*	 1 --All body for Inertia computation
+	*	 0 --Only the main body for Inertia computation
+	* @param iThinPartAttributeMode
+	*	 0 --thin part attribute not taken into account for Inertia computation
+	*	 1 --thin part attribute taken into account for Inertia computation
+	* @return
+	*	 HRESULT
+	*/
+
+	virtual HRESULT SetInertiaParameters(int iGranularityMode,
+										 int iThinPartAttributeMode) const = 0;
+
+
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATIInertia, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDistance.html">← 上一页: CATIDistance.h</a></div>
+        <div><a href="CATIMeasurableInContext.html">下一页: CATIMeasurableInContext.h →</a></div>
+    </div>
+</body>
+</html>

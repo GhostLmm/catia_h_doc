@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseDocument.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAVisualization.edu/CAAVisBasics.m/LocalInterfaces/CAAVisBaseDocument.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseDefaultDocument.html">← 上一页: CAAVisBaseDefaultDocument.h</a></div>
+        <div><a href="CAAVisBaseExitNotification.html">下一页: CAAVisBaseExitNotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAVisBaseDocument_h
+#define CAAVisBaseDocument_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Document base class.
+//  Each document of our application inherits from CAAVisBaseDocument.
+//  The documents are created by the application (CAAVisBaseApplication).
+//  Each document has an associated view (CAAVisBaseView) to graphically display
+//  its data.
+//  The main role of the document is to manage our model, which is a tree
+//  of CATRep objects, stored as a CAT3DBagRep * _pRootContainer data member.
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//           CAAVisBaseDocument
+//             CATBaseUnknown (System Framework)
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//
+//  CreateDocView : Creates the document view (CAAVisBaseView).
+//
+//  DeleteDocView : Deletes the document view.
+//
+//  CreateModel   : Creates the model, which is in fact a graphical
+//                  representation, that will be visualized in the view.
+//
+//  DeleteModel   : Deallocates resources used for the model.
+//
+//  AddRepToViewer: Adds our graphical representation to the viewer.
+//                  This method allows our model to be represented in the view.
+//
+//===========================================================================
+
+//System Framework
+#include &quot;CATBaseUnknown.h&quot;
+
+//Local Framework
+class CAAVisBaseView;
+
+//Visualization Framework
+class CAT3DBagRep;
+
+//Dialog Framework
+class CATDialog;
+
+//System Framework
+class CATCommand;
+
+class CAAVisBaseDocument : public CATBaseUnknown
+{
+public:
+
+  // Constructs the document from the application, the parent
+  // dialog object (the main frame), and a title.
+  // Parameters
+  //   iDialogParent
+  //     The parent dialog object. Here, it is the view
+  //     of our application, the application frame.
+  //   iDocumentName
+  //     The document name.
+  CAAVisBaseDocument(CATDialog *iDialogParent,
+                     const char *iDocumentName);
+
+  //destructor
+  virtual ~CAAVisBaseDocument();
+
+  // Gets the view associated to the document. There is
+  // only one view per document.
+  virtual CAAVisBaseView * GetView();
+
+  //Gets the root container of the representation.
+  CAT3DBagRep * GetModel();
+
+  //Inserts a graphical representation read from a CGR file
+  //into the model.
+  virtual void InsertModel(const char *iCGRFileName);
+
+protected:
+  
+  // Adds our model&#x27;s graphical representation into the
+  // view.
+  virtual void AddRepToViewer();
+
+  // Creates the model. This method depends on the kind of document we&#x27;re
+  // dealing with, and must be overridden by inherited class.
+  // Anyway, the created model will remain persistent thanks to the
+  // &lt;tt&gt;_pRootContainer&lt;/tt&gt; data member.
+  virtual void CreateModel() = 0;
+
+  // Deletes the model associated to our document, and
+  // stored in &lt;tt&gt;_pRootContainer&lt;/tt&gt;.
+  virtual void DeleteModel();
+
+private:
+
+  //Default constructor
+  CAAVisBaseDocument();
+
+  //Copy constructor
+  CAAVisBaseDocument(const CAAVisBaseDocument &amp;iBrother);
+
+  //Assignment operator
+  CAAVisBaseDocument &amp; operator = (const CAAVisBaseDocument &amp;iBrother);
+
+  // Creates the view (dialog object), associated to the document.
+  // Parameters
+  //   iDialogParent
+  //     The parent dialog object, which is the view object parent. Here,
+  //     it is the application frame.
+  //   iDocViewName
+  //     The name given to the document&#x27;s view. This is the name which will
+  //     appear on top of the window.
+  virtual void CreateDocView(CATDialog *iDialogParent, const char *iDocViewName);
+  
+protected:
+
+  // Document&#x27;s view
+  CAAVisBaseView *_pView;
+
+  // Model.
+  CAT3DBagRep    *_pRootContainer;
+
+  //View name
+  static int      _ViewName;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAVisBaseDefaultDocument.html">← 上一页: CAAVisBaseDefaultDocument.h</a></div>
+        <div><a href="CAAVisBaseExitNotification.html">下一页: CAAVisBaseExitNotification.h →</a></div>
+    </div>
+</body>
+</html>

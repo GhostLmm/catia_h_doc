@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAPlantShipInterfaces.edu/ProtectedInterfaces/CAAPspUtilityMacros.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAPlantShipInterfaces.edu/ProtectedInterfaces/CAAPspUtilityMacros.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAPspUtilitiesProtected.html">← 上一页: CAAPspUtilitiesProtected.h</a></div>
+        <div><a href="../../CAAPrint.edu/CAAPrtApplication.m/LocalInterfaces/CAAPrtApplication.html">下一页: CAAPrtApplication.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES  2008
+//=============================================================================
+//
+//-----------------------------------------------------------------------------
+//  Utility macros
+//-----------------------------------------------------------------------------
+
+#ifndef CAAPspUtilityMacros_H
+#define CAAPspUtilityMacros_H
+
+#include &quot;CATErrorDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIAlias.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATMathPoint.h&quot;
+#include &quot;CATMathVector.h&quot;
+#include &quot;CATError.h&quot;
+
+// Use c++ stream trace base classes
+
+/** @c++ansi mcf 2004-10-04.15:11:35 [Replace forward declaration of standard streams with iosfwd.h] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &quot;iosfwd.h&quot;
+#else //_CAT_ANSI_STREAMS
+class ofstream;
+class ostream;
+#endif //_CAT_ANSI_STREAMS
+
+//-----------------------------------------------------------------------------
+
+// Release a model object.
+#define ReleaseIUnknown(piObject) \
+{\
+  if (piObject)\
+  {\
+    (piObject)-&gt;Release();\
+    piObject = NULL;\
+  }\
+}
+
+// Delete a c++ object.
+#define DeleteObject(pObject) \
+{\
+  if (pObject)\
+  {\
+    delete pObject;\
+    pObject = NULL;\
+  }\
+}
+
+//  Get object name
+inline CATUnicodeString GetObjectName(const IUnknown *piObject)
+{
+  CATUnicodeString uObjectName;
+  if (piObject)
+  {
+    CATIAlias *piAlias = NULL;
+    if (SUCCEEDED(((IUnknown*)piObject)-&gt;QueryInterface (IID_CATIAlias, (void **)&amp;piAlias)) &amp;&amp;
+        piAlias)
+    {
+      uObjectName = piAlias-&gt;GetAlias();
+      piAlias-&gt;Release();
+    } // End if valid alias
+    else
+    {
+      CATISpecObject *piSpec = NULL;
+      if (SUCCEEDED(((IUnknown*)piObject)-&gt;QueryInterface (IID_CATISpecObject, (void **)&amp;piSpec)) &amp;&amp;
+          piSpec)
+      {
+        uObjectName = piSpec-&gt;GetName();
+        piSpec-&gt;Release();
+      }
+    } // End if valid spec
+  } // End if valid object
+  return uObjectName;
+}
+
+//  Get object name
+inline CATUnicodeString GetObjectName(const CATBaseUnknown_var&amp; ispObject)
+{
+  CATUnicodeString uObjectName;
+  if (ispObject)
+    uObjectName = GetObjectName(ispObject-&gt;GetImpl());
+  return uObjectName;
+}
+
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const CATUnicodeString&amp; Uni)
+{
+  ct &lt;&lt; &quot;\&quot;&quot; &lt;&lt; Uni.ConvertToChar() &lt;&lt; &quot;\&quot;&quot;;
+  return ct;
+}
+
+// Output CATError information
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const CATError *pError)
+{
+  if (!pError)
+  {
+    ct &lt;&lt; &quot;NULL CATError&quot; &lt;&lt; endl;
+  }
+  else
+  {
+		CATUnicodeString ucNLSMessage = ((CATError*)pError)-&gt;GetNLSMessage();
+    const char * pNLSMessage = ucNLSMessage.CastToCharPtr();
+    ct &lt;&lt; &quot;ID: &quot; &lt;&lt; ((CATError*)pError)-&gt;GetId() &lt;&lt; &quot;, Name: &quot; &lt;&lt; ((CATError*)pError)-&gt;GetName() &lt;&lt; endl
+       &lt;&lt; &quot;  Message: &quot; &lt;&lt; pNLSMessage &lt;&lt; endl;
+    char* pSourceFileName;
+    int sourceLineNumber;
+    ((CATError*)pError)-&gt;GetSourceFileName(&amp;pSourceFileName);
+    ((CATError*)pError)-&gt;GetSourceLineNumber(&amp;sourceLineNumber);
+    ct &lt;&lt; &quot;  Source: &quot; &lt;&lt; pSourceFileName &lt;&lt; &quot;:&quot; &lt;&lt; sourceLineNumber &lt;&lt; endl;
+  }
+  return ct;
+}
+
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const IUnknown *piUnk)
+{
+  if (!piUnk)
+    ct &lt;&lt; &quot;Invalid IUnknown handle&quot;;
+  else
+  {
+    // Print pointer value
+    ct &lt;&lt; (void *)piUnk &lt;&lt; &quot;:&quot; &lt;&lt; GetObjectName(piUnk);
+  } // End if valid piAlias
+  return ct;
+}
+
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const CATBaseUnknown_var&amp; spUnk)
+{
+  if (!spUnk)
+    ct &lt;&lt; &quot;Invalid CATBaseUnknown handle&quot;;
+  else
+    ct &lt;&lt; spUnk-&gt;GetImpl();
+  return ct;
+}
+
+// Output math point
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const CATMathPoint&amp; m)
+{
+  ct &lt;&lt; &quot;&lt;&quot; &lt;&lt; m.GetX() &lt;&lt; &quot;,&quot; &lt;&lt; m.GetY() &lt;&lt; &quot;,&quot; &lt;&lt; m.GetZ() &lt;&lt; &quot;&gt;&quot;;
+  return ct;
+}
+
+// Output math vector
+inline ostream &amp; operator &lt;&lt; (ostream &amp; ct, const CATMathVector&amp; m)
+{
+  ct &lt;&lt; &quot;&lt;&quot; &lt;&lt; m.GetX() &lt;&lt; &quot;,&quot; &lt;&lt; m.GetY() &lt;&lt; &quot;,&quot; &lt;&lt; m.GetZ() &lt;&lt; &quot;&gt;&quot;;
+  return ct;
+}
+
+//-----------------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAPspUtilitiesProtected.html">← 上一页: CAAPspUtilitiesProtected.h</a></div>
+        <div><a href="../../CAAPrint.edu/CAAPrtApplication.m/LocalInterfaces/CAAPrtApplication.html">下一页: CAAPrtApplication.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDMRuntime/PublicInterfaces/SdaiEntityInstance.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SDMRuntime/PublicInterfaces/SdaiEntityInstance.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SdaiEntity.html">← 上一页: SdaiEntity.h</a></div>
+        <div><a href="SdaiEnum.html">下一页: SdaiEnum.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/**
+ * @quickReview LDI 02:06:21
+ * @quickReview VSR1 19:06:20 VS2017 Compatibility-Impact KnowledgeEngineSdm.tst\KT0SCHEM.m
+ */
+// COPYRIGHT DASSAULT SYSTEMES  1996
+// ------------------------------------------------------------------------------------------------
+//  SDAI -- C++ Language Binding -- SdaiEntityInstance
+// ------------------------------------------------------------------------------------------------
+//  Auteurs :
+//      Corinne  VANDAELE (fevrier 1996)
+//	Philippe BAUCHER  
+// ------------------------------------------------------------------------------------------------
+//  Historique :
+//
+//	MODIFICATION	: 01
+//	DATE		: 6 fevrier 1996
+//	AUTEUR		: CVE
+//	NATURE		: Creation
+//	DESCRIPTION	: Norme ISO 10303-22 (binding C++)
+//
+// ------------------------------------------------------------------------------------------------
+// Definition :
+//
+//      &#x27;SdaiEntityInstance&#x27; represente une instance d&#x27;une &#x27;entity_definition&#x27;
+//
+//      &#x27;SdaiEntityInstance&#x27; est le super-type de ttes les instances (hormis les SdaiAggrInstances)
+//	qui peuvent etre manipulees par SDAI.
+//
+// ------------------------------------------------------------------------------------------------
+// Definition EXPRESS :
+//
+//	ENTITY   entity_instance
+//
+//	    ABSTRACT SUPERTYPE OF ( ONEOF (sdai_instance, application_instance) ) ;
+//
+//	    owning_model : sdai_model ;              (* Modele auquel appartient l&#x27;instance *)
+//	    definition   : entity_definition ;       (* Definition de l&#x27;entite instanciee *)
+//	    values       : LIST OF attribute_value ; (* Valeurs des attributs explicites de l&#x27;instance *)
+//
+//	END_ENTITY ;
+//
+// ------------------------------------------------------------------------------------------------
+
+#ifndef	SdaiEntityInstance_H
+#define	SdaiEntityInstance_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &lt;KS0SIMPL.h&gt;
+
+#include &lt;SdaiMacro.h&gt;
+#include &lt;SdaiRoot.h&gt;
+
+class CATSdaiEntityInstance;
+class SdaiBoolean;
+class SdaiLogical;
+class SdaiString;
+class SdaiPrimitiveH;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#if defined(_MSC_VER) &amp;&amp; (_MSC_VER&gt;=1915)
+#undef _CRT_INTERNAL_NONSTDC_NAMES
+#endif
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+// JNI 03/2003 optional build feature to have per-object reference counting tracking.
+// This is exclusively used to debug the internal reference counting of SDAI.
+// #define SDAI_WITH_MLKTRACKER
+
+#ifdef SDAI_WITH_MLKTRACKER
+#include &quot;CATUnicodeString.h&quot;
+#endif
+
+/**
+ * Class representing an instance of an SDAI entity_definition.
+ */
+class ExportedByKS0SIMPL SdaiEntityInstance : public SdaiRoot
+{
+private:
+        friend class SdaiModelContents ;
+        friend class CATSdaiModelContents ;
+	friend class SdaiEntityExtents ;
+	friend class CATSdaiModel ;
+	friend class CATSdaiAppInstance;
+
+	/* **************************************************************************************/
+	/* C O N S T R U C T O R S								*/
+	/* D E S T R U C T O R S								*/
+	/* **************************************************************************************/
+public :
+/** @nodoc */
+	SdaiEntityInstance ();
+/** @nodoc */
+	SdaiEntityInstance ( const SdaiEntityInstance&amp; a_repliquer );
+
+protected :
+	virtual	~SdaiEntityInstance ();
+
+        // ****************************************************************************************
+        // S D A I    O P E R A T I O N    D E C L A R A T I O N S
+        // ****************************************************************************************
+public :
+	// donne le modele auquel appartient l&#x27;instance
+/** @nodoc */
+	const SdaiModelH FindEntityInstanceModel	( )  const;
+
+	/**
+    * Tests if an SdaiEntityInstance is an instance of a given type.
+	*  @param typeName - the type to check with
+	*/
+	virtual const SdaiBoolean &amp;  	IsInstanceOf ( const SdaiString&amp;	typeName )  const;
+/** @nodoc */
+	virtual	const SdaiBoolean &amp;	IsInstanceOf	( const SdaiEntityH&amp;	typeEnt )  const;
+
+	/**
+    * Tests if an SdaiEntityInstance is of a given type.
+	*  @param typeName - the type to check with
+	*/
+	virtual	const SdaiBoolean &amp; 	IsKindOf	( const SdaiString&amp;	typeName )  const;
+/** @nodoc */
+    virtual const SdaiBoolean &amp; 	IsKindOf	( const SdaiEntityH&amp;	typeEnt )  const;
+
+	// determine si l&#x27;instance et le parametre entInst sont egales (au sens de l&#x27;operateur :=:)
+/** @nodoc */
+    virtual const SdaiLogical &amp; 	IsSame ( const SdaiEntityInstanceH&amp;	entInst )  const;
+
+	// determine si l&#x27;instance et le parametre entInst sont identiques 
+	// (au sens de l&#x27;operateur =)
+/** @nodoc */
+	virtual const SdaiLogical &amp;	IsEqual ( const SdaiEntityInstanceH	entInst )  const;
+
+	/**
+    * Gets the value of an attribute.
+	*  @param attName - the name of the attribute
+	*/
+	virtual const SdaiPrimitiveH &amp;	GetAttr	( const SdaiString&amp;  attName )	const;
+/** @nodoc */
+	virtual	const SdaiPrimitiveH &amp;	GetAttr	( const SdaiAttrH&amp;  attDef )	const;
+
+	/**
+    * Tests if an attribute has a valid value.
+	*  @param att_name - the name of the attribute
+	*/
+	virtual const SdaiBoolean &amp;	TestAttr( const SdaiString&amp;  att_name )  const;
+/** @nodoc */
+	virtual	const SdaiBoolean &amp;	TestAttr( const SdaiAttrH&amp;  att_def )	 const;
+
+	/**
+    * Gets the name of the type of a SdaiEntityInstance.
+	*/
+	virtual	const	SdaiNamedTypeH	GetInstanceType ( )  const;
+
+	/* Methode renvoyant le nom en clair de la classe */
+/** @nodoc */
+        virtual const	SdaiString &amp;    GetInstanceTypeName()   const ;
+
+	// Methode renvoyant le nom en clair de la classe 
+/** @nodoc */
+	static  const SdaiString &amp;      LeType(); /*&quot;EntityInstance&quot;*/
+
+        // ****************************************************************************************
+        // D S    O P E R A T I O N    D E C L A R A T I O N S
+        // ****************************************************************************************
+public:
+	// renvoie le nom du schema de l&#x27;instance (ajout BLC)
+/** @nodoc */
+	virtual const 	SdaiString &amp;	GetInstanceSchemaName ()	const;
+
+	// Operateur d&#x27;ecriture de l&#x27;instance  - Ajout CCT -
+/** @nodoc */
+        friend ExportedByKS0SIMPL ostream&amp;  operator&lt;&lt; (ostream&amp; , const SdaiEntityInstance&amp;) ;
+/** @nodoc */
+        friend ExportedByKS0SIMPL ostream&amp;  operator&lt;&lt; (ostream&amp; , const SdaiEntityInstanceH&amp;) ;
+
+	// affiche l&#x27;entite au format ISO 10303-21  - Ajout CCT -
+/** @nodoc */
+        virtual void  DumpInstance( ostream&amp; ) ;
+
+	// Fonction d&#x27;acces a l&#x27;identificateur de l&#x27;instance  - Ajout CCT -
+/** @nodoc */
+        virtual const char * GetInstanceName () const ;
+/** @nodoc */
+        virtual unsigned int GetInstanceNameId () const ;
+
+	// Methode indiquant si l&#x27;entite est protegee ou non (Ajout CVE)
+/** @nodoc */
+	unsigned char IsProtected() ;
+
+
+#ifdef SDAI_MULTI_TRANS_BCC
+public:
+  // JNI: this is necessary to allow logical destruction of an instance in a specific context while it is
+  // still referred to in another private context.
+  /**
+   * Note that external clients never have to addref/release, this reference counting is purely used for
+   * the internal purposes of SDMRuntime.
+   *
+   */
+/** @nodoc */
+  CATLONG32 refs;
+#ifdef SDAI_WITH_MLKTRACKER
+  /**
+   * @nodoc
+   * when built in SDAI_WITH_MLKTRACKER mode, this allows us to have
+   * stable tag-based memory debugging. Used to debug the internal reference
+   * count on SdaiEntityInstance objects.
+   */
+  CATLONG32 _tag;
+#endif
+/** @nodoc */
+  virtual void addref();
+/** @nodoc */
+  virtual void release();
+  
+    private:
+    //bcc: the implementation was incorrect anyway, might as well remove it
+#endif
+  
+        // inline  CATSdaiEntityInstance *   EntityInstance()  const { return  _EntityInstance; }
+
+        // ****************************************************************************************
+        // I M P L E M E N T A T I O N
+        // ****************************************************************************************
+protected :
+        // Pointeur sur l&#x27;implementation
+/** @nodoc */
+        SdaiModel* _model;
+        // CATSdaiEntityInstance *  _EntityInstance;
+
+
+};
+
+
+// Fonction globale determinant si une SdaiEntityInstance est valide (renvoie sdaiTRUE)
+// ou invalide [ == NULL !? ] (renvoie sdaiFALSE)
+// ExportedByKS0LATE extern	const SdaiBoolean &amp;	EXISTS ( const SdaiEntityInstanceH ) ;
+
+#endif	/* _SDAI_ENTITY_INSTANCE_H_ */
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="SdaiEntity.html">← 上一页: SdaiEntity.h</a></div>
+        <div><a href="SdaiEnum.html">下一页: SdaiEnum.h →</a></div>
+    </div>
+</body>
+</html>

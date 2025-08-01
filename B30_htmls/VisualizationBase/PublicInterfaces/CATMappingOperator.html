@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATMappingOperator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATMappingOperator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATManipulatorNotification.html">← 上一页: CATManipulatorNotification.h</a></div>
+        <div><a href="CATMaterialNotification.html">下一页: CATMaterialNotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMappingOperator_H
+#define CATMappingOperator_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//
+// Copyright Dassault Systemes 1996
+//----------------------------------------------------------------
+// Abstract : This Class allow to compute Texture Coordinates
+//            An operator is attached to one or several CATGraphicMaterial 
+//
+// ----------------------------------------------------------------
+//  Usage :   
+//
+//  MappingOperator attached to a CATGraphicMaterial 
+//
+//       When you attach an operator you increase the reference&#x27;s number
+//       of this operator. The management of the operator&#x27;s destruction
+//       is done by the material. An Operator is deleted when
+//       it number of links is zero.
+//
+//  Organization of data for ComputeTextureCoordinates Method
+//
+//     -Vertices are organized : (x,y,z)   (x,y,z) ....
+//     -Normales are organized : (nx,ny,nz)(nx,ny,nz) ....
+//      the number of normals is the number of vertices or 1
+//      if the number is 1, all vertices have the same normal
+//     -Texture Coordinates are organized : (s,t,0) (s,t,0) ...
+//      for a 1D texture t is 0
+//
+//  Send A notification to the material attach 
+//
+//      You have make a modification in your mapping, You can 
+//      call the material to worn it about this modification. After
+//      the material send a notification to the elements attach to it.
+//      In general case the modification is about the texture coordinates
+//      regeneration. In your method use :
+//      SendMaterialNotification( CATUpdateTCNotification) 
+//
+//   UV Necessary
+//
+//      If our method ComputeTextureCoordinates if you need of the UV 
+//      mesh, you must overload the method NeedUVMesh. The default behavior
+//      is No NeedUVMesh. This method will be used to ask the mesh 
+//
+// ----------------------------------------------------------------
+//  Inheritance : - -
+// ----------------------------------------------------------------
+//  Main Methods :
+//
+//    manage Computing
+//  
+//       ComputeTextureCoordinates
+//       SendMaterialNotification    ( protected to use in derivation )
+//       NeedUVMesh()
+//                 
+//    manage attachment of a mapping operator
+//       AddReference
+//       SubReference
+//       GetReferenceNumber
+//
+// ----------------------------------------------------------------
+
+// interfaces
+
+// TIEs
+
+// others
+#include &quot;CATEventSubscriber.h&quot;
+#include &quot;CATMaterialNotification.h&quot;
+#include &quot;CATViz.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+/** Base class to create a mapping operator to apply textures.
+ * Derive from this class and overload the method ComputeTextureCoordinates. */
+class ExportedByCATViz CATMappingOperator : public CATEventSubscriber
+{
+public:
+  // macros
+  /** @nodoc */
+  CATDeclareClass;
+
+  // &#x27;tors
+  /** Constructs an empty mapping operator. */
+
+  CATMappingOperator(); 
+
+  /** Copy contructor */
+  CATMappingOperator(const CATMappingOperator &amp; iOper);
+
+  /** Deletes the mapping operator. */
+  virtual int Destroy();
+
+  /** Increments the reference counter of the mapping operator. */
+  void AddReference();
+
+  /** IDecrements the reference counter of the mapping operator. */
+  void SubReference();
+
+  /** Returns the reference counter value of the mapping operator. */
+  int  GetReferenceNumber() const;
+
+  /** Computes the texture coordinates for all vertices.
+   * @param iVertex
+   * Array containing the coordinates of every vertices,as a succession
+   * of (x,y,z) sets.
+   * @param iNbVertex
+   * Number of vertices in &lt;tt&gt;iVertex&lt;/tt&gt;.
+   * @param iNormals
+   * Array containing the coordinates of the normals at every vertices, as
+   * a succession of (Nx,Ny,Nz) sets.
+   * If the surface is plane, the only given set is valid for all vertices.
+   * @param iNormals
+   * Number of normal sets in &lt;tt&gt;iNormals&lt;/tt&gt;.
+   * @param iTuv
+   * Array containing the parameters in of every vertices in the surface parametrization space,
+   * as a succession of (u,v) sets.
+   * This array must be required by the mapping operator through the method &lt;tt&gt;NeedUVMesh&lt;/tt&gt;.
+   * @param iNbuv
+   * Number of parameter sets in &lt;tt&gt;iNbuv&lt;/tt&gt;.
+   * @param oTexture
+   * Array containing the coordinates of texture coordinates for every vertices,
+   * as a succession of (s,t,0) sets. &lt;br&gt;
+   * (0,0,0) always indicates the lower-left corner of the texture image. &lt;br&gt;
+   * (1,1,0) always indicates the upper-right corner of the texture image.
+   */
+  virtual void ComputeTextureCoordinates(const float iVertex[],
+                                         const int   iNbVertex,
+                                         const float iNormals[],
+                                         const int   iNbNormals,
+                                         const float iTuv[],
+                                         const int   iNbuv,
+                                         float       oTexture[]) const;
+
+  /** Computes the texture coordinates for all vertices. Overload this method only if you need
+   * access to the topological cell. Otherwise, use other method.
+   * @param iVertex
+   * Array containing the coordinates of every vertices,as a succession
+   * of (x,y,z) sets.
+   * @param iNbVertex
+   * Number of vertices in &lt;tt&gt;iVertex&lt;/tt&gt;.
+   * @param iNormals
+   * Array containing the coordinates of the normals at every vertices, as
+   * a succession of (Nx,Ny,Nz) sets.
+   * If the surface is plane, the only given set is valid for all vertices.
+   * @param iNormals
+   * Number of normal sets in &lt;tt&gt;iNormals&lt;/tt&gt;.
+   * @param iTuv
+   * Array containing the parameters in of every vertices in the surface parametrization space,
+   * as a succession of (u,v) sets.
+   * This array must be required by the mapping operator through the method &lt;tt&gt;NeedUVMesh&lt;/tt&gt;.
+   * @param iNbuv
+   * Number of parameter sets in &lt;tt&gt;iNbuv&lt;/tt&gt;.
+   * @param oTexture
+   * Array containing the coordinates of texture coordinates for every vertices,
+   * as a succession of (s,t,0) sets. &lt;br&gt;
+   * (0,0,0) always indicates the lower-left corner of the texture image. &lt;br&gt;
+   * (1,1,0) always indicates the upper-right corner of the texture image.
+   * @param iCell
+   * Topological cell for which we are calculating the textures coordinates.
+   */
+  virtual void ComputeTextureCoordinates(const float            iVertex[],
+                                         const int              iNbVertex,
+                                         const float            iNormals[],
+                                         const int              iNbNormals,
+                                         const float            iTuv[],
+                                         const int              iNbuv,
+                                         float                  oTexture[],
+                                         const CATBaseUnknown * iCell) const;
+
+  /** @nodoc
+   * This method is only made to test temporalry the new mapping
+   * operators which need the indices of the faces
+   */
+  virtual void ComputeTextureCoordinates(const float            iVertex[],
+                                         const int              iNbVertex,
+                                         const float            iNormales[],
+                                         const int              iNbNormales,
+                                         const int              iTriangleIndices[],
+                                         const int              iNbTriangles,
+                                         const int              iTriangleStripIndices[],
+                                         const int              iNbTrianglesStrip,
+                                         const int              iNbVertexPerStrip[],
+                                         const int              iTriangleFanIndices[],
+                                         const int              iNbTrianglesFan,
+                                         const int              iNbVertexPerFan[],
+                                         const float            iTuv[],
+                                         const int              iNbuv,
+                                         float                  oTexture[],
+                                         const CATBaseUnknown * iCell) const;
+
+  /** Indicates the need for surface parameters array &lt;tt&gt;iTuv&lt;/tt&gt;.
+   * &lt;ul&gt;
+   * &lt;li&gt;0 : no need for surface parameters. &lt;/li&gt;
+   * &lt;li&gt;1 : require calculation of surface parameters. &lt;/li&gt;
+   * &lt;/ul&gt;
+   */
+  virtual int NeedUVMesh() const;
+
+#ifdef CATIAV5R8
+  /** Return the id of the mapping operator.
+   * This id is not persistent. It only serves to index different sets
+   * of mapping coordinates on CATGraphicPrimitives.
+   */
+  inline unsigned short GetId() const;
+#endif // ifdef CATIAV5R8
+
+protected:
+
+  /* @nodoc */
+  virtual ~CATMappingOperator();
+
+  /** Updates the display after a modification of the mapping operator.
+   * &lt;ul&gt;
+   * &lt;li&gt;CATRedrawNotification : redraw the window.&lt;/li&gt;
+   * &lt;li&gt;CATUpdateTCNotification : recalculate texture coordinates and redraw the window.&lt;/li&gt;
+   * &lt;/ul&gt;
+   */
+  virtual void SendMaterialNotification(CATMaterialNotificationType iType);
+
+private:
+  int _ReferenceNumber;
+  
+#ifdef CATIAV5R8
+  static unsigned short ms_usNbOperator;
+  unsigned short m_usId;
+#endif // ifdef CATIAV5R8
+};
+
+#ifdef CATIAV5R8
+inline unsigned short CATMappingOperator::GetId() const
+{
+   return m_usId;
+}
+#endif // ifdef CATIAV5R8
+
+#endif // CATMappingOperator_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATManipulatorNotification.html">← 上一页: CATManipulatorNotification.h</a></div>
+        <div><a href="CATMaterialNotification.html">下一页: CATMaterialNotification.h →</a></div>
+    </div>
+</body>
+</html>

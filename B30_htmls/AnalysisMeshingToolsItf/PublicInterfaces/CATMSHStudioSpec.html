@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnalysisMeshingToolsItf/PublicInterfaces/CATMSHStudioSpec.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AnalysisMeshingToolsItf/PublicInterfaces/CATMSHStudioSpec.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMSHStudioServices.html">← 上一页: CATMSHStudioServices.h</a></div>
+        <div><a href="CATMSHStudioSpecEdit.html">下一页: CATMSHStudioSpecEdit.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMSHStudioSpec_h
+#define CATMSHStudioSpec_h
+// COPYRIGHT Dassault Systemes 2002
+
+/**
+ * @CAA2Level L0 
+ * @CAA2Usage U2 
+ */
+
+//=============================================================================
+//
+// CATMSHStudioSpec :
+//
+// This class manage the mesh specification for the buildmesh method 
+//
+//=============================================================================
+// Novembre  2001   Creation                          G. Soubeyre
+//=============================================================================
+
+#include &quot;MSHStudio.h&quot;
+#include &quot;CATIMSHStudioSpec.h&quot;
+#include &quot;CATMSHStListOfPartitions.h&quot;
+#include &lt;stddef.h&gt;
+
+class CATMSHStSpecAttribute;
+class CATIMSHStPartition;
+class CATMSHStSpecAttribute;
+class CATUnicodeString;
+class CATMSHStSpecStream;
+class CATEMSHStudioSpecInstance;
+
+/**
+ * Object representing a user mesh specification.
+ * &lt;b&gt;Role&lt;/b&gt;: This object provides all necessary informations about a 
+ * mesh specification.
+ */
+
+class ExportedByMSHStudio CATMSHStudioSpec : public CATIMSHStudioSpec
+{
+  friend class CATMSHStSpecStream;
+
+public:
+
+/**
+ * @nodoc
+ */  
+  enum AttType
+  {
+    Unknown  = 0,
+    Short    = 1,
+    UShort   = 2,
+    Int      = 3,
+    UInt     = 4,
+    Double   = 5,
+    UString  = 6,
+    Partition= 7
+  };
+
+/**
+ * Constructs a mesh specification 
+ */
+  CATMSHStudioSpec ();
+/**
+ * Read the current Studio.
+ * @return
+ *   An interface to @href CATIMSHStudio.
+ */
+  CATIMSHStudio * GetStudio() const { return (CATIMSHStudio *)_Studio; };
+/**
+ * Write the current Studio.
+ * @param Studio
+ *   An interface to @href CATIMSHStudio.
+ */
+  void SetStudio(CATIMSHStudio * Studio) { _Studio=Studio; };
+/**
+ * Read the impact mode for the meshing specification.
+ * @return
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The meshing specification doesn&#x27;t impact neighbours mesh domains.
+ *   &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The meshing specification impacts neighbours mesh domains.
+ *   &lt;/dl&gt;
+ */
+  int GetImpactMode() const { return _WithImpact; };
+/**
+ * Write the impact mode for the meshing specification.
+ * @param WithImpact
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;The meshing specification doesn&#x27;t impact neighbours mesh domains.
+ *   &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;The meshing specification impacts neighbours mesh domains.
+ *   &lt;/dl&gt;
+ */
+  void SetImpactMode( int WithImpact );
+/**
+ * Read the link to support impacted by the meshing specification.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The support is valid.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The support is invalid.
+ *   &lt;/dl&gt;
+ * @param GeometryLink
+ *   A @href CATMSHStGeometryLink.
+ */
+  HRESULT GetSupport(CATMSHStGeometryLink * &amp;GeometryLink );
+/**
+ * Write the link to support impacted by the meshing specification.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The support is valid.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The support is invalid.
+ *   &lt;/dl&gt;
+ * @param GeometryLink
+ *   A @href CATMSHStGeometryLink.
+ */
+  HRESULT SetSupport(CATMSHStGeometryLink * GeometryLink);
+/**
+ * Read the list of partitions impacted by the meshing specification.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The list of partitions is valid.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The list of partitions is invalid.
+ *   &lt;/dl&gt;
+ * @param Partitions
+ *   A @href CATMSHStListOfPartitions.
+ */
+  HRESULT GetPartitions(CATMSHStListOfPartitions &amp;Partitions );
+/**
+ * Write the list of partitions impacted by the meshing specification.
+ * @return
+ *   An HRESULT.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;&lt;dt&gt;S_OK&lt;/dt&gt;&lt;dd&gt;The list of partitions is valid.
+ *   &lt;dt&gt;E_FAIL&lt;/dt&gt;&lt;dd&gt;The list of partitions is invalid.
+ *   &lt;/dl&gt;
+ * @param Partitions
+ *   A @href CATMSHStListOfPartitions.
+ */
+  HRESULT SetPartitions(CATMSHStListOfPartitions &amp;Partitions);
+/**
+ * Read the number of values in an attribute.
+ * @param iName
+ *   Name of the attribute. 
+ * @param oNumber
+ *   Number of values stored in the attribute. 
+ */
+ HRESULT GetNumberOfValues ( const CATUnicodeString &amp;iName , int &amp;oNbValues );
+/**
+ * Valuates a local mesh specification attribute to a real double value.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of iValues. 
+ * @param iValues
+ *   Real double value to be used for the specification. 
+ */
+ HRESULT SetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues, const double iValues[] );
+/**
+ * Retreives the real double value of a local mesh specification attribute.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of oValues. 
+ * @param oValue
+ *   Real double values of the attribute. 
+ */
+ HRESULT GetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues, double oValues[] );
+/**
+ * Valuates a local mesh specification attribute to a integer table value.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of iValues. 
+ * @param iValue
+ *   Integers values to be used for the attribute. 
+ */
+ HRESULT SetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues , const int iValues[] );
+/**
+ * Retreives the integer value of a local mesh specification attribute.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of oValues. 
+ * @param oValues
+ *   Integers values of the attribute. 
+ */
+ HRESULT GetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues, int oValues[] );
+/**
+ * Valuates a local mesh specification attribute to a character value.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of oValues. 
+ * @param iValue
+ *   Character value to be used for the specification. 
+ */
+ HRESULT SetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues, const CATUnicodeString iValue[] );
+/**
+ * Retreives the character value of a local mesh specification attribute.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iNbValues
+ *   Number of oValues. 
+ * @param oValue
+ *   Character value of the specification. 
+ */
+ HRESULT GetLocalSpecification ( const CATUnicodeString &amp;iName, int iNbValues, CATUnicodeString oValue[] );
+/**
+ * Valuates a local mesh specification attribute to partitions list.
+ * @param iName
+ *   Name of the local specification. 
+ * @param iPartitions 
+ *   List of partitions 
+ */
+ HRESULT SetLocalSpecification ( const CATUnicodeString &amp;iName, const CATMSHStListOfPartitions &amp;iPartitions );
+/**
+ * Retreives the partitions list of a local mesh specification attribute.
+ * @param iName
+ *   Name of the local specification. 
+ * @param oPartitions 
+ *   List of partitions 
+ */
+ HRESULT GetLocalSpecification ( const CATUnicodeString &amp;iName, CATMSHStListOfPartitions &amp;oPartitions );
+/**
+  * Returns the status of the specification concerning the mesh.
+  * @param oUpToUpdate
+  *  !=0: the mesh is up to date.&lt;br&gt;
+  *    0: the mesh needs to be updated.
+  */
+  virtual HRESULT IsMeshUpToDate( int &amp;oUpToUpdate );
+/**
+  * Modify the specified size map to take account the specification.
+  * @param Partition 
+  *   The partition impacted by the mesh for default specification only.
+  */
+  virtual HRESULT UpdateSizeMap(CATIMSHSizeMap * iMap, CATIMSHStPartition * Partition=NULL);
+/**
+  * Returns support dimension need for spec
+  */
+  virtual int GetSupportDimension();
+/**
+ * Generate mesh on Partition
+ */
+  virtual HRESULT UpdateMesh( CATIMSHStPartition * Partition=NULL);
+/**
+ * @nodoc
+ */  
+  virtual int IsExclusivePartition( const CATIMSHStPartition * Partition );
+/**
+ * Retourne si la perennit de la spec ( supporte les variations topologiques )
+ */
+  int GetPerpetuity() const { return _Perpetuity;};
+/**
+ * Ecrit perennit de la spec ( supporte les variations topologiques )
+ */
+  void SetPerpetuity (int Perpetuity) { _Perpetuity=Perpetuity; };
+/**
+ * @nodoc
+ */  
+  unsigned int GetInternalTag () const { return _InternalTag;} ;
+/**
+ * @nodoc
+ */  
+  void SetInternalTag (unsigned int Tag) { _InternalTag=Tag; } ;
+/**
+ * @nodoc
+ */  
+  unsigned int GetExternalTag () const { return _ExternalTag;} ;
+/**
+ * @nodoc
+ */  
+  unsigned int * GetPExternalTag () const { return ( unsigned int *) &amp;_ExternalTag;};
+/**
+ * @nodoc
+ */  
+  void SetExternalTag (unsigned int Tag) { _ExternalTag=Tag; };
+/**
+ * @nodoc
+ */  
+  inline CATIMSHStudioSpec::State GetState ();
+/**
+ * @nodoc
+ */  
+  virtual void Dump ( CATTrace * Trace=NULL ) const;
+/**
+ * @nodoc
+ */  
+  HRESULT ComputeMeshCondition( const CATIMSHStPartition * Partition, CATMSHStSpecCondition &amp;Mesh );
+/**
+ * @nodoc
+ */  
+  HRESULT virtual ComputeState( CATIMSHStudioSpec::State &amp;SpecState );
+/**
+ * @nodoc
+ */  
+  HRESULT ComputeMeshState(CATMSHStMeshState &amp;State);
+/**
+ * @nodoc
+ */
+  virtual HRESULT SetCompatibility( const CATMSHStSpecCompatibility Compatibility[] );
+/**
+ * @nodoc
+ */
+  const CATMSHStSpecCompatibility * GetCompatibility() const;
+/**
+ * @nodoc
+ */  
+  virtual CATRep * BuildRep ();
+/**
+ * @nodoc
+ */  
+  HRESULT GetName ( CATUnicodeString &amp; Name );
+/**
+ * @nodoc
+ */  
+  void DeleteAttributes ();
+/**
+ * @nodoc
+ * Recopie des attributs de la spec Source
+ */  
+  HRESULT CopyAttributes(const CATMSHStudioSpec &amp; Source);
+/**
+ * Chargement des attributs a partir d&#x27;un spec locale
+ */  
+  virtual HRESULT LoadAttributes ( CATIMSHLocalSpecification * LocalSpec );
+/**
+ * Chargement a partir du modele de toutes les specifications
+ */  
+  virtual HRESULT Load();
+/**
+ * @nodoc
+ */  
+  CATIMSHStudioSpec * Clone ();
+/**
+ * @nodoc
+ */  
+  void SetAttributesStamp (unsigned int Stamp) { _AttributesStamp=Stamp; };
+/**
+ * @nodoc
+ */
+  void AddInstanceListener();
+  void RemoveInstanceListener();
+/**
+ * @nodoc
+ * Invalidation des calculs effectus pour la spec
+ */
+  virtual void InvalidComputation();
+/**
+ * @nodoc
+ * Reset des supports de la spec
+ */  
+  virtual void ResetSupport ();
+/**
+ * Operateur d&#x27;affectation
+ */
+  CATMSHStudioSpec&amp; operator=(const CATMSHStudioSpec &amp; Source );
+
+protected:
+/**
+ * @nodoc
+ */  
+  virtual ~CATMSHStudioSpec ();
+/**
+ * @nodoc
+ */  
+  HRESULT UpdateTimeStamp(); 
+/**
+ * Ecriture de l&#x27;tat
+ */  
+  virtual void SetState (CATIMSHStudioSpec::State SpecState);
+/**
+ * Reset des calculs effectus pour la spec
+ */  
+  virtual void ResetComputation ();
+/**
+ * Recherche d&#x27;un attribut
+ */  
+  CATMSHStSpecAttribute * FindAttribute( const CATUnicodeString &amp;iName ) const;
+/**
+ * Recherche ou Creation d&#x27;un attribut
+ */  
+  CATMSHStSpecAttribute * FindOrCreateAttribute( const CATUnicodeString &amp;iName , CATMSHStudioSpec::AttType iType);
+/**
+ * Ajout d&#x27;un attribut
+ */  
+  HRESULT AddAttribute( CATMSHStSpecAttribute * Attribute);
+/**
+ * Suppression d&#x27;un attribut
+ */  
+  HRESULT DeleteAttribute( const CATUnicodeString &amp;iName );
+/**
+ * Migration des donnees de la spec
+ */  
+  virtual HRESULT MigrateData ( int StreamVersion );
+/**
+ * Destruction de la spec
+ */  
+  virtual HRESULT Remove ();
+/**
+ * Lecture de la liste des partitions supports
+ */  
+  HRESULT ReadPartitionsSupport(CATMSHStListOfPartitions &amp;Parts);
+/**
+ * Explicitation des partitions
+ */  
+  virtual HRESULT ComputePartitions();
+
+  // Donnes membres
+
+  CATMSHStSpecAttribute  **   _Attributes;
+  CATIMSHStudio          *    _Studio;
+  CATMSHStGeometryLink   *    _GeometryLink;
+  CATMSHStSpecCompatibility * _Compatibility;
+  CATEMSHStudioSpecInstance * _InstanceListener;
+  unsigned int           *    _PartitionsTag;
+  unsigned int           *    _PartitionsStamps;
+  unsigned int                _AttributesStamp;
+  unsigned int                _InternalTag;
+  unsigned int                _ExternalTag;
+  unsigned int                _NbPartitions;
+  unsigned short              _NbAttributes;
+  unsigned char               _WithImpact;
+  unsigned char               _Perpetuity;
+  CATIMSHStudioSpec::State    _State;
+
+private:
+
+/**
+ * Constructeur recopie
+ */
+  CATMSHStudioSpec(const CATMSHStudioSpec &amp; Source );
+};
+//
+//=============================================================================
+// Lecture de l&#x27;tat
+//=============================================================================
+//
+inline CATIMSHStudioSpec::State CATMSHStudioSpec::GetState () 
+{
+  if ( _State==CATMSHStudioSpec::Unknown ) ComputeState(_State);
+  return _State;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMSHStudioServices.html">← 上一页: CATMSHStudioServices.h</a></div>
+        <div><a href="CATMSHStudioSpecEdit.html">下一页: CATMSHStudioSpecEdit.h →</a></div>
+    </div>
+</body>
+</html>

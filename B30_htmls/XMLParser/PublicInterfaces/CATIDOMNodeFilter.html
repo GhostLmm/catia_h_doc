@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATIDOMNodeFilter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATIDOMNodeFilter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMNode.html">← 上一页: CATIDOMNode.h</a></div>
+        <div><a href="CATIDOMNodeIterator.html">下一页: CATIDOMNodeIterator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#ifndef CATIDOMNodeFilter_h
+#define CATIDOMNodeFilter_h
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+class CATIDOMNode_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATIDOMNodeFilter;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATIDOMNodeFilter ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+
+
+/**
+ * Interface for filters objects that know how to &quot;filter out&quot; nodes. If a 
+ * @href CATIDOMNodeIterator or @href CATIDOMTreeWalker is given a 
+ * @href CATIDOMNodeFilter, it applies the filter before it returns the next 
+ * node. If the filter says to accept the node, the traversal logic returns 
+ * it; otherwise, traversal looks for the next node and pretends that the 
+ * node that was rejected was not there.
+ * &lt;p&gt;The DOM does not provide any filters. @href CATIDOMNodeFilter is just an 
+ * interface that users can implement to provide their own filters. 
+ * &lt;p&gt;@href CATIDOMNodeFilter instances do not need to know how to traverse from node 
+ * to node, nor do they need to know anything about the data structure that 
+ * is being traversed. This makes it very easy to write filters, since the 
+ * only thing they have to know how to do is evaluate a single node. One 
+ * filter may be used with a number of different kinds of traversals, 
+ * encouraging code reuse.
+ * &lt;p&gt;See also the &lt;a href=&#x27;http://www.w3.org/TR/2000/REC-DOM-Level-2-Traversal-Range-20001113&#x27;&gt;Document Object Model (DOM) Level 2 Traversal and Range Specification&lt;/a&gt;.
+ */
+
+class ExportedByXMLParserItf CATIDOMNodeFilter: public CATBaseUnknown {
+	CATDeclareInterface;
+
+	public:
+
+		/**
+		 * Constants returned by @href #AcceptNode
+		 *
+		 * @param FILTER_ACCEPT
+		 * Accept the node. Navigation methods defined for 
+		 * @href CATIDOMNodeIterator or @href CATIDOMTreeWalker will return this 
+		 * node.
+		 * @param FILTER_REJECT
+		 * Reject the node. Navigation methods defined for 
+		 * @href CATIDOMNodeIterator or @href CATIDOMTreeWalker will not return 
+		 * this node. For @href CATIDOMTreeWalker, the children of this node 
+		 * will also be rejected. &lt;tt&gt;NodeIterators&lt;/tt&gt; treat this as a 
+		 * synonym for &lt;tt&gt;FILTER_SKIP&lt;/tt&gt;.
+		 *
+		 * @param FILTER_SKIP
+		 * Skip this single node. Navigation methods defined for 
+		 * @href CATIDOMNodeIterator or @href CATIDOMTreeWalker will not return 
+		 * this node. For both @href CATIDOMNodeIterator and 
+		 * @href CATIDOMTreeWalker, the children of this node will still be 
+		 * considered. 
+		 */
+		enum FilterAction { 
+			FILTER_ACCEPT                  = 0,
+			FILTER_REJECT                  = 1,
+ 			FILTER_SKIP                    = 2
+		};
+
+
+		/**
+		 * Tests whether a specified node is visible in the logical view of a 
+		 * &lt;tt&gt;CATIDOMTreeWalker&lt;/tt&gt; or &lt;tt&gt;CATIDOMNodeIterator&lt;/tt&gt;. This function 
+		 * will be called by the implementation of @href CATIDOMTreeWalker and 
+		 * @href CATIDOMNodeIterator ; it is not normally called directly from 
+		 * user code. (Though you could do so if you wanted to use the same 
+		 * filter to guide your own application logic.)
+		 * @param iNode
+		 * The node to check to see if it passes the filter or not.
+		 * @param oAccepted
+		 * a constant to determine whether the node is accepted, 
+		 *   rejected, or skipped, as defined above.
+		 */
+		virtual HRESULT AcceptNode(
+			const CATIDOMNode_var &amp; iNode, 
+			FilterAction &amp; oAccepted) = 0;
+};
+CATDeclareHandler(CATIDOMNodeFilter, CATBaseUnknown);
+
+#endif // CATIDOMNodeFilter_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMNode.html">← 上一页: CATIDOMNode.h</a></div>
+        <div><a href="CATIDOMNodeIterator.html">下一页: CATIDOMNodeIterator.h →</a></div>
+    </div>
+</body>
+</html>

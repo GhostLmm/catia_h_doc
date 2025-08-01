@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTPSInterfaces/PublicInterfaces/CATTPSToleranceZoneForm.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTPSInterfaces/PublicInterfaces/CATTPSToleranceZoneForm.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTPSToleranceValueType.html">← 上一页: CATTPSToleranceValueType.h</a></div>
+        <div><a href="CATTPSTypeWithDRF.html">下一页: CATTPSTypeWithDRF.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTPSToleranceZoneForm_H
+#define CATTPSToleranceZoneForm_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Enum for Tolerance Zone Form values.
+ *@param LineSegment:
+ *   Line zone defined by straight line segment.
+ *@param SurfaceDefinedByDisc:
+ *   Surface zone defined by a disc (inside area of a circle).
+ *@param SurfaceDefinedByCircularAnnulus:
+ *   Surface zone defined by a circular annulus (area between 2 concentric circles).
+ *@param SurfaceDefinedByStraightPlanarStrip:
+ *   Surface zone defined by a straight planar strip (area between 2 parallel straight lines).
+ *@param SurfaceGeneratedByLineShift:
+ *   Surface zone defined by the 2 lines enveloping all the same diameters circles the centers of which are situated on a given line (area between 2 lines).
+ *@param SurfaceGeneratedByCircleShift:
+ *   Cylindrical surface zone defined by the shift of a circle in a direction that is perpendicular to the plane of the circle.
+ *@param VolumeDefinedByCylinder:
+ *   Inside volume zone of a cylinder.
+ *@param VolumeDefinedByCylindricalAnnulus:
+ *   Volume zone defined by a cylindrical annulus (volume between 2 coaxial cylinders).
+ *@param VolumeDefinedBySphere:
+ *   Inside volume zone of a sphere.
+ *@param VolumeDefinedByRectangularPrism:
+ *   Inside volume zone of a rectangular section prism.
+ *@param VolumeGeneratedByPlaneShift:
+ *   Inside volume zone defined by a plan shift (volume between 2 parallel planes).
+ *@param VolumeGeneratedByDiscShift:
+ *   Volume zone defined by the shift of a disc in a direction that is perpendicular to the plane of the disc (inside volume zone of a cylinder).
+ *@param VolumeGeneratedBySurfaceShift:
+ *   Volume zone defined by the 2 surfaces enveloping all the same diameters spheres the centers of which are situated on a given surface (inside volume of the 2 surfaces).
+ *@param VolumeDefinedBySphericalAnnulus:
+ *   Volume zone defined by a spherical annulus (volume between 2 concentric spheres).
+ *@param VolumeGeneratedBy2PerpendicularPlaneShift:
+ *   Inside volume zone of a rectangular section prism.
+ *@param VolumeDefinedByNPlaneShift:
+ *   Set of n inside volume zones defined by the shift of n planes (union volume of the volumes between n couples of parallel planes).
+ *@param VolumeDefinedByNCircles:
+ *   Set of n surface zones defined by n same diameters discs (union surface of the inside areas of n circles).
+ *@param VolumeDefinedByNSpheres:
+ *   Set of n inside volume zones of n spheres (union volume of the inside volumes of n spheres).
+ *@param VolumeDefinedByNLines:
+ *   Set of n line zones defined by n same length straight line segments (union line of n straight line segments).
+ *@param VolumeDefinedByNCylinders
+ *   Set of n inside volume zones of n cylinders (union volume of the inside volumes of n cylinders).
+ */
+enum CATTPSToleranceZoneForm
+{
+  CATTPSTZFUnsupported = -1,
+  CATTPSTZFNotDefined = 0,
+  CATTPSTZFLineSegment = 1,
+  CATTPSTZFSurfaceDefinedByDisc = 2,
+  CATTPSTZFSurfaceDefinedByCircularAnnulus = 3,
+  CATTPSTZFSurfaceDefinedByStraightPlanarStrip = 4,
+  CATTPSTZFSurfaceGeneratedByLineShift = 5,
+  CATTPSTZFVolumeDefinedByRectangularPrism = 6,
+  CATTPSTZFVolumeDefinedByCylinder = 7,
+  CATTPSTZFVolumeDefinedByCylindricalAnnulus = 8,
+  CATTPSTZFVolumeGeneratedByPlaneShift = 9,
+  CATTPSTZFVolumeGeneratedBySurfaceShift = 10,
+  CATTPSTZFVolumeDefinedBySphere = 11,
+  CATTPSTZFSurfaceGeneratedByCircleShift = 12,
+  CATTPSTZFVolumeGeneratedByDiscShift = 13,
+
+  CATTPSTZFVolumeDefinedBySphericalAnnulus = 14,
+  CATTPSTZFVolumeGeneratedBy2PerpendicularPlaneShift = 15,
+  CATTPSTZFVolumeDefinedByNPlaneShift = 16,
+  CATTPSTZFVolumeDefinedByNCircles = 17,
+  CATTPSTZFVolumeDefinedByNSpheres = 18,
+  CATTPSTZFVolumeDefinedByNLines = 19,
+  CATTPSTZFVolumeDefinedByNCylinders = 20
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTPSToleranceValueType.html">← 上一页: CATTPSToleranceValueType.h</a></div>
+        <div><a href="CATTPSTypeWithDRF.html">下一页: CATTPSTypeWithDRF.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMAPSInterfaces/PublicInterfaces/CATISPPItemMgt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DMAPSInterfaces/PublicInterfaces/CATISPPItemMgt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPItem.html">← 上一页: CATISPPItem.h</a></div>
+        <div><a href="CATISPPLibTabSettingAtt.html">下一页: CATISPPLibTabSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISPPItemMgt_H_
+#define CATISPPItemMgt_H_
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;ProcessInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATISPPItem.h&quot;
+#include &quot;CATISPPProductIO.h&quot;
+
+//Monocodes V5Rn
+#include &quot;CATIAV5Level.h&quot;
+
+#include &quot;CATISPPActivitySpecification.h&quot;
+
+class CATICSPState_var ;
+class CATICkeParm_var;
+
+#define NULL_string CATUnicodeString()
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByProcessInterfaces IID IID_CATISPPItemMgt ;
+#else
+extern &quot;C&quot; const IID IID_CATISPPItemMgt ;
+#endif
+
+
+/**
+* Interface to manage the association of Items as Parts, Welds, etc  with Activity Specifications.
+*/
+
+class ExportedByProcessInterfaces CATISPPItemMgt: public CATBaseUnknown 
+{
+    CATDeclareInterface ;
+
+public:
+
+#define any_item_kind default_item_kinds
+    enum CATSPPAssignmentType { default_item_kinds = 0,
+                                processes = 1,
+                                firstprocesses = 2,
+                                removes = 4,
+                                attachesresource = 8,
+                                detachesresource = 16,
+                                partiallyconsumes = 32,
+                                completelyconsumes = 64,
+                                productviewpoint = 128,
+                                productvisualization = 256,
+                                all_item_kinds = -1 };
+
+    /**
+    * Creates a specification for an Activity to work on a specific item.
+    * @param item
+    * 	&lt;tt&gt; Handler on the Item Interface to be added to the new Activity &lt;/tt&gt;
+    * @return
+    * 	Handler on the the newly created Activity Specification Interface.
+    */
+    virtual CATBaseUnknown_var 	AddItem(const CATBaseUnknown_var &amp; item ) = 0;
+
+    /**
+    * Creates a specification for an Activity to work on a specific item.
+    * @param item
+    * 	&lt;tt&gt; Handler on the Item Interface to be added to the new Activity &lt;/tt&gt;
+    * @param iUpdate
+    * 	&lt;tt&gt; Determines if assigned item can be updated or not.&lt;/tt&gt;
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment&lt;/tt&gt;
+    * @return
+    * 	Handler on the the newly created Activity Specification Interface.
+    */
+    virtual CATBaseUnknown_var AddItem(const CATBaseUnknown_var &amp; item,
+        const int iUpdate,
+        const CATSPPAssignmentType iType = processes) = 0;
+
+    /**
+    * @nodoc
+    */
+    virtual void AddActivitySpecification(const CATICkeParm_var &amp; iTargetState,
+        const CATISPPItem_var &amp; iItem = NULL_var,
+        const CATISPPProductIO_var &amp; iProductInput = NULL_var,
+        const CATUnicodeString &amp; iItemType = NULL_string ) = 0;
+
+    /**
+    * Creates a specification for an Activity to work on a specific item.
+    * @param iTargetState
+    * 	&lt;tt&gt; Handler to CATICkeParm &lt;/tt&gt;
+    * @param iItem
+    * 	&lt;tt&gt; Handler to the item to be assigned &lt;/tt&gt;
+    * @param iProductInput
+    * 	&lt;tt&gt; Product Input created for the item &lt;/tt&gt;
+    * @param iItemType
+    &lt;tt&gt; Item type string &lt;/tt&gt;
+    * @param iUpdate
+    &lt;tt&gt; 0 or 1 ( Default value:0 used for all item assignments )- Used to support product flow &lt;/tt&gt;
+    * @param iType
+    &lt;tt&gt; Assignment type &lt;/tt&gt;
+    */
+    virtual void AddActivitySpecification(const CATICkeParm_var &amp; iTargetState,
+        const CATISPPItem_var &amp; iItem, 
+        const CATISPPProductIO_var &amp; iProductInput,
+        const CATUnicodeString &amp; iItemType,
+        const int iUpdate,
+        const CATSPPAssignmentType iType = processes) = 0;
+
+    /**
+    * @nodoc
+    */
+    virtual void AddActivitySpecification(const CATICSPState_var &amp; iTargetState, 
+        const CATISPPItem_var &amp; iItem = NULL_var,
+        const CATISPPProductIO_var &amp; iProductInput = NULL_var,
+        const CATUnicodeString &amp; iItemType = NULL_string ) = 0;
+
+    /**
+    * @nodoc
+    */
+    virtual void AddActivitySpecification(const CATICSPState_var &amp; iTargetState,
+        const CATISPPItem_var &amp; iItem,
+        const CATISPPProductIO_var &amp; iProductInput,
+        const CATUnicodeString &amp; iItemType,
+        const int iUpdate) = 0;
+
+    /**
+    * Removes the Specifications of an Activity, which were working on a specific Item.
+    * @param iItem
+    * 	&lt;tt&gt; Handler on the Item Interface to be removed from the Activity Specifications &lt;/tt&gt;
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment&lt;/tt&gt;
+    * @return
+    *    Warning: returns 0 if succeded only since CXR3SP4 ( before, returns 1 when succeded ).
+    */
+    virtual int RemoveItem(const CATBaseUnknown_var &amp; item,
+        const CATSPPAssignmentType iType = all_item_kinds) = 0;
+
+    /**
+    * @nodoc
+    * Removes the specified Specifications of an Activity.
+    * @param iActivitySpec
+    * 	&lt;tt&gt; Handler on the Activity Specification Interface to be removed from the Activity Specifications &lt;/tt&gt;
+    */
+    virtual int RemoveActivitySpecification(const CATISPPActivitySpecification_var &amp; iActivitySpec) = 0;
+
+    /**
+    * Returns the number of Items (in fact the number of Specifications) on an Activity.
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment&lt;/tt&gt;
+    */
+    virtual int GetNumberOfItems(const CATSPPAssignmentType iType = default_item_kinds) = 0;
+
+    /**
+    * Returns a list of Activity Specifications working on a specific type of Items.
+    * @param type
+    * 	&lt;tt&gt; type of the items to be searched in the Specifications of the Activities &lt;/tt&gt;
+    * @param AssignmentMode
+    *   &lt;tt&gt; AssignmentMode used to Assign the Item&lt;/tt&gt;
+    * @return
+    * 	List of Handlers on Specifications of the Activity
+    */
+    virtual CATListValCATBaseUnknown_var * GetItems(const CATUnicodeString &amp; type = &quot;Item&quot;,
+        const CATSPPAssignmentType AssignmentMode = default_item_kinds) = 0;
+
+    /**
+    * @nodoc
+    */
+
+    //AKA : Temporarily added to avoid build errors.. will be deleted soon. Use the next service.
+    virtual CATListValCATBaseUnknown_var GetActivitySpecification(const CATISPPItem_var &amp; iItem,
+        const CATISPPProductIO_var &amp; iProductInput,
+        const CATUnicodeString &amp; iItemType) = 0;
+
+    virtual CATListValCATBaseUnknown_var GetActivitySpecification(const CATISPPItem_var &amp; iItem = NULL_var,
+        const CATISPPProductIO_var &amp; iProductInput = NULL_var,
+        const CATSPPAssignmentType iAssignmentType = all_item_kinds) = 0;
+
+
+    /**
+    * Determines whether an item is assigned on the activity.
+    * @param iItem
+    *		concerned item.
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment&lt;/tt&gt;
+    */
+    virtual HRESULT HasItemAssigned(const CATISPPItem * iItem,
+        const CATSPPAssignmentType iType = processes) = 0;
+
+    /**
+    * Lists all sub-activities which have a given item assigned.
+    * @param iItem
+    *		concerned item.
+    * @param oListOfSubActivities
+    *       list of concerned sub-activities.
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment&lt;/tt&gt;
+    */
+    virtual HRESULT SubActivitiesForItem(const CATISPPItem * iItem,
+        CATListValCATBaseUnknown_var * oListOfSubActivities,
+        const CATSPPAssignmentType iType = processes) = 0;
+
+    /**
+    * Creates a list of specifications for an Activity to work on a list of corresponding items.
+    * @param iLItems
+    * 	&lt;tt&gt; The list of handles to items to be added to the new Activity &lt;/tt&gt;
+    * @param iUpdate
+    * 	&lt;tt&gt; Determines if assigned items can be updated or not.&lt;/tt&gt;
+    * @param iOneType
+    * 	&lt;tt&gt; If the following parameter is NULL or its size not equal to that of the first parameter,
+    *        then this is the type of the Assignment, which is always &quot;processes&quot; if default &lt;/tt&gt;
+    * @param iLAssignmentType
+    * 	&lt;tt&gt; If it is not NULL and its size equals to that of the first parameter, then this determines
+    *        the types of the Assignments &lt;/tt&gt;
+    * @return
+    * 	The list of handles to the newly created Activity Specifications.
+    */
+    virtual CATListValCATBaseUnknown_var AddMultipleItems(
+                    const CATListValCATBaseUnknown_var &amp; iLItems,
+                    const int iUpdate = 0,
+                    const CATSPPAssignmentType iOneType = processes,
+                    const CATListOfInt * iLAssignmentTypes = NULL) = 0;
+
+    /**
+    * Creates a specification for an Activity to work on a specific item,
+    * and returns the created activity specification
+    * @param iTargetState
+    * 	&lt;tt&gt; Handle to CATICkeParm &lt;/tt&gt;
+    * @param iItem
+    * 	&lt;tt&gt; Handle to the item to be assigned &lt;/tt&gt;
+    * @param iProductInput
+    * 	&lt;tt&gt; Product Input created for the item &lt;/tt&gt;
+    * @param iItemType
+    *   &lt;tt&gt; Item type string &lt;/tt&gt;
+    * @param iUpdate
+    *   &lt;tt&gt; 0 or 1 ( Default value:0 used for all item assignments )- Used to support product flow &lt;/tt&gt;
+    * @param iType
+    *   &lt;tt&gt; Assignment type &lt;/tt&gt;
+    * @param withNotif
+    *   &lt;tt&gt; If 1, a notification will be sent, at the end of the creation, to propogate the
+    *        activity&#x27;s modify event. If 0, it will not be sent. &lt;/tt&gt;
+    * @return
+    * 	Handle on the the newly created Activity Specification Interface.
+    */
+    virtual CATBaseUnknown_var CreateActivitySpecification(const CATICkeParm_var &amp; iTargetState,
+        const CATISPPItem_var &amp; iItem = NULL_var, 
+        const CATISPPProductIO_var &amp; iProductInput = NULL_var,
+        const CATUnicodeString &amp; iItemType = NULL_string,
+        const int iUpdate = 0,
+        const CATSPPAssignmentType iType = processes,
+        int withNotif = 1) = 0;
+
+    /**
+    * Creates a list of specifications for an Activity to work on a list of corresponding items.
+    * @param iTargetState
+    * 	&lt;tt&gt; handle to CATICkeParm &lt;/tt&gt;
+    * @param iLItems
+    * 	&lt;tt&gt; list of handles to the items to be assigned &lt;/tt&gt;
+    * @param iLProductInput
+    * 	&lt;tt&gt; list of Product Input created for the items &lt;/tt&gt;
+    * @param iItemType
+    *   &lt;tt&gt; the Item type string &lt;/tt&gt;
+    * @param iUpdate
+    *   &lt;tt&gt; 0 or 1 ( Default value:0 used for all item assignments )- Used to support product flow &lt;/tt&gt;
+    * @param iOneType
+    * 	&lt;tt&gt; If the following parameter is NULL or its size not equal to that of the first parameter,
+    *        then this is the type of the Assignment, which is always &quot;processes&quot; if default &lt;/tt&gt;
+    * @param iLAssignmentType
+    * 	&lt;tt&gt; If it is not NULL and its size equals to that of the first parameter, then this determines
+    *        the types of the Assignments &lt;/tt&gt;
+    * @return
+    * 	The list of handles to the newly created Activity Specifications.
+    */
+    virtual CATListValCATBaseUnknown_var AddMultipleActSpecs(
+                    const CATICkeParm_var &amp; iTargetState, 
+                    const CATListValCATBaseUnknown_var &amp; iLItems, 
+                    const CATListValCATBaseUnknown_var &amp; iLProductInput,
+                    const CATUnicodeString &amp; iItemType,
+                    const int iUpdate = 0,
+                    const CATSPPAssignmentType iOneType = processes,
+                    const CATListOfInt * iLAssignmentTypes = NULL) = 0;
+
+    /**
+    * Removes the Specifications of an Activity, which were assigned to work on a list of specific Items.
+    * @param iLItems
+    * 	&lt;tt&gt; The list of handles to the items to be removed from the Activity Specifications &lt;/tt&gt;
+    * @param iType
+    * 	&lt;tt&gt; Determines the type of the Assignment, which will be &quot;processes&quot; if NULL &lt;/tt&gt;
+    * @return
+    *    returns 1 if succeeded
+    */
+    virtual int RemoveMultipleItems(const CATListValCATBaseUnknown_var &amp; iLItems,
+        const CATSPPAssignmentType iType = all_item_kinds) = 0;
+
+    /**
+    * Removes the list of specified Specifications of an Activity.
+    * @param iLActivitySpecs
+    * 	&lt;tt&gt; The list of handles to the activity specifications to be removed from the activity &lt;/tt&gt;
+    */
+    virtual int RemoveMultipleActSpecs(const CATListValCATBaseUnknown_var &amp; iLActivitySpecs) = 0;
+
+};
+
+CATDeclareHandler( CATISPPItemMgt, CATBaseUnknown);
+#endif
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPItem.html">← 上一页: CATISPPItem.h</a></div>
+        <div><a href="CATISPPLibTabSettingAtt.html">下一页: CATISPPLibTabSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

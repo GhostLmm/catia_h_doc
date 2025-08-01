@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATIForeignSurface.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATIForeignSurface.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIForeignPCurve.html">← 上一页: CATIForeignPCurve.h</a></div>
+        <div><a href="CATIsoParameter.html">下一页: CATIsoParameter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIForeignSurface_h
+#define CATIForeignSurface_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATSurface.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATIForeignSurface ;
+#else
+extern &quot;C&quot; const IID IID_CATIForeignSurface ;
+#endif
+class CATForeignSurfaceData;
+class CATMathVector2D;
+
+/**
+ * Interface representing the  foreign bi-parameterized
+ * geometric elements. 
+ * &lt;br&gt;A foreign surface is introduced into CGM by filling the CATIForeignSurface object data
+ * with a CATForeignSurfaceData. Then, it is automatically integrated into CGM, and
+ * can be used as any CATSurface by the operators and the topology.
+ * To create your own surface type, you have to derive the CATForeignSurfaceData
+ * class, and re-write the methods that are associated with.
+ * &lt;br&gt; A CATIForeignSurface object is create through the method 
+ *&lt;tt&gt;CATGeoFactory::CreateForeignSurface&lt;/tt&gt; and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method.
+ * @see CATForeignSurfaceData
+ */
+class ExportedByCATGMGeometricInterfaces CATIForeignSurface : public CATSurface
+{
+  CATDeclareInterface;
+
+public:
+/**
+ * Retrieves a pointer to the data of &lt;tt&gt;this&lt;/tt&gt; CATIForeignSurface.
+ * @return
+ * A pointer to the data. As part of the CATIForeignSurface, it must not be deleted. 
+ */
+  virtual CATForeignSurfaceData * GetData() const = 0;
+
+/**
+ * Changes the maximum limitations of &lt;tt&gt;this&lt;/tt&gt; CATIForeignSurface.
+ * @param iRequiredParamExtension
+ * The value of the extension.
+ * &lt;ul&gt;
+ * &lt;li&gt;if &lt;tt&gt;iRequiredParamExtension.GetX() &gt; 0&lt;/tt&gt;, Umax is expected to increase by this value,
+ * &lt;li&gt;if &lt;tt&gt;iRequiredParamExtension.GetY() &lt; 0 &lt;/tt&gt;, Vmin is expected to decrease,
+ * &lt;li&gt;if null, no change is required in the related direction.
+ * &lt;/ul&gt;
+ * @param ioActualExtension
+ * If &lt;tt&gt;ioActualExtension&lt;/tt&gt; is NULL, no information on actual extrapolation is required.
+ */
+  virtual CATBoolean Extrapolate(const CATMathVector2D &amp; iRequiredParamExtension,
+                                       CATMathVector2D * ioActualExtension = NULL  ) = 0 ;
+
+
+};
+  
+CATDeclareHandler(CATIForeignSurface,CATSurface);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIForeignPCurve.html">← 上一页: CATIForeignPCurve.h</a></div>
+        <div><a href="CATIsoParameter.html">下一页: CATIsoParameter.h →</a></div>
+    </div>
+</body>
+</html>

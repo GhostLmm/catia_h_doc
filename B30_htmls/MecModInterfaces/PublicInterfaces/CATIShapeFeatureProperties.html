@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIShapeFeatureProperties.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIShapeFeatureProperties.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIShapeFeatureBody.html">← 上一页: CATIShapeFeatureBody.h</a></div>
+        <div><a href="CATIUpdateError.html">下一页: CATIUpdateError.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIShapeFeatureProperties_h
+#define CATIShapeFeatureProperties_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4 CATMmrShapeFeaturePropertiesAdapter
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+ 
+class CATListValCATISpecObject_var;
+#include &quot;CATMathPlane.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIShapeFeatureProperties;
+#else
+extern &quot;C&quot; const IID IID_CATIShapeFeatureProperties;
+#endif
+
+
+/**
+ * Interface to retrieve characteristics of a solid feature.
+ * &lt;b&gt;Role&lt;/b&gt;: A solid feature is a geometrical feature which references 3D geometry.
+ * There are two kinds of solid feature: the form and the contextual feature.
+ * &lt;br&gt;&lt;br&gt;&lt;b&gt;Form versus Contextual Feature &lt;/b&gt;
+ * &lt;p&gt;A Pad, a Pocket, a Groove, are different features: some add matter, while some remove it. 
+ * However, they share a common point: they have a form and are therefore called form features. 
+ * What is that?&lt;/p&gt;
+ * &lt;p&gt;Take a Groove for instance. From its input parameters, a Curve and a closed Sketch, 
+ * one can easily derive a shape (a Form) by sliding the Sketch along the Curve.
+ * The resulting solid has then to be operated with the Part&#x27;s shape as it exists prior to 
+ * the definition of the Groove, by removing matter (thanks to a boolean remove operation in 
+ * that case).&lt;/p&gt;
+ * &lt;p&gt;The fact that those features can be applied by first computing their form and 
+ * then operating the form with the current shape of the set defines the form 
+ * feature. The form of such a feature is sometimes called its footprint.&lt;/p&gt;
+ * In contrast to form features, contextual features cannot be applied 
+ * by computing a standalone footprint first, and operating it with the current set in a 
+ * second step. Fillets, Drafts, and generally all Dress up Features fall into this category, 
+ * because their shape is determined not only by their own input parameters, but also by the local
+ * topology of the target body (hence their name). Contextual features do not have a footprint.&lt;/p&gt;
+ * &lt;p&gt;This interface enables you to retrieve (or to define) the type of the solid feature thanks to the 
+ * two first methods (@href #IsAContextualFeature and @href #IsAFreeFormFeature ) which are 
+ * of course exclusives (except for the Body feature, see below the section dedicated to this
+ * feature, and the features representing the boolean operations)&lt;/p&gt;
+ * &lt;b&gt;Polarity of the Solid Feature&lt;/b&gt;
+ * &lt;p&gt;It must be noticed that the fact that some features add and some others remove matter from 
+ * the Part is not linked to the Form/Contextual classification. A Draft is a Contextual Feature
+ * that adds matter, while a Chamfer, still contextual, removes it. A Shaft and a Pocket are 
+ * Form Features that create and remove matter respectively.
+ * The @href #GetPolarity method enables you to retrieve (or to define) the intrinsic polarity of 
+ * a solid feature.&lt;/p&gt;
+ * &lt;b&gt;Body Feature Implementation&lt;/b&gt;
+ * &lt;p&gt;This interface is implemented on the Body feature. In this case, only the
+ * @href #GetPolarity method is valid.
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CAN be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page.
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ * @see CATIShapeFeatureBody, CATIMechanicalTool
+ */
+class ExportedByMecModItfCPP CATIShapeFeatureProperties : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+ public:
+
+/**
+ * Returns if the current solid feature is contextual.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to know if the solid feature is a contextual feature or
+ * not. 
+ *
+ * @return
+ *  An integer value.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;&lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature is contextual.
+ *   &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature is not contextual.
+ * &lt;/ul&gt;
+ * For the features representing a boolean operation ( Add, Assemble, Remove, Intersect and
+ * Union Trim) the value is 0.
+ */
+  virtual int  IsAContextualFeature ( )  const  =0 ;
+
+/**
+ * Returns if the current solid feature is a form feature.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to know if the solid feature is a form feature or
+ * not. 
+ *
+ * @return
+ *  An integer value.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *      &lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature is a form feature.
+ *      &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature is not a form feature.
+ *   &lt;/ul&gt;
+ * For the features representing a boolean operation ( Add, Assemble, Remove, Intersect and
+ * Union Trim) the value is 0.
+ */
+  virtual int  IsAFreeFormFeature ( )  const  =0 ;
+
+/**
+  * Returns the polarity of the current solid feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the polarity of the solid feature. The polarity 
+  * of a feature enables you to know if the feature adds or removes matter. But this method 
+  * returns the intrinsic polarity  of the feature. In other words, for a Pad for example, 
+  * this method always returns Add, even if the Pad removes matter. Consider the case where the Pad
+  * is inside a Body feature which contains at first a Hole, the form of the Pad will be removed from
+  * the hole.
+  * @return
+  * The returned values depends on the feature.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  * &lt;ul&gt;
+  * &lt;li&gt;&lt;b&gt;Body&lt;/b&gt;: ToolAdd or ToolRemove&lt;/li&gt;
+  * &lt;br&gt;The Body polarity is the polarity of its first activated (@href CATIMechanicalProperties ) 
+  * solid feature. 
+  * &lt;li&gt;&lt;b&gt;Assemble&lt;/b&gt; boolean operation: EltAdd or EltRemove&lt;/li&gt;
+  * &lt;br&gt;The polarity of the Assemble feature is the polarity of its operated body 
+  * (@href CATIPartRequest )
+  * &lt;li&gt;&lt;b&gt;Add&lt;/b&gt; boolean operation: EltAdd&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Remove&lt;/b&gt; boolean operation: EltRemove&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Intersect&lt;/b&gt; boolean operation: EltIntersect (== Add)&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Other solid feature&lt;/b&gt;: Add, EltAdd, Remove or EltRemove
+  * &lt;/ul&gt;
+  */
+  virtual CATUnicodeString GetPolarity ( )  const  =0 ;
+
+/**
+ * Returns specific sketches of the current solid feature.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns specific referenced sketches of the solid feature. These sketches 
+ * will be used in two cases:
+ *  &lt;ul&gt;
+ *  &lt;li&gt;Feature deletion: when the feature will be deleted, if the &quot;Delete referenced sketches&quot; 
+ * ckeck button is
+ *  activated in Tools/Options, the given sketches will be also deleted.&lt;/li&gt;
+ *  &lt;li&gt;Feature copy: when the feature will be copied, the given sketches will be also copied&lt;/li&gt;
+ *  &lt;/ul&gt;
+ */
+  virtual CATLISTV(CATISpecObject_var) GiveMeYourFavoriteSketches() const = 0 ;
+
+/** 
+ * Returns all the BRep specifications of the current solid feature.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method returns all the BRep (@href CATIFeaturize ) features 
+ * which are specifications of this solid feature.
+ * 
+ */
+  virtual CATLISTV(CATISpecObject_var) GiveMeYourBRepSpecifications()const = 0 ;
+
+/**
+ * @nodoc
+ */
+  virtual int HasAnAxis() const = 0;
+
+/**
+ * @nodoc
+ */
+  virtual int HasAnAxis(CATBaseUnknown_var iElt) const = 0;
+
+/**
+ * @nodoc
+ */
+  virtual CATMathPlane GetBoundingPlane(CATUnicodeString&amp; iSide) const = 0;
+
+/**
+ * Returns if the current solid feature can be patterned.
+ * @return
+ *  An integer value.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;
+ *   &lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature can be patterned.
+ *   &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature cannot be patterned.
+ *   &lt;/ul&gt;
+ */
+  virtual int CanBePatterned() const = 0;
+
+};
+
+CATDeclareHandler(CATIShapeFeatureProperties,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIShapeFeatureBody.html">← 上一页: CATIShapeFeatureBody.h</a></div>
+        <div><a href="CATIUpdateError.html">下一页: CATIUpdateError.h →</a></div>
+    </div>
+</body>
+</html>

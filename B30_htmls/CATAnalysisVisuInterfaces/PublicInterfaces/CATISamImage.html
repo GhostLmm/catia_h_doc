@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImage.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamImage.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnimationOperator.html">← 上一页: CATISamAnimationOperator.h</a></div>
+        <div><a href="CATISamImageAgent.html">下一页: CATISamImageAgent.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamImage_H
+#define CATISamImage_H
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+//
+// CATISamImage : interface designed to modify &quot;images&quot;
+//
+//=============================================================================
+// Octobre 2001 Creation
+//=============================================================================
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATBaseUnknown.h&quot;
+
+// prereqs  System
+#include &quot;CATListOfCATBaseUnknown.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+// prereqs SamVisuIterfaces 
+#include &quot;CATSamVisuTypeName.h&quot;
+class CATISamImageColorMap;
+
+#include &quot;CATSamVisuUUID.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISamImage;
+
+/**
+ * Analysis Images modification.
+ * &lt;b&gt;Role: &lt;/b&gt; Analysis &lt;i&gt;Images&lt;/i&gt; have a default definition.&lt;br&gt; 
+ * But modifications may be done : &lt;br&gt; For example : change the visu,the criteria,the occurrence, 
+ * the axis sytem,...&lt;br&gt;
+ * Query this interface in order to make some changes to an existing &lt;i&gt;Image&lt;/i&gt;.
+ */ 
+
+class ExportedByCATSamVisuUUID CATISamImage : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+  public :
+  
+  /**
+    * Retrieves the list of objects from which the values will be retrieved with the CATICharacCollector interface.
+    * @param oValuesProviders.
+    * the list of CATICharacCollector
+    */
+  virtual HRESULT GetValuesProviders ( CATLISTP(CATBaseUnknown) &amp; oValuesProviders ) = 0;
+
+  /**
+    * Retrieves the list of objects from which the displacements will be retrieved with the CATICharacCollector interface.
+    * @param oDisplacementsProviders.
+    * the list of CATICharacCollector
+    */
+  virtual HRESULT GetDisplacementsProviders ( CATLISTP(CATBaseUnknown) &amp; oDisplacementsProviders ) = 0;
+
+  /**
+    * Retrieves if the image is activated or not.
+    * @param oActivationStatus.
+    * TRUE if the image is activated
+    */
+  virtual HRESULT GetActivationStatus ( CATBoolean &amp; oActivationStatus ) = 0;
+
+  /**
+    * To activate or deactive an image.
+    * @param oActivationStatus.
+    * TRUE if the image is activated
+    */
+  virtual HRESULT SetActivationStatus ( CATBoolean iActivationStatus ) = 0;
+
+  /**
+    * Retrieves if Deformed is ON or OFF.
+    * @param oMode.
+    * the deform mode
+    */
+  virtual HRESULT GetDeformMode ( CATBoolean &amp; oMode ) = 0;
+
+  /**
+    * Sets the Deform ON or OFF.
+    * @param iMode.
+    * the deform mode
+    * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    * &lt;ul&gt;
+    * &lt;li&gt;&lt;tt&gt;Deform ON&lt;/tt&gt; is TRUE.&lt;/li&gt;
+    * &lt;li&gt;&lt;tt&gt;Deform OFF&lt;/tt&gt; is FALSE.&lt;/li&gt; 
+    * &lt;/ul&gt;
+    */
+  virtual HRESULT SetDeformMode ( CATBoolean iMode ) = 0;
+
+  /**
+    * Retrieves the current amplification scale factor.
+    * @param oAmplificationFactor
+    * the amplification scale factor
+    */
+  virtual HRESULT GetDeformCoefficient ( float &amp; oAmplificationFactor ) = 0;
+
+  /**
+    * Retrieves the default amplification scale factor.
+    * @param oDefaultFactor.
+    * the default amplification scale factor
+    */
+  virtual HRESULT GetDefaultCoefficient ( float &amp; oDefaultFactor ) = 0;
+
+  /**
+    * Sets the amplification scale factor.
+    * @param iAmplificationFactor.
+    * the amplification scale factor
+    */
+  virtual HRESULT SetDeformCoefficient ( float iAmplificationFactor ) = 0;
+
+  /**
+    * Retrieves the groups of entities on which the image is computed.
+    * @param oSamGroupList.
+    *   the list of objects that implement the CATISamGroup interface
+    */
+  virtual HRESULT GetSelectionGroup ( CATLISTP(CATBaseUnknown) &amp; oSamGroupList ) = 0;
+
+  /**
+    * Sets the groups of entities on which the image will be computed.
+    * @param oSamGroupList.
+    *   the list of objects that implement the CATISamGroup interface
+    */
+  virtual HRESULT SetSelectionGroup ( const CATLISTP(CATBaseUnknown) &amp; iSamGroupList ) = 0;
+
+  /**
+    * Retrieves all available Visu Types for this image (that is for a given physical type of characteristic). 
+    * Retrieves also the current Visu Type.
+    * @param oVisuTypeName
+    * List of supported Visu Types
+    * @param oNbType
+    * Number of supported Visu Types
+    * @param oCurrentNumber
+    * Position of the current Visu Type in the previous array
+    * @see CATSamVisuTypeName
+    */
+  virtual HRESULT GetAllAvailableVisuTypeNames ( CATSamVisuTypeName * &amp; oVisuTypeName,
+                                                 int &amp;                  oNbType,
+                                                 int &amp;                  oCurrentNumber ) = 0;
+
+  /**
+    * Retrieves the current Visu Type.
+    * @param oVisuTypeName
+    * The current type of visu
+    * @see CATSamVisuTypeName
+    */
+  virtual HRESULT GetVisuTypeName ( CATSamVisuTypeName &amp; oVisuTypeName ) = 0;
+
+  /**
+    * Changes the current Visu Type.
+    * @param iVisuTypeName
+    * The new type of visu
+    * @see CATSamVisuTypeName
+    */
+  virtual HRESULT SetVisuTypeName ( CATSamVisuTypeName iVisuTypeName ) = 0;
+
+  /**
+    * Retrieves all available Criteria for the current visu type. 
+    * Retrieves also the current Criteria.
+    * @param oCriteriaName
+    * List of supported Criteria for the current visu type
+    * @param oNbString
+    * Number of supported Criteria
+    * @param oCurrentNumber
+    * Position of the current Criteria in the previous array
+    */
+  virtual HRESULT GetAllAvailableCriteriaNames ( CATString * &amp; oCriteriaName,
+                                                 int &amp;         onbString,
+                                                 int &amp;         oCurrentNumber ) = 0;
+
+  /**
+    * Retrieves the current Criteria.
+    * @param oCriteriaName
+    * The current Criteria
+    */
+  virtual HRESULT GetCriteriaName ( CATString &amp; oCriteriaName ) = 0;
+
+  /**
+    * Changes the current Criteria.
+    * @param iCriteriaName
+    * The new Criteria
+    */
+  virtual HRESULT SetCriteriaName ( CATString iCriteriaName ) = 0;
+
+  /**
+    * Retrieves the current occurrence number.
+    * (that is for example the mode number in a frequency or buckling analysis)
+    * @param oCurrentNumber
+    */
+  virtual HRESULT GetCurrentOccurrence ( int &amp; oCurrentOccurrence ) = 0;
+
+  /**
+    * Sets the current occurrence number that is for example the mode in a frequency or buckling analysis.
+    * @param iCurrentOccurrence
+    * The occurrence number.
+    */
+  virtual HRESULT SetCurrentOccurrence ( int iCurrentOccurrence ) = 0;
+
+  /**
+    * Retrieves the color map of the image.
+    * @param oColorMap
+    * the color map
+    * @see CATISamImageColorMap
+    */
+  virtual HRESULT GetColorMap ( CATISamImageColorMap * &amp; oColorMap ) = 0;
+
+  /**
+    * Set the color map of the image. This can be used to share color map
+    * between several images.
+    * @param iColorMap
+    * the color map
+    * @see CATISamImageColorMap
+    */
+  virtual HRESULT SetColorMap ( CATISamImageColorMap * iColorMap ) = 0;
+
+  /**
+    * Only useful when the color map is shared between several images.
+    * A copy of the current shared color map is done.
+    */
+  virtual HRESULT UnSetColorMap() = 0;
+
+  /**
+    * Updates the visualization of the image.
+    */
+  virtual HRESULT UpdateDisplay () = 0;
+};
+
+CATDeclareHandler(CATISamImage, CATBaseUnknown);
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnimationOperator.html">← 上一页: CATISamAnimationOperator.h</a></div>
+        <div><a href="CATISamImageAgent.html">下一页: CATISamImageAgent.h →</a></div>
+    </div>
+</body>
+</html>

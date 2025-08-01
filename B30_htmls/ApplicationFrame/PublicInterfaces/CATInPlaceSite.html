@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATInPlaceSite.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATInPlaceSite.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkshop.html">← 上一页: CATIWorkshop.h</a></div>
+        <div><a href="CATListOfCATBaseUnknown.html">下一页: CATListOfCATBaseUnknown.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATInPlaceSite_H_
+#define CATInPlaceSite_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4 CATExtInPlaceSite
+ */
+
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CD0WIN.h&gt;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByCD0WIN IID_CATInPlaceSite;
+#else
+extern &quot;C&quot; const IID IID_CATInPlaceSite;
+#endif
+
+
+/**
+  * Interface to allow ui-activation of embedded objects implementing the 
+  * CATIUIActivate interface.
+  * &lt;b&gt;Role:&lt;/b&gt;
+  * A document contains a hierarchical structure of objects. Some 
+  * of these objects are able to provide a set of commands, called 
+  * a workshop ( see @href CATCmdWorkshop ). Such objects get this ability by 
+  * implementing the @href CATIUIActivate interface,
+  * and these objects are then said to be &lt;b&gt;ui-activable&lt;/b&gt;. An 
+  * ui-activable object whose workshop is displayed is the 
+  * &lt;b&gt;ui-active&lt;/b&gt; object. UI-activation operates on @href CATPathElement
+  * objects which are path from the document&#x27;s
+  * root to an object in the document&#x27;s tree structure.
+  * &lt;br&gt;
+  * The basis of the ui-activation mechanisms lay on three actors :
+  * &lt;ul&gt;
+  * &lt;li&gt;- the @href CATIUIActivate interface implemented by 
+  * ui-activable objects,&lt;/li&gt;
+  * &lt;li&gt;- the &lt;tt&gt;CATInPlaceSite &lt;/tt&gt; interface implemented by site 
+  * objects,&lt;/li&gt;
+  * &lt;li&gt;- the @href CATFrmEditor class that manages the current ui-active
+  * object.&lt;/li&gt;
+  * &lt;/ul&gt;
+  * UI-activation consists of pairs of site / ui-activable objects
+  * managed by the &lt;tt&gt;CATFrmEditor&lt;/tt&gt; class. In order to be ui-activated
+  * (having its workshop displayed on the screen), an ui-activable object
+  * must have a valid site object in its hierarchy. The role of the site
+  * is to accept or block the ui-activation requests coming from the 
+  * subordinates ui-activable objects.
+  * &lt;br&gt;
+  * The &lt;tt&gt;CATInPlaceSite&lt;/tt&gt; methods are called by the ui-activation
+  * manager with respect to the following sequence:
+  * &lt;ul&gt;
+  * &lt;li&gt;&lt;tt&gt;CanInPlaceActivate&lt;/tt&gt; : does the site accept the ui-activation 
+  * request&lt;/li&gt;
+  * &lt;li&gt;&lt;tt&gt;OnInPlaceActivate&lt;/tt&gt; : ui-activation initialization 
+  * notification&lt;/li&gt;
+  * &lt;li&gt;&lt;tt&gt;OnUIActivate&lt;/tt&gt; : workshop display notification&lt;/li&gt;
+  * &lt;li&gt; ... &lt;/li&gt;
+  * &lt;li&gt;&lt;tt&gt;OnInPlaceDeactivate&lt;/tt&gt; : workshop removal notification&lt;/li&gt;
+  * &lt;li&gt;&lt;tt&gt;OnUIDeactivate&lt;/tt&gt; : ui-deactivation completed&lt;/li&gt;
+  * &lt;/ul&gt;
+  * &lt;b&gt;Note:&lt;/b&gt;
+  * Using a subclass of @href CATExtInPlaceSite is mandatory 
+  * recommended when implementing this interface.
+  *
+  * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CANNOT be implemented
+  * using the BOA (Basic Object Adapter).
+  * To know more about the BOA, refer to the CAA Encyclopedia home page.
+  * Click Middleware at the bottom left, then click the Object Modeler tab page.
+  * Several articles deal with the BOA.&lt;/p&gt;
+  */
+class ExportedByCD0WIN CATInPlaceSite: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+  
+  /**
+    * Asks the site whether it accepts a subordinates ui-activable
+    * object&#x27;s ui-activation.
+    * @return
+    *   1 on accept, 0 on reject.
+    */
+  virtual int  CanInPlaceActivate () = 0;
+  
+  /**
+    * Notifies the site that ui-activation will begin.
+    * Called by the ui-activation manager 
+    * @return 
+    *   0 on failure, 1 otherwise.
+    */
+  virtual int  OnInPlaceActivate () = 0;
+  
+  /**
+    * Notifies the site that the ui-active object&#x27;s workshop
+    * is going to be displayed.
+    * Called by the ui-activation manager.
+    * @return 
+    *   0 on failure, 1 otherwise.
+    */
+  virtual int  OnUIActivate () = 0;
+  
+  /**
+    * Notifies the site that ui-activation will end.
+    * Called by the ui-activation manager .
+    * @return 
+    *   0 on failure, 1 otherwise.
+    */
+  virtual int  OnInPlaceDeactivate () = 0;
+  
+  /**
+    * Notifies the site that the ui-active object&#x27;s workshop
+    * is going to be removed.
+    * Called by the ui-activation manager.
+    * @return 
+    *   0 on failure, 1 otherwise.
+    */
+  virtual int  OnUIDeactivate () = 0;
+
+};
+
+// --------------------------------------------------------------------------
+//                             Handler
+// --------------------------------------------------------------------------
+
+CATDeclareHandler (CATInPlaceSite, CATBaseUnknown);
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkshop.html">← 上一页: CATIWorkshop.h</a></div>
+        <div><a href="CATListOfCATBaseUnknown.html">下一页: CATListOfCATBaseUnknown.h →</a></div>
+    </div>
+</body>
+</html>

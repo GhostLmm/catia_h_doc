@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATICGMDistanceMinPtSur.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATICGMDistanceMinPtSur.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDistanceMinPtCrv.html">← 上一页: CATICGMDistanceMinPtCrv.h</a></div>
+        <div><a href="CATICGMDistanceTool.html">下一页: CATICGMDistanceTool.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMDistanceMinPtSur_h_
+#define CATICGMDistanceMinPtSur_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;CATICGMGeoOperator.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATMathDiagnostic.h&quot;
+
+class CATGeoFactory;
+class CATMathPoint;
+class CATPoint;
+class CATPointOnSurface;
+class CATSurParam;
+class CATSurLimits;
+
+extern ExportedByCATGMModelInterfaces IID IID_CATICGMDistanceMinPtSur;
+
+/**
+* Class defining the operator of the minimum distance between
+* a point and a surface.
+*&lt;ul&gt;
+*&lt;li&gt;The CATICGMDistanceMinPtSur operator is created with the &lt;tt&gt;CATCGMCreateDistanceMin&lt;/tt&gt; method and 
+* directly released with the &lt;tt&gt;Release&lt;/tt&gt; method.
+* It is is not streamable. 
+*&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+* mode, the operation is automatically performed at the operator creation. 
+* In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+* mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+* asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. The advanced mode also allows you to
+* run the same operator with different points.
+*&lt;li&gt;In both cases, the result is accessed with specific methods.
+*&lt;/ul&gt;
+*/
+class ExportedByCATGMModelInterfaces CATICGMDistanceMinPtSur: public CATICGMGeoOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMDistanceMinPtSur();
+
+  /**
+	* Returns the parameter of a point realizing the minimum distance
+	* between a surface and a point.
+	*&lt;br&gt;Note that only one point is proposed, even multiple solutions exist.
+	* @return
+	* The parameter on the surface.
+	*/
+  virtual CATSurParam GetSurParam() const = 0;
+
+  /**
+	* Creates a CATPointOnSurface realizing the minimum distance
+	* between a surface and a point.
+	*&lt;br&gt;Note that only one point is proposed, even multiple solutions exist.
+	* @return
+	* The pointer to the created point. A new point is created each time this method is called.
+	* If you do not want to keep the created point, use the @href CATICGMContainer#Remove method.
+	*/
+  virtual CATPointOnSurface *GetPointOnSurface() const = 0;
+
+  /**
+	* Returns the minimum distance between a surface and a point.
+	* @return
+	* The distance.
+	*/
+  virtual double GetDistance() const = 0;
+
+  /**
+	* In the case of SetPointAndInit usage, the algorithm is limited to a maximum number of iterations.
+	* If a maximum number of iterations is reached, the returned point is not fully reconverged but
+	* can be used as a new init, using the SetPointAndInit method.
+	* @return
+	* The diagnostic (CATMathOK or CATMathMaxIteration)
+	*/
+  virtual CATMathDiagnostic GetDiagnostic() const = 0;
+
+  /**
+	* Defines the new domain of the surface to take into account for &lt;tt&gt;this&lt;/tt&gt; operator    
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	* @param iLimits
+	* The limitations on the surface.
+	*/
+  virtual void SetLimits(const CATSurLimits &amp;iLimits) = 0;
+
+  /**
+	* Sets a new point from which the distance to the same surface is evaluated
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	* @param iNewPointToOperate
+	* The pointer to the new point to take into account. 
+	*/
+  virtual void SetPoint(CATPoint *iNewPointToOperate) = 0;
+
+  /**
+	* Sets a new point from which the distance to the same surface is evaluated
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	* @param iNewMathPointToOperate
+	* The new point to take into account. 
+	*/
+  virtual void SetPoint(CATMathPoint &amp;iNewMathPointToOperate) = 0;
+
+  /** 
+	* Sets a new point and an initialization
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	*&lt;br&gt;This is usefull for computing the distance to a new point near a another one, whose CATSurParam
+	* solution is already known. 
+	* @param iNewPointToOperate
+	* The pointer to the new point to take into account. 
+	* @param iSolutionInit
+	* The parameter of a point close from the solution.
+	*/
+  virtual void SetPointAndInit(
+    CATPoint *iNewPointToOperate,
+    const CATSurParam &amp;iSolutionInit) = 0;
+
+  /** 
+	* Sets a new point and an initialization
+	* (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+	*&lt;br&gt;This is usefull for computing the distance to a new point near a another one, whose CATSurParam
+	* solution is already known. 
+	* @param iMathNewPointToOperate
+	* The new point to take into account. 
+	* @param iSolutionInit
+	* The parameter of a point close from the solution.
+	*/
+  virtual void SetPointAndInit(
+    CATMathPoint &amp;iNewPointToOperate,
+    const CATSurParam &amp;iSolutionInit) = 0;
+
+  /**
+	* Defines whether the boundaries are taken into account or not (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode). 
+	* @param iSearchMode
+	* The type of search.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*  &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; the operator is equivalent to an orthogonal
+	* projection which realizes the minimum distance.
+	*&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt; the operator always return a solution realizing minimum
+	* distance even if it is not a projection.&lt;/dl&gt; 
+	*/
+  virtual void SetSearchOnBoundary(CATBoolean iSearchOnBoundary) = 0;
+
+  /**
+	* Tests whether a solution exists in case of an 
+	* excluded boundary seach (&lt;tt&gt;iSearchOnBoundary=FALSE&lt;/tt&gt;).
+	* &lt;br&gt;To use after the run.
+	* @return
+	* The result of the test.
+	*&lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt; the solution exists inside the surface,
+	*(with excluded boundary). 
+	*    &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; the solution exists only on the surface 
+	* boundary.&lt;/dl&gt;
+	*/
+  virtual CATBoolean IsASolution() = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMDistanceMinPtSur(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMDistanceMinPtSur_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDistanceMinPtCrv.html">← 上一页: CATICGMDistanceMinPtCrv.h</a></div>
+        <div><a href="CATICGMDistanceTool.html">下一页: CATICGMDistanceTool.h →</a></div>
+    </div>
+</body>
+</html>

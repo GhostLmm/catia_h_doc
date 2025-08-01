@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATICGMOperator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATICGMOperator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMObjectsPersistency.html">← 上一页: CATICGMObjectsPersistency.h</a></div>
+        <div><a href="CATICGMUnknown.html">下一页: CATICGMUnknown.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMOperator_h_
+#define CATICGMOperator_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGeometricObjects.h&quot;
+#include &quot;CATICGMVirtual.h&quot;
+
+class CATBaseUnknown;
+class CATCGMOutput;
+class CATCGMStream;
+class CATCloneManager;
+class CATError;
+class CATExtCGMReplay;
+class CATExtGeoOperator;
+class CATGeoFactory;
+class CATICGMObject;
+class CATSoftwareConfiguration;
+class CATString;
+class CATTolerance;
+class CATICGMTopOperator;
+
+extern ExportedByCATGeometricObjects IID IID_CATICGMOperator;
+
+//=======================================================================================================================
+/**
+ * Base class for all the CGM operators.
+ * &lt;br&gt;To use a CGM operator:
+ * &lt;ul&gt;&lt;li&gt;Create it with the corresponding &lt;tt&gt;CreateXxx&lt;/tt&gt; global method
+ * &lt;li&gt;Tune some parameters if needed
+ * &lt;li&gt;Run it
+ * &lt;li&gt;Read the results
+ * &lt;li&gt;Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ *&lt;/ul&gt;
+ */
+class ExportedByCATGeometricObjects CATICGMOperator: public CATICGMVirtual
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMOperator();
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  /**
+ * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+ */
+  virtual int Run() = 0;
+
+  /**
+ * Returns the factory of &lt;tt&gt;this&lt;/tt&gt; operator. 
+ * @return
+ * The pointer to the geometric factory that creates the output objects.
+ */
+  virtual CATGeoFactory *GetFactory() const = 0;
+
+  /**
+ * Retrieves the name of &lt;tt&gt;this&lt;/tt&gt; operator.
+ * @return
+ * The name. This output string is part of the class and will be deleted at its deletion.
+ */
+  virtual const CATString *GetOperatorId() = 0;
+
+  /** 
+ * Defines the name of &lt;tt&gt;this&lt;/tt&gt; operator.
+ * @param iOperatorName
+ * The name of the operator.
+ */
+  virtual void SetOperatorId(const CATString iOperatorName) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMOperator(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMOperator_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMObjectsPersistency.html">← 上一页: CATICGMObjectsPersistency.h</a></div>
+        <div><a href="CATICGMUnknown.html">下一页: CATICGMUnknown.h →</a></div>
+    </div>
+</body>
+</html>

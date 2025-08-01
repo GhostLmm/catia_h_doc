@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricOperators/PublicInterfaces/CATDynMassProperties1D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricOperators/PublicInterfaces/CATDynMassProperties1D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDistanceTool.html">← 上一页: CATDistanceTool.h</a></div>
+        <div><a href="CATEdgeCurveComputation.html">下一页: CATEdgeCurveComputation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMassProperties1D_H
+#define CATMassProperties1D_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATCGMOperator.h&quot;
+
+#include &quot;Y3DYNOPE.h&quot;
+
+#include &quot;CATCurve.h&quot;
+class CATCrvParam;
+class CATSoftwareConfiguration;
+
+/**
+ * Class defining the geometric operator to perform a global analysis on a CATCurve.
+ *&lt;br&gt;This class is transient and cannot be streamed. It performs conversion from curve parameter
+ * to length and the converse.
+ * The class is created with the &lt;tt&gt;CATDynCreateMassProperties1D&lt;/tt&gt; global method and is deleted
+ * with the usual C++ delete operator.
+ */
+#ifdef CATIACGMV5R21
+class ExportedByY3DYNOPE CATDynMassProperties1D : public CATCGMOperator
+#else
+class ExportedByY3DYNOPE CATDynMassProperties1D : public CATCGMVirtual
+#endif
+{
+  CATCGMVirtualDeclareClass(CATDynMassProperties1D);
+  public :
+      /** @nodoc */
+#ifdef CATIACGMV5R21
+  CATDynMassProperties1D(CATGeoFactory *iFactory);
+#else
+  CATDynMassProperties1D();
+#endif
+  virtual ~CATDynMassProperties1D() ;
+  
+  /**
+  * @nodoc 
+  * Sets the operator in a mode where, in the GetParamFromLength method,
+  * it estimates the solution before starting the computation.
+  * Better and quicker results, but the behaviour modification may
+  * affect sensitive algorithms.
+  * @param iEstimate
+  * The type of search.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *  &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;dd&gt; the operator uses the low value of the limits as
+  * an initial point.
+  *&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;dd&gt; the operator uses an estimation of the solution as an
+  * initial point.&lt;/dl&gt; 
+  */
+  virtual void SetEstimateInit(const CATBoolean &amp;iEstimate=TRUE) = 0;
+  
+  
+  /**
+   * Returns the CATCrvParam corresponding to the point at a given length
+   * of another point.
+   * @param iParam
+   * The point on the curve.
+   * @param iLength
+   * The length on the curve measured from the point &lt;tt&gt;iParam&lt;/tt&gt;.
+   * @return
+   * The corresponding point.
+   */
+  virtual CATCrvParam GetParamFromLength(const CATCrvParam &amp;iParam,
+					 const CATLength   &amp;iLength) const = 0; 
+  
+  /**
+   * Returns the length between two points of a CATCurve.
+   * @param iParam1
+   * The first point.
+   * @param iParam2
+   * The second point.
+   * @return
+   * The length between the two points.
+   */
+     virtual CATLength GetLengthFromParams(const CATCrvParam &amp;iParam1,
+					   const CATCrvParam &amp;iParam2) const  = 0;
+  
+  /**
+   * Returns the total length of a CATCurve.
+   * @return
+   * The total length of the curve
+   */
+  virtual CATPositiveLength GetLength() const = 0; 
+};
+
+
+/**
+ * Creates a global analyzer on a CATCurve.
+ * @param iCurveToAnalyze
+ * The pointer to the curve to analyze.
+ * @param iSoftwareConfig
+ * The pointer to the CATSoftwareConfiguration.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ delete operator after use.
+ */  
+ExportedByY3DYNOPE CATDynMassProperties1D* CATDynCreateMassProperties1D(CATCurve* iCurveToAnalyze,
+                                                                        CATSoftwareConfiguration * iSoftwareConfig);
+
+/**
+ * @deprecated V5R14
+ * Use the signature with CATSoftwareConfiguration as second argument.
+ * Creates a global analyzer on a CATCurve.
+ * @param iCurveToAnalyze
+ * The pointer to the curve to analyze.
+ * @return
+ * The pointer to the created operator. To delete with the usual C++ delete operator after use.
+ */  
+ExportedByY3DYNOPE CATDynMassProperties1D* CATDynCreateMassProperties1D(const CATCurve* iCurveToAnalyze);
+
+#endif 
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDistanceTool.html">← 上一页: CATDistanceTool.h</a></div>
+        <div><a href="CATEdgeCurveComputation.html">下一页: CATEdgeCurveComputation.h →</a></div>
+    </div>
+</body>
+</html>

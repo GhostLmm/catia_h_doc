@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftStandardManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftStandardManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftStandard.html">← 上一页: CATIDftStandard.h</a></div>
+        <div><a href="CATIDftStandardMediator.html">下一页: CATIDftStandardMediator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef CATIDftStandardManager_h
+#define CATIDftStandardManager_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;IUnknown.h&quot;
+#include &quot;CATIStringList.h&quot;
+
+class CATIDftStandard;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftStandardManager ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftStandardManager;
+#endif
+
+/**
+* Interface which manages the available standards for a drawing document.
+*/
+
+
+class ExportedByDraftingItfCPP CATIDftStandardManager : public IUnknown
+{
+	
+public:
+
+       
+   /**
+   * Description : Gets the list of the standards that can be used in the drawing document.
+   * @param CATIStringList **oList : List of standard names.
+   */  
+ 
+    virtual HRESULT GetAvailableStandards ( CATIStringList **oList ) = 0;
+
+   /**
+   * Description : Gets the list of the standards that are used in the drawing document.
+   * @param CATIStringList **oList : List of standard names.
+   */  
+
+    virtual HRESULT GetUsedStandards ( CATIStringList **oList ) = 0;
+
+    
+   /**
+   * Description : Creates a standard in the drawing document
+   * and makes it current.
+   * @param wchar_t *iName : Name of standard to be created.
+   */  
+    virtual HRESULT ImportStandard ( wchar_t *iName ) = 0;
+
+
+  /**
+   * Upgrades the current standard.
+   * UpgradeStandard differs from ImportStandard in its way of updating formats.
+   * @return
+   * Un &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+   * &lt;/dl&gt;
+   */
+    virtual HRESULT UpgradeStandard() = 0;
+
+    
+   /**
+   * @nodoc
+   * Description : Creates a standard in the drawing document
+   * and makes it current, but doesn&#x27;t check if the switch is possible without loss.
+   * Shouldn&#x27;t be used outside the creation of a drawing.
+   * @param wchar_t *iName : Name of standard to be created.
+   * @param int iCleanPRJ : if non null, the old standard is not updated but destroyed before
+   *                        been rebuilt. All the contained descriptions will be lost.
+   */  
+    virtual HRESULT ImportStandardWithoutCheck ( wchar_t *iName, int iCleanPRJ=0 ) = 0;
+  
+    
+   /**
+   * Description : Gets the current standard name in the drawing document..
+   * @param wchar_t **oName : Name of the current standard.
+   */  
+    virtual HRESULT GetDefaultStandard ( wchar_t **oName ) = 0;
+
+   /**
+   * Description : Gets the current standard object in the drawing document..
+   * @param CATIDftStandard **oCurrentStd : pointer to the current standard object.
+   */  
+    virtual HRESULT GetDefaultStandardPtr ( CATIDftStandard **oCurrentStd ) = 0;
+
+    /**
+    * @deprecated CXR24
+    * do not use
+    */
+    virtual HRESULT SetDefaultStandard ( wchar_t *iName ) = 0;
+
+
+   /**
+   * Description : Gets the standard object from its name.
+   * @param wchar_t *iStd : Name of standard to be retrieved
+   * @param CATIDftStandard **ooStand : pointer to the standard object.
+   */  
+    virtual HRESULT GetStandard ( wchar_t *iStd, CATIDftStandard **oStand ) = 0;
+			
+};
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftStandard.html">← 上一页: CATIDftStandard.h</a></div>
+        <div><a href="CATIDftStandardMediator.html">下一页: CATIDftStandardMediator.h →</a></div>
+    </div>
+</body>
+</html>

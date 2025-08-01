@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DialogEngine/PublicInterfaces/CATStateCondition.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DialogEngine/PublicInterfaces/CATStateCondition.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATStateCommand.html">← 上一页: CATStateCommand.h</a></div>
+        <div><a href="CATStateDesactivateNotification.html">下一页: CATStateDesactivateNotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATStateCondition_h
+#define CATStateCondition_h
+#include &quot;CATDialogEngine.h&quot;
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+// protected DI0STATE.m
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATStateCondition.h&quot;
+
+#include &quot;CATDialogAgent.h&quot;
+
+class CATCommand;
+class CATICmdCondition;
+class CATNotification;
+
+ /**
+  * Prototype of the condition methods.
+  * &lt;b&gt;Role&lt;/b&gt;: These methods are passed as parameters of the @href 
+  * CATStateCondition class methods.
+  * @param iData
+  *   The data specified by the @href CATStateCondition#SetData method.
+  * @return 
+  *   The result of the condition evaluation.
+  */
+typedef CATBoolean (CATCommand::*ConditionMethod)(void * iData);
+
+/**
+ * Base class to create a condition.
+ * &lt;b&gt;Role&lt;/b&gt;: Conditions are used to check whether the dialog can go on.
+ * A condition may be
+ * &lt;ul&gt;
+ * &lt;li&gt;a guard condition linked to a transition. The condition is evaluated 
+ * when the transition is triggered. 
+ * If it evaluates TRUE, the transition fires. &lt;/li&gt;
+ * &lt;li&gt;a state exit condition. It is evaluated before the guard conditions: 
+ * &lt;ul&gt;
+ * &lt;li&gt;whenever a state dialog agent is valued
+ * &lt;li&gt;when entering the state, if the state is empty or if the state 
+ * contains a one-shot agent already valued.
+ * &lt;/ul&gt;
+ * If it evaluates FALSE, the guard conditions are not evaluated and no 
+ * transition fires.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;br&gt;To create a condition, you can derive this class and override the @href
+ * #GetStatus method or use the @href CATStateCommand#Condition method and
+ * give as argument the address of a method to evaluate the condition.  
+ * &lt;br&gt;Conditions must be created in the @href CATStateCommand#BuildGraph 
+ * method.
+ * @see CATDialogState, CATDialogTransition
+ */
+
+class ExportedByCATDialogEngine CATStateCondition : public CATBaseUnknown
+{
+
+  /** @nodoc  */
+  CATDeclareClass;
+  
+public:
+  
+  /** @nodoc  */
+  enum ConditionType { UNKNOWN, ALWAYS_TRUE, METHOD , IS_OUTPUT_SET, IS_LAST_MODIFIED_AGENT, AND, OR, NOT, DegMETH, INTERFACE};
+  
+  /**
+  * Constructs an empty condition.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use it only when deriving the &lt;tt&gt;CATStateCondition&lt;/tt&gt; 
+  * class, otherwise use the @href CATStateCommand#Condition method to create
+  * a condition.
+  */
+  CATStateCondition ();
+  
+  virtual ~CATStateCondition ();
+  
+  /**
+  * Sets data which may be useful to evaluate the condition.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This data will be given as the argument of the &lt;tt&gt;
+  * ConditionMethod&lt;/tt&gt; method.
+  * &lt;br&gt;Do not use this method if you derive the &lt;tt&gt;CATStateCondition&lt;/tt&gt; 
+  * class.
+  * @param iData
+  *   An object that can be useful for the condition.
+  *   &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: A copy of &lt;tt&gt;iData&lt;/tt&gt; is kept. 
+  *   Deallocate this object only at end of the command.
+  * @return
+  *   An HRESULT. 
+  *   S_OK is always returned.
+  */
+  HRESULT SetData (void * iData);
+  
+  /**
+  * Sets the method to evaluate the condition.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method must be a method of the CATStateCommand 
+  * object which defines the statechart.
+  * &lt;br&gt;Do not use &lt;tt&gt;SetMethod&lt;/tt&gt; if you derive the 
+  * &lt;tt&gt;CATStateCondition&lt;/tt&gt; class.
+  * @param iMeth
+  *   The method which evaluates the condition.
+  * @return
+  *   An HRESULT. 
+  *   S_OK is always returned.
+  */
+  HRESULT SetMethod (ConditionMethod iMeth);
+  
+  /**
+  * Evaluates the condition.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Redefine this method when deriving &lt;tt&gt;
+  * CATStateCondition&lt;/tt&gt;.
+  * @return 
+  *   The result of the condition evaluation.
+  */
+  virtual CATBoolean GetStatus ();
+  
+  /*---------------------------------*/
+  //  constructors FOR INTERNAL USE  
+  /*---------------------------------*/
+  
+  /** @nodoc  */
+  CATStateCondition (ConditionMethod);  
+  /** @nodoc  */
+  CATStateCondition (CATCommand *, ConditionMethod);
+  /** @nodoc  */
+  CATStateCondition (CATCommand *);
+  /** @nodoc  */
+  CATStateCondition (CATICmdCondition *interfac);
+  /** @nodoc  */
+  CATStateCondition (CATCommand * cmd,CATCommand * agt, CATNotification *);
+  /** @nodoc  */
+  CATStateCondition (CATCommand * cmd,CATCommand * agt, const char *);
+  /** @nodoc  */
+  CATStateCondition (ConditionType, CATStateCondition *, CATStateCondition *);
+  /** @nodoc  */
+  CATStateCondition (ConditionType, CATStateCondition *);
+  
+  /*---------------------------------*/
+  //  methods FOR INTERNAL USE  
+  /*---------------------------------*/
+  
+  /** @nodoc  */
+  HRESULT Evaluate (CATBoolean * oBool);
+  /** @nodoc  */
+  void SetCommand (CATCommand *);
+  /** @nodoc  */  
+  HRESULT QueryCATICmdCondition (CATICmdCondition ** oCondition);
+  /** @nodoc  */
+  void Dump (int decale=0, int offTraces=0); 
+  /** @nodoc  */
+  void ReleaseComponents (); 
+
+  /** @nodoc */
+  friend class CATEDegCmdDbgCondition;
+
+protected:
+  
+  /*------------------*/
+  // internal data 
+  /*------------------*/
+  
+  /** @nodoc  */
+  ConditionMethod _method;
+  /** @nodoc  */
+  /* command which can answer to GetLasModifiedAgent */
+  CATCommand * _command;
+  /** @nodoc  */
+  /* command which contains the methods */
+  CATCommand * _MethCommand; 
+  /** @nodoc  */
+  CATCommand * _agent;
+  /** @nodoc  */
+  CATNotification *  _notification;
+  /** @nodoc  */
+  CATString _notifChar;
+  
+  /** @nodoc  */
+  ConditionType _type;
+  /** @nodoc  */
+  CATStateCondition * _firstCondition, *_secondCondition;
+  /** @nodoc  */
+  int _withData;
+  /** @nodoc  */
+  void * _data;
+  /** @nodoc  */
+  CATICmdCondition * _interface;
+  /** @nodoc  */
+  int _offTraces;
+  
+private:
+  
+  CATStateCondition (CATStateCondition &amp;);
+  
+  // NOT implemented, only declared to prevent unexpected call to default ctors created by the compiler
+  CATStateCondition &amp; operator= (const CATStateCondition &amp;);
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATStateCommand.html">← 上一页: CATStateCommand.h</a></div>
+        <div><a href="CATStateDesactivateNotification.html">下一页: CATStateDesactivateNotification.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATIWorkbenchAddin.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATIWorkbenchAddin.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkbench.html">← 上一页: CATIWorkbench.h</a></div>
+        <div><a href="CATIWorkbenchInitialization.html">下一页: CATIWorkbenchInitialization.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIWorkbenchAddin_h
+#define CATIWorkbenchAddin_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U6
+ */
+
+#include &lt;CD0VWTLB.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+
+class CATCmdContainer;
+
+extern ExportedByCD0VWTLB IID IID_CATIWorkbenchAddin;
+
+/**
+* Interface to derive to create an addin.
+* &lt;b&gt;Role&lt;/b&gt;: Existing workshops or workbenches can be customized by the client 
+* application programmer. This customization consists in putting commands into one or 
+* several new toolbars, and add these toolbars to the appropriate workshop or workbench. 
+* Note that an add-in cannot customize the menu bar. 
+* &lt;br&gt;
+* The workshop or the workbench 
+* should feature an add-in interface that you will implement to provide the toolbars 
+* using a class extending a late type. This add-in interface derives from the &lt;tt&gt;CATIWorkbenchAddin&lt;/tt&gt; 
+* interface and it&#x27;s valid for workshops as well as workbenches. 
+* @see CATIWorkshop, CATIWorkbench 
+*/
+class ExportedByCD0VWTLB CATIWorkbenchAddin : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+  /**
+  * Instantiates the command headers.  
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Each command you want to make available in your workshop or 
+  * workbench must have a command header. The command header holds the necessary 
+  * information to load the command, such as the name of the 
+  * shared library in which the command&#x27;s executable code is located, the name of the 
+  * command class, and the data to pass to the command&#x27;s code when this command 
+  * becomes the current one. The command header has resources for each command to display 
+  * such as the command name shown to the end user, its ToolTip displayed in a balloon, 
+  * its help message, and its icon.
+  * &lt;br&gt;Each instance of header is deleted by CATIA.
+  * @see CATCommandHeader
+  */
+  virtual void              CreateCommands () = 0;
+
+  /**
+  * Creates toolbars containers.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Creates toolbars&#x27;s container with the @href NewAccess macro, and arranges 
+  * commands in the toolbars. Toolbars are chained together.
+  * @return
+  *    The first toolbar of the chain.
+  */
+  virtual CATCmdContainer * CreateToolbars () = 0;
+ 
+};
+
+CATDeclareHandler(CATIWorkbenchAddin, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIWorkbench.html">← 上一页: CATIWorkbench.h</a></div>
+        <div><a href="CATIWorkbenchInitialization.html">下一页: CATIWorkbenchInitialization.h →</a></div>
+    </div>
+</body>
+</html>

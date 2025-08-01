@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATDftImportToolbox.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATDftImportToolbox.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDftGenViewsPosMode.html">← 上一页: CATDftGenViewsPosMode.h</a></div>
+        <div><a href="CATDftLeaderParameters.html">下一页: CATDftLeaderParameters.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2006
+
+/**
+* @CAA2Level L0
+* @CAA2Usage U1
+*/
+
+#ifndef CATDftImportToolbox_H
+#define CATDftImportToolbox_H
+
+#include &quot;DraftingItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+//-----------------------------------------------------------------------
+
+/**
+* Class that represents a toolbox providing a set of services to be used to
+* transfer data from a drawing to another one.
+*/
+class ExportedByDraftingItfCPP CATDftImportToolbox
+{
+    public:
+
+      /** 
+      * Imports a drawing view from another document in a specified sheet.
+      *
+      * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This service allows creating a new drawing view or 2D Layout view in a 
+      * specified sheet and creating geometry, dimensions, annotations, 2D Component instances
+      * and dress-up elements in this new view by copy/pasting the elements from the original 
+      * view to the new one.
+      *
+      * &lt;br&gt;&lt;b&gt;Important&lt;/b&gt;: As a current limitation, this service only supports the import of 
+      * a drawing view (that comes from a CATDrawing document), into a 2D Layout for 3D Design 
+      * view (in a CATPart document). In addition, this service is only available if a license 
+      * for LO1 product is granteed.
+      *
+      * &lt;br&gt;&lt;b&gt;Important&lt;/b&gt;: Only pure interactive views can be taken into account. It means 
+      * that this service does not take into account 2D component views and drawing generative 
+      * views, except if this view has been isolated before.
+      *
+      * &lt;br&gt;&lt;b&gt;Important&lt;/b&gt;: As this service creates data in the document containg the target 
+      * sheet, if it has to be called in the scope of an interactive command, this command has
+      * to be instanciated in the target document editor in order to inherit from the Undo/Redo
+      * mechanism to let the user cancel the import operation.
+      *
+      * Notice that the resulting view and its sub-elements do not keep any link to the original
+      * document: in particular, if the original view contains some 2D component instances, the 
+      * whole 2D component structure will also be imported in the target drawing or 2D Layout. 
+      * In this case, the service searches for all the required 2D components recursively, by
+      * identifying if they have to be imported at the same time. The algorithm to identify if 
+      * a 2D component has to be imported is based on an identification by its name: if a 2D 
+      * component with the same name and sheet name is found in the target document, this 2D 
+      * component will not be imported and all the 2D component instances of this 2D component 
+      * will become instances of found 2D component, no matter what its content or synchronization 
+      * status is. If there is no 2D component with the same name and sheet name is found, it will
+      * be imported in the target document. 
+      * As a consequence some detail sheets may be created during the import. It is also important 
+      * to notice that if a required 2D component is not located in the original document (for 
+      * example a 2D component instance coming from a catalog), the import process will fail if the
+      * other document is not accessible. If the other document is accessible, the copy of 2D component will be 
+      * synchronized.
+      *
+      * In addition, if the original view contains texts with attribute links, those texts 
+      * are isolated (it includes the view name text). Please, notice also that if some annotations
+      * or dimensions are associated to any 2D component instance (in the view or any 2D component
+      * that will be imported), for example a leader with positional link to a 2D component instance
+      * sub-element or a dimension on a 2D component instance sub-element, this association will be 
+      * lost in the target document. That&#x27;s an actual limitation.
+      *
+      * The resulting view type does not depend on the the original view type: it is always
+      * created as an auxiliary view (see CATIDftView#GetViewType and CATDftViewType). However,
+      * if the specified view is a 2D component view, the resulting view may be a 2D component
+      * view, as soon as the target sheet is a detail sheet. If not, the 2D component view is
+      * imported as an auxiliary view in a design sheet.
+      *
+      * In addition, the view axis (see CATISketch#GetAxisData) is the same as the original view.
+      *
+      * &lt;br&gt;&lt;b&gt;Important&lt;/b&gt;: As the target drawing or 2D Layout may use a different standard,
+      * the graphical result of some annotations or dimensions may differ between the original
+      * document and the resulting view, with respect to the target document standard.
+      *
+      * &lt;br&gt;&lt;b&gt;Important&lt;/b&gt;: The import process is based on a copy/paste operation between two
+      * documents that are opened in session: it implies that a large amount of data may be loaded
+      * at the same time, and in addition, a lot of new data are created, leading to an important
+      * memory consumption.
+      *
+      * @param ipViewToImport [in]
+      *   The view to be imported.
+      *   @precondition ipViewToImport must be a drawing view (located in a CATDrawing document).
+      *                 This is an actual limiation.
+      *   @precondition The view must be a pure interactive one or a 2D component view.
+      * @param ipTargetSheet [in]
+      *   The sheet where the view has to be imported.
+      *   @precondition ipTargetSheet must be a 2D Layout sheet. Current limitation.
+      *   @precondition ipTargetSheet must be located in a different document than ipViewToImport.
+      *   @precondition if ipViewToImport is a design view (by opposition to 2D component views),
+      *                 ipTargetSheet must be a design sheet (by opposition to detail sheet).
+      *
+      * @return
+      *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok
+      *   &lt;code&gt;E_INVALIDARG&lt;/code&gt; Check the precondition are all fullfilled
+      *   &lt;code&gt;E_UNEXPECTED&lt;/code&gt; An unexpected error occured
+      *
+      * @see CATIDftView#GetViewType, CATDftViewType, CATISketch#GetAxisData
+      */
+      static HRESULT ImportView(CATBaseUnknown *ipViewToImport, CATBaseUnknown *ipTargetSheet);
+
+    private:
+      CATDftImportToolbox();
+      ~CATDftImportToolbox();
+      CATDftImportToolbox(CATDftImportToolbox &amp;);
+      CATDftImportToolbox&amp; operator=(CATDftImportToolbox&amp;);
+};
+
+//-----------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDftGenViewsPosMode.html">← 上一页: CATDftGenViewsPosMode.h</a></div>
+        <div><a href="CATDftLeaderParameters.html">下一页: CATDftLeaderParameters.h →</a></div>
+    </div>
+</body>
+</html>

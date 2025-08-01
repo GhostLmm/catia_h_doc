@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgLatheLocalPlaneElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgLatheLocalPlaneElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgInsertActivity.html">← 上一页: CATIMfgInsertActivity.h</a></div>
+        <div><a href="CATIMfgLatheMultiTurSpiMachineMgt.html">下一页: CATIMfgLatheMultiTurSpiMachineMgt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===================================================================
+// COPYRIGHT Dassault Systemes 2004
+//===================================================================
+
+#ifndef CATIMfgLatheLocalPlaneElement_H
+#define CATIMfgLatheLocalPlaneElement_H
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATMathPoint;
+class CATMathDirection;
+class CATMathAxis;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgLatheLocalPlaneElement;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgLatheLocalPlaneElement ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+* Manage Lathe Local Plane Element
+*/
+class ExportedByMfgItfEnv CATIMfgLatheLocalPlaneElement: public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+public:
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   Set the Local plane on a Lathe Feature
+	*   @param oLocalPlaneElement
+	*      The returned local plane.
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual HRESULT SetLocalPlaneElement (CATBaseUnknown_var&amp; iLocalPlaneElement, const int&amp; iNotif=0) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT SetLocalPlaneElement (CATBaseUnknown_var&amp; iLocalPlaneElement, const int&amp; iNotif = 0)=0;
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   Get the Local plane defined on a Lathe Feature
+	*   @param oLocalPlaneElement
+	*      The returned local plane.
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual HRESULT GetLocalPlaneElement(CATBaseUnknown_var&amp; oLocalPlaneElement) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT GetLocalPlaneElement (CATBaseUnknown_var&amp; oLocalPlaneElement)=0;
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   Retrieves the Machining Axis System selected for Local Plane definition
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual HRESULT GetMachiningAxis ( CATMathAxis &amp; oMathAxis ) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT GetMachiningAxis ( CATMathAxis &amp; oMathAxis )=0;    
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   remove the Local plane defined on a Lathe Feature
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual int MyFunction (int Arg1) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT RemoveLocalPlaneElement (const int&amp; iNotif=0)=0;
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   Retrieves the orthonormalized directions
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual HRESULT GetDirections (CATMathPoint &amp; ioOrigin,CATMathDirection &amp; ioAxialDirection,CATMathDirection &amp; ioRadialDirection) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT GetDirections (CATMathPoint &amp; ioOrigin,CATMathDirection &amp; ioAxialDirection,CATMathDirection &amp; ioRadialDirection)=0;
+
+	/**
+	* &lt;dl&gt;
+	* &lt;pre&gt;
+	*       
+	*   Retrieves the Machining Axis System based on Axial / Radial definition
+	*   X = Axial axis
+	*   Y = Radial axis
+	*   Z = Axial ^ Radial
+	*   @return
+	*      Error code of function.
+	* 
+	* virtual HRESULT GetTurningMachiningAxis ( CATMathAxis &amp; oMathAxis ) = 0;
+	* &lt;/pre&gt;
+	* &lt;/dl&gt;
+	*/
+	virtual HRESULT GetTurningMachiningAxis ( CATMathAxis &amp; oMathAxis )=0;
+
+	// No constructors or destructors on this pure virtual base class
+	// --------------------------------------------------------------
+};
+
+CATDeclareHandler (CATIMfgLatheLocalPlaneElement, CATBaseUnknown) ;
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgInsertActivity.html">← 上一页: CATIMfgInsertActivity.h</a></div>
+        <div><a href="CATIMfgLatheMultiTurSpiMachineMgt.html">下一页: CATIMfgLatheMultiTurSpiMachineMgt.h →</a></div>
+    </div>
+</body>
+</html>

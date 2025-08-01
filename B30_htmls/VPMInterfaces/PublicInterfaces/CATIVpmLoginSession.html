@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATIVpmLoginSession.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATIVpmLoginSession.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmLightQueryManager.html">← 上一页: CATIVpmLightQueryManager.h</a></div>
+        <div><a href="CATIVpmLongTransaction.html">下一页: CATIVpmLongTransaction.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIVpmLoginSession_H_
+#define CATIVpmLoginSession_H_
+//======================================================================== 
+// ENOVIA_VPM (c) Copyright Dassault Systemes 1999
+// -------------------------------------------------------------
+// Responsable: AHC
+// --------------------------------------------------------------
+// Macro: CATIVpmLoginSession.h
+//       
+//        A LoginSession object manages a set of informations related
+//        to a user with a specific role. It manages transactions with        
+//        a security and privileges context.
+// --------------------------------------------------------------
+// Historic:
+// Creation : 96/09/12 &gt; AHC
+//======================================================================== 
+//
+// Include
+//
+/**
+ *	@CAA2Level L1
+ *	@CAA2Usage U3
+ */
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CORBAAnyDef.h&quot;
+#include &quot;sequence_CORBAAny.h&quot;
+#include &quot;ENOVIEventManager.h&quot;
+class CATIVpmLongTransaction;
+class CATIVpmLongTransaction_var;
+//#include &quot;CATIVpmCommandTransaction.h&quot;
+
+class _SEQUENCE_octet;
+class VPMIProject;
+
+class CATIVpmCommandTransaction_var;
+
+class ENOVIVaultSession;
+class ENOVIVaultUserSession;
+
+//
+
+//
+// Interface Identifier
+//
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATIVpmLoginSession;
+#else
+extern &quot;C&quot; const IID IID_CATIVpmLoginSession;
+#endif
+class CATVpmAssocObject;
+
+/**
+ * This interface represents the working context of a logged-in user and its
+ * LCA transaction.
+ */
+class ExportedByGUIDVPMInterfaces CATIVpmLoginSession :public CATBaseUnknown
+{
+    //
+    CATDeclareInterface ;
+    //
+    public:
+    //
+    //-------------------------------------------------------------
+    // Methods declaration  
+    //-------------------------------------------------------------
+    //
+    /**
+     * @deprecated V5R14
+     *
+    *   Is cache activated.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is activated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is not activated&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT IsCached() = 0 ;
+
+    /**
+     * @deprecated V5R14
+     *
+    *   Activate the cache.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is activated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is already activated&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT SetCache() = 0 ;
+
+    /**
+     * @deprecated V5R14
+     *
+    *   Deactivate the cache.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is deactivated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Cache is already deactivated&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT UnsetCache() = 0 ;
+
+    /**
+     * @deprecated V5R14
+     *
+    *   Activate the refresh.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is activated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is already activated&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT SetRefresh() = 0;
+
+    /**
+    *   Deactivate the refresh.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is deactivated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is already deactivated&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT UnsetRefresh() = 0;
+
+    /**
+    *   Is Refresh activated.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is activated&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Refresh is not activated&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT IsRefreshed() = 0 ;
+
+
+    /** @nodoc
+     *
+     *   Retrieve the event manager.
+     *   @param oEventManager
+     *   The event manager found
+     *   @return
+     *   An HRESULT value. 
+     *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *   &lt;dl&gt;
+     *     &lt;dt&gt;S_OK&lt;/dt&gt;
+     *     &lt;dd&gt;Operation succeeded&lt;/dd&gt;
+     *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+     *     &lt;dd&gt;A problem occurs during the process&lt;/dd&gt;
+     *   &lt;/dl&gt;		
+     */
+      virtual  HRESULT get_ENOVEventManager
+        ( ENOVIEventManager_var&amp;  oEventManager )= 0 ;
+
+    /**
+    *   Get login session identifier.
+    *   @param oLoginSessionId
+    *   The login session identifier 
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Identifier is defined&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT get_LoginSessionId
+        ( CATUnicodeString&amp;  oLoginSessionId ) const = 0 ;
+
+    //
+    // -&gt;Get the current transaction  Identifier 
+    //
+    // HRESULT S_OK    -&gt; Identifier is defined 
+    // HRESULT E_FAIL  -&gt; An error occurs during the process 
+    //
+    /** @nodoc */
+    virtual HRESULT get_LongTransactionId
+        ( CATUnicodeString &amp;  oTransactionId ) const = 0 ;
+
+    //
+    // -&gt;Get the current command transaction  Identifier 
+    //
+    // HRESULT S_OK    -&gt; Identifier is defined 
+    // HRESULT E_FAIL  -&gt; An error occurs during the process 
+    //
+    /** @nodoc */
+    virtual HRESULT get_CommandTransactionId
+        ( CATUnicodeString &amp;  oTransactionId ) const = 0 ;
+
+    //
+    //
+    // -&gt; Register a transactional component 
+    //
+    // HRESULT S_OK    -&gt; Identifier is defined 
+    // HRESULT S_FALSE -&gt; Modeler already registered
+    // HRESULT E_FAIL  -&gt; An error occurs during the process 
+    //
+    /** @nodoc */
+    virtual HRESULT Register
+        (CATIVpmLongTransaction_var&amp; iTransactionComponent)= 0 ;
+
+    //
+    //
+    // -&gt; Register a CommandTransaction
+    //
+    // HRESULT S_OK    -&gt; Identifier is defined
+    // HRESULT S_FALSE -&gt; A CommandTransaction with same Id is already registered
+    // HRESULT E_FAIL  -&gt; An error occurs during the process
+    //
+    /** @nodoc */
+    virtual HRESULT Register
+        (CATIVpmCommandTransaction_var&amp; iCommandTransaction)= 0 ;
+
+
+    //
+    //
+    // -&gt; Unregister a CommandTransaction or a LongTransaction
+    //
+    // HRESULT S_OK    -&gt; Identifier is defined
+    // HRESULT S_FALSE -&gt; No CommandTransaction or LongTransaction with iName has been found
+    // HRESULT E_FAIL  -&gt; An error occurs during the process
+    //
+    /** @nodoc */
+    virtual HRESULT Unregister
+        (const CATUnicodeString &amp; iName)= 0 ;
+
+    /**
+    *   RefreshContents.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;At least one object needs to be refreshed&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;No object needs to be refreshed&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT RefreshContents()=0;
+
+    /**
+    *   Is save operation needed.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;At least one modification needs to be saved&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;No modification needs to be saved&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT IsSaveNeeded()=0;
+
+    /**
+    *   Save operation.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Save is successful&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Nothing to save&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT Save () = 0 ; 
+
+    //
+    // -&gt; SetSaveActivation
+    //
+    // HRESULT S_OK, if previous save was activated
+    // HRESULT S_FALSE, if previous save was desactivated
+    //
+    /** @nodoc */
+    virtual HRESULT SetSaveActivation(boolean iActivated)= 0 ;
+
+    //
+    // -&gt; GetSaveActivation
+    //
+    // HRESULT S_OK, if save activated
+    // HRESULT S_FALSE, if save desactivated
+    //
+    /** @nodoc */    
+    virtual HRESULT GetSaveActivation()= 0 ;
+
+    /**
+    *   Start operation.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Start is successful&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT Start () = 0 ; 
+
+    /**
+    *   Close operation.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Close is successful&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT Close() = 0 ;
+
+    /**
+    *   Abort operation.
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Abort is successful&lt;/dd&gt;
+    *     &lt;dt&gt;S_FALSE&lt;/dt&gt;
+    *     &lt;dd&gt;Nothing to abort&lt;/dd&gt;
+    *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+    *     &lt;dd&gt;An error occured during the process&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT Abort() = 0 ;
+
+
+    /**
+    *   Set the current project.
+    *   @param iProject
+    *   The VPMIProject to set
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Set is OK&lt;/dd&gt;
+    *     &lt;dd&gt;&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT SetCurrentProject
+        (VPMIProject * iProject) = 0;
+
+    //
+    // -&gt; GetCurrentProject
+    //
+    // HRESULT S_OK
+    // HRESULT S_FALSE
+    //
+
+    /**
+    *   Set the current project.
+    *   @param ioProject
+    *   The retrieved VPMIProject to set
+    *   @return
+    *   An HRESULT value. 
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+    *   &lt;dl&gt;
+    *     &lt;dt&gt;S_OK&lt;/dt&gt;
+    *     &lt;dd&gt;Get is OK&lt;/dd&gt;
+    *     &lt;dd&gt;&lt;/dd&gt;
+    *   &lt;/dl&gt;		
+    */
+    virtual HRESULT GetCurrentProject(VPMIProject ** ioProject) = 0;
+
+
+    #define AppObjectMngmt
+    /**
+     * @nodoc
+     * establish a link between an AssocObject and a VPMObject.
+     * The LoginSession will take ownership of the AssocObject which
+     * will be deleted when it is closed.
+     * Once a link is establish subsequent links to the same object will fail.
+     * @param i2Register 
+     *          the AssocObject to link.
+     * @param iID
+     *          the unique id of the VPMObject.
+     * @result
+     *      S_OK the link was established.
+     *      E_??? an error occured
+     */
+    virtual HRESULT RegisterAssocObject(CATVpmAssocObject*  i2Register, SEQUENCE(octet)&amp; iID) = 0;
+    /**
+     * @nodoc
+     * Retrieve a linked object from the symbolic link of a linked object.
+     * @param oLinked 
+     *          the linked object
+     * @param iID
+     *          the unique id of the VPMObject 
+     * @result
+     *      S_OK the object was retrieved.
+     *      E_FAIL no linked object.
+     */
+    virtual HRESULT RetrieveAssocObject(CATVpmAssocObject**  oLinked, SEQUENCE(octet)&amp; iID)=0;
+
+/**
+ * This method replaces VPMSession::GetLogicalUser.
+ *
+ * Get the logical User
+ *   @param oUser
+ *   The name of the logical user
+ *   @return
+ *   An HRESULT value. 
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;S_OK&lt;/dt&gt;
+ *     &lt;dd&gt;&lt;/dd&gt;
+ *   &lt;/dl&gt;		
+ */
+  virtual HRESULT GetLogicalUser(CATUnicodeString&amp; oUser ) const = 0;
+
+
+/**
+ * @nodoc not implemented in V5R12, will be in V5R13
+ *   Retrieve vault sessions.
+ *   @param oVaultSession
+ *   The vault sessions found
+ *   @return
+ *   An HRESULT value. 
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;S_OK&lt;/dt&gt;
+ *     &lt;dd&gt;Operation succeeded&lt;/dd&gt;
+ *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+ *     &lt;dd&gt;A problem occurs during the process&lt;/dd&gt;
+ *   &lt;/dl&gt;		
+ */
+  virtual HRESULT GetVaultSession(ENOVIVaultSession ** oVaultSession)=0;
+  
+  /**
+   * @nodoc not implemented in V5R12, will be in V5R13
+   *   Retrieve vault user session.
+   *   @param iVaultName
+   *   The vault name
+   *   @param oVaultUserSession
+   *   The vault user sessions found
+   *   @return
+   *   An HRESULT value. 
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *   &lt;dl&gt;
+   *     &lt;dt&gt;S_OK&lt;/dt&gt;
+   *     &lt;dd&gt;Operation succeeded&lt;/dd&gt;
+   *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+   *     &lt;dd&gt;A problem occurs during the process&lt;/dd&gt;
+   *   &lt;/dl&gt;		
+   */
+  virtual HRESULT GetVaultUserSession(const CATUnicodeString&amp; iVaultName,
+                                      ENOVIVaultUserSession ** oVaultUserSession )=0;  
+  
+};
+//
+// Handler Definition
+//
+CATDeclareHandler(CATIVpmLoginSession,CATBaseUnknown);
+//
+// How to get a LoginSession
+//
+#ifdef  _WINDOWS_SOURCE
+#ifdef  __VX0FACTO
+#define ExportedByVX0FACTO      __declspec(dllexport)
+#else
+#define ExportedByVX0FACTO      __declspec(dllimport)
+#endif
+#else
+#define ExportedByVX0FACTO
+#endif
+
+    /**
+    *   Get a login session.
+    *   @param oLoginSession
+    *   The login session
+    */
+
+ExportedByVX0FACTO HRESULT get_ENOVLoginSession 
+(CATIVpmLoginSession_var&amp; oLoginSession) ; 
+//
+// --------------------------------------------------------------
+// End of the Header
+// --------------------------------------------------------------
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIVpmLightQueryManager.html">← 上一页: CATIVpmLightQueryManager.h</a></div>
+        <div><a href="CATIVpmLongTransaction.html">下一页: CATIVpmLongTransaction.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUsePointOnPlane.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUsePointOnPlane.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUsePointOnCurve.html">← 上一页: CATIGSMUsePointOnCurve.h</a></div>
+        <div><a href="CATIGSMUsePointOnSurface.html">下一页: CATIGSMUsePointOnSurface.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUsePointOnPlane_H
+#define CATIGSMUsePointOnPlane_H
+// 
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATICkeParm.h&quot;
+
+class CATIGSMUseDirection_var;
+class CATMathDirection;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUsePointOnPlane;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUsePointOnPlane;
+#endif
+/**
+ * Interface to point on a plane feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the point feature created on
+ * a plane with a reference point or not.
+ * @see CATIGSMUseDirection 
+ * @see CATIGSMUseFactory#CreatePoint
+ */
+class ExportedByCATGSMUseItf CATIGSMUsePointOnPlane : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+ /**
+  * Gets the support plane.
+  *   @param oSupport 
+  *      support
+  */
+ virtual HRESULT GetSupport(CATIMmiMechanicalFeature_var&amp; oSupport) = 0;
+
+ /**
+  * Sets the support plane.
+  *   @param iSupport 
+  *      support
+  */
+ virtual HRESULT SetSupport(const CATIMmiMechanicalFeature_var iSupport) = 0;
+
+ /**
+  * Gets the reference point. 
+  * This data is not mandatory, if Point is
+  * null, the projection of the origin point on the plane is taken.
+  * (RefPoint = NULL_var is allowed).
+  *   @param oRefPoint 
+  *      reference point 
+  */
+ virtual HRESULT GetReferencePoint(CATIMmiMechanicalFeature_var&amp; oRefPoint) = 0;
+
+ /**
+  * Sets the reference point. 
+    * This data is not mandatory, if Point is
+  * null, the projection of the origin point on the plane is taken.
+  * (RefPoint = NULL_var is allowed).
+  *   @param iRefPoint 
+  *      reference point 
+  */
+ virtual HRESULT SetReferencePoint(const CATIMmiMechanicalFeature_var  iRefPoint) = 0;
+
+ /**
+  * Gets the X,Y cartesian coordinates in the plane.
+  *   @param oX 
+  *      X coordinates 
+  *   @param oY 
+  *      Y coordinates 
+  */
+ virtual HRESULT GetCoordinates(CATICkeParm_var &amp; oX,CATICkeParm_var &amp; oY) = 0;
+
+ /**
+  * Sets the X,Y cartesian coordinates in the plane.
+  *   @param iX 
+  *      X coordinates 
+  *   @param iY 
+  *      Y coordinates 
+  */
+ virtual HRESULT SetCoordinates(const CATICkeParm_var iX,const CATICkeParm_var iY) = 0;
+
+ /**
+  * Gets the first direction on the plane to compute the point (for stability).
+  *   @param oDir
+  *      first direction
+  *      @see CATIGSMUseDirection 
+  */
+ virtual HRESULT GetFirstDirection(CATIGSMUseDirection_var &amp; oDir) = 0;
+
+ /**
+  * Sets the first direction on the plane to compute the point (for stability).
+  *   @param iDir
+  *      first direction
+  *      @see CATIGSMUseDirection 
+  */
+ virtual HRESULT SetFirstDirection(const CATIGSMUseDirection_var iDir) = 0;
+
+ /**
+  * Gets the second direction on the plane to compute the point (for stability).
+  * &lt;br&gt;This direction has to be kept perpendicular to the first direction
+  *   @param oDir
+  *      second direction
+  *      @see CATIGSMUseDirection 
+  */
+ virtual HRESULT GetSecondDirection(CATMathDirection&amp; oDir) = 0;
+
+ /**
+  * Sets the second direction on the plane to compute the point (for stability).
+  * &lt;br&gt;This direction has to be kept perpendicular to the first direction
+  *   @param iDir
+  *      second direction
+  *      @see CATIGSMUseDirection 
+  */
+ virtual HRESULT SetSecondDirection(const CATMathDirection&amp; iDir) = 0;
+
+  /**
+  * Gets the Projection Surface to compute the point 
+  * This data is not mandatory, if Projection Surface is
+  * null, the result is projection of the origin point or ref point on the plane is taken.
+  * (oProjSur = NULL_var is allowed).
+  *   @param oProjSur
+  *      Projection Surface
+  */
+ virtual    HRESULT GetProjectionSurface (CATIMmiMechanicalFeature_var&amp; oProjSur) = 0;
+
+  /**
+  * Sets the Projection Surface to compute the point 
+  * This data is not mandatory, if Projection Surface is
+  * null, the result is projection of the origin point or ref point on the plane is taken.
+  * (iProjSur = NULL_var is allowed).
+  *   @param iProjSur
+  *      Projection Surface
+  */
+  virtual    HRESULT SetProjectionSurface  (const CATIMmiMechanicalFeature_var iProjSur) = 0;
+
+};
+CATDeclareHandler (CATIGSMUsePointOnPlane, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUsePointOnCurve.html">← 上一页: CATIGSMUsePointOnCurve.h</a></div>
+        <div><a href="CATIGSMUsePointOnSurface.html">下一页: CATIGSMUsePointOnSurface.h →</a></div>
+    </div>
+</body>
+</html>

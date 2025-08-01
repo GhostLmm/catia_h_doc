@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathPointf.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathPointf.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathPoint2Df.html">← 上一页: CATMathPoint2Df.h</a></div>
+        <div><a href="CATMathSetOf3DObjects.html">下一页: CATMathSetOf3DObjects.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMATPOINTF_H
+#define CATMATPOINTF_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;YN000MFL.h&quot;
+
+class CATMathVectorf;
+class CATMathDirectionf;
+class CATMathPoint;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+/**
+ * Class representing a mathematical cartesian 3D-point in float precision.
+ */
+class ExportedByYN000MFL CATMathPointf
+{
+public:
+  /** @nodoc */
+  float x, y, z;
+
+//============================================================================
+//============================================================================
+/**
+ * Constructs CATMathPointf with (0,0,0) float coordinates.
+ */
+  CATMathPointf( const float iFirstCoord = 0. , const float iSecondCoord = 0. ,
+                 const float iThirdCoord = 0. );
+
+/**
+ * Copy constructor.
+ */
+  CATMathPointf( const CATMathPointf&amp; iPointfToCopy );
+
+/**
+ * Constructs a CATMathPointf from an array of 3 floats.
+ */
+  CATMathPointf( const float iCoord[] );
+
+/**
+ * Constructs a CATMathPointf by using a CATMathPoint.
+ */
+  CATMathPointf( const CATMathPoint&amp; iPointInDouble );
+
+//============================================================================
+// Methods
+//============================================================================
+/**
+ * Retrieves as a CATMathPoint.
+ */
+// Get the value and put it in a CATMathPoint
+  void GetValue(CATMathPoint &amp;oPointInDouble);
+
+/**
+ * Returns the distance to another CATMathPointf.
+ */
+  float DistanceTo( const CATMathPointf&amp; iOtherPointf ) const;
+
+/**
+ * Returns the sum of the absolute difference between &lt;tt&gt;this&lt;/tt&gt; 
+ * and another CATMathPointf.
+ */
+  float DistanceL1To( const CATMathPointf&amp; iOtherPointf ) const;
+
+/**
+ * Sets the coordinates to the min of the coordinates of 2 CATMathPointfs. 
+ */
+  void GetMinimum( const CATMathPointf&amp; iOtherPointf );
+/**
+ * Sets the coordinates to the max of the coordinates of 2 CATMathPointfs. 
+ */
+  void GetMaximum( const CATMathPointf&amp; iOtherPointf );
+
+/**
+ * Dumps the coordinates of a CATMathPointf.
+  * @nodoc
+ * &lt;br&gt;This writes the following line on the ostream:
+ * &lt;br&gt;&lt;tt&gt;( FirstCoord , SecondCoord , ThirdCoord )&lt;/tt&gt;
+ * @param iStream
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+
+//============================================================================
+//- Operators
+//============================================================================
+/**
+ * Translates a CATMathPointf by a CATMathVectorf.
+ * @param iPoint1
+ * The CATMathPointf of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVectorf
+ * The CATMathVectorf of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates,
+ * @return
+ * The CATMathPointf of &lt;tt&gt;(p1+u1,p2+u2,p3+u3)&lt;/tt&gt; coordinates.
+ */
+  CATMathPointf operator+( const CATMathVectorf&amp; iVectorf ) const;
+
+/**
+ * Translates a CATMathPointf by a CATMathVectorf.
+ * @param iPoint1
+ * The CATMathPointf of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iVectorf
+ * The CATMathVectorf of &lt;tt&gt;(u1,u2,u3)&lt;/tt&gt; coordinates,
+ * @return
+ * The CATMathPointf of &lt;tt&gt;(p1-u1,p2-u2,p3-u3)&lt;/tt&gt; coordinates.
+ */
+  CATMathPointf operator-( const CATMathVectorf&amp; iVectorf ) const;
+
+/**
+ * Builds a CATMathVectorf as the difference of two CATMathPointfs.
+ * &lt;br&gt; Note that the iPoint1iPoint2 vector is given by iPoint2-iPoint1.
+ * @param iPoint1
+ * The CATMathPointf of &lt;tt&gt;(p1,p2,p3)&lt;/tt&gt; coordinates.
+ * @param iPoint2
+ * The CATMathPointf of &lt;tt&gt;(q1,q2,q3)&lt;/tt&gt; coordinates.
+ * @return 
+ * The CATMathVectorf of &lt;tt&gt;(p1-q1,p2-q2,p3-q3)&lt;/tt&gt; coordinates.
+ */
+  CATMathVectorf operator-( const CATMathPointf&amp; iPoint2 ) const;
+
+};
+
+/** @nodoc */
+extern  ExportedByYN000MFL const CATMathPointf CATMathOf;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathPoint2Df.html">← 上一页: CATMathPoint2Df.h</a></div>
+        <div><a href="CATMathSetOf3DObjects.html">下一页: CATMathSetOf3DObjects.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATListOfInt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATListOfInt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATListOfFloat.html">← 上一页: CATListOfFloat.h</a></div>
+        <div><a href="CATListPV.html">下一页: CATListPV.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATListOfInt_h
+#define CATListOfInt_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CATCollec.h&quot;
+#include &quot;CATCollecRoot.h&quot;
+#include &quot;CO0RCINT.h&quot;
+#include &lt;stdlib.h&gt;
+
+
+/**
+ * Class to implement a mutable list of 32-bit integers.
+ * &lt;b&gt;Role&lt;/b&gt;: The purpose of this class is to let C++ classes easily pass and
+ * receive lists of integers. The class handles all the low-level
+ * memory allocation tasks such as reallocating the list once it capacity has
+ * been exceeded. It also provides high level operations such as sorting,
+ * comparison, etc... The first element has index 1.
+ * &lt;br&gt;Use the type @href CATListOfInt
+ */
+class ExportedByCO0RCINT CATRawCollint : public CATCollecRoot {
+	public:
+
+		/**
+		 * Constructs an empty list of ints.
+		 * @param iInitAlloc
+		 * The default capacity of the list.
+		 */
+		CATRawCollint ( int iInitAlloc = 0 );
+
+		/**
+		 * Copy constructor.
+		 * @param iCopy
+		 * The list to copy.
+		 */
+		CATRawCollint ( const CATRawCollint &amp; iCopy );
+
+		/**
+		 * Constructs a list and initializes it with a C++ int array.
+		 * @param iArray
+		 * A C++ array of ints used to initialize the list.
+		 * @param iSize
+		 * The size of the C++ array of ints used to initialize the list.
+		 */
+		CATRawCollint ( int * iArray , int iSize );
+
+		/**
+		 * Destructor.
+		 */
+		virtual ~CATRawCollint ( );
+
+		/**
+		 * Assignment operator. Overwrites the content of the list by 
+		 * copying into it another list.
+		 * @param iCopy
+		 * The assigned list.
+		 */
+		CATRawCollint &amp; operator = ( const CATRawCollint &amp; iCopy );
+
+		/**
+		 * Appends an int to the list.
+		 * @param iAdd
+		 * The int to append.
+		 * @return
+		 * &lt;tt&gt;0&lt;/tt&gt; upon sucess, &lt;tt&gt;1&lt;/tt&gt; if there is no more free memory.
+		 */
+		int Append ( int iAdd );
+
+		/**
+		 * Appends the content of an int list.
+		 * @param iConcat
+		 * The int list to append.
+		 * @return
+		 * &lt;tt&gt;0&lt;/tt&gt; upon sucess, &lt;tt&gt;1&lt;/tt&gt; if there is no more free memory.
+		 */
+		int Append ( const CATRawCollint &amp; iConcat );
+
+		/**
+		 * Inserts an int within the list at the specified index.
+		 * @param iIndex
+		 * The index at which the int is to be inserted. 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Equals 1 of the int is
+		 * to be inserted at the head of the list, and &lt;tt&gt;Size() + 1&lt;/tt&gt; if the
+		 * int is to be inserted at the tail of the list.
+		 * @param iAdd
+		 * The int to insert.
+		 * @return
+		 * &lt;tt&gt;0&lt;/tt&gt; upon sucess, &lt;tt&gt;1&lt;/tt&gt; if there is no more free memory.
+		 */
+		int InsertAt ( int iIndex , int iAdd );
+
+		/**
+		 * Returns the size of the list. 
+		 * @return the size of the list.
+		 */
+		int Size ( ) const {
+			return _Size;
+		}
+
+		/**
+		 * Forces the size of the list to an arbitrary size. 
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: If &lt;tt&gt;iSize&lt;/tt&gt; is
+		 * larger than the current size, the newly allocated slots contain random
+		 * int values.
+		 * @param iSize
+		 * The desired size.
+		 * @return
+		 * &lt;tt&gt;0&lt;/tt&gt; upon sucess, &lt;tt&gt;1&lt;/tt&gt; if there is no more free memory.
+		 */
+		int Size ( int iSize );
+
+		/**
+		 * Forces the size of the list to an arbitrary size. 
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: If &lt;tt&gt;iSize&lt;/tt&gt; is
+		 * larger than the current size, the newly allocated slots contain
+		 * &lt;tt&gt;iFiller&lt;/tt&gt;.
+		 * @param iSize
+		 * The desired size.
+		 * @param iFiller
+		 * An int used to fill newly allocated slots.
+		 * @return
+		 * &lt;tt&gt;0&lt;/tt&gt; upon sucess, &lt;tt&gt;1&lt;/tt&gt; if there is no more free memory.
+		 */
+		int Size ( int iSize , int iFiller );
+
+		/**
+		 * Subscripting operator.
+		 * @param iIndex
+		 * The index of the element.
+		 * @return 
+		 * The int at index &lt;tt&gt;iIndex&lt;/tt&gt;.
+		 */
+		int &amp; operator[] ( int iIndex );
+
+		/**
+		 * Subscripting operator.
+		 * @param iIndex
+		 * The index of the element.
+		 * @return 
+		 * The int at index &lt;tt&gt;iIndex&lt;/tt&gt;.
+		 */
+		int operator[] ( int iIndex ) const;
+
+		/**
+		 * Finds the first occurrence of an int from a given index.
+		 * @param iLocate
+		 * The int to locate.
+		 * @param iIndex
+		 * The index at which the search is to begin.
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The index of the located int, or 
+		 * &lt;tt&gt;0&lt;/tt&gt; if the list does not contain
+		 * the specified int.
+		 */
+		int Locate ( int iLocate , int iIndex = 1 ) const;
+
+		/**
+		 * Removes the first occurrence of an int from the list.
+		 * @param iRemove
+		 * The int to remove.
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The index of the removed int, 
+		 * or &lt;tt&gt;0&lt;/tt&gt; if the list does not contain
+		 * the specified int.
+		 */
+		int RemoveValue ( int iRemove );
+
+		/**
+		 * Removes all the values specifed in &lt;tt&gt;iSubstract&lt;/tt&gt; from the list.
+		 * @param iSubstract
+		 * A list of ints to remove.
+		 * @return 
+		 * The count of ints removed from the list.
+		 */
+		int Remove ( const CATRawCollint &amp; iSubstract );
+
+		/**
+		 * Removes the int located at a given index.
+		 * @param iIndex
+		 * The list index of the int to remove.
+		 */
+		void RemovePosition ( int iIndex );
+
+		/**
+		 * Removes several ints from the starting given index.
+		 * @param iIndex
+		 * The stating list index of the ints to remove.
+		 * @param iNbElem
+		 * The number of ints to remove.
+		 * @return 
+		 * The count of ints removed from the list.
+		 */
+		int RemovePosition(int iIndex, unsigned int iNbElem);
+
+		/**
+		 * Removes all the elements from the list.
+		 * @param iMH
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Specifies whether the list capacity 
+		 * should be shrunk to 0 
+		 * (&lt;tt&gt;CATCollec::ReleaseAllocation&lt;/tt&gt;) or not
+		 * (&lt;tt&gt;CATCollec::KeepAllocation&lt;/tt&gt;).
+		 */
+		void RemoveAll ( CATCollec::MemoryHandling iMH = CATCollec::ReleaseAllocation );
+
+		/**
+		 * Removes all the ints equal to 0.
+		 * @return 
+		 * The count of null ints removed from the list.
+		 */
+		int RemoveNulls ( );
+
+		/**
+		 * Removes all the duplicate occurrences of an int from the list and
+		 * appends them to another list.
+		 * @param ioExtract
+		 * A list to which duplicate ints are appended.
+		 * @return 
+		 * The count of duplicate ints removed from the list.
+		 */
+		int RemoveDuplicates ( CATRawCollint * ioExtract = NULL );
+
+		/**
+		 * Equality operator.
+		 * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Two lists are equal if they contain the same
+		 * elements in the same order.
+		 * @param iRC
+		 * The list to test for equality
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the two lists are equal, 
+		 * &lt;tt&gt;0&lt;/tt&gt; otherwise
+		 */
+		int operator == ( const CATRawCollint &amp; iRC ) const { 
+			return ( * this != iRC ? 0 : 1 );
+		}
+
+		/**
+		 * Inequality operator.
+		 * @param iRC
+		 * The list to test for inequality
+		 * @return
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the two lists are not equal, 
+		 * &lt;tt&gt;0&lt;/tt&gt; otherwise.
+		 */
+		int operator != ( const CATRawCollint &amp; iRC ) const;
+
+		/**
+		 * Compares two lists of ints. 
+		 * @param iRC1
+		 * The first list
+		 * @param iRC2
+		 * The second list
+		 * @return 
+		 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; if the lists are equal,
+		 * &lt;tt&gt;-1&lt;/tt&gt; if the first list is smaller 
+		 * than the second list
+		 * (smaller means that the first list contains less elements than the second
+		 * list or that &lt;tt&gt;iRC1[i] &amp;lt; iRC2[i]&lt;/tt&gt; for the first i where
+		 * &lt;tt&gt;iRC1[i] != iRC2[i]&lt;/tt&gt;), or &lt;tt&gt;1&lt;/tt&gt; otherwise.
+		 */
+		static int Compare ( const CATRawCollint &amp; iRC1 , const CATRawCollint &amp; iRC2 );
+
+		/**
+		 * Swaps two list elements. 
+		 * @param iIndex1
+		 * index of the first element to swap.
+		 * @param iIndex2
+		 * index of the second element to swap.
+		 */
+		void Swap ( int iIndex1 , int iIndex2 );
+
+		/**
+		 * Sorts the list using the quicksort algorithm.
+		 */
+		void QuickSort ( );
+
+		/**
+		 * Fills a C++ array of ints with elements from the list.
+		 * @param ioArray
+		 * The C++ array to fill.
+		 * @param iMaxSize
+		 * The size of the C++ array to fill.
+		 */
+		void FillArray ( int * ioArray , int iMaxSize ) const;
+
+		/**
+		 * Counts the occurrences of an int in the list.
+		 * @param iTest
+		 * The int for which the occurrences are to be counted.
+		 * @return
+		 * The count of occurrences of the int in the list.
+		 */
+		int NbOccur ( int iTest );
+
+		/**
+		 * Computes the intersection of two lists.
+		 * @param iRC1
+		 * The first list.
+		 * @param iRC2
+		 * The second list.
+		 * @param ioResult
+		 * A list to which elements in the intersection are appended.
+		 */
+		static void Intersection ( const CATRawCollint &amp; iRC1 , const CATRawCollint &amp; iRC2 , CATRawCollint &amp; ioResult );
+
+	protected:
+
+		/** @nodoc */
+		void GetStorage( int iNbElem , int * &amp; oBlock ) {
+			oBlock = new int[iNbElem];
+		}
+
+		/** @nodoc */
+		void FreeStorage( int * &amp; ioBlock );
+
+		/** @nodoc */
+		int * Storage( ) {
+				return _Block;
+		}
+
+		/** @nodoc */
+		int _Size;
+
+		/** @nodoc */
+		int _MaxSize;
+
+		/** @nodoc */
+		int * _Block;
+
+/** 
+ * @nodoc 
+ * The list has an initial internal static buffer of size &lt;tt&gt;CATListOfIntDefaultSize&lt;/tt&gt;
+ * it uses to store elements. This reduces the number of memory allocation calls for
+ * small lists.
+ */
+#define CATListOfIntDefaultSize  10
+
+/** @nodoc */
+#define _LessFree
+#ifdef _LessFree
+
+	private:
+
+		/** @nodoc */
+		int _StaticBaseBlock[CATListOfIntDefaultSize];
+#endif
+};
+ 
+
+#include &quot;CATRCOLL_Misc.h&quot;
+
+#endif		/* CATListOfInt_h */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATListOfFloat.html">← 上一页: CATListOfFloat.h</a></div>
+        <div><a href="CATListPV.html">下一页: CATListPV.h →</a></div>
+    </div>
+</body>
+</html>

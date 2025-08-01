@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvancedMathematics/PublicInterfaces/CATMathFunctionX.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AdvancedMathematics/PublicInterfaces/CATMathFunctionX.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathFunctionGeneral.html">← 上一页: CATMathFunctionGeneral.h</a></div>
+        <div><a href="CATMathFunctionXType.html">下一页: CATMathFunctionXType.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathFunctionX_H
+#define CATMathFunctionX_H
+
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+
+#include &quot;YN000FUN.h&quot;
+#include &quot;CATMathFunctionGeneral.h&quot;
+
+#include &quot;CATMathFunctionXType.h&quot;
+#include &quot;CATMathInterval.h&quot;
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+// A garder jusqu&#x27;a deflaggage complet de tous sources l&#x27;utilisant
+#define CATMathFunctionXR19Interface
+#define CATMathFunctionXR19InterfaceComputeOptimalImage
+#define CATMathFunctionXR20Interface
+
+class CATMathAttrList;
+class CATMathAttrScaleOption;
+class CATMathConstraint;
+class CATMathSetOfPointsND;
+class CATSoftwareConfiguration;
+
+/** @nodoc */
+#define  FUNCTION 0
+/** @nodoc */
+#define  DERIVATE 1
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXSamplingPoints;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXConstraint;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXAbsoluteExtremum;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXInteriorExtremum;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXLimitValue;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXDiscretizationMethod;
+/** @nodoc */
+ExportedByYN000FUN extern const CATMathAttrId AttrFunctionXAbsoluteTolerance;
+
+
+/**
+ * Class representing a scalar function of one variable.
+ *  &lt;pre&gt; F: R   -&gt; R
+ * x   -&gt; F(x)
+ * &lt;/pre&gt;
+ */ 
+class ExportedByYN000FUN CATMathFunctionX : public CATMathFunctionGeneral 
+{
+
+ public:
+  
+  virtual ~CATMathFunctionX() ;
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX derives from a class (given by a numerical value).
+ * @param iClassId
+ * The numerical value representing the class type.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathFunction is a type of &lt;tt&gt;iType&lt;/tt&gt;,
+ * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+   virtual CATBoolean IsATypeOf(const CATMathFunctionXTypeId iType) const;
+   
+   //-----------------------------------------------------------------
+   // Evaluators on doubles
+   //----------------------------------------------------------------- 
+ /** 
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+   virtual double Eval           (const double &amp; iT) const = 0;
+
+ /** 
+ * Evaluates the first derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+   virtual double EvalFirstDeriv (const double &amp; iT) const;
+
+   /** 
+ * Evaluates the second derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+   virtual double EvalSecondDeriv(const double &amp; iT) const;
+
+/** 
+ * Evaluates the third derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+   virtual double EvalThirdDeriv (const double &amp; iT) const;
+
+
+/** 
+ * Simultaneously evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX and its derivatives.
+ * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: The pointers
+ * must have been previously allocated if you asked for the corresponding evaluation. 
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is evaluated.
+ * @param iOption
+ * The type of evalution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;OptionEval   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the function
+ * &lt;dt&gt;OptionEvalFirstDeriv   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the first derivatives of the function
+ * &lt;dt&gt;OptionEvalSecondDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the second derivatives of the function
+ * &lt;dt&gt;sum of preceeding values&lt;/dt&gt;&lt;dd&gt; multiple evaluation.
+ * &lt;/dl&gt;
+ * @param ioF
+ * A pointer to the value of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param ioDf
+ * A pointer to the first derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ * @param ioD2f
+ * A pointer to the second derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX.
+ */
+   virtual void Eval             (const double        iT      ,
+                                  const CATMathOption iOption ,
+                                        double        * ioF   ,
+                                        double        * ioDf  = 0,
+                                        double        * ioD2f = 0) const;
+
+/** 
+ * Simultaneously evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX and its derivatives at regularly spaced values.
+ * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: The output arrays
+ * must have been previously allocated if you asked for the corresponding evaluation.
+ * @param iI
+ * The interval containing the regularly spaced values.
+ * @param iNbPoints
+ * The number of values of &lt;tt&gt;iI&lt;/tt&gt; where &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX must be evaluated. 
+ * If &lt;tt&gt;NbPoints = 1&lt;/tt&gt;, the evaluations are made on the first value of &lt;tt&gt;iI&lt;/tt&gt;.
+ * @param iOption
+ * The type of evalution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;OptionEval   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the function
+ * &lt;dt&gt;OptionEvalFirstDeriv   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the first derivatives of the function
+ * &lt;dt&gt;OptionEvalSecondDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the second derivatives of the function
+ * &lt;dt&gt;sum of preceeding values&lt;/dt&gt;&lt;dd&gt; multiple evaluation.
+ * &lt;/dl&gt;
+ * @param ioF
+ * The array of evaluations of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX at the regurlarly spaced values.
+ * @param ioDf
+ * The array of the first derivatives of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX at the regurlarly spaced values.
+ * @param ioD2f
+ * The array of the second derivatives of &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX at the regurlarly spaced values.
+ */
+   virtual void Eval             (const CATMathInterval  &amp; iI       ,
+                                  const CATLONG32          iNbPoints,
+                                  const CATMathOption      iOption  ,
+                                        double          *  ioF      ,
+                                        double          *  ioDf     = 0,
+                                        double          *  ioD2f    = 0) const;
+
+
+  /**
+  * Returns a function representing the linear combination of other CATMathFunctions.
+   * &lt;tt&gt;iConstant + Sum_{i=0}^{iN-1} iCoef[i] * iFunc[i]&lt;/tt&gt;.
+   * &lt;br&gt;WARNING : the returned pointer must be deleted by the caller
+   */
+  // see forward
+  friend ExportedByYN000FUN CATMathFunctionX * CreateCombination(const CATLONG32           iN       , 
+                                                                 const CATMathFunctionX ** iFunc    ,
+                                                                 const double            * iCoef    , 
+                                                                 const double              iConstant);
+
+    /**
+ * Tests if &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX derives from a class (given by its name).
+ * @param iClassId
+ * The name of the class.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathFunctionX is a kind of &lt;tt&gt;iClassId&lt;/tt&gt;,
+ * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+   virtual CATBoolean IsAKindOf(const CATMathClassId iClassId) const;
+ 
+
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/** @nodoc */
+   virtual CATMathInterval Eval           (const CATMathInterval &amp; x) const;
+/** @nodoc */
+   virtual CATMathInterval EvalFirstDeriv (const CATMathInterval &amp; x) const;
+/** @nodoc */
+   virtual CATMathInterval EvalSecondDeriv(const CATMathInterval &amp; x) const;
+/** @nodoc */
+   virtual CATMathInterval EvalThirdDeriv (const CATMathInterval &amp; x) const;
+/** 
+   * @nodoc 
+   * Interval evaluator of function and derivatives at the same time :
+   * (performance are increased if redefined in derived classes)
+   * iOptions is a command which contains which derivatives are requested
+   * (usually, iOptions = OptionEvalInterval + OptionEvalFirstDerivInterval)
+   */
+   virtual void            Eval               (const CATMathInterval          &amp; I            ,
+                                               const CATMathOption              iOptions     ,
+                                                     CATMathInterval         *  f            ,
+                                                     CATMathInterval         *  df           = 0, 
+                                                     CATMathInterval         *  d2f          = 0) const;
+
+ 
+    /**
+  * @nodoc
+  * Computes a quite good interval containing the image of (I), thanks to a recursive process.
+  */
+   virtual CATMathInterval ComputeOptimalImage(const CATMathInterval          &amp; I            ,
+                                               const CATTolerance             &amp; iTolObject   = CATGetDefaultTolerance(),
+                                                     CATMathAttrScaleOption  *  iScaleOption = NULL,
+                                                     CATSoftwareConfiguration*  iConfig      = NULL
+                                              ) const;
+
+  /**
+   * Duplicates &lt;tt&gt;this&lt;/tt&gt;. Must be implemented when defining a user CATMathFunctionX.
+   */   
+   virtual CATMathFunctionX * Duplicate() const = 0;
+
+   /**
+   * Duplicates &lt;tt&gt;this&lt;/tt&gt; as well as the pointers to the CATMathFunctionX 
+    * referred to by &lt;tt&gt;this&lt;/tt&gt;. Must be implemented when defining a user CATMathFunctionX.
+   */
+   virtual CATMathFunctionX * DeepDuplicate() const ;
+
+#if defined ( CATIACGMR216CAA )
+   /** @nodoc  Not Published  */
+   virtual CATMathFunctionX * DeepDuplicateWithTol(const CATTolerance *ipTolObject) const ;
+#endif
+
+  //
+  // Solver public interface
+  //
+  // iAttributes is a pointer to a list of attributes to pass options to the solver
+  // (default is 0, i.e. no option).
+  // The available attributes, defined from the CATMathAttrId
+  // listed in the beginning of the file, are the following :
+  // 
+  // * CATMathAttrIntegerValue((CATMathAttrId) AttrFunctionXSamplingPoints, (CATLONG32) NbPoints)
+  //     with this attribute, the sampling grid used by Solve 
+  //     has NbPoints number of points.
+  //
+  // * CATMathContraint((CATMathAttrId) AttrFunctionXConstraint)
+  //     rederive the base class CATMathConstraint to overload the Eval method.
+  //
+  // * AttrFunctionXDiscretizationMethod to force the discretization solver
+  //
+  // * AttrFunctionXAbsoluteTolerance to specify an absolute tolerance such that if the
+  //   function is less than this tolerance on the domain D, it is considered as null
+  //
+  // The returned value is CATMathOK if all is OK, CATMathNullFunction is the function
+  // vanishes on D.
+   /**
+   * @nodoc
+   */
+  virtual CATMathDiagnostic Solve      (const CATMathInterval          &amp; D            ,
+                                              CATMathSetOfPointsND     &amp; roots        ,
+                                        const CATMathAttrList         *  attributes   = 0,
+                                              CATSoftwareConfiguration*  iConfig      = NULL
+                                       ) const;
+
+
+  // Lagrange Newton algorithm.
+  // iD id the interval where the root is.
+  // iF is the interval [function(Dmin), function(Dmax)] which must contain 0.
+  // iDerivate indicate if we solve the function or its derivative.
+  // ioResult is the initial point and the result.
+
+    /**
+   * @nodoc
+   */
+  virtual CATMathDiagnostic SolveNewton(const CATMathInterval          &amp; iD           ,
+                                        const CATMathInterval          &amp; iF           ,
+                                        const CATLONG32                &amp; iDerivate    ,
+                                              double                   &amp; ioResult     ,
+                                        const CATTolerance             &amp; iTol         = CATGetDefaultTolerance(),
+                                              CATMathAttrScaleOption  *  iScaleOption = NULL,
+                                              CATSoftwareConfiguration*  iConfig      = NULL
+                                       ) const;
+
+  //
+  // Minimize public interface
+  //
+  // iAttributes is a pointer to a list of attributes to pass options to the solver
+  // (default is 0, i.e. no option).
+  // The available attributes, defined from the CATMathAttrId listed in the 
+  // beginning of the file, are the following (there are not exclusive) :
+  // 
+  // * CATMathAttrIntegerValue((CATMathAttrId) AttrFunctionXSamplingPoints, (CATLONG32) NbPoints)
+  //     with this attribute, the sampling grid used by Minimize
+  //     has NbPoints number of points.
+  //
+  // * CATMathAttrString((CATMathAttrId) AttrFunctionXAbsoluteExtremum)
+  //     find only the absolute extremum
+  //
+  // * CATMathAttrString((CATMathAttrId) AttrFunctionXInteriorExtremum)
+  //     find only the minimum on which the gradient vanishes.
+  //
+  // * CATMathAttrDoubleValue((CATMathAttrId) AttrFunctionXLimitValue, (double) LimitValue)
+  //     find only all the local minima under LimitValue.
+  //
+  // * CATMathAttrString((CATMathAttrId) AttrFunctionXDiscretizationMethod)
+  //     use a discretization method to find the minima
+  //
+  //
+  // The returned value is CATMathOK if all is OK, CATMathConstantFunction if the function
+  // appears to be constant on D.
+  //
+     /**
+   * @nodoc
+   */
+  virtual CATMathDiagnostic Minimize(const CATMathInterval          &amp; D          ,
+                                           CATMathSetOfPointsND     &amp; oSolutions ,
+                                     const CATMathAttrList         *  attributes = 0,
+                                           CATSoftwareConfiguration*  iConfig    = NULL
+                 ) const;
+    /**
+   * @nodoc
+   */
+  virtual CATMathDiagnostic Maximize(const CATMathInterval          &amp; D          ,
+                                           CATMathSetOfPointsND     &amp; oSolutions ,
+                                     const CATMathAttrList         *  attributes = 0,
+                                           CATSoftwareConfiguration*  iConfig    = NULL
+                                    ) const;
+    /**
+   * @nodoc
+   */
+  virtual double Integrate        (const CATMathInterval &amp; D,
+                                   const double            tol) const;
+     /**
+   * @nodoc
+   */
+  virtual double IntegrateRelative(const CATMathInterval &amp; D,
+                                   const double            tol) const;
+
+  // N is the order of GaussLegendre integration, M the number of splits to do on D
+  // Possible values of N are 2, 4, 6, 8, 10, 12, 16, 20
+     /**
+   * @nodoc
+   */
+  virtual double GaussLegendre    (const CATMathInterval &amp; D,
+                                   const CATLONG32         N,
+                                   const CATLONG32         M) const;
+
+   /**
+   * @nodoc
+   */
+  
+  virtual CATMathFunctionX * CreateDeriv() const;
+
+  //---------------------------------------------------------------------
+  // Composition creation
+  //
+  // Create the FunctionX defined by : t-&gt; Phi(F(t))
+  // WARNING : The returned pointer must be deleted by the caller.
+  //           When the returned pointer is deleted, iPhi and iF are not deleted
+  // 
+  //---------------------------------------------------------------------
+  /**
+   * @nodoc
+   */
+  static CATMathFunctionX * CreateCompositionX(const CATMathFunctionX * iPhi,
+                                               const CATMathFunctionX * iF);
+
+  //---------------------------------------------------------------------
+  // Composition creation with deletion
+  //
+  // Create the FunctionX defined by : t-&gt; Phi(F(t))
+  // WARNING : The returned pointer must be deleted by the caller.
+  //           When the returned pointer is deleted, iPhi and iF are deleted
+  // 
+  //---------------------------------------------------------------------
+  /**
+   * @nodoc
+   */
+  static CATMathFunctionX * CreateCompositionXDel(CATMathFunctionX * iPhi,
+                                                  CATMathFunctionX * iF  );
+
+  //---------------------------------------------------------------------
+  // Cubic Interpolation creation
+  //
+  // Create a Piecewise-cubic FunctionX F of class C2 with minimal energy
+  // such that F(iParam[i]) = iValue[i] for 0&lt;= i &lt; iN
+  //
+  // WARNING : The returned pointer must be deleted by the caller.
+  //---------------------------------------------------------------------
+  
+  /**
+   * @nodoc
+   */
+  static CATMathFunctionX * CreateCubicInterpolation(const CATLONG32      iN         ,
+                                                     const double      *  iParam     ,
+                                                     const double      *  iValue     ,
+                                                     const CATTolerance &amp; iTolObject = CATGetDefaultTolerance());
+
+  /**
+   * @nodoc
+   */
+   virtual CATLONG32 GetNumberOfVariables() const;
+
+
+protected:
+ 
+    /**
+   * @nodoc
+   */
+  virtual CATMathInterval RComputeOptimalImage(const CATMathInterval &amp; I          ,  
+                                               const CATMathInterval &amp; Image      ,
+                                               const CATLONG32         iDepth     ,
+                                               const CATTolerance    &amp; iTolObject = CATGetDefaultTolerance()) const;
+
+  //---------------------------------------------------------------------
+  // Composition creation
+  //
+  // Return the FunctionX defined by : t-&gt; this(F(t)).
+  // This method can be redefined in derived classes to support formal calculus
+  // WARNING : The returned pointer must be deleted by the caller.
+  //           When the returned pointer is deleted, iPhi and iF are not deleted
+  // 
+  //---------------------------------------------------------------------
+  /**
+   * @nodoc
+   */
+  virtual CATMathFunctionX * FormalCompositionX(const CATMathFunctionX * iF) const;
+
+  //---------------------------------------------------------------------
+  // Linear combination creation : 
+  //
+  // try to return a formal linear combination
+  // iConstant + Sum_{i=0}^{iN-1} iCoef[i] * iFunc[i] of the same type
+  // than the pointer &quot;this&quot;.
+  // Note : the pointer &quot;this&quot; is usually iFunc[0]. This mecanism is used to
+  //        overload the creation of combination in derived classes.
+  //        This method is usually called by the friend function CreateCombination
+  // WARNING :  the returned pointer must be deleted by the caller of CreateCombination
+  // --------------------------------------------------------------------
+    /**
+   * @nodoc
+   */
+  virtual CATMathFunctionX * FormalCombination(const CATLONG32           iN       , 
+                                               const CATMathFunctionX ** iFunc    ,
+                                               const double            * iCoef    , 
+                                               const double              iConstant) const;
+
+  /**
+  * @nodoc
+  * derive this method to tune the level of confidence of ComputeImageByChebyshev
+  * and adjust the tradeoff between performance and reliability
+  * it is better to decrease this parametre when the function is not very regular
+  */
+
+  virtual double             GetChebyshevConfidenceParametre() const;
+  
+ public:
+  /**
+  * @nodoc
+  * Compute the first n coefficients of the chebyshev expansion of the function
+  * ( Chebychev expansion is P = sum_{0&lt;=i &lt;=n} beta_{i} T_i(x))
+  *
+  * If we denote by c the returned pointer, we have
+  * c[i] = beta_{i} is the i-th coefficient of the expansion
+  * The returned pointer c must be deleted by the caller.
+  */
+  double * ComputeChebyshevCoefficients(const CATMathInterval &amp; D, CATLONG32 n) const;
+
+
+  
+  /**
+  * @nodoc
+  * Computes in oJ an upper bound of the image of the function on the image D thanks to the chebyshev expansion.
+  * Return 1 is it has succeed, 0 else (in this case, the chebyshev expansion is too bad to obtain an approximation
+  * of the image from it).
+  */
+  CATBoolean ComputeImageByChebyshev(const CATMathInterval &amp; D, CATMathInterval &amp; oJ, const CATTolerance &amp; iTolObject=CATGetDefaultTolerance()) const;
+
+
+  /** @nodoc */
+  CATBoolean ComputeImageByChebyshev_old(const CATMathInterval &amp; D, CATMathInterval &amp; oJ) const;
+
+// Creates an N-point Chebyshev approximation P of this on I such that (not assuredly but likely)
+
+// | P(x)-Eval(x) | &lt; eps
+// Returns NULL if no good approximation found
+// *** Deletion is up to caller ***
+// N must be &lt;= 16 and even, preferrably 4,6,8,12,16 (optimized values)
+  /** @nodoc */
+  CATMathFunctionX * ChebyshevApproximation(const CATMathInterval &amp; I, CATLONG32 N, double eps) const;
+
+ private:
+//
+// Integration private methods
+//
+  virtual double IntegrateAbsOrRel(const CATMathInterval &amp; D,
+               const double tol,
+               const CATBoolean IsRelative) const;
+  
+  virtual double GaussLegendre(const CATMathInterval &amp; D,
+                const CATLONG32 N) const;
+
+};
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+// Forward declaration of friend functions
+// (duplication here with default argument values for standard declaration on all platforms)
+//----------------------------------------------------------------------------------------------------------------------------
+
+  /**
+  * Returns a function representing the linear combination of other CATMathFunctions.
+   * &lt;tt&gt;iConstant + Sum_{i=0}^{iN-1} iCoef[i] * iFunc[i]&lt;/tt&gt;.
+   * &lt;br&gt;WARNING : the returned pointer must be deleted by the caller
+   */
+ExportedByYN000FUN
+CATMathFunctionX * CreateCombination          (const CATLONG32                  iN                , 
+                                               const CATMathFunctionX        ** iFunc             ,
+                                               const double                   * iCoef             ,
+                                               const double                     iConstant         = 0);
+
+//----------------------------------------------------------------------------------------------------------------------------
+// DS Internal Use: static methods for extended data transmission with no CAA impact on class methods
+//----------------------------------------------------------------------------------------------------------------------------
+// N.B methods that should have been nodoc keep their old interface during SPs of same release
+/** @nodoc */
+// Calls SolveNewton() method on a function, with extended argument list
+ExportedByYN000FUN
+CATMathDiagnostic SolveNewtonFunctionX        (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; iD                ,
+                                               const CATMathInterval          &amp; iF                ,
+                                               const CATLONG32                &amp; iDerivate         ,
+                                                     double                   &amp; ioResult          ,
+                                               const CATTolerance             &amp; iTol              = CATGetDefaultTolerance(),
+                                                     CATMathAttrScaleOption  *  iScaleOption      = NULL,
+                                                     CATSoftwareConfiguration*  iConfig           = NULL
+                                              ) ;
+
+/** @nodoc */
+// Deprecated, and should have been nodoc. use SolveNewtonFunctionX
+ExportedByYN000FUN
+CATMathDiagnostic SolveNewton                 (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; iD                ,
+                                               const CATMathInterval          &amp; iF                ,
+                                               const CATLONG32                &amp; iDerivate         ,
+                                                     double                   &amp; ioResult          ,
+                                               const CATTolerance             &amp; iTol              = CATGetDefaultTolerance(),
+                                                     CATMathAttrScaleOption  *  iScaleOption      = NULL
+                                                 //  CATSoftwareConfiguration*  iConfig           = NULL
+                                       ) ;
+
+/** @nodoc */
+// Calls ComputeOptimalImage() method on a function, with extended argument list
+ExportedByYN000FUN
+CATMathInterval   ComputeOptimalImageFunctionX(const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; I                 ,
+                                               const CATTolerance             &amp; iTolObject        = CATGetDefaultTolerance(),
+                                                     CATMathAttrScaleOption  *  iScaleOption      = NULL,
+                                                     int                        iUseGeneralMethod = 0   , // to force use of general method in CATMathFunctionX class (not derived method)
+                                                     CATSoftwareConfiguration*  iConfig           = NULL
+                                              ) ;
+/** @nodoc */
+// Deprecated: use ComputeOptimalImageFunctionX
+ExportedByYN000FUN
+CATMathInterval   ComputeOptimalImage         (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; I                 ,
+                                               const CATTolerance             &amp; iTolObject        = CATGetDefaultTolerance(),
+                                                     CATMathAttrScaleOption  *  iScaleOption      = NULL,
+                                                     int                        iUseGeneralMethod = 0 // to force use of general method in CATMathFunctionX class (not derived method)
+                                            //,      CATSoftwareConfiguration*  iConfig           = NULL
+                                              ) ;
+
+/** @nodoc */
+ExportedByYN000FUN
+CATSoftwareConfiguration* GetSoftwareConfigurationUnderComputeOptimalImage(const CATMathFunctionX* iFunction) ;
+/** @nodoc */
+ExportedByYN000FUN
+CATSoftwareConfiguration* GetSoftwareConfigurationUnderSolve              (const CATMathFunctionX* iFunction) ;
+
+
+/** @nodoc */
+// CAUTION: migration from iFunction-&gt;Minimize() to MinimizeFunctionX(iFunction,...);
+// must not be done if Minimize() method derived in derived function
+// Calls Minimize() method on a function, with extended argument list
+ExportedByYN000FUN
+CATMathDiagnostic MinimizeFunctionX           (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; D                 ,
+                                                     CATMathSetOfPointsND     &amp; oSolutions        ,
+                                               const CATMathAttrList         *  attributes        ,
+                                                     CATSoftwareConfiguration*  iConfig           = NULL) ;
+
+/** @nodoc */
+// CAUTION: migration from iFunction-&gt;Maximize() to MaximizeFunctionX(iFunction,...);
+// must not be done if Maximize() method derived in derived function
+// Calls Maximize() method on a function, with extended argument list
+ExportedByYN000FUN
+CATMathDiagnostic MaximizeFunctionX           (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; D                 ,
+                                                     CATMathSetOfPointsND     &amp; oSolutions        ,
+                                               const CATMathAttrList         *  attributes        ,
+                                                     CATSoftwareConfiguration*  iConfig           = NULL) ;
+
+/** @nodoc */
+// Calls Solve() method on a function, with extended argument list
+ExportedByYN000FUN
+CATMathDiagnostic SolveFunctionX              (const CATMathFunctionX        *  iFunction         ,
+                                               const CATMathInterval          &amp; D                 ,
+                                                     CATMathSetOfPointsND     &amp; roots             ,
+                                               const CATMathAttrList         *  attributes        ,
+                                                     int                        iUseGeneralMethod = 0, // =1 to force use of general method in CATMathFunctionX class (not derived method)
+                                                     CATSoftwareConfiguration*  iConfig           = NULL
+                                              );
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathFunctionGeneral.html">← 上一页: CATMathFunctionGeneral.h</a></div>
+        <div><a href="CATMathFunctionXType.html">下一页: CATMathFunctionXType.h →</a></div>
+    </div>
+</body>
+</html>

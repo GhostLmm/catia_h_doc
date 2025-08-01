@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATTypesForFileExit.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATTypesForFileExit.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTypeCode.html">← 上一页: CATTypeCode.h</a></div>
+        <div><a href="CATUniStd.html">下一页: CATUniStd.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* COPYRIGHT DASSAULT SYSTEMES 2000 */
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+#ifndef CATTypesForFileExit_H 
+#define CATTypesForFileExit_H
+#ifndef _WINDOWS_SOURCE
+#include &lt;errno.h&gt;
+#endif
+
+
+ /**
+  * Definition of the acces rigth on a file.
+  * &lt;b&gt;Role&lt;/b&gt;: This type is used to defined the requested and or granted rights 
+  * on a file. It is construted by ORING the following values.
+  * @param   CATReadRight    Read right for the user.
+  * @param   CATWriteRight Write right for the user.
+  * @param   CATRWRight Read/write right for the user.
+  * @param   CATExecuteRight Execute right for the user.
+  *  @see CATIUExitIO
+  */
+typedef unsigned int CATAccessRight;
+
+/** @nodoc */
+#define CATReadRight		0x0000000
+/** @nodoc */
+#define CATWriteRight		0x0000001
+/** @nodoc */
+#define CATRWRight		0x0000002
+/** @nodoc */
+#define CATExecuteRight		0x0000040
+
+
+
+
+ /**
+  * Definition of the error type for the IO user Exit.
+  * &lt;b&gt;Role&lt;/b&gt;: If any error occurs in the code of an IO User Exit, the method
+  * must return CATERRNO, in order that the CATIA soft can interpret correctly
+  * the error and show the correct error messages.
+  *  @param  0  On success
+  *  @param  CATERRNO if any system error has occurred.
+  *  @see CATIUExitIO
+  */
+typedef int CATFileSystemError;
+
+#ifdef _WINDOWS_SOURCE
+/** @nodoc */
+#define CATERRNO GetLastError()
+#else
+/** @nodoc */
+#define CATERRNO errno
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTypeCode.html">← 上一页: CATTypeCode.h</a></div>
+        <div><a href="CATUniStd.html">下一页: CATUniStd.h →</a></div>
+    </div>
+</body>
+</html>

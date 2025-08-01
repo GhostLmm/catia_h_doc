@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAAFreeStyleItf/PublicInterfaces/CATIStFeatureAndSupportAgent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAAFreeStyleItf/PublicInterfaces/CATIStFeatureAndSupportAgent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIStEditableFeature.html">← 上一页: CATIStEditableFeature.h</a></div>
+        <div><a href="CATIStFreeStyleSettings.html">下一页: CATIStFreeStyleSettings.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIStFeatureAndSupportAgent_H
+#define CATIStFeatureAndSupportAgent_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+//==============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//==============================================================================
+//
+// CATIStFeatureAndSupportAgent :
+//   Interface for retreiving the value of a FeatureAndSupportAgent created
+//   through the CATIStInteractiveFactory
+//
+//==============================================================================
+// Usage Notes :
+//  --------------------------------------------------
+//   IMPORTANT : DASSAULT SYSTEMES INTERNAL USE ONLY.
+//  --------------------------------------------------
+//
+//------------------------------------------------------------------------------
+//  Inheritance : CATIStFeatureAndSupportAgent  (CAAFreeStyleItf FW)
+//                  CATBaseUnknown              (System FW)
+//==============================================================================
+// Dev. 02   Creation                                          Guillaume BOUDIER
+//==============================================================================
+
+#include &quot;CAAFreeStyleItf.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATPathElement;
+class CATSO;
+class CATIStAgentExtraFilter_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern  ExportedByCAAFreeStyleItf IID IID_CATIStFeatureAndSupportAgent;
+#else
+extern &quot;C&quot; const IID IID_CATIStFeatureAndSupportAgent;
+#endif
+
+
+/**
+ * @nodoc
+ * Class for retrieving the value of a FeatureAndSupportAgent. 
+ * &lt;ul&gt;
+ * &lt;li&gt; Retrieve the single value of the agent (if agent&#x27;s behavior is set
+ * &lt;li&gt; to CATDlgEngMonoAcquisition). No AddRef is done on the returned value
+ * &lt;li&gt; Retrieve the list of values of the agent (if agent&#x27;s behavior is set
+ * &lt;li&gt; to CATDlgEngMultiAcquisition). No AddRef is done on the returned list
+ * &lt;li&gt; Release this interface when it is not needed anymore.
+ *  To Retreive the information of the geometrical support, 
+ *  query CATIStSupportSelection on the returned CATPathElement
+ */ 
+class ExportedByCAAFreeStyleItf CATIStFeatureAndSupportAgent : public CATBaseUnknown
+{
+    CATDeclareInterface;
+
+public :
+
+    /**
+	 * @nodoc
+     */
+    virtual HRESULT GetAgentValue(CATPathElement *&amp; oPath) = 0;
+
+    /**
+	 * @nodoc
+     */
+    virtual HRESULT GetAgentListOfValues(CATSO *&amp; oListOfValues) = 0;
+
+    /**
+	 * @nodoc
+     * iValuation :
+     *    0 : Prevaluated (The agent has a value but is not accepted)
+     *    1 : Valuated    (the agent is accepted)
+     */
+    virtual HRESULT SetAgentValueToSelect(CATPathElement * iPath, int iValuation = 1) = 0;
+
+    /**
+	 * @nodoc
+     * iValuation :
+     *    0 : PreValuated (the agent has a value but is not accepted)
+     *    1 : Valuated    (the agent is accepted) 
+     */
+    virtual HRESULT SetAgentListOfValuesToSelect(CATSO * iListOfValues, int iValuation = 1) = 0;
+
+    /**
+	 * @nodoc
+     */
+    virtual HRESULT SetAgentFilter(CATIStAgentExtraFilter_var iFilter) = 0;
+};
+
+CATDeclareHandler(CATIStFeatureAndSupportAgent, CATBaseUnknown);
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIStEditableFeature.html">← 上一页: CATIStEditableFeature.h</a></div>
+        <div><a href="CATIStFreeStyleSettings.html">下一页: CATIStFreeStyleSettings.h →</a></div>
+    </div>
+</body>
+</html>

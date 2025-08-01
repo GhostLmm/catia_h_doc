@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DBoundingSphere.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DBoundingSphere.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DBoundingGP.html">← 上一页: CAT3DBoundingGP.h</a></div>
+        <div><a href="CAT3DCuboidRep.html">下一页: CAT3DCuboidRep.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DBoundingSphere_H
+#define CAT3DBoundingSphere_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATViz.h&quot;
+
+#include &quot;CATBoundingElement.h&quot;
+#include &quot;CATMathPointf.h&quot;
+ 
+class CAT4x4Matrix;
+class CAT2DBoundingBox;
+class CATStreamer;
+
+
+
+/**
+ * Class to manage bounding volume of 3D elements.
+ * &lt;b&gt;Role&lt;/b&gt;:This class is used to manage the volume occupied by a 3D 
+ * element. &lt;br&gt;This information is used at the rendering time to know if a given
+ * element is visible on the screen and needs to be drawn or not.&lt;br&gt;
+ * For performance issues BoundingSpheres need to be as close to the object they are linked
+ * to as possible. &lt;br&gt;Idealy they represent the smallest sphere containing the object.
+ * You can add 2 3DBoundingSpheres using the += operator&lt;br&gt; 
+ */
+class ExportedByCATViz CAT3DBoundingSphere : public CATBoundingElement
+{
+ friend class CAT3DViewport;
+ friend class CATMarshal3DBoundingSphere;
+ CATDeclareClass;
+
+ public :
+
+   /**
+   * Constructs an empty boundingSphere.
+   * default center will be 0,0,0 and default radius 1
+   */
+   CAT3DBoundingSphere ();
+   
+   /**
+    * Copy constructor.
+    */
+   CAT3DBoundingSphere (const CAT3DBoundingSphere &amp;); 
+
+   /**
+    * Constructs a BoundingSphere from a 2D box.
+	*/
+   CAT3DBoundingSphere (const CAT2DBoundingBox &amp;);
+   
+   /**
+    * Constructs a 3DBoundingSphere with a given center, radius and radius in mm.
+	* @param center
+	*  The center of the boundingSphere
+	* @param radius
+	*  The radius of the boundingSphere in model unit.
+	* @param radius_mm
+	*  This is used for elements with fixed size on the screen on which
+	*  zoom has no effect.&lt;br&gt;
+	*  Default is 0.
+	*/
+   CAT3DBoundingSphere (const CATMathPointf &amp;center, const float radius, const float radius_mm = 0.f);
+
+
+   /**
+    * Destructor.
+	*/
+   virtual ~CAT3DBoundingSphere();
+
+   /**
+    * @nodoc
+	* Streaming
+	*/
+   virtual void Stream(CATStreamer&amp; str,int savetype=0);
+
+   /**
+    * @nodoc
+	* UnStreaming
+	*/
+   virtual void UnStream(CATStreamer&amp; str);
+
+
+
+   /**
+    * Multiply operator. Multiply a BoundingSphere by a given Matrix.
+	* @param mat
+	* The matrix to apply to the Sphere
+	*/
+   CAT3DBoundingSphere &amp; operator *= (const CAT4x4Matrix &amp;mat);
+
+   /**
+    * Add operator. Add 2 boundingSpheres.
+	*/
+   CAT3DBoundingSphere &amp; operator += (const CAT3DBoundingSphere &amp;);
+
+   /**
+    * Assign a new value to the current BoundingSphere.
+    */
+   CAT3DBoundingSphere &amp; operator  = (const CAT3DBoundingSphere &amp;);
+ 
+   /**
+    * Returns the 3DBoundingSphere center.
+	*/
+   inline const CATMathPointf &amp; GetCenter() const;
+
+   /**
+    * Returns the radius of the 3DBoundingSphere.
+	*/
+   inline float GetRadius   () const ;
+
+   /**
+    * Returns the radius for fixed element.
+	*  (Element with fixed size on the screen on which
+	*  zoom has no effect.)
+	*/
+   inline float GetRadiusMM () const ;
+
+   /**
+   * @nodoc
+   */
+   void GetClippedBoundingSphere(CAT3DBoundingSphere&amp; oSphere,
+     float *ipPoint, float *ipNormal, int iNbPlanes) const;
+
+   
+
+//------------------------------------------------------------------------------
+
+  private :
+
+   CATMathPointf _center;
+
+   float _radius;
+   float _radius_mm;
+
+};
+
+inline const CATMathPointf &amp; CAT3DBoundingSphere::GetCenter () const
+{
+ return (_center);
+}
+
+inline float CAT3DBoundingSphere::GetRadius () const 
+{
+ return (_radius);
+}
+
+inline float CAT3DBoundingSphere::GetRadiusMM () const
+{
+ return (_radius_mm);
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DBoundingGP.html">← 上一页: CAT3DBoundingGP.h</a></div>
+        <div><a href="CAT3DCuboidRep.html">下一页: CAT3DCuboidRep.h →</a></div>
+    </div>
+</body>
+</html>

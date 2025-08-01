@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATIASchComponent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATIASchComponent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIASchCompatible.html">← 上一页: TIE_CATIASchCompatible.h</a></div>
+        <div><a href="TIE_CATIASchComponent2.html">下一页: TIE_CATIASchComponent2.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATIASchComponent
+#define __TIE_CATIASchComponent
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATExitJournal.h&quot;
+#include &quot;CATIASchComponent.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATIASchComponent */
+#define declare_TIE_CATIASchComponent(classe) \
+ \
+ \
+class TIECATIASchComponent##classe : public CATIASchComponent \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATIASchComponent, classe) \
+      CATDeclareIUnknownMethodsForCATBaseUnknownTIE \
+      CATDeclareIDispatchMethodsForCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT __stdcall CreateLocalReference(CATIADocument * iDocumentToPutCopyIn, CATIASchComponent *&amp; oSchComp); \
+      virtual HRESULT __stdcall QueryConnectAbility(CATIASchGRRComp * iGRR, CATIABase *&amp; oPlaceInfo); \
+      virtual HRESULT __stdcall IsInserted(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall IsAReference(CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall PlaceInSpace(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent); \
+      virtual HRESULT __stdcall CreateComponentInst(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent); \
+      virtual HRESULT __stdcall PlaceOnComponentWithInfo(CATIABase * iPlaceInfo, CATIASchComponent *&amp; oNewComponent); \
+      virtual HRESULT __stdcall InsertIntoRouteWithInfo(CATIABase * iInsertInfo, CATIASchComponent *&amp; oNewComponent, CATIASchRoute *&amp; oNewRoute); \
+      virtual HRESULT __stdcall PlaceOnObject(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchAppConnectable * iObjectToConnect, CATIASchComponent *&amp; oNewComponent); \
+      virtual HRESULT __stdcall Slide(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb2PtToSlideTo); \
+      virtual HRESULT __stdcall FlipConnected(CATIASchGRRComp * iGRR); \
+      virtual HRESULT __stdcall FlipOnLine(CATIASchGRRComp * iGRR); \
+      virtual HRESULT __stdcall FlipHorizontal(CATIASchGRRComp * iGRR); \
+      virtual HRESULT __stdcall FlipVertical(CATIASchGRRComp * iGRR); \
+      virtual HRESULT __stdcall Uninsert(CATIASchGRRComp * iGRR); \
+      virtual HRESULT __stdcall OKToSlide(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToPlaceInSpace(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToFlipConnected(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToFlipOnLine(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes, CATIASchListOfDoubles *&amp; oDb2LinePt, CATIASchListOfDoubles *&amp; oDb2LineVec); \
+      virtual HRESULT __stdcall OKToFlipHorizontal(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToFlipVertical(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToUninsert(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT __stdcall OKToScale(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+      virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+      virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+      virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+      virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+      virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+};
+
+
+
+#define ENVTIEdeclare_CATIASchComponent(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT __stdcall CreateLocalReference(CATIADocument * iDocumentToPutCopyIn, CATIASchComponent *&amp; oSchComp); \
+virtual HRESULT __stdcall QueryConnectAbility(CATIASchGRRComp * iGRR, CATIABase *&amp; oPlaceInfo); \
+virtual HRESULT __stdcall IsInserted(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall IsAReference(CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall PlaceInSpace(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent); \
+virtual HRESULT __stdcall CreateComponentInst(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent); \
+virtual HRESULT __stdcall PlaceOnComponentWithInfo(CATIABase * iPlaceInfo, CATIASchComponent *&amp; oNewComponent); \
+virtual HRESULT __stdcall InsertIntoRouteWithInfo(CATIABase * iInsertInfo, CATIASchComponent *&amp; oNewComponent, CATIASchRoute *&amp; oNewRoute); \
+virtual HRESULT __stdcall PlaceOnObject(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchAppConnectable * iObjectToConnect, CATIASchComponent *&amp; oNewComponent); \
+virtual HRESULT __stdcall Slide(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb2PtToSlideTo); \
+virtual HRESULT __stdcall FlipConnected(CATIASchGRRComp * iGRR); \
+virtual HRESULT __stdcall FlipOnLine(CATIASchGRRComp * iGRR); \
+virtual HRESULT __stdcall FlipHorizontal(CATIASchGRRComp * iGRR); \
+virtual HRESULT __stdcall FlipVertical(CATIASchGRRComp * iGRR); \
+virtual HRESULT __stdcall Uninsert(CATIASchGRRComp * iGRR); \
+virtual HRESULT __stdcall OKToSlide(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToPlaceInSpace(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToFlipConnected(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToFlipOnLine(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes, CATIASchListOfDoubles *&amp; oDb2LinePt, CATIASchListOfDoubles *&amp; oDb2LineVec); \
+virtual HRESULT __stdcall OKToFlipHorizontal(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToFlipVertical(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToUninsert(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT __stdcall OKToScale(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes); \
+virtual HRESULT  __stdcall get_Application(CATIAApplication *&amp; oApplication); \
+virtual HRESULT  __stdcall get_Parent(CATBaseDispatch *&amp; oParent); \
+virtual HRESULT  __stdcall get_Name(CATBSTR &amp; oNameBSTR); \
+virtual HRESULT  __stdcall put_Name(const CATBSTR &amp; iNameBSTR); \
+virtual HRESULT  __stdcall GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj); \
+
+
+#define ENVTIEdefine_CATIASchComponent(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT __stdcall  ENVTIEName::CreateLocalReference(CATIADocument * iDocumentToPutCopyIn, CATIASchComponent *&amp; oSchComp) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)CreateLocalReference(iDocumentToPutCopyIn,oSchComp)); \
+} \
+HRESULT __stdcall  ENVTIEName::QueryConnectAbility(CATIASchGRRComp * iGRR, CATIABase *&amp; oPlaceInfo) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)QueryConnectAbility(iGRR,oPlaceInfo)); \
+} \
+HRESULT __stdcall  ENVTIEName::IsInserted(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)IsInserted(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::IsAReference(CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)IsAReference(oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::PlaceInSpace(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)PlaceInSpace(iGRR,iDb6Axis,oNewComponent)); \
+} \
+HRESULT __stdcall  ENVTIEName::CreateComponentInst(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)CreateComponentInst(iGRR,iDb6Axis,oNewComponent)); \
+} \
+HRESULT __stdcall  ENVTIEName::PlaceOnComponentWithInfo(CATIABase * iPlaceInfo, CATIASchComponent *&amp; oNewComponent) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)PlaceOnComponentWithInfo(iPlaceInfo,oNewComponent)); \
+} \
+HRESULT __stdcall  ENVTIEName::InsertIntoRouteWithInfo(CATIABase * iInsertInfo, CATIASchComponent *&amp; oNewComponent, CATIASchRoute *&amp; oNewRoute) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)InsertIntoRouteWithInfo(iInsertInfo,oNewComponent,oNewRoute)); \
+} \
+HRESULT __stdcall  ENVTIEName::PlaceOnObject(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchAppConnectable * iObjectToConnect, CATIASchComponent *&amp; oNewComponent) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)PlaceOnObject(iGRR,iDb6Axis,iObjectToConnect,oNewComponent)); \
+} \
+HRESULT __stdcall  ENVTIEName::Slide(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb2PtToSlideTo) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)Slide(iGRR,iDb2PtToSlideTo)); \
+} \
+HRESULT __stdcall  ENVTIEName::FlipConnected(CATIASchGRRComp * iGRR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)FlipConnected(iGRR)); \
+} \
+HRESULT __stdcall  ENVTIEName::FlipOnLine(CATIASchGRRComp * iGRR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)FlipOnLine(iGRR)); \
+} \
+HRESULT __stdcall  ENVTIEName::FlipHorizontal(CATIASchGRRComp * iGRR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)FlipHorizontal(iGRR)); \
+} \
+HRESULT __stdcall  ENVTIEName::FlipVertical(CATIASchGRRComp * iGRR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)FlipVertical(iGRR)); \
+} \
+HRESULT __stdcall  ENVTIEName::Uninsert(CATIASchGRRComp * iGRR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)Uninsert(iGRR)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToSlide(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToSlide(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToPlaceInSpace(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToPlaceInSpace(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToFlipConnected(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToFlipConnected(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToFlipOnLine(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes, CATIASchListOfDoubles *&amp; oDb2LinePt, CATIASchListOfDoubles *&amp; oDb2LineVec) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToFlipOnLine(iGRR,oBYes,oDb2LinePt,oDb2LineVec)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToFlipHorizontal(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToFlipHorizontal(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToFlipVertical(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToFlipVertical(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToUninsert(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToUninsert(iGRR,oBYes)); \
+} \
+HRESULT __stdcall  ENVTIEName::OKToScale(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)OKToScale(iGRR,oBYes)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)get_Application(oApplication)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)get_Parent(oParent)); \
+} \
+HRESULT  __stdcall  ENVTIEName::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)get_Name(oNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)put_Name(iNameBSTR)); \
+} \
+HRESULT  __stdcall  ENVTIEName::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+return (ENVTIECALL(CATIASchComponent,ENVTIETypeLetter,ENVTIELetter)GetItem(IDName,RealObj)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATIASchComponent(classe)    TIECATIASchComponent##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATIASchComponent(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATIASchComponent, classe) \
+ \
+ \
+CATImplementTIEMethods(CATIASchComponent, classe) \
+CATImplementIUnknownMethodsForCATBaseUnknownTIE(CATIASchComponent, classe, 2) \
+CATImplementIDispatchMethodsForCATBaseUnknownTIE(CATIASchComponent, classe) \
+CATImplementCATBaseUnknownMethodsForTIE(CATIASchComponent, classe) \
+ \
+HRESULT __stdcall  TIECATIASchComponent##classe::CreateLocalReference(CATIADocument * iDocumentToPutCopyIn, CATIASchComponent *&amp; oSchComp) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,1,&amp;_Trac2,&amp;iDocumentToPutCopyIn,&amp;oSchComp); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateLocalReference(iDocumentToPutCopyIn,oSchComp); \
+   ExitAfterCall(this,1,_Trac2,&amp;_ret_arg,&amp;iDocumentToPutCopyIn,&amp;oSchComp); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::QueryConnectAbility(CATIASchGRRComp * iGRR, CATIABase *&amp; oPlaceInfo) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,2,&amp;_Trac2,&amp;iGRR,&amp;oPlaceInfo); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;QueryConnectAbility(iGRR,oPlaceInfo); \
+   ExitAfterCall(this,2,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oPlaceInfo); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::IsInserted(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,3,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsInserted(iGRR,oBYes); \
+   ExitAfterCall(this,3,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::IsAReference(CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,4,&amp;_Trac2,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;IsAReference(oBYes); \
+   ExitAfterCall(this,4,_Trac2,&amp;_ret_arg,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::PlaceInSpace(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,5,&amp;_Trac2,&amp;iGRR,&amp;iDb6Axis,&amp;oNewComponent); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;PlaceInSpace(iGRR,iDb6Axis,oNewComponent); \
+   ExitAfterCall(this,5,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;iDb6Axis,&amp;oNewComponent); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::CreateComponentInst(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchComponent *&amp; oNewComponent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,6,&amp;_Trac2,&amp;iGRR,&amp;iDb6Axis,&amp;oNewComponent); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;CreateComponentInst(iGRR,iDb6Axis,oNewComponent); \
+   ExitAfterCall(this,6,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;iDb6Axis,&amp;oNewComponent); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::PlaceOnComponentWithInfo(CATIABase * iPlaceInfo, CATIASchComponent *&amp; oNewComponent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,7,&amp;_Trac2,&amp;iPlaceInfo,&amp;oNewComponent); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;PlaceOnComponentWithInfo(iPlaceInfo,oNewComponent); \
+   ExitAfterCall(this,7,_Trac2,&amp;_ret_arg,&amp;iPlaceInfo,&amp;oNewComponent); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::InsertIntoRouteWithInfo(CATIABase * iInsertInfo, CATIASchComponent *&amp; oNewComponent, CATIASchRoute *&amp; oNewRoute) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,8,&amp;_Trac2,&amp;iInsertInfo,&amp;oNewComponent,&amp;oNewRoute); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;InsertIntoRouteWithInfo(iInsertInfo,oNewComponent,oNewRoute); \
+   ExitAfterCall(this,8,_Trac2,&amp;_ret_arg,&amp;iInsertInfo,&amp;oNewComponent,&amp;oNewRoute); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::PlaceOnObject(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb6Axis, CATIASchAppConnectable * iObjectToConnect, CATIASchComponent *&amp; oNewComponent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,9,&amp;_Trac2,&amp;iGRR,&amp;iDb6Axis,&amp;iObjectToConnect,&amp;oNewComponent); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;PlaceOnObject(iGRR,iDb6Axis,iObjectToConnect,oNewComponent); \
+   ExitAfterCall(this,9,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;iDb6Axis,&amp;iObjectToConnect,&amp;oNewComponent); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::Slide(CATIASchGRRComp * iGRR, const CATSafeArrayVariant &amp; iDb2PtToSlideTo) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,10,&amp;_Trac2,&amp;iGRR,&amp;iDb2PtToSlideTo); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Slide(iGRR,iDb2PtToSlideTo); \
+   ExitAfterCall(this,10,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;iDb2PtToSlideTo); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::FlipConnected(CATIASchGRRComp * iGRR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,11,&amp;_Trac2,&amp;iGRR); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;FlipConnected(iGRR); \
+   ExitAfterCall(this,11,_Trac2,&amp;_ret_arg,&amp;iGRR); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::FlipOnLine(CATIASchGRRComp * iGRR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,12,&amp;_Trac2,&amp;iGRR); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;FlipOnLine(iGRR); \
+   ExitAfterCall(this,12,_Trac2,&amp;_ret_arg,&amp;iGRR); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::FlipHorizontal(CATIASchGRRComp * iGRR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,13,&amp;_Trac2,&amp;iGRR); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;FlipHorizontal(iGRR); \
+   ExitAfterCall(this,13,_Trac2,&amp;_ret_arg,&amp;iGRR); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::FlipVertical(CATIASchGRRComp * iGRR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,14,&amp;_Trac2,&amp;iGRR); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;FlipVertical(iGRR); \
+   ExitAfterCall(this,14,_Trac2,&amp;_ret_arg,&amp;iGRR); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::Uninsert(CATIASchGRRComp * iGRR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,15,&amp;_Trac2,&amp;iGRR); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;Uninsert(iGRR); \
+   ExitAfterCall(this,15,_Trac2,&amp;_ret_arg,&amp;iGRR); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToSlide(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,16,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToSlide(iGRR,oBYes); \
+   ExitAfterCall(this,16,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToPlaceInSpace(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,17,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToPlaceInSpace(iGRR,oBYes); \
+   ExitAfterCall(this,17,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToFlipConnected(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,18,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToFlipConnected(iGRR,oBYes); \
+   ExitAfterCall(this,18,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToFlipOnLine(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes, CATIASchListOfDoubles *&amp; oDb2LinePt, CATIASchListOfDoubles *&amp; oDb2LineVec) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,19,&amp;_Trac2,&amp;iGRR,&amp;oBYes,&amp;oDb2LinePt,&amp;oDb2LineVec); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToFlipOnLine(iGRR,oBYes,oDb2LinePt,oDb2LineVec); \
+   ExitAfterCall(this,19,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes,&amp;oDb2LinePt,&amp;oDb2LineVec); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToFlipHorizontal(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,20,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToFlipHorizontal(iGRR,oBYes); \
+   ExitAfterCall(this,20,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToFlipVertical(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,21,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToFlipVertical(iGRR,oBYes); \
+   ExitAfterCall(this,21,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToUninsert(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,22,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToUninsert(iGRR,oBYes); \
+   ExitAfterCall(this,22,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT __stdcall  TIECATIASchComponent##classe::OKToScale(CATIASchGRRComp * iGRR, CAT_VARIANT_BOOL &amp; oBYes) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,23,&amp;_Trac2,&amp;iGRR,&amp;oBYes); \
+   HRESULT  _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;OKToScale(iGRR,oBYes); \
+   ExitAfterCall(this,23,_Trac2,&amp;_ret_arg,&amp;iGRR,&amp;oBYes); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchComponent##classe::get_Application(CATIAApplication *&amp; oApplication) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,24,&amp;_Trac2,&amp;oApplication); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Application(oApplication); \
+   ExitAfterCall(this,24,_Trac2,&amp;_ret_arg,&amp;oApplication); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchComponent##classe::get_Parent(CATBaseDispatch *&amp; oParent) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,25,&amp;_Trac2,&amp;oParent); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Parent(oParent); \
+   ExitAfterCall(this,25,_Trac2,&amp;_ret_arg,&amp;oParent); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchComponent##classe::get_Name(CATBSTR &amp; oNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,26,&amp;_Trac2,&amp;oNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;get_Name(oNameBSTR); \
+   ExitAfterCall(this,26,_Trac2,&amp;_ret_arg,&amp;oNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchComponent##classe::put_Name(const CATBSTR &amp; iNameBSTR) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,27,&amp;_Trac2,&amp;iNameBSTR); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;put_Name(iNameBSTR); \
+   ExitAfterCall(this,27,_Trac2,&amp;_ret_arg,&amp;iNameBSTR); \
+   return(_ret_arg); \
+} \
+HRESULT  __stdcall  TIECATIASchComponent##classe::GetItem(const CATBSTR &amp; IDName, CATBaseDispatch *&amp; RealObj) \
+{ \
+   CATICallTrac2 *_Trac2; \
+   ExitBeforeCall(this,28,&amp;_Trac2,&amp;IDName,&amp;RealObj); \
+   HRESULT   _ret_arg = ((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;GetItem(IDName,RealObj); \
+   ExitAfterCall(this,28,_Trac2,&amp;_ret_arg,&amp;IDName,&amp;RealObj); \
+   return(_ret_arg); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATIASchComponent(classe) \
+ \
+ \
+declare_TIE_CATIASchComponent(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIASchComponent##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIASchComponent,&quot;CATIASchComponent&quot;,CATIASchComponent::MetaObject(),classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIASchComponent(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATIASchComponent, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIASchComponent##classe(classe::MetaObject(),CATIASchComponent::MetaObject(),(void *)CreateTIECATIASchComponent##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATIASchComponent(classe) \
+ \
+ \
+declare_TIE_CATIASchComponent(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATIASchComponent##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATIASchComponent,&quot;CATIASchComponent&quot;,CATIASchComponent::MetaObject(),classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATIASchComponent(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATIASchComponent, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATIASchComponent##classe(classe::MetaObject(),CATIASchComponent::MetaObject(),(void *)CreateTIECATIASchComponent##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATIASchComponent(classe) TIE_CATIASchComponent(classe)
+#else
+#define BOA_CATIASchComponent(classe) CATImplementBOA(CATIASchComponent, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATIASchCompatible.html">← 上一页: TIE_CATIASchCompatible.h</a></div>
+        <div><a href="TIE_CATIASchComponent2.html">下一页: TIE_CATIASchComponent2.h →</a></div>
+    </div>
+</body>
+</html>

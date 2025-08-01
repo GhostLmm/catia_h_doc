@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATIDOMElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATIDOMElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMDocumentType.html">← 上一页: CATIDOMDocumentType.h</a></div>
+        <div><a href="CATIDOMEntity.html">下一页: CATIDOMEntity.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIXMLDOMElement_h
+#define CATIXMLDOMElement_h
+
+// System framework
+#include &quot;CATBoolean.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+#include &quot;CATIDOMNode.h&quot;
+class CATIDOMAttr_var;
+class CATIDOMNodeList_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATIDOMElement;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATIDOMElement ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface representing by far the vast majority of objects nodes (apart from text) that authors 
+ * encounter when traversing a document.
+ *
+ * Assume the following XML document:
+ * &lt;br&gt;
+ * &lt;br&gt;&amp;lt;elementExample id=&quot;demo&quot;&amp;gt; 
+ * &lt;br&gt;&amp;lt;subelement1/&amp;gt; 
+ * &lt;br&gt;&amp;lt;subelement2&amp;gt;&amp;lt;subsubelement/&amp;gt;&amp;lt;/subelement2&amp;gt;
+ * &lt;br&gt;&amp;lt;/elementExample&amp;gt;
+ *
+ * &lt;p&gt;When represented using DOM, the top node is a &lt;tt&gt;CATIDOMElement&lt;/tt&gt; node 
+ * for &quot;elementExample&quot;, which contains two child &lt;tt&gt;CATIDOMElement&lt;/tt&gt; nodes, 
+ * one for &quot;subelement1&quot; and one for &quot;subelement2&quot;. &quot;subelement1&quot; contains no 
+ * child nodes.
+ * &lt;p&gt;Elements may have attributes associated with them; since the 
+ * &lt;tt&gt;CATIDOMElement&lt;/tt&gt; interface inherits from @href CATIDOMNode, the generic
+ * @href CATIDOMNode interface method @href CATIDOMNode#GetAttributes may be used 
+ * to retrieve the set of all attributes for an element.
+ * &lt;br&gt;There are methods on the &lt;tt&gt;CATIDOMElement&lt;/tt&gt; interface to retrieve 
+ * either a @href CATIDOMAttr object by name or an attribute value by name. 
+ * In XML, where an attribute value may contain entity references, 
+ * a @href CATIDOMAttr object should be 
+ * retrieved to examine the possibly fairly complex sub-tree representing the 
+ * attribute value. On the other hand, in HTML, where all attributes have 
+ * simple string values, methods to directly access an attribute value can 
+ * safely be used as a convenience.
+ */
+class ExportedByXMLParserItf CATIDOMElement: public CATIDOMNode {
+	CATDeclareInterface;
+	
+	public:
+		
+		/**
+		 * Retrieves the name of the element.
+		 *
+		 * For example, in:
+		 * &lt;br&gt;&amp;lt;elementExample 
+		 * id=&quot;demo&quot;&amp;gt;  ... &amp;lt;/elementExample&amp;gt; , 
+		 * &lt;br&gt;&lt;tt&gt;tagName&lt;/tt&gt; has 
+		 * the value &lt;tt&gt;&quot;elementExample&quot;&lt;/tt&gt;. Note that this is 
+		 * case-preserving in XML, as are all of the operations of the DOM.
+		 *
+		 * @param oTagName
+		 * The retrieved name of the element.
+		 */
+		virtual HRESULT GetTagName(
+			CATUnicodeString&amp; oTagName) = 0;
+		
+		/**
+		 * Retrieves an attribute value by name.
+		 *
+		 * @param iName
+		 * The name of the attribute to retrieve.
+		 * @param oValue
+		 * The @href CATIDOMAttr value as a string, or the empty string if 
+		 *   that attribute does not have a specified or default value.
+		 */
+		virtual HRESULT GetAttribute(
+			const CATUnicodeString&amp; iName, 
+			CATUnicodeString&amp; oValue) = 0;
+		
+		/**
+		 * Adds a new attribute. 
+		 * 
+		 * If an attribute with that name is already present 
+		 * in the element, its value is changed to be that of the value parameter. 
+		 * This value is a simple string, it is not parsed as it is being set. So 
+		 * any markup (such as syntax to be recognized as an entity reference) is 
+		 * treated as literal text, and needs to be appropriately escaped by the 
+		 * implementation when it is written out. In order to assign an attribute 
+		 * value that contains entity references, the user must create an 
+		 * @href CATIDOMAttr node plus any @href CATIDOMText and 
+		 * @href CATIDOMEntityReference nodes, build the appropriate subtree, and 
+		 * use @href #SetAttributeNode to assign it as the value of an 
+		 * attribute.
+		 *
+		 * @param iAttributeName
+		 * The name of the attribute to create or alter.
+		 * @param iAttributeValue
+		 * Value to set in string form.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2205&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INVALID_CHARACTER_ERR: Raised if the specified name contains an 
+		 *   invalid character.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMAttr, CATIDOMText
+		 */
+		virtual HRESULT SetAttribute(
+			const CATUnicodeString&amp; iAttributeName, 
+			const CATUnicodeString&amp; iAttributeValue) = 0;
+		
+		/**
+		 * Removes an attribute by name. 
+		 *
+		 * If the removed attribute has a default 
+		 * value it is immediately replaced.
+		 *
+		 * @param iAttributeName
+		 * The name of the attribute to remove.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT RemoveAttribute(
+			const CATUnicodeString&amp; iAttributeName) = 0;
+		
+		/**
+		 * Retrieves a &lt;tt&gt;CATIDOMAttr&lt;/tt&gt; node by name.
+		 *
+		 * @param iAttributeName
+		 * The name of the attribute to retrieve.
+		 * @param oAttributeNode
+		 * The retrieved @href CATIDOMAttr node with the specified attribute name or 
+		 *   &lt;tt&gt;NULL_var&lt;/tt&gt; if there is no such attribute.
+		 *
+		 * @see CATIDOMAttr
+		 */
+		virtual HRESULT GetAttributeNode(
+			const CATUnicodeString&amp; iAttributeName, 
+			CATIDOMAttr_var&amp; oAttributeNode) = 0;
+		
+		/**
+		 * Adds a new attribute. 
+		 * 
+		 * If an attribute with that name is already present 
+		 * in the element, it is replaced by the new one.
+		 *
+		 * @param iAttributeNode
+		 * The @href CATIDOMAttr node to add to the attribute list.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2204&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;WRONG_DOCUMENT_ERR: Raised if &lt;tt&gt;iAttributeNode&lt;/tt&gt; was created from a 
+		 *   different document than the one that created the element.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2210&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INUSE_ATTRIBUTE_ERR: Raised if &lt;tt&gt;iAttributeNode&lt;/tt&gt; is already an 
+		 *   attribute of another @href CATIDOMElement object. The DOM user must 
+		 *   explicitly clone @href CATIDOMAttr nodes to re-use them in other 
+		 *   elements.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMAttr
+		 */
+		virtual HRESULT SetAttributeNode(
+			const CATIDOMAttr_var&amp; iAttributeNode) = 0;
+		
+		/**
+		 * Removes the specified attribute.
+		 *
+		 * @param iAttributeNodeToRemove
+		 * The @href CATIDOMAttr node to remove from the attribute 
+		 *   list. If the removed @href CATIDOMAttr has a default value it is 
+		 *   immediately replaced.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2208&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NOT_FOUND_ERR: Raised if &lt;tt&gt;iAttributeNodeToRemove&lt;/tt&gt; is not an attribute 
+		 *   of the element.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see CATIDOMAttr
+		 */
+		virtual HRESULT RemoveAttributeNode(
+			const CATIDOMAttr_var&amp; iAttributeNodeToRemove) = 0;
+		
+		/**
+		 * Returns a &lt;tt&gt;CATIDOMNodeList&lt;/tt&gt; of all descendant elements with a given tag name.
+		 * The elements are returned in the order in which they would be encountered in a preorder 
+		 * traversal of the &lt;tt&gt;CATIDOMElement&lt;/tt&gt; tree.
+		 *
+		 * @param iElementsName
+		 * The name of the tag to match on. The special value &quot;*&quot; matches all tags.
+		 * @param oListOfElements
+		 * A list of matching @href CATIDOMElement nodes.
+		 *
+		 * @see CATIDOMNodeList
+		 */
+		virtual HRESULT GetElementsByTagName(
+			const CATUnicodeString&amp; iElementsName, 
+			CATIDOMNodeList_var&amp; oListOfElements) = 0;
+		
+		/**
+		 * Retrieves an attribute value by local name and namespace URI.
+		 *
+		 * @param iNamespaceURI
+		 * The namespace URI of
+		 *   the attribute to retrieve. When it is an empty
+		 *   @href CATUnicodeString, this method behaves like @href #GetAttribute.
+		 * @param iLocalName
+		 * The local name of the
+		 *    attribute to retrieve.
+		 * @param oValue
+		 * The @href CATIDOMAttr value as a string, or an empty string if
+		 *    that attribute does not have a specified or default value.
+		 */
+		virtual HRESULT GetAttributeNS(
+			const CATUnicodeString &amp; iNamespaceURI, 
+			const CATUnicodeString &amp; iLocalName, 
+			CATUnicodeString &amp; oValue) = 0;
+		
+		/**
+		 * Adds a new attribute. If an attribute with the same local name and
+		 * namespace URI is already present in the element, its prefix is changed
+		 * to be that of the &lt;tt&gt;qualifiedName&lt;/tt&gt; parameter,
+		 * and its value is changed to be that of the &lt;tt&gt;value&lt;/tt&gt; parameter.
+		 * This value is a simple string, it is
+		 * not parsed as it is being set. So any markup (such as syntax to be
+		 * recognized as an entity reference) is treated as literal text, and
+		 * needs to be appropriately escaped by the implementation when it is
+		 * written out. In order to assign an attribute value that contains entity
+		 * references, the user must create a @href CATIDOMAttr node plus any
+		 * @href CATIDOMText and @href CATIDOMEntityReference nodes, build the
+		 * appropriate subtree, and use @href #SetAttributeNodeNS or
+		 * @href #SetAttributeNode to assign it as the value of an
+		 * attribute.
+		 *
+		 * @param iNamespaceURI 
+		 * The namespace URI of
+		 *    the attribute to create or alter. When it is an empty
+		 *    @href CATUnicodeString, this method behaves like @href #SetAttribute.
+		 * @param iQualifiedName 
+		 * The qualified name of the attribute to create or alter.
+		 * @param iValue 
+		 * The value to set in string form.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2205&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INVALID_CHARACTER_ERR: Raised if the specified name contains an 
+		 *   invalid character.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT SetAttributeNS(
+			const CATUnicodeString &amp; iNamespaceURI, 
+			const CATUnicodeString &amp; iQualifiedName, 
+			const CATUnicodeString &amp; iValue) = 0;
+		
+		/**
+		 * Removes an attribute by local name and namespace URI. If the
+		 * removed attribute has a default value it is immediately replaced.
+		 *
+		 * @param iNamespaceURI 
+		 * The namespace URI of
+		 *    the attribute to remove. When it is an empty
+		 *    @href CATUnicodeString, this method behaves like @href #RemoveAttribute.
+		 * @param iLocalName 
+		 * The local name of the
+		 *    attribute to remove.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT RemoveAttributeNS(
+			const CATUnicodeString &amp; iNamespaceURI, 
+			const CATUnicodeString &amp; iLocalName) = 0;
+		
+		/**
+		 * Retrieves a &lt;tt&gt;CATIDOMAttr&lt;/tt&gt; node by local name and namespace URI.
+		 *
+		 * @param iNamespaceURI
+		 * The namespace URI of
+		 *    the attribute to retrieve. When it is or an empty
+		 *    @href CATUnicodeString, this method behaves like @href #GetAttributeNode.
+		 * @param iLocalName
+		 * The local name of the
+		 *    attribute to retrieve.
+		 * @param oAttribute
+		 * The @href CATIDOMAttr node with the specified attribute local
+		 *    name and namespace URI or &lt;tt&gt;NULL_var&lt;/tt&gt; if there is no such attribute.
+		 */
+		virtual HRESULT GetAttributeNodeNS(
+			const CATUnicodeString &amp; iNamespaceURI, 
+			const CATUnicodeString &amp; iLocalName, 
+			CATIDOMAttr_var &amp; oAttribute) = 0;
+		
+		/**
+		 * Adds a new attribute. 
+		 * 
+		 * If an attribute with that local name and namespace URI is already present 
+		 * in the element, it is replaced by the new one.
+		 *
+		 * @param iNewAttribute
+		 * The @href CATIDOMAttr node to add to the attribute list.
+		 *    When the node has no &lt;tt&gt;namespaceURI&lt;/tt&gt;, this method behaves like
+		 *    @href #SetAttributeNode.
+		 * @param oPreviousAttr
+		 * If the &lt;tt&gt;newAttr&lt;/tt&gt; attribute replaces an existing
+		 *    attribute with the same local name and namespace URI,
+		 *    the previously existing @href CATIDOMAttr node is
+		 *    returned, otherwise &lt;tt&gt;NULL_var&lt;/tt&gt; is returned.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2204&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;WRONG_DOCUMENT_ERR: Raised if &lt;tt&gt;iNewAttribute&lt;/tt&gt; was created from a 
+		 *   different document than the one that created the element.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2210&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INUSE_ATTRIBUTE_ERR: Raised if &lt;tt&gt;iNewAttribute&lt;/tt&gt; is already an 
+		 *   attribute of another @href CATIDOMElement object. The DOM user must 
+		 *   explicitly clone @href CATIDOMAttr nodes to re-use them in other 
+		 *   elements.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT SetAttributeNodeNS(
+			const CATIDOMAttr_var &amp; iNewAttribute,
+			CATIDOMAttr_var&amp; oPreviousAttr) = 0;
+
+		/**
+		 * Returns a &lt;tt&gt;CATIDOMNodeList&lt;/tt&gt; of all the &lt;tt&gt;CATIDOMElement&lt;/tt&gt;s
+		 * with a given local name and namespace URI in the order in which they
+		 * would be encountered in a preorder traversal of the
+		 * &lt;tt&gt;CATIDOMDocument&lt;/tt&gt; tree, starting from this node.
+		 *
+		 * @param iNamespaceURI 
+		 * The namespace URI of
+		 *    the elements to match on. The special value &quot;*&quot; matches all
+		 *    namespaces. When it is an empty @href CATUnicodeString, this
+		 *    method behaves like @href #GetElementsByTagName .
+		 * @param iLocalName 
+		 * The local name of the
+		 *    elements to match on. The special value &quot;*&quot; matches all local names.
+		 * @param oElementList
+		 * A new @href CATIDOMNodeList object containing all the matched
+		 *   instances of @href CATIDOMElement.
+		 */
+		virtual HRESULT GetElementsByTagNameNS(
+			const CATUnicodeString &amp; iNamespaceURI, 
+			const CATUnicodeString &amp; iLocalName, 
+			CATIDOMNodeList_var &amp; oElementList ) = 0;
+		
+		/**
+		 * Returns &lt;tt&gt;TRUE&lt;/tt&gt; when an attribute with a given name is 
+		 * specified on this element or has a default value, &lt;tt&gt;FALSE&lt;/tt&gt; 
+		 * otherwise.
+		 *
+		 * @param iName
+		 * The name of the attribute to look for.
+		 * @param oResult
+		 * &lt;tt&gt;TRUE&lt;/tt&gt; if an attribute with the given name is 
+		 *   specified on this element or has a default value, &lt;tt&gt;FALSE&lt;/tt&gt;
+		 *    otherwise.
+		 */
+		virtual HRESULT HasAttribute(
+			const CATUnicodeString &amp; iName,
+			CATBoolean &amp; oResult) = 0; 
+		
+		/**
+		 * Returns &lt;tt&gt;TRUE&lt;/tt&gt; when an attribute with a given local name and 
+		 * namespace URI is specified on this element or has a default value, 
+		 * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise. HTML-only DOM implementations do not 
+		 * need to implement this method.
+		 *
+		 * @param iNamespaceURI
+		 * The namespace URI of the attribute to look for.
+		 * @param iLocalName
+		 * The local name of the attribute to look for.
+		 * @param oResult
+		 * &lt;tt&gt;TRUE&lt;/tt&gt; if an attribute with the given local name 
+		 *   and namespace URI is specified or has a default value on this 
+		 *   element, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+		 */
+		virtual HRESULT HasAttributeNS(
+			const CATUnicodeString &amp; iNamespaceURI,
+			const CATUnicodeString &amp; iLocalName,
+			CATBoolean &amp; oResult) = 0; 
+
+};
+
+CATDeclareHandler(CATIDOMElement, CATIDOMNode);
+
+#endif // CATIXMLDOMElement_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMDocumentType.html">← 上一页: CATIDOMDocumentType.h</a></div>
+        <div><a href="CATIDOMEntity.html">下一页: CATIDOMEntity.h →</a></div>
+    </div>
+</body>
+</html>

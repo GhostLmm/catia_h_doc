@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopExtrapolWireOpe.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopExtrapolWireOpe.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopExtrapolWireOnShell.html">← 上一页: CATICGMTopExtrapolWireOnShell.h</a></div>
+        <div><a href="CATICGMTopExtrude.html">下一页: CATICGMTopExtrude.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopExtrapolWireOpe_h_
+#define CATICGMTopExtrapolWireOpe_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+
+class CATBody;
+class CATVertex;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopExtrapolWireOpe;
+
+/**
+* Class defining the topological operator to extrapol a wire.
+* &lt;br&gt;
+* The operator produces a wire topology result of the extrapolation of the input wire.
+* The user can customize the extrapolation with the Setxxx methods to
+*&lt;ul&gt;
+* &lt;li&gt; define the type of continuity : tangency or curvature. 
+* &lt;li&gt; define the extremity from which the extrapolation starts.
+* &lt;li&gt; define the length of extrapolation or the body to reach.
+*&lt;/ul&gt;
+* &lt;p&gt;
+* When no support is defined, 
+* the extrapolation in curvature &quot;up to&quot; is only possible if the body to reach is a wire and a plane; 
+* the extrapolation in curvature of a given length is the extrapolated wire relimited by the plane
+* created at the given length from the chosen extremity.
+* When a support is defined, 
+* the extrapolation in curvature is only possible on the faces with same geometry. 
+*&lt;/p&gt;
+* This operator follows the general scheme of the topological operators:
+* &lt;ul&gt;
+*&lt;li&gt; Create the operator with the &lt;tt&gt;CATCGMCreateTopExtrapolWireOpe&lt;/tt&gt; global function.
+*&lt;li&gt; Set the extrapolation parameters: continuity, extremity, length...
+*&lt;li&gt; Run with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+*&lt;li&gt; Get the result body by the &lt;tt&gt;GetResult&lt;/tt&gt; method. 
+*&lt;li&gt; Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*&lt;/ul&gt;
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMTopExtrapolWireOpe: public CATICGMTopOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopExtrapolWireOpe();
+
+  /**
+  * Defines the type of continuity.
+  * @param type
+  * 1 for tangency continuity
+  * 2 for curvature continuity. 
+  */
+  virtual void SetContinuityType(int type) = 0;
+
+  /**
+  * Defines the extremity from which the extrapolation must start and the length of the extrapolation.
+  * @param iVertex
+  * The vertex must be one of the two extremities of the wire to extrapolate. 
+  * The extrapolation is only possible from one vertex.
+  * @param ilength
+  * The length must be a positive value.
+  */
+  virtual void SetExtrapolLimit(CATVertex *iVertex, double ilength) = 0;
+
+  /**
+  * Defines the extremity from which extrapolation must start and the body to reach.
+  * @param iVertex
+  * The vertex must be one of the two extremities of the wire to extrapolate. 
+  * The extrapolation is only possible from one vertex.
+  * @param iLimBody
+  * The body to reach can be:
+  * &lt;ul&gt;
+  *   &lt;li&gt; a wire (laid on the same support than the body to extrapol)
+  *   &lt;li&gt; a shell (must be plane when extrapolation in curvature mode and no support defined).
+  * &lt;/ul&gt;
+  */
+  virtual void SetExtrapolLimit(CATVertex *iVertex, CATBody *iLimBody) = 0;
+
+  /**
+  * Runs &lt;tt&gt;this&lt;/tt&gt; operator. Returns 0 if the operation completes properly.
+  */
+  virtual int Run() = 0;
+
+  /**
+  * Returns the result of &lt;tt&gt;this&lt;/tt&gt; operator.
+  * @return
+  * The pointer to the created body. 
+  */
+  virtual CATBody *GetResult() = 0;
+
+  /**
+  * Returns the pointer to the resulting body.
+  * The pointer to the journal of the operation.
+  * @param iJourn
+  * The pointer to the journal to fill.
+  * @return
+  * The pointer to the resulting body. 
+  */
+  virtual CATBody *GetResult(CATCGMJournalList *iJourn) = 0;
+
+  /**
+  * By default the result of the extrapolation of a line in tangency 
+  * when no support is defined gives a body which only contains one edge.
+  * The intermediate vertex has been cleaned.
+  * To avoid this behaviour and keep the vertex use the following option.
+  */
+  virtual void SetNoSimplifOnLine() = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopExtrapolWireOpe(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMTopExtrapolWireOpe_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopExtrapolWireOnShell.html">← 上一页: CATICGMTopExtrapolWireOnShell.h</a></div>
+        <div><a href="CATICGMTopExtrude.html">下一页: CATICGMTopExtrude.h →</a></div>
+    </div>
+</body>
+</html>

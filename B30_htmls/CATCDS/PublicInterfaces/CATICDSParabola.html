@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATCDS/PublicInterfaces/CATICDSParabola.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATCDS/PublicInterfaces/CATICDSParabola.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICDSOffsetCurve2D.html">← 上一页: CATICDSOffsetCurve2D.h</a></div>
+        <div><a href="CATICDSParabola2D.html">下一页: CATICDSParabola2D.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICDSParabola_H
+#define CATICDSParabola_H
+
+// COPYRIGHT DASSAULT SYSTEMES  2012
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATCDS.h&quot;
+
+#include &quot;CATICDSMonoParametric.h&quot;
+
+class CATICDSFactory;
+
+/**
+ * A geometry representing a parabola in three-dimensional space.
+ */
+class ExportedByCDSInterface CATICDSParabola : public CATICDSMonoParametric
+{
+  CATICDSDeclareInterface(CATICDSParabola)
+
+public:
+
+  /**
+   * Retrieves coordinates of the parabola center.
+   * @param oX
+   *   An abscissa axis.
+   * @param oY
+   *   An ordinate axis.
+   * @param oZ
+   *   An applicate axis.
+   */
+  virtual void GetCenter(double &amp;oX, double &amp;oY, double &amp;oZ) const = 0;
+
+  /**
+   * Specify coordinates of the parabola center.
+   * @param iX
+   *   An abscissa axis.
+   * @param iY
+   *   An ordinate axis.
+   * @param iZ
+   *   An applicate axis.
+   */
+  virtual void SetCenter(double iX, double iY, double iZ) = 0;
+
+  /**
+   * Retrieves coordinates of the parabola major direction (perpendicular to the symmetry axis).
+   * @param oX
+   *   An abscissa axis.
+   * @param oY
+   *   An ordinate axis.
+   * @param oZ
+   *   An applicate axis.
+   */
+  virtual void GetDirection(double &amp;oX, double &amp;oY, double &amp;oZ) const = 0;
+
+  /**
+   * Specify coordinates of the parabola major direction (perpendicular to the symmetry axis).
+   * @param iX
+   *   An abscissa axis.
+   * @param iY
+   *   An ordinate axis.
+   * @param iZ
+   *   An applicate axis.
+   */
+  virtual void SetDirection(double iX, double iY, double iZ) = 0;
+
+  /**
+   * Retrieves coordinates of the parabola normal.
+   * @param oX
+   *   An abscissa axis.
+   * @param oY
+   *   An ordinate axis.
+   * @param oZ
+   *   An applicate axis.
+   */
+  virtual void GetNormal(double &amp;oX, double &amp;oY, double &amp;oZ) const = 0;
+
+  /**
+   * Specify coordinates of the parabola normal.
+   * @param iX
+   *   An abscissa axis.
+   * @param iY
+   *   An ordinate axis.
+   * @param iZ
+   *   An applicate axis.
+   */
+  virtual void SetNormal(double iX, double iY, double iZ) = 0;
+  
+  /**
+   * Sets the vertex curvature of the parabola.
+   * @param iCurvature
+   *   A vertex curvature of the parabola.
+   * @see #GetVertexCurvature
+   */
+  virtual void SetVertexCurvature(double iCurvature) = 0;
+
+  /**
+   * Retrieves the vertex curvature of the parabola.
+   * @return
+   *   A vertex curvature of the parabola.
+   * @see #SetVertexCurvature
+   */
+  virtual double GetVertexCurvature() const = 0;
+
+  /**
+   * Creates an instance of the CATICDSParabola geometry.
+   * @param ipFactory
+   *   Pointer to the instance of CATICDSFactory to use.
+   * @param iOriginX
+   *   X coordinate of the parabola origin.
+   * @param iOriginY
+   *   Y coordinate of the parabola origin.
+   * @param oZ
+   *   Z coordinate of the parabola origin.
+   * @param iDirectionX
+   *   Input value that specifies the normalized X-direction of the major radius.
+   * @param iDirectionY
+   *   Input value that specifies the normalized Y-direction of the major radius.
+   * @param iDirectionZ
+   *   Input value that specifies the normalized Z-direction of the major radius.
+   * @param iNormalX
+   *   Input value that specifies the normalized X-direction of the normal.
+   * @param iNormalY
+   *   Input value that specifies the normalized Y-direction of the normal.
+   * @param iNormalZ
+   *   Input value that specifies the normalized Z-direction of the normal.
+   * @param iCurvature
+   *   Input value that specifies the angle of curvature (radians) of the parabola.
+   */
+  static CATICDSParabola* Create(CATICDSFactory* ipFactory, 
+                                 double iOriginX, double iOriginY, double iOriginZ,
+                                 double iDirectionX, double iDirectionY, double iDirectionZ,
+                                 double iNormalX, double iNormalY, double iNormalZ,
+                                 double iCurvature);
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICDSOffsetCurve2D.html">← 上一页: CATICDSOffsetCurve2D.h</a></div>
+        <div><a href="CATICDSParabola2D.html">下一页: CATICDSParabola2D.h →</a></div>
+    </div>
+</body>
+</html>

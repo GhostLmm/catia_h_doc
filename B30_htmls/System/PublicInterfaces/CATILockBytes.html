@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATILockBytes.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATILockBytes.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIIRBase.html">← 上一页: CATIIRBase.h</a></div>
+        <div><a href="CATIMessageReceiver.html">下一页: CATIMessageReceiver.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//*===========================================================================*
+//* COPYRIGHT DASSAULT SYSTEMES 1996                                          *
+//*===========================================================================*
+//*                                                                           *
+//*  CATIStorage                                                              *
+//*                                                                           *
+//*  Usage Notes:                                                             *
+//*===========================================================================*
+//*  Creation mars 1997                                                       *
+//*===========================================================================*
+
+/* COPYRIGHT DASSAULT SYSTEMES 2004 */
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#ifndef __CATILOCKBYTES
+#define __CATILOCKBYTES
+
+#include &quot;CATWTypes.h&quot;
+#include &quot;IUnknown.h&quot;
+
+
+/**
+ * A type for memory manipulation within the @href CATILockBytes interface.
+ */
+typedef void * CATMemHandle;
+/**
+ * Default value for an uninitialized @href CATMemHandle
+ */
+#define INVALIDMEM NULL
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __JS0COMP
+#define ExportedByJS0COMPSPEC __declspec(dllexport)
+#else
+#ifndef __CATSysCompFile
+#define ExportedByJS0COMPSPEC __declspec(dllimport)
+#else
+#define ExportedByJS0COMPSPEC
+#endif
+#endif
+#else
+#define ExportedByJS0COMPSPEC
+#endif
+
+extern ExportedByJS0COMPSPEC IID IID_CATILockBytes;
+
+
+
+
+/**
+ * Interface used by the V5 documents to represent their physical storage
+ * as a byte array.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface is used by the V5 composite documents to access 
+ * to their physical storage device, without needing to consider the 
+ * specifications of the physical storage.
+ * This interface should be not implemented. 
+ **/
+class  ExportedByJS0COMPSPEC CATILockBytes : public IUnknown
+{
+public:
+
+/**
+ * Reads a block of data in the byte array object.
+ * &lt;b&gt;Role&lt;/b&gt;: Reads a block of data at the specified offset fom the 
+ * beginning of the array. 
+ * @param iOffset [in]
+ *  Offset of the block from the beginning of the array 
+ * @param  iBuff [in]
+ *  Buffer where data where will be stored.
+ * @param iLengthToRead [i]
+ *   the size of the requested data.
+ * @param oLengthRead [out]
+ *   the actual length of read data.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_SEEKERROR :&lt;/tt&gt; problem in setting the read offset.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_READFAULT :&lt;/tt&gt; problem while reading.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDPARAMETER :&lt;/tt&gt; invalid arguments.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_ACCESSDENIED:&lt;/tt&gt; No sufficient permission to read.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+ */     
+  virtual  HRESULT __stdcall ReadAt( ULARGE_INTEGER iOffset,
+				     void FAR *iBuff,
+				     ULONG iLengthToRead,
+				     ULONG FAR *oLengthRead) = 0;
+/**
+ * Writes a block of data in the byte array object.
+ * &lt;b&gt;Role&lt;/b&gt;: Writes a block of data at the specified offset fom the 
+ * beginning of the array. 
+ * @param iOffset [in]
+ *   Offset of the block  from the beginning of the array 
+ * @param  iDataSource [in]
+ *  Buffer of data to write.
+ * @param iLengthToWrite [i]
+ *   the size of the data to write.
+ * @param oLengthWriten [out]
+ *   the actual length of written data. Should be equal to iLengthToWrite if 
+ *   no problem has occurred.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_SEEKERROR :&lt;/tt&gt; problem in setting the read offset.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_WRITEFAULT :&lt;/tt&gt; problem while writing and iLengthToWrite
+ *				      is not equal to LengthWritten.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_MEDIUMFULL :&lt;/tt&gt; The write operation was not completed 
+ *				      because there is no space left on the
+ *				      storage device. The actual written length
+ *				       is still returned in LengthWritten.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDPARAMETER :&lt;/tt&gt; invalid arguments.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_DISKISWRITEPROTECTED :&lt;/tt&gt; disk write protected.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_ACCESSDENIED:&lt;/tt&gt; No sufficient permission to write.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/                 
+  virtual  HRESULT __stdcall WriteAt( ULARGE_INTEGER iOffset,
+				      const void FAR *iDataSource,
+				      ULONG iLengthToWrite,
+				      ULONG FAR *LengthWritten) = 0;
+/**
+ * Flush all the buffers.
+ * &lt;b&gt;Role&lt;/b&gt;: Insures that any internal buffers maintained by the 
+ * CATILockBytes object are written out to the permanent storage.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_WRITEFAULT :&lt;/tt&gt; problem while writing.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_MEDIUMFULL :&lt;/tt&gt; disk full error.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_DISKISWRITEPROTECTED :&lt;/tt&gt; disk write protected.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/               
+  virtual HRESULT __stdcall Flush( void) = 0;
+
+
+/**
+ * Sets the size of the CATILockBytes.
+ * &lt;b&gt;Role&lt;/b&gt;: Sets the size of the CATILockBytes.
+ * @ param iLength.
+ *      The new size of the CATILockBytes.
+ * @return   
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success. 
+ *   &lt;br&gt;&lt;tt&gt; STG_E_ACCESSDENIED:&lt;/tt&gt; No sufficient permission to set 
+ *                                     the size of the document.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_SEEKERROR :&lt;/tt&gt; problem in setting the new offset.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_MEDIUMFULL :&lt;/tt&gt; no space left on the backing storage to
+ *                                    increase the size of the byte array.
+*/             
+  virtual HRESULT __stdcall SetSize( ULARGE_INTEGER iLength) = 0;
+
+
+
+/**
+ * Locks a region of the CATILockBytes.
+ * &lt;b&gt;Role&lt;/b&gt;: Locks a region of the CATILockBytes.
+ * @param iOffset [in]
+ *   Offset of the block from the beginning of the array
+ * @param iLength [i] 
+ *   the size of the region.  if iLength and Offset are null, then the lock
+ *   is applied on the whole array.
+ * @param dwLockType [in] 
+ *        type of lock. 
+ * @return 
+ *   &lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success. 
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDFUNCTION :&lt;/tt&gt; the underlying object does not 
+ *					   support locking.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_LOCKVIOLATION :&lt;/tt&gt; array object locked by another caller.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_ACCESSDENIED:&lt;/tt&gt; array object locked by another caller.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDHANDLE :&lt;/tt&gt; the underlying storage device is not
+ *					 available.
+*/               
+  virtual HRESULT __stdcall LockRegion( ULARGE_INTEGER iOffset,
+					ULARGE_INTEGER iLegnth,
+					DWORD dwLockType) = 0;
+  
+/**
+ * Locks a region of the CATILockBytes.
+ * &lt;b&gt;Role&lt;/b&gt;: Locks a region of the CATILockBytes. This method is not 
+ * implemented by any V5 implementation of this interface and are never
+ * called by the V5 documents code. 
+ * @param iOffset [in]
+ *   Offset of the block from the beginning of the array  
+ * @param iLength [i] 
+ *   the size of the region. 
+ * @param dwLockType [in] 
+ *        type of lock. 
+ * @return 
+ *   &lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDFUNCTION :&lt;/tt&gt; the underlying object does not 
+ *					   support locking.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_LOCKVIOLATION :&lt;/tt&gt; array object locked by another caller.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDHANDLE :&lt;/tt&gt; the underlying storage device is not
+ *					 available.
+*/
+  virtual HRESULT __stdcall UnlockRegion( ULARGE_INTEGER iOffset,
+					  ULARGE_INTEGER iLength,
+					  DWORD dwLockType) = 0;
+
+/**
+ * Returns informations for the byte array object.
+ * &lt;b&gt;Role&lt;/b&gt;:  Returns informations for the CATILockBytes. 
+ * @param oStat [io]
+ *    pointer to a STATSTG structure.
+ * @param iStatFlag [in]
+ *    specifies whether the name of the object should be supplied.
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; STATFLAG_NONAME:&lt;/tt&gt; no name is supplied.
+ *   &lt;br&gt;&lt;tt&gt; STATFLAG_DEFAULT:&lt;/tt&gt; all fields are supplied
+ * @return 
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDPOINTER :&lt;/tt&gt; invalid pointer for the STATSTG
+ *					  structure. 
+ *   &lt;br&gt;&lt;tt&gt; STG_E_ACCESSDENIED:&lt;/tt&gt; No sufficient permission to retrieve 
+ *                                     the information concerning the array.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INSUFFICIENTMEMORY:&lt;/tt&gt; no more memory.
+ *   &lt;br&gt;&lt;tt&gt; STG_E_INVALIDFLAG :&lt;/tt&gt; value for iStatFlag is not valid.
+*/          
+  virtual HRESULT __stdcall Stat( STATSTG FAR *oStat,
+				  DWORD iStatFlag) = 0;
+        
+};
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIIRBase.html">← 上一页: CATIIRBase.h</a></div>
+        <div><a href="CATIMessageReceiver.html">下一页: CATIMessageReceiver.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathStream.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathStream.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSincos.html">← 上一页: CATMathSincos.h</a></div>
+        <div><a href="CATMathStreamDef.html">下一页: CATMathStreamDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathStream_h
+#define CATMathStream_h
+// COPYRIGHT DASSAULT SYSTEMES  1999
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+#include &quot;ExportedByCATMathStream.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class istream;
+#endif
+
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATMathStreamDef.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATMathStreamImpl;
+class CATStream;
+class CATMathBox;
+class CATMathPoint;
+class CATMathVector2D;
+class CATMathVector;
+class CATMath3x3Matrix;
+class CATMathTransformation;
+class CATMathPlane;
+class CATMathAxis;
+class CATUuid;
+class CATSoftwareConfiguration;
+
+
+/**
+ * Base class of the stream and unstream operations.
+ */
+class ExportedByCATMathStream CATMathStream : public CATCGMVirtual 
+{
+public:
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+ /**
+  * Constructs CATMathStream for stream operation (read and write acces are allowed).
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(CATMathStreamImpl* ipImpl = NULL);
+
+ /**
+  * Constructs CATMathStream for read only stream operation.
+  * @param iBuffer
+  *  The memory area directly acceded for the read operation.
+  * @param iSizeBuffer
+  *  The size in bytes of &lt;tt&gt;iBuffer&lt;/tt&gt;.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(void*              iBuffer,
+                size_t             iSizeBuffer,
+                CATMathStreamImpl* ipImpl = NULL);
+  
+ /**
+  * Constructs CATMathStream for write only stream operation.
+  * @param ioFile
+  * The stream on which the stream is saved.
+  * @param iInitialNumberOfBytes
+  *  The initial memory size of internal buffer in bytes.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  * @param iEnableByAddress
+  *  Reserved for future use. Do not change the default value.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(ostream&amp;           ioFile,
+                size_t             iInitialNumberOfBytes = 0,
+                const CATBoolean   iEnableByAddress = FALSE,
+                CATMathStreamImpl* ipImpl = NULL);
+  
+ /**
+  * Constructs CATMathStream for read only stream operation.
+  * @param ioFile
+  * The stream from which the stream is read.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(istream&amp;           ioFile,
+                CATMathStreamImpl* ipImpl = NULL);
+
+ /**
+  * Constructs CATMathStream for read only or write only stream operation.
+  * @param ioFile
+  * The stream from which the stream is read.
+  * @param iAcces
+  *  The kind of acces allowed on the CATMathStream.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param iEnableByAddress
+  *  Reserved for future use. Do not change the default value.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(const char*            iFilename,
+                const CATCGMStreamType iAcces,
+                const CATBoolean       iEnableByAddress = FALSE,
+                CATMathStreamImpl*     ipImpl = NULL);
+
+ /**
+  * Constructs CATMathStream for stream operation.
+  * @param iInitialNumberOfBytes
+  *  The initial number of bytes for internal buffer.
+  * @param iAcces
+  *  The kind of acces allowed on the CATMathStream.
+  * @param iEnableByAddress
+  *  Reserved for future use. Do not change the default value.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(size_t                 iInitialNumberOfBytes,
+                const CATCGMStreamType iAcces,
+                const CATBoolean       iEnableByAddress = FALSE,
+                CATMathStreamImpl*     ipImpl = NULL);
+
+ /**
+  * @nodoc
+  * Constructs CATMathStream for read only or write only stream operation.
+  * @param iDirectStreaming
+  * The stream from which the stream is read or writen.
+  * @param iAcces
+  *  The kind of acces allowed on the CATMathStream.
+  * &lt;br&gt;The first acces of the stream may be done with &lt;tt&gt;OpenReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * &lt;br&gt;The last acces of the stream may be done with &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt; or &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param iEnableByAddress
+  *  Reserved for future use. Do not change the default value.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(CATStream&amp;             iDirectStreaming,
+                const CATCGMStreamType iAcces,
+                const CATBoolean       iEnableByAddress = FALSE,
+                CATMathStreamImpl*     ipImpl = NULL);
+
+ /**
+  * @nodoc
+  * Constructs CATMathStream for read only stream operation.
+  * @param iDirectStreaming
+  * The stream from which the stream is read.
+  * @param iSizeStream
+  *  The size in bytes of &lt;tt&gt;iDirectStreaming&lt;/tt&gt;.
+  * @param ipMathStreamImpl
+  *  Internal use only. Do not change the default value.
+  */
+  CATMathStream(CATStream&amp;         iDirectStreaming,
+                size_t             iSizeStream,
+                CATMathStreamImpl* ipImpl = NULL);
+
+ /**
+  * Destructor
+  */
+  virtual ~CATMathStream();
+
+ /**
+  * Clear the Contents of the current Stream.
+  */
+  void Clear();
+  
+ /**
+  * Returns the length of &lt;tt&gt;this&lt;/tt&gt;.
+  * @return
+  * The length.
+  */
+  size_t GetLength() const;
+  
+ /**
+  * Returns the current position.
+  */
+  size_t GetCurrentPosition() const;
+
+ /**
+  * Skips of a given length.
+  */
+  void Advance(size_t iSiz);
+
+ /**
+  * Resets the position to the beginning.
+  */
+  void Reset();
+
+ /**
+  * Get the CATMathStream contents in a memory area.
+  * @param iSizeBuffer
+  *  The size in bytes of &lt;tt&gt;iBuffer&lt;/tt&gt;, given to avoid overwriting.
+  * @param iBuffer
+  *  The memory area where bytes are copied.
+  * @param ioSizeCopied
+  *  Number of bytes copied in &lt;tt&gt;iBuffer&lt;/tt&gt;.
+  */
+  void GetMemoryCopy(const size_t iSizeBuffer, void* iBuffer, size_t&amp; ioSizeCopied);
+
+ /**
+  * Writes the content of a stream on &lt;tt&gt;this&lt;/tt&gt;.
+  * @param iToWrite
+  * The stream
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteStream(const CATMathStream&amp; iToWrite, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a stream on &lt;tt&gt;this&lt;/tt&gt;.
+  * @param iToRead
+  * The stream to read.
+  * @param iLengthToRead
+  * the length of &lt;tt&gt;iToRead&lt;/tt&gt;.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadStream(CATMathStream&amp; iToRead, size_t iLengthToRead, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Open a CATMathStream for write acces.
+  * @param oWhere
+  *  internal parameter you must give back at &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param oLevel
+  *  internal parameter you must give back at &lt;tt&gt;CloseWriteStreamHeader&lt;/tt&gt;.
+  * @param iWithEndianFormat
+  *  little big endian format is written, allowing interoperability between different Operating Systems
+  */
+  void OpenWriteStreamHeader(size_t&amp; oWhere, short&amp; oLevel, const short iWithEndianFormat = 1);
+
+ /**
+  * Open a CATMathStream for read acces.
+  * @param oWhere
+  *  internal parameter you must give back at &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  * @param oLevel
+  *  internal parameter you must give back at &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  * @param iWithEndianFormat
+  *  little big endian format is written, allowing interoperability between different Operating Systems
+  */
+  void OpenReadStreamHeader(size_t&amp; oWhere, short&amp; oLevel, const short iWithEndianFormat = 1);
+
+ /**
+  * Close a CATMathStream for write acces.
+  * @param iWhere
+  *  internal parameter given by &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  * @param iLevel
+  *  internal parameter given by  &lt;tt&gt;OpenWriteStreamHeader&lt;/tt&gt;.
+  */
+  void CloseWriteStreamHeader(const size_t iWhere, const short iLevel);
+
+ /**
+  * Close a CATMathStream for read acces.
+  * @param iWhere
+  *  internal parameter given by &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  * @param iLevel
+  *  internal parameter given by  &lt;tt&gt;CloseReadStreamHeader&lt;/tt&gt;.
+  */
+  void CloseReadStreamHeader(const size_t iWhere, const short iLevel);
+
+ /**
+  * Writes an CATBoolean.
+  * @param iBoolean
+  * The CATBoolean to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteBoolean(const CATBoolean iBoolean, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an CATBoolean.
+  * @param iBoolean
+  * The read CATBoolean. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadBoolean(CATBoolean&amp; ioBoolean, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes an unsigned char.
+  * @param iUChar
+  * The unsigned char to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteUChar(const unsigned char iUChar, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an unsigned char.
+  * @param ioUChar
+  * The read char. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadUChar(unsigned char&amp; ioUChar, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a sequence of unsigned chars.
+  * @param iUCharArray
+  * The array of unsigned chars to write.
+  * @param iNbCell
+  * The count of unsigned chars to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteUChar(const unsigned char* iUCharArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an array of unsigned chars.
+  * @param ioArrayUChar
+  * The array of unsigned chars to write.
+  * @param iNbCell
+  * The size of &lt;tt&gt;ioArrayUChar&lt;/tt&gt;. If the the count of UChars to read is greater than &lt;tt&gt;iNbCell&lt;/tt&gt;,
+  * nothing is read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadUChar(unsigned char* ioArrayUChar, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a short integer.
+  * @param iShort
+  * The short to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteShort(const short iShort, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a short integer.
+  * @param ioShort
+  * The read short integer. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadShort(short&amp; ioShort, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a sequence of short integers.
+  * @param iShortArray
+  * The array of shorts to write.
+  * @param iNbCell
+  * The count of shorts to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteShort(const short* iShortArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an array of short integers.
+  * @param ioArrayShort
+  * The array of short integers to write.
+  * @param iNbCell
+  * The size of &lt;tt&gt;ioArrayShort&lt;/tt&gt;. If the the count of short integers to read is greater than &lt;tt&gt;iNbCell&lt;/tt&gt;,
+  * nothing is read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadShort(short* ioArrayShort, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes an unsigned short integer.
+  * @param iUShort
+  * The unsigned short to write. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+   void WriteUShort(const unsigned short iUShort, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an unsigned short integer.
+  * @param ioUShort
+  * The read unsigned short integer.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadUShort(unsigned short&amp; ioUShort, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATLONG32 integer.
+  * @param iLong
+  * The CATLONG32 to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteLong(const CATLONG32 iLong, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATLONG32 integer.
+  * @param ioLong
+  * The read CATLONG32 integer.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadLong(CATLONG32&amp; ioLong, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a sequence of CATLONG32 integers.
+  * @param iLongArray
+  * The array of longs to write.
+  * @param iNbCell
+  * The count of longs to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteLong(const CATLONG32* iLongArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATLONG32 integer.
+  * @param ioLong
+  * The read CATLONG32 integer.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadLong(CATLONG32* ioArrayLong, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes an CATULONG32  integer.
+  * @param iULong
+  * The CATULONG32  to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteULong(const CATULONG32 iULong, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an CATULONG32  integer.
+  * @param ioULong
+  * The read unsigned short integer.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadULong(CATULONG32&amp; ioULong, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a sequence of CATULONG32  integers.
+  * @param iULongArray
+  * The array of CATULONG32s to write.
+  * @param iNbCell
+  * The count of CATULONG32s to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteULong(const CATULONG32* iULongArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an array of CATULONG32  integers.
+  * @param ioArrayULong
+  * The array of CATLONG32 integers to write.
+  * @param iNbCell
+  * The size of &lt;tt&gt;ioArrayULong&lt;/tt&gt;. If the the count of CATLONG32 integers to read is greater than &lt;tt&gt;iNbCell&lt;/tt&gt;,
+  * nothing is read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadULong(CATULONG32* ioArrayULong , const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a double.
+  * @param iDouble
+  * The double to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteDouble(const double iDouble, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a double.
+  * @param ioDouble
+  * The read double.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadDouble(double&amp; ioDouble, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a sequence of doubles.
+  * @param iDoubleArray
+  * The array of doubles to write.
+  * @param iNbCell
+  * The count of doubles to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteDouble(const double* iDoubleArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an array of doubles.
+  * @param ioArrayDouble
+  * The array of doubles to write.
+  * @param iNbCell
+  * The size of &lt;tt&gt;ioArrayDouble&lt;/tt&gt;. If the the count of doubles to read is greater than &lt;tt&gt;iNbCell&lt;/tt&gt;,
+  * nothing is read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadDouble(double* ioArrayDouble, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a float.
+  * @param iFloat
+  * The float to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteFloat(const float iFloat, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a float.
+  * @param ioFloat
+  * The read float.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadFloat(float&amp; ioFloat, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a sequence of floats.
+  * @param iFloatArray
+  * The array of floats to write.
+  * @param iNbCell
+  * The count of floats to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteFloat(const float* iFloatArray, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads an array of floats.
+  * @param ioArrayFloat
+  * The array of floats to write.
+  * @param iNbCell
+  * The size of &lt;tt&gt;ioArrayFloat&lt;/tt&gt;. If the the count of floats to read is greater than &lt;tt&gt;iNbCell&lt;/tt&gt;,
+  * nothing is read.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadFloat(float* ioArrayFloat, const CATLONG32 iNbCell, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a string.
+  * @param iString
+  * The string to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteString(const char* iString, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a string.
+  * @param ioString
+  * The read string.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadString(char*&amp; ioString, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATMathBox.
+  * @param iBox
+  * The box to write. The box is written with floats, precision can be lost. 
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteBox(const CATMathBox&amp; ioBox, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATMathBox.
+  * @param ioBox
+  * The read box.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadBox(CATMathBox&amp; ioBox, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATMathPoint.
+  * @param ioPoint
+  * The CATMathPoint to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WritePoint(const CATMathPoint&amp; ioPoint, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATMathPoint.
+  * @param ioPoint
+  * The read CATMathPoint.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadPoint(CATMathPoint&amp; ioPoint, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATMathVector2D.
+  * @param ioVector2D
+  * The CATMathVector2D to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteVector2D(const CATMathVector2D&amp; ioVector2D, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATMathVector2D.
+  * @param ioVector2D
+  * The read CATMathVector2D.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadVector2D(CATMathVector2D&amp; ioVector2D, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATMathVector.
+  * @param ioVector
+  * The CATMathVector to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteVector(const CATMathVector&amp; ioVector, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Reads a CATMathVector.
+  * @param ioVector
+  * The read CATMathVector.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadVector(CATMathVector&amp; ioVector, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATMath3x3Matrix.
+  * @param ioMatrix
+  * The CATMath3x3Matrix to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void Write3x3Matrix(const CATMath3x3Matrix&amp; ioMatrix, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATMath3x3Matrix.
+  * @param ioMatrix
+  * The read CATMath3x3Matrix.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void Read3x3Matrix(CATMath3x3Matrix&amp; ioMatrix, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATMathTransformation.
+  * @param ioTransfo
+  * The CATMathTransformation to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteTransformation(const CATMathTransformation&amp; ioTransfo, const char iReservedLabel[] = &quot;&quot;);
+ 
+ /**
+  * Reads a CATMathTransformation.
+  * @param ioTransfo
+  * The read CATMathTransformation.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadTransformation(CATMathTransformation&amp; ioTransfo, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATMathPlane.
+  * @param ioPlane
+  * The CATMathPlane to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WritePlane(const CATMathPlane&amp; ioPlane, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Reads a CATMathPlane.
+  * @param ioPlane
+  * The read CATMathPlane.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadPlane(CATMathPlane&amp; ioPlane, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Writes a CATMathAxis.
+  * @param ioAxis
+  * The CATMathAxis to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteAxis(const CATMathAxis&amp; ioAxis, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Reads a CATMathAxis.
+  * @param ioAxis
+  * The read CATMathAxis.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadAxis(CATMathAxis&amp; ioAxis, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATUuid.
+  * @param iid
+  * The CATUuid to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteCATUuid(const CATUuid&amp; iid, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Reads a CATUuid.
+  * @param iid
+  * The read CATUuid.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadCATUuid(CATUuid&amp; iid, const char iReservedLabel[] = &quot;&quot;);
+
+ /**
+  * Writes a CATSoftwareConfiguration.
+  * @param iConfig
+  * The CATSoftwareConfiguration to write.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void WriteConfig(const CATSoftwareConfiguration&amp; iConfig, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * Reads a CATSoftwareConfiguration.
+  * @param iConfig
+  * The read CATSoftwareConfiguration.
+  * @param iReservedLabel
+  * Reserved for future use. Do not change the default value.
+  */
+  void ReadConfig(CATSoftwareConfiguration&amp; ioConfig, const char iReservedLabel[] = &quot;&quot;);
+  
+ /**
+  * @nodoc
+  * For internal use only. Do not use.
+  * Retrieve &lt;tt&gt;this&lt;/tt&gt; internal data class instance.
+  */
+  INLINE void* GetImpl();
+
+ /**
+  * @nodoc
+  * Do not use : for internal use only.
+  */
+  CATCGMNewClassArrayDeclare;
+
+protected :
+
+ /**
+  * For internal use only. Do not use.
+  * Internal data class;
+  */
+  CATMathStreamImpl* _pImpl;
+
+
+ 
+
+private :
+
+  /** @nodoc  forbidden functionnality */
+  CATMathStream(const CATMathStream&amp;);
+
+  /** @nodoc   forbidden functionnality */
+  CATMathStream&amp; operator=(const CATMathStream&amp;);
+ 
+
+};
+
+//-----------------------------------------------------------------------------
+// GetImpl
+//-----------------------------------------------------------------------------
+INLINE void* CATMathStream::GetImpl()
+{
+  return (void*)_pImpl;
+}
+//-----------------------------------------------------------------------------
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathSincos.html">← 上一页: CATMathSincos.h</a></div>
+        <div><a href="CATMathStreamDef.html">下一页: CATMathStreamDef.h →</a></div>
+    </div>
+</body>
+</html>

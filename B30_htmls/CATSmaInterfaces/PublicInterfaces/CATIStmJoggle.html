@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSmaInterfaces/PublicInterfaces/CATIStmJoggle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSmaInterfaces/PublicInterfaces/CATIStmJoggle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmHydroForming.html">← 上一页: CATIStmHydroForming.h</a></div>
+        <div><a href="CATIStmJoggleAccess.html">下一页: CATIStmJoggleAccess.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIStmJoggle_H
+#define CATIStmJoggle_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;ExportedByCATSmaInterfaces.h&quot;
+#include &quot;CATTopDefine.h&quot;
+#include &quot;CATICkeParm.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSmaInterfaces IID IID_CATIStmJoggle;
+#else
+extern &quot;C&quot; const IID IID_CATIStmJoggle;
+#endif
+
+/**
+ * Interface to manage the aerospace sheet metal &lt;b&gt;joggle&lt;/b&gt; feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Provides the basic methods to access data of a sheet metal
+ * &lt;b&gt;joggle&lt;/b&gt; feature.
+ *
+ * &lt;br&gt;A &lt;b&gt;joggle&lt;/b&gt; is a local deformation of a &lt;b&gt;surfacic flange&lt;/b&gt; or a &lt;b&gt;Web&lt;/b&gt;.
+ *      &lt;br&gt;&lt;b&gt;A &lt;b&gt;joggle&lt;/b&gt; is defined by&lt;/b&gt; : 
+ *      &lt;ul&gt;
+ *      &lt;li&gt; &lt;b&gt;support&lt;/b&gt;      : a &lt;b&gt;surfacic flange&lt;/b&gt; or the &lt;b&gt;web&lt;/b&gt;,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;plane&lt;/b&gt;        : a &lt;b&gt;CATPlane&lt;/b&gt; or a planar face,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;depth&lt;/b&gt;        : the offset value of the joggle support surface,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;runout&lt;/b&gt;       : the length of the joggle,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;start radius&lt;/b&gt; : the value of the start fillet radius of the joggle,&lt;/li&gt;
+ *      &lt;li&gt; &lt;b&gt;end radius&lt;/b&gt;   : the value of the end fillet radius of the joggle.&lt;/li&gt;
+ *      &lt;/ul&gt;
+ */
+
+class ExportedByCATSmaInterfaces CATIStmJoggle : public CATBaseUnknown
+  {
+	CATDeclareInterface;
+	
+  public: 
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the support of the joggle.
+     *
+     * @param opiSupportSpec 
+     *   Specification of the support : a surfacic flange or a Web.
+     *
+     */ 
+    virtual HRESULT __stdcall GetSupport (CATISpecObject ** opiSupportSpec) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the support of the joggle.
+     *
+     * @param ipiSupportSpec 
+     *   Specification of the support : a surfacic flange or a Web.
+     *
+     */ 
+    virtual HRESULT __stdcall SetSupport (const CATISpecObject * ipiSupportSpec) = 0;
+    
+    /**
+     * &lt;b&gt;Role&lt;/b&gt;: Method to manage Joggle internal specifications.
+     *
+     *              A call to this method is mandatory BEFORE updating the Joggle.
+     *                 - if the Support has been modified : 
+     *                   the Joggle will be removed from its Previous Support (if any).
+     *                 - if the Joggle Plane has been modified : 
+     *                   the Joggle will be inserted on the Support according with other Joggles (if any).
+     *                 - a new OFFSET Surface of the Support will be created if necessary.
+     *
+     * @param ipiPrtPartSpec 
+     *   Part Feature
+     * @param ipiPrevSupportSpec 
+     *   Suppport of the Joggle BEFORE any Joggle modification ( is NULL if NEW Joggle ).
+     */ 
+    virtual HRESULT __stdcall ManageOnSupport (const CATISpecObject * ipiPrtPartSpec,
+                                               const CATISpecObject * ipiPrevSupportSpec) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the start plane of the joggle.
+     *
+     * @param opiPlaneSpec 
+     *   a plane or a planar face.
+     *
+     */ 
+    virtual HRESULT __stdcall GetPlane (CATISpecObject ** opiPlaneSpec) = 0;    
+       
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the start plane of the joggle.
+     *
+     * @param ipiPlaneSpec 
+     *   a plane or a planar face.
+     *
+     */ 
+    virtual HRESULT __stdcall SetPlane (const CATISpecObject * ipiPlaneSpec) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the runout definition type of the joggle.
+     *                  This definition is set by the &lt;b&gt;sheet metal parameters&lt;/b&gt; for all the
+     *                  joggles created in the current Part.
+     *
+     * @param RunoutType
+     *   an integer 
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;1&lt;/b&gt; : the runout length includes the joggle fillets,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;2&lt;/b&gt; : the runout length excludes partially the joggle fillets.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */ 
+    virtual HRESULT __stdcall GetRunoutType (int &amp; RunoutType) = 0;    
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the runout length parameter of the joggle.
+     *
+     * @param Runout 
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the runout length. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetRunout (CATICkeParm ** opiRunoutParam) = 0;      
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the relative orientation of the runout compared to the joggle plane.
+     * @param oRunoutOrient 
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */
+    virtual HRESULT __stdcall GetRunoutOrient (CATOrientation &amp; oRunoutOrient) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the relative orientation of the runout compared to the joggle plane.
+     * @param iRunoutOrient 
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */
+    virtual HRESULT __stdcall SetRunoutOrient (const CATOrientation &amp; iRunoutOrient) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the depth length parameter of to the joggle.
+     *
+     * @param opiDepth 
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the depth length. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetDepth (CATICkeParm ** opiDepthParam) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the relative orientation of the depth compared to the joggle support.
+     * @param oDepthOrient 
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */
+    virtual HRESULT __stdcall GetDepthOrient (CATOrientation &amp; oDepthOrient) = 0;
+    
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method sets the relative orientation of the depth compared to the joggle support.
+     * @param iDepthOrient 
+     *      A reference to a &lt;b&gt;CATOrientation&lt;/b&gt; instance.
+     *      &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+     *      &lt;ul&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationNegative&lt;/b&gt;: The orientations are opposite,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationPositive&lt;/b&gt;: The orientations are the same,&lt;/li&gt;
+     *      &lt;li&gt; &lt;b&gt;CATOrientationUnknown&lt;/b&gt; : The orientation is unknown.&lt;/li&gt;
+     *      &lt;/ul&gt;
+     */
+    virtual HRESULT __stdcall SetDepthOrient (const CATOrientation &amp; iDepthOrient) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the radius of the start fillet of the Joggle.
+     *
+     * @param opiRadiusParam 
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the radius length. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetStartRadius (CATICkeParm ** opiRadiusParam) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the radius of the end fillet of the Joggle.
+     *
+     * @param opiRadiusParam 
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the radius length. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetEndRadius (CATICkeParm ** opiRadiusParam) = 0;
+
+    /**
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the clearance length of the Joggle.
+     *
+     * @param opiClearanceParam 
+     *   a CATICkeParm : use the method &lt;b&gt;Valuate&lt;/b&gt; to modify the Clearance length. @see CATICkeParm.
+     */ 
+    virtual HRESULT __stdcall GetClearance (CATICkeParm ** opiClearanceParam) = 0;
+
+  };
+
+CATDeclareHandler(CATIStmJoggle, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIStmHydroForming.html">← 上一页: CATIStmHydroForming.h</a></div>
+        <div><a href="CATIStmJoggleAccess.html">下一页: CATIStmJoggleAccess.h →</a></div>
+    </div>
+</body>
+</html>

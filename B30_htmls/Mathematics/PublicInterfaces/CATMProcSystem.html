@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMProcSystem.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMProcSystem.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATListPtrCATCGMVirtualItf.html">← 上一页: CATListPtrCATCGMVirtualItf.h</a></div>
+        <div><a href="CATMath.html">下一页: CATMath.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2011
+
+#ifndef CATMProcSystem_H
+#define CATMProcSystem_H
+
+#include &quot;CATIACGMLevel.h&quot;
+#ifdef CATIACGMV5R23
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U1
+ */
+
+#include &quot;MPROCTools.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+/**
+ * Class to control the behavior of the MProc system.
+ */
+class ExportedByMPROCTools CATMProcSystem
+{
+public:
+	/**
+	 * Method to enable or disable the MProc system.
+	 * &lt;b&gt;Role:&lt;/b&gt; Use this method to specify the number of processes to use
+	 * in parallel regions. By default, it will enable a number of processes
+	 * equal to the number of processors. Specifing 1 will disable the MProc system.
+	 * Otherwise the spefified number will be used, maxing out at the number of processors.
+	 * @param iNumProcesses
+	 *  The number of processes to use.
+	 * @return
+	 *  &lt;tt&gt;TRUE&lt;/tt&gt; if the operation was successful, otherwise &lt;tt&gt;FALSE&lt;/tt&gt;.
+	 */
+	static CATBoolean EnableMProc( unsigned int iNumProcesses = 0);
+
+	/**
+	 * Method to retrieve the number of physical processors in the system.
+	 * @return
+	 *  The number of processors found in the system.
+	 */
+	static unsigned int NumberPhysicalProcessors();
+
+	/**
+	 * Option to aid in debugging of custom MProc implementations.
+	 * &lt;b&gt;Role:&lt;/b&gt; When this mode is enabled, all code that is 
+	 * typically only exercised in slave processes, such as the streaming
+	 * and unstreaming methods, is executed in the master process. 
+	 * This makes it easier to assure code correctness, without the 
+	 * complexities of multiple processes.
+	 * &lt;b&gt;Note:&lt;/b&gt; This is for debugging purposes only. Once enabled,
+	 *  this option cannot be disabled in the same session.
+	 */
+	static void EnableMonoProcMode();
+
+};
+
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATListPtrCATCGMVirtualItf.html">← 上一页: CATListPtrCATCGMVirtualItf.h</a></div>
+        <div><a href="CATMath.html">下一页: CATMath.h →</a></div>
+    </div>
+</body>
+</html>

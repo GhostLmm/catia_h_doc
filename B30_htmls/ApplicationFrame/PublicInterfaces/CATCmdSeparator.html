@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATCmdSeparator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATCmdSeparator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCmdHeaderSensitivityMngt.html">← 上一页: CATCmdHeaderSensitivityMngt.h</a></div>
+        <div><a href="CATCmdStarter.html">下一页: CATCmdStarter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCmdSeparator_H
+#define CATCmdSeparator_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CD0FRAME.h&quot;
+#include &quot;CATCmdAccess.h&quot;
+
+/**
+ * Class to create a separator&#x27;s access .
+ * &lt;b&gt;Role&lt;/b&gt;: Application Frame elementary component used to separate other
+ * components visually (line in a submenu, blank in a toolbar). Use the @href NewAccess 
+ * macro to create a &lt;tt&gt;CATCmdSeparator&lt;/tt&gt;
+ */
+class ExportedByCD0FRAME CATCmdSeparator: public CATCmdAccess
+{
+  friend class CATMarshallableCmdSeparator;
+  
+  CATDeclareKindOf;
+  
+public:
+
+	/*---------------------------------*/
+    //     CONSTRUCTORS  
+    /*---------------------------------*/
+  /**
+  * @nodoc
+  */
+  CATCmdSeparator (Persistence = Code);
+  /**
+  * @nodoc
+  */
+  CATCmdSeparator (const CATString &amp;name, Persistence = Code);
+  /**
+  * @nodoc
+  */
+  CATCmdSeparator (CATCmdSeparator &amp;);
+  
+  /**
+  * @nodoc
+  */
+  virtual CATCmdAccess * Clone(int noNext = 0,CATCmdAccess * toBeCompleted = NULL);
+			       
+  
+  virtual ~CATCmdSeparator();
+ 
+    /*---------------------------------*/
+    //  SAVE
+    /*---------------------------------*/
+#ifdef AfrCAA2
+
+  /**
+  * @nodoc
+  */
+  virtual void SaveAsXml (CATAfrGen * Gen, int depth);
+#endif
+
+
+    /*---------------------------------*/
+    //  INTERNAL USAGE 
+    /*---------------------------------*/
+
+  /** @nodoc */
+  virtual char *GenerateVariableName(const char *);
+
+    /*---------------------------------*/
+    //     REPRESENTATION  
+    /*---------------------------------*/
+
+  /** @nodoc */
+  virtual CATCmdRep * CreateMenuRep (CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyMenuRep();
+  
+  /** @nodoc */
+  virtual CATCmdRep * CreateToolbarRep (CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyToolbarRep();
+
+  /** @nodoc */
+  virtual void CreateToolbarVisRep(CATVisDialog* parentVisRep);
+
+  /** @nodoc */
+  virtual void DestroyToolbarVisRep();
+  
+  /** @nodoc */
+  virtual CATCmdRep * CreateCtxMenuRep (CATDialog *);
+  /** @nodoc */
+  virtual void        DestroyCtxMenuRep();
+
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCmdHeaderSensitivityMngt.html">← 上一页: CATCmdHeaderSensitivityMngt.h</a></div>
+        <div><a href="CATCmdStarter.html">下一页: CATCmdStarter.h →</a></div>
+    </div>
+</body>
+</html>

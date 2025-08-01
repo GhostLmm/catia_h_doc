@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplicationFrame/PublicInterfaces/CATIWorkbench.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ApplicationFrame/PublicInterfaces/CATIWorkbench.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIUIActivate.html">← 上一页: CATIUIActivate.h</a></div>
+        <div><a href="CATIWorkbenchAddin.html">下一页: CATIWorkbenchAddin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIWorkbench_h
+#define CATIWorkbench_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U6
+ */
+
+#include &lt;CD0FRAME.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CATListPV.h&gt;
+
+extern ExportedByCD0FRAME IID IID_CATIWorkbench;
+
+class CATCmdWorkbench;
+/**
+* Interface to derive to create a workbench.
+* &lt;b&gt;Role&lt;/b&gt;: The workbench is the object seen by the end user in place of the 
+* workshop. As in workshops, tools are grouped in toolbars and menus. 
+* These tools are commands which are handled by workshop and its workbenches by means of 
+* command headers. 
+* &lt;br&gt;&lt;br&gt;
+* The workshop dedicated to this workbench features a specific workbench 
+* interface, see @href CATIWorkshop#GetWorkbenchInterface, which derives from &lt;tt&gt;CATIWorkbench&lt;/tt&gt;.
+* Each workbench of this workshop is an implementation of this specific workbench interface. 
+* &lt;br&gt;&lt;br&gt;
+* To enable the instanciation of the workbench you must:
+* &lt;ul&gt;
+* &lt;li&gt; Create a workbench factory interface which derives from @href CATIGenericFactory. &lt;/li&gt;
+* &lt;li&gt; Implement this factory interface with the help of these two macros: @href CATDeclareConfigurationFactory 
+* and @href CATImplementConfigurationFactory. &lt;/li&gt;
+* &lt;/ul&gt;
+  * @see CATIWorkshop, CATIWorkbenchAddin
+*/
+class ExportedByCD0FRAME CATIWorkbench : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public:
+  /**
+  * Instantiates the command headers.  
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Each command you want to make available in your workshop or 
+  * workbench must have a command header. The command header holds the necessary 
+  * information to load the command, such as the name of the 
+  * shared library in which the command&#x27;s executable code is located, the name of the 
+  * command class, and the data to pass to the command&#x27;s code when this command 
+  * becomes the current one. The command header has resources for each command to display 
+  * such as the command name shown to the end user, its ToolTip displayed in a balloon, 
+  * its help message, and its icon.
+  * &lt;br&gt;Each instance of header is deleted by CATIA.
+  * @see CATCommandHeader
+  */
+  virtual void              CreateCommands() = 0;
+
+  /**
+  * Creates the workbench accesses.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Creates the containers for the workbench, the menubar, the menus, and the toolbars, 
+  * the starters for the commands, and arranges the commands in the menus and toolbars.
+  * With the @href NewAccess macro you have explanations to create  each 
+  * component of the workbench and how to arrange it.
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;:
+  * The workbench&#x27;s name must be the same as the class implementing this interface.
+  * @return 
+  *   The workbench&#x27;s container . 
+  */
+  virtual CATCmdWorkbench * CreateWorkbench() = 0;
+
+  /**
+  * Returns the name of the interface exposed by the workbench to create add-ins.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: To enable client applications of your workbench to add their 
+  * own addins , you should provide an interface that the client application will implement. 
+  * This interface should derive from the @href CATIWorkbenchAddin interface. 
+  * &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: The name of this interface must be pppIxxx&lt;b&gt;Addin&lt;/b&gt;, where 
+  * ppp is your application prefix (such as CAT for CATIA) and xxx is the name of your 
+  * workbench.
+  */
+  virtual CATClassId        GetAddinInterface () = 0;
+
+/**
+* Replaces specific interfaces by customized interfaces.
+* &lt;br&gt;&lt;b&gt;Warning&lt;/b&gt;: if you don&#x27;t have any customized interface, this method must be &lt;i&gt;empty&lt;/i&gt; implemented.
+* @param oDefaultIIDList
+*    The list of IID of interfaces you need to customize
+* @param oCustomIIDList
+*    The list of IID of your replacing interfaces
+*
+*@example
+*    How to implement this method:
+*
+*    oDefaultIIDList-&gt;Append((void*)&amp;IID_CATIxxxxxx);
+*    oCustomIIDList-&gt;Append((void*)&amp;IID_MyCustoCATIxxxxxx); //MyCustoCATIxxxxxx derives from CATIxxxxxx
+*
+*/
+  virtual void              GetCustomInterfaces(CATListPV * oDefaultIIDList,
+						                        CATListPV * oCustomIIDList) = 0;
+  
+};
+
+CATDeclareHandler(CATIWorkbench, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIUIActivate.html">← 上一页: CATIUIActivate.h</a></div>
+        <div><a href="CATIWorkbenchAddin.html">下一页: CATIWorkbenchAddin.h →</a></div>
+    </div>
+</body>
+</html>

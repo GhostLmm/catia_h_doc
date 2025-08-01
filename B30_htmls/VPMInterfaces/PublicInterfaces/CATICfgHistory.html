@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATICfgHistory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATICfgHistory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgGroupModif.html">← 上一页: CATICfgGroupModif.h</a></div>
+        <div><a href="CATICfgInterval.html">下一页: CATICfgInterval.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+#ifndef CATICfgHistory_h_
+#define CATICfgHistory_h_
+
+// =================================================================
+// Includes
+// =================================================================
+
+/**
+ *@CAA2Level L1
+ *@CAA2Usage U3
+ */
+
+//System
+#include &quot;CATBaseUnknown.h&quot;
+//Interface ID
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;sequence_octet.h&quot;
+#include &quot;sequence_CORBAAny.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATTime.h&quot;
+#include &quot;CATICfgModification.h&quot;
+
+class CATILinkableObject_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_CATICfgHistory;
+#else
+extern &quot;C&quot; const IID IID_CATICfgHistory;
+#endif
+class ExportedByGUIDVPMInterfaces CATICfgHistory : public CATBaseUnknown {
+
+CATDeclareInterface;
+	public:
+
+
+	/**
+	 * Set the operation (&quot;Add&quot;, &quot;Cut&quot;, &quot;Move&quot;, &quot;Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param iType 
+	 */
+	virtual HRESULT SetOperation(const CATICfgModification::Operation &amp;iType) = 0;
+
+	/** @nodoc */
+	virtual HRESULT SetOperation(const CATUnicodeString&amp; iType) = 0;
+
+
+	/**
+	 * Get the operation (&quot;Add&quot;, &quot;Cut&quot;, &quot;Move&quot;, &quot;Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oType 
+	 */
+	virtual HRESULT GetOperation(CATICfgModification::Operation &amp;oType) const = 0;
+     
+	/** @nodoc */
+	virtual HRESULT GetOperation(CATUnicodeString&amp; oType) const = 0;
+
+
+	/**
+	 * Set the ID object 1 (&quot;Add&quot;, &quot;Cut&quot;, &quot;Move&quot;, &quot;Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oObject
+	 */
+	virtual HRESULT SetObj1(const CATILinkableObject_var&amp; oObject) = 0;
+	
+	/** @nodoc */
+	virtual HRESULT SetObjId1(const SEQUENCE(octet)&amp; iIdentifier) = 0;
+    /** @nodoc */
+     virtual HRESULT SetObjId1(CORBAAny&amp; iIdentifier) = 0;
+
+	/**
+	 * Get object 1 (&quot;Add&quot;, &quot;Cut&quot;, &quot;Move&quot;, &quot;Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oObject
+	 */
+	virtual HRESULT GetObj1(CATILinkableObject_var&amp; oObject) const  = 0;
+
+	/** @nodoc */
+	virtual HRESULT GetObjId1(CORBAAny&amp; oIdentifier) const = 0;
+	/** @nodoc */
+	virtual HRESULT GetObjId1(SEQUENCE(octet)&amp; oIdentifier) const = 0;
+
+
+	/**
+	 * Set object 2 (&quot;Move/Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oObject
+	 */
+	virtual HRESULT SetObj2(const CATILinkableObject_var&amp; oObject) = 0;
+
+	/** @nodoc */
+	virtual HRESULT SetObjId2(const SEQUENCE(octet)&amp; iIdentifier) = 0;
+	/** @nodoc */
+	virtual HRESULT SetObjId2(CORBAAny&amp; iIdentifier) = 0;
+
+
+
+	/**
+	 * Get  object 2 (&quot;Move/Replace&quot;) of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oObject
+	 */
+	virtual HRESULT GetObj2(CATILinkableObject_var&amp; oObject) const  = 0;
+	/** @nodoc */
+	virtual HRESULT GetObjId2(SEQUENCE(octet)&amp; oIdentifier) const = 0;
+	/** @nodoc */
+	virtual HRESULT GetObjId2(CORBAAny&amp; oIdentifier) const = 0;
+
+     
+	/**
+	 * Get the related mod of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oRelatedMod 
+	 */
+	virtual HRESULT GetRelatedMod(CATICfgModification_var&amp; oRelatedMod) const = 0; 
+
+
+	/**
+	 * Get the creation date of a &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param oDate 
+	 */
+	virtual HRESULT GetDate(CATTime&amp; oDate) const = 0;
+
+
+	/**
+	 * Get the user who created the &lt;b&gt;MODHistory&lt;/b&gt;
+	 * @param  oUser
+	 */
+	virtual HRESULT GetUser(CATUnicodeString&amp; oUser) const = 0;
+
+	/** @nodoc */
+	virtual HRESULT GetOwningCV(CATIConfigurableObject_var &amp;oCV) const = 0;
+
+	/** @nodoc */
+	virtual HRESULT GetAsString( CATUnicodeString&amp; oString ) const = 0;
+};
+
+CATDeclareHandler(CATICfgHistory, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICfgGroupModif.html">← 上一页: CATICfgGroupModif.h</a></div>
+        <div><a href="CATICfgInterval.html">下一页: CATICfgInterval.h →</a></div>
+    </div>
+</body>
+</html>

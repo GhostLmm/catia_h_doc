@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftSheetFormat.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftSheetFormat.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftSheet.html">← 上一页: CATIDftSheet.h</a></div>
+        <div><a href="CATIDftStandard.html">下一页: CATIDftStandard.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2003
+#ifndef CATIDftSheetFormat_H
+#define CATIDftSheetFormat_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// Parent class
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;DraftingItfCPP.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftSheetFormat ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftSheetFormat ;
+#endif
+
+// System
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+// DraftingInterfaces
+#include &quot;CATSheetOrientation.h&quot;
+class CATIDftFormat;
+
+/**
+ * &lt;B&gt;Role:&lt;/B&gt; CATIDftSheetFormat is an interface dedicated to access the sheet format, orientation, display mode.
+ * @see CATIDftFormat.
+ */
+class ExportedByDraftingItfCPP CATIDftSheetFormat: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Retrieves the format associated with this sheet.
+ * @see CATIDftFormat, CATIDftCustomFormat
+ * @param &lt;tt&gt;const IID &amp;iIID&lt;/tt&gt;
+ * [in] the IID of the interface by which the format will be retrieved.
+ * @param &lt;tt&gt;IUnknown **oFormat&lt;/tt&gt; [out, IUnknown#Release]
+ * the interface.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetSheetFormat(const IID &amp;iIID, IUnknown **oFormat)= 0;
+
+
+/**
+ * Sets the format associated to this sheet to the format in the drawing whose name is iFormatName.
+ * &lt;B&gt;Note:&lt;/B&gt; The sheet orientation will be modified (if necessary) to be compliant with the format orientations type.
+ * &lt;B&gt;Note:&lt;/B&gt; iFormat must be a format in the drawing.
+ * @param &lt;tt&gt;const CATUnicodeString &amp;iFormatName&lt;/tt&gt;
+ * [in] The name of the format.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;           &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;   &lt;dd&gt; The given format is not available in the drawing. The valuation could not be performed.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;         &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT SetSheetFormat(const CATUnicodeString &amp;iFormatName)= 0;
+
+
+/**
+ * Sets the format associated with this sheet to iFormat.
+ * &lt;B&gt;Note:&lt;/B&gt; The sheet orientation will be modified (if necessary) to be compliant with the format orientations type.
+ * &lt;B&gt;Note:&lt;/B&gt; iFormat must be a format in the drawing.
+ * @param &lt;tt&gt;CATIDftFormat *iFormat&lt;/tt&gt;
+ * [in] The format.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK   &lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL &lt;/tt&gt;     &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT SetSheetFormat(CATIDftFormat *iFormat)= 0;
+
+
+/**
+ * Retrieves the sheet orientation.
+ * @param &lt;tt&gt;CATSheetOrientation &amp;oOrient&lt;/tt&gt;
+ * [out] The orientation of the sheet.
+ * @see CATSheetOrientation
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetSheetOrientation(CATSheetOrientation &amp;oOrient)= 0;
+
+
+/**
+ * Sets the sheet orientation to iOrient.
+ * &lt;B&gt;Note:&lt;/B&gt; The sheet orientation must be compliant with the sheet format orientations type.
+ * @see CATIDftFormat.
+ * @param &lt;tt&gt;CATSheetOrientation iOrient&lt;/tt&gt;
+ * [in] The new orientation of the sheet.
+ * @see CATSheetOrientation
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; The requested orientation is not compliant with the sheet format, therefore the sheet is unchanged.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT SetSheetOrientation(CATSheetOrientation iOrient)= 0;
+
+
+/**
+ * Retrieves the sheet display mode.
+ * @param &lt;tt&gt;CATBoolean &amp;oDisplayMode&lt;/tt&gt;
+ * [out] The sheet display mode. This parameter is used in order to check whether the sheet format frame should be displayed or not.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetSheetDisplayMode(CATBoolean &amp;oDisplayMode)= 0;
+
+
+/**
+ * Sets the sheet display mode to iDisplayMode.
+ * @param &lt;tt&gt;CATBoolean iDisplayMode&lt;/tt&gt;
+ * [in] The new sheet display mode. This parameter is used in order to check whether the sheet format frame should be displayed or not.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ * @see CATIDftSheetFormat#GetSheetDisplayMode
+ */
+  virtual HRESULT SetSheetDisplayMode(CATBoolean iDisplayMode)= 0;
+
+
+/**
+ * Retrieves the sheet size according to the current sheet orientation.
+ * &lt;B&gt;Note:&lt;/B&gt; The sheet size is based on its format and its orientation.
+ * @param &lt;tt&gt;double &amp;oWidth&lt;/tt&gt;
+ * [out] The width of the sheet.
+ * @param &lt;tt&gt;double &amp;oHeight&lt;/tt&gt;
+ * [out] The height of the sheet.
+ * @return
+ * &lt;tt&gt;HRESULT&lt;/tt&gt;
+ * &lt;dl&gt;
+ * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Success.
+ * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Error.
+ * &lt;/dl&gt;
+ */
+  virtual HRESULT GetSheetSize(double &amp;oWidth, double &amp;oHeight)= 0;
+
+};
+
+// Handler correspondant.
+CATDeclareHandler(CATIDftSheetFormat, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftSheet.html">← 上一页: CATIDftSheet.h</a></div>
+        <div><a href="CATIDftStandard.html">下一页: CATIDftStandard.h →</a></div>
+    </div>
+</body>
+</html>

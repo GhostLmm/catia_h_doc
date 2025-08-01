@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAACompositesItf/PublicInterfaces/CATICciDart.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAACompositesItf/PublicInterfaces/CATICciDart.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICciCutPiecesGroup.html">← 上一页: CATICciCutPiecesGroup.h</a></div>
+        <div><a href="CATICciETBS.html">下一页: CATICciETBS.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2007
+//===================================================================
+//
+// CATICciDart.h
+// Define the CATICciDart interface
+//
+//===================================================================
+//
+// Usage notes:
+//   Interface to manage dart feature.
+//
+//===================================================================
+//  Inheritance : CATICciDart (CAACompositesItf FW)
+//                 CATICciBaseContour (CAACompositesItf FW)
+//                  CATBaseUnknown        (System FW)
+//===================================================================
+#ifndef CATICciDart_H
+#define CATICciDart_H
+/**
+* @CAA2Level L0
+* @CAA2Usage U0
+*/
+
+#include &quot;CAACompositesItf.h&quot;
+#include &quot;CATICciBaseContour.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCAACompositesItf IID IID_CATICciDart;
+#else
+extern &quot;C&quot; const IID IID_CATICciDart ;
+#endif
+
+/**
+ * The dart feature type.
+ * &lt;b&gt;Role:&lt;/b&gt; This type defines the type of a Composites dart feature, created
+ * from 2 points or a curve.
+ * @param CATCciLineDart
+ *    The dart feature is a Line dart.   
+ *
+ * @param CATCciCurveDart
+ *    The dart feature is a Curvilinear dart.
+ */
+enum CATCciDartType
+{
+   CATCciLineDart          = 0,  
+   CATCciCurveDart         = 1
+};
+
+/**
+ * Interface to Dart.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows to manage a Composites Dart feature.
+ */
+//------------------------------------------------------------------
+class ExportedByCAACompositesItf CATICciDart: public CATICciBaseContour
+{
+  CATDeclareInterface;
+
+  public:
+
+     /**
+     * Gets the dart type.
+     * @param oType
+     *    The dart type (CATCciLineDart or CATCciCurveDart).
+     */
+     virtual HRESULT GetType (CATCciDartType &amp; oType) = 0;
+
+     /**
+     * Gets the dart points.
+     * &lt;br&gt; WARNING: If dart is defined by point indication, user @href #GetPoint1Coord and @href #GetPoint2Coord.
+     *               Only available for line dart.
+     * @param oDartPoint1
+     *    The first dart point.
+     * @param oDartPoint2
+     *    The second dart point.
+     */
+     virtual HRESULT GetDartPoints(CATIMmiMechanicalFeature_var &amp; oDartPoint1, CATIMmiMechanicalFeature_var &amp; oDartPoint2) = 0;
+     
+     /**
+     * Gets the first dart point coordinates.
+     * @param oXCoord
+     *   The coordinate along X axis of the dart point1.
+     * @param oYCoord
+     *   The coordinate along Y axis of the dart point1.
+     * @param oZCoord
+     *   The coordinate along Z axis of the dart point1.
+     */
+     virtual HRESULT GetPoint1Coord (double &amp; oXCoord, double &amp; oYCoord, double &amp; oZCoord) = 0;
+     
+     /**
+     * Gets the second dart point coordinates.
+     * @param oXCoord
+     *   The coordinate along X axis of the dart point2.
+     * @param oYCoord
+     *   The coordinate along Y axis of the dart point2.
+     * @param oZCoord
+     *   The coordinate along Z axis of the dart point2.
+     */
+     virtual HRESULT GetPoint2Coord (double &amp; oXCoord, double &amp; oYCoord, double &amp; oZCoord) = 0;
+
+     /**
+     * Gets the dart curve.
+     * &lt;br&gt; WARNING: only available for curve dart.
+     * @param oDartCurve
+     *    The dart curve.
+     */
+     virtual HRESULT GetDartCurve (CATIMmiMechanicalFeature_var &amp; oDartCurve) = 0;
+
+	 //--------------------------------------------------------------------------------------------------
+    //------------------------- METHODS NOT TO BE USED: will be removed in future release --------------
+    //--------------------------------------------------------------------------------------------------
+     /**
+     * @deprecated V5R26 
+	 * Use @see #GetDartPoints overloaded method instead.
+     * Gets the dart points.
+     * &lt;br&gt; WARNING: If dart is defined by point indication, user @href #GetPoint1Coord and @href #GetPoint2Coord.
+     *               Only available for line dart.
+     * @param oDartPoint1
+     *    The first dart point.
+     * @param oDartPoint2
+     *    The second dart point.
+     */
+     virtual HRESULT GetDartPoints(CATISpecObject_var &amp; oDartPoint1, CATISpecObject_var &amp; oDartPoint2) = 0;
+     
+     /**
+	 * @deprecated V5R26 
+	 * Use @see #GetDartCurve overloaded method instead.
+     * Gets the dart curve.
+     * &lt;br&gt; WARNING: only available for curve dart.
+     * @param oDartCurve
+     *    The dart curve.
+     */
+     virtual HRESULT GetDartCurve (CATISpecObject_var &amp; oDartCurve) = 0;
+
+     // No constructors or destructors on this pure virtual base class
+     // --------------------------------------------------------------
+};
+
+CATDeclareHandler(CATICciDart, CATICciBaseContour);
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICciCutPiecesGroup.html">← 上一页: CATICciCutPiecesGroup.h</a></div>
+        <div><a href="CATICciETBS.html">下一页: CATICciETBS.h →</a></div>
+    </div>
+</body>
+</html>

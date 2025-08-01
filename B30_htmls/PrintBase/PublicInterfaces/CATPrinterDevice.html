@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintBase/PublicInterfaces/CATPrinterDevice.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PrintBase/PublicInterfaces/CATPrinterDevice.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPrinter.html">← 上一页: CATPrinter.h</a></div>
+        <div><a href="CATPrinterManager.html">下一页: CATPrinterManager.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPRINTERDEVICE_H
+#define CATPRINTERDEVICE_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATPrintBase.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATPrintFileDevice.h&quot;
+
+#ifdef _WINDOWS_SOURCE
+class CDC;
+#endif
+
+class CATString;
+class CATPrinter;
+class CATPrintStream;
+class CATPrintFileDevice;
+
+/**
+ * Class to create a printer device.
+ * &lt;br&gt;
+ * &lt;b&gt;Role&lt;/b&gt;: This class allows to create a device based on a printer, or for printing to a file 
+ * instead sending data to the printer.
+ * 
+ * @see CATPrinter, CATPrintFileDevice
+ */
+class ExportedByCATPrintBase CATPrinterDevice : public CATPrintFileDevice
+{
+    CATDeclareClass; 
+public:
+
+/**
+ * Constructs a CATPrinterDevice from a given printer.
+ * @param iPrinter
+ *   The device printer.
+ */
+    CATPrinterDevice( const CATPrinter* iPrinter = NULL );
+
+/**
+ * Constructs a CATPrinterDevice for printing to a file. 
+ * @param iPrinter
+ *   The device printer.
+ * @param iFileName
+ *   The file name where to print.
+ */
+    CATPrinterDevice( const CATPrinter* iPrinter, const CATUnicodeString&amp; iFileName );
+    virtual ~CATPrinterDevice();
+
+/**
+ * Initializes the printer device with given parameters.
+ * @param iParameters
+ *   The device parameters.
+ * @return
+ *   Check the status of the device.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 1 = OK, 0 = KO.
+ */
+    int  Begin(const CATPrintParameters&amp; iParameters);
+
+/**
+ * Terminates the using of the printer device.
+ */
+    void End(void);
+
+/**
+ * Sets the number of copies.
+ * @param iCopies
+ *   The number of copies.
+ */
+    void SetCopies(int iCopies);
+
+/**
+ * Returns the number of copies.
+ * @return
+ *   The number of copies.
+ */
+    int  GetCopies(void);
+
+/**
+ * Returns the target printer.
+ * @return
+ *   The target printer.
+ */
+    const CATPrinter* GetTargetPrinter(void) const;
+
+/**
+ * Sets the file name of the printer device.
+ * @param iFileName
+ *   The file name of the printer device.
+ */
+    void SetFileName(const CATUnicodeString&amp; iFileName);
+
+/**
+ * Returns the file name of the printer device.
+ * @return 
+ *   The file name of the printer device.
+ */
+    const CATUnicodeString*  GetFileName(void) const;
+	
+/**
+ * Sets the document name.
+ * @param iDocName
+ *   The file name of the printer device.
+ */
+    void SetDocumentName(const CATUnicodeString&amp; iDocName);
+
+/**
+ * @nodoc
+ */
+    void UsePrinterMargins(int iFlag);
+
+private:
+
+#ifdef _WINDOWS_SOURCE
+    CDC     *_pDC;
+    DOCINFO _docInfo;
+#endif
+
+    int          _printToFile, _copies;
+    CATPrinter   *_printer;
+    CATPrintStream     *_outputFile;
+    CATUnicodeString   *_docName, *_fileName;
+    int                _usePrinterMargins;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPrinter.html">← 上一页: CATPrinter.h</a></div>
+        <div><a href="CATPrinterManager.html">下一页: CATPrinterManager.h →</a></div>
+    </div>
+</body>
+</html>

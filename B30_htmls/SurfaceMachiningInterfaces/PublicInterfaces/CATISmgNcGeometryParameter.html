@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurfaceMachiningInterfaces/PublicInterfaces/CATISmgNcGeometryParameter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SurfaceMachiningInterfaces/PublicInterfaces/CATISmgNcGeometryParameter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISmgNcGeometryManager.html">← 上一页: CATISmgNcGeometryManager.h</a></div>
+        <div><a href="CATISmgProgramAddin.html">下一页: CATISmgProgramAddin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISmgNcGeometryParameter_H
+#define CATISmgNcGeometryParameter_H
+//=================================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=================================================================================
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;SmgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATGeometry.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+class CATListValCATBaseUnknown_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySmgItfEnv IID IID_CATISmgNcGeometryParameter;
+#else
+extern &quot;C&quot; const IID IID_CATISmgNcGeometryParameter ;
+#endif
+
+/**
+ * Interface to manage nc geometry parameters.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This interface offers services for nc geometry parameters.
+ * @see CATISmgNcGeometryManager
+ * @see CATIMfgGeometryAccess
+ */
+
+class ExportedBySmgItfEnv CATISmgNcGeometryParameter: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Adds a manufacturing geometry or a nc geometry feature to the parameter.
+ * If you add a nc geometry feature, all the previously added manufacturing geometries
+ * will be removed. To keep them, use CATISmgNcGeometryParameter#Export.
+ * @param iMember
+ *      Manufacturing geometry or nc geometry feature to add
+ *
+ * @param iNotification  
+ *      Flag to indicate whether a notification is sent. 
+ *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *  &lt;ul&gt;
+ *  &lt;li&gt; 1 : notification is sent&lt;/li&gt;
+ *  &lt;li&gt; other value : no notification&lt;/li&gt;
+ *  &lt;/ul&gt;
+ *
+ * @param iVerify  
+ *      Flag to indicate whether it is necessary to check if iMember has already been added.   
+ *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *  &lt;ul&gt;
+ *  &lt;li&gt; 0 : Default value : iMember is added without any verification&lt;/li&gt;
+ *  &lt;li&gt; other value : Check if iMember has already been added: If not, iMember is added. If yes, iMember is removed &lt;/li&gt;
+ *  &lt;/ul&gt;
+ */
+	virtual HRESULT Add(const CATBaseUnknown_var &amp;iMember, const int iNotification = 1, const int iVerify = 0) = 0;
+
+/**
+ * Removes all the members of the parameter.
+ * @param iNotification  
+ *      Flag to indicate whether a notification is sent. 
+ *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ *  &lt;ul&gt;
+ *  &lt;li&gt; 1 : notification is sent&lt;/li&gt;
+ *  &lt;li&gt; other value : no notification&lt;/li&gt;
+ */
+	virtual HRESULT RemoveAll(const int iNotification = 1) = 0;
+
+/**
+ * Retrieves nc geometry features of the parameter.
+ * @param oNcGeometryFeatures  
+ *      List of nc geometry features
+ */
+	virtual HRESULT GetNcGeometryFeatures(CATListValCATBaseUnknown_var&amp; oNcGeometryFeatures) = 0;
+
+/**
+ * Retrieves the geometric elements of the members of the parameter. 
+ * @param iAllGeometricElements
+ *   Specifies if all geometric elements must be retrieved.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The parameter can be
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;   &lt;dd&gt;Only geometric elements on the visible space are retrieved
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;   &lt;dd&gt;All geometric elements are retrieved
+ *    &lt;/dl&gt;
+ *
+ * @param iDuplicate
+ *   Specifies if the geometric elements must be duplicated
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The parameter can be
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;   &lt;dd&gt;Geometric elements are duplicated only if necessary (in a product context)  
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;   &lt;dd&gt;Geometric elements are duplicated
+ *   &lt;/dl&gt;
+ *
+ * @param oGeometricElements
+ *    The geometric elements.
+ */
+    virtual HRESULT GetGeometricElements(CATLISTP(CATGeometry) &amp;oGeometricElements, const int iAllGeometricElements=0, const int iDuplicate=0) = 0; 
+
+/**
+ * Creates a new nc geometry feature, fill it with the manufacturing geometries of the parameter and
+ * add it in the parameter. 
+ * @param iName
+ *   New nc geometry feature&#x27;s value
+ *
+ * @return
+ *   HRESULT value fails if the manager already contains nc geometry features
+ */
+    virtual HRESULT Export (const CATUnicodeString &amp;iName = &quot;&quot;) = 0; 
+
+/**
+ * Gets the status of the geometric element.
+ * @param oIsValid
+ *   Status of the geometry
+ *     0 : Required
+ *     1 : Valuated
+ *     2 : Optional
+ *     3 : Not found
+ *     4 : Not up to date
+ *
+ * @param iIsRequired
+ *   Specifies if the geometric element is mandatory
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The parameter can be
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;   &lt;dd&gt;Geometric element is optional 
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;   &lt;dd&gt;Geometric element is mandatory
+ *   &lt;/dl&gt;
+ *
+ * @return
+ *   HRESULT value fails if the internal structure is invalid 
+ */
+    virtual HRESULT IsValid (int&amp; oIsValid, const int iIsRequired = 0) = 0;
+
+/**
+ * @nodoc
+ */
+    virtual HRESULT Analyse (const CATUnicodeString &amp; iName = &quot;&quot;) = 0;
+
+};
+
+CATDeclareHandler(CATISmgNcGeometryParameter, CATBaseUnknown) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISmgNcGeometryManager.html">← 上一页: CATISmgNcGeometryManager.h</a></div>
+        <div><a href="CATISmgProgramAddin.html">下一页: CATISmgProgramAddin.h →</a></div>
+    </div>
+</body>
+</html>

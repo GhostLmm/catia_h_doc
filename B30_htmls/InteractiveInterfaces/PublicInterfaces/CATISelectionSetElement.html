@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InteractiveInterfaces/PublicInterfaces/CATISelectionSetElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>InteractiveInterfaces/PublicInterfaces/CATISelectionSetElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectionSet.html">← 上一页: CATISelectionSet.h</a></div>
+        <div><a href="CATISelectionSetsFactory.html">下一页: CATISelectionSetsFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2002
+//===================================================================
+//
+// CATISelectionSetElement.h
+// Define the CATISelectionSetElement interface
+//
+//===================================================================
+//
+// Usage notes:
+//   Compute CATPathElement, compare element of a Selection Set Elements
+//
+//===================================================================
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#ifndef CATISelectionSetElement_H
+#define CATISelectionSetElement_H
+
+#include &quot;CATInteractiveInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+class CATPathElement;
+class CATListPtrCATPathElement;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATInteractiveInterfaces IID IID_CATISelectionSetElement;
+#else
+extern &quot;C&quot; const IID IID_CATISelectionSetElement ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+ * Interface to handle a Selection Set element.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; A Selection Set element is managed by @href CATISelectionSet .
+ *                  &lt;br&gt;A Selection Set contains elements. An element is a feature 
+ *                  or a sub-element (face, edge, vertex, ...) and is refered by a CATPathElement. As the element
+ *                  can change with the design, the path can be modified. So the path that is used the first 
+ *                  time to create the Selection Set element is named initial path. 
+ */
+class ExportedByCATInteractiveInterfaces CATISelectionSetElement: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+    *   Computes the initial path of the Selection Set element.
+    *   @param oElementPath
+    *      The initial path of this.
+    *      &lt;br&gt;The path can be relative to the document or an absolute path, depending on the content of the value
+    *          of iDocInstancePath.
+
+    *   @param iDocInstancePath
+    *       The path of the instance of the document containing the Selection Set which includes this, or NULL.
+    *      &lt;ul&gt; 
+    *         &lt;li&gt; NULL (the default value) if you want that the returned path is relative to the document. &lt;/li&gt;
+    *         &lt;li&gt; the path of the instance of the document containing the Selection Set if you want that
+    *              the returned path of the element is an absolute path in the Product context. &lt;/li&gt;
+    *      &lt;/ul&gt;
+    *   @return
+    *   Error code.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: if the path is not computed.&lt;/li&gt;
+    *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: if the path is computed.&lt;/li&gt;&lt;/ul&gt;
+    */
+  virtual HRESULT ComputePath (CATPathElement *&amp; oElementPath,
+                               CATPathElement * iDocInstancePath=NULL) = 0 ;
+
+  /**
+    *   Computes the updated path of the Selection Set element.
+    *   &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;  The @href #ComputePath method returns the initial path of the Selection Set element
+    *   (the one used in the @href CATISelectionSet#AddElement method) while the 
+    *   &lt;tt&gt;ComputePathWithContext&lt;/tt&gt; method returns the path in the last feature containing the element.
+    *   For example if a face has been created in a feature and this feature has been absorbed by another feature, 
+    *   this method retrieves the path of the element in the last feature.
+    *   @param oListElementPath
+    *      The paths of this, updated with the context.
+    *      &lt;br&gt;Note that it is possible to have several paths for a Selection Set element : for example if a face is pointed by a
+    *      Selection Set element and this face is divided in several faces by a pocket or another feature
+    *      this method returns the paths of all the faces.
+    *      &lt;br&gt;If the Selection Set element is not visible, the path is nul.
+    *      &lt;br&gt;Release is needed on each element of the list except if nul.
+    *      &lt;br&gt;The path can be relative to the document or an absolute path, depending on the content of the value
+    *          of iDocInstancePath.
+    *   @param iDocInstancePath
+    *       The path of the instance of the document containing the Selection Set which includes this, or NULL.
+    *      &lt;ul&gt; 
+    *         &lt;li&gt; NULL (the default value) if you want that the returned path is relative to the document. &lt;/li&gt;
+    *         &lt;li&gt; the path of the instance of the document containing the Selection Set if you want that
+    *              the returned path of the element is an absolute path in the Product context. &lt;/li&gt;
+    *      &lt;/ul&gt;
+    *   @return
+    *   Error code.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: if the path is not computed. In this case, you can retrieve the error 
+    *        using the CATError::CATGetLastError method. On this error, you can get the message using 
+    *        the GetNLSMessage on the error to have more information.
+    *        Do not forget to release the error then.&lt;/li&gt;
+    *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: if the path is computed.&lt;/li&gt;&lt;/ul&gt;
+    */
+  virtual HRESULT ComputePathWithContext (CATLISTP(CATPathElement) &amp; oListElementPath,
+                                          CATPathElement * iDocInstancePath=NULL) = 0;
+
+  /**
+    * Compares this with another Selection Set element.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+    * Returns the result of the comparison of the two Selection Set elements.
+    * This comparison is made on the initial paths returned by @href #ComputePath.
+    * The elements can be identical even if they are not in the same Selection Set.
+    * @param iSetElement
+    *   The Selection Set element to be compared with.
+    * @return
+    *   The status.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;: the two Selection Set element are identical.&lt;/li&gt;
+    *   &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;: the two Selection Set element are different.&lt;/li&gt;&lt;/ul&gt;
+    */
+  virtual int Compare (const CATISelectionSetElement * iSetElement) = 0 ;
+
+  /**
+    * Compares the path of this and another path.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:
+    * This method compares the initial path of this and another path.
+    * @param iPathElement
+    *   The path of the element to be compared with.
+    * @return
+    *   The status.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;: the two paths are identical.&lt;/li&gt;
+    *   &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;: the two paths are different.&lt;/li&gt;&lt;/ul&gt;
+    */
+  virtual int Compare (const CATPathElement * iPathElement) = 0 ;
+
+
+  /**
+    * Returns pointed element.
+    * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method retrieves the element pointed by &lt;tt&gt;this&lt;/tt&gt; (only if in same document).
+    * @return 
+    *   Error code.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;ul&gt;
+    *   &lt;li&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;: the pointed element has not been retrieved.&lt;/li&gt;
+    *   &lt;li&gt;&lt;tt&gt;S_OK&lt;/tt&gt;: the pointed element has been retrieved.&lt;/li&gt;&lt;/ul&gt;
+    */
+  virtual HRESULT GetPointedElement(CATBaseUnknown* &amp; oPointedElement) =0;
+};
+CATDeclareHandler (CATISelectionSetElement, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISelectionSet.html">← 上一页: CATISelectionSet.h</a></div>
+        <div><a href="CATISelectionSetsFactory.html">下一页: CATISelectionSetsFactory.h →</a></div>
+    </div>
+</body>
+</html>

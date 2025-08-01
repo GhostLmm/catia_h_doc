@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATSurLimits.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATSurLimits.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSurEvalResult.html">← 上一页: CATSurEvalResult.h</a></div>
+        <div><a href="CATSurParam.html">下一页: CATSurParam.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSURLIMITS_H
+#define CATSURLIMITS_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;CATIACGMLevel.h&quot;
+//#if defined ( CATIAV5R10 )
+#include &quot;ExportedByCATCGMGeoMath.h&quot;
+/*
+#else
+#include &quot;YP00IMPL.h&quot;
+#endif  
+*/
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATParamData.h&quot;
+#include &quot;CATSurParam.h&quot;
+#include &quot;CATIsoParameter.h&quot;
+#include &quot;CATVerificationMode.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+class CATSurParamReference;
+class CATCrvLimits;
+class CATCrvParam;
+class CATMathBox2D;
+class CATMathPoint2D;
+class CATMathTransformation2D;
+class CATCGMStreamImpl;
+
+/**
+ * Class representing the limitations of a CATSurface.
+ *&lt;br&gt;The CATSurLimits contains the two CATSurParams of the limiting points.
+ *&lt;br&gt;The CATSurLimits defines a closed interval of R&amp;sup2;.
+ * It can be empty (if
+ * the high limit is smaller than the low one, or if some of them 
+ * are not defined): in this case, it does not contain any point.
+ */
+//#if defined ( CATIAV5R10 )
+class ExportedByCATCGMGeoMath CATSurLimits
+/*
+#else
+class ExportedByYP00IMPL CATSurLimits
+#endif  
+*/
+{
+public:
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+//======================================================================
+//  CONSTRUCTORS AND DESTRUCTOR
+//======================================================================
+/**
+ * Constructs an empty CATSurLimits.
+ * &lt;br&gt;Do not use it.
+ */
+  CATSurLimits ();
+
+/**
+ * Constructs a CATSurLimits from two CATSurParams.
+ * @param iLowSurParam
+ * The first limitation.
+ * @param iHighSurParam
+ * The last limitation.
+ * @param iMode
+ * Only use with the default mode.
+ */
+  CATSurLimits (const CATSurParam &amp; iLowSurParam,
+		const CATSurParam &amp; iHighSurParam,
+		CATVerificationMode iMode=CATVerify);
+
+/**
+ * Copy constructor.
+ */
+  CATSurLimits (const CATSurLimits &amp; iSurLimitsToCopy);
+//======================================================================
+// SET AND GET THE EXTREMITIES
+//======================================================================
+/**
+ * Sets &lt;tt&gt;this&lt;/tt&gt; CATSurLimits to an empty one.
+ */
+  INLINE void SetToEmpty();
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits is empty.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if it is not empty.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if it is empty.
+ * &lt;/dl&gt;
+ */
+  INLINE CATLONG32 IsEmpty() const;
+
+/**
+ * Modifies the low CATSurParam of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iLowParam&lt;/tt&gt; is lower than &lt;tt&gt;iHighParam&lt;/tt&gt;.
+ * @param iLowParam
+ * The new low limit.
+ */ 
+  void SetLow (const CATSurParam &amp; iLowParam);
+
+/**
+ * Modifies the high CATSurParam of &lt;tt&gt;this&lt;/tt&gt; CATCrvLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iHighParam&lt;/tt&gt; is higher than &lt;tt&gt;iLowParam&lt;/tt&gt;.
+ * @param iLowParam
+ * The new last limit.
+ */ 
+  void SetHigh(const CATSurParam &amp; iHighParam);
+/**
+ * Retrieves the CATSurParams that delimit &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioLowParam
+ * The first limit.
+ * @param ioHighParam
+ * The last limit.
+ */
+  void GetExtremities(CATSurParam &amp; ioLowParam, CATSurParam &amp; ioHighParam) const;
+
+/**
+ * Retrieves the low CATSurParam of &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ *&lt;br&gt;Check before that the CATSurLimits is not empty.
+ * @param ioLowParam
+ * The first limit.
+ */
+  void GetLow (CATSurParam &amp; ioLowParam) const;
+
+/**
+ * Retrieves the high CATSurParam of &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ *&lt;br&gt;Check before that the CATSurLimits is not empty.
+ * @param ioHighParam
+ * The last limit.
+ */
+  void GetHigh(CATSurParam &amp; ioHighParam) const;
+
+/**
+ * Computes a 2D box corresponding to the global parameters of &lt;tt&gt;this&lt;/tt&gt;
+ * CATSurLimits. 
+ * @param ioGlobalBox
+ * The corresponding 2D box.
+ * The result is empty if the CATSurLimits is empty.
+ */
+  void Get2DBox(CATMathBox2D &amp; ioGlobalBox) const;
+
+/**
+ * Retrieves the extremities of a 2D box corresponding to the global parameters of &lt;tt&gt;this&lt;/tt&gt;
+ * CATSurLimits. &lt;br&gt;Check before that the CATSurLimits is not empty.
+ * @param ioUmin
+ * The low limit in the first direction.
+ * @param ioVmin
+ * The low limit in the second direction.
+ * @param ioUmax
+ * The last limit in the first direction.
+ * @param ioVmax
+ * The last limit in the second direction.
+ */
+  void GetExtremities(double &amp;ioUmin, double &amp;ioVmin, double &amp;ioUmax, double &amp;ioVmax) const;
+
+	/**
+	 * Retrieves the center of &lt;tt&gt;this&lt;/tt&gt; CATSurLimits. 
+	 * @param ioUmiddle
+	 * The parameter of the center in the first direction.
+	 * @param ioVmiddle
+	 * The parameter of the center in the second direction.
+	 */
+  void GetMiddle(double &amp;ioUmiddle, double &amp;ioVmiddle) const;
+
+/** 
+  *    Retrieves the extremities of a 2D box corresponding to the local parameters of &lt;tt&gt;this&lt;/tt&gt;
+  * CATSurLimits. &lt;br&gt; Check before that the CATSurLimits is not empty.
+	* @param ioLocalUmin
+	* The local parameter value in the first direction of the first limit.
+	* @param ioLocalVmin
+	* The local parameter value in the second direction of the first limit.
+	* @param ioLocalUmax
+	* The local parameter value in the first direction of the last limit.
+	* @param ioLocalVmax
+	* The local parameter value in the second direction of the last limit.
+	*	@param ioUMinPartNumber
+	* The patch number in the first direction of the first limit.
+	* @param ioVMinPartNumber
+	* The patch number in the second direction of the first limit.
+	* @param ioUMaxPartNumber
+	* The patch number in the first direction of the last limit.
+	* @param ioVMaxPartNumber
+	* The patch number in the second direction of the last limit. 
+  */
+  void GetLocalExtremities(double &amp;ioLocalUmin     , double &amp;ioLocalVmin     , 
+			   double &amp;ioLocalUmax     , double &amp;ioLocalVmax     , 
+			   CATLONG32   &amp;ioUMinPartNumber, CATLONG32   &amp;ioVMinPartNumber, 
+			   CATLONG32   &amp;ioUMaxPartNumber, CATLONG32   &amp;ioVMaxPartNumber) const;
+
+//=====================================================================
+// COMPUTATIONS THAT MODIFIES THE BOX
+//======================================================================
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; CATSurLimits by the intersection of two other ones.
+ *&lt;br&gt;The result may be an empty CATSurLimits.
+ * @param iBox1
+ * The first CATSurLimits to intersect.
+ * @param iBox2
+ * The second CATSurLimits to intersect.
+ */
+  void SetToIntersection(const CATSurLimits &amp;iBox1, const CATSurLimits &amp;iBox2);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; CATSurLimits by the union of two other one.
+ * &lt;br&gt;&lt;tt&gt;this&lt;/tt&gt; becomes
+ * the CATSurLimits of low limit the lowest limit of the two CATSurlimits and
+ * of high limit the highest limit, even the two CATSurLimits are not 
+ * intersecting each other.
+ * @param iBox1
+ * The first CATSurLimits to union.
+ * @param iBox2
+ * The second CATSurLimits to union.
+ */
+  void SetToUnion(const CATSurLimits &amp;iBox1, const CATSurLimits &amp;iBox2);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; by a CATSurLimits that also contains a given CATSurParam.
+ * @param iPointOnSurface
+ * The point that must be contained by &lt;tt&gt;this&lt;/tt&gt;.
+ */
+  void AddInside(const CATSurParam &amp;iPointOnSurface);
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; by the union with an other CATSurLimits.
+ * @param iOtherBox
+ * The box to union with &lt;tt&gt;this&lt;/tt&gt;.
+ */
+  void AddInside(const CATSurLimits &amp;iOtherBox); 
+
+/**
+ * Replaces &lt;tt&gt;this&lt;/tt&gt; by a CATCrvLimits that also contains a given CATMathPoint2D.
+ * @param iPointOnSurface
+ * The point that must be contained by &lt;tt&gt;this&lt;/tt&gt;.
+ */
+  void AddInside(const CATMathPoint2D &amp; iPointUV);
+
+//======================================================================
+// COMPUTATION WITH A BOX THAT RETURNS A RESULT
+//======================================================================
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurLimits is intersecting another one.
+ * @param iBoxToCompare
+ * The box to compare.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if there is no intersection.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if there is an intersection (this is also the case
+ * when there is just a point or a line in common).
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsIntersecting(const CATSurLimits &amp;iBoxToCompare) const;
+
+	/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurLimits is intersecting another one at a given tolerance.
+ * @param iBoxToCompare
+ * The box to compare.
+ * @param iTol
+ * The tolerance to take into account.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if there is no intersection.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if there is an intersection (this is also the case
+ * when there is just a point or a line in common).
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsIntersecting(const CATSurLimits &amp;iBoxToCompare, double iTol) const;
+/**
+ * Tests wether &lt;tt&gt;this&lt;/tt&gt; CATSurParam is inside a CATSurLimits.
+ * @param iPointToCompare
+ * The point to test.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits does not contain the 
+ * CATCrvParam.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits contains the CATSurParam.
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATSurParam &amp;iPointToCompare) const;
+
+/**
+ * Tests wether &lt;tt&gt;this&lt;/tt&gt; CATSurParam is inside a CATSurLimits at a given tolerance.
+ * @param iPointToCompare
+ * The point to test.
+ * @param iTol
+ * The tolerance to take into account.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits does not contain the 
+ * CATCrvParam.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits contains the CATSurParam.
+ * &lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATSurParam &amp;iPointToCompare, double iTol) const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurLimits is including another CATSurLimits.
+ * @param iOtherBox
+ * The box to test.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits is not containing 
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits is containing
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *&lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATSurLimits &amp;iOtherBox) const;
+
+	/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATSurLimits is including another CATSurLimits at a given tolerance.
+ * @param iOtherBox
+ * The box to test.
+ * @param iTol
+ * The tolerance to take into account.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits is not containing 
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if the CATSurLimits is containing
+ * &lt;tt&gt;iOtherBox&lt;/tt&gt;.
+ *&lt;/dl&gt;
+ */
+  CATLONG32 IsContaining(const CATSurLimits &amp;iOtherBox, double iTol) const;
+
+  //---------------------------------------------------------------
+  // Tests if T(iBox) is included in this and calculate the 
+  // new Transfo2D if necessary
+  // PeriodX = 0 if not periodic in the X direction
+  //---------------------------------------------------------------
+/**
+ * Tests whether the transformation of a CATSurLimits belongs to &lt;tt&gt;this&lt;/tt&gt;.
+ * @param iBox
+ * The box which transformation is tested.
+ * @param ioTransfo2D
+ * The transformation to apply to &lt;tt&gt;iBox&lt;/tt&gt;. In case of the transformed box belongs
+ * to &lt;tt&gt;this&lt;/tt&gt;, and in case
+ * of a periodicity in one direction, the minimal corresponding transformation is returned.
+ * @param iPeriodU
+ * The periodicity in the first direction.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt; The surface is periodic in the first direction.
+ * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ * @param iPeriodV
+ * The periodicity in the second direction.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt; The surface is periodic in the second direction.
+ * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; if &lt;tt&gt;ioTranfo2D(iBox)&lt;/tt&gt; belongs to &lt;tt&gt;this&lt;/tt&gt;.
+ *     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; otherwise.
+ *&lt;/dl&gt; 
+ */
+  CATLONG32 IsContaining(const CATSurLimits            &amp; iBox,
+		          CATMathTransformation2D &amp; ioTransfo2D,
+		          double                    iPeriodU = 0,
+		          double                    iPeriodV = 0,
+		          double                    iTol = 0    ) const;
+
+/**
+ * Retrieves the CATSurParam of the point that has the same relative position to &lt;tt&gt;this&lt;/tt&gt;
+ * than RefPoint in RefBox.
+ * @param iRefAll
+ * The reference CATSurLimits of global parameters &lt;tt&gt;((A1u,A1v),(A2u,A2v))&lt;/tt&gt;.
+ * @param iRefPoint
+ * The compared CATSurParam of global parameters &lt;tt&gt;(Bu,Bv)&lt;/tt&gt;.
+ * @param ioResult
+ * The resulting CATSurParam of global parameter &lt;tt&gt;(Ru,Rv)&lt;/tt&gt; 
+ *  following the equation (with &lt;tt&gt;((T1u,T1v),(T2u,T2v))&lt;/tt&gt; the global
+ * parameters of &lt;tt&gt;this&lt;/tt&gt;):
+ *&lt;tt&gt;(Ru-Tu)*(A2u-A1u) = (Bu-A1u)*(T2u-T1u) &lt;/tt&gt; 
+ * &lt;br&gt;&lt;tt&gt;(Rv-Tv)*(A2v-A1v) = (Bv-A1v)*(T2v-T1v) &lt;/tt&gt;
+ */
+  void GetEquivalentParam(const CATSurLimits &amp; iRefBox,
+                          const CATSurParam  &amp; iRefPoint,
+	                        CATSurParam  &amp; ioResult) const; 
+
+/**  
+ * Retrieves the CATSurParam of the point that has the same relative position to &lt;tt&gt;this&lt;/tt&gt;
+ * than RefPoint in RefCrvLimits along an isoparametric curve.
+ *&lt;br&gt;The isoparametric curve is in the &lt;tt&gt;iIsoParameter&lt;/tt&gt; direction
+ * passing through &lt;tt&gt;iIsoParamUV&lt;/tt&gt;.
+ * @param iRefCrvLimits
+ * The reference CATCrvLimits of global parameters &lt;tt&gt;(A1,A2)&lt;/tt&gt;.
+ * @param iRefPoint
+ * The compared CATCrvParam of global parameters &lt;tt&gt;(B)&lt;/tt&gt; on the the iso-parametric curve defined by
+ * &lt;tt&gt;iIsoParamUV&lt;/tt&gt; and &lt;tt&gt;iIsoParameter&lt;/tt&gt;.
+ * @param iIsoParameter
+ * The type of isoparametric curve.
+ * @param iIsoParamUV
+ * The point belonging to the iso parametric curve.
+ * @param ioResult
+ * The resulting CATSurParam of global parameter  
+ * such that (with &lt;tt&gt;(T1,T2)&lt;/tt&gt; the global
+ * parameters of &lt;tt&gt;this&lt;/tt&gt;):
+ *&lt;dl&gt; &lt;dt&gt; if &lt;tt&gt;iIsoParameter=CATIsoParamU&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *&lt;tt&gt; (iIsoParamUV(U),  T1v + (T2v-T1v)*(B-A1)/(A2-A1))&lt;/tt&gt; 
+ * &lt;dt&gt; if &lt;tt&gt;iIsoParameter=CATIsoParamV&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+ *&lt;tt&gt; ( T1u + (T2u-T1u)*(B-A1)/(A2-A1),   iIsoParamUV(V) )&lt;/tt&gt; 
+ *&lt;/dl&gt;
+ */
+  void GetEquivalentParam(const CATCrvLimits    &amp; iRefCrvLimits,
+			  const CATCrvParam     &amp; iRefPoint,
+			  const CATIsoParameter   iIsoParameter,
+			  const CATSurParam     &amp; iIsoParamUV,     
+			        CATSurParam     &amp; ioResult       ) const; 
+  
+/**  
+ * Tests whether two CATSurLimits are equal (logically, no tolerance) with regards to the first coordinate.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;The first coodinates are logically equal.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsEqualU(const CATSurLimits &amp; iComparedBox) const ;
+
+/**  
+ * Tests whether two CATSurLimits are equal (logically, no tolerance) with regards to second coordinate.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;The second coodinates are logically equal.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;&lt;/dt&gt; &lt;dd&gt;Otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsEqualV(const CATSurLimits &amp; iComparedBox) const ;
+
+  /**
+	 * Applies a 2D transformation to &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+	 * @param iTransfo2D
+	 * The transformation to apply.
+	 * @param ioLimits
+	 * The resulting limits.
+	 */
+  void ApplyTransformation2D(const CATMathTransformation2D &amp;iTransfo2D,
+			           CATSurLimits            &amp;ioLimits   ) const;
+
+//=============================================================================
+// OVERLOADED OPERATORS
+//=============================================================================
+/**
+ * Equality operator.
+ * &lt;br&gt;&lt;pre&gt;( Lim1 == Lim2 ) &lt;=&gt; (Lim1.GetLow == Lim2GetLow) and
+ *                          (Lim1.GetHigh == Lim2.GetHigh) 
+ *                         &lt;/pre&gt;
+ */
+  CATLONG32 operator == (const CATSurLimits &amp; iComparedBox) const;
+
+/**
+ * Inequality operator.
+ * &lt;br&gt;&lt;pre&gt;( Lim1 != Lim2 ) &lt;=&gt; (Lim1.GetLow != Lim2GetLow) or
+ *                          (Lim1.GetHigh != Lim2.GetHigh)
+ *                          &lt;/pre&gt;
+ */
+  CATLONG32 operator != (const CATSurLimits &amp; iComparedBox) const;
+
+  
+
+
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * @nodoc
+ * Constructs a CATSurLimits from the extremities on each direction.
+ *&lt;br&gt;If the last argument is set to &lt;tt&gt;DontVerify&lt;/tt&gt;,
+ * the two CATSurParams are assumed to be the low one and the high one,
+ * else it creates the smallest CATSurLimits that contains the two 
+ * CATSurParams.
+ * @param iMode
+ * Only use with the default mode.
+ */
+  CATSurLimits (const CATParamData &amp; iLowU,
+		const CATParamData &amp; iLowV,
+		const CATParamData &amp; iHighU,
+		const CATParamData &amp; iHighV,
+		const CATSurParamReference *iReference,
+		CATVerificationMode iMode=CATVerify);
+
+/**
+ * @nodoc
+ * Constructs from two CATMathPoint2Ds and a reference.
+ *&lt;br&gt;If the last argument is set to &lt;tt&gt;DontVerify&lt;/tt&gt;,
+ * the two CATSurParams are assumed to be the low one and the high one,
+ * else it creates the smallest CATSurLimits that contains the two 
+ * CATSurParams.
+ */
+  CATSurLimits (const CATMathPoint2D       &amp; iLowPointUV,
+		const CATMathPoint2D       &amp; iHighPointUV,
+		const CATSurParamReference * iReference,
+		CATVerificationMode          iMode = CATVerify);
+
+
+//=============================================================================
+// FRIENDS
+//=============================================================================
+	/** @nodoc */
+//#if defined ( CATIAV5R10 )
+friend ExportedByCATCGMGeoMath ostream&amp; operator &lt;&lt; (ostream&amp; s,
+						const CATSurLimits &amp; p);
+/*
+#else
+friend ExportedByYP00IMPL ostream&amp; operator &lt;&lt; (ostream&amp; s,
+						const CATSurLimits &amp; p);
+#endif  
+*/
+//=============================================================================
+//******************** OTHER METHODS : WILL DISAPPEAR SOON ********************
+//=============================================================================
+/**
+ * @nodoc
+ * Use now the IsContaining method.
+ */
+  CATBoolean Contains(const CATSurParam &amp; P) const;
+/**
+ * @nodoc
+ * Use now the SetLow method
+ */
+  void SetStartParam (const CATSurParam &amp; P);
+/**
+ * @nodoc
+ * Use now the SetHigh method
+ */
+  void SetEndParam   (const CATSurParam &amp; P);
+/**
+ * @nodoc
+ * Use now the GetLow method
+ */
+  CATSurParam GetStartParam () const;
+/**
+ * @nodoc
+ * Use now the GetHigh method
+ */
+  CATSurParam GetEndParam   () const;
+
+
+//=============================================================================
+//  SETTING AND GETTING THE REFERENCE
+//=============================================================================
+/**
+ * @nodoc
+ * Returns a pointer to the reference of &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ * @return
+ * The constant pointer to the reference of the surface.
+ */ 
+  INLINE const CATSurParamReference * GetReference() const;
+
+/**
+ * @nodoc
+ * Changes the reference of &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ */
+  INLINE void SetReference(const CATSurParamReference * Reference);
+
+
+/**
+ * @nodoc
+ * Modifies the parameters and the reference of a CATSurLimits.
+ *&lt;br&gt;Check before that &lt;tt&gt;iLowParam&lt;/tt&gt; is lower than &lt;tt&gt;iHighParam&lt;/tt&gt;.
+ * WARNING : No verification is performed : if you want a verification, use the method
+ * AddInside after SetToEmpty().
+ */
+  void SetExtremities(const CATParamData &amp; iLowU , const CATParamData &amp; iLowV,
+		              const CATParamData &amp; iHighU, const CATParamData &amp; iHighV,
+		              const CATSurParamReference * iReference);
+
+  /** 
+ * @nodoc 
+ * WARNING : No verification is performed : if you want a verification, use the method
+ * AddInside after SetToEmpty().
+	*/
+  INLINE void SetExtremities(const double LowU , const double LowV,
+		      const double HighU, const double HighV,
+		      const CATSurParamReference * Reference ) ;
+
+ /**
+  * @nodoc 
+ * Retrieves the CATSurParams that delimit &lt;tt&gt;this&lt;/tt&gt; CATSurLimits.
+ *&lt;br&gt;Check before that the CATCrvLimits is not empty.
+ * @param ioLowParam
+ * The first limit.
+ * @param ioHighParam
+ * The last limit.
+ */
+  void GetExtremitiesForStream(CATSurParam &amp; ioLowParam, CATSurParam &amp; ioHighParam, CATCGMStreamImpl &amp;iStream) const;
+
+
+protected:
+//=============================================================================
+// INTERNAL DATAS
+//=============================================================================
+// Position of the extermities
+//  CATParamData _LowU, _LowV, _HighU, _HighV;
+  double _minGlobalU, _maxGlobalU, _minGlobalV, _maxGlobalV;
+
+// Flag which is not null if the box is empty
+  CATLONG32                 _IsEmpty;
+
+// Management of the datas
+  const CATSurParamReference * _Reference;
+
+};
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+INLINE void CATSurLimits::SetToEmpty()
+{
+  _IsEmpty=1;
+}
+
+INLINE CATLONG32 CATSurLimits::IsEmpty() const
+{
+  return _IsEmpty;
+}
+
+INLINE const CATSurParamReference * CATSurLimits::GetReference() const
+{
+  return _Reference;
+}
+
+INLINE void CATSurLimits::SetReference(const CATSurParamReference * Reference)
+{
+  _Reference = Reference;
+}
+
+// Setting the extremities
+INLINE void CATSurLimits::SetExtremities(const double LowU , const double LowV,
+                                         const double HighU, const double HighV,
+                                         const CATSurParamReference * Reference)
+{
+  _Reference = Reference;
+  _minGlobalU    = LowU;
+  _minGlobalV    = LowV;
+  _maxGlobalU    = HighU;
+  _maxGlobalV    = HighV;
+  _IsEmpty = 0;
+}
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSurEvalResult.html">← 上一页: CATSurEvalResult.h</a></div>
+        <div><a href="CATSurParam.html">下一页: CATSurParam.h →</a></div>
+    </div>
+</body>
+</html>

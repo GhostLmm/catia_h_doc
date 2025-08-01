@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseLineBisecting.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseLineBisecting.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseLineBiTangent.html">← 上一页: CATIGSMUseLineBiTangent.h</a></div>
+        <div><a href="CATIGSMUseLineNormal.html">下一页: CATIGSMUseLineNormal.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUseLineBisecting_H
+#define CATIGSMUseLineBisecting_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATGSMLineDef.h&quot;
+
+class CATICkeParm_var; 
+class CATIMmiMechanicalFeature_var; 
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUseLineBisecting;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseLineBisecting;
+#endif
+
+/**
+ * Interface to create a line bisecting of two others. 
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the Line bisecting Feature.
+ * @see CATIGSMUseFactory#CreateLine
+ */
+class ExportedByCATGSMUseItf CATIGSMUseLineBisecting : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public: 
+
+	/**
+	* Gets the first line.
+	*   @param oLine1 
+	*      first line
+	*/
+	virtual HRESULT GetFirstLine(CATIMmiMechanicalFeature_var&amp; oLine1) = 0;
+	/**
+	* Sets the first line.
+	*   @param iLine1 
+	*      first line
+	*/
+	virtual HRESULT SetFirstLine(const CATIMmiMechanicalFeature_var&amp; iLine1) = 0;
+	/**
+	* Gets the second line.
+	*   @param oLine2 
+	*      second line
+	*/
+	virtual HRESULT GetSecondLine(CATIMmiMechanicalFeature_var&amp; oLine2) = 0;
+	/**
+	* Sets the second line.
+	*   @param oLine2
+	*      second line
+	*/
+	virtual HRESULT SetSecondLine(const CATIMmiMechanicalFeature_var&amp; iLine2) = 0;
+	/**
+	* Gets the reference point. 
+        *  &lt;br&gt; This data is optional, when no point is given, the intersection
+        *  of both lines is taken into account.
+	*   @param oPt. 
+	*      Reference starting point. oPt=NULL_var is allowed
+	*/
+	virtual HRESULT GetStartingPoint(CATIMmiMechanicalFeature_var&amp; oPt) = 0;
+	/**
+	* Sets the reference point.
+	*   @param oLine2
+	*      second line
+	*/
+	virtual HRESULT SetStartingPoint(const CATIMmiMechanicalFeature_var&amp; iPt) = 0;
+	/**
+	* Gets the support surface.
+	* &lt;br&gt;If a support surface is given, the line will lie on it.
+	* &lt;br&gt;Can be NULL_var : this data is optional. Useful when Line1 and Line2 are curves lying on a surface
+	* @param oSupport 
+	*         support 
+	*/
+	virtual HRESULT GetSupport(CATIMmiMechanicalFeature_var&amp; oSupport) = 0;
+	/**
+	* Sets the support surface.
+	* &lt;br&gt;If a support surface is given, the line will lie on it.
+	* @param iSupport 
+	*         support 
+	*/
+	virtual HRESULT SetSupport(const CATIMmiMechanicalFeature_var&amp; iSupport) = 0;
+	/**
+	* Gets the start and end lengthes of the line.
+	*   @param oStart 
+	*      start length 
+	*   @param oEnd 
+	*      end length 
+	*/
+	virtual HRESULT GetLengths(CATICkeParm_var &amp; oStart,CATICkeParm_var &amp; oEnd) = 0;
+	/**
+	* Sets the start and end lengthes of the line.
+	*   @param iStart 
+	*      start length 
+	*   @param iEnd 
+	*      end length 
+	*/
+	virtual HRESULT SetLengths(const CATICkeParm_var &amp;iStart,const CATICkeParm_var&amp; End) = 0;
+	/**
+	* Sets the symmetrical extension of the line (start = -end).
+	*   @param iSym
+	*       Symetry flag  
+	*/
+	virtual HRESULT SetSymmetricalExtension(CATBoolean iSym) = 0;	
+	/**
+	* Gets whether the symmetrical extension of the line is active.
+	*   @param oSym
+	*       Symetry flag  
+	*/
+	virtual HRESULT GetSymmetricalExtension(CATBoolean&amp; oSym) = 0;
+	/**
+	* Selects the current solution.
+	*  &lt;br&gt; 2 solutions can be computed :
+    *  &lt;ul&gt; 
+	*  &lt;li&gt;The first solution is computed using the half angle between first and second line.
+	*       This angle is oriented using the direction of perpendicular line of first and second line.
+	*  &lt;li&gt;Second solution is perpendicular to the first.
+    *   &lt;/ul&gt; 
+	*   @param SolNo
+	*		Solution number : can be 1 or 2
+	*/
+	virtual HRESULT SetSolution(int SolNo) = 0;
+	/**
+	* Gets the current solution.
+	*/
+	virtual int GetSolution() = 0;
+ /**
+  * Gets the length type : length or infinite or infinite start point or infinite end point.
+  * &lt;br&gt; Note: Default is Length.
+  * &lt;br&gt; 
+  * Length means that the line is limited by its extremities
+  * Infinite means that the line is infinite
+  * InfStartPoint means that the line is infinite on the side of the start point
+  * InfEndPoint means that the line is infinite on the side of the end point
+  *   @param oType
+  *    distance type  enum {Length, Infinite, InfStartPoint, InfEndPoint}
+  */
+ virtual HRESULT GetLengthType(CATGSMLineLengthType &amp; oType) = 0;
+
+ /**
+  * Sets the length type : length or infinite or infinite start point or infinite end point.
+  *   @param iType
+  *    length type:   enum {Length, Infinite, InfStartPoint, InfEndPoint}
+  */
+ virtual HRESULT SetLengthType(CATGSMLineLengthType iType) = 0;
+};
+CATDeclareHandler (CATIGSMUseLineBisecting, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseLineBiTangent.html">← 上一页: CATIGSMUseLineBiTangent.h</a></div>
+        <div><a href="CATIGSMUseLineNormal.html">下一页: CATIGSMUseLineNormal.h →</a></div>
+    </div>
+</body>
+</html>

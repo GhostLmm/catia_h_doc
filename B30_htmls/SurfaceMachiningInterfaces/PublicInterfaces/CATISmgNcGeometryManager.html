@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurfaceMachiningInterfaces/PublicInterfaces/CATISmgNcGeometryManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SurfaceMachiningInterfaces/PublicInterfaces/CATISmgNcGeometryManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISmgMachiningAreaParts.html">← 上一页: CATISmgMachiningAreaParts.h</a></div>
+        <div><a href="CATISmgNcGeometryParameter.html">下一页: CATISmgNcGeometryParameter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISmgNcGeometryManager_H
+#define CATISmgNcGeometryManager_H
+//=================================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=================================================================================
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;SmgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATSmgDefs.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySmgItfEnv IID IID_CATISmgNcGeometryManager;
+#else
+extern &quot;C&quot; const IID IID_CATISmgNcGeometryManager ;
+#endif
+
+/**
+ * Interface to define new nc geometry parameters.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This interface offers services to create or retrieve a nc geometry parameter
+ * to a user feature. This kind of parameter can contain manufacturing geometries or nc geometry features.
+ * @see CATISmgNcGeometryParameter
+ */
+
+class ExportedBySmgItfEnv CATISmgNcGeometryManager: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+/**
+ * Adds a new parameter to a user machining feature or operation.
+ * This method should be use when instantiating the user feature.
+ * @param iName 
+ *    Parameter&#x27;s name
+ *
+ * @param iType
+ *   Type of nc geometry features allowed.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Use
+ *   &lt;dl&gt;
+ *     &lt;dt&gt;&lt;tt&gt;SmgAreaType &lt;/tt&gt; &lt;dd&gt; to create areas
+ *     &lt;dt&gt;&lt;tt&gt;SmgEdgeType &lt;/tt&gt; &lt;dd&gt; to create edges
+ *     &lt;dt&gt;&lt;tt&gt;SmgPlaneType&lt;/tt&gt; &lt;dd&gt; to create planes
+ *     &lt;dt&gt;&lt;tt&gt;SmgPointType&lt;/tt&gt; &lt;dd&gt; to create points
+ *   &lt;/dl&gt;
+ */
+	virtual HRESULT AddNcGeometryParameter(const CATUnicodeString &amp;iName, const CATUnicodeString &amp;iType = SmgAreaType) = 0;
+
+/**
+ * Returns the parameter of a manufacturing feature from its name.
+ * @param iName 
+ *    Parameter&#x27;s name
+ *
+ * @param oMAF
+ *   Nc geometry parameter
+ */
+	virtual HRESULT GetNcGeometryParameter(const CATUnicodeString &amp;iName, CATBaseUnknown_var &amp;oMAF) = 0;
+
+};
+
+CATDeclareHandler( CATISmgNcGeometryManager, CATBaseUnknown) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISmgMachiningAreaParts.html">← 上一页: CATISmgMachiningAreaParts.h</a></div>
+        <div><a href="CATISmgNcGeometryParameter.html">下一页: CATISmgNcGeometryParameter.h →</a></div>
+    </div>
+</body>
+</html>

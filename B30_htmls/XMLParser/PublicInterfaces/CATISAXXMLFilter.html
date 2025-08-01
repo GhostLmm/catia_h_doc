@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATISAXXMLFilter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATISAXXMLFilter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXParser.html">← 上一页: CATISAXParser.h</a></div>
+        <div><a href="CATISAXXMLReader.html">下一页: CATISAXXMLReader.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#ifndef CATISAXXMLFilter_h
+#define CATISAXXMLFilter_h
+
+// System framework
+#include &quot;CATBoolean.h&quot;
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;CATISAXXMLReader.h&quot;
+#include &quot;XMLParserItf.h&quot;
+class CATISAXXMLReader_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATISAXXMLFilter;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATISAXXMLFilter ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface for an XML filter.
+ *
+ * &lt;p&gt;An XML filter is like an XML reader, except that it obtains its
+ * events from another XML reader rather than a primary source like
+ * an XML document or database.  Filters can modify a stream of
+ * events as they pass on to the final application.&lt;/p&gt;
+ *
+ * &lt;p&gt;The @href CATSAXDefaultXMLFilter helper class provides a convenient base
+ * for creating SAX2 filters, by passing on all @href CATISAXEntityResolver, 
+ * @href CATISAXDTDHandler, @href CATISAXContentHandler and @href CATISAXErrorHandler events automatically.&lt;/p&gt;
+ *
+ * @see CATISAXXMLReader, CATSAXDefaultXMLFilter
+ */
+class ExportedByXMLParserItf CATISAXXMLFilter : public CATISAXXMLReader {
+	CATDeclareInterface;
+	
+	public:
+		
+		/**
+		 * Retrieves the parent reader.
+		 *
+		 * &lt;p&gt;This method allows the application to query the parent reader (which may be another filter). 
+		 * It is generally a bad idea to perform any operations on the parent reader directly: 
+		 * they should all pass through this filter.&lt;/p&gt;
+		 *
+		 * @param oParent
+		 * The parent reader, or &lt;tt&gt;NULL_var&lt;/tt&gt; if none has been set.
+		 *
+		 * @see #SetParent
+		 */
+		virtual HRESULT GetParent(
+			CATISAXXMLReader_var&amp; oParent) = 0;
+		
+		/**
+		 * Sets the parent reader.
+		 *
+		 * &lt;p&gt;This method allows the application to link the filter to a parent reader (which may be another filter). 
+		 * The argument may not be &lt;tt&gt;NULL_var&lt;/tt&gt;.&lt;/p&gt;
+		 *
+		 * @param iParent
+		 * The parent reader.
+		 *
+		 * @see #SetParent
+		 */
+		virtual HRESULT SetParent(
+			const CATISAXXMLReader_var&amp; iParent) = 0;
+};
+
+CATDeclareHandler(CATISAXXMLFilter, CATBaseUnknown);
+
+#endif // CATISAXXMLFilter_h
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISAXParser.html">← 上一页: CATISAXParser.h</a></div>
+        <div><a href="CATISAXXMLReader.html">下一页: CATISAXXMLReader.h →</a></div>
+    </div>
+</body>
+</html>

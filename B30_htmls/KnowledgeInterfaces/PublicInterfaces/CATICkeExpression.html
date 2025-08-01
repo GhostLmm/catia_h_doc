@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATICkeExpression.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATICkeExpression.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeCheck.html">← 上一页: CATICkeCheck.h</a></div>
+        <div><a href="CATICkeExpressionFactory.html">下一页: CATICkeExpressionFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// Copyright Dassault Systemes 2002
+#ifndef CATICkeExpression_H
+#define CATICkeExpression_H
+
+/** 
+* @CAA2Level L1
+* @CAA2Usage U3 
+*/
+
+// module definition
+#include &quot;KnowledgeItf.h&quot;
+
+// inheriting from
+#include &quot;CATICkeNaming.h&quot;
+
+// forwards definition
+class CATICkeExpression_var;
+class CATICkeTerm_var;
+
+// OLE
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByKnowledgeItf IID_CATICkeExpression;
+#else
+extern &quot;C&quot; const IID IID_CATICkeExpression;
+#endif
+
+//-----------------------------------------------------------------------------
+/**   
+ * Interface dedicated to expressions management.
+ * 
+ * An expression is a feature that describes a function to be evaluated on a set of identified objects.
+ * &lt;p&gt;
+ * It is composed of a signature and a body.
+ * &lt;p&gt;
+ * The signature details the list of objects on which it is supposed to work on.
+ * example : &quot;(x: #In Integer, y: #Out Real) : #Void &quot; means that the expression works on 2 abstract
+ * objects x which is an Integer and will be used as an input; and y which is a Real and that will be
+ * used as output.
+ * &lt;p&gt;
+ * The body expresses the function: example : &quot; y=3.2*x &quot;
+ * &lt;p&gt;
+ * An expression is created from 2 strings (signature and body). It is able to tell if they are
+ * syntaxically correct.
+ * &lt;p&gt;
+ * Expressions also implement CATICkeFunction that is in charge of evaluation on specific objects.
+ * &lt;p&gt;
+ * @see CATICkeRelationFactory
+ * @see CATICkeFunction
+ * @see CATICkeSignature
+ * @see CATICkeArg
+ * @see CATICkeType
+ */
+//-----------------------------------------------------------------------------
+class ExportedByKnowledgeItf CATICkeExpression : public CATICkeNaming
+{
+  CATDeclareInterface;
+
+public:
+
+   /**
+    * Returns the signature of this expression.
+    * This will provoke a partial &quot;parse&quot; of the expression if not done already
+    * @return  CATICkeSignature_var : signature pf the expression
+    */
+   virtual CATICkeSignature_var Signature () const = 0;
+
+   /**
+    * Returns the body of this expression.
+	* It Shouldn&#x27;t be used to produce a view of the body, it returns only the body stored in the attribute.
+    * @return : body in a text format
+    */
+   virtual CATUnicodeString Body () const = 0;
+ 
+   /**
+    * Replaces the expression content (parse of the expression is done).
+    * This method may raise syntax error (CATCkeParseException). No ability to catch them in CAA.&lt;br&gt;
+    * @param iSignature : signature in a text format
+    * @param iBody : body in a text format
+    */
+   virtual void   SetBody (const CATUnicodeString &amp;iSignature,const CATUnicodeString &amp;iBody) = 0;
+
+   /**
+    * Produces a view of the body of the expression with a change in the variable names.
+    * @param iListNames : list of the names to be used
+    * @return : body view
+    */
+   virtual CATUnicodeString ViewBody (const CATListOfCATUnicodeString &amp;iListNames) const = 0;
+
+   /**
+    * Copy the expression.
+    * @return : copied expression 
+    */
+   virtual CATICkeExpression_var Copy () const = 0;
+
+   /**
+    * Replaces an expression by another.
+    * @param iExpression : expression that replaces
+    */
+   virtual void Replace (const CATICkeExpression_var &amp;iExpression) = 0;
+
+   /**
+    * @nodoc
+    * Replaces an expression by another.
+    * @param iExpression : expression that replaces
+    */
+   virtual void Replace (const CATICkeTerm_var &amp;iExpression) = 0;
+
+
+   /**
+    * Indicates if an expression can be edited (Is it syntaxically correct).
+    * @return CATCke::Boolean : True if can be edited
+    */
+   virtual CATCke::Boolean CanBeEdited () const = 0;
+
+
+   /**
+    * Indicates if an expression can be evaluated (syntaxically correct &amp; operators available at runtime).&lt;br&gt;
+    * This method may raise syntax error (CATCkeParseException). No ability to catch them in CAA.&lt;br&gt;
+    * @return CATCke::Boolean : True if can be evaluated
+    */
+   virtual CATCke::Boolean CanBeEvaluated () const= 0;
+
+   
+   /**
+    * @nodoc
+    * Indicates if an expression contains external functions.
+    * @return CATCke::Boolean : True if contains external functions
+    */
+   virtual CATCke::Boolean UsesExternalFunctions () const= 0;
+   
+   /**
+    * @nodoc
+    * Indicates if the expression is broken (syntaxically incorrect or broken).
+    * @return CATCke::Boolean : True if contains external functions
+    */
+   virtual CATCke::Boolean IsBroken () const= 0;
+     
+   /**
+    * @nodoc
+    * Indicates if an expression contains external functions that are time consuming.
+    * @return CATCke::Boolean : True if update must be postponed
+    */
+   virtual CATCke::Boolean IsTimeConsuming () const= 0;
+ 
+};
+
+// declaration of Handler
+CATDeclareHandler(CATICkeExpression,CATICkeNaming);
+
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeCheck.html">← 上一页: CATICkeCheck.h</a></div>
+        <div><a href="CATICkeExpressionFactory.html">下一页: CATICkeExpressionFactory.h →</a></div>
+    </div>
+</body>
+</html>

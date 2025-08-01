@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjectModelerBase/PublicInterfaces/CATDocumentIntegrityServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ObjectModelerBase/PublicInterfaces/CATDocumentIntegrityServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDocument.html">← 上一页: CATDocument.h</a></div>
+        <div><a href="CATDocumentServices.html">下一页: CATDocumentServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content"> #ifndef  CATDocumentIntegrityServices_H
+ #define  CATDocumentIntegrityServices_H
+ /*  -*-c++-*-  */
+ //  COPYRIGHT  DASSAULT  SYSTEMES  1999
+ 
+ /**
+     *  @CAA2Level  L1
+     *  @CAA2Usage  U1
+     */
+ 
+ 
+ 
+ #include  &quot;AC0XXLNK.h&quot;
+ #include  &quot;CATBaseUnknown.h&quot;
+ #include  &quot;CATListOfInt.h&quot;
+ #include  &quot;CATListOfCATUnicodeString.h&quot;
+ class  CATDocument;
+ class  CATIReporter;
+ 
+ /**
+ *  Services  to  check  data  integrity  within  a  document.
+ *  &lt;b&gt;Role:&lt;/b&gt;  Provide  support  to  know  if  a  given  document  contains  CATDUA  errors
+ */
+ 
+ class  ExportedByAC0XXLNK  CATDocumentIntegrityServices
+ {
+   public:
+ 
+     /**
+     *  Test  if  a  given  document  contains  CATDUA  errors
+     *  &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;  Provide  support  to  know  if  a  given  document  contains  CATDUA  errors
+           *      @param  iDoc  [in]
+           *            The  given  document  to  check.
+           *      @param  iRepairMode  [in]
+           *            The  given  RepairMode  to  process.
+           *  &lt;UL&gt;&lt;TT&gt;0&lt;/TT&gt;:  To  activate  Check  action  (default  value).  
+           *  &lt;BR&gt;&lt;TT&gt;1&lt;/TT&gt;:  To  activate  Clean  action.  
+           *  &lt;/UL&gt;  
+           *      @param  iSelectMode  [in]
+           *            The  given  SelectMode  to  process.
+           *  &lt;UL&gt;&lt;TT&gt;0&lt;/TT&gt;:  &quot;AllBut&quot;  mode:  All  errors  available  on  site  except  the  one  specified  in  the  following  criteria  are  applied.
+           *  &lt;BR&gt;&lt;TT&gt;1&lt;/TT&gt;:  &quot;NonePlus&quot;  mode  (default  value):  Only  errors  specified  in  the  following  criteria  are  applied.
+           *  &lt;/UL&gt;  
+           *  @param  ilstSelectedCriteriaType  [in]
+           *  List  of  criteria  type  that  has  to  be  applied  to  ilstSelectedCriteria  argue.
+           *  &lt;UL&gt;Possible  values  are:
+ 
+           *  &lt;BR&gt;&lt;TT&gt;0&lt;/TT&gt;:  Criteria  is  a  ErrorName  filter  (default  value).
+           *  &lt;BR&gt;&lt;TT&gt;1&lt;/TT&gt;:  Criteria  is  a  Severity  filter.
+           *  &lt;BR&gt;&lt;TT&gt;2&lt;/TT&gt;:  Criteria  is  a  Domain  filter.
+           *  &lt;BR&gt;&lt;TT&gt;3&lt;/TT&gt;:  Criteria  is  a  Keyword  filter.
+           *  &lt;/UL&gt;
+ 
+           *  @param  ilstSelectedCriteria  [in]  
+           *  List  of  criteria  that  has  to  be  taken  into  account  to  specify  the  list  of  errors  to  be  considered  while  CATDUA  check/clean  process.
+           *  &lt;UL&gt;Possible  values  are:
+           *  &lt;BR&gt;
+           *  &lt;LI&gt;When  the  correspondant  Criteria  type  is  a  &quot;ErrorName&quot;  filter  (=0):
+           *  &lt;UL&gt;
+           *  Error  to  process  filter  defines  a  list  of  error,  identified  with  their  names,  to  process  or  not,  depending  on  the  iSelectMode  argue. 
+					 *  Note: User has to follow a specific format to mention the list of Errors. All    errors have to be listed by comma separator in a single line.
+           *  Ex: UAV_11,LIF_3,DOC_4,CST_4, ... 
+
+           *  &lt;BR&gt;See  the  complete  list  of  possible  error  in  the  &lt;A  HREF=&quot;http://v5doc/doc18/online/cfyugcatdua_C2/cfyugcatdua05.htm&quot;&gt;CATDUA  documentation  error  code  table&lt;/A&gt;.
+ 
+           *  &lt;BR&gt;All  the  value  are  not  case  sensitive:  you  can  write  &quot;Cst_4&quot;,  &quot;DOc_4&quot;,  &quot;lif_3&quot;  ...
+           *  &lt;/UL&gt;
+ 
+ 
+ 
+           *  &lt;LI&gt;When  the  correspondant  Criteria  type  is  a  &quot;Severity&quot;  filter  (=1):
+           *  &lt;UL&gt;&lt;TT&gt;1&lt;/TT&gt;:  Severity  One:  Cleaning  action  may  lead  to  data  deletion.  
+           *  &lt;BR&gt;&lt;TT&gt;2&lt;/TT&gt;:  Severity  Two:  Cleaning  action  may  lead  to  data  modification  (without  deletion).  
+           *  &lt;BR&gt;&lt;TT&gt;3&lt;/TT&gt;:  Severity  Three:  Unimportant  error.  Cleaning  action  without  huge  impact  on  data.  
+					 *  Note: User has to follow a specific format to mention the list of Severity.     All severities have to be listed by comma separator in a single line.
+           *  Ex:3,1,2,
+
+           *  &lt;/UL&gt;
+           *  &lt;LI&gt;When  the  correspondant  Criteria  type  is  a  &quot;Domain&quot;  filter  (=2):
+           *  &lt;UL&gt;Error  to  process  filter  defines  a  list  of  error,  identified  with  their  Domain,  to  process  or  not,  depending  on  the  iSelectMode  argue.  
+		       *  Note: User has to follow a specific format to mention the list of Domains.      All domains have to be listed by comma separator in a single line.
+		       *  Ex: Drafting,Sketcher,MechanicalDesign,... 
+          
+           *  &lt;BR&gt;The  complete  list  of  available  Domains  is  defined  in  the  CATCheckReport.CATNls  file.
+           *  &lt;UL&gt;&lt;TT&gt;3DFunctionalTolerancingAndAnnotation&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Aggregation&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Analysis&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;AssemblyDesign&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;BodyinWhite&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Camera&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Catalog&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;DMUFitting&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;DMUKinematics&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;DMUNavigator&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Drafting&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Electrical&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;EquipmentandSystemsArrangement&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;FunctionalModeler&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;GenerativeDrafting&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;GenerativeShapeDesign&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;GenericNaming&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Geometry&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Knowledge&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Manufacturing&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;Material&lt;/TT&gt;
+           *  &lt;BR&gt;&lt;TT&gt;MechanicalDesign&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;MechanicalModeler&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;MoldDesign&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;Numbering&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;ObjectModeler&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;PartDesign&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;PlantShipModeler&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;ProductStructure&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;Robotics&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;SheetMetal&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;Sketcher&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;SketcherModeler&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;SpecsModeler&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;TopologicalObjects&lt;/TT&gt;
+	           *  &lt;BR&gt;&lt;TT&gt;V4V5integration&lt;/TT&gt;
+	           *  &lt;/UL&gt;
+	           *  All  the  value  are  not  case  sensitive:  you  can  write  &quot;MECHANICALDESIGN&quot;,  &quot;mechanicaldesign&quot;,  ...
+	           *  &lt;/UL&gt;
+	 
+	 
+	           *  &lt;LI&gt;When  the  correspondant  Criteria  type  is  a  &quot;Keyword&quot;  filter  (=3):
+	           *  &lt;UL&gt;
+	           *  Error  to  process  filter  defines  a  list  of  error,  identified  with  keyword,  to  process  or  not,  depending  on  the  iSelectMode  argue.          
+	           *  &lt;UL&gt;&lt;TT&gt;Specification&lt;/TT&gt;:  List  of  errors  dealing  with  the  specifications
+	           *  &lt;BR&gt;&lt;TT&gt;Geometry&lt;/TT&gt;:  List  of  errors  dealing  with  geometry  only
+	           *  &lt;BR&gt;&lt;TT&gt;Update&lt;/TT&gt;:  List  of  errors  impacting  the  Update  status  of  the  document
+	           *  &lt;BR&gt;&lt;TT&gt;PCS&lt;/TT&gt;:  List  of  errors  impacting  the  PCS  and  performance  result
+	           *  &lt;BR&gt;&lt;TT&gt;GhostLinks&lt;/TT&gt;:  List  of  errors  dealing  with  Ghost  Link
+			       *  Note: User has to follow a specific format to mention the list of
+			          Keywords. All keywords have to be listed by comma separator in a single line.
+			       *  Ex: Specification,Geometry,Update,..
+
+	           *  &lt;/UL&gt;The  complete  list  of  available  Keywords  is  defined  in  the  CATCheckReport.CATNls  file.
+	           *  &lt;BR&gt;All  the  value  are  not  case  sensitive:  you  can  write  &quot;UPDATE&quot;,  &quot;pcs&quot;,  ...
+	           *  &lt;/UL&gt;
+	 
+	 
+	           *  &lt;P&gt;&lt;LI&gt;When  no  criteria  is  defined  (empty  list),  all  the  errors  available  on  the  site  are  automatically  processed  while  CATDUA  check/clean  process.
+	           *    &lt;/UL&gt;
+	 
+	           *      @param  oReporter  [out]
+	           *  Pointer  allowing  to  retrieve  all  information  regarding  detected  errors  after  processing  the  input  document.  
+	           *    &lt;BR&gt;Use  CATIReporter#GetListReporterInfo  to  retrieve  all  errors.
+	           *    &lt;BR&gt;The  pointer  has  to  be  released  after  use  by  the  caller.  &lt;/UL&gt;
+	 
+	           *      @return
+	           *            S_OK  if  everything  goes  well,  otherwise  E_FAIL.
+	     */
+	 
+	   static    HRESULT  CheckDataIntegrity  (  CATDocument  *iDoc,  int  iRepairMode,  int  iSelectMode,CATListOfInt  &amp;  ilstSelectedCriteriaType,  CATListOfCATUnicodeString  &amp;  ilstSelectedCriteria,  CATIReporter*  &amp;  oReporter  )  ;  
+	 
+	 
+	 };
+	 /*
+		For user reference: Below is just a sample code snippet to show the way CheckDataIntegrity function can be called.
+		...
+		iRepairMode=1;
+		iSelectMode=0;
+		ilstSelectedCriteria.Append(&quot;AFI_1,KWE_1,KWE_2,KWE_8&quot;); 
+		ilstSelectedCriteriaType.Append(0); // All errors
+
+		ilstSelectedCriteria.Append(&quot;Aggregation,DMUFitting,FunctionalModeler&quot;);
+		ilstSelectedCriteriaType.Append(2); // type Domain
+
+		ilstSelectedCriteria.Append(&quot;GHOSTLINKS,PCS&quot;);
+		ilstSelectedCriteriaType.Append(3); // type Keyword
+
+		ilstSelectedCriteria.Append(&quot;3&quot;);
+		ilstSelectedCriteriaType.Append(1); // type severity=1
+		...
+		rc = CATDocumentIntegrityServices::CheckDataIntegrity(pDocument, iRepairMode, iSelectMode, ilstSelectedCriteriaType, ilstSelectedCriteria,		piReporter);
+
+		*/
+	 #endif
+	 
+
+	
+		
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDocument.html">← 上一页: CATDocument.h</a></div>
+        <div><a href="CATDocumentServices.html">下一页: CATDocumentServices.h →</a></div>
+    </div>
+</body>
+</html>

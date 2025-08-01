@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisGeneralSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisGeneralSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisGeneralExtSettingAtt.html">← 上一页: CATISamAnalysisGeneralExtSettingAtt.h</a></div>
+        <div><a href="CATISamAnalysisManager.html">下一页: CATISamAnalysisManager.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamAnalysisGeneralSettingAtt_H
+#define CATISamAnalysisGeneralSettingAtt_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATAnalysisInterface.h&quot;
+
+class CATUnicodeString;
+class CATSettingInfo;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamAnalysisGeneralSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_CATISamAnalysisGeneralSettingAtt;
+#endif
+/**
+ * Interface to handle the Analysis &amp; Simulation &quot;GeneralSetting&quot;.
+ */
+
+class ExportedByCATAnalysisInterface CATISamAnalysisGeneralSettingAtt : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  public :
+
+/**
+ * Retrieves if a default analysis Case will be created.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; No default case is set up.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; A default case is set up.
+ */
+    virtual HRESULT GetDefaultAnalysisFlag(int &amp; oAllowed)=0;
+/**
+ * Sets that a default analysis Case will be created.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; No default case is set up.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; A default case is set up.
+ */
+    virtual HRESULT SetDefaultAnalysisFlag(const int &amp; iAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetDefaultAnalysisFlagInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetDefaultAnalysisFlagLock( unsigned char  iLocked ) = 0;
+
+/**
+ * Retrieves the type of default analysis Case to create.
+ * @param oTemplate The Case type.
+ */
+    virtual HRESULT GetDefaultAnalysisTemplate(CATUnicodeString &amp; oTemplate)=0;
+/**
+ * Sets up a type of default analysis Case to create.
+ * @param iTemplate The Case type.
+ */
+    virtual HRESULT SetDefaultAnalysisTemplate(const CATUnicodeString &amp; iTemplate)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetDefaultAnalysisTemplateInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetDefaultAnalysisTemplateLock( unsigned char  iLocked ) = 0;
+
+/**
+ * Retrieves if the parameter set will be displayed in the feature tree.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; The parameter set is shown.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; The parameter set is hidden.
+ */
+    virtual HRESULT GetViewAnalysisParameter(int &amp; oAllowed)=0;
+/**
+ * Sets up if the parameter set will be displayed in the feature tree.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; The parameter set is shown.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; The parameter set is hidden.
+ */
+    virtual HRESULT SetViewAnalysisParameter(const int &amp; oAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetViewAnalysisParameterInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetViewAnalysisParameterLock( unsigned char  iLocked ) = 0;
+
+/**
+ * Retrieves if the relation set will be displayed in the feature tree.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; The relation set is shown.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; The relation set is hidden.
+ */
+    virtual HRESULT GetViewAnalysisRelation(int &amp; oAllowed)=0;
+/**
+ * Sets up if the relation set will be displayed in the feature tree.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; The relation set is shown.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; The relation set is hidden.
+ */
+    virtual HRESULT SetViewAnalysisRelation(const int &amp; oAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetViewAnalysisRelationInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetViewAnalysisRelationLock( unsigned char  iLocked ) = 0;
+
+/**
+ * Retrieves if the pointed documents are automatically loaded.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; pointed documents are not automatically loaded.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; pointed documents are automatically loaded.
+ */
+    virtual HRESULT GetAnalysisLoadMode(int &amp; oAllowed)=0;
+/**
+ * Sets up if the pointed document are loaded.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; pointed documents are not automatically loadedd.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; pointed documents are automatically loaded.
+ */
+    virtual HRESULT SetAnalysisLoadMode(const int &amp; oAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetAnalysisLoadModeInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetAnalysisLoadModeLock( unsigned char  iLocked ) = 0;
+
+/**
+ * Retrieves if we are handling Product Structure Cache Mode.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; Cache Mode is handled.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; Cache Mode is not handled.
+ */
+    virtual HRESULT GetAnalysisCacheMode(int &amp; oAllowed)=0;
+/**
+ * Sets up Product Structure Cache Mode handling.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; Cache Mode is handled.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; Cache Mode is not handled.
+ */
+    virtual HRESULT SetAnalysisCacheMode(const int &amp; oAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+    virtual HRESULT GetAnalysisCacheModeInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetAnalysisCacheModeLock( unsigned char  iLocked ) = 0;
+/**
+ * Tells if Automatic naming is activated.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; Automatic Naming is activated.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; Automatic Naming is not activated.
+ */
+	virtual HRESULT GetAnalysisNamingAuto(int &amp; oAllowed)=0;
+/**
+ * Sets the Automatic naming to be activated.
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt; Automatic Naming is activated.
+ * 	&lt;br&gt;&lt;tt&gt;0 :&lt;/tt&gt; Automatic Naming is not activated.
+ */
+	virtual HRESULT SetAnalysisNamingAuto(const int &amp; iAllowed)=0;
+/** 
+ * Retrieves environment informations for the default flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Retrieves the state of the default flag in the current environment. 
+ * @param AdminLevel
+ *       &lt;br&gt;If the parameter is locked, AdminLevel gives the administration
+ *       level that imposes the value of the parameter.
+ *	 &lt;br&gt;If the parameter is not locked, AdminLevel gives the administration
+ *       level that will give the value of the parameter after a reset.
+ * @param oLocked   Indicates if the parameter has been locked.
+ * @param oModified Indicates if the parameter has been explicitly modified or remain
+ *      to the administrated value.
+ * @return
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */ 
+	virtual HRESULT GetAnalysisNamingAutoInfo( CATSettingInfo*  oInfo ) = 0;
+/** 
+ * Locks or unlocks the flag.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the parameter if it is 
+ * possible in the current administrated. In user mode this method 
+ * will always return E_FAIL.
+ * @param iLocked The locking operation to be performed
+ *	&lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;TRUE :&lt;/tt&gt;   to lock the parameter.
+ * 	&lt;br&gt;&lt;tt&gt;FALSE:&lt;/tt&gt;   to unlock the parameter.
+ * @return
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ *	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on Success
+ * 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+ */
+    virtual HRESULT SetAnalysisNamingAutoLock( unsigned char  iLocked ) = 0;
+
+};
+
+CATDeclareHandler(CATISamAnalysisGeneralSettingAtt, CATBaseUnknown);
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisGeneralExtSettingAtt.html">← 上一页: CATISamAnalysisGeneralExtSettingAtt.h</a></div>
+        <div><a href="CATISamAnalysisManager.html">下一页: CATISamAnalysisManager.h →</a></div>
+    </div>
+</body>
+</html>

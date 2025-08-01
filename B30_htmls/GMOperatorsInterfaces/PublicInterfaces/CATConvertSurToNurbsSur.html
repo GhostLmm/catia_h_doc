@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATConvertSurToNurbsSur.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATConvertSurToNurbsSur.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATConvertCrvToNurbsCrv.html">← 上一页: CATConvertCrvToNurbsCrv.h</a></div>
+        <div><a href="CATCreateEndingShell.html">下一页: CATCreateEndingShell.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATConvertSurToNurbsSur_H
+#define CATConvertSurToNurbsSur_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+class CATNurbsSurface;
+class CATSurParam;
+class CATSurLimits;
+class CATMathNurbsBipar;
+class CATSoftwareConfiguration;
+class CATGeoFactory;
+class CATSurface;
+
+#include &quot;CATParameterizationOption.h&quot;
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATCGMVirtual.h&quot;
+
+/** @nodoc */
+enum CATFrFConvertionDiagnostic
+{
+  CatParameterizationKept = 0,
+  CatParameterizationChanged = 1,
+  CatNotConvertible = 2
+};
+
+/**
+ * @deprecated V5R10 CATSurFittingToNurbsSur
+ * Class defining a geometric operator that computes the NURBS representation of a CATSurface.
+ *&lt;br&gt;The operator deals with the CATSphere, CATCylinder, CATTorus, CATCone and CATRevolution surfaces
+ * and creates the corresponding rational CATNurbsSurface. CATPlane and CATTabulatedCylinder 
+ * give a non rational CATNurbsSurface. For a CATNurbsSurface, the corresponding CATNurbsSurface
+ * without extrapolation is created.
+ * The CATConvertSurToNurbsSur operator follows the global frame of the geometric operators: 
+ *&lt;ul&gt;
+ * &lt;li&gt;A CATConvertSurToNurbsSur operator is created with the &lt;tt&gt;CreateConvertSurToNurbsSur&lt;/tt&gt; global method 
+ * and must be
+ * directly &lt;tt&gt;delete&lt;/tt&gt;d with the usual C++ operator after use.
+ * It is is not streamable. 
+ *&lt;li&gt;In case of &lt;tt&gt;BASIC&lt;/tt&gt;
+ * mode, the operation is automatically performed at the operator creation. 
+ * In case of &lt;tt&gt;ADVANCED&lt;/tt&gt;
+ * mode, options can be precised with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+ * asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+ *&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;Getxxx&lt;/tt&gt; methods. 
+ *&lt;/ul&gt;
+ */
+class ExportedByCATGMOperatorsInterfaces CATConvertSurToNurbsSur : public CATCGMVirtual
+{
+  public :
+
+    CATConvertSurToNurbsSur();
+    virtual ~CATConvertSurToNurbsSur();
+
+/**
+ * @nodoc
+ */
+    virtual CATFrFConvertionDiagnostic IsConvertible(CATParameterizationOption iParameterizationOption)=0;
+
+/**
+ * @nodoc
+ */
+    virtual void SetMaxLimits(CATSurLimits &amp;iMaxLimits)=0;
+
+/**
+ * Runs &lt;tt&gt;this&lt;/tt&gt; operator (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ */
+    virtual void Run()=0;
+
+/**
+ * Runs &lt;tt&gt;this&lt;/tt&gt; operator by keeping the same parameterization for the input
+ * and resulting surface (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * @return
+ * &lt;tt&gt;0&lt;/tt&gt; if the the parameterization is not kept, &lt;tt&gt;1&lt;/tt&gt; if it is kept.
+ */
+    virtual int RunWithSameParametrisation()=0;
+
+
+/**
+ * Returns the corresponding CATNurbsSurface.
+ * @return
+ * The pointer to the created CATNurbsSurface. Use the @href CATICGMContainer#Remove if you do not want
+ * to keep it in the geometric factory.
+ */
+    virtual CATNurbsSurface *GetNurbsSurface() const=0;
+
+/**
+ * @nodoc
+ */
+    virtual CATMathNurbsBipar *GetNurbsBipar() const=0;
+ 
+/**
+ * Avoids to create periodic Nurbs representation.
+ * &lt;br&gt;By default, periodic representations can be created.
+ */
+    virtual void ForbidPeriodicity()= 0;
+
+/**
+ * Maps a parameter on the initial surface to the corresponding parameter on the computed Nurbs representation.
+ * @param iParamOnSurface
+ * The parameter on the initial surface.
+ * @return
+ * The parameter on the computed Nurbs representation.
+ */
+  virtual CATSurParam ComputeNewParameter(const CATSurParam &amp;iParamOnSurface)= 0;
+
+/**
+ * @nodoc
+ * Maps a parameter on the initial surface to the corresponding parameter on the computed Nurbs representation.
+ * @param iOldSurParam
+ * The parameter on the initial surface.
+ * @param ioNewSurParam
+ * The parameter on the computed Nurbs representation.
+ * @return
+ * 0.
+ */
+  virtual int GetEquivalentParam(const CATSurParam &amp; iOldSurParam,
+                                       CATSurParam &amp; ioNewSurParam) = 0;
+
+
+/**
+ * @nodoc
+ */
+  virtual CATLONG32 CheckResult() = 0;
+
+/**
+ * @nodoc
+ */
+  virtual void AllowPartialDesextrapolation() = 0;
+/**
+ * @nodoc
+ */
+  virtual void ForbidRational() = 0;
+
+  /**
+ * @nodoc
+ */
+	virtual void SetTrimOption(CATBoolean iTrimToLimits) = 0;
+
+  private:
+
+CATConvertSurToNurbsSur(const CATConvertSurToNurbsSur &amp;);
+void operator = (const CATConvertSurToNurbsSur &amp;);
+
+};
+
+/**
+ * @nodoc
+ * Creates the geometric operator that computes the Nurbs representation of a CATSurface.
+ * @param iFactory
+ * The pointer to the factory of the geometry.
+ * @param iSurface
+ * The pointer to the surfacee to convert.
+ * @param iMode
+ * The mode of use.
+ * @return
+ * The pointer to the created operator. To &lt;tt&gt;delete&lt;/tt&gt; with the usual C++ delete operator afer use.
+ * @see CATConvertSurToNurbsSur
+ */
+ExportedByCATGMOperatorsInterfaces
+ CATConvertSurToNurbsSur*  CATCreateConvertSurToNurbsSur( CATGeoFactory  *iFactory, 
+ CATSoftwareConfiguration * iSoftwareConfiguration,
+                                                     const CATSurface &amp;iSurface);
+
+#ifndef CATConvertSurToNurbsSur_Remove
+#define CATConvertSurToNurbsSur_Remove
+
+/**
+ * @nodoc
+ */
+ExportedByCATGMOperatorsInterfaces
+void Remove( CATConvertSurToNurbsSur *&amp;ioCATConvertSurToNurbsSur );
+
+#endif
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATConvertCrvToNurbsCrv.html">← 上一页: CATConvertCrvToNurbsCrv.h</a></div>
+        <div><a href="CATCreateEndingShell.html">下一页: CATCreateEndingShell.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModeler/PublicInterfaces/CATMfBRepDecodeProtected.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModeler/PublicInterfaces/CATMfBRepDecodeProtected.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMfBRepDecode.html">← 上一页: CATMfBRepDecode.h</a></div>
+        <div><a href="CATMfCkeServices.html">下一页: CATMfCkeServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* COPYRIGHT DASSAULT SYSTEMES 2004 */
+/** @CAA2Required */
+//**********************************************************************
+//* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS *
+//* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME *
+//**********************************************************************
+#ifndef CATMfBRepDecodeProtected_h
+#define CATMfBRepDecodeProtected_h
+
+#include &quot;CATMechanicalModeler.h&quot;
+#include &quot;CATMfBRepDefs.h&quot;
+#include &quot;CATMfBRepInternalDefs.h&quot;
+
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+/*
+ * Global methods to create a selecting object from a topological cell.
+ * A &lt;tt&gt;CATIBRepAccess&lt;/tt&gt; is created from a &lt;tt&gt;CATCell&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIRSur&lt;/tt&gt; is created from a &lt;tt&gt;CATFace&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIREdgeAccess&lt;/tt&gt; is created from a &lt;tt&gt;&lt;CATEdge/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIREdge&lt;/tt&gt; is created from a &lt;tt&gt;CATEdge&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIBorderREdge&lt;/tt&gt; is created from a &lt;tt&gt;CATEdge&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIWireREdge&lt;/tt&gt; is created from a &lt;tt&gt;CATEdge&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIFVertexAccess&lt;/tt&gt; is created from a &lt;tt&gt;CATVertex&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIFVertex&lt;/tt&gt; is created from a &lt;tt&gt;CATVertex&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIBorderFVertex&lt;/tt&gt; is created from a &lt;tt&gt;CATVertex&lt;/tt&gt;.
+ * &lt;br&gt;A &lt;tt&gt;CATIWireFVertex&lt;/tt&gt; is created from a &lt;tt&gt;CATVertex&lt;/tt&gt;.
+ * &lt;br&gt;A selecting object is not persistent. 
+ * Other methods create a persistent BRep feature from a selecting object.
+ * @see CATIFeaturize, CATIBRepAccess, CATIMfBRepFactory
+ */
+
+class CATCell_var;
+class CATDomain_var;
+class CATBody_var;
+class CATIBRepAccess_var;
+class CATIContainer_var;
+class CATIGeometricalElement_var;
+class CATBrpObject;
+class CATBrpScope;
+class CATBaseUnknown;
+class CATNamingReference;
+class CATIMfBRep_var;
+class CATIMfRsur_var;
+class CATIRSur_var;
+class CATIBRepAccess;
+class CATIRSur;
+class CATCell;
+class CATFace;
+class CATIMfBRepFeature_var;
+class CATIContainer;
+class CATIPrtContainer;
+
+
+// InterfaceCleaning2004 : 19 old nodoc method are now protected
+// InterfaceCleaning2004 : si migration non faite, remettre en PublicRequirer ce .h avant la GA.
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * Old method. Use GetBReps of CATIMfGeometryAccess.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;Empreinte, const CATUnicodeString   &amp;key);
+
+/**
+ * @nodoc
+ * Deprecated: use a CATBRepDecode method with different arguments.
+ * Returns the selecting object from a topological cell and the topological body of a specified scope.
+ * @param iCell
+ * Topological cell.
+ * @param iScope
+ * Owner of the topological body used to select the topological cell.
+ */
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(const CATCell_var &amp;iCell,
+						   CATBrpScope       *iScope);
+
+/**
+ * @nodoc
+ * Deprecated: use a CATBRepDecode method with different arguments.
+ * Returns the selecting object from a topological cell and the topological body of a specified scope.
+ * @param iCell
+ * Topological cell.
+ * @param iScope
+ * Scope owner of the topological body used to select the topological cell.
+ * @param iDecodeType
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfDecodeAll&lt;/tt&gt;, &lt;tt&gt;MfDecodeWire&lt;/tt&gt;, &lt;tt&gt;MfDecodeShell&lt;/tt&gt;, &lt;tt&gt;MfDecodeLump&lt;/tt&gt;.
+ * @param iSelectType
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfForceSelect&lt;/tt&gt;, &lt;tt&gt;MfSimpleSelect&lt;/tt&gt;.
+ */
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(const CATCell_var         &amp;iCell,
+						   CATBrpScope               *iScope,
+						   const CATMfBRepDecodeType iDecodeType,
+               const CATMfBRepSelectType iSelectType = MfSimpleSelect);
+
+/**
+ * @nodoc
+ * Deprecated: use a CATBRepDecode method with different arguments.
+ * Internal method.
+ */
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(CATBrpObject *node,CATBrpScope *scope);
+
+
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(CATNamingReference               *MfNamingReference,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+
+/**
+ * @nodoc
+ * Returns the selecting objects from journaling information.
+ * @param iMfNamingReference
+ * Journaling information.
+ * @param iNamingContext
+ * Naming context.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(CATNamingReference *iMfNamingReference,
+                                                             const CATINamingContext_var &amp;iNamingContext);
+
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * Old method. Use GetBReps of CATIMfGeometryAccess.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;ProfilElement);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * Old method. Use GetBReps of CATIMfGeometryAccess.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;Empreinte,
+							     const CATUnicodeString           &amp;key,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;Empreinte,
+							     const CATUnicodeString           &amp;key,
+							     const CATISpecObject_var         &amp;ProfilElement,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;Empreinte,
+							     const CATUnicodeString   &amp;key1,
+							     const CATISpecObject_var &amp;ProfilElement1,
+							     const CATUnicodeString   &amp;key2,
+							     const CATISpecObject_var &amp;ProfilElement2);
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;Empreinte1,
+							     const CATUnicodeString           &amp;key1,
+							     const CATISpecObject_var         &amp;ProfilElement1,
+							     const CATISpecObject_var         &amp;Empreinte2,
+							     const CATUnicodeString           &amp;key2,
+							     const CATISpecObject_var         &amp;ProfilElement2,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;Empreinte1,
+							     const CATUnicodeString           &amp;key1,
+							     const CATISpecObject_var         &amp;ProfilElement1,
+							     const CATISpecObject_var         &amp;Empreinte2,
+							     const CATUnicodeString           &amp;key2,
+							     const CATISpecObject_var         &amp;ProfilElement2,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+							     const CATIBRepAccess_var &amp;select);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+							     const CATIBRepAccess_var &amp;select,
+							     CATUnicodeString         &amp;key);
+/**
+ * @nodoc
+ * Internal use. Get the shell face on the scope of the ResultOUT.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var &amp;feature,
+								       const CATIMfRsur_var     &amp;MfRsur1,
+								       const CATIMfRsur_var     &amp;MfRsur2);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATIRSur* CATBRepDecode(CATIContainer *BrepContainer,
+                                          CATFace *face);
+/**
+ * @nodoc
+ * Old method.
+ */
+ExportedByCATMechanicalModeler CATIBRepAccess* CATBRepDecodeInScope(CATIContainer *BrepContainer,
+                                                       CATCell* cell,
+                                                       CATBaseUnknown * AssociatedFeature);
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(const CATIContainer_var &amp;BrepContainer,
+                                                   const CATCell_var &amp;Cell,
+                                                   const CATIGeometricalElement_var &amp;AssociatedFeat);
+
+/**
+ * @nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ */
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+                                                             const CATIMfBRepFeature_var &amp;MfBRep);
+
+
+/**
+ * @nodoc
+ * Retrieve the selecting object from the cell of a feature on the target feature.
+ * @param iTargetFeature
+ * target feature 
+ * @param iSourceFeature
+ * feature that contains the cell from which the selecting objects are retrieved
+ * @param iCell
+ * cell from which the selecting objects are retrieved
+ *&lt;br&gt;
+ * if iCell is Null the query is launched from all the cells of the feature 
+ * @param oBReps
+ * List of selecting objects.
+ * @return
+ *  S_OK if no error occurs
+ */
+ExportedByCATMechanicalModeler HRESULT CATGetGeneratedBReps(const CATISpecObject_var &amp;iTargetFeature,const CATISpecObject_var &amp;iSourceFeature,const CATCell_var &amp;iCell, CATLISTV(CATBaseUnknown_var) &amp;oBReps);
+
+//----------------------------------------------------------------------------------------------------------------
+
+/*
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+CATIContainer_var CATBrepGetContainer(const CATBody_var &amp;Body);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use a CATBRepDecode method with different arguments.
+ * Returns the selecting object from a topological cell and the topological body of a specified scope.
+ * param iCell
+ * Topological cell.
+ * param iDomain
+ * Topological domain.
+ * param iScope
+ * Scope owner of the topological body used to select the topological cell.
+ * param iSelectType
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;tt&gt;MfForceSelect&lt;/tt&gt;, &lt;tt&gt;MfSimpleSelect&lt;/tt&gt;.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(const CATCell_var&amp;        iCell,
+						   const CATDomain_var&amp;      iDomain,
+						   CATBrpScope*              iScope,
+                                                   const CATMfBRepSelectType iSelectType = MfSimpleSelect);
+*/
+
+/*
+* nodoc
+* Deprecated: use a CATBRepDecode method with different arguments.
+* Internal method.
+* InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(CATBrpObject *node,CATBrpScope *scope,const CATCell_var &amp;Cell ,const CATMfBRepAccessElementType type = MfUnknownElementType,const CATMfBRepSelectInitMode InitMode = MfInitMode_Default);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATUnicodeString &amp;iMfExtendeLabel,
+							     CATBrpScope            *iScope);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * Old method. Use GetBReps of CATIMfGeometryAccess.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;Empreinte,
+							     const CATUnicodeString   &amp;key);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * Old method. Use GetBReps of CATIMfGeometryAccess.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;ProfilElement,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+							     const CATIMfBRep_var     &amp;MfBRep);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;feature,
+							     const CATIMfBRep_var             &amp;MfBRep,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var         &amp;feature,
+							     const CATIBRepAccess_var         &amp;select,
+							     const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+							     const CATIMfBRep_var     &amp;MfBRep,
+							     CATUnicodeString         &amp;key);
+*/
+
+/* 
+ * nodoc
+ * Internal use.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var &amp;feature,
+								       const CATIRSur_var       &amp;select1,
+								       const CATIRSur_var       &amp;select2);
+ * nodoc
+ * Internal use.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var         &amp;feature,
+								       const CATIMfRsur_var             &amp;MfRsur1,
+								       const CATIMfRsur_var             &amp;MfRsur2,
+								       const CATIGeometricalElement_var &amp;AssociatedFeat);
+ * nodoc
+ * Internal use.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var         &amp;feature,
+								       const CATIRSur_var               &amp;select1,
+								       const CATIRSur_var               &amp;select2,
+								       const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess* CATBRepDecode(CATIContainer *BrepContainer,
+                                                CATCell *cell);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecode(const CATIContainer_var &amp;BrepContainer,
+                                                   const CATCell_var &amp;Cell,
+                                                   CATBrpScope *Scope);
+*/
+
+/*
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecodeAxis(const CATIContainer_var &amp;BrepContainer,
+                                                       const CATCell_var &amp;Cell,
+                                                       const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecodeExtremity(const CATIContainer_var &amp;BrepContainer,
+                                                            const CATCell_var &amp;Cell,
+                                                            const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+/*
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATIBRepAccess_var CATBRepDecodePlanarSubElement(const CATIContainer_var &amp;BrepContainer,
+                                                                   const CATCell_var &amp;Cell,
+                                                                   const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+/*
+ * nodoc
+ * Deprecated: use an other CATBRepDecode method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecode(const CATISpecObject_var &amp;feature,
+                                                             const CATIMfBRepFeature_var &amp;MfBRep,
+                                                             const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+/* 
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var &amp;feature,
+                                                                       const CATIMfBRepFeature_var &amp;MfRsur1,
+                                                                       const CATIMfBRepFeature_var &amp;MfRsur2);
+ *
+ * nodoc
+ * Old method.
+ * InterfaceCleaning
+ExportedByCATMechanicalModeler CATLISTV(CATBaseUnknown_var) CATBRepDecodeContextual(const CATISpecObject_var &amp;feature,
+                                                                       const CATIMfBRepFeature_var &amp;MfRsur1,
+                                                                       const CATIMfBRepFeature_var &amp;MfRsur2,
+                                                                       const CATIGeometricalElement_var &amp;AssociatedFeat);
+*/
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMfBRepDecode.html">← 上一页: CATMfBRepDecode.h</a></div>
+        <div><a href="CATMfCkeServices.html">下一页: CATMfCkeServices.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMDynThickness.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMDynThickness.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDynSplit.html">← 上一页: CATICGMDynSplit.h</a></div>
+        <div><a href="CATICGMDynTransformation.html">下一页: CATICGMDynTransformation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMDynThickness_h_
+#define CATICGMDynThickness_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMDynOperator.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATMathDef.h&quot;
+
+class CATTopData;
+class CATBody;
+class CATLISTP(CATFace);
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMDynThickness;
+
+/**
+ * Interface representing the topological operator of thickness.
+ * A thickness operation blows or shrinks the faces of a volume.
+ * Each face may have its own offset value. The offset values
+ * may be negative: the body is shrunk.
+ * This operator can also be used to offset a shell. In this case, it is recommended to use the
+ * SetSharpBorderMode API with the optimization parameter.
+ * As all the topological operators, the input objects are not modified. The resulting body is
+ * a new one, that you can get by using the &lt;tt&gt;CATICGMDynOperator::GetResult&lt;/tt&gt; method.
+ * To use it:
+ *&lt;ul&gt;
+ * &lt;li&gt;Create it with the &lt;tt&gt;CATCGMCreateDynThickness&lt;/tt&gt; global function.
+ * &lt;li&gt;Tune it with appropriate options, using the &lt;tt&gt;SetXxx&lt;/tt&gt; methods. 
+ * &lt;li&gt;Run it
+ * &lt;li&gt;Get the resultin body with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+ * to keep these resulting body, use the @href CATICGMContainer#Remove method to remove them from the 
+ * geometric factory, after the operator deletion.
+ *&lt;li&gt;Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ *&lt;/ul&gt; 
+ */
+class ExportedByCATGMOperatorsInterfaces CATICGMDynThickness: public CATICGMDynOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMDynThickness();
+
+  /**
+ * Defines the offset value for a given list of faces of a body to thick.
+ * @param iSpecialOffset
+ * The list of the pointers to faces. The faces must belong to the body to thick.
+ * @param iOffset
+ * The offset value for the faces of &lt;tt&gt;iSpecialOffset&lt;/tt&gt;. If &lt;tt&gt;iOffset &lt; 0&lt;/tt&gt;,
+ * the faces are shrunk.
+ */
+  virtual void Append(
+    const CATLISTP(CATFace) &amp;iSpecialOffset,
+    CATLength iOffset) = 0;
+
+  /**
+ * Defines the offset value that applies to all the body to thicken.
+ * @param iOffsetValue
+ * The offset value for all the faces. If &lt;tt&gt;iOffsetValue &lt;0 &lt;/tt&gt;,
+ * the faces are shrunk.
+ */
+  virtual void SetDefaultOffsetValue(CATLength iOffsetValue) = 0;
+
+  /**
+  * Defines how borders are transformed in the neighborhood of sharp edges.
+  * @param iSharpBorderOptimisation
+  * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt;
+  * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Optimization not required
+  * &lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;Optimization required (the skin is handled like a volume)
+  * &lt;/dl&gt;
+  */
+  virtual void SetSharpBorderMode(short iSharpBorderOptimisation) = 0;
+
+  /**
+ * Defines the state of the resulting body.
+ * @param iOnOrOff
+ * The state of the resulting body. 
+ */
+  virtual void SetFreezeMode(CATBodyFreezeMode iOnOrOff) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMDynThickness(); // -&gt; delete can&#x27;t be called
+};
+
+// Creation EntryPoints
+/**
+ * Creates a CATICGMDynThickness operator.
+ * &lt;br&gt;To define the offset
+ * values for each face, use the &lt;tt&gt;CATICGMDynThickness::Append&lt;/tt&gt; method.
+ * @param iForResultingBody
+ * The pointer to the factory of the geometry for the creation of the resulting body. 
+ * @param iTopData
+ * The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+ * is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+ * @param iPart
+ * The pointer to the 3D CATBody to operate.
+ * @return [out, IUnknown#Release]
+ * The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ */
+ExportedByCATGMOperatorsInterfaces CATICGMDynThickness *CATCGMCreateDynThickness(
+  CATGeoFactory *iContainer,
+  CATTopData *iTopData,
+  CATBody *iPart);
+
+#endif /* CATICGMDynThickness_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDynSplit.html">← 上一页: CATICGMDynSplit.h</a></div>
+        <div><a href="CATICGMDynTransformation.html">下一页: CATICGMDynTransformation.h →</a></div>
+    </div>
+</body>
+</html>

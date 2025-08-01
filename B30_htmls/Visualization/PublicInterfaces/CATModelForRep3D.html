@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATModelForRep3D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATModelForRep3D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATModelForRep2D.html">← 上一页: CATModelForRep2D.h</a></div>
+        <div><a href="CATModelNotification.html">下一页: CATModelNotification.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATModelForRep3D_H
+#define CATModelForRep3D_H
+
+//
+//  copyright dassault systemes 2001
+//  --------------------------------
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+/**
+ *  Class for dialog help 3D objects.
+ *  &lt;br&gt;This class is the main class (implementation) of a component that 
+ *  implements the @href CATI3DGeoVisu interface.
+ *  It is dedicated to hold a graphic representation of an object that is 
+ *  not part of the document, but is used to ease the dialog. This
+ *  representation is to be built outside and set to the component thanks to 
+ *  the @href #SetRep method.
+ *
+ *  &lt;br&gt;You can visualize the component thanks to a &lt;i&gt;CATISO&lt;/i&gt; object and
+ *  you can select it. Create a @href 
+ *  CATPathElement with the component, and use the 
+ *  @href CATHSO and the @href CATPSO to highlight, and 
+ *  to prehighlight respectively.
+ * 
+ *  &lt;br&gt;&lt;br&gt;&lt;b&gt;Sample:&lt;/b&gt;
+ *   
+ *  &lt;pre&gt;
+ *  ...
+ *  CAT3DxxxRep * pMyRep = new CAT3DxxxRep();
+ *
+ *  CATModelForRep3D * pFor3DModel = new CATModelForRep3D(); 
+ *  pFor3DModel-&gt;&lt;b&gt;SetRep&lt;/b&gt;(pMyRep);
+ *  pMyRep = NULL;
+ *  
+ *  CATISO *pISO = .... // to retrieve from the CATFrmEditor 
+ *  pISO-&gt;&lt;b&gt;AddElement&lt;/b&gt;(pFor3DModel);
+ *  ...
+ *
+ *  pISO-&gt;&lt;b&gt;RemoveElement&lt;/b&gt;(pFor3DModel);  //pMyRep is deleted 
+ *  ...
+ *
+ *  &lt;b&gt;// To do a new visualization &lt;/b&gt;
+ *  pMyRep = new CAT3DxxxRep();
+ *  pFor3DModel-&gt;&lt;b&gt;SetRep&lt;/b&gt;(pMyRep);
+ *  pISO-&gt;AddElement(pFor3DModel);
+ *  ...
+ *
+ *  pISO-&gt;RemoveElement(pFor3DModel);  //pMyRep is deleted 
+ *  ...
+ *
+ *  //No more need of the model
+ *  pFor3DModel-&gt;Release();
+ *  pFor3DModel=NULL;
+ *  ...
+ *  &lt;/pre&gt;
+ *  &lt;b&gt;Life Cycle of the graphic representation&lt;/b&gt;
+ *  &lt;br&gt;The graphic representation associated with the current class is managed 
+ *  by the @href CATVisManager . So after the &lt;i&gt;SetRep&lt;/i&gt; method, it will be deleted
+ *  when the &lt;i&gt;CATModelForRep3D&lt;/i&gt; instance will be removed from the ISO (but not from
+ *  the  HSO and PSO). A new graphic representation must be created whenever you call &lt;code&gt;
+ *  AddElement&lt;/code&gt; to add such a component into the ISO.
+ *  &lt;br&gt;&lt;br&gt;&lt;b&gt;Why to derive from this class?&lt;/b&gt;
+ *  &lt;br&gt;To understand, here is an extract of the &lt;code&gt;BuildGraph&lt;/code&gt; 
+ *  method of a &lt;i&gt;CATStateCommand:&lt;/i&gt;&lt;/b&gt;
+ *  &lt;pre&gt;
+ *  ...
+ *  _daPathElement = new CATPathElementAgent(&quot;MyAgentName&quot;);
+ *  _daPathElement-&gt;&lt;b&gt;AddElementType&lt;/b&gt;(IID_CATI3DGeoVisu);
+ *  ...
+ *  &lt;/pre&gt;
+ *  With this agent, &lt;code&gt;_daPathElement&lt;/code&gt;, your component will be selectable since it 
+ *  implements the &lt;i&gt;CATI3DGeoVisu&lt;/i&gt; interface. But unfortunately, this criterion is not 
+ *  enough discriminating, because all the 3D visualized objects are also selectable. 
+ *  To filter the selection, you can
+ *  create a new component which derives from the &lt;i&gt;CATModelForRep3D&lt;/i&gt; component and which  
+ *  implements a dedicated interface. In short:
+ *  &lt;ul&gt;
+ *     &lt;li&gt;Create a new interface without method, named &lt;code&gt;MyNewInterface&lt;/code&gt;&lt;/li&gt;
+ *     &lt;li&gt;Create a new component, named &lt;code&gt;MyModelForRep&lt;/code&gt;, which OM and C++ derives from CATModelForRep3D&lt;/li&gt;
+ *     &lt;ul&gt;
+ *     &lt;li&gt;Its header class is:&lt;/li&gt;
+ *     &lt;pre&gt;
+ *      #include &quot;CATModelForRep3D.h&quot;  
+ *      class  MyModelForRep : public CATModelForRep3D
+ *      {
+ *         // Used in conjunction with CATImplementClass in the .cpp file
+ *         CATDeclareClass;
+ *
+ *         MyModelForRep() ;
+ *         virtual ~MyModelForRep();
+ *
+ *         private:
+ *
+ *         // Copy constructor, not implemented
+ *         // Set as private to prevent from compiler automatic creation as public.
+ *         MyModelForRep(const MyModelForRep &amp;iObjectToCopy);
+ *
+ *         // Assignment operator, not implemented
+ *         // Set as private to prevent from compiler automatic creation as public.
+ *         MyModelForRep &amp; operator = (const MyModelForRep &amp;iObjectToCopy);
+ *      };
+ *     &lt;/pre&gt;
+ *     &lt;li&gt;Its source class is:&lt;/li&gt;
+ *     &lt;pre&gt;
+ *     #include &quot;MyModelForRep.h&quot;
+ *
+ *     // To declare that the class is a component main class which OM derives from
+ *     // CATModelForRep3D
+ *     CATImplementClass(MyModelForRep, Implementation, CATModelForRep3D, CATNull);
+ *     
+ *     MyModelForRep::MyModelForRep();
+ *     {
+ *     }
+ *
+ *     MyModelForRep::~MyModelForRep();
+ *     {
+ *     }
+ *
+ *     // The component implements MyNewInterface interface
+ *     #include &quot;TIE_MyNewInterface.h&quot;
+ *     TIE_MyNewInterface(MyModelForRep);
+ *     &lt;/pre&gt;
+ *     &lt;/ul&gt;
+ *     &lt;li&gt;Modify the interface dictionary&lt;/li&gt;
+ *     &lt;pre&gt;
+ *     MyModelForRep  MyNewInterface libxxxx
+ *     &lt;/pre&gt;
+ *  &lt;/ul&gt;
+ */
+
+#include &quot;CATVisualization.h&quot;
+#include &quot;CATModelForRep.h&quot;
+
+
+class ExportedByCATVisualization CATModelForRep3D : public  CATModelForRep
+{
+  CATDeclareClass;
+public:
+
+   /** Default constructor. 
+    */
+   CATModelForRep3D();
+
+  /**
+   * Associates a graphic representation.
+   *
+   * @param iRep
+   *   The given representation which you want &lt;i&gt;CATModelForRep3D&lt;/i&gt; to be associated with.
+   *   Once the representation iRep has been associated with a &lt;i&gt;CATModelForRep3D&lt;/i&gt; 
+   *   component its lifecycle is
+   *   managed by the @href CATVisManager .
+   *   &lt;br&gt;iRep is a pointer to an instance of a class which derives from
+   *   @href CAT3DRep .
+   */
+  virtual void SetRep (CATRep * iRep);
+ 
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATModelForRep2D.html">← 上一页: CATModelForRep2D.h</a></div>
+        <div><a href="CATModelNotification.html">下一页: CATModelNotification.h →</a></div>
+    </div>
+</body>
+</html>

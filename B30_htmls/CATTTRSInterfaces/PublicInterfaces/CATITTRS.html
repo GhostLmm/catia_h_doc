@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATTTRSInterfaces/PublicInterfaces/CATITTRS.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATTTRSInterfaces/PublicInterfaces/CATITTRS.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIRGETopology.html">← 上一页: CATIRGETopology.h</a></div>
+        <div><a href="CATITTRSAdvanced.html">下一页: CATITTRSAdvanced.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATITTRS_H
+#define CATITTRS_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATTTRSItf.h&quot; 
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATIRGE.h&quot;
+#include &quot;CATMathRGE.h&quot;
+#include &quot;CATMmrTTRSRepresented.h&quot;
+#include &quot;CATListPV.h&quot;
+
+/**
+ * Definition of TTRS types.
+ * @param CATMmrSupportTTRS
+ * The support type
+ * @param CATMmrNodeTTRS
+ * The node type
+ */
+enum CATMmrTTRSType { CATMmrSupportTTRS , CATMmrNodeTTRS };
+
+
+/**
+ * Type definition for TTRS validity state.
+ * &lt;b&gt;Role&lt;/b&gt;: states include different value:
+ * &lt;ul&gt;&lt;li&gt;CATMmrTTRSValidity_OK
+ * &lt;li&gt;CATMmrTTRSValidity_NotBuilt
+ * &lt;li&gt;CATMmrTTRSValidity_DestroyedComp
+ * &lt;li&gt;CATMmrTTRSValidity_ModifClass
+ * &lt;li&gt;CATMmrTTRSValidity_ModifAssocCase
+ * &lt;li&gt;CATMmrTTRSValidity_ModifFoS
+ * &lt;li&gt;CATMmrTTRSValidity_InvalidComp
+ * &lt;li&gt;CATMmrTTRSValidity_Unresolved
+ * &lt;li&gt;CATMmrTTRSValidity_VisuMode&lt;/ul&gt;
+ */
+typedef unsigned long CATMmrTTRSValidityState;
+
+/** @nodoc */
+#define CATMmrTTRSValidity_OK                      (0)
+/** @nodoc */
+#define CATMmrTTRSValidity_NotBuilt                (1 &lt;&lt; 1)
+/** @nodoc */
+#define CATMmrTTRSValidity_DestroyedComp           (1 &lt;&lt; 3)
+/** @nodoc */
+#define CATMmrTTRSValidity_ModifClass              (1 &lt;&lt; 4)
+/** @nodoc */
+#define CATMmrTTRSValidity_ModifAssocCase          (1 &lt;&lt; 5)
+/** @nodoc */
+#define CATMmrTTRSValidity_ModifAdmissibleType     (1 &lt;&lt; 6)
+/** @nodoc */
+#define CATMmrTTRSValidity_ModifSurfCanonicity     (1 &lt;&lt; 7)
+/** @nodoc */
+#define CATMmrTTRSValidity_ModifFoS                (1 &lt;&lt; 8)
+/** @nodoc */
+#define CATMmrTTRSValidity_InvalidComp             (1 &lt;&lt; 9)
+/** @nodoc */
+#define CATMmrTTRSValidity_Unresolved              (1 &lt;&lt; 10)
+/** @nodoc */
+#define CATMmrTTRSValidity_VisuMode                (1 &lt;&lt; 11)
+/** @nodoc */
+#define CATMmrTTRSValidity_InvalidRepresented      (1 &lt;&lt; 12)
+/** @nodoc */
+#define CATMmrTTRS_NotPresent                      (1 &lt;&lt; 13)
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATTTRSItf IID IID_CATITTRS; 
+#else
+extern &quot;C&quot; const IID IID_CATITTRS;
+#endif
+
+class CATITTRS_var;
+
+/**
+ * Interface representing TTRS ( Technologically and Topologically Related Surfaces ).
+ * &lt;b&gt;Role&lt;/b&gt;: &lt;b&gt;TTRS&lt;/b&gt; add technological and topological pieces of information to surface associations.
+ */
+class ExportedByCATTTRSItf CATITTRS: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public :
+
+    /** 
+     * Gets the class of the TTRS.
+     * @param oTTRSClass
+     * The class of the TTRS.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Spherical, Planar, Cylindrical, Revolute, Prismatic, Complex.
+     */
+    virtual HRESULT GetTTRSClass (CATMmrTTRSClass&amp; oTTRSClass) const = 0;
+
+    /**
+     * @nodoc
+     * use CATITTRS::GetMRGE(CATMathRGE*&amp; oMrge)
+     * Gets the MRGE ( &lt;b&gt;M&lt;/b&gt;inimum &lt;b&gt;R&lt;/b&gt;epresentation &lt;b&gt;G&lt;/b&gt;eometrical &lt;b&gt;E&lt;/b&gt;lement ) of the TTRS.
+     * @param oMrge
+     * The MRGE of the TTRS.
+     */
+    virtual HRESULT GetMRGE (CATIRGE_var&amp; oMrge) const = 0; 
+
+    /**
+     * Returns the nature of the TTRS.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;tt&gt;Support&lt;/tt&gt; if it directly represents geometry.
+     * &lt;tt&gt;Node&lt;/tt&gt; if it represents higher level TTRS.
+     */
+    virtual CATMmrTTRSType GetNature () const = 0;
+
+    /**
+     * Gets the list of the 2 to n components of the TTRS.&lt;br&gt;
+     * @param oListe
+     * The list of components.
+     * &lt;ul&gt;&lt;li&gt;either 1 to n RGEs ( Support TTRS ) &lt;br&gt;
+     * &lt;li&gt;or 2 to n TTRS ( Node TTRS ) &lt;/ul&gt;
+     */
+    virtual HRESULT GetComponents (CATLISTV(CATBaseUnknown_var)&amp; oListe) const = 0;
+
+    /**
+     * Adds a component to a TTRS.
+     * @param iNewComponent
+     * &lt;ul&gt;&lt;li&gt;either a RGE  (Support TTRS ) &lt;/li&gt;
+     * &lt;li&gt;or a TTRS ( Node TTRS )&lt;/li&gt;&lt;/ul&gt;
+     */
+    virtual HRESULT AddComponent (CATBaseUnknown_var&amp; iNewComponent) = 0;
+
+    /**
+     * Removes a component from a TTRS.
+     * @param iComponent
+     * The component to be removed.
+     */
+    virtual HRESULT RemoveComponent (CATBaseUnknown_var&amp; iComponent) = 0;
+
+    /**
+     * @nodoc
+     * Gets the list of current TTRS&#x27;s constructedRGE.
+     * &lt;br&gt;Constructed RGEs are additional wireframe elements to position the TTRS.
+     * &lt;br&gt;They always respect current TTRS&#x27;s class.
+     * &lt;br&gt;example: you can add to a revolute TTRS a constructed RGE corresponding 
+     * to a plane if this plane is normal to the axis of revolution.
+     * @param oListe
+     * The list of the constructed RGE.
+     */
+    virtual HRESULT GetConstructedRGEs (CATLISTV(CATBaseUnknown_var)&amp; oListe) const = 0;
+
+    /**
+     * @nodoc
+     * Adds a constructed RGE according to current TTRS&#x27;s class.
+     * @param iNewConstructedRGE
+     * The constructed RGE to be added.
+     */
+     virtual HRESULT AddConstructedRGE (CATIRGE_var&amp; iNewConstructedRGE) = 0;
+
+    /**
+     * @nodoc
+     * Removes a constructed RGE.
+     * @param iConstructed RGE
+     * The constructed RGE to be removed.
+     */
+     virtual HRESULT RemoveConstructedRGE (CATIRGE_var&amp; iConstructedRGE) = 0;
+
+    /**
+     * Retrieves the represented TTRS.
+     * The represented TTRS is a TTRS which is represented by this.
+     * @param opiTTRS
+     *   The TTRS which is represented by this.
+     */
+    virtual HRESULT GetRepresentedTTRS (CATITTRS ** opiTTRS) const = 0;
+
+    /**
+     * Sets the represented TTRS.
+     * @param ipiTTRS
+     *   The TTRS which is represented by this.
+     */
+    virtual HRESULT SetRepresentedTTRS (const CATITTRS * ipiTTRS) = 0;
+
+    /**
+     * Retrieves the nature of the link with the represented TTRS.
+     * @param oLinkNature
+     *   Nature of the link.
+     */
+    virtual HRESULT GetRepresentedTTRSLink (CATMmrTTRSRepresented * oLinkNature) const = 0;
+
+    /**
+     * Sets the nature fo teh link with the represented TTRS.
+     * @param iLinkNature
+     *   Nature of the link.
+     */
+    virtual HRESULT SetRepresentedTTRSLink (const CATMmrTTRSRepresented iLinkNature) = 0;
+
+     /**
+     * @nodoc
+     * use CATITTRS::GetValidityState
+     * Returns 1 if the TTRS is valid, ie when its components would create a new TTRS of the same class.
+     */
+    virtual int IsValid () = 0;
+
+    /**
+     * Returns the state of validity of the TTRS.
+     * @return
+     * The call status.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: CATMmrTTRSValidity_OK, CATMmrTTRSValidity_DestroyedComp, 
+     * CATMmrTTRSValidity_ModifClass, CATMmrTTRSValidity_ModifAssocCase, 
+     * CATMmrTTRSValidity_ModifFoS, CATMmrTTRSValidity_InvalidComp, CATMmrTTRSValidity_Unresolved.
+     */
+    virtual CATMmrTTRSValidityState GetValidityState () = 0;
+
+    /**
+     * @nodoc
+     * Method to be transfered on CATITTRSAdvanced
+     * Returns the value of the FeatureOfSize parameter (container / contents, etc).
+     * The value used at first by tolerancing applications can be shared with others.
+     */
+    virtual int GetFeatureOfSize () const = 0;
+
+    /**
+     * @nodoc
+     * Method to be transfered on CATITTRSAdvanced
+     * Sets the value of the FeatureOfSize parameter.
+     * @param iFOS
+     * The value of the FeatureOfSize parameter.
+     */
+    virtual HRESULT SetFeatureOfSize (int iFOS) = 0;
+
+    /**
+     * Gets the MRGE ( &lt;b&gt;M&lt;/b&gt;inimum &lt;b&gt;R&lt;/b&gt;epresentation &lt;b&gt;G&lt;/b&gt;eometrical &lt;b&gt;E&lt;/b&gt;lement ) of the TTRS.
+     * @param oMrge
+     * The MRGE of the TTRS.
+     */
+    virtual HRESULT GetMRGE (CATMathRGE*&amp; oMrge) const = 0;
+
+    /**
+     * @nodoc
+     * Gets the geometry path id of the TTRS.
+     * @param oListPathGeomId
+     * The list of CATListOfInt.
+     */
+    virtual HRESULT GetGeomPathId ( CATListPV* oListPathGeomId ) const = 0;
+
+};
+CATDeclareHandler(CATITTRS, CATBaseUnknown);
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIRGETopology.html">← 上一页: CATIRGETopology.h</a></div>
+        <div><a href="CATITTRSAdvanced.html">下一页: CATITTRSAdvanced.h →</a></div>
+    </div>
+</body>
+</html>

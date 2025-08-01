@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIOffset.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIOffset.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATINewHole.html">← 上一页: CATINewHole.h</a></div>
+        <div><a href="CATIPad.html">下一页: CATIPad.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIOffset_H
+#define CATIOffset_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATIShape.h&gt;
+#include &lt;CATPrtEnum.h&gt;
+
+class CATISpecObject_var;
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIOffset;
+#else
+extern &quot;C&quot; const IID IID_CATIOffset;
+#endif
+
+/**
+ * Interface to represent the offset feature.
+ * &lt;b&gt;Role&lt;/b&gt;: The offset feature allows users to create a thick surface 
+ * above a surfacic feature.
+ * The result of the operation is a mechanical feature.
+ */
+class  ExportedByPartItf CATIOffset : public CATIShape
+{
+  CATDeclareInterface;
+
+
+  public:
+
+/**
+ * Modifies the distance between the top skin of the offset feature
+ * and the surfacic feature.
+ * @param iTopOffset
+ *	The distance between the surfacic feature and the top 
+ *	skin of the offset feature.
+ */		
+	virtual void ModifyTopOffset(double iTopOffset) = 0;
+
+	
+/**
+ * Modifies the distance between the bottom skin of the offset feature
+ * and the surfacic feature.
+ * @param iBotOffset
+ *	The distance between the surfacic feature and the bottom 
+ *	skin of the offset feature.
+ */		
+  virtual void ModifyBotOffset(double iBotOffset) = 0;
+
+
+/**
+ * Returns the distance between the top skin of the offset feature 
+ * and the surfacic feature.
+ * @return the top skin distance
+ */			
+  virtual double GetTopOffset()  = 0;
+
+
+/**
+ * Returns the distance between the bottom skin of the offset feature 
+ * and the surfacic feature.
+ * @return the bottom skin distance
+ */   
+  virtual double GetBotOffset()  = 0;
+
+
+/**
+ * Retrieves the surfacic feature to be offseted.
+ * @return the surfacic feature
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;CATISpecObject_var&lt;/tt&gt; if 
+ * the surfacic feature exists
+ * or
+ * &lt;tt&gt;NULL_var&lt;/tt&gt; if it does not.
+ */
+  virtual CATISpecObject_var GetSurfaceOffset()  =0;
+
+
+/**
+ * Sets or swaps the surfacic feature to be offseted.
+ * @param ihSurface
+ *	The surfacic feature to be offseted.
+ */
+  virtual void SwapSurface (const CATISpecObject_var ihSurface) = 0;
+
+
+/**
+ * Retrieves the offset orientation value of the offset feature.
+ * @return the offset orientation value
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: if it equals &lt;tt&gt;NormalSide&lt;/tt&gt; (=0) then
+ * the offset direction is the same as the normal vector of the surfacic
+ * feature.
+ * If it equals &lt;tt&gt;InverseNormalSide&lt;/tt&gt; (=1) then the offset direction is
+ * the opposite of the normal vector of the surfacic feature.
+ */
+	virtual int GetIsensOffset()  = 0;
+
+/**
+ * Invert the offset orientation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: if it equals &lt;tt&gt;NormalSide&lt;/tt&gt; (=0) then
+ * the offset direction becomes &lt;tt&gt;InverseNormalSide&lt;/tt&gt;.
+ * If it equals &lt;tt&gt;InverseNormalSide&lt;/tt&gt; (=1) then the offset direction 
+ * becomes &lt;tt&gt;InverseNormalSide&lt;/tt&gt;.
+ */
+  virtual void ReverseOffdir()  = 0;
+
+
+  /** @nodoc */
+  //virtual void UpdateDim() = 0;
+
+
+	/** @nodoc */
+  virtual CATICkeParm_var GetBotOffsetParm()= 0;
+
+
+	/** @nodoc */
+  virtual CATICkeParm_var GetTopOffsetParm()= 0;
+
+/** @nodoc */ 
+  virtual HRESULT GetSmoothingMode(int  &amp;oMode) = 0;
+
+/** @nodoc */ 
+  virtual HRESULT SetSmoothingMode(const int iMode) = 0;
+
+/** @nodoc */ 
+  virtual HRESULT GetConstantThicknessMode(int &amp;oMode) = 0;
+
+/** @nodoc */ 
+  virtual HRESULT SetConstantThicknessMode(const int iMode) = 0;
+
+/** @nodoc */ 
+  virtual HRESULT GetMaxDeviation(CATICkeParm_var&amp; ohMaxDeviation) = 0;
+
+/** @nodoc */ 
+  virtual HRESULT GetMaxDeviation(double &amp; oMaxDeviation) = 0;
+
+/** @nodoc */  
+  virtual HRESULT SetMaxDeviation(const double iMaxDeviation) = 0;  
+
+/**
+@nodoc
+  * Gets the Thick Surface Tangency Continuity Mode.
+  * @param oMode    
+  *&lt;br&gt;- 0 - Tangency Continuity Mode Enabled       
+  *&lt;br&gt;- 1 - Tangency Continuity Mode Disabled
+  */
+
+  virtual HRESULT GetTangencyContinuityMode(int &amp;oMode) = 0;
+
+/**
+@nodoc
+ * Sets the Thick Surface Tangency Continuity Mode.
+  * @param iMode    
+  *&lt;br&gt;- 0 - Tangency Continuity Mode Enabled       
+  *&lt;br&gt;- 1 - Tangency Continuity Mode Disabled
+  */
+  virtual HRESULT SetTangencyContinuityMode(const int iMode) = 0;
+
+  /** 
+  * Sets the regularization type
+  *   @param oRegul
+  *      CATPrtRegularization_Undefined if the regularization is not defined
+  *	   CATPrtRegularization_Local if the regularization is local
+  *	   CATPrtRegularization_Global if the regularization is global
+  */
+  virtual HRESULT SetRegularizationType(const CATPrtOffsetRegularisationType &amp;iRegul) = 0;
+
+  /** 
+  * Gets the regularization type
+  *   @param oRegul
+  *      CATPrtRegularization_Undefined if the regularization is not defined
+  *	   CATPrtRegularization_Local if the regularization is local
+  *	   CATPrtRegularization_Global if the regularization is global
+  */
+  virtual HRESULT GetRegularizationType(CATPrtOffsetRegularisationType &amp;oRegul) = 0;
+};
+CATDeclareHandler (CATIOffset, CATIShape);
+
+#endif // CATIOffset_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATINewHole.html">← 上一页: CATINewHole.h</a></div>
+        <div><a href="CATIPad.html">下一页: CATIPad.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalCommands/PublicInterfaces/CATIUdfFeatureInstance.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalCommands/PublicInterfaces/CATIUdfFeatureInstance.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeature.html">← 上一页: CATIUdfFeature.h</a></div>
+        <div><a href="CATIUdfFeatureSet.html">下一页: CATIUdfFeatureSet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIUdfFeatureInstance_H
+#define CATIUdfFeatureInstance_H
+//
+// Copyright Dassault Systemes 1999
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATUdfInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+
+class CATUnicodeString;
+class CATPathElement;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATUdfInterfaces IID IID_CATIUdfFeatureInstance ;
+#else
+extern &quot;C&quot; const IID IID_CATIUdfFeatureInstance ;
+#endif
+
+//------------------------------------------------------------------
+/**
+  * Interface to edit a User Feature instance. 
+  * &lt;b&gt;Role:&lt;/b&gt; This interface is implemented on a User Feature to modify it. 
+  * You can change its inputs or/and modify the value of its published parameters.
+  * &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;Before any calls, you must call @href #Init, and the last call must be  @href #Reset.  
+  * @see CATIUdfFactory
+  */
+class ExportedByCATUdfInterfaces CATIUdfFeatureInstance: public CATBaseUnknown
+{
+   CATDeclareInterface;
+public:
+   
+   /**
+     * Initializes the modification transaction.
+	 * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+     * Need to be called before all other services in one transaction.
+     * At the end of the transaction, call @href #Reset to clean internal data.
+     */
+   virtual HRESULT Init () = 0;
+
+   /**
+     * Retrieves the input count.
+     * @param oInputCount
+     *   Count of inputs. 
+     *   &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;This value is the same for all instances, it is independant of
+     *   the current instance. 
+     */
+   virtual HRESULT GetInputsNumber (int&amp; oInputCount) = 0;
+
+   /**
+     * Retrieves the role of one input.
+     * @param iPos
+     *   Input position, from 1 to @href #GetInputsNumber 
+     * @param oRole
+     *   The role of the iPos input.
+     *   &lt;br&gt;The role of an input, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box.
+     *   &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;The iPos role is the same for all instances, it is independant of
+     *   the current instance.
+     */
+   virtual HRESULT GetInputRole (const int iPos,
+                                 CATUnicodeString &amp; oRole) = 0;
+
+   /**
+     * Retrieves one input.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns an input from its role. You can consult the returned input,
+     * but don&#x27;t try to modify it. Use the @href #SetNewInput method to change it.
+     * @param iRole
+     *   The role of the input.
+     *   &lt;br&gt;The role of an input, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box.
+     * @param oInput
+     *   The input. 
+    */
+   virtual HRESULT GetInput (const CATUnicodeString&amp; iRole,
+                             CATBaseUnknown_var&amp; oInput) = 0;
+
+   /**
+     * Retrieves one input.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the iPos input. You can consult the returned input,
+     * but don&#x27;t try to modify it. Use the @href #SetNewInput method to change it.
+     * @param iPos
+     *   Input position, from 1 to @href #GetInputsNumber 
+     * @param oInput
+     *   The iPos input. 
+    */
+   virtual HRESULT GetInput (const int iPos,
+                             CATBaseUnknown_var&amp; oInput) = 0;
+
+
+   /**
+     * Retrieves the source input.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;If the input is an external reference, it returns the reference of this external reference.
+     * Otherwise it returns the input. See @href #GetInput.
+     * @param iRole
+     *   The role of the input.
+     *   &lt;br&gt;The role of an input, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box.
+     * @param oSourceInput
+     *   The source input. 
+     *   @return 
+     *   &lt;b&gt;Legal values:&lt;/b&gt;&lt;br&gt;
+     *   &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;The source input is retrieved.&lt;/dd&gt;
+     *   &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;The source input is not retrieved, for instance because the reference 
+     *   of the external reference is not loaded.&lt;/dd&gt;&lt;/dl&gt;
+    */
+   virtual HRESULT GetSourceInput(const CATUnicodeString&amp; iRole,
+                                  CATBaseUnknown_var&amp; oSourceInput) = 0;
+
+   /**
+     * Filters the selection.
+     * @param iRole
+     *   The role of the input.
+     *   &lt;br&gt;The role of an input, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box.
+     * @param iSelection
+     *   A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the new object, this path must contains the full selection
+     *   path for a valid import mechanism in multidocument context.
+     * @param oFilteredSelection
+     *   A subpath of iSelection
+    */
+   virtual HRESULT FilterInput(const CATUnicodeString&amp; iRole,
+                               CATPathElement* iSelection, 
+                               CATPathElement** oFilteredSelection) = 0;
+
+
+   /**
+     * Filters the selection.
+     * @param iPos
+     *   Input position, from 1 to @href #GetInputsNumber 
+     * @param iSelection
+     *   A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the new object, this path must contains the full selection
+     *   path for a valid import mechanism in multidocument context.
+     * @param oFilteredSelection
+     *   A subpath of iSelection
+    */
+   virtual HRESULT FilterInput(const int iPos,
+                               CATPathElement* iSelection, 
+                               CATPathElement** oFilteredSelection) = 0;
+
+   /**
+     * Changes one input.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method replaces the iPos input by the new one.
+     * @param iPos
+     *   Input position, from 1 to @href #GetInputsNumber 
+     * @param iSelection
+     *   A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the new object, this path must contains the full selection
+     *   path for a valid import mechanism in multidocument context.
+    */
+   virtual HRESULT SetNewInput (const int iPos,
+                                CATPathElement* iSelection) = 0;
+
+   /**
+     * Changes one input.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method replaces the input whose role is iRole by the new one.
+     * @param iRole
+     *   The role of the input.
+     *   &lt;br&gt;The role of an input, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box.
+     * @param iSelection
+     *   A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the new object, this path must contains the full selection
+     *   path for a valid import mechanism in multidocument context.
+    */
+   virtual HRESULT SetNewInput (const CATUnicodeString&amp; iRole,
+                                CATPathElement* iSelection) = 0;
+
+
+   /**
+     * Retrieves a published parameter from its role.
+     * @param iRole
+     *   The role of the parameter you want to retrieve.
+     *   &lt;br&gt;The role of a parameter, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box and it is the string in the specifications tree under
+     *   the User Feature instance or reference.   
+     * @param oParam
+     *   A published parameter.
+	 *   &lt;br&gt;Use the &lt;tt&gt;CATICkeParm&lt;/tt&gt; to modify it.
+     */
+   virtual HRESULT GetParameter(const CATUnicodeString&amp; iRole,
+                                CATBaseUnknown_var&amp; oParam) = 0;
+
+
+   /**
+     * Retrieves all published parameters.
+     * @param oParametersList
+     *   liste of published parameters. 
+     *   &lt;br&gt;Use the &lt;tt&gt;CATICkeParm&lt;/tt&gt; to modify them.
+     */
+   virtual HRESULT GetParameters (CATListValCATBaseUnknown_var*&amp; oParametersList) = 0;
+
+   /**
+     * Retrieves the role of a published parameter.
+     * @param iParam
+     *   A published parameter which must be one of the list given by @href #GetParameters
+     * @param oRole
+     *   The role of the iParam parameter.
+     *   &lt;br&gt;The role of a parameter, is the NLS String which appears in the instantiate 
+     *   or in the edit dialog box and it is the string in the specifications tree under
+     *   the User Feature instance or reference.   
+     *   &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;Roles are independant of the current instance.
+     */
+   virtual HRESULT GetParameterRole (const CATBaseUnknown_var&amp; iParam,
+                                     CATUnicodeString &amp; oRole) = 0;
+
+   /**
+     * Retrieves the output count.
+     * @param oOutputCount
+     *   Count of outputs. 
+     *   &lt;br&gt;&lt;b&gt;Note:&lt;/b&gt;This value is the same for all instances, it is independant of
+     *   the current instance. 
+     */
+   virtual HRESULT GetOutputsNumber (int&amp; oOutputCount) = 0;
+
+   /**
+     * Retrieves one output.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns an output from its role. 
+     * @param iRole
+     *   The role of the output.
+     *   &lt;br&gt;The role of an output is the Name of the ouput which appears in the tree
+     * @param oInput
+     *   The input. 
+    */
+   virtual HRESULT GetOutput (const CATUnicodeString&amp; iRole,
+                              CATBaseUnknown_var&amp; oInput) = 0;
+
+   /**
+     * Retrieves one output.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the iPos output. 
+     * @param iPos
+     *   Input position, from 1 to @href #GetOutputsNumber 
+     * @param oOutput
+     *   The iPos output. 
+    */
+   virtual HRESULT GetOutput (const int iPos,
+                              CATBaseUnknown_var&amp; oOutput) = 0;
+   /**
+     * @nodoc 
+     * Reads all external links.
+     * @param oExternalLinks
+     *   liste of CATIExternalLink.
+     */
+   virtual HRESULT GetExternalLinks (CATListValCATBaseUnknown_var*&amp; oExternalLinks) = 0;
+
+   /**
+     * Ends the modification transaction.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;: Need to be called at the end of a modification transaction  to
+     * clean all internal data. At the  beginning of the transation, you have call the @href #Init method.
+     */
+   virtual HRESULT Reset () = 0;
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler (CATIUdfFeatureInstance, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeature.html">← 上一页: CATIUdfFeature.h</a></div>
+        <div><a href="CATIUdfFeatureSet.html">下一页: CATIUdfFeatureSet.h →</a></div>
+    </div>
+</body>
+</html>

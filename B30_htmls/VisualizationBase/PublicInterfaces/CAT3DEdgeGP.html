@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DEdgeGP.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DEdgeGP.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DCylinderGP.html">← 上一页: CAT3DCylinderGP.h</a></div>
+        <div><a href="CAT3DFaceGP.html">下一页: CAT3DFaceGP.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DEdgeGP_H
+#define CAT3DEdgeGP_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//******************************************************************************
+//  Abstract:
+//  ---------
+//    Representation of an edge on an element, generally an exact solid.
+//    The edge shares the data of the two faces it belongs to (in fact, only
+//    the vertices of the first face are being used).
+//    The adresses of the faces are stored to complete the topological informa-
+//    tion on the element. Beware of any modification in the architecture.
+//    It is designed to be used by the CATSurfacicRep.
+//
+//    The edge is a 3d polyline, with chained vertices references.
+//
+//******************************************************************************
+//  Usage:   
+//  ------
+//    Needed building information:
+//      - Faces adresses (CAT3DBoundingGP children),
+//      - Indices making the edge (use 0 3 6... not vertices numbers).
+//    The reference of the vertices array is being stored at the creation, using
+//    the tessellation Get method provided on the CAT3DBoundingGP.
+//
+//******************************************************************************
+//  Inheritance:
+//  ------------
+//                CAT3DEdgeGP
+//                  CATGraphicPrimitive
+//                    CATBaseUnknown (SYSTEM framework)
+//
+//******************************************************************************
+//
+//  Main Methods:
+//  -------------
+//    Construction,
+//    Get,
+//    Draw.
+//    DrawM.
+//
+//******************************************************************************
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATGraphicPrimitive.h&quot;
+#include &quot;CAT3DBoundingGP.h&quot;
+#include &quot;CATSupport.h&quot;
+#include &quot;CATVizMacForMetaClass.h&quot;
+
+
+class CATStreamer;
+class CATViz3DEdge;
+
+/**
+ * Class to create the graphic primitive of a 3D edge.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ *    Representation of an edge on an element, generally an exact solid.
+ *    The edge shares the data of the two faces it belongs to (in fact, only
+ *    the vertices of the first face are being used).
+ *    The adresses of the faces are stored to complete the topological informa-
+ *    tion on the element.
+ *    It is designed to be used by the CATSurfacicRep.
+ *    The edge is a 3d polyline, with chained vertices references.
+ */
+class ExportedByCATViz CAT3DEdgeGP : public CATGraphicPrimitive
+{
+  
+  // Marshalling information:
+  // ------------------------
+  
+  friend class CATMarshallable3DEdgeGP;
+  friend class CATDmuStreamSurfacicRep;
+  friend class CATXMLStreamSurfacicRep;
+  friend class CATSurfacicRep;
+  CATDeclareClass;
+  CATVizDeclareClass;
+  
+  
+  public:
+    
+    // Building:
+    // ---------
+    //   Vertex information is shared on the FIRST face of the building method.
+    //   The second face information can be set to NULL if it doesn&#x27;t exist.
+
+  /**
+   * Default constructor.
+   */
+    CAT3DEdgeGP (void);
+
+  /**
+   * Constructs a 3D edge graphic primitive from the two faces it belongs to,
+   * its vertices indices and their number.
+   * @param iFace1
+   *    The first face the edge belongs to. This face shares vertices
+   *    informations with the edge.
+   * @param iFace2
+   *    The second face the edge belongs to. This face can be set to NULL if
+   *    doesn&#x27;t exist.
+   * @param iVerticesIndices
+   *    Edge vertices indices array, taken from the first face. This means that these
+   *    indices allow to access vertices coordinates only through first face data.
+   * @param iNbVertices
+   *    The number of vertices in the edge.
+   */
+    CAT3DEdgeGP (CAT3DBoundingGP *iFace1,CAT3DBoundingGP *iFace2,
+		 int *iVerticesIndices,int iNbVertices);
+    
+    
+  
+  /**
+   * @nodoc
+   * Streaming
+   */
+  virtual void Stream(CATStreamer&amp; oStr,int iSaveType=0);
+
+  /**
+   * @nodoc
+   * Streaming
+   */
+  virtual void UnStream(CATStreamer&amp; iStr);
+
+ /**
+   * @nodoc
+   * Skips the unstreaming of a 3D Edge.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;: This method can be used when you do not want
+   * to unstream an edge. It is used like this :&lt;br&gt;
+   * CAT3DEdgeGP::Skip(str);
+   * @param iStr
+   *   The streamer used to unstream the 3D edges.
+   */
+  static void Skip(CATStreamer &amp; iStr);
+
+  /**
+   * Retrieves edge&#x27;s vertices and faces informations.&lt;br&gt;
+   * &lt;b&gt;Role&lt;/b&gt;: As this method is designed to return values on its
+   * parameters, it has to be called like this :&lt;br&gt;
+   * &lt;tt&gt;&lt;pre&gt;
+   * CAT3DBoundingGP * fref1, *fref2;
+   * float * verticesFref1;
+   * ...
+   * Get(&amp;fref1, &amp;fref2, &amp;verticesFref1, ...);
+   * &lt;/pre&gt;&lt;/tt&gt;&lt;br&gt;
+   * @param oFref1
+   *    Retrieves a pointer to the edge first face.
+   * @param oFref2
+   *    Retrieves a pointer to the edge second face.
+   * @param oVerticesFref1
+   *    Retrieves the first face vertices coordinates array: XYZXYZXYZ...
+   *    The edge vertices can be retrieved from this array thanks to their
+   *    indices stored in *oIndices.
+   * @param oIndices
+   *    Retrieves the array of edge vertices indices. These indices allow the
+   *    the access to vertices coordinates thanks to the *oVerticesFref1 array.
+   *    For example, to get the edge first vertex coordinates, one must use
+   *    the *oVerticesFref1 array combined with the *oIndices array, like this :
+   *    v0.x = (*oVerticesFref1)[(*oIndices)[0]], v0.y = (*oVerticesFref1)[(*oIndices)[0]+1], v0.z = (*oVerticesFref1)[(*oIndices)[0]+2].
+   * @param oIndicesSize
+   *    Retrieves the oIndices array size.
+   */
+    void Get (CAT3DBoundingGP **oFref1,CAT3DBoundingGP **oFref2,
+	           float **oVerticesFref1,int **oIndices,int *oIndicesSize);
+
+  /**
+   * @nodoc
+   */
+    void Get (CAT3DBoundingGP **oFref1,CAT3DBoundingGP **oFref2,
+	           float **oVertexFref1,int **oIndices,int *oIndexSize,
+              void **oRenderData);
+    
+  /**
+   * Gets the edge vertices number. 
+   */
+    int  GetSize (void);    
+
+  /**
+   * Draws the 3D edge.
+   * @param iRender
+   *   The render through which the edge is drawn.
+   */
+    virtual void Draw (CATRender &amp; iRender);
+
+  /**
+   * @nodoc
+   */
+    virtual void DrawM (CATRender &amp;, CAT3DEdgeGP** geomL, int n, int m);
+
+  /**
+   * @nodoc
+   */
+    void Empty();
+
+  /**
+   * @nodoc
+   */
+  virtual int DetailCulling(CATRender *render);
+
+#ifdef _SUNOS_SOURCE
+  /**
+   * @nodoc
+   */
+  inline void SetRenderData (void *renderData);
+
+  /**
+   * @nodoc
+   */
+  inline void* GetRenderData (void);
+#endif
+
+  /**
+   * @nodoc
+   */
+  virtual CATVizPrimitive * GetVizPrimitive(int &amp;oAllocateMode);
+
+  /**
+   * @nodoc
+   */
+  virtual void SetVizPrimitive(CATVizPrimitive *iPrimitive, int iAllocateMode);
+
+  /**
+   * @nodoc
+   */
+  inline CATVizVertexBuffer * GetVertexBuffer();
+
+  /**
+   * @nodoc
+   */
+    inline void GetBoundingGPs(CAT3DBoundingGP **oFref1,CAT3DBoundingGP **oFref2);
+
+  /**
+   * @nodoc
+   */
+    inline void SetStorageID(unsigned int iStorageID);
+
+  /**
+   * @nodoc
+   */
+    inline unsigned int GetStorageID();
+
+	/**
+   * @nodoc
+   */
+    inline unsigned int StorageIDisValid() const;
+
+
+  /**
+   * @nodoc
+   */
+	virtual HRESULT GetCrvParams(float **oCrvParams);
+
+  /**
+   * @nodoc
+   */
+   virtual HRESULT GetTangents(float **tangents);
+
+  /**
+   * @nodoc
+   */
+   virtual HRESULT SetTangents(float *tangents, int copy);
+
+  protected:
+    
+    // Destruction:
+    // ------------
+    
+    virtual ~CAT3DEdgeGP (void);
+    
+  /**
+  * @nodoc
+  */
+  virtual void ResetStorage();
+    
+    // Face information:
+    // -----------------
+    
+    CAT3DBoundingGP *_fref1,*_fref2;
+    CATViz3DEdge    * _vizEdge;
+
+  unsigned int _StorageID;
+  
+#ifdef _SUNOS_SOURCE
+    void *_SUNrenderData;
+#endif
+};
+
+
+
+
+//******************************************************************************
+//*** INLINED FUNCTIONS: *******************************************************
+//******************************************************************************
+
+
+#ifdef _SUNOS_SOURCE
+inline void CAT3DEdgeGP::SetRenderData (void *renderData)
+{
+  _SUNrenderData = renderData;
+}
+
+inline void* CAT3DEdgeGP::GetRenderData (void)
+{
+  return(_SUNrenderData);
+}
+#endif
+
+inline CATVizVertexBuffer * CAT3DEdgeGP::GetVertexBuffer()
+{
+   if(_fref1)
+   {
+      return _fref1-&gt;GetVertexBuffer();
+   }
+   else
+   {
+      return NULL;
+   }
+}
+
+inline void CAT3DEdgeGP::GetBoundingGPs(CAT3DBoundingGP **oFref1,CAT3DBoundingGP **oFref2)
+{
+   *oFref1 = _fref1;
+   *oFref2 = _fref2;
+}
+
+inline void CAT3DEdgeGP::SetStorageID(unsigned int iStorageID)
+{
+ 
+}
+
+inline unsigned int CAT3DEdgeGP::GetStorageID() 
+{
+  return 0;
+}
+
+inline unsigned int CAT3DEdgeGP::StorageIDisValid() const
+{
+    return 0;
+  
+}
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DCylinderGP.html">← 上一页: CAT3DCylinderGP.h</a></div>
+        <div><a href="CAT3DFaceGP.html">下一页: CAT3DFaceGP.h →</a></div>
+    </div>
+</body>
+</html>

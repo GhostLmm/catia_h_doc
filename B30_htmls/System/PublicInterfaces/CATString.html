@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATString.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATString.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATStdLib.html">← 上一页: CATStdLib.h</a></div>
+        <div><a href="CATSysAllocator.html">下一页: CATSysAllocator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATString_H
+#define CATString_H
+#ifdef _WINDOWS_SOURCE 
+#ifdef __JS0STR
+/** @nodoc */
+#define ExportedByJS0STR  __declspec(dllexport) 
+#else
+/** @nodoc */
+#define ExportedByJS0STR  __declspec(dllimport) 
+#endif
+#else
+/** @nodoc */
+#define ExportedByJS0STR
+#endif
+
+
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &lt;stdlib.h&gt;
+#ifdef _CAT_ANSI_STREAMS
+/** @c++ansi aew 2004-08-02.20:05:16 [Replace forward declaration of standard streams with iosfwd.h] **/
+ #include &quot;iosfwd.h&quot; 
+#else //!_CAT_ANSI_STREAMS 
+class istream;
+#endif //_CAT_ANSI_STREAMS
+#include &quot;CATChar.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATDataType.h&quot;
+
+typedef const char *CATClassId;        // For indentification ( classname )
+/** @nodoc */
+#if defined(PLATEFORME_DS64)
+#define STRINGSIZE  36
+#else
+#define STRINGSIZE  32
+#endif
+
+#if defined(_AIX_SOURCE) &amp;&amp; (__xlC__ &gt;= 0x0500)
+class CATString;
+/** @nodoc */
+extern ExportedByJS0STR HRESULT CATSysUTF8Str(CATString *iStr, char *iPtrToChar);
+#endif
+
+//-----------------------------------------------------------------------------------
+
+/**
+ * Class to use for non language meaningful character strings. 
+ * &lt;b&gt;Role&lt;/b&gt;: Class for ISO 646 string, i.e. codes from
+ * 0 to 127 in decimal:
+ * &lt;ul&gt;
+ * &lt;li&gt;C0 ASCII control codes (see the unicode standard
+ * documentation): 0 to 31 in decimal&lt;/li&gt;
+ * &lt;li&gt;ASCII (contains digit characters, latin capital
+ * letters, latin small letters, punctuation characters ...)&lt;/li&gt;  
+ * &lt;/ul&gt;
+ * ISO 646 has been specified by the International Organization for Standardization (http://www.iso.ch ).&lt;/br&gt;
+ * Thus, this class does not support NLS
+ * (National Langage Support), at the opposite of @href CATUnicodeString .
+ * Comparing this class to @href CATUnicodeString ,
+ * the very simple character set supported here, 
+ * once accepted the limitations it implies, enables to supress
+ * all the problems that arise with NLS complexity.
+ * Before using this class instead of @href CATUnicodeString,
+ * check carefully that you will never need the NLS
+ * support. 
+ * The raw type char* you should never be used.
+ */
+
+class ExportedByJS0STR  CATString
+{ 
+  
+public:
+
+/** 
+ * Strip mode.
+ * &lt;b&gt;Role&lt;/b&gt;: Stripping is the process consisting
+ * of removing a peculiar character occurences from a given
+ * string. Once the character specified , you can, as you want, 
+ * use one of the
+ * following options:
+ * @param CATStripModeLeading
+ *   Remove all the consecutive occurences of the  
+ *   character from the beginning of the string 
+ *   (of course it supposes that the first character of the 
+ *   string is the specified character, if it is not the case, 
+ *   nothing is done).
+ * @param CATStripModeTrailing
+ *   Remove all the consecutive occurences from the end
+ *   of the string (It means that the first 
+ *   character of the string is really the specified 
+ *   character).
+ * @param CATStripModeBoth
+ *   Remove all the consecutive occurences both from the 
+ *   beginning of the string and from the end (this option cumulates
+ *   the two preceeding options, it does not affects the 
+ *   intermediate consecutive occurences).
+ * @param CATStripModeAll
+ *   Removes all the occurences of the character
+ *   from the string. 
+ * &lt;p&gt;
+ * Warning : CATStripMode is also defined in CATInternalString.cpp
+ */
+  enum CATStripMode {CATStripModeLeading = 0x1, CATStripModeTrailing = 0x2,
+		     CATStripModeBoth = 0x3, CATStripModeAll=0x4}; // used by strip method
+
+/**
+ * Constructs a string object so that it represents an empty 
+ * character sequence.
+ */
+  CATString();        
+/*
+ * Copy constructor.
+ * @param iString
+ *   The string to copy
+ */
+  CATString(const CATString &amp;iString);         
+/**
+ * Construct a CATString from a C string .
+ * @param iString
+ *   The C string used for initialization
+ */  
+  CATString(char *iString);                                // Create a string from a char*
+/**
+ * Construct a CATString from a C string, with C++ protection
+ * from writing access from the called method to the
+ * calling service string.
+ * @param iString
+ *   The C string used for initialization
+ */ 
+  CATString(const char * const iString);                   //    &quot;&quot;      &quot;&quot;     &quot;&quot;     &quot;&quot;  
+/**   
+ * Construct a CATString from a CATChar, duplicating the
+ * character into the result string a specified amount
+ * of times.
+ * @param iChar
+ *   Character
+ * @param iRepeatCount
+ *   Repeat count
+ */ 
+  CATString(const CATChar iChar, size_t iRepeatCount);     
+/**   
+ * Construct a CATString from a CATString, duplicating the
+ * string into the result string a specified amount
+ * of times.
+ * @param iString
+ *   String
+ * @param iRepeatCount
+ *   Repeat count
+ */ 
+  CATString(const CATString&amp; iString, size_t iRepeatCount); 
+  
+/**
+ * Destructor.
+ */
+  ~CATString() ;         
+
+/**
+ * Assignment operator.
+ * @param iString
+ *   The string to assign to the current one
+ * @return 
+ *   The class resulting from the assignment
+ */  
+  CATString &amp;operator =(const char *iString) ;
+/**
+ * Assignment operator of a CATString to a CATString.
+ * @param iString
+ *   The string to assign to the current one
+ * @return 
+ *   The class resulting from the assignment
+ */
+  CATString &amp;operator =(const CATString &amp;iString) ;
+  
+/**
+ * String concatenation assignment operator.
+ * @param iString
+ *   The string to append to the current one
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += ( const CATString &amp; iString );
+/**
+ * C string concatenation assignment operator.
+ * @param iString
+ *   The String to append to the current one
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += ( const char *  iString );
+/**
+ * CATChar concatenation assignment operator.
+ * @param iChar
+ *   The character to append to the CATString
+ * @return 
+ *   The CATString resulting from the concatenation
+ */
+  CATString &amp; operator += ( const CATChar &amp; iChar );
+
+/**
+ * Concatenates CATString instances.
+ * The string passed as a parameter is appended to the current string.
+ * @param iStringToAppend
+ *	the string to append to the current string
+ * @return 
+ *	The CATString resulting from the concatenation
+ */
+
+  CATString &amp; Append( const CATString&amp; iStringToAppend );
+/**
+ * String concatenation operator.
+ * @param iString
+ *   The String to append to the current one
+ * @return 
+ *   The CATString resulting from the concatenation
+ */  
+  CATString operator + (const CATString &amp;iString) const ;
+/**
+ * C string concatenation operator.
+ * @param iString
+ *   The String to append to the current one
+ * @return 
+ *   The CATString resulting from the concatenation
+ */  
+  CATString operator + (const char *iString) const ;
+/** @nodoc */
+  friend ExportedByJS0STR CATString operator+(const char* iPtrOnCharToAdd, 
+					      const CATString&amp; iStringToAdd);
+
+/**
+ * Converts a CATString into a const char*.
+ * @return iString
+ *   const char* output string
+ */  
+  const char* ConvertToChar() const;
+
+/**
+ * @deprecated CXR25 ConvertToChar
+ * Converts a CATString into a const char*.
+ * Caution: the returned char* must be declared as a const.
+ * @return iString
+ *   const char* output string
+ */
+  char* const CastToCharPtr() const;
+
+/** @nodoc */
+  int         Init();
+
+  // --- Comparison : 
+/**
+ * Compares two strings lexicographically.
+ * The character sequence represented by the current String 
+ * is compared lexicographically to the character sequence 
+ * represented by the argument string. 
+ * @param iString
+ *   The String to be compared
+ * @return 
+ *   Comparison result.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;less than 0&lt;/tt&gt; 
+ *   if the value of the current object string is 
+ *   lexicographically less than iString, or 
+ *   &lt;tt&gt;greater than 0&lt;/tt&gt; if the value of the current object 
+ *   string is lexicographically greater than iString,
+ *   or &lt;tt&gt;equal to 0&lt;/tt&gt; if the value of the current object 
+ *   string is lexicographically equal than iString.
+ */
+
+  int Compare( const char *     iString ) const ;
+/**
+ * Compares two strings lexicographically.
+ * The character sequence represented by the current String 
+ * is compared lexicographically to the character sequence 
+ * represented by the argument string. 
+ * @param iString
+ *   The String to be compared
+ * @return 
+ *   Comparison result.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;less than 0&lt;/tt&gt; 
+ *   if the value of the current object string is 
+ *   lexicographically less than iString, or 
+ *   &lt;tt&gt;greater than 0&lt;/tt&gt; if the value of the current object 
+ *   string is lexicographically greater than iString,
+ *   or &lt;tt&gt;equal to 0&lt;/tt&gt; if the value of the current object 
+ *   string is lexicographically equal than iString.
+ */
+
+  int Compare( const CATString&amp; iString ) const ;
+  
+/**
+ * Equality operator.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator == ( const char *iString ) const ;
+/**
+ * Inequality operator.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator != ( const char *iString ) const ;
+
+/**
+ * Inferior comparison operator between a CATString and a char* .
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &lt;  ( const char *iString ) const ;
+/**
+ * &quot;Inferior or equal&quot; comparison operator between a CATString 
+ * and a char* .
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &lt;= ( const char *iString ) const ;
+/**
+ * &quot;Superior or equal&quot; comparison operator between a CATString 
+ * and a char* .
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &gt;= ( const char *iString ) const ;
+/**
+ * Superior comparison operator between a CATString and a char* .
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &gt;  ( const char *iString ) const ;
+/**
+ * Equality comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator == ( const CATString &amp;iString ) const ;
+/**
+ * Inequality comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator != ( const CATString &amp;iString ) const ;
+/** 
+ * Inequality comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &lt;  ( const CATString &amp;iString ) const ;
+/** 
+ * Less-than or equal comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &lt;= ( const CATString &amp;iString ) const ;
+/** 
+ * Greater-than or equal comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &gt;= ( const CATString &amp;iStringToCompare ) const ;
+/** 
+ * Greater-than comparison operator between two CATString.
+ * @param iString
+ *   Operand of the comparison
+ * @return 
+ *   Boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the condition is not fullfilled, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the condition is fullfilled.
+ */
+  int operator &gt;  ( const CATString &amp;iString ) const ;
+  
+/** 
+ * Get the length of the CATString, as char count.
+ * @return 
+ *   Char count.
+ */
+  int GetLengthInChar() const;
+/** 
+ * Get the length of the CATString, as byte count.
+ * @return 
+ *   Byte count.
+ */
+  int GetLengthInByte() const;
+/** 
+ * Indicates if the current CATString length is of zero value.
+ * @return 
+ *   boolean
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0: False&lt;/tt&gt; 
+ *   the length is not of zero value, or &lt;tt&gt;Other: True&lt;/tt&gt; 
+ *   if the length is of zero value.
+ */
+  int IsNull();
+  
+  
+  
+/**
+ * Set the length of a string to desired length, adding occurences
+ * of a given filling character to reach the desired length.
+ * If the required length is shorter that the preceeding
+ * one, the delivered filling character will not be used.
+ * @param iNewSize
+ *   The desired length
+ * @param iFillingChar
+ *   Filling character
+ * @param iTruncationAllowed
+ *   The truncation is allowed.
+ *   If the given value for iTruncationAllowed equals zero, and 
+ *   the required length is shorter than the preceeding one, 
+ *   nothing is done.
+ */
+  void Resize(int iNewSize, CATChar iFillingChar, int iTruncationAllowed);
+/**
+ * Set the length of a string to desired length, adding occurences
+ * of a given filling character to reach the desired length.
+ * If the required length is shorter that the preceeding
+ * one, the delivered filling character will not be used.
+ * Compared to the preceeding method, the truncation is considered
+ * to be allowed.
+ * @param iNewSize
+ *   The desired length
+ * @param iFillingChar
+ *   Filling character
+ */
+  inline void Resize(int iNewSize, CATChar iFillingChar )  
+    {
+      Resize(iNewSize, iFillingChar, 1);
+    }
+/**
+ * Put the length of a string to desired length, adding occurences
+ * of the space character as a filling character, to reach the 
+ * desired length.
+ * If the required length is shorter that the preceeding
+ * one, the delivered filling character will not be used.
+ * @param iNewSize
+ *   The desired length
+ */  
+  inline void Resize(int iNewSize)
+    {
+      Resize(iNewSize, &#x27; &#x27;, 1);
+    }
+  
+/**
+ * Converts all of the characters in this String to upper case. 
+ */   
+  void ToUpper() ;
+/**
+ * Converts all of the characters in this String to lower case.  
+ */  
+  void ToLower() ;
+  
+  
+/**
+ * Compare two CATStrings.
+ * @param iComparisonString
+ *   The string to compare to the current one
+ * @return 
+ *   Comparison result.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;tt&gt;0: Not equal&lt;/tt&gt; 
+ *   &lt;tt&gt;1: Strictly equal&lt;/tt&gt; 
+ *   &lt;tt&gt;2: Equal not speaking of the case. The comparison does 
+ *   not take the case into account&lt;/tt&gt;
+ */
+  
+  int CompareByCase(const CATString &amp;iComparisonString) const ;
+/**
+ * Determines the location and existence of strings in the
+ * current CATString.
+ * @param iLookedForSubString
+ *   The string to look for
+ * @param iSearchBeginning
+ *   The search beginning index
+ * @return 
+ *   Location of the substring.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;tt&gt;-1: Not found&lt;/tt&gt; 
+ *   &lt;tt&gt;Other: Location index, from 0 to the current CATString
+ *   length minus 1&lt;/tt&gt; 
+ */
+  int FindPosition(const CATString &amp;iLookedForSubString, 
+                   int iSearchBeginning = 0) const ;
+/**
+ * Modify the current CATString, supressing a given part of it
+ * and putting instead a given replacement substring.
+ * @param iModificationStartingPosition
+ *   The modification starting position
+ * @param iModificationCharCount
+ *   The modification char count
+ * @param iReplacementString
+ *   The replacement string
+ */  
+  
+  void ReplaceSubString(int iModificationStartingPosition, 
+            int iModificationCharCount, 
+            const CATString &amp;iReplacementString);
+/**
+ * Modify the current CATString, supressing a given part of it
+ * and putting instead a given replacement substring.
+ * @param iModificationStartingPosition
+ *   The modification starting position
+ * @param iModificationCharCount
+ *   The modification char count
+ * @param iReplacementString
+ *   The replacement string
+ * @param iReplacementStringParametering
+ *   The replacement string parametering.
+ *   Enables to specify not to take the replacement string as is, 
+ *   but transformed first by a resizing action. 
+ *   This tuning specification is the character count of the
+ *   real CATString that will be used for the substitution, 
+ *   i.e. the CATString resized through the space filling
+ *   character. 
+ */  
+  void ReplaceSubString(int iModificationStartingPosition, 
+            int iModificationCharCount, 
+			const CATString &amp;iReplacementString, 
+            int iReplacementStringParametering) ;
+/**
+ * Replace the first occurence of the given substring by the
+ * other given substring.
+ * @param iLookedForString
+ *   The substring whose first occurence must be replaced
+ * @param iSubstitutionString
+ *   The string to substitute to the previous one
+ * @return 
+ *   Location of the input substring occurence.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;tt&gt;-1: Not found&lt;/tt&gt; 
+ *   &lt;tt&gt;Other: Location index, from 0 to the current CATString
+ *   length minus 1&lt;/tt&gt; 
+ */  
+  int  ReplaceSubString(const CATString &amp;iLookedForString, 
+            const CATString &amp;iSubstitutionString);
+/**
+ * Modify the current CATString, supressing a given part of it.
+ * @param iModificationStartingPosition
+ *   The modification starting position
+ * @param iModificationCharCount
+ *   The modification char count
+ */    
+  void Remove(int iModificationStartingPosition,
+              int iModificationCharCount=1) ;
+  
+  
+/**
+ * Modify the current CATString, inserting a given substring
+ * at the middle of it.
+ * @param iInsertionStartingPosition
+ *   The insertion starting position
+ * @param iStringToInsert
+ *   The string to insert into the current CATString
+ */   
+  void Insert(int iInsertionStartingPosition,
+              const CATString &amp;iStringToInsert) ;
+  
+
+/**
+ * Returns a hashcode for this string.
+ * This hashcoding encoding does work only if the 8 first
+ * characters (from 0 to 7) of the related CATString
+ * objects are different the one from the other.
+ * @return 
+ *   The hashcoding key.
+ */ 
+  unsigned ComputeHashKey() const ;	
+  
+  
+
+/** 
+ * Strips the current CATString.
+ * &lt;b&gt;Role&lt;/b&gt;: Removes a peculiar character occurences from a 
+ * given string.
+ * @param iMode
+ *   Option parameterizing the action.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;tt&gt;CATStripModeLeading&lt;/tt&gt; Removes all the consecutive 
+ *   occurences of the given character from the beginning of the 
+ *   given string (of course it supposes that the first character 
+ *   of the string is the delivered character, if it is not the 
+ *   case, nothing is done).
+ *   &lt;tt&gt;CATStripModeTrailing&lt;/tt&gt; Removes all the consecutive 
+ *   occurences of the given character from the end of the string 
+ *   (the same way, it means that the first character of the 
+ *   delivered string is really the delivered character).
+ *   &lt;tt&gt;CATStripModeBoth&lt;/tt&gt; Removes all the consecutive 
+ *   occurences of the given character both from the beginning 
+ *   of the string and from the end (this option cumulates the 
+ *   two preceeding options, it does not affects the intermediate 
+ *   consecutive occurences).
+ *   &lt;tt&gt;CATStripModeAll&lt;/tt&gt; Removes all the occurences of the 
+ *   given character from the string. 
+ * &lt;p&gt;
+ * @param iCharacter
+ *   The peculiar character whose occurences are to be removed
+ *   from the current CATString.
+ */
+  CATString Strip(CATString::CATStripMode iMode , 
+                  CATChar iCharacter) const;
+/** 
+ * Strips the current CATString through the space character.
+ * &lt;b&gt;Role&lt;/b&gt;: Removes the space character occurences from a 
+ * given string. 
+ * @param iMode
+ *   See above
+ */
+
+  inline CATString Strip(CATString::CATStripMode iMode) const
+    {
+      return Strip(iMode, &#x27; &#x27;);  
+    }
+/** 
+ * Strips the current CATString through the space character,
+ * using the CATStripModeLeading mode (see above).
+ */  
+  inline CATString Strip() const
+    {
+      return Strip(CATStripModeLeading, &#x27; &#x27;);  // To build on HP
+    }
+/**
+ * Returns a new string that is a substring of this string.
+ * @param iSubStringFirstIndex
+ *   The string to extract first index 
+ * @param iSubStringCharCount
+ *   The string to extract char count
+ * @return 
+ *   Extracted substring.
+ */  
+
+  CATString SubString ( size_t  iSubStringFirstIndex, 
+                        size_t  iSubStringCharCount ) const ;
+  
+  
+  
+  // --- streams operations. No time to document it now
+/** @nodoc */
+  istream&amp; ReadLine( istream&amp; iStreamToRead, int skipWhite = 1);
+  
+  // ------------------------
+  // TEMPOCATSTRING methods :
+  // ------------------------
+/** @nodoc */
+  char* getUnicodeString() const ;
+/** @nodoc */
+  char* getMBCSString()    const ;
+/** @nodoc */
+  int compare( const char *     x ) const ;
+/** @nodoc */
+  int compare( const CATString&amp; x ) const ;
+/** @nodoc */
+  int length() const ;
+/** @nodoc */
+  int Length() const ;
+  
+  // --- Remplissage de la chaine
+/** @nodoc */
+  void pad(int size, char padChar = &#x27; &#x27;, int trunc = 0) ;
+  
+  // --- Convertion majuscule &lt;-&gt; minuscule
+/** @nodoc */
+  void toUpper() ;
+/** @nodoc */
+  void toLower() ;
+  
+  // --- Recherche de sous chaine de caracteres
+/** @nodoc */
+  int equal(const CATString &amp;x) const ;
+/** @nodoc */
+  int index(const CATString &amp;oldS, int pos = 0) const ;
+  
+  // --- Remplacement d&#x27;une sous-chaine de caracteres par une autre
+/** @nodoc */
+  void replace(int pos, int del, const CATString &amp;newS) ;
+/** @nodoc */
+  int  replace(const CATString &amp;oldS,const CATString &amp;newS) ;
+  
+  // --- Suppression d&#x27;une sous-chaine de caracteres
+/** @nodoc */
+  void remove(int pos,int len=1) ;
+  
+  // --- Insertion d&#x27;une sous-chaine de caracteres
+/** @nodoc */
+  void insert(int pos,const CATString &amp;newS) ;
+  
+  // --- Calcul d&#x27;une cle pour du HashCoding
+/** @nodoc */
+  unsigned hash() const ;	// lby : This method will be suppressed : Don&#x27;t use it
+  
+//  Deprecated since the implicit use of the cast is too dangerous
+//  (very often the users don&#x27;t know how to use it)
+/** @nodoc */  
+  operator  const char * () const ;
+/**
+ * Returns the character at the specified index.
+ * Doesn&#x27;t make any bound checking.
+ * @param iIndex
+ *   The index of the character
+ * @return 
+ *   The character at the specified index of this string. 
+ *   The first character is at index 0.
+ */
+
+  const CATChar operator[](int iIndex) const;  
+  
+/** @nodoc */
+  CATString strip(char c=&#x27; &#x27;) ;
+
+/**
+ * &quot;()&quot; operator to compute a substring from the current CATString.
+ * @param begin
+ *   The first index of string to extract 
+ * @param end
+ *   The last index of string to extract 
+ * @return 
+ *   Extracted substring.
+ */  
+  CATString operator()(int begin,int end) const; 
+
+/**
+ * &quot;+=&quot; operator to append an integer to a CATString, i.e. 
+ * appends the integer to the current CATString after having been
+ * converted to a string.
+ * @param iInt
+ *   The integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += (          int      iInt ) ;
+/**
+ * &quot;+=&quot; operator to append a long integer to a CATString, i.e. 
+ * appends the long integer to the current CATString after having 
+ * been converted to a string.
+ * @param iLongInt
+ *   The long integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += (          long     iLongInt ) ;
+/**
+ * &quot;+=&quot; operator to append an unsigned long integer to a 
+ * CATString, i.e. appends the unsigned long integer to the 
+ * current CATString after having been converted to a string.
+ * @param iUnsLongInt
+ *   The unsigned long integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += ( unsigned long     iUnsLongInt ) ;
+/**
+ * &quot;+=&quot; operator to append an unsigned integer to a 
+ * CATString, i.e. appends the unsigned integer to the 
+ * current CATString after having been converted to a string.
+ * @param iUnsInt
+ *   The unsigned long integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */
+  CATString &amp; operator += ( unsigned int      iUnsInt ) ;
+
+#if defined (PLATEFORME_DS64)
+/**
+ * &quot;+=&quot; operator to append a 64-bit signed long integer to a 
+ * CATString, i.e. appends the 64-bit signed long integer to the 
+ * current CATString after having been converted to a string.
+ * Defined on 64-bit platforms only.
+ * @param i64sINT
+ *   The 64-bit signed long integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */  
+  CATString &amp; operator += ( CATLONG64  iInt ) ;
+
+/**
+ * &quot;+=&quot; operator to append a 64-bit unsigned long integer to a 
+ * CATString, i.e. appends the 64-bit unsigned long integer to the 
+ * current CATString after having been converted to a string.
+ * Defined on 64-bit platforms only.
+ * @param i64UnsInt
+ *   The 64-bit unsigned long integer to append
+ * @return 
+ *   The class resulting from the concatenation
+ */  
+  CATString &amp; operator += ( CATULONG64 iUnsInt ) ;
+#endif
+  
+/** @nodoc */  
+  int Marshalling ( int ibd, int iinternalused);
+/** @nodoc */
+  CATString*  Unmarshalling (int ibd, CATString *istr, int iinternalused );
+/** @nodoc */
+  CATString*  Unmarshal (int ibd, CATString *istr, int iinternalused );
+/** @nodoc */  
+  static const CLSID &amp; ClassId();    
+  //-------------------------
+/** @nodoc */  
+friend ExportedByJS0STR HRESULT CATSysUTF8Str(CATString *iStr, char *iPtrToChar);
+
+private:
+/** @nodoc */
+  char *_String;
+/** @nodoc */
+  int _Length;
+/** @nodoc */
+  char _Tab [STRINGSIZE];
+
+
+};
+
+#ifdef _CAT_ANSI_STREAMS
+/** @nodoc */
+ExportedByJS0STR ostream&amp; operator&lt;&lt;(ostream&amp;, const CATString&amp;);
+#endif
+
+#endif
+
+
+
+
+
+
+
+ 
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATStdLib.html">← 上一页: CATStdLib.h</a></div>
+        <div><a href="CATSysAllocator.html">下一页: CATSysAllocator.h →</a></div>
+    </div>
+</body>
+</html>

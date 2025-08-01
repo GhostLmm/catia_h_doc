@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElecRoutingItf/PublicInterfaces/CATEwrWireGroup.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ElecRoutingItf/PublicInterfaces/CATEwrWireGroup.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEwrWire.html">← 上一页: CATEwrWire.h</a></div>
+        <div><a href="CATIEwrFilter.html">下一页: CATIEwrFilter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEwrWireGroup_H
+#define CATEwrWireGroup_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/** 
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+// module declaration
+#include &quot;ExportedByCATEwrInterfaces.h&quot;
+
+// for class variable declaration
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+/**
+ * Class dedicated to wire group.
+ * &lt;b&gt;Role&lt;/b&gt;: This class is used to represent wire group and its attributes
+ */
+class ExportedByCATEwrInterfaces CATEwrWireGroup
+{
+public:
+  /**
+   * The identifier of the WireGroup.
+   * &lt;br&gt;&lt;b&gt;Mandatory&lt;/b&gt;
+   */
+  CATUnicodeString Id;
+
+  /**
+   * The name of the WireGroup.
+   * &lt;br&gt;&lt;b&gt;Mandatory&lt;/b&gt;
+   */
+  CATUnicodeString Name;
+
+  /**
+   * Whether the Wire Group is Generic or Shielded.
+   */
+  CATUnicodeString WireGroupType;
+
+  /**
+   * @nodoc
+   * Do not use.
+   */
+  double Length;
+
+  /**
+   * The Diameter attribute corresponds to the diameter of the WireGroup.
+   * &lt;br&gt;&lt;b&gt;Mandatory&lt;/b&gt;
+   */
+  double Diameter;
+
+  /**
+   * The BendRadius attribute corresponds to the maximum curvature of the WireGroup.
+   */
+  double BendRadius;
+
+  /**
+   * The WireLengthCoefficient attribute. 
+   */
+  
+  double WireLengthCoefficient;
+
+  /**
+   * The subtype of the WireGroup.
+   */
+  CATUnicodeString SubType;
+
+  /**
+   * The color of the WireGroup.
+   */
+  CATUnicodeString Color;
+
+  /**
+   * The SeparationCode attribute is used in knowledge rules checked in WireGroup routing.
+   */
+  CATUnicodeString SeparationCode;
+
+  /**
+   * The PartNumber attribute corresponds to the part number of the WireGroup.
+   */
+  CATUnicodeString PartNumber;
+
+  /**
+   * The identifier of the first extremity of the Shielded Wire Group.
+   */
+  CATUnicodeString Id_FirstExtremity;
+
+  /**
+   * The identifier of the second extremity of the Shielded Wire Group.
+   */
+  CATUnicodeString Id_SecondExtremity;
+
+  /**
+   * @nodoc
+   * Do not use.
+   */
+  CATBoolean _ifConnectedToTwoDevices;
+
+  /**
+   * The identifier of the harness (if exists) containing the WireGroup.
+   */
+  CATUnicodeString Id_Harness;
+
+  /**
+   * List of wire names children of the wire group.
+   */
+  CATListValCATUnicodeString ListOfSubWires;
+
+  /**
+   * List of wire groups names children of the wire group.
+   */
+  CATListValCATUnicodeString ListOfSubWireGroups;
+
+  /**
+   * The identifier of the WireGroup (if exists) immediate father of the WireGroup.
+   */
+  CATUnicodeString FatherWireGroup;
+
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEwrWire.html">← 上一页: CATEwrWire.h</a></div>
+        <div><a href="CATIEwrFilter.html">下一页: CATIEwrFilter.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvancedMachiningInterfaces/PublicInterfaces/CATIMfgMultiAxisFlankContouring.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AdvancedMachiningInterfaces/PublicInterfaces/CATIMfgMultiAxisFlankContouring.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIAMGProgramAddin.html">← 上一页: CATIAMGProgramAddin.h</a></div>
+        <div><a href="CATMfgAMGItfEnv.html">下一页: CATMfgAMGItfEnv.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIMfgMultiAxisFlankContouring_h
+#define CATIMfgMultiAxisFlankContouring_h
+//=================================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2004
+//=================================================================================
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATMfgAMGItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATTopDefine.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATMfgAMGItfEnv IID IID_CATIMfgMultiAxisFlankContouring;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgMultiAxisFlankContouring;
+#endif
+
+/**
+ * Interface dedicated to Multi-Axis Flank Contouring Object.
+ * &lt;b&gt;Role&lt;/b&gt;:
+ * This inferface offers services to populate geometric inputs of Multi-Axis Flank Contouring activity.&lt;br&gt;
+ *
+ */
+
+class ExportedByCATMfgAMGItfEnv CATIMfgMultiAxisFlankContouring : public CATBaseUnknown
+{
+	CATDeclareInterface;
+	
+	public:
+
+   /**
+	* Sets the Part geometry of the operation.
+	*
+	* @param iReference
+	*		the geometry referenced as a Part by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	* @param iPosition
+	*		the position where to set the referenced geometry in the Parts list 
+	*		(optional: if not set, elements are added at the end of the list)
+	*/
+	virtual HRESULT SetPartsGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct, const int &amp; iPosition = 0) = 0;
+
+   /**
+	* Resets all the Parts geometry of the operation.
+	*/
+	virtual HRESULT RemovePartsGeometries () = 0;
+
+   /**
+	* Sets the Drive geometry of the operation.
+	*		Faces set as Drives must be sorted from the first to machine to the last one
+	*
+	* @param iReference
+	*		the geometry referenced as a Drive by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	* @param iPosition
+	*		the position where to set the referenced geometry in the Drives list 
+	*		(optional: if not set, elements are added at the end of the list)
+	*/
+	virtual HRESULT SetDrivesGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct, const int &amp; iPosition = 0) = 0;
+
+   /**
+	* Resets all the Drives geometry of the operation.
+	*/
+	virtual HRESULT RemoveDrivesGeometries () = 0;
+
+   /**
+	* Sets the Check geometry of the operation.
+	*
+	* @param iReference
+	*		the geometry referenced as a Check by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	* @param iPosition
+	*		the position where to set the referenced geometry in the Checks list 
+	*		(optional: if not set, elements are added at the end of the list)
+	*/
+	virtual HRESULT SetChecksGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct, const int &amp; iPosition = 0) = 0;
+
+   /**
+	* Resets all the Checks geometry of the operation.
+	*/
+	virtual HRESULT RemoveChecksGeometries () = 0;
+
+   /**
+	* Sets the single first relimiting element geometry of the operation.
+	*
+	* @param iReference
+	*		the geometry referenced as a first relimiting element by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	*
+	* Returns S_FALSE if a geometry is already defined 
+	*/
+	virtual HRESULT SetFirstRelimitingElementGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct) = 0;
+
+   /**
+	* Resets the first relimiting element geometry of the operation.
+	*/
+	virtual HRESULT RemoveFirstRelimitingElementGeometry () = 0;
+	
+   /**
+	* Sets the single second relimiting element geometry of the operation.
+	*
+	* @param iReference
+	*		the geometry referenced as a second relimiting element by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	*
+	* Returns S_FALSE if a geometry is already defined 
+	*/
+	virtual HRESULT SetSecondRelimitingElementGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct) = 0;
+
+   /**
+	* Resets the second relimiting element geometry of the operation.
+	*/
+	virtual HRESULT RemoveSecondRelimitingElementGeometry () = 0;
+
+   /**
+	* Sets the optional Reference Point geometry of the operation.
+	*
+	* @param iReference
+	*		the geometry referenced as Reference Point element by the operation
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	*
+	* Returns S_FALSE if a geometry is already defined 
+	*/
+	virtual HRESULT SetReferencePointGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct) = 0;
+
+   /**
+	* Resets the Reference Point geometry of the operation.
+	*/
+	virtual HRESULT RemoveReferencePointGeometry () = 0;
+
+	/**
+	* Modifies the orientation of the Drive with regards to its geometry.
+	* &lt;br&gt;The system will automatically initialize the &#x27;Side to mill&#x27; arrow based on orientation stored on first Face provided as Drive element.
+	* This orientation stored on CATCell itself is naturally defined outer the material in case of solid faces but stays unpredictable in case of wireframe surfaces.
+	* @param iNewOrientation
+	*   The new relative orientation.
+	*/
+	virtual HRESULT SetDrivesOrientation (CATOrientation iNewOrientation) = 0 ;
+	
+	/**
+	* Sets the &#x27;Tool Axis&#x27; geometry to the operation.
+	* &lt;br&gt; This will also force the definition mode of this direction as &#x27;Selection&#x27;.
+	* @param iReference
+	*		the geometry referenced as Tool Axis by the operation
+	*
+	* @param iProduct
+	*		the belonging product of the referenced geometry
+	*/
+    virtual HRESULT SetToolAxisGeometry (const CATBaseUnknown_var &amp; iReference, const CATBaseUnknown_var &amp; iProduct) = 0;	
+	
+	/**
+	* Resets the &#x27;Tool Axis&#x27; geometry of the operation.
+	* &lt;br&gt; This will also reset the definition mode of this direction as &#x27;Manual&#x27;.
+	*/
+	virtual HRESULT RemoveToolAxisGeometry () = 0 ;
+
+   /**
+	* Sets the Local Modifications parameters of a Drive.
+	*
+	* @param iPosition
+	*		the position of Drive where to set Local Modifications (start to idx 1)
+	* @param iOffset
+	*		the additional offset on current Drive
+	* @param iGuidance
+	*		the local tool axis strategy
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; keep global axis strategy
+	*     &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;  &lt;dd&gt; Tanto Fan 
+	*     &lt;dt&gt;&lt;tt&gt;3&lt;/tt&gt;  &lt;dd&gt; Combin Tanto
+	*     &lt;dt&gt;&lt;tt&gt;4&lt;/tt&gt;  &lt;dd&gt; Combin Parelm 
+	*     &lt;dt&gt;&lt;tt&gt;5&lt;/tt&gt;  &lt;dd&gt; Mixed Combin
+	*     &lt;dt&gt;&lt;tt&gt;6&lt;/tt&gt;  &lt;dd&gt; Fixed Axis 
+	*     &lt;dt&gt;&lt;tt&gt;7&lt;/tt&gt;  &lt;dd&gt; Normal To Part
+	*     &lt;dt&gt;&lt;tt&gt;8&lt;/tt&gt;  &lt;dd&gt; Tanto
+	*   &lt;/dl&gt;
+	* @param iEnable4X
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;  &lt;dd&gt; Deactivate 4 Axis constraint
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; Activate 4 Axis constraint
+	*   &lt;/dl&gt;
+	* @param iStartCondition
+	*		the restarting condition from previous Drive to current one
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; Auto 
+	*     &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;  &lt;dd&gt; Left
+	*     &lt;dt&gt;&lt;tt&gt;3&lt;/tt&gt;  &lt;dd&gt; Right 
+	*     &lt;dt&gt;&lt;tt&gt;4&lt;/tt&gt;  &lt;dd&gt; Forward
+	*   &lt;/dl&gt;
+	* @param iStopCondition
+	*		the stopping condition between current Drive and next one
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; Auto 
+	*     &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;  &lt;dd&gt; To
+	*     &lt;dt&gt;&lt;tt&gt;3&lt;/tt&gt;  &lt;dd&gt; On 
+	*     &lt;dt&gt;&lt;tt&gt;4&lt;/tt&gt;  &lt;dd&gt; Past
+	*     &lt;dt&gt;&lt;tt&gt;5&lt;/tt&gt;  &lt;dd&gt; Tangent to Drives
+	*   &lt;/dl&gt;
+	* @param iToolSide
+	*		the tool side on current Drive
+	*   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	*   &lt;dl&gt;
+	*     &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;  &lt;dd&gt; Same as first Drive 
+	*     &lt;dt&gt;&lt;tt&gt;2&lt;/tt&gt;  &lt;dd&gt; Swap
+	*     &lt;dt&gt;&lt;tt&gt;3&lt;/tt&gt;  &lt;dd&gt; On
+	*   &lt;/dl&gt;
+	*
+	* Returns E_Fail if a Drive is not already defined for given Position 
+	*/
+	virtual HRESULT SetDrivesGeometryWithLocalModification (const CATBaseUnknown_var &amp; ihReference, const CATBaseUnknown_var &amp; ihProduct, const int &amp; iPosition, 
+												const double &amp; iOffset, const int &amp; iGuidance, const int &amp; iEnable4X,
+												const int &amp; iStartCondition, const int &amp; iStopCondition, const int &amp; iToolSide)	= 0;
+};
+CATDeclareHandler (CATIMfgMultiAxisFlankContouring, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIAMGProgramAddin.html">← 上一页: CATIAMGProgramAddin.h</a></div>
+        <div><a href="CATMfgAMGItfEnv.html">下一页: CATMfgAMGItfEnv.h →</a></div>
+    </div>
+</body>
+</html>

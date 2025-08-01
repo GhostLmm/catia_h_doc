@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwAnnotationComponent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwAnnotationComponent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwAnnotation.html">← 上一页: CATIDrwAnnotation.h</a></div>
+        <div><a href="CATIDrwAnnotationFactory.html">下一页: CATIDrwAnnotationFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwAnnotationComponent_H
+#define CATIDrwAnnotationComponent_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+#include &quot;CATIDrwAnnotation.h&quot;
+
+#include &quot;CATDftTextBoxDisplay.h&quot;
+class CATIDrwTextStyle_var;
+class CATIDrwAnnFrame_var;
+class CATMathPoint2D;
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwAnnotationComponent;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwAnnotationComponent;
+#endif
+
+/**
+ *  @nodoc
+ */
+#define DrwOrientSheet   0
+/**
+ *  @nodoc
+ */
+#define DrwOrientView    1
+/**
+ *  @nodoc
+ */
+#define DrwOrientElement 2
+
+/**
+* Interfaces to handle global aspects of annotation object.
+*/
+class ExportedByDraftingItfCPP CATIDrwAnnotationComponent : public CATIDrwAnnotation
+{
+  CATDeclareInterface;
+  
+public:
+  
+  /** 
+  * @nodoc
+  */
+  virtual void SetGlobalTextStyle(CATIDrwTextStyle_var GlobalTextStyle) = 0;
+  /** 
+  * @nodoc
+  */
+  virtual CATIDrwTextStyle_var GetGlobalTextStyle() = 0;
+  
+  /** 
+  * Set the orientation reference of an annotation.
+  * @param OrientReference
+  * &lt;br&gt;0 : Sheet orientation
+  * &lt;br&gt;1 : View orientation
+  */
+  virtual void SetOrientationReference(int OrientReference) = 0;
+  /** 
+  * Returns the orientation reference of an annotation.
+  * @return
+  * &lt;br&gt;0 : Sheet orientation
+  * &lt;br&gt;1 : View orientation
+  */
+  virtual int GetOrientationReference() = 0;
+  
+  /** 
+  * @nodoc
+  */
+  virtual int Build() = 0;
+  /** 
+  * @nodoc
+  */
+  virtual int UpdateLeader () = 0;
+  
+  /** 
+  * @nodoc
+  */
+  virtual CATIDrwAnnFrame_var GetGlobalFrame() = 0; 
+  /** 
+  * @nodoc
+  */
+  virtual void SetGlobalFrame(CATIDrwAnnFrame_var GlobalTextFrame) = 0; 
+  
+  /** Returns characteristic points of the text included in a AnnotationComponent.
+  * &lt;br&gt;Note :
+  * &lt;pre&gt;
+  * oPt3 -------------- oPt4
+  *      !  T e x t   !
+  * oPt1 -------------- oPt2
+  * &lt;/pre&gt;
+  * The points are computed without leaders but the Frame is included
+  */
+  virtual void GetTextBox(CATMathPoint2D &amp; oPt1, CATMathPoint2D &amp; oPt2, 
+    CATMathPoint2D &amp; oPt3, CATMathPoint2D &amp; oPt4) = 0; 
+/**
+  * Used to manage the display mode of the annotation value.
+  * @param iModeDisplay
+  * @see CATDftTextBoxDisplay
+  */
+   virtual HRESULT SetTextBoxDisplay (CATDftTextBoxDisplay iModeDisplay) = 0;
+   
+/**
+  * Used to read the display mode of the annotation value.
+  * @param oModeDisplay
+  * @see CATDftTextBoxDisplay
+  */
+   virtual HRESULT GetTextBoxDisplay (CATDftTextBoxDisplay &amp;oModeDisplay) = 0;
+};
+CATDeclareHandler(CATIDrwAnnotationComponent, CATIDrwAnnotation);
+#endif 
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwAnnotation.html">← 上一页: CATIDrwAnnotation.h</a></div>
+        <div><a href="CATIDrwAnnotationFactory.html">下一页: CATIDrwAnnotationFactory.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATTopDef.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATTopDef.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTopData.html">← 上一页: CATTopData.h</a></div>
+        <div><a href="CATTopDefine.html">下一页: CATTopDefine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTopDef_H
+#define CATTopDef_H
+
+/** @CAA2Required */
+
+// COPYRIGHT DASSAULT SYSTEMES  1997
+//=============================================================================
+//
+// CATTopDef : Constants for topology
+// 
+//=============================================================================
+
+#include &quot;CATTopDefine.h&quot;
+
+//----------------------------------------------------------------------
+// Edge Sharpness (Regarding a couple of adjacents faces)
+//      NB : CATG0 = CATSharp
+//----------------------------------------------------------------------
+#define CATG0                   1
+#define CATG1                   3
+#define CATG2                   7
+
+
+
+//------------------------------------------------------------------------------
+//  To test if an edge if flat : 
+//        if (Sharpness._GeoContinuity &amp; Smooth) 
+//  To test if an edge if sharp : 
+//        if (!(Sharpness._GeoContinuity &amp; Smooth)) ...
+//          or 
+//        if (Sharpness._GeoContinuity == Sharp) ...
+//------------------------------------------------------------------------------
+
+
+// Lying On Diagnostic
+// enum CATTopLyingOnDiagnostic     {CatTopNotLyingOn, CatTopPartiallyLyingOn, CatTopLyingOn };
+
+// JunctionEdge Flags
+// enum CATTopJunctionEdgeStatus	{CatTopJunctionUndefined, CatTopJunction, CatTopFunctional};
+
+
+// To define common macros
+#ifndef TRUE
+#define TRUE 1
+#endif
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+//------------------------------------------------------------------------------
+//  Dump 
+//------------------------------------------------------------------------------
+#include &quot;CATGMModelInterfaces.h&quot;
+class CATCGMOutput;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+ExportedByCATGMModelInterfaces ostream&amp;      operator&lt;&lt; (ostream&amp; , const CATTopSharpness&amp; );
+ExportedByCATGMModelInterfaces CATCGMOutput&amp; operator&lt;&lt; (CATCGMOutput&amp; , const CATTopSharpness&amp; );
+ExportedByCATGMModelInterfaces void CATDumpOrientation(CATCGMOutput&amp; , CATOrientation);
+ExportedByCATGMModelInterfaces void CATDumpSide(CATCGMOutput&amp; , CATSide);
+ExportedByCATGMModelInterfaces void CATDumpLocation(CATCGMOutput&amp; , CATLocation);
+
+
+//******************************************************************************
+//
+//   Restricted Area :
+//       Valeur de la Vivicite en radian  (0.5 degre)
+//       Ne pas trop utiliser en dur, s&#x27;il vous plait (LAT), 
+//       rien n&#x27;est statue sur le sujet. 
+//******************************************************************************
+//#define CATTopSharpAngle 0.0087266463
+
+// pour faire compiler CATCGMVisuController qui inclut un header inconnu ou 
+//  Convex est uen macro qui vaut 2
+#ifdef Convex
+#undef Convex
+#endif
+
+const CATTopGeoContinuity G0                   =  1;
+const CATTopGeoContinuity G1                   =  3;
+const CATTopGeoContinuity G2                   =  7;
+const CATTopGeoContinuity Sharp                =  1; // = G0
+//const CATTopGeoContinuity Smooth               =  2;
+const CATTopGeoContinuity UnknownGeoContinuity =  0; 
+
+const CATTopConvexity   Convex           =   1;
+const CATTopConvexity   Concave          =  -1;
+const CATTopConvexity   UnknownConvexity =   0;
+const CATTopConvexity   RazorBlade       =   2; // reserve aux bords de skin
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTopData.html">← 上一页: CATTopData.h</a></div>
+        <div><a href="CATTopDefine.html">下一页: CATTopDefine.h →</a></div>
+    </div>
+</body>
+</html>

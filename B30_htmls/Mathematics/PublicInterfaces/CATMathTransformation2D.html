@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathTransformation2D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathTransformation2D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransformation1D.html">← 上一页: CATMathTransformation1D.h</a></div>
+        <div><a href="CATMathVector.html">下一页: CATMathVector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+#ifndef CATMathTransformation2D_H
+#define CATMathTransformation2D_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATMathematics.h&quot;
+
+#include &quot;CATMath2x2Matrix.h&quot;
+#include &quot;CATMathVector2D.h&quot;
+#include &quot;CATMathCircleArc2D.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATErrorDef.h&quot; //HRESULT
+
+class CATMathAxis2D;
+class CATMathLine2D;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+//#ifdef CATIAV5R11
+class CATMathPoint2D;
+	/**
+ * @nodoc
+ */
+extern  ExportedByCATMathematics CATMathPoint2D  operator * (
+				const CATMathTransformation2D &amp;iTransfo,
+				const CATMathPoint2D &amp;iPointToTransfo);
+//#endif
+/**
+ * Class representing a transformation in dimension 2.
+ * &lt;br&gt;It is composed of a matrix &lt;tt&gt;Matrix&lt;/tt&gt;, 
+ * and of a translation &lt;tt&gt;Vector&lt;/tt&gt;.
+ *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+ *    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;
+ *        &lt;td&gt; Vector= &lt;/td&gt;&lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;
+ *        &lt;td&gt;         &lt;/td&gt;&lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt;
+ * &lt;br&gt;Apply transformations by using the &lt;tt&gt;*&lt;/tt&gt; operator.
+ * &lt;br&gt;Available transformations are scaling, translation, reflection, 
+ * rotation.
+ */ 
+class ExportedByCATMathematics CATMathTransformation2D
+{
+
+ public:
+
+//===========================================================================
+//- Constructors
+//===========================================================================
+/**
+ * Constructs an Identity transformation.
+ * &lt;br&gt; &lt;tt&gt;Matrix= Identity&lt;/tt&gt;, &lt;tt&gt;Vector = (0,0) &lt;/tt&gt;
+ */
+  CATMathTransformation2D();
+
+/**
+ * Constructs from a CATMath2x2Matrix and a CATMathVector2D.
+ */
+  CATMathTransformation2D(const CATMath2x2Matrix &amp; iMatrix,
+                                                const CATMathVector2D &amp; iVector);
+
+  /**
+ * Constructs a CATMathTansformation2D from a scalar and a CATMathPoint2D.
+ * @return
+ *   If iType== CATMathScaling
+ *     &lt;table&gt;
+ *    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; iA &lt;/td&gt;&lt;td&gt; 0 &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt; 0  &lt;/td&gt;&lt;td&gt;iA &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt; 
+ *   If iType== CATMathRotation, &lt;tt&gt;iA&lt;/tt&gt; is in radians.
+ *     &lt;table&gt;
+ *    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; cos(iA) &lt;/td&gt;&lt;td&gt; -sin(iA) &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt; sin(iA)  &lt;/td&gt;&lt;td&gt; cos(iA) &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt; 
+ */
+  CATMathTransformation2D( const double iA,const CATMathPoint2D &amp; iCenter,
+                                                  const CATMathTransfoType iType = CATMathScaling);
+
+/**
+ * Constructs a translation.
+ */
+  CATMathTransformation2D(const CATMathVector2D &amp; iTranslation);
+
+/**
+ * Constructs a reflection.
+ */
+  CATMathTransformation2D(const CATMathLine2D &amp; iReflectLine);
+
+
+/**
+ * Constructs a tranformation of axes systems.
+ */
+  CATMathTransformation2D(const CATMathAxis2D &amp; iFromAxis, 
+                                                 const CATMathAxis2D &amp; iToAxis);
+
+/**
+ *  Copy constructor.
+ */
+  CATMathTransformation2D(const CATMathTransformation2D &amp; iTransfoToCopy);
+
+
+ /**
+ * @deprecated V5R20 Set
+  * Constructs theCATMathTransformation2D that transforms 3 2D points
+  * into 3 new 2D points.
+  * &lt;br&gt; The points must be different.
+  * @param iFrom[]
+  * The array of the six coordinates &lt;tt&gt;(Point1.x, Point1.y, Point2.x, Point2.y,
+  *  Point3.x, Point3.y)&lt;/tt&gt; of the initial points.
+  * @param iTo[]
+  * The array of the six coordinates: &lt;tt&gt;(Result1.x, Result1.y, Result2.x, Result2.y,
+  *  Result3.x, Result3.y)&lt;/tt&gt;of the resulting points.
+  */
+  CATMathTransformation2D(const double iFrom[], const double iTo[]);
+
+//===========================================================================
+//- Get/Set 
+//===========================================================================
+/**
+  * Modifies the CATMathTransformation2D that transforms 3 2D points
+  * into 3 new 2D points.
+  * &lt;br&gt; The points must be different.
+  * @param iFrom[]
+  * The array of the six coordinates &lt;tt&gt;(Point1.x, Point1.y, Point2.x, Point2.y,
+  *  Point3.x, Point3.y)&lt;/tt&gt; of the initial points.
+  * @param iTo[]
+  * The array of the six coordinates: &lt;tt&gt;(Result1.x, Result1.y, Result2.x, Result2.y,
+  *  Result3.x, Result3.y)&lt;/tt&gt;of the resulting points.
+  *@return E_FAIL if an error occurs, S_OK otherwise. 
+  */
+  HRESULT Set(const double iFrom[], const double iTo[]);
+
+  /**
+ * Retrieves the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D in an array[] of doubles.
+ * &lt;br&gt;The size of the array is 6. If the matrix is:
+ *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+ *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;
+ *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;
+ *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt;
+ * the coefficients must be given COLUMN by COLUMN.
+ */
+  void GetCoef(double iCoef[]) const;
+
+/**
+ * Retrieves the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D in an array[] of doubles.
+ * &lt;br&gt;The size of the array is 6. If the matrix is:
+ *&lt;br&gt;&lt;tt&gt;&lt;table width = 40&gt;
+ *    &lt;tr&gt;&lt;td&gt; iCoeff&lt;/td&gt;&lt;td&gt; a11 &lt;/td&gt;&lt;td&gt; a12 &lt;/td&gt;
+ *        &lt;td&gt; u1 &lt;/td&gt;&lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt; a21 &lt;/td&gt;&lt;td&gt; a22 &lt;/td&gt;
+ *        &lt;td&gt; u2 &lt;/td&gt;&lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt;
+ * the coefficients must be given COLUMN by COLUMN.
+ */
+  void SetCoef(const double iCoeff[]);
+
+ /**
+ * Returns the CATMath2x2Matrix associated with &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+ */
+  void GetMatrix(CATMath2x2Matrix &amp; ioMatrix) const;
+
+ /**
+  * Sets the matrix of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+  */
+  void SetMatrix(const CATMath2x2Matrix &amp; iMatrix) ;
+ /**
+  * Sets the vector of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+  */
+  void SetVector(const CATMathVector2D &amp; iVector) ;
+ 
+/**
+ * Returns the CATMathVector2D associated with &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+ */
+  void GetVector(CATMathVector2D &amp; ioVector) const;
+
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; transformation is an isometry (keeps the distances).
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not an isometry.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a direct isometry.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsIsometry() const;
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; transformation is a similitude (keeps the angles).
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not an similitude.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a similitude.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsSimilitude() const;
+  /**
+ * Retrieves the scale of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not an similitude.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a similitude.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsSimilitude(double &amp; oScale) const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; transformation is a scaling and retrieves the Origin and 
+ * the Scale.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a scaling.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a scaling.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsScaling(CATMathPoint2D &amp; oOrigin, double &amp; oScale) const;
+
+  /**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; transformation is a rotation and retrieves the center and the
+ * angle in radians.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is not a rotation.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is a rotation.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsRotation( CATAngle &amp;ioAngle,CATMathPoint2D &amp;ioCenter) const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; transformation is direct.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;if it is indirect.
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if it is direct.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsDirect() const;
+
+/**
+ * Retrieves the inverse of &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D.
+ * @return 
+ * &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathTransformation2D is invertible, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise. 
+ * In this last case, &lt;tt&gt;ioInverse&lt;/tt&gt; is not modified.
+ */
+  CATBoolean Inverse(CATMathTransformation2D &amp; ioInverse) const;
+
+   /**
+   * @deprecated V5R21 ApplyToLine 
+  * Computes the CATMathLine2D transformation.
+  * @param iLineToTransfo
+  *  The CATMathLine2D of origin 
+  * @param oLine
+  * The transformed CATMathLine2D
+  *  Note that it could change the length if the transformation is not an isometry.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+HRESULT ApplyTo(const CATMathLine2D &amp; iLineToTransfo, CATMathLine2D &amp; oLine);
+
+ /**
+  * Computes the CATMathLine2D transformation.
+  * @param iLineToTransfo
+  *  The CATMathLine2D of origin 
+  * @param oLine
+  * The transformed CATMathLine2D
+  *  Note that it could change the length if the transformation is not an isometry.
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+HRESULT ApplyToLine(const CATMathLine2D &amp; l,  CATMathLine2D &amp; oLine) const;
+
+/**
+* @deprecated V5R21 ApplyToAxis
+  * Computes the CATMathAxis transformation.
+  * @param iAxisToTransfo
+  *  The CATMathAxis2D of origin 
+  * @param oAxis
+  * The transformed CATMathAxis2D
+  *  Note that the directions of the transformated axis are re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+HRESULT ApplyTo(const CATMathAxis2D &amp; iAxisToTransfo, CATMathAxis2D &amp; oAxis);
+
+/**
+  * Computes the CATMathAxis transformation.
+  * @param iAxisToTransfo
+  *  The CATMathAxis2D of origin 
+  * @param oAxis
+  * The transformed CATMathAxis2D
+  *  Note that the directions of the transformated axis are re-orthonormalized. 
+  * @return 
+  * &lt;tt&gt;E_FAIL&lt;/tt&gt; if an error occurs, &lt;tt&gt;S_OK&lt;/tt&gt; otherwise. 
+  */
+HRESULT ApplyToAxis(const CATMathAxis2D &amp; p, CATMathAxis2D &amp; oAxis) const ;
+ 
+//===========================================================================
+//- Overloaded operators
+//===========================================================================
+/**
+ * Defines the composition of two CATMathTransformation2D.
+ * @return
+ * The CATMathTransformation2D defined by:
+ * &lt;tt&gt; Matrix = iTransfo1.Matrix * iTransfo2.Matrix&lt;/tt&gt;
+ *&lt;br&gt;&lt;tt&gt; Vector = iTransfo1.Matrix * iTransfo2.Vector +iTransfo1.Vector&lt;/tt&gt; 
+ */
+  friend ExportedByCATMathematics CATMathTransformation2D operator * (
+				const CATMathTransformation2D &amp;iTransfo1,
+				const CATMathTransformation2D &amp;iTransfo2);
+
+/**
+ * Defines the CATMathPoint2D transformation.
+ * @return
+ *  The CATMathPoint2D defined by: 
+ * &lt;tt&gt; iTransfo.Matrix*iPointToTransfo + iTransfo.Vector&lt;/tt&gt;
+ */
+  friend  ExportedByCATMathematics CATMathPoint2D  operator * (
+                const CATMathTransformation2D &amp;iTransfo,
+                const CATMathPoint2D &amp;iPointToTransfo);
+
+/**
+ * Defines the CATMathVector2D transformation.
+ * @return
+ *  The CATMathVector2D defined by &lt;tt&gt; iTransfo.Matrix*iVectorToTransfo &lt;/tt&gt;
+ */
+  friend  ExportedByCATMathematics CATMathVector2D operator * (
+                 const CATMathTransformation2D &amp;iTransfo,
+                 const CATMathVector2D &amp;iVectorToTransfo);
+
+/**
+ * @deprecated V5R20 ApplyTo
+ * Defines the CATMathLine2D transformation.
+ * @return
+ *  The CATMathLine2D of origin 
+ * &lt;tt&gt; iTransfo*iLineToTransfo.Origin &lt;/tt&gt;
+ * and of vector &lt;tt&gt; iTransfo*iLineToTransfo.Direction&lt;/tt&gt;. Note that
+ * it could change the length if the transformation is not an isometry.
+  * &lt;br&gt;Throws an error if the resulting line cannot be computed.
+ */
+  friend ExportedByCATMathematics CATMathLine2D   operator * (
+               const CATMathTransformation2D &amp;,
+               const CATMathLine2D &amp;);
+
+/**
+ * @deprecated V5R20 ApplyTo
+ * Defines the CATMathAxis2D transformation.
+ * @return
+ *  The CATMathAxis2D of origin 
+ * &lt;tt&gt; iTransfo*AxisToTransfo.Origin &lt;/tt&gt;
+ * and of directions &lt;tt&gt; iTransfo*iAxisToTransfo.FirstDirection&lt;/tt&gt;and 
+ * &lt;tt&gt; iTransfo*iAxisToTransfo.SecondDirection&lt;/tt&gt;.
+ *  Note that the directions of the transformated axis are
+ *  re-orthonormalized. 
+ */
+  friend  ExportedByCATMathematics CATMathAxis2D   operator * (
+                const CATMathTransformation2D &amp;,
+                const CATMathAxis2D &amp;);
+
+
+  /**
+ * @nodoc
+ * @deprecated V5R20 
+ */
+  void SetType(const CATMathTransfoType iType, double iTol);
+
+/**
+ * @nodoc
+ * @deprecated V5R20 Inverse
+ * Use the  signature which returns a CATMathTransformation2D as an output argument.
+ */
+    CATMathTransformation2D Inverse() const;
+
+ /**
+ * @nodoc
+ * @deprecated V5R20 GetMatrix
+ * Use the  signature which returns a CATMath2x2Matrix as an output argument.
+ */
+    CATMath2x2Matrix GetMatrix() const;
+/**
+ * @nodoc
+ * @deprecated V5R20 GetVector
+* Use the  signature which returns a CATMathVector2D as an output argument.
+ */
+    CATMathVector2D GetVector() const;
+
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ * Dumps a CATMathTransformation2D.
+ * &lt;br&gt;This writes the following lines on the ostream:
+ *    &lt;tt&gt;&lt;table width = 40&gt;
+ *&lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;td&gt; iA11 &lt;/td&gt;&lt;td&gt; iA12 &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;
+ *&lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;td&gt; iA21 &lt;/td&gt;&lt;td&gt; iA22 &lt;/td&gt;&lt;td&gt;|&lt;/td&gt;&lt;/tr&gt;
+ *&lt;tr&gt;&lt;td&gt;Translation= &lt;/td&gt;&lt;td&gt;(&lt;/td&gt;&lt;td&gt; FirstCoord,&lt;/td&gt;&lt;td&gt;SecondCoord&lt;/td&gt;
+ *                      &lt;td&gt;)&lt;/td&gt;&lt;/td&gt;&lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt; 
+ * @param iStream  
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps 
+ * on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+	
+
+/**
+ * @nodoc
+ * @deprecated V5R20 CATMathTransformation2D
+ * Use now the signature 
+ *&lt;tt&gt;CATMathTransformation2D(const double, const CATMathPoint2D &amp;, 
+ * const CATLONG32 type = 1)&lt;/tt&gt; in radian for a rotation.
+ * Constructs the CATMathTansformation from a scalar and a CATMathPoint2D.
+ * @return
+ *   If iType= 1
+ *     &lt;table&gt;
+ *    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; iA &lt;/td&gt;&lt;td&gt; 0 &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt; 0  &lt;/td&gt;&lt;td&gt;iA &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt; 
+ *   If iType= 2
+ *     &lt;table&gt;
+ *    &lt;tr&gt;&lt;td&gt; Matrix= &lt;/td&gt;&lt;td&gt; cos(iA) &lt;/td&gt;&lt;td&gt; -sin(iA) &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *    &lt;tr&gt;&lt;td&gt;         &lt;/td&gt;&lt;td&gt; sin(iA)  &lt;/td&gt;&lt;td&gt; cos(iA) &lt;/td&gt;
+ *        &lt;/tr&gt;
+ *        &lt;/table&gt;&lt;/tt&gt; 
+ */
+  CATMathTransformation2D(const CATMathPoint2D &amp; iCenter,
+                                                 const double iA,
+                                                 const CATMathTransfoType iType = CATMathScaling);
+
+/**
+ * @nodoc 
+ * @deprecated V5R20 IsRotation
+ * Use now the signature 
+ *&lt;tt&gt;CATBoolean IsRotation(const CATAngle &amp;, const CATMathPoint2D &amp;)&lt;/tt&gt; in radian.
+ *&lt;br&gt;
+ * Tests if the transformation is a rotation and retrieves the center and the
+ * angle in degree.
+ * @return
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;        &lt;dd&gt;if it is not a rotation.
+ * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;        &lt;dd&gt;if it is a rotation.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsRotation(CATMathPoint2D &amp;oCenter, CATAngle &amp;oAngle) const;
+
+//===========================================================================
+// Private Data
+//===========================================================================
+ private:
+  CATMath2x2Matrix _matrix;
+  CATMathVector2D  _vector;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathTransformation1D.html">← 上一页: CATMathTransformation1D.h</a></div>
+        <div><a href="CATMathVector.html">下一页: CATMathVector.h →</a></div>
+    </div>
+</body>
+</html>

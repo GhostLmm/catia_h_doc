@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drafting2DLInterfaces/PublicInterfaces/CATI2DLayoutLayout.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Drafting2DLInterfaces/PublicInterfaces/CATI2DLayoutLayout.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DLayoutClipping.html">← 上一页: CATI2DLayoutClipping.h</a></div>
+        <div><a href="CATI2DLayoutSheet.html">下一页: CATI2DLayoutSheet.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2007
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+//===================================================================
+//
+// CATI2DLayoutLayout.h
+// Define the CATI2DLayoutLayout interface
+//
+//===================================================================
+#ifndef CATI2DLayoutLayout_H
+#define CATI2DLayoutLayout_H
+
+#include &quot;CATDrafting2DLInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+class CATLISTV(CATISpecObject_var);
+class CATI2DLayoutLayout;
+class CATI2DLayoutSheet;
+class CATI2DLayoutView;
+class CATIUnknownList;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATDrafting2DLItfCPP IID IID_CATI2DLayoutLayout;
+#else
+extern &quot;C&quot; const IID IID_CATI2DLayoutLayout ;
+#endif
+
+//------------------------------------------------------------------
+
+/**
+* This interface manages the 2D Layout.
+*
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The 2D Layout is the root object of the 2D Layout for 3D Design Application.
+*
+*/
+class ExportedByCATDrafting2DLItfCPP CATI2DLayoutLayout: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+
+  /**
+  * Gets the active view in the 2D Layout.
+  * &lt;BR&gt;The active view is the view in edition.
+  * @param o2DLView [out, CATBaseUnknown#Release]
+  *   The active view in the 2D Layout.
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the view is retrieved.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT GetActiveView(CATI2DLayoutView **o2DLView)  = 0;
+
+  /**
+  * Gets the active sheet in the 2D Layout.
+  * &lt;BR&gt;The active sheet is the working sheet.
+  * @param o2DLSheet [out, CATBaseUnknown#Release]
+  *   The active sheet in the 2D Layout.
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the sheet is retrieved.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT GetActiveSheet(CATI2DLayoutSheet **o2DLSheet)  = 0;
+
+  /**
+  * Sets the active sheet in the 2D Layout.
+  * &lt;BR&gt;The active sheet is the working sheet.
+  * @param iSheet
+  *   The active sheet in the 2D Layout.
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the sheet is activated.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT SetActiveSheet(const CATI2DLayoutSheet *i2DLSheet)  = 0;
+
+  /**
+  * Returns the sheets referenced by the 2D Layout.
+  * @param oLstResult [out, CATBaseUnknown#Release]
+  *   Founded sheets are added to the list
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the operation is successful.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT GetSheets(CATIUnknownList **oLstResult)  = 0;
+
+  /**
+  * Returns the views referenced by the 2D Layout.
+  * @param oLstResult [out, CATBaseUnknown#Release]
+  *   Founded views are added to the list
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the operation is successful.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT GetViews(CATIUnknownList **oLstResult)  = 0;
+
+  /**
+  * This method is used to create a 2DL sheet in the 2D Layout.
+  * @param oSheet [out, CATBaseUnknown#Release]
+  *   The new created sheet
+  * @param iName
+  *   The sheet name, automatic if NULL pointer (default)
+  * @param iSheetBefore
+  *   The sheet XXXXXXXXXXXXXXXX (NOT IMPLEMENTED)
+  * @param iSheetAfter
+  *   The sheet XXXXXXXXXXXXXXXX (NOT IMPLEMENTED)
+  * @param ibDetailSheet
+  *   If true the 2DL sheet created is a detail sheet
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the sheet is added.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  
+  virtual HRESULT AddSheet (CATI2DLayoutSheet **o2DLSheet,
+                            wchar_t *iName = NULL,
+                            CATI2DLayoutSheet *iSheetBefore = 0,
+                            CATI2DLayoutSheet *iSheetAfter  = 0,
+							CATBoolean ibDetailSheet = FALSE) = 0;
+  /**
+  * This method is used to remove a sheet in the 2D Layout.
+  * @param iSheet
+  *   Sheet to remove
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the sheet is removed.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT RemoveSheet (CATI2DLayoutSheet *iSheet) = 0;
+
+  /**
+  * Validates that the given ordered list can be used as an input
+  * for ReorderSheet.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: i.e. validates that:
+  * iOrderedSheets is the result of a permutation applied to 
+  * the list of &lt;b&gt;all&lt;/b&gt; the sheets of this 2D Layout, with the
+  * following constraint: for every non-detail sheet, there isnt any 
+  * detail sheet appearing before in iOrderedSheets.
+  * @param iOrderedSheets
+  * The list of sheets to validate.
+  * @return
+  * An &lt;tt&gt;HRESULT&lt;/tt&gt; value.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; iOrderedSheets is a valid input.
+  * &lt;dt&gt; &lt;tt&gt;E_XXX&lt;/tt&gt;   &lt;dd&gt; iOrderedSheet is not a valid input.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT ValidateSheetOrder(CATLISTV(CATISpecObject_var) &amp;iOrderedSheets)=0;
+
+
+  /**
+  * Changes the positions of the sheets in a 2D Layout according to the given ordered list.
+  * @param &lt;tt&gt;const CATLISTV(CATISpecObject_var) &amp;iOrderedSheets&lt;/tt&gt;
+  * [in] The ordered list of the sheets in this 2D Layout.
+  * &lt;b&gt;Preconditions&lt;b&gt;:
+  * &lt;dl&gt;
+  * &lt;dt&gt; ValidateSheetOrder(iOrderedSheets) must succeed. @see ValidateSheetOrder.
+  * &lt;/dl&gt;
+  * @return
+  * A &lt;tt&gt;HRESULT&lt;/tt&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;         &lt;dd&gt; Sheets were reordered.
+  * &lt;dt&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt; &lt;dd&gt; Preconditions not met.
+  * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;       &lt;dd&gt; Internal error.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT ReorderSheets(CATLISTV(CATISpecObject_var) &amp;iOrderedSheets)=0;
+
+  /**
+  * Gets the 3D visualization mode of the layout in the 3D Viewer
+  * @param obVisuMode: 
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the operation is successful.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT GetVisuIn3DMode(CATBoolean &amp;obVisuMode)= 0;
+
+  /**
+  * Sets the 3D visualization mode of the layout in the 3D Viewer
+  * @param ibVisuMode: 
+  * @return
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt; &lt;dd&gt;if the operation is successful.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt; &lt;dd&gt;if the operation failed.
+  * &lt;/dl&gt;
+  */
+  virtual HRESULT SetVisuIn3DMode(CATBoolean ibVisuMode) = 0;
+};
+//------------------------------------------------------------------
+CATDeclareHandler(CATI2DLayoutLayout, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DLayoutClipping.html">← 上一页: CATI2DLayoutClipping.h</a></div>
+        <div><a href="CATI2DLayoutSheet.html">下一页: CATI2DLayoutSheet.h →</a></div>
+    </div>
+</body>
+</html>

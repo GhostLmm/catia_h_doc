@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMModelInterfaces/PublicInterfaces/CATICGMTopRelimitByVolume.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMModelInterfaces/PublicInterfaces/CATICGMTopRelimitByVolume.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopPropagationEdge.html">← 上一页: CATICGMTopPropagationEdge.h</a></div>
+        <div><a href="CATIntersectionOrientation.html">下一页: CATIntersectionOrientation.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopRelimitByVolume_h_
+#define CATICGMTopRelimitByVolume_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2010
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMModelInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+#include &quot;CATDataType.h&quot;
+
+extern ExportedByCATGMModelInterfaces IID IID_CATICGMTopRelimitByVolume;
+/**
+* Operator to trim a shell or a wire by a volume.
+* The generated result is made up of the portions of the input shell or wire which are
+* inside or outside the input volume. &lt;br&gt;
+* The body to be trimmed can be a multi-domain body. The domains making up the input body do 
+* not have necessarily to be of the same type. For example, the input body can contain a mixture of shells
+* and lumps.&lt;br&gt;
+* All the cells of the input body are trimmed by the volume and the portions to be kept
+* are to be specifed by using the &lt;tt&gt;SetSelectionType&lt;/tt&gt; method. Resulting sub-elements
+* can be merged.
+* &lt;p&gt;
+* The CATICGMTopRelimitByVolume operator is created with the &lt;tt&gt;CATCGMCreateRelimitByVolume&lt;/tt&gt; 
+* global function and is directly released with the &lt;tt&gt;Release&lt;/tt&gt; method.
+* It is is not streamable. 
+* &lt;p&gt;
+* The CATICGMTopRelimitByVolume operator is a multi-run operator: &lt;br&gt;
+* the methods to set parameters as well as the &lt;tt&gt;Run&lt;/tt&gt; and &lt;tt&gt;GetResult&lt;/tt&gt; methods
+* can be called several times from the same operator.
+*  @param iFactory
+* A pointer to the factory of the resulting body. 
+* @param iTopData
+* A pointer to the topological data.
+* @param iBodyToRelimit
+* A pointer to the body to be trimmed or relimited.
+* @param iSolidBody
+* A pointer to the solid used as trimming object.
+* @return [out, IUnknown#Release]
+*/
+class ExportedByCATGMModelInterfaces CATICGMTopRelimitByVolume: public CATICGMTopOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopRelimitByVolume();
+  
+ /**
+ * Retrieves the type of selection (inside, outside or boundary)
+ * @return
+ * &lt;ul&gt;
+ *   &lt;li&gt; 0 - no result is generated
+ *   &lt;li&gt; 1 - the skin which is inside the volume is kept
+ *   &lt;li&gt; 2 - the skin which is outside the volume is kept
+ *   &lt;li&gt; 3 - all the sub-elements are kept
+ *   &lt;li&gt; 4 - the skin which is on the volume boundary is kept
+ * &lt;/ul&gt;
+ */
+  virtual CATLONG32 GetSelectionType() const = 0;
+ 
+ /**
+ * Specifies the portions of the input body to be kept.
+ * @param
+ * &lt;ul&gt;
+ *   &lt;li&gt; 0 - no result is generated
+ *   &lt;li&gt; 1 - the skin which is inside the volume is kept
+ *   &lt;li&gt; 2 - the skin which is outside the volume is kept
+ *   &lt;li&gt; 3 - all the sub-elements are kept
+ *   &lt;li&gt; 4 - the skin which is on the volume boundary is kept
+ * &lt;/ul&gt;
+ */
+  virtual void SetSelectionType(CATLONG32 iSelectionType) = 0;
+
+  /**
+  * Runs the operator.
+  */
+  virtual int Run() = 0;
+ 
+  /**
+  * Retrieves the trimmed result.
+  * @param ioJournal
+  * The journal of operations
+  * @return
+  * The generated result.
+  */
+  virtual CATBody *GetResult(CATCGMJournalList *ioJournal) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopRelimitByVolume(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMTopRelimitByVolume_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopPropagationEdge.html">← 上一页: CATICGMTopPropagationEdge.h</a></div>
+        <div><a href="CATIntersectionOrientation.html">下一页: CATIntersectionOrientation.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tessellation/PublicInterfaces/CATTessFanIter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Tessellation/PublicInterfaces/CATTessFanIter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATTessEdgeIter.html">← 上一页: CATTessEdgeIter.h</a></div>
+        <div><a href="CATTessPointIter.html">下一页: CATTessPointIter.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTessFanIter_H
+#define CATTessFanIter_H
+
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATDataType.h&quot;
+#include &quot;TessAPI.h&quot;
+#include &quot;CATCGMNewArray.h&quot;
+
+#include &quot;CATIACGMLevel.h&quot;
+#include &quot;CATCGMTessFanIter.h&quot;
+
+class CATTessFace;
+class CATTessAssCont;
+class CATTessContour;
+/**
+ * Class defining the iterator on the fans resulting from a Tessellation operator.
+ * &lt;br&gt; Such iterator is directly created by the @href CATBodyTessellator#GetFace
+ * or @href CATCellTessellator#GetFace methods. Its deletion is managed at the
+ * CATBodyTessellator and CATCellTessellator deletion. 
+ * &lt;br&gt; Use it according to the following scheme:
+ * &lt;ul&gt;
+ * &lt;li&gt; Retrieve the number of fans 
+ * &lt;li&gt; Go the next result
+ * &lt;li&gt; Retrieve the result
+ * &lt;li&gt; Optionally, reset to begin again.
+ * &lt;/ul&gt;
+ * &lt;p&gt; If the fan is closed, the first and last point of the fan are different. 
+ * &lt;p&gt; This class also allows you to directly retrieve the results in an array that 
+ * you have to allocate and deallocate after use.
+ */
+class ExportedByTessAPI CATTessFanIter: public CATCGMTessFanIter
+{
+public:
+  /**
+   * @nodoc
+	 * Default constructor.
+	 */
+  CATTessFanIter();
+  
+  /**
+   * Destructor
+   */
+  virtual ~CATTessFanIter();
+
+  /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+   /**
+   * Returns the number of fans.
+   * @param ioNbPtsAll
+   * The sum of the number of points for the definition of all the fans.
+   * @return
+   * The number of fans.
+   */
+  inline CATLONG32 GetNbFan( CATLONG32 &amp; ioNbPtsAll ) const;
+
+  
+#if defined (CATIACGMV5R17)
+  /**
+  * FROM CATIA V5R17
+  * Returns the number of points of the current fan.
+  * @return
+  * The number of points of the current fan.
+  */
+  virtual CATLONG32 GetFanNbPts();
+#else
+  /**
+  * UP TO CATIA V5R17
+  * Returns the number of points of the current fan.
+  * @return
+  * The number of points of the current fan.
+  */
+  virtual CATLONG32 GetFanNbPts() const;
+#endif
+
+#ifndef PLATEFORME_DS64
+  /**
+   * Retrieves the points ranks (as CATLONG32) defining the current fan.
+   * @param iNuPts[] 
+   * The array of the points ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetFanNbPts&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetFanNuPts(CATLONG32 iNuPts[]) const;
+#endif
+
+   /**
+   * Retrieves the points ranks (as int) defining the current fan.
+   * @param iNuPts[] 
+   * The array of the points ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetFanNbPts&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetFanNuPts(int  iNuPts[]) const;
+  
+   /**
+   * Globally retrieves the points ranks for all the fans.
+   * @param iNbPts[]
+   * The array of number of points for each fan. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;GetNbFan&lt;/tt&gt; for its dimension.
+   * @param iNuPts[]
+   * The array of the point ranks. The allocation has to be managed by
+   * the caller: use &lt;/tt&gt;oNbPtsAll&lt;/tt&gt; for its dimension.
+   */
+  virtual void GetFanAllNuPts(int iNbPts[], int iNuPts[]) const;
+
+  /**
+   * Skips to the next fan.
+   */
+  virtual void GoToNext();
+
+   /**
+   * Resets the iterator to the beginning.
+   */
+  virtual void Reset();
+
+   /**
+   * Tests whether the list is completed.
+	 * @return
+	 * The result of the test.
+	 * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the list is completed, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+   */
+  virtual CATLONG32 IsExhausted() const;
+
+  /**
+   * @nodoc
+   * Internal use.
+   */
+  virtual void Initialize(CATTessFace * iFace);
+ 
+protected:
+   /** @nodoc */
+  CATTessFace    * _Face;
+   /** @nodoc */
+  CATTessAssCont * _AssContCurrent;
+
+   /** @nodoc */
+  CATLONG32        _NbFan;
+  /** @nodoc */
+  CATLONG32        _NbPtsAll;
+#if defined (CATIACGMV5R17)
+  /** @nodoc */
+  // Nombre de Point pour le fan courant
+  CATLONG32        _NbPts;
+#endif
+};
+
+ 
+inline CATLONG32 CATTessFanIter::GetNbFan( CATLONG32 &amp; NbPtsAll ) const
+{
+  NbPtsAll = _NbPtsAll;
+  return _NbFan;
+}
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATTessEdgeIter.html">← 上一页: CATTessEdgeIter.h</a></div>
+        <div><a href="CATTessPointIter.html">下一页: CATTessPointIter.h →</a></div>
+    </div>
+</body>
+</html>

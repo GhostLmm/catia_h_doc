@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAACATIAApplicationFrm.edu/CAACafGeoDocument.m/LocalInterfaces/CAAECafGeoDocument.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAACATIAApplicationFrm.edu/CAACafGeoDocument.m/LocalInterfaces/CAAECafGeoDocument.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../CAACafEltToolsOptions.m/LocalInterfaces/CAAICafElementPropertyPageEdtFactory.html">← 上一页: CAAICafElementPropertyPageEdtFactory.h</a></div>
+        <div><a href="../../CAACafGrapPropCombo.m/LocalInterfaces/CAACafComboApplication.html">下一页: CAACafComboApplication.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAECafGeoDocument_H
+#define CAAECafGeoDocument_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//     
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Class which implements a new document type (CAAGeometry)
+//  It is a data extension of a late type (CAAGeomety)
+//  representing the document type. 
+//
+//  In this document, the document identifier equals the document suffix
+//  (CAAGeometry).
+//  So all these interfaces are implemented by a data extension of the
+//  same late type (CAAGeometry).
+//  
+//  Illustrates:
+//     - implementation of the following interfaces to create a new document
+//        CATIDocAlias
+//        CATIEditor
+//        CATIDocumentEdit
+//        CATInit
+//
+//  CATIDocAlias and CATIEditor are implemented in CAAApplicationFrame.edu
+//===========================================================================
+//  Usage:
+//  ------
+//  Launch CATIA V5, File/New In the Dialog Box the new document type  
+//  appears.
+//  
+//===========================================================================
+//  Inheritance:
+//  ------------
+//         CATBaseUnknown (System Framework)
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//
+//  CreateDefaultWindow
+//  GetActiveObject
+//  Activate
+//  Deactivate
+//  MemoryDraw
+//
+//===========================================================================
+
+// System framework
+#include &quot;CATBaseUnknown.h&quot;   // Needed to derive from CATBaseUnknown
+
+// Visualization framework
+#include &quot;CATPathElement.h&quot;   // Needed by GetActiveObject 
+
+// ApplicationFrame framework
+class     CATFrmEditor ;      //Needed by CreateDefaultWindow 
+class     CATFrmWindow ;      //Needed by CreateDefaultWindow 
+
+
+class CAAECafGeoDocument: public CATBaseUnknown
+{
+  // Used in conjunction with CATImplementClass in the .cpp file
+  CATDeclareClass;
+
+  public:
+    CAAECafGeoDocument();
+    virtual ~CAAECafGeoDocument();
+
+  // CATIDocumentEdit 
+   
+    // CreateDefaultWindow
+    // -------------------
+    // Creates the window dedicated to display and manipulate the document.
+    //
+    // This method is called by the File-&gt;New and the File-&gt;Open dialog boxes.
+
+    // The document references its editor, that can reference one or more windows 
+    // each displaying this document. 
+    // 
+    CATFrmWindow*            CreateDefaultWindow(CATFrmEditor *iEditor);
+
+    // GetActivePath
+    // -------------
+    // Returns a path to the first object to ui-activate.
+    // The ui-activation manager can&#x27;t know about the initial
+    // object to ui-activate for a newly opened or created document.
+    // The purpose of this method is to create a new CATPathElement
+    // containing a path in the model to the first ui-activable object to 
+    // ui-activate.
+    //
+    // Warning : Never used this method after the creation of the document 
+    //
+
+    CATPathElement           GetActiveObject();
+
+    // Useless
+    void                     Activate();
+    void                     Deactivate();
+
+    // MemoryDraw 
+    // ----------
+    // This method is used to display the viewer image using a metafile in an  
+    // OLE document. It can be used with Windows NT only. 
+    //
+    void *                   MemoryDraw(unsigned short iFormat, int iWidth, int iHeight );
+
+  private:
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAECafGeoDocument(const CAAECafGeoDocument &amp;iObjectToCopy);
+
+    // Assigment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAECafGeoDocument &amp; operator = (const CAAECafGeoDocument &amp;iObjectToCopy);
+
+  private:
+
+    // The path to the active object 
+    // 
+    CATPathElement    _ActivePath ; 
+
+     
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../CAACafEltToolsOptions.m/LocalInterfaces/CAAICafElementPropertyPageEdtFactory.html">← 上一页: CAAICafElementPropertyPageEdtFactory.h</a></div>
+        <div><a href="../../CAACafGrapPropCombo.m/LocalInterfaces/CAACafComboApplication.html">下一页: CAACafComboApplication.h →</a></div>
+    </div>
+</body>
+</html>

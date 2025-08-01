@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModeler/PublicInterfaces/CATMmrBRepScanServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModeler/PublicInterfaces/CATMmrBRepScanServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrBRepFromGeometricalElementServices.html">← 上一页: CATMmrBRepFromGeometricalElementServices.h</a></div>
+        <div><a href="CATMmrFeatureAttributes.html">下一页: CATMmrFeatureAttributes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  CATMmrBRepScanServices_H  
+#define  CATMmrBRepScanServices_H
+
+// COPYRIGHT Dassault Systemes 2003
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include  &quot;CATBaseUnknown.h&quot;
+#include  &quot;CATMechanicalModeler.h&quot;
+
+#include &quot;CATLISTV_CATISpecObject.h&quot; 
+  
+
+class CATIBRepAccess;
+class CATISpecObject;
+ /**  
+  *  Class providing services which allow the traversal of a part through selecting objects.
+  */
+  
+class  ExportedByCATMechanicalModeler CATMmrBRepScanServices  
+{  
+  public:  
+         /**  
+          *  Retrieves the corresponding selecting object in the copied or reference feature.&lt;br&gt;
+          *  &lt;br&gt;
+          *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the corresponding selecting object in the copied/reference feature, when given a selecting object in the reference/copied feature respectively.&lt;br&gt;
+          *  It succeeds in finding the dual selecting object only in the &lt;b&gt;&lt;tt&gt;Paste As Result With Link&lt;/tt&gt;&lt;/b&gt; and &lt;b&gt;&lt;tt&gt;Paste As Result&lt;/tt&gt;&lt;/b&gt; cases. This service does not work in the case of &lt;b&gt;&lt;tt&gt;Paste As Spec&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+          *  &lt;br&gt;
+          *  The reference feature should be copied using a constructor of &lt;tt&gt;CATMmrInterPartCopy&lt;/tt&gt;.&lt;br&gt;
+          *  Subsequently, the method presented here may be called right after the copy-paste operation.&lt;br&gt;
+          *  Note:&lt;br&gt;
+          *       &lt;ul&gt;          
+          *         &lt;li&gt;The results are not guaranteed if an action on the model such as &lt;b&gt;&lt;tt&gt;Save&lt;/tt&gt;&lt;/b&gt; has been done before calling the method presented here.&lt;/li&gt;
+          *       &lt;/ul&gt;
+          *       &lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   iRefSpecObject
+          *         The reference feature.&lt;br&gt;
+          *         This is a mechanical feature, which can be a surfacic element (curve, line) or a sketch, or a solid body (PartBody, Body).&lt;br&gt;
+          *         see @href CATMmrInterPartCopy#CATMmrInterPartCopy.&lt;br&gt;
+          *         Note:&lt;br&gt;
+          *         &lt;ul&gt;
+          *           &lt;li&gt;This parameter can be NULL in the case of a &lt;b&gt;&lt;tt&gt;Paste As Result with Link&lt;/tt&gt;&lt;/b&gt;, in which case the reference feature is internally retrieved by using &lt;tt&gt;iCopySpecObject&lt;/tt&gt;.&lt;/li&gt;
+          *           &lt;li&gt;This parameter must not be omitted in the case of &lt;b&gt;&lt;tt&gt;Paste As Result&lt;/tt&gt;&lt;/b&gt;.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         &lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   iCopySpecObject
+          *         The copied feature.&lt;br&gt;
+          *         This feature results from a copy-paste operation (except &lt;b&gt;&lt;tt&gt;Paste As Spec&lt;/tt&gt;&lt;/b&gt;) of the reference feature &lt;tt&gt;iRefSpecObject&lt;/tt&gt;.&lt;br&gt;
+          *         Note:&lt;br&gt;
+          *         &lt;ul&gt;
+          *           &lt;li&gt;This parameter must not be NULL.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         &lt;br&gt;
+          *  &lt;br&gt;
+          *  @param  ioRefBRepAccess
+          *         The input or output selecting object.&lt;br&gt;
+          *         &lt;ul&gt; 
+          *           &lt;li&gt;When this parameter is NULL, it is used as the output corresponding to the input in the copied feature: &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt;.&lt;/li&gt;
+          *           &lt;li&gt;When this parameter is not NULL, it is used as an input in order to get the corresponding output in the copy: &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt;.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         Note:&lt;br&gt;
+          *         &lt;ul&gt;
+          *           &lt;li&gt;When this parameter is NULL, &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt; must not be NULL.&lt;/li&gt;
+          *           &lt;li&gt;This parameter must not be NULL when &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt; is NULL.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         &lt;br&gt;
+          *  &lt;br&gt; 
+          *  @param   ioCopyBRepAccess
+          *         The input or output selecting object.&lt;br&gt;
+          *         &lt;ul&gt; 
+          *           &lt;li&gt;When this parameter is NULL, it is used as the output corresponding to the input in the reference feature: &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt;.&lt;/li&gt;
+          *           &lt;li&gt;When this parameter is not NULL, it is used as an input in order to get the corresponding output in the reference: &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt;.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         Note:&lt;br&gt;
+          *         &lt;ul&gt;
+          *           &lt;li&gt;When this parameter is NULL, &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt; must not be NULL.&lt;/li&gt;
+          *           &lt;li&gt;This parameter must not be NULL when &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt; is NULL.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          *         &lt;br&gt;
+          *  &lt;br&gt;                 
+          *  @return 
+          *         &lt;ul&gt;
+          *           &lt;li&gt;S_OK if the interface &lt;tt&gt;CATIBRepAccess&lt;/tt&gt; of the dual selecting object has been found.&lt;/li&gt;
+          *           &lt;li&gt;E_FAIL if the interface to the dual selecting object has not been found.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iCopySpecObject&lt;/tt&gt; is NULL.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iRefSpecObject&lt;/tt&gt; is NULL and no reference feature could be retrieved by &lt;tt&gt;iCopySpecObject&lt;/tt&gt; (e.g. in the case of a &lt;tt&gt;Paste As Result&lt;/tt&gt;).&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iRefSpecObject&lt;/tt&gt; is not NULL and the feature does not match the one referred to by &lt;tt&gt;iCopySpecObject&lt;/tt&gt;.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt; is NULL and &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt; is NULL too.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;ioRefBRepAccess&lt;/tt&gt; is not NULL and &lt;tt&gt;ioCopyBRepAccess&lt;/tt&gt; is not NULL either.&lt;/li&gt;
+          *           &lt;li&gt;E_UNEXPECTED in case an unexpected internal error occurs.
+          *         &lt;/ul&gt;
+          */  
+        static HRESULT FindDualBRepAccess( const CATISpecObject* iRefSpecObject, const CATISpecObject* iCopySpecObject, CATIBRepAccess** ioRefBRepAccess , CATIBRepAccess** ioCopyBRepAccess ); 
+
+        /**  
+          *  Retrieves all the ancestors since the generation feature from a selecting object.&lt;br&gt;
+          *  &lt;br&gt;
+          *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves all the ancestors features since the generation feature from a selecting object.&lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   iBRepAccess
+          *         The selecting object.&lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   ioAncestorsFeatures
+          *         The method appends the list of ancestors features of the selecting object to the input list.&lt;br&gt;
+          *         The features are ordered from the most recent feature to the oldest feature.&lt;br&gt; 
+          *  &lt;br&gt;
+          *  @return 
+          *         &lt;ul&gt;
+          *           &lt;li&gt;S_OK if the list of ancestors features of the selecting object has been found.&lt;/li&gt;
+          *           &lt;li&gt;E_FAIL if the list of ancestors features of the selecting object has not been found.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG  if &lt;tt&gt;iBRepAccess&lt;/tt&gt; is NULL.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          */  
+        static HRESULT ListAncestorsSinceGenerationFeature(const CATIBRepAccess* iBRepAccess, CATLISTV(CATISpecObject_var) &amp;ioAncestorsFeatures) ;    
+
+        /**  
+          *  Retrieves from a selecting object all the ancestors since the generation feature that modified the geometry.&lt;br&gt;
+          *  &lt;br&gt;
+          *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves from a selecting object all the ancestors features since the generation feature that modified the geometry of the selecting object.&lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   iBRepAccess
+          *         The selecting object.&lt;br&gt;
+          *  &lt;br&gt;
+          *  @param   ioAncestorsFeatures
+          *         The method appends the list of ancestors features of the selecting object to the input list.&lt;br&gt;
+          *         The features are ordered from the most recent feature to the oldest feature.&lt;br&gt; 
+          *  &lt;br&gt;
+          *  @return 
+          *         &lt;ul&gt;
+          *           &lt;li&gt;S_OK if the list of ancestors features of the selecting object has been found.&lt;/li&gt;
+          *           &lt;li&gt;E_FAIL if the list of ancestors features of the selecting object has not been found.&lt;/li&gt;
+          *           &lt;li&gt;E_INVALIDARG  if &lt;tt&gt;iBRepAccess&lt;/tt&gt; is NULL.&lt;/li&gt;
+          *         &lt;/ul&gt;
+          */  
+        static HRESULT ListFeaturesForGeometry(const CATIBRepAccess* iBRepAccess, CATLISTV(CATISpecObject_var) &amp;ioAncestorsFeatures) ;  
+  private:  
+         CATMmrBRepScanServices();  
+         ~CATMmrBRepScanServices();     
+   };  
+     
+     
+#endif  
+     
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrBRepFromGeometricalElementServices.html">← 上一页: CATMmrBRepFromGeometricalElementServices.h</a></div>
+        <div><a href="CATMmrFeatureAttributes.html">下一页: CATMmrFeatureAttributes.h →</a></div>
+    </div>
+</body>
+</html>

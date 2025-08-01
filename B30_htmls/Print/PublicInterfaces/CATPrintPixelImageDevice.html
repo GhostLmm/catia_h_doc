@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print/PublicInterfaces/CATPrintPixelImageDevice.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Print/PublicInterfaces/CATPrintPixelImageDevice.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPrintFile.html">← 上一页: CATPrintFile.h</a></div>
+        <div><a href="CATPrintSupportImage.html">下一页: CATPrintSupportImage.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPRINTPIXELIMAGEDEVICE_H
+#define CATPRINTPIXELIMAGEDEVICE_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2005
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATPrint.h&quot;
+#include &quot;CATPrintDevice.h&quot;
+
+class CATPixelImage;
+class CATPrintParameters;
+
+/**
+ * Class to create CATPixelImage devices.
+ */
+class ExportedByCATPrint CATPrintPixelImageDevice : public CATPrintDevice
+{
+
+public:
+
+/**
+ * Constructs a CATPrintPixelImageDevice.
+ */
+    CATPrintPixelImageDevice();
+
+/**
+ * Constructs a CATPrintPixelImageDevice from a CATPixelImage object.
+ * @param iPixelImage
+ *   The pixel image associated to the device.
+ */
+    CATPrintPixelImageDevice(CATPixelImage* iPixelImage);
+
+/**
+ * Destructor.
+ */
+    virtual ~CATPrintPixelImageDevice();
+
+/**
+ * Sets the pixel image associated to the device.
+ * @param iPixelImage
+ *   The pixel image associated to the device.
+ *   The pixel image could be allocated by default constructor.
+ */
+    void SetPixelImage(CATPixelImage* iPixelImage);
+
+/**
+ * Initializes the pixel image device.
+ * @param iParameters
+ *   The parameters of the generator.
+ * @return
+ *   The status of the method.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 0 if device initialization failed, 
+ *   1 otherwise.
+ */
+    int  Begin(const CATPrintParameters&amp; iParameters);
+
+/**
+ * Ends the device.
+ */
+    void End(void);
+
+private:
+
+    CATPixelImage*  _paPixelImage;
+};
+
+#endif
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPrintFile.html">← 上一页: CATPrintFile.h</a></div>
+        <div><a href="CATPrintSupportImage.html">下一页: CATPrintSupportImage.h →</a></div>
+    </div>
+</body>
+</html>

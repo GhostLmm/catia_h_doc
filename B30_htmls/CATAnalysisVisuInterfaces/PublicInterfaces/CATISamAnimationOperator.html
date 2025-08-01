@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamAnimationOperator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisVisuInterfaces/PublicInterfaces/CATISamAnimationOperator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISPMProcessAccess.html">← 上一页: CATISPMProcessAccess.h</a></div>
+        <div><a href="CATISamImage.html">下一页: CATISamImage.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISamAnimationOperator_H
+#define CATISamAnimationOperator_H
+//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2005
+//=============================================================================
+//
+// CATISamAnimationOperator : interface tolaunch animation of images.
+//
+//=============================================================================
+// April 2005 Creation                                         O.Franks
+//=============================================================================
+
+/**
+  * @CAA2Level L0
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATBaseUnknown.h&quot;
+
+// SamVisuIterfaces 
+#include &quot;CATSamAnimationLoopMode.h&quot;
+#include &quot;CATISamImage.h&quot;
+
+// system
+class CATNotification;
+class CATDialog;
+class CATDlgDialog;
+class CATCommand;
+
+#include &quot;CATSamVisuUUID.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISamAnimationOperator ;
+//------------------------------------------------------------------
+
+/**
+ * Animation of Analysis Images.
+ * &lt;b&gt;Role: &lt;/b&gt; Ability to launch animation of analysis images. &lt;br&gt;
+ * Create this interface using CATSamImagesOperatorFactory, supplying &lt;br&gt;
+ * a list of images you wish to animate. Store this interface pointer as &lt;br&gt;
+ * a member variable in your command. &lt;br&gt; 
+ * &lt;p&gt;
+ * The primary method Run() will launch the &quot;Animate&quot; command with the &lt;br&gt;
+ * images you supplied. By default the animation dialog box will appear &lt;br&gt;
+ * and animation will begin automatically.
+ * &lt;p&gt;
+ * &lt;b&gt;In your command, follow these steps: &lt;/b&gt; 
+ * &lt;ul&gt; &lt;li&gt; Create and store this interface using CATSamImagesOperatorFactory&lt;/li&gt;
+ *      &lt;li&gt; Call Run() to start the animation.&lt;/li&gt;
+ *      &lt;li&gt; Add callbacks to catch when the user closes the dialog.&lt;/li&gt;
+ *      &lt;li&gt; Call End() to stop the command.&lt;/li&gt;&lt;/ul&gt;
+ * &lt;p&gt;
+ * @see CATSamImagesOperatorFactory
+ */
+class ExportedByCATSamVisuUUID CATISamAnimationOperator: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+    * Launch animation of Images. &lt;br&gt;
+    * This will launch the image animation command and dialog. &lt;br&gt;
+    * @param iAutomaticStart.
+    * Whether or not to &quot;play&quot; immediately
+    * @param iLoopMode
+    * The loop mode
+    * @param iCycleMode
+    * The cycle mode. 0 = Linear, 1 = Sinusoidal
+    */
+  virtual HRESULT Run ( const CATBoolean              iAutomaticStart = TRUE, 
+                        const CATSamAnimationLoopMode iLoopMode = CATSamAnimationLoopMode_LoopBack,
+                        const int                     iCycleMode = 1) = 0;
+
+  /**
+    * End the animation command and dialog.
+    */
+  virtual HRESULT End() = 0;
+
+  /**
+    * Set the calibration angle. &lt;br&gt;
+    * The calibration angle is an offset for the first frame of animation.
+    * @param iImage
+    * For which image you wish to set the angle. 
+    * @param iOffsetRadians
+    * The calibration angle in radians. For no calibration use zero. &lt;br&gt;
+    * Keep in mind that Sinusoidal animation starts at -PI.
+    */
+  virtual HRESULT SetCalibrationAngle( CATISamImage_var iImage, const float iOffsetRadians) = 0;
+
+  /**
+    * Get the calibration angle. &lt;br&gt;
+    * The calibration angle is an offset for the first frame of animation.
+    * @param iImage
+    * For which image you wish to set the angle. 
+    * @param oOffsetRadians
+    * The calibration angle in radians. Sinusoidal Animation cycle starts at -PI. 
+    * @see CATSamImagesOperatorFactory
+    */
+  virtual HRESULT GetCalibrationAngle( CATISamImage_var iImage, float&amp; oOffsetRadians) = 0;
+
+  /**
+    * Calculate a calibration angle. &lt;br&gt;
+    * The calibration angle is an offset for the first frame of animation. &lt;br&gt;
+    * This method finds the node of maximum displacement and its phase.
+    * @param iImage
+    * For which image you wish to set the angle. 
+    * @param oOffsetRadians
+    * The calibration angle in radians. Sinusoidal animation cycle starts at -PI, therefor &lt;br&gt;
+    * an offset of zero degrees indicates that the found phase angle was -PI.
+    * @see CATSamImagesOperatorFactory
+    */
+  virtual HRESULT CalculateCalibrationAngleAtMaxDisplacement( CATISamImage_var iImage, float&amp; oOffsetRadians) = 0;
+
+  /**
+    * Get the publisher of the animation dialog close notification.
+    * @param oPublisher
+    * Use this in your AddAnalyseNotificationCB callback along with &lt;br&gt;
+    * GetDiaCLOSENotification to catch when the user closes the &lt;br&gt;
+    * animation dialog. &lt;br&gt;
+    * Must only be called after Run().
+    */
+  virtual HRESULT GetEventPublisher ( CATCommand *&amp; oPublisher) = 0;
+
+  /**
+    * Get animation dialog close notification.
+    * This method can only be called after Run().
+    * @param oNotif
+    * Use this in your AddAnalyseNotificationCB callback along with &lt;br&gt;
+    * GetEventPublisher to catch when the user closes the &lt;br&gt;
+    * animation dialog.
+    */
+  virtual HRESULT GetDiaCLOSENotification ( CATNotification *&amp; oNotif) = 0;
+
+  /**
+    * Get animation dialog close notification.
+    * This method can only be called after Run().
+    * @param oNotif
+    * Use this in your AddAnalyseNotificationCB callback along with &lt;br&gt;
+    * GetEventPublisher to catch when the user closes the &lt;br&gt;
+    * animation dialog.
+    */
+  virtual HRESULT GetWindCloseNotification ( CATNotification *&amp; oNotif) = 0;
+
+  /**
+    * Get the animation dialog.
+    * This method can only be called after Run().
+    * @param oAnimationWindow
+    * Use this to hide or show the animation window.
+    * Must only be called after Run().
+    */
+  virtual HRESULT GetActiveWindow ( CATDialog *&amp; oAnimationWindow) = 0;
+
+  /**
+    * Set the loop mode.
+    * @param iLoopMode
+    * The loop mode.
+    * Must only be called after Run().
+    * @see CATSamAnimationLoopMode
+    */
+  virtual HRESULT SetLoopMode ( const CATSamAnimationLoopMode iLoopMode) = 0;
+
+  /**
+    * Set the cycle mode.
+    * @param iCycleMode
+    * Possible values: 0 = Linear, 1 = Sinusoidal
+    * Must only be called after Run().
+    */
+  virtual HRESULT SetCycleMode ( const int iCycleMode) = 0; // 0 = Linear, 1 = Sinus
+
+  /**
+    * Set the speed.
+    * @param iSpeed
+    * The speed of animation, from 1 to 10.
+    * Must only be called after Run().
+    */
+  virtual HRESULT SetSpeed ( const int iSpeed ) = 0;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+CATDeclareHandler(CATISamAnimationOperator, CATBaseUnknown);
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISPMProcessAccess.html">← 上一页: CATISPMProcessAccess.h</a></div>
+        <div><a href="CATISamImage.html">下一页: CATISamImage.h →</a></div>
+    </div>
+</body>
+</html>

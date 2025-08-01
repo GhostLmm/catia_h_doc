@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATPlantShipInterfaces/PublicInterfaces/CATIPspPartConnector.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATPlantShipInterfaces/PublicInterfaces/CATIPspPartConnector.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspObject.html">← 上一页: CATIPspObject.h</a></div>
+        <div><a href="CATIPspPhysical.html">下一页: CATIPspPhysical.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPspPartConnector_H
+#define CATIPspPartConnector_H
+
+// COPYRIGHT Dassault Systemes 2001
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;IUnknown.h&quot;
+#include &quot;CATPspPartConnectorTypeEnum.h&quot;
+
+class CATListValCATUnicodeString;
+class CATIMovable;
+class CATIMovable_var;
+class CATMathPoint;
+class CATMathPlane;
+class CATMathDirection;
+
+extern &quot;C&quot; const IID IID_CATIPspPartConnector ;
+
+/**
+ * Interface to manage the technological data on connectors.
+ * &lt;b&gt;Role&lt;/b&gt;: To access the technological data on connectors.
+ */
+
+class CATIPspPartConnector: public IUnknown
+{
+  public:
+  
+  /**
+  * Get face connector.
+  * @param oConnector [out, IUnknown#Release]
+  *   Face connector.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetFaceConnector (IUnknown **oConnector) = 0;
+
+  /**
+  * Set the face connector.
+  * @param iConnector 
+  *   The new sub-Face connector.
+  * @param iEFaceType 
+  *   The new Face connector type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetFaceConnector(IUnknown *iConnector, CATPspPartConnectorTypeEnum iEFaceType) = 0;
+
+  /**
+  * Get alignment connector.
+  * @param oConnector [out, IUnknown#Release]
+  *   Alignment connector.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetAlignmentConnector (IUnknown **oConnector) = 0;
+
+  /**
+  * Set the alignment connector.
+  * @param iConnector 
+  *   The new sub-alignment connector.
+  * @param iEAlignType 
+  *   The new alignment connector type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetAlignmentConnector(IUnknown *iConnector, CATPspPartConnectorTypeEnum iEAlignType) = 0;
+
+  /**
+  * Get orientation connector.
+  * @param oConnector [out, IUnknown#Release]
+  *   Orientation connector.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetOrientationConnector (IUnknown **oConnector) = 0;
+
+  /**
+  * Set the orientation connector.
+  * @param iConnector 
+  *   The new sub-orientation connector.
+  * @param iEClockType 
+  *   The new orientation connector clock type.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetOrientationConnector(IUnknown *iConnector, CATPspPartConnectorTypeEnum iEClockType) = 0;
+
+  /**
+  * Get datum connector.
+  * @param oConnector [out, IUnknown#Release]
+  *   Datum connector.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetDatumConnector (IUnknown **oConnector) = 0;
+
+  /**
+  * Set the datum connector.
+  * @param iConnector 
+  *   The new sub-datum connector.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetDatumConnector(IUnknown *iConnector) = 0;
+
+  /**
+  * Get connector number.
+  * @param oCtrNumber
+  *   Connector number on this connector. 
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetConnectorNumber (int &amp;oCtrNumber) = 0;
+
+  /**
+  * Retrieve the CATMathPoint of the position associated with this connector.
+  * @param iRelAxis
+  *   The relative axis object (NULL means relative to parent).
+  * @param oPosition
+  *   The position as CATMathPoint.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPosition (const CATIMovable *iRelAxis, CATMathPoint &amp;oPosition) = 0;
+
+  /**
+  * Retrieve the CATMathDirection of outward normal to the face place position
+  * associated with this connector.
+  * @param iRelAxis
+  *   The relative axis object (NULL means relative to parent).
+  * @param oAlignmentDirection
+  *   The align direction as a CATMathDirection.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetAlignmentDirection (const CATIMovable *iRelAxis,
+     CATMathDirection &amp;oAlignmentDirection) = 0;
+
+  /**
+  * Retrieve the CATMathDirection of the upward normal to the up plane
+  * associated with this connector.
+  * @param iRelAxis
+  *   The relative axis object (NULL means relative to parent).
+  * @param oUpDirection
+  *   The up direction as CATMathDirection.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetUpDirection (const CATIMovable *iRelAxis,
+     CATMathDirection &amp;oUpDirection) = 0;
+
+  /**
+  * Retrieve the CATMathPlane that contains the connector position (plane origin), 
+  * alignment direction (plane z-axis), and the up direction (plane y-axis).
+  * @param iRelAxis
+  *   The relative axis object (NULL means relative to parent).
+  * @param oMathPlane
+  *   The connector face plane.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetConnectorMathPlane (const CATIMovable *iRelAxis,
+     CATMathPlane &amp;oMathPlane) = 0;
+
+  /**
+  * Retrieve the face type (normal or &quot;transparent&quot; support) for this connector.
+  * @param oFaceType
+  *   The face type.
+  *   @see CATPspPartConnectorTypeEnum
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetFaceType (CATPspPartConnectorTypeEnum &amp;oFaceType) = 0;
+
+  /**
+  * Retrieve the alignment type for this connector.
+  * @param oAlignType
+  *   The alignment type.
+  *   @see CATPspPartConnectorTypeEnum
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetAlignType (CATPspPartConnectorTypeEnum &amp;oAlignType) = 0;
+
+  /**
+  * Retrieve the clocking type (how symmetric this end is) for this connector.
+  * @param oClockType
+  *   The clock type.
+  *   @see CATPspPartConnectorTypeEnum
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetClockType (CATPspPartConnectorTypeEnum &amp;oClockType) = 0;
+
+  /**
+  * Set a list of attribute names associated to this connector.
+  * @param opListOfAttrNames
+  *   List of attribute names associated.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetAttrNames ( const CATListValCATUnicodeString* ipListOfAttrNames ) = 0;
+  
+  /**
+  * Returns a list of attribute names associated to this connector.
+  * @param opListOfAttrNames
+  *   List of attribute names associated.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListAttrNames ( CATListValCATUnicodeString*&amp; opListOfAttrNames ) = 0;
+
+  // No constructors or destructors on this pure virtual base class
+  // --------------------------------------------------------------
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPspObject.html">← 上一页: CATIPspObject.h</a></div>
+        <div><a href="CATIPspPhysical.html">下一页: CATIPspPhysical.h →</a></div>
+    </div>
+</body>
+</html>

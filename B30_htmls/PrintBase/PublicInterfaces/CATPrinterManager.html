@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintBase/PublicInterfaces/CATPrinterManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PrintBase/PublicInterfaces/CATPrinterManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPrinterDevice.html">← 上一页: CATPrinterDevice.h</a></div>
+        <div><a href="../../Print/PublicInterfaces/CATPrint.html">下一页: CATPrint.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPRINTERMANAGER_H
+#define CATPRINTERMANAGER_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATPrintBase.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATCallbackManager.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATListOfCATPrinter.h&quot;
+
+class CATPrinter;
+class CATPrintStream;
+class CATPrintParameters;
+class CATDialog;
+class CATPrinterDevice;
+class CATIPrinterManager;
+class CATPrintLogManager;
+
+#if defined(_WINDOWS_SOURCE) &amp;&amp; defined(GetDefaultPrinter)
+#undef GetDefaultPrinter
+#endif
+
+/**
+ * Class to manage system printers.
+ * &lt;br&gt;
+ * &lt;b&gt;Role&lt;/b&gt;: A printer manager can retrieve the list of available printers
+ * and their attributes, it can retrieve the system default printer or can
+ * send data to a specific printer.
+ * &lt;br&gt;It&#x27;s a pure static and OS-specific class.
+ * &lt;br&gt;Calling @href #Begin at the beginning of the application is not compulsory.
+ * Therefore, @href #End should be called at the end in order to release memory and
+ * save default print parameters.
+ */
+class ExportedByCATPrintBase CATPrinterManager : public CATCallbackManager
+{
+    CATDeclareClass;
+
+/**
+ * @nodoc
+ */
+    CATDeclareCBEvent(PrinterChanged);
+	CATDeclareCBEvent(ExtendedOptionsInfoChanged);
+
+	friend class CATPrinterConfigureDialog;
+    friend class l_CATPrinterManagerDialog;
+    friend class CATPrinterDialog;
+    friend class CATPrinterDevice;
+    friend class CATPrintLogManager;
+	friend class CATPrinterUtility;
+	friend class ENOVWebPrintPrinterConfigureDlg;
+	friend class ENOVWebPrintManager;
+	
+
+
+public:
+
+/**
+ * Constructs a CATPrinterManager.
+ */
+    CATPrinterManager();
+    ~CATPrinterManager();
+
+
+/**
+ * Initializes and builts printer list. 
+ * @param iDirectory
+ *   The printers directory.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The default is &lt;tt&gt;$CATUserSettingPath/Printers&lt;/tt&gt;.
+ */
+    static void Begin(const char* iDirectory=NULL);
+
+/**
+ * Terminates the using of printer management.
+ */
+    static void End(void);
+
+/**
+ * Returns the number of available printers.
+ * @return 
+ *   The number of available printers.
+ */
+    static int GetPrinterCount(void);
+
+/**
+ * Returns a printer from its index.
+ * @param iIndex
+ *   The index of the printer.
+ * @return
+ *   The printer which index is &lt;tt&gt;iIndex&lt;/tt&gt;.
+ */
+    static     CATPrinter&amp; GetPrinterFromIndex(int iIndex);
+
+/**
+ * Returns the list of available printers.
+ * @return
+ *   The list of available printers.
+ */
+    static const CATLISTP(CATPrinter)&amp; GetPrinterList(void);
+
+/**
+ * Returns the default printer index.
+ * @return 
+ *   The the default printer index.
+ */
+    static int  GetDefaultPrinterIndex(void);
+
+/**
+ * Sets the default printer index.
+ * @param iIndex
+ *   The index of the default printer.
+ */
+    static void SetDefaultPrinterIndex(int iIndex);
+
+/**
+ * Returns the default printer.
+ * @return 
+ *   The default printer.
+ */
+    static CATPrinter&amp; GetDefaultPrinter(void);
+
+/**
+ * Returns the default parameters.
+ * @return
+ *   The default parameters.
+ */
+    static const CATPrintParameters&amp; GetDefaultParameters(void);
+
+/**
+ * Sets the default parameters.
+ * @param iParameters
+ *   The default parameters.
+ */
+    static void SetDefaultParameters(const CATPrintParameters&amp; iParameters);
+
+/**
+ * Returns the default unit.
+ * @return
+ *   The default unit.
+ */ 
+    static CATPrintUnit GetDefaultUnit(void);
+
+/**
+ * Sets the default unit.
+ * @param iUnit
+ *   The default unit.
+ */
+    static void SetDefaultUnit(CATPrintUnit iUnit);
+   
+/**
+ * Reads printer properties.
+ * @param iPrinter
+ *   The printer to scan.
+ * @param ioProperties
+ *   The properties of the printer.
+ */
+    static void ReadPrinterProperties (const CATPrinter* iPrinter, CATBaseUnknown* ioProperties);
+
+/**
+ * Writes printer properties.
+ * @param iPrinter
+ *   The printer to update.
+ * @param iProperties
+ *   The properties of the printer.
+ */
+    static void WritePrinterProperties(const CATPrinter* iPrinter, CATBaseUnknown* iProperties);
+
+/**
+ * Sends data to a printer.
+ * @param iPrinter
+ *   The printer where the data are sent.
+ * @param iStream
+ *   The data to send.
+ * @param iNbcopies
+ *   The number of copies. 
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The defaut is 1.
+ */
+    static void Write(const CATPrinter&amp; iPrinter, const CATPrintStream&amp; iStream, int iNbcopies=1);
+
+/**
+ * Returns the user printers directory.
+ * @return
+ *   The printers directory.
+ */ 
+    static const CATString&amp; GetUserPrintersDir(void);
+
+/**
+ * @nodoc
+ */
+    static void GetUserPrintersDir(CATUnicodeString&amp; userPrintersDir);
+
+/**
+ * Returns the temporary directory.
+ * @return
+ *   The temporary directory.
+ */
+    static const char* GetTempDirectory(void); 
+
+/**
+ * Returns the instance of CATPrinterManager.
+ * &lt;br&gt;Only one CATPrinterManager can be instancied.
+ * @return
+ *   The CATPrinterManager instance.
+ */
+    static CATPrinterManager* GetInstance();
+
+/**
+ * @nodoc
+ */
+    static CATIPrinterManager* GetIPrinterManager(void);
+
+/**
+ * @nodoc
+ */
+    static void GetDriverCfgPath(CATUnicodeString&amp; driverCfgPath);
+
+/**
+ * @nodoc
+ */
+    static int GetPrinterGroupCount(void);
+
+/**
+ * @nodoc
+ */
+    static void GetPrinterGroupNameFromIndex(int iIndex, CATUnicodeString&amp; oGroupName);
+
+/**
+ * @nodoc
+ */
+    static void GetPrinterGroupListFromIndex(int iIndex, CATListOfInt&amp; oPrinterIndexList);
+
+private:
+
+    static void ReadPrinterList(void);
+    static void ReadWindowsPrinterList(void);
+    static void Read3DPLMPrinterList(void);
+    static void ReadExternalPrinterList(void);
+    
+    static void ReadGroupList(void);
+    
+    static void RetrieveUserPrintersDir(const char* iDirectory = NULL);
+    static void RetrievePrintersDirs();
+
+    static int  CreatePrinter(const CATPrinter&amp; printer);
+    static int  CreatePrinter();
+    static void RemovePrinter(int index);
+    static void RetrievePrinterDescription(int index);
+    static int  RetrievePrinterDescription(CATPrinter&amp; printer);
+
+    static void ReadDefaultParameters(void);
+    static void WriteDefaultParameters(void);
+    
+    static CATString          _userPrintersDirString;
+    static CATUnicodeString   _userPrintersDir;
+    static CATLISTV(CATUnicodeString) _printersDirs;
+    static CATListOfInt _printersDirsState;
+    static int                _isOK;
+    static int                _printerCount;
+    static int                _defaultPrinter;
+    static CATPrintParameters* _defaultParameters;
+    static CATPrintUnit       _defaultUnit;
+    static CATLISTP(CATPrinter)* _printerList;
+    static CATPrinterManager*   _instance;
+    static CATLISTV(CATUnicodeString) _groupNames;
+    static CATLISTV(CATUnicodeString) _printerNamesByGroup;
+
+    static CATIPrinterManager*  _pIPrinterManager;
+
+    // driver UNIX : read the queue list
+    static const CATLISTV(CATUnicodeString)&amp; GetQueueList(void);
+    static CATLISTV(CATUnicodeString) _queueList;
+
+    // putenv management
+    static void PutEnv(const char* str);
+    static char** _env;
+    static int _envIndex;
+    static int _envSize;
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPrinterDevice.html">← 上一页: CATPrinterDevice.h</a></div>
+        <div><a href="../../Print/PublicInterfaces/CATPrint.html">下一页: CATPrint.h →</a></div>
+    </div>
+</body>
+</html>

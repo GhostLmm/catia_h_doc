@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATIUExitDRMDocument.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATIUExitDRMDocument.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIUExitDRMAuthorization.html">← 上一页: CATIUExitDRMAuthorization.h</a></div>
+        <div><a href="CATIUExitDRMILockBytes.html">下一页: CATIUExitDRMILockBytes.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* COPYRIGHT DASSAULT SYSTEMES 2006 */
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U5
+ */
+
+#ifndef CATIUExitDRMDocument_H
+#define CATIUExitDRMDocument_H
+
+#include &quot;CATWTypes.h&quot;
+#include &quot;CATErrorDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+#ifdef _WINDOWS_SOURCE
+#undef ExportedByJS0DRMDOC
+#ifdef __JS0DRMDOC
+#define ExportedByJS0DRMDOC __declspec(dllexport)
+#else
+#define ExportedByJS0DRMDOC __declspec(dllimport)
+#endif
+#else
+#define ExportedByJS0DRMDOC
+#endif
+
+
+
+extern &quot;C&quot; const IID IID_CATIUExitDRMDocument;
+extern &quot;C&quot; const IID IID_CATIUExitDRMSession;
+extern &quot;C&quot; const IID IID_CATIUExitDRMAuthorization;
+extern &quot;C&quot; const IID IID_CATIUExitDRMUI;
+
+
+			  
+
+/**
+ * Interface to enable user specific DRM (digital rights management) mechanism on
+ * documents.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface is a user exit, that allows an user to augment the
+ * security of its strategical documents by assigning security parameters inside 
+ * the document itself and not only relying on a perimeter-based security.
+ **/
+class ExportedByJS0DRMDOC  CATIUExitDRMDocument : public IUnknown
+{
+public:
+
+/**
+ * Creates the DRM context for a given document.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Creates the DRM context necessary to work on the document
+ * pointed by iDocumentID. This method will be called at the opening of the 
+ * document. It must be thread safe.
+ * @param iDocumentID
+ *      Pointer to the wide char string null terminated defining the document ID
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; S_FALSE :&lt;/tt&gt; To indicate that DRM  will not be used with 
+ *			     the document.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INVALIDNAME :&lt;/tt&gt; invalid name for the document.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_ACCESSDENIED:&lt;/tt&gt; access to the document not granted.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INVALIDPARAMETER :&lt;/tt&gt; DRM environment not set.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_DOCUMENTNOTFOUND :&lt;/tt&gt; document can not be found.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INSUFFICIENTMEMORY :&lt;/tt&gt; no more memory to make the open.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+
+*/
+  virtual HRESULT DRMCreateContext( const CATUC2Bytes * iDocumentID)=0;
+
+
+
+/**
+ * Closes the DRM context.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Closes the DRM context associated to a given document that has 
+ * been previously created by @href #DRMCreateContext.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;	on Success.
+ *   &lt;br&gt;&lt;tt&gt;  DRM_E_FAIL :&lt;/tt&gt;	on Error.
+*/
+  virtual HRESULT DRMCloseContext() = 0;
+
+
+
+/**
+ * Creates the digital envelope for a protected document.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Creates the digital envelope for a protected document on an
+ * exportable format. This information will be packed with the DRM enabled
+ * documentduring its saving phase. This data blob can be retrieved at opening 
+ * by @href #DRMImportEnvelope .
+ * @param  oDRMEnvelope [out]
+ *  Buffer where the protected exportable Envelope data will be stored.
+ * @param iDRMEnvelopeSize [out]
+ *   the size of of the DRM Envelope.
+ * @return
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_FAIL :&lt;/tt&gt; problem during envelope generation.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_ACCESSDENIED:&lt;/tt&gt; access to the document not granted.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INVALIDPARAMETER :&lt;/tt&gt; arguments incorrects.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INSUFFICIENTMEMORY :&lt;/tt&gt; no more memory to make the  envelope.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/    
+  virtual  HRESULT DRMExportEnveloppe ( void  *&amp;oDRMEnvelope,
+					size_t &amp;oDRMEnvelopeSize) = 0;
+  
+/**
+ * Frees the exportable envelope data.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Frees  the envelope data associated to a given document that 
+ * has been allocated during the @href #DRMExportEnveloppe
+ * @param iDRMEnvelope [in]
+ *     DRMEnvelope Buffer.
+ * @return
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_FAIL :&lt;/tt&gt; problem during license generation.
+*/    
+  virtual  HRESULT DRMFreeEnveloppe (void *oDRMEnvelope) = 0;
+
+
+
+/**
+ * Returns to DRM code the envelope data associated with a document.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns to the DRM code the envelope data associated with 
+ * the document that has been opened with @href DRMCreateContext. The DRM code 
+ * should be able to retrieve here all the necessary information for retrieving 
+ * the document, verify its integrety.
+ * It is possible to revoque directly here all subsequent operation by returning
+ * DRM_E_ACCESSDENIED.
+ * @param  iDRMLicence [in]
+ *  Buffer containing the DRM Envelope data.
+ * @param iDRMLicenseSize [in]
+ *   the size of the DRM license.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_FAIL :&lt;/tt&gt; problem during license retrieval.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_NODRM :&lt;/tt&gt; Not DRM protected document.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_ACCESSDENIED:&lt;/tt&gt; access to the document not granted.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INVALIDPARAMETER :&lt;/tt&gt; arguments incorrects.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/          
+  virtual  HRESULT DRMImportEnveloppe( const void *iDRMEnveloppe,
+				       size_t iDRMEnveloppeSize) = 0;
+
+
+
+/**
+ * Returns the GUID of the library implementing the user exits.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns the GUID of the library implementing the user exits.
+ * Thus it will be possible to detect documents that have been DRM protected by
+ * othercode or level of code. This GUID will be marshalled into the document.
+ * @param  oUID [o]
+ *  GUID structure.
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_FAIL :&lt;/tt&gt; problem during license retrieval.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INVALIDPARAMETER :&lt;/tt&gt; arguments incorrects.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/          
+  virtual  HRESULT DRMGetLibUID( GUID &amp;oUID) = 0;
+
+
+};
+
+
+
+
+/**
+ * Returns  the display name of a DRM document.
+ * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Returns the display name of a given DRM document 
+ * The caller is reponsible to release the memory by  calling a 
+ * delete []oDisplayName.
+ * @param iDoc [i]
+ *      Pointer to a CATIUExitDRMDocument 
+ *  @param oDisplayName [o]
+ *      Pointer to the wide char string null terminated defining the display of
+ *      the DRM document. 
+ * @return
+ *   &lt;b&gt;Legal values&lt;/b&gt;:
+ *   &lt;br&gt;&lt;tt&gt; S_OK :&lt;/tt&gt;on Success.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_DOCUMENTNOTFOUND :&lt;/tt&gt; document can not be found.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_INSUFFICIENTMEMORY :&lt;/tt&gt; no more memory to make the open.
+ *   &lt;br&gt;&lt;tt&gt; DRM_E_UNKNOWN :&lt;/tt&gt; unexpected error.
+*/
+HRESULT ExportedByJS0DRMDOC CATSysDRMGetDisplayName(CATIUExitDRMDocument *iDoc, 
+						    CATUC2Bytes *&amp; oDisplayName);
+
+
+
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIUExitDRMAuthorization.html">← 上一页: CATIUExitDRMAuthorization.h</a></div>
+        <div><a href="CATIUExitDRMILockBytes.html">下一页: CATIUExitDRMILockBytes.h →</a></div>
+    </div>
+</body>
+</html>

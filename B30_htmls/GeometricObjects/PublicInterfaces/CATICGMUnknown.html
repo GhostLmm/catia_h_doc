@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATICGMUnknown.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATICGMUnknown.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMOperator.html">← 上一页: CATICGMOperator.h</a></div>
+        <div><a href="CATIForeignCurve.html">下一页: CATIForeignCurve.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMUnknown_h
+#define CATICGMUnknown_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#include &quot;CATCGMNewInterface.h&quot;
+#include &quot;CATGeometryType.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATICGMUnknown ;
+#else
+extern &quot;C&quot; const IID IID_CATICGMUnknown ;
+#endif
+
+class CATCGMQueryManager;
+class CATTolerance;
+ 
+//CAA_Exposed CATIGemContainer
+/**
+ * Interface representing  the base class of all the objects of the Catia Geometrical Modeler 
+ */
+class ExportedByCATGMGeometricInterfaces CATICGMUnknown : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  CATNewInterfaceDeclare;
+public:
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+    //CAA_Exposed 
+/**
+  * Tests the type of &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown.
+  * @param iTypeReference
+  * The geometric type that must be tested
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown type is &lt;tt&gt;iTypeReference&lt;/tt&gt;, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual int  IsATypeOf(CATGeometricType iTypeReference)const =0;
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+ /**
+  * @nodoc
+  */
+  virtual void *IsCGMV5() const = 0;
+  
+
+      //CAA_Exposed 
+/**
+  * Compare the type of &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown with another object.
+  * @param iOtherObject
+  * Another geometric object whose type is to be compared with.
+  * @return
+  * The result of the test.
+  * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  * &lt;tt&gt;1&lt;/tt&gt; if these two objects have same type, &lt;tt&gt;0&lt;/tt&gt; otherwise.
+  */
+  virtual int  IsSameTypeAs(CATICGMUnknown * iOtherObject) const = 0;
+
+//CAA_Exposed 
+/**
+  * Returns the CATTolerance Object associated with &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown.
+  * &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown must be alive.
+  * Note that the Extreme Scale capability is not available in V5. It is available in V6 from V6R417.
+  * @return
+  *   The constant CATTolerance Object associated with &lt;tt&gt;this&lt;/tt&gt; CATICGMUnknown.
+  */
+  virtual const CATTolerance &amp; GetToleranceObject() const = 0;
+};
+  
+CATDeclareHandler(CATICGMUnknown,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMOperator.html">← 上一页: CATICGMOperator.h</a></div>
+        <div><a href="CATIForeignCurve.html">下一页: CATIForeignCurve.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDftView.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDftView.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftTextRange.html">← 上一页: CATIDftTextRange.h</a></div>
+        <div><a href="CATIDftViewEditor.html">下一页: CATIDftViewEditor.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDftView_H
+#define CATIDftView_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//===================================================================
+//
+// CATIDftView.h
+// Sheet feature type interface.
+//
+//===================================================================
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+// Inheritance
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMacForIUnknown.h&quot;
+
+// System
+#include &quot;CATBooleanDef.h&quot;
+
+// Drafting
+#include &quot;CATDftViewType.h&quot;
+#include &quot;CATDftViewLinkType.h&quot;
+
+// Forward declarations
+class CATISketch;
+class CATIDftSheet;
+// class CATIDftPosRelation;
+class CATIUnknownList;
+class CATIGenerSpec;
+
+#include &quot;CATDraftingInterfaces.h&quot;
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDftView ;
+#else
+extern &quot;C&quot; const IID IID_CATIDftView ;
+#endif
+
+/**
+ * Interface of the drawing view object.
+ * &lt;b&gt;Role&lt;/b&gt;: The view is a workspace containing geometries and annotations.
+ * The view may also contain the generative drafting results.
+ * The view positionning in a sheet is managed using the view make-up object.
+ * The generative drafting specifications are available using the CATIGenerSpec
+ * interface.
+ * @see CATIDftViewMakeUp
+ * @see CATIGenerSpec
+ */
+
+class ExportedByDraftingItfCPP CATIDftView : public CATBaseUnknown
+{
+  CATDeclareInterface;
+public:
+
+   /**
+   * Gets the view type.
+   * @param oType
+   *   The view type
+   * @return 
+    * &lt;tt&gt;HRESULT&lt;/tt&gt;
+    * &lt;dl&gt;
+    * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; View type has been found
+    * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No view type found.
+    * &lt;/dl&gt;
+    */
+   virtual HRESULT GetViewType(CATDftViewType *oType) const = 0;
+
+   /**
+   * Gets the view name as a string.
+   * @param oName
+   *   The view name
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; View name has been found
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No view name found.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetViewName(wchar_t **oName) const = 0;
+
+   /**
+   * Sets the view name as a string. This name can override an existing formula.
+   * @param iName
+   *   The view name
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; View name has been modified
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No modification applied.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT SetViewName(const wchar_t *iName) = 0;
+
+   /**
+   * Gets the view name formula. This object is a CKE formula computing the view name.
+   * from different inputs.
+   * @param oVNameFormula
+   *   The view name formula
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; View name formula has been modified
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; No view name formula found.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetViewNameFormula(IUnknown **oVNameFormula) const = 0;
+   
+
+   /**
+   * Used to get the view components (annotations, geometry, callout, ...).
+   * @param IID
+   *   The interface filter.
+   * @param oElems
+   * List of elements found.
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Elements found
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Execution failed.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetComponents(const IID interfaceID, CATIUnknownList **oElems) const = 0;
+
+
+   /**
+   * Used to Activate the view.
+   *   The active view is the view in edition. 
+   *   There is only one active view per sheet in a Drawing.
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; View is activated.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; View isn&#x27;t activated.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT Activate() const = 0;
+
+   /**
+   * Used to know if this view is active.
+   *   The active view is the view in edition. 
+   *   There is only one active view int the drawing.
+   * @param oActive
+   *   TRUE if the view is active.
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Execution successfully.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Execution failed.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT IsActive(boolean *oActive) const = 0;
+
+   /**
+   * Gets the generative specifications of the view.
+   * &lt;br&gt;&lt;b&gt;Postcondition&lt;/b&gt;:	Don&#x27;t forget to RELEASE the resulting oProduct after use.
+   * @param oGenerSpec
+   *   The generative specification interface.
+   * @return 
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Execution successfully.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Execution failed.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetGenerSpec(CATIGenerSpec **oGenerSpec) const = 0;
+
+   /** 
+   * Returns the extension of the view which deals with a specific applicative behavior.
+   * @param interfaceID
+   *    The interface which describes the extension.
+   * @param oExtension
+   *    The result of the query
+   * @return
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Execution successfully.
+   * &lt;dt&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt;     &lt;dd&gt; f internal problem.
+   * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;     &lt;dd&gt; if not recognize interfaceID.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Execution failed.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT GetApplicativeExtension(const IID &amp; interfaceID, IUnknown ** oExtension) = 0;
+
+   /**
+   * Adds an extension to the view to deal with a specific applicative behavior.
+   * @param interfaceID
+   *    The interface which describe the extension to be added
+   * @param oExtension
+   *    The added extension. If the extension already exists, it is returned also
+   * @return
+   * &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;     &lt;dd&gt; Execution successfully.
+   * &lt;dt&gt; &lt;tt&gt;E_UNEXPECTED&lt;/tt&gt;     &lt;dd&gt; f internal problem.
+   * &lt;dt&gt; &lt;tt&gt;E_INVALIDARG&lt;/tt&gt;     &lt;dd&gt; if not recognize interfaceID.
+   * &lt;dt&gt; &lt;tt&gt;E_FAIL&lt;/tt&gt;   &lt;dd&gt; Execution failed.
+   * &lt;/dl&gt;
+   */
+   virtual HRESULT AddApplicativeExtension(const IID &amp; interfaceID, IUnknown ** oExtension) = 0;
+};
+CATDeclareHandler(CATIDftView, CATBaseUnknown);
+#endif
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDftTextRange.html">← 上一页: CATIDftTextRange.h</a></div>
+        <div><a href="CATIDftViewEditor.html">下一页: CATIDftViewEditor.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitVirtualElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitVirtualElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitTypes.html">← 上一页: CATAnalysisExplicitTypes.h</a></div>
+        <div><a href="CATAnalysisExplicitVirtualNode.html">下一页: CATAnalysisExplicitVirtualNode.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitVirtualElement
+//
+//=============================================================================
+#ifndef CATAnalysisExplicitVirtualElement_H_
+#define CATAnalysisExplicitVirtualElement_H_
+
+#include &quot;CATAnalysisExplicitEntity.h&quot;
+
+class CATAnalysisExplicitListUsr;
+class CATString;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Field model virtual element.
+ * This object is used to define in the field model an object 
+ * which represent an physical behavior without meshing representation.
+ */
+
+class ExportedByCATSAM0Explicit CATAnalysisExplicitVirtualElement : public CATAnalysisExplicitEntity
+{
+
+   public :
+/**
+ * Default constructor.
+ */
+      CATAnalysisExplicitVirtualElement() ;
+/**
+ * Copy constructor.
+ */
+      CATAnalysisExplicitVirtualElement(const CATAnalysisExplicitVirtualElement &amp;iElement) ;
+/**
+ * Copy constructor.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitVirtualElement(const CATAnalysisExplicitData &amp;iData) ;
+/**
+ * Assignment operator.
+ */
+      CATAnalysisExplicitVirtualElement &amp;operator = (const CATAnalysisExplicitVirtualElement &amp;iElement) ;
+/**
+ * Assignment operator.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitVirtualElement &amp;operator = (const CATAnalysisExplicitData &amp;iData) ;
+/**
+ * Creates a virtual element.
+ * @param iElementSet
+ *    The parent element set.
+ * @param iElementPhysicalType
+ *    The physical type of the element.
+ * @param iListOfNodes
+ *    The list of nodes linked to the element.
+ */
+	  HRESULT CreateVirtualElement(CATAnalysisExplicitSet  &amp;iElementSet,
+                                 CATSamPhysicalType       iElementPhysicalType,
+                                 CATAnalysisExplicitListUsr &amp; iListOfNodes);
+/**
+ * Returns the number of linked Nodes.
+ * @param oNumber
+ *   The number of linked Nodes.
+ */
+      HRESULT GetNumberOfLinkedNodes(int &amp;oNumber) const ;
+/**
+ * Returns the linked nodes of the element.
+ * @param oLinkedNodes
+ *   The linked Nodes. They can be @href CATAnalysisExplicitNode or @href CATAnalysisExplicitVirtualNode.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.
+ *   The memory for the array is allocated by this method and must be de-allocated by the caller.
+ */
+      HRESULT GetLinkedNodes(CATSamExplicitPtr * (&amp;oLinkedNodes)) const ;
+
+
+/**
+ * Returns the Connectivity.
+ * @param oConnectivityName
+ *   The oConnectivity identifier.
+ */
+      HRESULT GetConnectivity(CATString &amp; oConnectivity) const;
+
+   private:
+
+      virtual HRESULT Init(const CATAnalysisExplicitData &amp;iData) ;
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitTypes.html">← 上一页: CATAnalysisExplicitTypes.h</a></div>
+        <div><a href="CATAnalysisExplicitVirtualNode.html">下一页: CATAnalysisExplicitVirtualNode.h →</a></div>
+    </div>
+</body>
+</html>

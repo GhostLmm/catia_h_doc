@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisResources/PublicInterfaces/CATEExpressionCollector.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisResources/PublicInterfaces/CATEExpressionCollector.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATECharacCollector.html">← 上一页: CATECharacCollector.h</a></div>
+        <div><a href="CATESamEnumManager.html">下一页: CATESamEnumManager.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2001
+//===================================================================
+//
+// CATEExpressionCollector.h
+// Provide default implementation of some methods of interface
+//    CATIExpressionCollector for AnalysisSet and AnalysisEntity
+//
+//===================================================================
+//
+// Usage notes:
+//
+//===================================================================
+#ifndef CATEExpressionCollector_H
+#define CATEExpressionCollector_H
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U2
+ */
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATAnalysisResources.h&quot;
+#include &quot;CATAnalysisExplicitExpression.h&quot;
+#include &quot;CATAnalysisExplicitListUsr.h&quot;
+
+class CATDocument;
+//------------------------------------------------------------------
+
+/**
+ * Adapter for the implementation of CATIExpressionCollector interface.
+ * It can be used for both for AnalysisSet and AnalysisEntity.
+ * @see CATIExpressionCollector, CATAnalysisExplicitExpression
+ */
+
+class ExportedByCATAnalysisResources CATEExpressionCollector: public CATBaseUnknown
+{
+  
+  public:
+   /**
+    * Default constructor.
+    */
+    CATEExpressionCollector();
+
+   /**
+    * Destructor.
+    */
+    virtual ~CATEExpressionCollector();    
+
+   /**
+    * Returns the list of Expressions available under this feature.
+    * @param iDefinition
+    *    Should be NULL_exp for this implementation.
+    * @param oDefinitions
+    *    The list of expressions.
+    *    The list must be created and deleted by the caller.
+    * @see CATAnalysisExplicitExpression, CATAnalysisExplicitListUsr
+    */
+   virtual HRESULT GetAvailableExpressions(const CATAnalysisExplicitExpression&amp; iDefinition,
+                                           CATAnalysisExplicitListUsr&amp; oDefinitions) ;
+
+   /**
+    * Make sure that a particular Expression obtained through &lt;b&gt;GetAvailableExpressions&lt;/b&gt;
+    * gets filled with its values.
+    * @param iExpression
+    *    The expression for which the values are requested.
+    * @see CATAnalysisExplicitExpression
+    */
+   virtual HRESULT CollectValues(CATAnalysisExplicitExpression&amp; iExpression) = 0 ;
+
+   /**
+    * Get the total number of Expressions.
+    */
+   virtual HRESULT GetNumberOfExpressions(int &amp;oNumber) ;
+
+   /**
+    * Get an Expression with a unique ID (0..GetNumberOfExpressions()) arbitrarily given by the implementation.&lt;br&gt;
+    * Order can change when Update is called.
+    * @param iNumber
+    *    The ID of the expression which is requested.
+    * @param oExpression
+    *    The requested expression.
+    * @param iCollectValues
+    *    Should be FALSE for this implementation.
+    * @see CATAnalysisExplicitExpression
+    */
+   virtual HRESULT GetExpression(int iNumber, CATAnalysisExplicitExpression &amp;oExpression,
+                                 const CATBoolean iCollectValues = TRUE) ;
+
+  	/**
+    * Release an Expression instance that is hosted under this feature and delete its definition.&lt;br&gt;
+	 * As a result it will not be saved under this feature.
+    * @param iExpression
+    *    The expression to delete.&lt;br&gt;
+    *    Will be equal to NULL_exp on exit of the method.
+    * @see CATAnalysisExplicitExpression
+	 */
+   virtual HRESULT DeleteExpression(CATAnalysisExplicitExpression &amp;ioExpression) ;
+
+   /**
+    * Release all Expression intances under the feature implementing this interface.&lt;br&gt;
+    * Instances that are not deleted (because they are still in use elsewhere) will not be saved under this feature.
+    */
+   virtual HRESULT DeleteAll() ;
+
+   /*
+    * Update Internal Data
+    */
+   virtual HRESULT Update() ;
+
+   /*
+    * Get the context
+    */
+   HRESULT GetContext() ;
+
+   /*
+    * Check that the corresponding feature is up to date
+    */
+   CATBoolean IsUpToDate() ;
+
+  private:
+   /**
+    * Constructors. No implementation provided. Just declared to avoid that 
+    * someone could build this class.
+    */
+   CATEExpressionCollector(const CATEExpressionCollector &amp;);
+   CATEExpressionCollector&amp; operator=(const CATEExpressionCollector &amp;);
+
+   /*
+    * Get the list of Expressions
+    */
+   HRESULT GetList() ;
+
+   int                        _Number ;
+   CATSamExplicitPtr          *_Pointers ;
+   CATAnalysisExplicitListUsr _List ;
+   CATAnalysisExplicitParent  _Context ;
+   CATDocument                *_pDoc;
+};   
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATECharacCollector.html">← 上一页: CATECharacCollector.h</a></div>
+        <div><a href="CATESamEnumManager.html">下一页: CATESamEnumManager.h →</a></div>
+    </div>
+</body>
+</html>

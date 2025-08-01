@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATISysLicenseSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATISysLicenseSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISysGlobalStatisticsSettingAtt.html">← 上一页: CATISysGlobalStatisticsSettingAtt.h</a></div>
+        <div><a href="CATISysMemoryWarningSettingAtt.html">下一页: CATISysMemoryWarningSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//===========================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2003                                         
+//===========================================================================
+//                                                                           
+//  CATISysLicenseSettingAtt                                                
+//                                                                           
+//  Usage Notes: Interface Definition                                          
+//===========================================================================
+//  Creation fevrier  2003                                 adt         	
+//===========================================================================
+#ifndef __CATISYSLICENSESETTINGATT
+#define __CATISYSLICENSESETTINGATT
+#include &quot;JS0LIB0.h&quot;
+#include &quot;CATBaseUnknown.h&quot;   
+#include &quot;CATISysSettingController.h&quot;
+
+// COPYRIGHT DASSAULT SYSTEMES 2003
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+class CATUnicodeString;
+class CATSettingInfo;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByJS0LIB0 IID IID_CATISysLicenseSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_CATISysLicenseSettingAtt;
+#endif
+
+
+
+/**
+* Interface to handle the licensing settings.
+* &lt;b&gt;Role&lt;/b&gt;: This interface is implemented by a component which
+* represents the controller of the static Licenses. 
+* &lt;br&gt;To access this property page:
+* &lt;li&gt;Click the Options command in the Tools menu&lt;/li&gt;
+* &lt;li&gt;Click General&lt;/li&gt;
+* &lt;li&gt;Click the Licensing Property Page&lt;/li&gt;
+* &lt;br&gt;This interface defines:
+* &lt;li&gt;A method to set each License&lt;/li&gt;
+* &lt;li&gt;A method to get the value of each License&lt;/li&gt;
+* &lt;li&gt;A method to lock/unlock each parameter&lt;/li&gt;
+* &lt;li&gt;A method to retrieve the information concerning each parameter&lt;/li&gt;
+*/
+class ExportedByJS0LIB0 CATISysLicenseSettingAtt : public CATBaseUnknown
+{
+  CATDeclareInterface;
+  
+public :
+
+/**
+* Retrieves the information on Demo Mode .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing if Demo Mode 
+* is active.
+* @param oRight
+*     TRUE if the demo mode is active.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetDemoMode (unsigned char &amp;oRight)=0;
+
+
+
+/**
+* Sets the value of the parameter Demo Mode.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the value of the parameter that discribing if Demo Mode
+* is active.
+* @param iRight
+*     TRUE if demo mode is active.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetDemoMode (unsigned char iRight)=0;
+
+/** 
+* Retrieves information about the DemoMode setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetDemoModeInfo (CATSettingInfo *oInfo)=0;
+
+/** 
+* Locks or unlocks the DemoMode setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+
+  virtual HRESULT SetDemoModeLock (unsigned char iLock)=0;
+
+  
+/**
+* Retrieves server time out .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing the 
+* licensing server time out in minutes. For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param oTimeOut
+*     Licensing server time out.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetServerTimeOut (float &amp;oTimeOut)=0;
+  
+
+/**
+* Sets server time out .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the value of the parameter describing the
+* licensing server time out in minutes. For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param iTimeOut
+*     Licensing server time out.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetServerTimeOut (float iTimeOut)=0;
+
+
+/** 
+* Retrieves information about the TimeOut setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetServerTimeOutInfo (CATSettingInfo *oInfo)=0;
+
+  
+/** 
+* Locks or unlocks the TimeOut setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetServerTimeOutLock (unsigned char iLock)=0;
+
+
+/**
+* Retrieves nodelock expiry alert .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing the 
+* nodelock expiry alert in day. For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param oAlert
+*     Licensing server time out.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetNodelockAlert (long &amp;oAlert)=0;
+  
+
+/**
+* Sets nodelock expiry alert .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the value of the parameter describing the
+* nodelock expiry alert in days. For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param iAlert
+*     Nodelock expiry alert.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetNodelockAlert(long iAlert)=0;
+
+
+/** 
+* Retrieves information about the nodelock expiry alert setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetNodelockAlertInfo (CATSettingInfo *oInfo)=0;
+
+  
+/** 
+* Locks or unlocks the nodelock expiry alert setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetNodelockAlertLock (unsigned char iLock)=0;
+
+/**
+* Retrieves the server contact frequency .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing the 
+* licensing server contact frequency in minutes. Note that a null value represents the maximum
+* contact frequency value.For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param oFrequency
+*     Licensing server contact frequency.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetFrequency (float &amp;oFrequency)=0;
+  
+
+/**
+* Sets the server contact frequency.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the value of the parameter describing the 
+* licensing server contact frequency in minutes. Note that a null value represents the maximum
+* contact frequency value. For more information about the range and maximum, refers to the 
+* Infrastructure documentation.
+* @param iFrequency
+*     Licensing server contact frequency.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetFrequency (float iFrequency)=0;
+
+
+/** 
+* Retrieves information about the Frequency setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetFrequencyInfo (CATSettingInfo *oInfo)=0;
+
+  
+/** 
+* Locks or unlocks the Frequency setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetFrequencyLock (unsigned char iLock)=0;
+
+
+
+
+/**
+* Retrieves if licenses have to be shown .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Retrieves the value of the parameter describing if complete 
+* license information has to be shown.
+* When the parameter is set, the user gets more information about the reason of the failure to request a license.
+* @param oRight
+*     TRUE if the information has to be shown.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetShowLicense (unsigned char &amp;oRight)=0;
+
+
+/**
+* Sets the value of the parameter ShowLicense.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:  Sets the value of the parameter that discribing if complete
+* license information has to be shown.
+* When the parameter is set, the user gets more information about the reason of the failure to request a license.
+* @param iRight
+*     TRUE if the information has to be shown.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetShowLicense (unsigned char iRight)=0;
+
+
+/** 
+* Retrieves information about the ShowLicense setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetShowLicenseInfo (CATSettingInfo *oInfo)=0;
+
+/** 
+* Locks or unlocks the ShowLicense setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetShowLicenseLock (unsigned char iLock)=0;
+  
+
+/**
+* Retrieves the List of the requested or locked Licenses .
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the list of the Licenses.
+* @param oNbLic
+*   The number of License
+* @param iDefaultLicenses
+*  If iDefaultLicenses!=0 and the settings are empty, returns the default licenses,
+*  that is, the visible nodolocked licenses
+*  If iDefaultLicenses == 0 and the settings are empty, returns the selected licenses
+* (not yet stored, because not yet validated by OK button). 
+* @param oTabLic
+*	The array of Licenses.
+*   You are responsible of the deallocation of oTabLic:
+*	&lt;br&gt;if (oTabLic) 
+*	&lt;br&gt;{
+*	&lt;br&gt;for (int Index = 0; Index &lt; oNbLic; Index++)
+*	&lt;br&gt;delete oTabLic[Index];
+*	&lt;br&gt;delete [] oTabLic;
+*	&lt;br&gt;oTabLic = NULL;
+*	&lt;br&gt;}
+*	&lt;br&gt;character meaning in license name:
+*   &quot;_&quot;: internal notation for a license configuration
+*   &quot;+&quot;: you chose &quot;Any license&quot; mode, example of returned value: _ME1.slt+FS1
+*	When the return value is a serial number (_ME1.slt_SerialNumber), you have chosen the &quot;Explicit&quot; license mode. In this case the add on product is not indicated in the license name.
+*
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT GetLicensesList (int &amp; NbLic, long iDefaultLicenses, CATUnicodeString **&amp;oTabLic) =0;
+
+
+/**
+* @deprecated V5R15 CATSysLicenseSettingAtt#GetLicensesList 
+*/
+  virtual HRESULT GetGrantedLicensesList (int &amp; NbLic, long iDefaultLicenses, CATUnicodeString **&amp;oTabLic) =0;
+
+
+/**
+* Retrieves information about the LicensesList setting parameter.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves information about the LicensesList setting locking state (global lock for the LicensesList).
+* It is used to get the lock status of the List of the Licenses.
+* If the LicensesList is locked all the licenses are locked.
+* When the licenses are locked, it means that an administrator has locked the attribute.
+* It does not means that an administrator has changed the value of the attribute.
+* The value of the setting is not updatable because it refers to a lock on a list. 
+* That is why the return value is false.
+* @param oInfo:
+* Address of an object CATSettingInfo.
+* &lt;br&gt;Information returned in the dump:
+* &lt;li&gt;Parameter 1 : &quot;Value taken in case of reset&quot; : useless. Default value : &quot;Default value&quot; &lt;/li&gt;
+* &lt;li&gt;Parameter 2 : &quot;Locking state&quot; value : unlocked / locked / locked at Admin Level n &lt;/li&gt;
+* &lt;li&gt;Parameter 3 : &quot;Returned value&quot; : useless, default value : False &lt;/li&gt;
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetLicensesListInfo (CATSettingInfo * oInfo)=0;
+  
+  
+/**
+* Locks or unlocks the LicensesList setting parameter.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;:Locks or unlocks the LicensesList setting parameter.
+* Locks or unlocks the parameter describing the list of 
+* installed licenses, if the  operation is allowed in the current
+* administrated environment.
+* It is the global lock on all the licenses.
+* In user mode  this method will always return E_FAIL.
+* When the LicenseList is locked all the licenses are locked.
+* When the LicenseList is unlocked all the licenses are unlocked.
+* @param iLock
+*	the locking operation to be performed:
+*	&lt;br&gt;&lt;tt&gt;1 :&lt;/tt&gt;   to lock the parameter.
+* 	&lt;br&gt;&lt;tt&gt;0:&lt;/tt&gt;   to unlock the parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetLicensesListLock ( unsigned char iLock)=0;
+
+
+/**
+* Retrieves the value of the license.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the mapping between a name of a license and 
+* the value of the license. 
+* The license does not need to be returned by GetLicensesList().
+* 
+* @param iLicense
+*  the name of the license: &quot;PMG.prd&quot;, &quot;_MD2.slt+&quot;, &quot;_MD2.slt+GSD&quot; for example.
+*  &lt;br&gt;&quot;PMG.prd&quot; represent the license of the product PMG
+*  &lt;br&gt;&quot;_MD2.slt+&quot; represent the license of the solution MD2
+*  &lt;br&gt;&quot;_MD2.slt+GSD&quot;represent the license of the solution MD2, with the AddOn product GSD
+* @param oValue
+*	the value of the License:
+*	&lt;br&gt;&lt;tt&gt; NotRequested :&lt;/tt&gt;   License is not Requested
+* 	&lt;br&gt;&lt;tt&gt; key :&lt;/tt&gt;  the name of the license, the default available license has been chosen by the user. License is Requested.
+*  &lt;br&gt;&lt;tt&gt; License Number :&lt;/tt&gt; a specific license number has been chosen by the user. License is Requested.
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure. A problem occured during setting file access. 
+*/
+  virtual HRESULT GetLicense(const CATUnicodeString *iLicense, 
+			     CATUnicodeString *oValue)=0;
+
+
+/**
+* Sets the License.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets the value of the license.
+* @param iLicense
+*  the name of the license: &quot;PMG.prd&quot;, &quot;_MD2.slt+&quot;, &quot;_MD2.slt+GSD&quot; for example.
+*  &lt;br&gt;&quot;PMG.prd&quot; represent the license of the product PMG.
+*  &lt;br&gt;&quot;_MD2.slt+&quot; represent the license of the solution MD2.
+*  &lt;br&gt;&quot;_MD2.slt+GSD&quot; represent the license of the solution MD2, with the AddOn product GSD.
+* @param iValue
+*	the value of the License:
+*	&lt;br&gt;&lt;tt&gt; NotRequested :&lt;/tt&gt;   License is not Requested
+* 	&lt;br&gt;&lt;tt&gt; key :&lt;/tt&gt;  the name of the license, the default available license has been chosen by the user. License is Requested.
+*  &lt;br&gt;&lt;tt&gt; License Number :&lt;/tt&gt; a specific license number has been chosen by the user. License is Requested.
+* 
+* @return
+*	&lt;b&gt;Legal values&lt;/b&gt;:
+*	&lt;br&gt;&lt;tt&gt;S_OK :&lt;/tt&gt;   on success
+* 	&lt;br&gt;&lt;tt&gt;E_FAIL:&lt;/tt&gt;  on failure
+*/
+  virtual HRESULT SetLicense(const CATUnicodeString *iLicense, 
+			     const CATUnicodeString *iValue)=0;
+
+
+/** 
+* Retrieves information about the License setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT GetLicenseInfo (const CATUnicodeString *iLicense,
+				  CATSettingInfo* oInfo)=0;
+
+
+/** 
+* Locks or unlocks the License setting parameter.
+* &lt;br&gt;Refer to @href CATSysSettingController for a detailed description.
+*/
+  virtual HRESULT SetLicenseLock (const CATUnicodeString *iLicense,
+				  unsigned char iLock)=0;
+
+
+  
+};
+
+
+
+
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISysGlobalStatisticsSettingAtt.html">← 上一页: CATISysGlobalStatisticsSettingAtt.h</a></div>
+        <div><a href="CATISysMemoryWarningSettingAtt.html">下一页: CATISysMemoryWarningSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

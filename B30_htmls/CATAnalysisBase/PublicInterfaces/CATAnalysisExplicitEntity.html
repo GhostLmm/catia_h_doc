@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitEntity.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATAnalysisExplicitEntity.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitElement.html">← 上一页: CATAnalysisExplicitElement.h</a></div>
+        <div><a href="CATAnalysisExplicitExpression.html">下一页: CATAnalysisExplicitExpression.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+//=============================================================================
+//
+// CATAnalysisExplicitEntity
+//
+//=============================================================================
+//
+// Usage Notes: Services linked to the field model entities.
+//
+//=============================================================================
+// Octobre 99   Creation                                                    LBK
+//=============================================================================
+#ifndef CATAnalysisExplicitEntity_H_
+#define CATAnalysisExplicitEntity_H_
+
+#include &quot;CATAnalysisExplicitParent.h&quot;
+
+class CATSamStream ;
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+/**
+ * Field model entity.
+ * This object is used to provide services linked to the field model entities.
+ */
+class ExportedByCATSAM0Explicit CATAnalysisExplicitEntity : public CATAnalysisExplicitParent
+{
+   public :
+/**
+ * Default constructor.
+ */
+      CATAnalysisExplicitEntity() ;
+
+/**
+ * Copy constructor.
+ */
+      CATAnalysisExplicitEntity(const CATAnalysisExplicitEntity &amp;iEntity) ;
+
+/**
+ * Copy constructor.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitEntity(const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Assignment operator.
+ */
+      CATAnalysisExplicitEntity &amp;operator = (const CATAnalysisExplicitEntity &amp;iEntity) ;
+
+/**
+ * Assignment operator.
+ * @see CATAnalysisExplicitData
+ */
+      CATAnalysisExplicitEntity &amp;operator = (const CATAnalysisExplicitData &amp;iData) ;
+
+/**
+ * Creates an entity in the field model.
+ * @param iModel
+ *   A pointer to the field model into which the entity will be created.
+ * @param iPhysicalType
+ *   The physical type of the entity.
+ * @see CATAnalysisExplicitModel
+ */
+      HRESULT CreateEntity(const CATAnalysisExplicitModel *iModel,
+         CATSamPhysicalType iPhysicalType) ;
+
+/**
+ * Creates an entity in the field model as the child of an other set or entity.
+ * @param iParent
+ *   The parent of the entity which will be created.
+ * @param iPhysicalType
+ *   The physical type of the entity.
+ * @see CATAnalysisExplicitParent
+ */
+      HRESULT CreateEntity(const CATAnalysisExplicitParent &amp;iParent,
+         CATSamPhysicalType iPhysicalType) ;
+
+/**
+ * Obtains the apply-to list.
+ * @param oApplyToList
+ *   The apply-to list.
+ * @see CATAnalysisExplicitList
+ */
+      HRESULT GetApplyToList(CATAnalysisExplicitList &amp;oApplyToList) const ;
+
+/**
+ * Obtains the array of pointers to the apply-to.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param oApplyTo[oNumber]
+ *   The array of pointers to the apply-to.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param iExpand
+ *   If iExpand is True, and if the ApplyTo list contains Sets or Groups, the method
+ *   returns the children of the Sets or the ApplyTo of the Groups.
+ */
+      HRESULT GetApplyTo(int &amp;oNumber, CATSamExplicitPtr * &amp;oApplyTo, CATBoolean iExpand = FALSE) const ;
+    
+/**
+ * Obtains the arrays of the apply-to pointers, apply-to numbers, apply-to Qualifiers and the apply-to positions.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param oApplyTo[oNumber]
+ *   The array of the apply-to pointers.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param oApplyToPosition
+ *   The apply position.
+ * @param oApplyToNumbers[oNumber]
+ *   The array of apply-to numbers.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param oApplyToQualifiers[oNumber]
+ *   The array of apply-to qualifiers.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param iExpand
+ *   If iExpand is True, and if the ApplyTo list contains Sets or Groups, the method
+ *   returns the children of the Sets or the ApplyTo of the Groups. 
+ * @see CATSamPosition, CATSamApplyQualifier
+ */
+      HRESULT GetApplyTo(int &amp;oNumber, CATSamExplicitPtr* &amp;oApplyTo, CATSamPosition &amp;oApplyToPosition, int* &amp;oApplyToNumbers,
+                         CATSamApplyQualifier* &amp;oApplyToQualifiers, CATBoolean iExpand = FALSE) const ;
+ 
+/**
+ * Obtains the arrays of the apply-to sequential numbers, apply-to numbers, apply-to Qualifiers and the apply-to positions.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param oApplyTo[oNumber]
+ *   The array of the apply-to Sequential Number .&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param oApplyToPosition
+ *   The apply-to position.
+ * @param oApplyToNumbers[oNumber]
+ *   The array of apply-to numbers.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param oApplyToQualifiers[oNumber]
+ *   The array of apply-to qualifiers.&lt;br&gt;
+ *   This parameter must be equal to NULL when this method is called.&lt;br&gt;
+ *   The memory for the array is allocated by this method but must be de-allocated by the caller.
+ * @param iExpand
+ *   If iExpand is True, and if the ApplyTo list contains Sets or Groups, the method
+ *   returns the children of the Sets or the ApplyTo of the Groups. 
+ * @see CATSamPosition, CATSamApplyQualifier
+ */
+      HRESULT GetApplyTo(int &amp;oNumber, int* &amp;oApplyTo, CATSamPosition &amp;oApplyToPosition, int* &amp;oApplyToNumbers,
+                         CATSamApplyQualifier* &amp;oApplyToQualifiers, CATBoolean iExpand = FALSE) const ;
+
+/**
+ * Applies a field model entity to another entity or set.
+ * @param iApplyTo
+ *   The field object on which the apply is done. must be defined in the same model than the entity.
+ * @param iApplyPosition
+ *   The position of the apply.
+ * @param iApplyNumber
+ *   The number of the apply.
+ * @param iApplyQualifier
+ *   The apply qualifier.
+ * @see CATAnalysisExplicitParent, CATSamPosition, CATSamApplyQualifier
+ */
+      HRESULT ApplyTo(const CATAnalysisExplicitParent &amp;iApplyTo, CATSamPosition iApplyPosition,
+                      int iApplyNumber = 0, CATSamApplyQualifier iApplyQualifier = CATSamApplyQualifierLast) const ;
+
+/**
+ * Applies a field model entity to several entities or sets.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param iApplyTo[oNumber]
+ *   The array of pointers to the field objects on which the apply is done.
+ * @param iApplyPosition
+ *   The position of the applies.
+ * @param iApplyNumber
+ *   The number of the applies.
+ * @param iApplyQualifier
+ *   The apply qualifier.
+ * @see CATSamPosition, CATSamApplyQualifier
+ */
+      HRESULT ApplyTo(int iNumber, const CATSamExplicitPtr *iApplyTo, CATSamPosition iApplyPosition, int iApplyNumber = 0,
+                      CATSamApplyQualifier iApplyQualifier = CATSamApplyQualifierLast) const ;
+   
+/**
+ * Applies a field model entity to several entities or sets.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param iApplyTo[oNumber]
+ *   The array of pointers to the field objects on which the apply is done.
+ * @param iApplyPosition
+ *   The position of the applies.
+ * @param iApplyNumber[oNumber]
+ *   The array of numbers of the applies.
+ * @param iApplyQualifier[oNumber]
+ *   The array of apply qualifiers.
+ * @see CATSamPosition
+ */
+      HRESULT ApplyTo(int iNumber, const CATSamExplicitPtr *iApplyTo, CATSamPosition iApplyPosition,
+                      const int *iApplyNumber, const CATSamApplyQualifier *iApplyQualifier = NULL) const ;
+  
+/**
+ * Removes the apply of a field model entity on another entity or set.
+ * @param iApplyTo
+ *   The field object for which the apply must be removed.
+ * @see CATAnalysisExplicitParent
+ */
+      HRESULT RemoveApplyTo(const CATAnalysisExplicitParent &amp;iApplyTo) const ;
+
+/**
+ * Removes the applies of a field model entity on several entities or sets.
+ * @param oNumber
+ *   The number of apply-to.
+ * @param iApplyTo[oNumber]
+ *   The array of pointers to the field objects for which the apply must be removed.
+ * @param iApplyModel
+ *   if iApplyModel is not NULL the objects for which the apply must be removed are defined in iApplyModel, otherwise they are defined in the same model than the entity.
+ */
+      HRESULT RemoveApplyTo(int iNumber, const CATSamExplicitPtr *iApplyTo, const CATAnalysisExplicitModel *iApplyModel = NULL) const ;
+
+/**
+ * @deprecated V5R17
+ * Returns the Combine status.
+ * &lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;&lt;li&gt;&lt;tt&gt;TRUE&lt;/tt&gt; The object is a combined Entity.&lt;br&gt;
+ * This means that it is pointing to aSet in an other case.
+ * To access the &quot;pointed&quot; Set object use @href #GetPointedSetByCombinedEntity.&lt;/li&gt;
+ *     &lt;li&gt;&lt;tt&gt;FALSE&lt;/tt&gt;  The object is not a combined Entity.&lt;/li&gt;&lt;/ul&gt;
+ */
+      CATBoolean IsACombinedEntity() const;
+
+/**
+ * @deprecated V5R17
+ * Gets the pointed Set if Combine status.
+ * @param oPointedObject the pointed object.
+ */
+      HRESULT GetPointedSetByCombinedEntity(CATAnalysisExplicitSet&amp; oPointedSet) const;
+
+   protected :
+     virtual void    Reset() ;
+     virtual HRESULT Init(const CATAnalysisExplicitData &amp;iData) ;
+
+   private :
+    // Friend Class For Private Methode
+    friend class CATAnalysisExplicitServices; 
+
+    // Creates an entity in the field model (internal use Only
+    HRESULT CreateEntity(const CATAnalysisExplicitModel *iModel, const CATULONG32&amp; iEntityTag, const CATSamPhysicalType&amp; iPhysicalType, const CATBoolean&amp; iIsOrpan);
+    // Obtain the User defined positions of the instance of CATAnalysisExplicitEntity if exists.
+    // return TRUE if the instance of CATAnalysisExplicitEntity had User defined positions.
+    CATBoolean HadUserDefinedPositions(CATAnalysisExplicitCharac &amp;oNbPositions, CATAnalysisExplicitCharac &amp;oPositions) const;
+    // Check the position apply in case of enity having variable characteristics.
+    // return S_OK if the User defined positions are well defined.
+    HRESULT CheckApplyValidity() const;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAnalysisExplicitElement.html">← 上一页: CATAnalysisExplicitElement.h</a></div>
+        <div><a href="CATAnalysisExplicitExpression.html">下一页: CATAnalysisExplicitExpression.h →</a></div>
+    </div>
+</body>
+</html>

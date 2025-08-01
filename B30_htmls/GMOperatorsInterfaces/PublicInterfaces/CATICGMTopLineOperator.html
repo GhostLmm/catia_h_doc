@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopLineOperator.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMTopLineOperator.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopHelixOperator.html">← 上一页: CATICGMTopHelixOperator.h</a></div>
+        <div><a href="CATICGMTopLineTangentCrvCrvOperator.html">下一页: CATICGMTopLineTangentCrvCrvOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMTopLineOperator_h_
+#define CATICGMTopLineOperator_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopCurveOperator.h&quot;
+#include &quot;CATMathConstant.h&quot;
+
+class CATMathVector;
+class CATTopData;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMTopLineOperator;
+
+/**
+* Class defining a topological operator that builds a line body.
+* &lt;br&gt; The definition of the line can be:
+* &lt;ul&gt;&lt;li&gt; passing by two points,
+* &lt;li&gt; passing by a point and with a given direction,
+* &lt;li&gt; tangent to a wire at a given point,
+* &lt;li&gt; angled to the tangent to a wire at a given point, round the shell normal at this point 
+* &lt;li&gt; normal to a shell at a point.
+*&lt;/ul&gt;
+*&lt;br&gt; This operator follows the general scheme of the topological operators.
+* For a basic use, use the functions &lt;tt&gt;CATCGMCreateTopLineXXX&lt;/tt&gt;
+* that directly returns a line body.
+* If you need to tune specific parameters, use the advanced scheme:
+*&lt;ul&gt;
+*&lt;li&gt; Create the operator with one of the functions &lt;tt&gt;CATCGMCreateTopLineOperatorXXX&lt;/tt&gt;
+*&lt;li&gt; Set parameters: for example, use the &lt;/tt&gt;SetFirstLimit&lt;/tt&gt;
+* &lt;/tt&gt;SetSecondLimit&lt;/tt&gt; methods to tune the line limits
+*&lt;li&gt; Run
+*&lt;li&gt; Get the resulting body 
+*&lt;li&gt; Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method.
+*&lt;/ul&gt;
+*&lt;br&gt;The created body can be removed from the factory with the 
+* @href CATICGMContainer#Remove method as any CATICGMObject.
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator: public CATICGMTopCurveOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMTopLineOperator();
+
+  /** 
+  * Defines the first limitation of the Line Body.
+  * @param iFirstLength
+  * The length from the origin of the line to define the first limitation.
+  */
+  virtual void SetFirstLimit(double iFirstLength) = 0;
+
+  /** 
+  * Defines the second limitation of the Line Body.
+  * @param iSecondLength
+  * The length from the origin of the line to define the second limitation.
+  */
+  virtual void SetSecondLimit(double iSecondLength) = 0;
+
+  /**
+ * Reads the first limitation, set for &lt;tt&gt;this&lt;/tt&gt; CATICGMTopLineOperator.
+ * @param ioFirstLength
+ * The length from the origin of the line to define the first limitation.
+ */
+  virtual void GetFirstLimit(double &amp;ioFirstLength) = 0;
+
+  /**
+ * Reads the second limitation, set for &lt;tt&gt;this&lt;/tt&gt; CATICGMTopLineOperator.
+ * @param ioSecondLength
+ * The length from the origin of the line to define the second limitation.
+ */
+  virtual void GetSecondLimit(double &amp;ioSecondLength) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMTopLineOperator(); // -&gt; delete can&#x27;t be called
+};
+
+/**
+* Creates a topological line operator that builds
+* a line passing through two points.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iSecondPoint
+* A pointer to the second point body, defining the line. This body must only contain one point (vertex).
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineOperatorFromPoints(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iSecondPoint);
+
+/**
+* Creates a line body passing through two points.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line.  This body must only contain one point (vertex).
+* @param iSecondPoint
+* The pointer to the second point body defining the line.  This body must only contain one point (vertex).
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopLineFromPoints(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iSecondPoint);
+
+/**
+* Creates a topological line operator that builds
+* a line passing through a point and with a given direction.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* A pointer to the point body, origin of the line.  This body must only contain one point (vertex).
+* @param iDirection
+* The vector defining the line direction.
+* @param iLength
+* The length of the line from the origin point.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineOperatorFromDirection(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  const CATMathVector &amp;iDirection,
+  double iLength);
+
+/**
+* Creates a line body passing through a point with a given direction.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iDirection
+* The vector defining the line direction.
+* @param iLength
+* The length of the line from the origin point.
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopLineFromDirection(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  const CATMathVector &amp;iDirection,
+  double iLength);
+
+/**
+* Creates a topological line operator that builds
+* a line tangent to a wire at a given point on the wire.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line.  This body must only contain one point (vertex).
+* @param iWire
+* The pointer to the wire body which geometrically contains the origin point. This body must only contain one wire.
+* @param iLength
+* The length of the line from the origin point.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineOperatorTangentToWire(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iCurve,
+  double iLength);
+
+/**
+* Creates a line body tangent to a wire at a given point on the wire.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iCurve
+* The pointer to the wire body which geometrically contains the origin point. This body must only contain one wire.
+* @param iLength
+* The length of the line from the origin point.
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopLineTangentToWire(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iCurve,
+  double iLength);
+
+/**
+* Creates a topological line operator that builds
+* a line angled to the tangent to the wire at the origin point,
+* and lying in the plane tangent to the shell at the origin point.
+* &lt;br&gt;In other words:
+* &lt;ul&gt;
+*   &lt;li&gt;consider T as the tangent to the wire at the origin point P,
+*   &lt;li&gt;build the result line by rotation of T of a given angle round the
+*     normal to the shell at P.
+* &lt;/ul&gt;
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iCurve
+* The pointer to the wire which contains the origin point. It must be included in the shell. 
+* @param iShellOfCurve
+* The pointer to the shell which contains the origin point and the wire. 
+* @param iLength
+* The length of the line from the origin point.
+* @param iAngle
+* The angle in radian of the rotation around the normal of the shell at the origin point.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineOperatorAngledTangentToWire(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iCurve,
+  CATBody *iShellOfCurve,
+  double iLength,
+  CATAngle iAngle);
+
+/**
+* Creates a line body angled to the tangent to the wire at the origin point,
+* and lying in the plane tangent to the shell at the origin point.
+* &lt;br&gt;In other words:
+* &lt;ul&gt;
+*   &lt;li&gt;consider T as the tangent to the wire at the origin point P,
+*   &lt;li&gt;build the result line by rotation of T of a given angle round the
+*     normal to the shell at P.
+* &lt;/ul&gt;
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iWire
+* The wire which contains the origin point. It must be included in the shell. 
+* @param iShellOfWire
+* The pointer to the shell containing the origin point and the wire. 
+* @param iLength
+* The length of the line from the origin point.
+* @param iAngle
+* The angle in radian of the rotation around the normal of the shell at the origin point.
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopLineAngledTangentToWire(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iWire,
+  CATBody *iShellOfWire,
+  double iLength,
+  CATAngle iAngle);
+
+/**
+* Creates a topological line operator  that builds
+* a line normal to a shell at a point.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iShellOfPoint
+* The pointer to the shell containing the origin point. 
+* @param iLength
+* The length of the line from the origin point.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineOperatorNormalToShell(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  CATBody *iShellOfPoint,
+  double iLength);
+
+/**
+* Creates a line body normal to a shell at a point.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The pointer to the point body, origin of the line. This body must only contain one point (vertex).
+* @param iShellOfPoint
+* The pointer to the shell containing the origin point. 
+* @param iLength
+* The length of the line from the origin point.
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopLineNormalToShell(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iFirstPoint,
+  CATBody *iShellOfPoint,
+  double iLength);
+
+/**
+* Create an infinite line passing through a point in a given direction.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iOriginPoint
+* The point body origin of the line.
+* @param iDirection
+* The vector giving the line direction.
+* @param iIsSemiInfinite
+* Yes if the line is only infinite in the given direction
+* and No if the line is infinite on the both side.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ 
+ExportedByCATGMOperatorsInterfaces CATICGMTopLineOperator *CATCGMCreateTopLineInfiniteOperatorFromDirection(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  const CATMathVector &amp;iDirection,
+  CATBoolean iIsSemiInfinite);
+
+/**
+* Create an infinite line passing through a point in a given direction.
+* @param iFactory
+* The factory that creates the resulting body.
+* @param iTopData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iTopData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+* @param iOriginPoint
+* The point body origin of the line.
+* @param iDirection
+* The vector giving the line direction.
+* @param iIsSemiInfinite
+* TRUE if the line is only infinite in the given direction
+* and FALSE if the line is infinite on the both side.
+* @return
+* The pointer to the created line body. To remove with the @href CATICGMContainer#Remove method.
+*/
+ExportedByCATGMOperatorsInterfaces CATBody *CATCGMCreateTopInfiniteLineFromDirection(
+  CATGeoFactory *iFactory,
+  CATTopData *iTopData,
+  CATBody *iOriginPoint,
+  const CATMathVector &amp;iDirection,
+  CATBoolean iIsSemiInfinite);
+
+#endif /* CATICGMTopLineOperator_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMTopHelixOperator.html">← 上一页: CATICGMTopHelixOperator.h</a></div>
+        <div><a href="CATICGMTopLineTangentCrvCrvOperator.html">下一页: CATICGMTopLineTangentCrvCrvOperator.h →</a></div>
+    </div>
+</body>
+</html>

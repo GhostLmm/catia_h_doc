@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperatorsLight/PublicInterfaces/CATEuclidianDistanceTool.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperatorsLight/PublicInterfaces/CATEuclidianDistanceTool.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDistanceMinBodyBody.html">← 上一页: CATDistanceMinBodyBody.h</a></div>
+        <div><a href="CATExtrapolParallelTool.html">下一页: CATExtrapolParallelTool.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEuclidianDistanceTool_H
+#define CATEuclidianDistanceTool_H
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;ParallelLight.h&quot;
+
+#include &quot;CATTopDef.h&quot;
+#include &quot;CATDistanceTool.h&quot;
+
+class CATMathSetOfPointsND;
+class CATMathFunctionX;
+class CATGeoFactory;
+class CATSoftwareConfiguration;
+class CATCurve;
+class CATSurface;
+class CATCrvLimits;
+class CATSurLimits;
+class CATLaw;
+class CATCompositeLaw;
+class CATParallelComputer;
+
+
+/**
+ * @deprecated V5R10 CATCreateTopEuclidianDistanceTool
+ * Class defining the euclidean parallel computation.
+ * This class is used to define the parameters of a @href CATTopParallel operator.
+ */
+class ExportedByParallelLight CATEuclidianDistanceTool : public CATDistanceTool
+{
+  CATCGMVirtualDeclareClass(CATEuclidianDistanceTool);
+ public:
+
+  /**
+ * Constructs the object for the euclidean computation.
+ * @param iGeoFactory
+ * The pointer to geometry factory.
+ * @param iSoftwareConfiguration
+ * The pointer to the software configuration with which the code must be run.
+ * @param iOrientation
+ * The side on which the parallel is computed.
+ * The cross product between the shell normal and the wire tangent define the
+ * left side.
+ * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: &lt;tt&gt;CATOrientationPositive&lt;/tt&gt; for the left side,
+ * &lt;tt&gt;CATOrientationNegative&lt;/tt&gt; for the right side.
+ * @param iDistance
+ * The pointer to the law defining the parallel offset.
+ */
+  CATEuclidianDistanceTool( CATGeoFactory * iGeoFactory,
+                            CATSoftwareConfiguration * iSoftwareConfiguration,
+                            CATOrientation iOrientation, CATCompositeLaw *iDistance );
+
+  /**
+ * @nodoc
+ * Use the signature with CATCompositeLaw.
+ * Constructs the object for the euclidean computation.
+ * @param iGeoFactory
+ * The pointer to geometry factory.
+ * @param iSoftwareConfiguration
+ * The pointer to the software configuration with which the code must be run.
+ * @param iOrientation
+ * The side on which the parallel is computed.
+ * The cross product between the shell normal and the wire tangent define the
+ * left side.
+ * &lt;br&gt;&lt;b&gt;Legal values &lt;/b&gt;: &lt;tt&gt;CATOrientationPositive&lt;/tt&gt; for the left side,
+ * &lt;tt&gt;CATOrientationNegative&lt;/tt&gt; for the right side.
+ * @param iDistance
+ * The pointer to the law defining the parallel offset.
+ */
+
+  CATEuclidianDistanceTool( CATGeoFactory * iGeoFactory,
+                            CATSoftwareConfiguration * iSoftwareConfiguration,
+                            CATOrientation iOrientation, CATLaw *iDistance );
+  ~CATEuclidianDistanceTool();
+
+/** @nodoc */
+  short GetType() const;
+
+/** @nodoc */
+  CATTopSign GetSign();
+
+/** @nodoc @nocgmitf */
+  CATParallelComputer *GetParallelComputer( CATCurve * iCurve,
+				       CATCrvLimits &amp; iCurveLimit,
+				       CATLONG32 iOrientationEdge,
+				       CATBoolean iExtrapolEdge,
+				       CATSurface * iSupport,
+				       CATSurLimits &amp; iSupportLimit,
+				       CATLONG32 iOrientationSupport,
+				       CATBoolean iExtrapolSupport,
+                                       CATParallelConnectTool *iConnectTool,
+				       CATMathSetOfPointsND * iInitPoints,
+	                               CATBoolean iLoopSearch );
+
+/** @nodoc @nocgmitf */
+	CATCGMOperator * GetProjectOpe(CATGeoFactory * iFacto, CATTopData * iData, CATGeometry * iToProject, CATGeometry * iSupport);
+/** @nodoc @nocgmitf */
+	CATCGMOperator * GetDistOpe(CATGeoFactory * iFacto, CATTopData * iData, CATGeometry * iToProject, CATGeometry * iSupport);
+ private :
+
+  CATOrientation _Orientation;
+
+  // Temporaire
+  CATSoftwareConfiguration   * _SoftwareConfiguration;
+  CATBoolean _OwnedConfig;
+
+ 
+ public:
+ /**
+ * @nodoc
+ * Use the signature with CATSoftwareConfiguration and CATCompositeLaw.
+ */
+  CATEuclidianDistanceTool( CATGeoFactory * iGeoFactory,
+                            CATOrientation iOrientation, CATLaw *iDistance );
+  /**
+ * @nodoc
+ * Use the signature with CATSoftwareConfiguration.
+ */
+  CATEuclidianDistanceTool( CATGeoFactory * iGeoFactory,
+                            CATOrientation iOrientation, CATCompositeLaw *iDistance );
+
+};
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDistanceMinBodyBody.html">← 上一页: CATDistanceMinBodyBody.h</a></div>
+        <div><a href="CATExtrapolParallelTool.html">下一页: CATExtrapolParallelTool.h →</a></div>
+    </div>
+</body>
+</html>

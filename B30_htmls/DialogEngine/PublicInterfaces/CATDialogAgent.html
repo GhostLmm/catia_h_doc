@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DialogEngine/PublicInterfaces/CATDialogAgent.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DialogEngine/PublicInterfaces/CATDialogAgent.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDiaError.html">← 上一页: CATDiaError.h</a></div>
+        <div><a href="CATDialogEngine.html">下一页: CATDialogEngine.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATDialogAgent_h
+#define CATDialogAgent_h
+#include &quot;CATDialogEngine.h&quot;
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+// protected DI0STATE.m
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATCommand.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATDlgEngUtility.h&quot;
+
+#include &quot;CATString.h&quot;
+
+#include &quot;CATMsgCatalog.h&quot;
+#include &quot;CATDlgResource.h&quot;
+
+class CATAcquisitionFilter;
+class CATUnicodeString;
+class CATFrmEditor;
+class CATDialog;
+class CATECmdAgentEngine;
+class CATNotification;
+class CATBaseUnknown;
+
+/**
+* Enables the use of a resource file whose name is the current class name.
+* &lt;b&gt;Role&lt;/b&gt;: Declares that the current object belongs to the &lt;tt&gt;thisclass
+* &lt;/tt&gt; class which derives from the &lt;tt&gt;baseclass&lt;/tt&gt; class and that the
+* resource file name is &lt;tt&gt;thisclass&lt;/tt&gt;.
+* &lt;br&gt;Search keys in the resource file must begin with the class name.
+* &lt;br&gt;Use this macro in your command header file (.h).
+* @param thisclass
+*   The current class name which is also the resource file name.
+* @param baseclass
+*   The base class name of the current class
+*/
+#define CmdDeclareResource(thisclass, baseclass)                                  \
+public:                                                                           \
+                                                                                  \
+  virtual char* GetResourceFilename(int nDepth) const                             \
+{                                                                                 \
+  return ( nDepth &lt;= 0 ? #thisclass : baseclass::GetResourceFilename(nDepth-1) ); \
+}                                                                                 \
+  virtual char* GetResourceClass(int nDepth) const                                \
+{                                                                                 \
+  return ( nDepth &lt;= 0 ? #thisclass : baseclass::GetResourceClass(nDepth-1) );    \
+}                                                                                 \
+  virtual int IsOtherResourceFile(int nDepth) const                               \
+{                                                                                 \
+  return ( nDepth &lt;= 0 ? 0 : baseclass::IsOtherResourceFile(nDepth-1) );          \
+}
+
+/**
+* Enables the use of a resource file whose name is different from the current class name.
+* &lt;b&gt;Role&lt;/b&gt;: Declares that the current object belongs to the &lt;tt&gt;thisclass
+* &lt;/tt&gt; class which derives from the &lt;tt&gt;baseclass&lt;/tt&gt; class and that the
+* resource file name is &lt;tt&gt;FileName&lt;/tt&gt;.
+* &lt;br&gt;This macro may be more convenient than @href CmdDeclareResource since 
+* it enables to put resources from several commands in the same file.
+* &lt;br&gt;Search keys in the resource file must begin with the file name 
+* followed by the command class name.
+* &lt;br&gt;Use this macro in your command header.
+* @param FileName
+*   The resource file name
+* @param thisclass
+*   The current class name
+* @param baseclass
+*   The base class name of the current class
+*/
+#define CmdDeclareResourceFile(FileName, thisclass, baseclass)                   \
+public:                                                                          \
+                                                                                 \
+  virtual char* GetResourceFilename(int nDepth) const                            \
+{                                                                                \
+  return ( nDepth &lt;= 0 ? #FileName : baseclass::GetResourceFilename(nDepth-1) ); \
+}                                                                                \
+  virtual char* GetResourceClass(int nDepth) const                               \
+{                                                                                \
+  return ( nDepth &lt;= 0 ? #thisclass : baseclass::GetResourceClass(nDepth-1) );   \
+}                                                                                \
+  virtual int IsOtherResourceFile(int nDepth) const                              \
+{                                                                                \
+  return ( nDepth &lt;= 0 ? 1 : baseclass::IsOtherResourceFile(nDepth-1) );         \
+}
+
+/**
+* Base class for a state command agent.
+* &lt;b&gt;Role&lt;/b&gt;: A dialog agent translates a user interaction into a user 
+* input. It is created to match a given end user interaction and is valued
+* when the end user performs the interaction. It is associated with one
+* or possibly several states. Its valuation triggers the evaluation
+* of the state exit condition and, then, of the transition guard conditions 
+* if the state condition returns TRUE.
+* &lt;br&gt;An end user interaction is always defined using a notification whose 
+* type reflects the interaction, and a notifier, that is, the object that 
+* sends the notification.
+* &lt;br&gt;A basic dialog agent is valued when both notification and notifier match
+* the dialog agent&#x27;s required ones.
+* &lt;br&gt;Agents must be created in the @href CATStateCommand#BuildGraph method,
+* along with the states they are dedicated to.
+* @see CATDialogState, CATStateCommand
+*/
+class ExportedByCATDialogEngine CATDialogAgent: public CATCommand
+{
+  
+  /** @nodoc */
+  CATDeclareClass;
+
+public:
+  
+  /** @nodoc */
+  enum ModeOffOn {OFF ,ON};
+  /** @nodoc */
+  enum UndoType {NoUndo, SimpleUndo, UndoStop};
+  
+  /**
+  * @nodoc
+  * Agent valuation mode.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: It corresponds to the way a notification must be 
+  * processed. It is used in the @href 
+  * CATAcquisitionAgent#SetBehaviorOnNotify method which associates a 
+  * notification class to a valuation mode.
+  * @param PreValuation
+  *   The notification linked to the &lt;tt&gt;PreValuation&lt;/tt&gt; mode prevalues
+  *   the agent whose @href CATAcquisitionAgent#ValuationState becomes &lt;tt&gt;
+  *   PreValuated&lt;/tt&gt; if the notification is accepted.
+  *   &lt;br&gt;In general, the &lt;tt&gt;Prevaluation&lt;/tt&gt; mode is associated with the 
+  *   @href CATPreactivate and @href CATMove notifications which are received
+  *   when an object is under the mouse without being selected.
+  * @param Valuation
+  *   The notification linked to the &lt;tt&gt;Valuation&lt;/tt&gt; mode values
+  *   the agent whose @href CATAcquisitionAgent#ValuationState becomes &lt;tt&gt;
+  *   Valuated&lt;/tt&gt; if the notification is accepted.
+  *   &lt;br&gt;In general, the &lt;tt&gt;Valuation&lt;/tt&gt; mode is associated with the @href
+  *   CATActivate notification which is received when an object is selected 
+  *   with a mouse left click.
+  * @param ResetPreValuation
+  *   The notification linked to the &lt;tt&gt;ResetPreValuation&lt;/tt&gt; mode cancels 
+  *   the previous prevaluation of the agent whose @href 
+  *   CATAcquisitionAgent#ValuationState becomes &lt;tt&gt;NotValuated&lt;/tt&gt; or &lt;tt&gt;
+  *   Valuated&lt;/tt&gt; if it has got a value.
+  *   &lt;br&gt;In general, the &lt;tt&gt;ResetPrevaluation&lt;/tt&gt; mode is associated with
+  *   the @href CATEndPreactivate notification which is received when the 
+  *   mouse leaves an object.
+  */
+  enum ValuationMode {PreValuation, Valuation, ResetPreValuation};
+  
+  /**
+  * Constructs a dialog agent.
+  * @param iId
+  *   The agent identifier. It is used to retrieve the undo/redo titles in 
+  *   the command message file.
+  * @param iBehavior
+  *   The behavior of the agent.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The behavior is given in the form of a
+  *   concatenation of the facet values using the | character.
+  *   &lt;br&gt;e.g.: &lt;code&gt;CATDlgEngRepeat|CATDlgEngActive&lt;/code&gt;
+  *   &lt;br&gt;If it is NULL, the agent has the default behavior value for each 
+  *   facet.
+  *   &lt;br&gt;The behavior may be specified later with the @href #SetBehavior 
+  *   method.
+  * @param iMode
+  *   The focus mode.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must always be &lt;tt&gt;
+  *   CATCommandModeUndefined&lt;/tt&gt;.
+  *   The focus of an agent is managed by the state command it belongs to.
+  */
+  CATDialogAgent (const CATString &amp; iId,
+                  CATDlgEngBehavior iBehavior=NULL, 
+                  CATCommandMode iMode=CATCommandModeUndefined);
+  
+  /**
+  * @nodoc
+  * OBSOLETE : Do not use, a dialog agent must have an Id
+  */
+  CATDialogAgent ();
+  
+  /**
+  * @nodoc
+  * OBSOLETE : Do not use, dialog agents must have different Ids
+  */
+  CATDialogAgent (CATDialogAgent &amp; iAgent);
+  
+  /** @nodoc */
+  virtual ~CATDialogAgent ();
+
+  /**
+  * Requests the command delayed destruction.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The command will ve destroyed as soon as this will be possible
+  */
+  virtual void RequestDelayedDestruction ();
+  
+  /*---------------------------------*/
+  //     VALUATION 
+  /*---------------------------------*/
+  
+  /**
+  * Values an agent dynamically.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: When using this method on an agent, the agent becomes 
+  * valued immediately as if it had received an expected notification. 
+  * &lt;br&gt;Moreover, this method enables to specify a notification which can be
+  * considered as the valuating notification by methods like @href 
+  * CATStateCommand#GetLastNotification or @href 
+  * CATStateCommand#IsLastModifiedAgentCondition.
+  * &lt;br&gt;However, this method doesn&#x27;t register an undo step.
+  * @param iNotif
+  *   The notification to consider as the valuing notification 
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The notifier may be NULL. It is an optional
+  *   parameter.
+  * @param iDoNotRegisterUndo
+  *   Internal argument. Do not use it.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Its default value must always be used.
+  */ 
+  void Accept (CATNotification * iNotif=NULL, int iDoNotRegisterUndo=0);
+  
+  /** @nodoc */
+  void Accept (CATNotification * iNotif, int iDoNotRegisterUndo, ValuationMode iMode);
+  
+  /**
+  * Specifies the user interaction expected by the agent.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The agent becomes valued when it receives a notification
+  * which belongs to the &lt;tt&gt;iNotifClass&lt;/tt&gt; class from the &lt;tt&gt;iNotifier
+  * &lt;/tt&gt; notifier.
+  * @param iNotifier
+  *   The notifier.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The notifier may be NULL: the reception of the
+  *   notification is sufficient to value the agent whatever the notifier. 
+  * @param iNotifClass
+  *   The notification class.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: It can be NULL: any notification sent by the
+  *   &lt;tt&gt;iNotifier&lt;/tt&gt; notifier values the agent. 
+  */
+  void AcceptOnNotify (CATCommand * iNotifier, const char * iNotifClass);
+  
+  /**
+  * Specifies the user interaction expected by the agent.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The agent becomes valued when it receives a notification 
+  * which belongs to the &lt;tt&gt;iNotif&lt;/tt&gt; notification class from the &lt;tt&gt;
+  * iNotifier&lt;/tt&gt; notifier.
+  * @param iNotifier
+  *   The notifier.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The notifier may be NULL: the reception of the
+  *   notification is sufficient to value the agent whatever the notifier. 
+  * @param iNotif
+  *   The notification address.
+  *   The agent checks whether the received notifications belong to the
+  *   same class as the &lt;tt&gt;iNotif&lt;/tt&gt; notification. So, only the 
+  *   notification class matters. 
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: It can be NULL: any notification sent by the
+  *   &lt;tt&gt;iNotifier&lt;/tt&gt; notifier values the agent. 
+  */
+  void AcceptOnNotify (CATCommand * iNotifier, CATNotification * iNotif);
+  
+  /**
+  * Cancels the effect of the AcceptOnNotify method.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The agent won&#x27;t be valued anymore when receiving a 
+  * notification which belongs to the &lt;tt&gt;iNotifClass&lt;/tt&gt; class 
+  * from the &lt;tt&gt;iNotifier&lt;/tt&gt; notifier.
+  * @param iNotifier
+  *   The notifier.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must have the same value as in the @href 
+  *   #AcceptOnNotify method to cancel.
+  * @param iNotifClass
+  *   The notification class.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must have the same value as in the @href 
+  *   #AcceptOnNotify method to cancel.
+  */
+  void IgnoreOnNotify (CATCommand * iNotifier, const char * iNotifClass);
+  
+  /**
+  * Cancels the effect of the AcceptOnNotify method.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The agent won&#x27;t be valued anymore when receiving a
+  * notification which  belongs to the &lt;tt&gt;iNotif&lt;/tt&gt; notification class 
+  * from the &lt;tt&gt;iNotifier&lt;/tt&gt; notifier.
+  * @param iNotifier
+  *   The notifier.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must have the same value as in the @href
+  *   #AcceptOnNotify method to cancel.
+  * @param iNotif
+  *   The notification address.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must have the same value as in the @href 
+  *   #AcceptOnNotify method to cancel.
+  */
+  void IgnoreOnNotify (CATCommand * iNotifier, CATNotification * iNotif);
+  
+  /**
+  * Tries to value an agent with a given value.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: It only works with @href CATPathElementAgent agents and
+  * the value must be a @href CATPathElement.
+  * The Path Element is tested as if the object it represents had been selected
+  * by the end user. If the object dosen&#x27;t have the expected type, the agent 
+  * is not valued and the method returns FALSE.
+  * @param iValue
+  *   The value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Must be a @href CATPathElement. 
+  * @return 
+  *   The result of the valuation.
+  */
+  CATBoolean TryValue (CATBaseUnknown * iValue);
+  
+  /**
+  * Resets an agent to have it reusable.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The agent is no more valued and is able to accept 
+  * notifications again. 
+  */
+  virtual void InitializeAcquisition ();
+  
+  /**
+  * Tests whether the agent is valued.
+  * @return 
+  *   The result of the test.
+  */
+  virtual CATBoolean IsOutputSet ();
+  
+  /** @nodoc */
+  virtual CATBoolean IsActivated ();
+  
+  /*---------------------------------*/
+  //     BEHAVIOR 
+  /*---------------------------------*/
+  
+  /**
+  * Sets the agent behavior.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A behavior is made of behavioral facets that can be each 
+  * set to a given value. These facets are listed in the @href 
+  * CATDlgEngBehavior definition.
+  * @param iBehavior
+  *   The behavior.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The behavior is given in the form of a
+  *   concatenation of the facet values using the | character.
+  *   &lt;br&gt;e.g.: &lt;code&gt;CATDlgEngRepeat|CATDlgEngActive&lt;/code&gt;
+  */
+  virtual void SetBehavior (CATDlgEngBehavior iBehavior);
+  
+  /**
+  * Returns the agent behavior.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: A behavior is made of behavioral facets that can be each 
+  * set to a given value. These facets are listed in the @href 
+  * CATDlgEngBehavior definition.
+  * @return
+  *   The behavior.
+  */
+  virtual CATDlgEngBehavior GetBehavior ();
+  
+  /*---------------------------------*/
+  //     EDITOR 
+  /*---------------------------------*/
+  
+  /**
+  * Returns the editor associated with the command.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Do use this method instead of the @href 
+  * CATFrmEditor#GetCurrentEditor method which gives the current editor which
+  * may be the editor of another document, during a Drag&amp;Drop for example.
+  * @return
+  *   The editor.
+  */
+  CATFrmEditor * GetEditor ();
+  
+  /*-----------------------------------------------*/
+  // NLS ressources 
+  /*-----------------------------------------------*/
+  
+  /**
+  * Declares that the command shares its resource file with a dialog.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The resources of the &lt;tt&gt;iDialog&lt;/tt&gt; dialog are written
+  * in the command resource file and their research keys are prefixed with 
+  * the command research key. 
+  * @param iDialog
+  *   The dialog.
+  */
+  virtual void AddPanelForNLS (CATDialog * iDialog);
+  
+  /*---------------------------------*/
+  //     INTERNAL METHODS 
+  /*---------------------------------*/
+  
+  /*-------------------------------------------------*/
+  /* ISO MANAGEMENT                                  */
+  /*-------------------------------------------------*/
+  
+  /* Informs the ISO that the model has just changed    */
+  /** @nodoc */
+  void OnModify ();
+  /** @nodoc */
+  void SetVisibility (CATDlgEngVisibility);
+  
+  /*-------------------------------------------------*/
+  /* Filter on senders                               */
+  /*-------------------------------------------------*/
+  
+  /** @nodoc */
+  void AddNotifier (CATCommand * from);
+  /** @nodoc */
+  void RemoveNotifier (CATCommand * from);
+  
+  /*-------------------------------------------------*/
+  /* Add Views on which to be the father            */
+  /*-------------------------------------------------*/
+  
+  /** @nodoc */
+  void AddView (CATCommand * view);
+  
+  /*----------------------------------------------------------*/
+  /* Returns the current notification. Must be used during  */
+  /* a valuation, not after because the notification may have */
+  /* been destroyed                                           */
+  /*----------------------------------------------------------*/
+  
+  /** @nodoc */
+  CATNotification * GetCurrentNotification ();
+  
+  /*----------------------------------------------------------*/
+  /* Manage preselection                                      */
+  /*----------------------------------------------------------*/
+  
+  /** @nodoc */
+  CATDialogAgent * GetCurrentPrevaluatedAcquisition ();
+  /** @nodoc */
+  void SetCurrentPrevaluatedAcquisition (CATDialogAgent * cmd);
+  /** @nodoc */
+  virtual void RemoveLastPrevaluation ();
+  /** @nodoc */
+  virtual void ResetPrevaluation ();
+  
+  /*----------------------------------------------------------*/
+  /* NLS ressources management                                */
+  /*----------------------------------------------------------*/
+  
+  /** @nodoc */
+  int getResourceValue (const CATString&amp; key, CATUnicodeString&amp; value);
+  /** @nodoc */
+  void SetResourceID (const CATString&amp; rsc);
+  /** @nodoc */
+  CATString&amp; GetResourceID ();
+  
+  /** @nodoc */
+  virtual char* GetResourceFilename (int) const;
+  /** @nodoc */
+  virtual char* GetResourceClass (int) const;
+  /** @nodoc */
+  virtual int IsOtherResourceFile (int) const ;                                         
+  /** @nodoc */
+  void SetMsgParameter (const CATString&amp; searchKey,
+                        int nbParameter,
+                        CATUnicodeString iTabOfParameter[]);
+  /** @nodoc */
+  CATUnicodeString * GetMsgParameter (const CATString&amp; searchKey , int nbParameter);
+  
+  // agent prompt does not exist anymore.
+  /** @nodoc */
+  virtual void SetPrompt (CATString text);
+  /** @nodoc */
+  virtual CATString GetPrompt ();
+  
+  /** @nodoc */
+  virtual void SetUndoTitle (const CATUnicodeString&amp; text);
+  /** @nodoc */
+  virtual void SetRedoTitle (const CATUnicodeString&amp; text);
+  /** @nodoc */
+  virtual CATUnicodeString&amp; GetUndoTitle ();
+  /** @nodoc */
+  virtual CATUnicodeString&amp; GetRedoTitle ();
+  
+  /*----------------------------------------------------*/
+  /*  undo/redo management                              */
+  /*----------------------------------------------------*/
+  
+  /** @nodoc */
+  virtual void UndoCommand ();
+  /** @nodoc */
+  virtual void RedoCommand ();
+
+  /**
+  * Before  an agent&#x27;s undo.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+  *   This method is executed before the transaction undo and must not 
+  *   modify transactional objects.
+  *   &lt;br&gt;Method to overwrite, if necessary, if your @href CATStateCommand is a &lt;tt&gt;CATDialogAgent&lt;/tt&gt;
+  */
+  virtual void BeforeUndo ();
+
+  /**
+  * Before an agent&#x27;s redo.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+  *   This method is executed before the transaction redo and must not 
+  *   modify transactional objects.
+  *   &lt;br&gt;Method to overwrite, if necessary, if your @href CATStateCommand is a &lt;tt&gt;CATDialogAgent&lt;/tt&gt;
+  */
+  virtual void BeforeRedo ();
+
+  /**  
+  * After an agent&#x27;s undo.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+  *   This method is executed after the transaction undo and must not 
+  *   modify transactional objects.
+  *   &lt;br&gt;Method to overwrite, if necessary, if your @href CATStateCommand is a &lt;tt&gt;CATDialogAgent&lt;/tt&gt;
+  */
+  virtual void AfterUndo ();
+
+  /**  
+  * After an agent&#x27;s redo.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+  *   This method is executed after the transaction redo and must not 
+  *   modify transactional objects.
+  *   &lt;br&gt;Method to overwrite, if necessary, if your @href CATStateCommand is a &lt;tt&gt;CATDialogAgent&lt;/tt&gt;
+  */
+  virtual void AfterRedo ();
+
+  /** @nodoc */
+  virtual void Reset (); 
+  
+  /*----------------------------------------------------------*/
+  /* Returns the state command it belongs to                  */
+  /*----------------------------------------------------------*/
+  
+  /** @nodoc */
+  CATDialogAgent * GetCallingCommand ();
+  
+  /*----------------------------------------------------------*/
+  /* Filter handling                                          */
+  /*----------------------------------------------------------*/
+  
+  /**
+  * Creates a AND combination of two filters.
+  * @param iFilter1
+  *   The first filter.
+  * @param iFilter2
+  *   The second filter.
+  * @return 
+  *   The resulting filter.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A pointer to the filter is kept and
+  *   Released at the end of the command before the command destructor call.
+  *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+  *   returned value.
+  * See also: @href CATStateCommand#Filter method.
+  */
+  CATAcquisitionFilter * AndFilter (CATAcquisitionFilter * iFilter1,
+                                    CATAcquisitionFilter * iFilter2);
+  /**
+  * Creates a OR combination of two filters.
+  * @param iFilter1
+  *   The first filter.
+  * @param iFilter2
+  *   The second filter.
+  * @return 
+  *   The resulting filter.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A pointer to the filter is kept and
+  *   Released at the end of the command before the command destructor call.
+  *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+  *   returned value.
+  * See also: @href CATStateCommand#Filter method.
+  */
+  CATAcquisitionFilter * OrFilter (CATAcquisitionFilter * iFilter1,
+                                   CATAcquisitionFilter * iFilter2);
+  /**
+  * Creates a filter reverse of another one.
+  * @param iFilter
+  *   The genuine filter.
+  * @return 
+  *   The resulting filter.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A pointer to the filter is kept and
+  *   Released at the end of the command before the command destructor call.
+  *   &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt;: This method doesn&#x27;t AddRef the 
+  *   returned value.
+  * See also: @href CATStateCommand#Filter method.
+  */
+  CATAcquisitionFilter * NotFilter (CATAcquisitionFilter * iFilter);
+  
+  /*----------------------------------------------------------*/
+  /* Manages the life cycle of the envelop                   */
+  /*----------------------------------------------------------*/
+
+  /** @nodoc */
+  virtual void EndCommand ();
+  
+  /*---------------------------------*/
+  // OBSOLETE AND DEPRECATED METHODS 
+  /*---------------------------------*/
+  
+  /**
+  * @nodoc
+  * OBSOLETE : Use SetBehavior instead.
+  */
+  void SetRepeatMode (ModeOffOn);
+  
+  /** @nodoc */
+  virtual void RemoveAcquisition ();
+  
+protected:
+
+  /**
+  * @nodoc 
+  * Do not use : Ctor for agents with their own letter (ex:CATStateCommand)
+  */
+  CATDialogAgent (const CATString &amp; iId,
+                  CATCommandMode iMode);
+  /**
+  * @nodoc 
+  * Do not use : Specific Ctor for specific CATStateCommand
+  */
+  CATDialogAgent (const CATString &amp; iId, 
+                  CATCommandMode iMode,
+                  CATFrmEditor * iEditor);
+  /**
+  * @nodoc 
+  * Do not use : Specific Ctor for specific CATStateCommand
+  */
+  CATDialogAgent (const CATString &amp; iId, 
+                  CATCommandMode iMode,
+                  CATCommand * iFather);
+
+  CATECmdAgentEngine * _Implement; 
+   
+private:
+   
+  // NOT implemented, only declared to prevent unexpected call to default ctors created by the compiler
+  CATDialogAgent &amp; operator= (const CATDialogAgent &amp;);
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDiaError.html">← 上一页: CATDiaError.h</a></div>
+        <div><a href="CATDialogEngine.html">下一页: CATDialogEngine.h →</a></div>
+    </div>
+</body>
+</html>

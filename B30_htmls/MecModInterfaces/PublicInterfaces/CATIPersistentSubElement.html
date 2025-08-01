@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIPersistentSubElement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIPersistentSubElement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPartRequest.html">← 上一页: CATIPartRequest.h</a></div>
+        <div><a href="CATIPrtContainer.html">下一页: CATIPrtContainer.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPersistentSubElement_H
+#define CATIPersistentSubElement_H
+
+// COPYRIGHT Dassault Systemes 2002
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIPersistentSubElement;
+#else
+extern &quot;C&quot; const IID IID_CATIPersistentSubElement ;
+#endif
+
+//------------------------------------------------------------------
+
+#include &quot;CATListOfCATUnicodeString.h&quot;
+#include &quot;CATICkeRelationForwards.h&quot;
+
+class CATICkeParm;
+class CATIVisProperties;
+class CATISpecObject;
+class CATICkeParmFactory;
+
+ /** 
+  * 
+  *  @deprecated V5R23 CATMmrApplicativeAttributes
+  *  Interface allowing the manipulation of Applicative Attributes.&lt;br&gt;
+  *  This interface provides a convenient mechanism for adding, setting, retrieving and removing Applicative Attributes (i.e. basic, user-defined and persistent parameters) on feature sub-elements.&lt;br&gt;
+  *  This interface can be retrieved directly from a @href CATIBRepAccess.&lt;br&gt;
+  * &lt;br&gt;
+  *  Note:&lt;br&gt;
+  *       &lt;ul&gt;              
+  *         &lt;li&gt;An Applicative Attribute consists of a unique name, and an associated value, which can only belong to one of the following types: a @href CATUnicodeString , an &lt;tt&gt;int&lt;/tt&gt;, or a &lt;tt&gt;double&lt;/tt&gt;.&lt;/li&gt;
+  *         &lt;li&gt;The only valid selection objects for retrieving a &lt;tt&gt;CATIPersistentSubElement&lt;/tt&gt; interface are the ones corresponding to: a face (@href CATIRSur ), an edge (@href CATIWireREdge , @href CATIBorderREdge ) or a vertex (@href CATIBorderFVertex ).&lt;/li&gt;
+  *       &lt;/ul&gt;
+  *       &lt;br&gt;
+  *  &lt;br&gt;
+  *  @see CATIBRepAccess, CATICkeParmFactory, CATIMmiBRepAttributeSynchronize
+  */
+
+class ExportedByMecModItfCPP CATIPersistentSubElement: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+    // Methods used to set, get and remove Applicative Attributes.
+    //------------------------------------------------------------
+     
+   /**  
+    *  Retrieves the names of all the attributes.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the names of all the attributes corresponding to the current &lt;tt&gt;CATIBRepAccess&lt;/tt&gt;.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;          
+    *         &lt;li&gt;The name of an attribute is unique for a given selection object. It can therefore be considered as the identifier of the attribute.&lt;/li&gt;
+    *         &lt;li&gt;If the name of an attribute is already defined in a parent of the &lt;tt&gt;CATIPersistentSubElement&lt;/tt&gt;, then the corresponding value is the one of the child, i.e. the value on the latest design-level.&lt;/li&gt;
+    *         &lt;li&gt;If you need to retrieve all attributes as well as their respective values, use @href #GetAttributes for faster performance.&lt;/li&gt;         
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oAttributNameList
+    *         The names of the attributes.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;   
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the names of the attributes have been properly found.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL no attribute names could be retrieved.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    */  
+    virtual HRESULT GetListAttributesName(CATListOfCATUnicodeString** oAttributNameList) = 0;
+         
+   /**  
+    *  Adds a new attribute.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method creates an attribute given a name and a value.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;              
+    *         &lt;li&gt;Although the attribute will be visible from the current selection object, the user does not have any control on the design-level on which the attribute will be effectively added. Indeed, the attribute will be added to the last feature where the element corresponding to the current &lt;tt&gt;CATIBRepAccess&lt;/tt&gt; had the same connexity, for stability reasons.&lt;/li&gt;
+    *         &lt;li&gt;It is not possible to add an attribute if an attribute with the same name has been added previously.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iName
+    *         The name of the attribute.&lt;br&gt;
+    *         This is the name of the attribute, stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This name is unique, as it is used as the identifier of the attribute.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iAttributeValue
+    *         The value of the attribute.&lt;br&gt;
+    *         This is the value of the attribute, which can be either a &lt;tt&gt;CATUnicodeString&lt;/tt&gt;, an &lt;tt&gt;int&lt;/tt&gt;, or a &lt;tt&gt;double&lt;/tt&gt;, stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;A convenient way of creating the value of an attribute is by using the &lt;b&gt;&lt;tt&gt;CATICkeParmFactory&lt;/tt&gt;&lt;/b&gt; interface.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the attribute has been succesfully added.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the attribute could not be added. In general, this happens when an attribute with the same name already exists. If this is the case, the value of the attribute can be modified using @href #SetAttribute .&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iName&lt;/tt&gt; is an empty string.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttributeValue&lt;/tt&gt; is NULL, or if the its type is neither a &lt;tt&gt;CATParmDictionary::StringType&lt;/tt&gt;, a &lt;tt&gt;CATParmDictionary::IntegerType&lt;/tt&gt;, nor a &lt;tt&gt;CATParmDictionary::RealType&lt;/tt&gt;.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;If the method fails for any of the above reasons, the attribute will not be added.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    */  
+    virtual HRESULT AddAttribute(const CATUnicodeString&amp; iName, const CATICkeParm* iAttributeValue) = 0;
+         
+   /**  
+    *  Retrieves the value of an attribute.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the value of an attribute, given its name.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;              
+    *         &lt;li&gt;The retrieved value is the latest added one as seen from the current design-level.&lt;/li&gt;    
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iName
+    *         The name of the attribute.&lt;br&gt;
+    *         This is the name of the attribute, stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This name is unique, as it is used as the identifier of the attribute.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oAttributeValue
+    *         The retrieved value of the attribute.&lt;br&gt;
+    *         This is the value of the attribute, which can be either a &lt;tt&gt;CATUnicodeString&lt;/tt&gt;, an &lt;tt&gt;int&lt;/tt&gt;, or a &lt;tt&gt;double&lt;/tt&gt;, stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the value of the attribute has been succesfully retrieved.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the value of the attribute could not be retrieved. This can happen if the name of the attribute does not exist.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the retrieved value is not a valid data type. See @href #SetAttribute and @href #AddAttribute for valid data types.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iName&lt;/tt&gt; is an empty string.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oAttributeValue&lt;/tt&gt; is NULL or if &lt;tt&gt;*oAttributeValue&lt;/tt&gt; is not NULL.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    */  
+    virtual HRESULT GetAttributeValue(const CATUnicodeString&amp; iName, CATICkeParm** oAttributeValue) = 0;
+
+   /**  
+    *  Sets a new value to an existing attribute.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method modifies the value of an existing attribute, given the existing attribute&#x27;s name and the new value.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  
+    *  @param   iName
+    *         The name of the attribute.&lt;br&gt;
+    *         This is the name of the attribute, stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iAttributeValue
+    *         The value of the attribute.&lt;br&gt;
+    *         This is the value of the attribute, which can be either a &lt;tt&gt;CATUnicodeString&lt;/tt&gt;, an &lt;tt&gt;int&lt;/tt&gt;, or a &lt;tt&gt;double&lt;/tt&gt;, stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;A convenient way of creating the value of an attribute is by using the &lt;b&gt;&lt;tt&gt;CATICkeParmFactory&lt;/tt&gt;&lt;/b&gt; interface.    *           &lt;li&gt;A convenient way of creating the value of an attribute is by using the &lt;b&gt;&lt;tt&gt;CATICkeParmFactory&lt;/tt&gt;&lt;/b&gt; interface.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the attribute has been succesfully set.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the attribute could not be set.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iName&lt;/tt&gt; is an empty string.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttributeValue&lt;/tt&gt; is NULL, or if the its type is neither a &lt;tt&gt;CATParmDictionary::StringType&lt;/tt&gt;, a &lt;tt&gt;CATParmDictionary::IntegerType&lt;/tt&gt;, nor a &lt;tt&gt;CATParmDictionary::RealType&lt;/tt&gt;.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;If the method fails for any of the above reasons, the attribute will not be modified.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    */  
+    virtual HRESULT SetAttributeValue(const CATUnicodeString&amp; iName, const CATICkeParm* iAttributeValue) = 0;          
+        
+   /**  
+    *  Removes an attribute.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method removes an attribute given its name.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;                 
+    *         &lt;li&gt;If an attribute has been defined at many different design levels, only one will be removed.&lt;/li&gt;
+    *         &lt;li&gt;Attributes transferred to a &lt;tt&gt;CATIMmiBRepAttributeSynchronize&lt;/tt&gt; after a synchronisation (see @href CATIMmiBRepAttributeSynchronize#SynchronizeBRepAttributes ) cannot be removed. Remove them or change their value before synchronisation if needed.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iName
+    *         The name of the attribute to remove.&lt;br&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if all the specified attribute has been properly removed.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the attribute could not be properly removed.&lt;/li&gt;    
+    *           &lt;li&gt;S_FALSE if the attribute has not been removed because it was part of an import.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iName&lt;/tt&gt; is an empty string.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    */
+    virtual HRESULT RemoveAttribute(const CATUnicodeString&amp; iName) = 0;
+        
+   /**  
+    *  Retrieves the names of all attributes which rely on a specific feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the names of all the attributes on a specific feature.&lt;br&gt;          
+    *  &lt;br&gt; 
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;          
+    *         &lt;li&gt;If you need to retrieve all direct attributes as well as their respective values, use @href #GetDirectAttributes for faster performance.&lt;/li&gt;         
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  
+    *  @param   iMechanicalFeature
+    *         The feature used in order to retrieve the attributes.&lt;br&gt;
+    *         This can be seen as the design-level where the attributes are being looked for.&lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oAttributNameList
+    *         The names of the attributes.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the names and the values of the attributes have been properly found.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL no attribute names could be retrieved.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iMechanicalFeature&lt;/tt&gt; is not a valid ancestor for the &lt;tt&gt;CATIPersistentSubElement&lt;/tt&gt;.&lt;/li&gt;           
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oAttrNameList&lt;/tt&gt; is NULL (invalid list) or if the list is not empty. In that case, the list will be emptied before exiting.&lt;/li&gt;              
+    *         &lt;/ul&gt;
+    */
+    virtual HRESULT GetListOfDirectAttributesName(const CATISpecObject *iMechanicalFeature , CATListOfCATUnicodeString** oAttributNameList) = 0;
+
+      
+    // Method used to access the visual properties corresponding to the current selection object.
+    // ------------------------------------------------------------------------------------------
+    
+   /**  
+    *  Provides access to the visual properties of the current sub-element.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves a @href CATIVisProperties interface from the current sub-element.&lt;br&gt;          
+    *  &lt;br&gt;              
+    * @param   oVisPropertiesAccess
+    *         The retrieved &lt;tt&gt;CATIVisProperties&lt;/tt&gt; interface.&lt;br&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the &lt;tt&gt;CATIVisProperties&lt;/tt&gt; interface has been sucessfully retrieved.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the retrieval of &lt;tt&gt;CATIVisProperties&lt;/tt&gt; interface failed.&lt;/li&gt;    
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oVisPropertiesAccess&lt;/tt&gt; is not NULL.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    */
+    virtual HRESULT GetVisPropertiesAccess(CATIVisProperties* &amp;oVisPropertiesAccess) = 0;
+
+
+    // Methods similar to the ones above, but using lists as parameters for faster performance.
+    //-----------------------------------------------------------------------------------------     
+
+   /**  
+    *  Retrieves the names and the respective values of all attributes.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the names of all the attributes, as well as their respective values.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;          
+    *         &lt;li&gt;The value of attribute &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;oAttrNameList&lt;/tt&gt; is stored as element &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;oCkeAttrValList&lt;/tt&gt;.&lt;/li&gt;
+    *         &lt;li&gt;If the name of an attribute is already defined in a parent of the &lt;tt&gt;CATIPersistentSubElement&lt;/tt&gt;, then the corresponding value is the one of the child, i.e. the value on the latest design-level.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oAttrNameList
+    *         The names of the attributes.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oCkeAttrValList
+    *         The values of the attributes.&lt;br&gt;
+    *         Contrary to &lt;tt&gt;oAttrNameList&lt;/tt&gt;This is a &lt;b&gt;pointer&lt;/b&gt; to a list containing the values of the attributes. Each value is stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;The list &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; is actually a &lt;b&gt;pointer&lt;/b&gt; to &lt;tt&gt;CATLISTV(CATBaseUnknown_var)&lt;/tt&gt; ( see &lt;tt&gt; CATICkeRelationForwards.h &lt;/tt&gt; for more details ). Because of the presence of a pointer in this definition, some extra care must be taken when calling this method.&lt;/li&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;oAttrNameList&lt;/tt&gt;.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the names and the values of the attributes have been properly found.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if &lt;tt&gt;oAttrNameList&lt;/tt&gt; and &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; do not have the same size. In that case, both lists will be emptied before exiting.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oAttrNameList&lt;/tt&gt; is NULL (invalid list) or if the list is not empty. In that case, the list will be emptied before exiting.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; is NULL (invalid list) or if the list is not empty. In that case, the list will be emptied before exiting.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    */  
+    virtual HRESULT GetAttributes( CATListOfCATUnicodeString** oAttrNameList, CATCkeListOfParm * oCkeAttrValList ) = 0;
+    
+
+   /**  
+    *  Retrieves the names and the respective values of all attributes which rely on a specific feature.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method retrieves the names of all the attributes on a specific feature, as well as their respective values.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;          
+    *         &lt;li&gt;The value of attribute &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;oAttrNameList&lt;/tt&gt; is stored as element &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;oCkeAttrValList&lt;/tt&gt;.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iMechanicalFeature
+    *         The feature used in order to retrieve the attributes.&lt;br&gt;
+    *         This can be seen as the design-level where the attributes are being looked for.&lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oAttrNameList
+    *         The names of the attributes.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   oCkeAttrValList
+    *         The values of the attributes.&lt;br&gt;
+    *         This is a &lt;b&gt;pointer&lt;/b&gt; to a list containing the values of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;The list &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; is actually a &lt;b&gt;pointer&lt;/b&gt; to &lt;tt&gt;CATLISTV(CATBaseUnknown_var)&lt;/tt&gt; ( see &lt;tt&gt; CATICkeRelationForwards.h &lt;/tt&gt; for more details ). Because of the presence of a pointer in this definition, some extra care must be taken when calling this method.&lt;/li&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;oAttrNameList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the names and the values of the attributes have been properly found.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if &lt;tt&gt;oAttrNameList&lt;/tt&gt; and &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; do not have the same size. In that case, both lists will be emptied before exiting.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iMechanicalFeature&lt;/tt&gt; is not a valid ancestor for the &lt;tt&gt;CATIPersistentSubElement&lt;/tt&gt;.&lt;/li&gt;           
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oAttrNameList&lt;/tt&gt; is NULL (invalid list) or if the list is not empty. In that case, the list will be emptied before exiting.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;oCkeAttrValList&lt;/tt&gt; is NULL (invalid list) or if the list is not empty. In that case, the list will be emptied before exiting.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    */  
+    virtual HRESULT GetDirectAttributes(const CATISpecObject *iMechanicalFeature, CATListOfCATUnicodeString** oAttrNameList, CATCkeListOfParm * oCkeAttrValList ) = 0;
+
+
+   /**  
+    *  Sets the values of every attribute in a list.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method sets each attribute of a list to a given value.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;          
+    *         &lt;li&gt;Attribute &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;iAttrNameList&lt;/tt&gt; will be set to the value corresponding to element &lt;tt&gt;i&lt;/tt&gt; in &lt;tt&gt;iCkeAttrValList&lt;/tt&gt;.&lt;/li&gt;
+    *         &lt;li&gt;If the name of the attribute does not already exist, it is created and its value is set.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iAttrNameList
+    *         The names of the attributes.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;iCkeAttrValList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iCkeAttrValList
+    *         The values of the attributes.&lt;br&gt;
+    *         This is a &lt;b&gt;pointer&lt;/b&gt; to a list containing the values of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATICkeParm_var&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;The list &lt;tt&gt;iCkeAttrValList&lt;/tt&gt; is actually a &lt;b&gt;pointer&lt;/b&gt; to &lt;tt&gt;CATLISTV(CATBaseUnknown_var)&lt;/tt&gt; ( see &lt;tt&gt;  CATICkeRelationForwards.h &lt;/tt&gt; for more details ). Because of the presence of a pointer in this definition, some extra care must be taken when calling this method.&lt;/li&gt;
+    *           &lt;li&gt;This list has the same size as &lt;tt&gt;iAttrNameList&lt;/tt&gt; .&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *  &lt;br&gt;          
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if the values of the attributes have been properly set.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if the value of an attribute belonging to &lt;tt&gt;iAttrNameList&lt;/tt&gt; could not be retrieved, set or added.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttrNameList&lt;/tt&gt; is NULL (invalid list) or if the list is empty.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iCkeAttrValList&lt;/tt&gt; is NULL (invalid list) or if the list is empty.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttrNameList&lt;/tt&gt; and &lt;tt&gt;iCkeAttrValList&lt;/tt&gt; do not have the same size.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;If the method fails for any of the above reasons, none of the attributes in &lt;tt&gt;iAttrNameList&lt;/tt&gt; will be set or added.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *         &lt;br&gt;
+    */  
+    virtual HRESULT SetAttributes(const CATListOfCATUnicodeString* iAttrNameList, const CATCkeListOfParm iCkeAttrValList ) = 0;
+    
+
+   /**  
+    *  Removes multiple attributes at once.&lt;br&gt;
+    *  &lt;br&gt;
+    *  &lt;b&gt;Role&lt;/b&gt;: This method removes each attribute of a list from a given design level.&lt;br&gt;          
+    *  &lt;br&gt;          
+    *  Note:&lt;br&gt;
+    *       &lt;ul&gt;                 
+    *         &lt;li&gt;As with the &lt;tt&gt;RemoveAttribute&lt;/tt&gt; method, if an attribute has been defined at many different design levels, only one will be removed.&lt;/li&gt;
+    *         &lt;li&gt;As with the &lt;tt&gt;RemoveAttribute&lt;/tt&gt; method, attributes transferred to a &lt;tt&gt;CATIMmiBRepAttributeSynchronize&lt;/tt&gt; after a synchronisation 
+    *             (see @href CATIMmiBRepAttributeSynchronize#SynchronizeBRepAttributes ) cannot be removed. 
+    *             Remove them or change their value before synchronisation if needed.&lt;/li&gt;
+    *       &lt;/ul&gt;
+    *       &lt;br&gt;
+    *  &lt;br&gt;
+    *  @param   iAttrNameList
+    *         The names of the attributes to remove.&lt;br&gt;
+    *         This is a list containing the names of the attributes, each one being stored as a &lt;b&gt;&lt;tt&gt;CATUnicodeString&lt;/tt&gt;&lt;/b&gt;.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;When set to NULL, all attributes will be removed at once from the specified design-level.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    * &lt;br&gt;
+    *         &lt;br&gt;
+    *  @param   iMechanicalFeature
+    *         The feature where the attributes will be removed from.&lt;br&gt;
+    *         This can be seen as the design-level, where the attributes are actually stored.&lt;br&gt;
+    *         Note:&lt;br&gt;
+    *         &lt;ul&gt;
+    *           &lt;li&gt;When set to NULL, the attributes will be removed from the current design-level.&lt;/li&gt;
+    *         &lt;/ul&gt;
+    *  &lt;br&gt;
+    *  @return 
+    *         &lt;ul&gt;
+    *           &lt;li&gt;S_OK if all the specified attributes have been properly removed.&lt;/li&gt;
+    *           &lt;li&gt;E_FAIL if one or more attributes in &lt;tt&gt;iAttrNameList&lt;/tt&gt; have not been properly removed.&lt;/li&gt;    
+    *           &lt;li&gt;S_FALSE if one or more attributes in &lt;tt&gt;iAttrNameList&lt;/tt&gt; have not been removed because they were part of an import.&lt;/li&gt;
+    *           &lt;li&gt;E_UNEXPECTED if the current selecting object is invalid .&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttrNameList&lt;/tt&gt; is not NULL and empty.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if the specified &lt;tt&gt;iMechanicalFeature&lt;/tt&gt; is invalid.&lt;/li&gt;
+    *           &lt;li&gt;E_INVALIDARG if &lt;tt&gt;iAttrNameList&lt;/tt&gt; and &lt;tt&gt;iMechanicalFeature&lt;/tt&gt; are both not NULL at the same time.&lt;/li&gt;    
+    *         &lt;/ul&gt;
+    */
+    virtual HRESULT RemoveAttributes(const CATListOfCATUnicodeString* iAttrNameList = NULL, const CATISpecObject *iMechanicalFeature = NULL ) = 0;
+
+  
+    // No constructors or destructors on this pure virtual base class
+    // --------------------------------------------------------------
+
+};
+
+//------------------------------------------------------------------
+CATDeclareHandler(CATIPersistentSubElement, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPartRequest.html">← 上一页: CATIPartRequest.h</a></div>
+        <div><a href="CATIPrtContainer.html">下一页: CATIPrtContainer.h →</a></div>
+    </div>
+</body>
+</html>

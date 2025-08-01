@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAMechanicalModeler.edu/PublicInterfaces/CAAIMmrCombinedCurve.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAMechanicalModeler.edu/PublicInterfaces/CAAIMmrCombinedCurve.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAIMmrCombCrvFactory.html">← 上一页: CAAIMmrCombCrvFactory.h</a></div>
+        <div><a href="CAAMmrAddCCExtension.html">下一页: CAAMmrAddCCExtension.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2000
+#ifndef CAAIMmrCombinedCurve_H
+#define CAAIMmrCombinedCurve_H
+
+// Local Framework
+#include &quot;CAAMmrCombinedCurve.h&quot;
+
+// System Framework
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATISpecObject;
+
+extern ExportedByCAAMmrCombinedCurve IID IID_CAAIMmrCombinedCurve ;
+
+/**
+ * Interface to manage Combined Curves.
+ *  
+ *  Role : use this interface to get / set the input of a Combined Curve. 
+ *         A Combined Curve is the intersection of two extruded surfaces.
+ *         Each of the two surfaces is buildt using a curve (profile) and a direction (of extrusion).
+ *         Consequently, a Combined Curve has two input curves and two input directions.
+ */
+
+class ExportedByCAAMmrCombinedCurve CAAIMmrCombinedCurve: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+   /**
+   * Sets one of the input curve of the Combined Curve.
+   *
+   * param iNum    : the index of the input curve.
+   *                 Legal values : 1 for the first curve.
+   *                                2 for the second curve.
+   * param ipCurve : the input curve
+   *
+   * returns       : S_OK  the call succeeded.
+   *               : E_FAIL  the call failed.
+   */
+   virtual HRESULT SetCurve ( int iNum ,
+                              CATISpecObject *ipCurve ) = 0 ;
+
+
+  /**
+   * Gets one of the input curve of the Combined Curve.
+   *
+   * param iNum    : the index of the input curve.
+   *                 Legal values : 1 for the first curve.
+   *                                2 for the second curve.
+   * param ipCurve : the input curve
+   *
+   * returns       : S_OK  the call succeeded.
+   *               : E_FAIL  the call failed.
+   */
+   virtual HRESULT GetCurve ( int iNum ,
+                              CATISpecObject **opCurve ) = 0 ;
+
+  /**
+   * Sets one of the input direction of the Combined Curve.
+   *
+   * param iNum        : the index of the input curve.
+   *                     Legal values : 1 for the first curve.
+   *                                2 for the second curve.
+   * param ipDirection : the input direction
+   *
+   * returns           : S_OK  the call succeeded.
+   *                   : E_FAIL  the call failed.
+   */
+  virtual HRESULT SetDirection ( int iNum , 
+                                 CATISpecObject *ipDirection ) = 0 ;
+  
+
+   /**
+   * Gets one of the input direction of the Combined Curve.
+   *
+   * param iNum        : the index of the input curve.
+   *                     Legal values : 1 for the first curve.
+   *                                2 for the second curve.
+   * param opDirection : the input direction
+   *
+   * returns           : S_OK  the call succeeded.
+   *                   : E_FAIL  the call failed.
+   */
+  virtual HRESULT GetDirection ( int iNum ,
+                                 CATISpecObject **opDirection ) = 0 ;
+
+
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAIMmrCombCrvFactory.html">← 上一页: CAAIMmrCombCrvFactory.h</a></div>
+        <div><a href="CAAMmrAddCCExtension.html">下一页: CAAMmrAddCCExtension.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModeler/PublicInterfaces/CATMmrInterPartCopy.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModeler/PublicInterfaces/CATMmrInterPartCopy.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrImportComparator.html">← 上一页: CATMmrImportComparator.h</a></div>
+        <div><a href="CATMmrLinearBodyServices.html">下一页: CATMmrLinearBodyServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+#ifndef CATMmrInterPartCopy_H
+#define CATMmrInterPartCopy_H
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMechanicalModeler.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATIContainer.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATMmrGraphicPropertiesModes.h&quot;
+
+class CATIProduct;
+class CATIBRepAccess_var;
+class CATICkeParm_var;
+class CATPathElement;
+class CATMmrInterPartCopyLetter;
+
+/**
+ * Class to manage inter and intra part copy as result.
+ * &lt;b&gt;Role:&lt;/b&gt;This class allows to simulate a copy/paste special as result (with link or not) in a easier way than
+ * @href CATICutAndPastable . 
+ * &lt;b&gt;Usage :&lt;/b&gt;Use a constructor to give the input object and target, then use the @href #Run method then the @href #GetResult method.
+ */
+class ExportedByCATMechanicalModeler CATMmrInterPartCopy
+{
+public :
+/**
+ * Constructor with a source feature and a target feature for the copy.
+ * @param iObjectToCopy
+ * a curve, line, surface, plane, point, sketch, solid feature set
+ * @param iTarget
+ * a part, solid or surfacic feature set
+ */
+	CATMmrInterPartCopy(const CATISpecObject_var&amp; iObjectToCopy ,const CATISpecObject_var&amp; iTarget);
+
+/**
+ * Constructor with a source subelement and a target feature for the copy.
+ * @param iElementToCopy
+ * a rsur, redge, vertex obtained from selection of a subelement
+ * @param iTarget
+ * a part, solid or surfacic feature set
+ */
+	CATMmrInterPartCopy(const CATIBRepAccess_var&amp; iElementToCopy ,const CATISpecObject_var&amp; iTarget);
+/**
+ * Constructor with a source parameter and a target feature for the copy.
+ * @param iElementToCopy
+ * a cke parameter
+ * @param iTarget
+ * Target is a part, solid or surfacic feature set
+ */
+	CATMmrInterPartCopy(const CATICkeParm_var&amp; iElementToCopy ,const CATISpecObject_var&amp; iTarget);
+
+/**
+ * Constructor with a source path and a target path.
+ * @param iObject
+ * path may contain (product instance +) part + feature or subelement
+ * @param iTarget
+ * Target path may contain a product instance, a part, solid or surfacic feature set
+ * 
+ */
+	CATMmrInterPartCopy(CATPathElement* iObject ,CATPathElement* iTarget);
+/**
+ * Selects the product instance of the object.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; for contextual link, you may specify the instance of the source part. 
+ * It can also be specified with the constructor with pathelement.
+ * @param iProd
+ * the selected instance will be used to determine the product context
+ * @return
+ * S_OK if instance is accepted, E_FAIL otherwise
+*/
+  HRESULT SetSourceInstance(CATIProduct* iProd); 
+                                             
+  /**
+ * Selects the product instance of the target.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; for contextual link, you may specify the instance of the target part.
+ * It can also be specified with the constructor with pathelement.
+ * @param iProd
+ * the selected product instance used as a context for the contextual link
+ * @return
+ * S_OK if instance is accepted, E_FAIL otherwise
+*/
+  HRESULT SetTargetInstance(CATIProduct* iProd);
+
+/**
+ * Sets the link option (with or without link) to override default setting (keep link).
+ * @param iMode
+ * TRUE to keep the link, FALSE otherwise
+ * @return
+ * S_OK if mode is accepted, E_FAIL otherwise
+ */
+	HRESULT SetLinkMode(CATBoolean iMode);
+
+/**
+ * Sets the type of created solid set.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Specifies the type of solid set, Solid Body (MechanicalTool startup) or Body
+ * (HybridBody startup), that will be created during import (Run method). This parameter is applicable
+ * only in case of solid import. If the type is not specified, the type of solid set that will be
+ * created will be based on &quot;Hybrid Design&quot; setting value.
+ * @param iIsAnOrderedSet
+ *   If TRUE, the created body is a Body.
+ *   If FALSE, the created body is a Solid Body.
+ * @return
+ * S_OK if set is accepted, E_FAIL otherwise
+ */
+   HRESULT SetTypeOfCreatedSolidSet(CATBoolean iIsAnOrderedSet);
+
+/**
+ * DEPRECATED
+ *
+ * Sets the copy mode for attributes when copying without keeping a link.
+ * 
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Allows to specify which attributes are copied. By default, if this method is not called
+ * BRep-attributes and colors on sub-elements are not copied. This method allows to copy color and/or attributes.
+ * &lt;br&gt;This method has no effect on copies with link, for which colors and attributes are copied according to the setting
+ * in PartInfrastructure/PartDocument.
+ * &lt;br&gt; This method must be called before the @href #Run method.
+ * @param iMode
+ * 0 : color and BRep-attributes are not copied&lt;br&gt;
+ * 1: color is copied, not BRep-attributes&lt;br&gt;
+ * 2: BRep-attributes are copied, not color&lt;br&gt;
+ * 3: BRep-attributes and colors are copied
+ * @return
+ * S_OK if mode is accepted, E_FAIL otherwise
+ * @see CATMmrApplicativeAttributes
+ */
+ HRESULT SetAttributeMode(int iMode);
+
+ /**
+ * Sets the copy mode for BRep-attributes when copying without keeping a link.
+ * 
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Allows to specify if BRep-attributes are copied. By default, if this method is not called
+ * BRep-attributes are not copied. This method allows to copy BRep-attributes.
+ * &lt;br&gt;This method has no effect on copies with link, for which BRep-attributes are copied according to the setting
+ * in PartInfrastructure/PartDocument.
+ * &lt;br&gt; This method must be called before the @href #Run method.
+ * @param iMode
+ * FALSE : BRep-attributes are not copied&lt;br&gt;
+ * TRUE : BRep-attributes are copied&lt;br&gt;
+ * @return
+ * S_OK if mode is accepted, E_FAIL otherwise
+ * @see CATMmrApplicativeAttributes
+ */
+ HRESULT SetBRepAttributeMode(const CATBoolean iBRepAttributeMode);
+
+ /**
+ * Sets the copy mode for colors when copying without keeping a link.
+ * 
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; Allows to specify if colors are copied. By default, if this method is not called
+ * colors on sub-elements are not copied. This method allows to copy colors.
+ * &lt;br&gt;This method has no effect on copies with link, for which colors are copied according to the setting
+ * in PartInfrastructure/PartDocument.
+ * &lt;br&gt; This method must be called before the @href #Run method.
+ * @param iMode
+ * NONE_GP                         : color is not copied&lt;br&gt;
+ * ALL_GP                          : color of feature and color of faces seen in 3D is copied.
+ * FEATURE_GP                      : color of feature is copied&lt;br&gt;
+ * FEATURE_AND_FACES_OVERLOADED_GP : color of feature and ONLY color of faces overloaded are copied&lt;br&gt;
+ * FACES_OVERLOADED_GP             : color of faces overloaded is copied
+ * @return
+ * S_OK if mode is accepted, E_FAIL otherwise
+ * @see CATMmrApplicativeAttributes
+ */
+ HRESULT SetColorMode(const CATMmrGraphicPropertiesModes::MmrGraphicPropertiesReportMode iColorMode);
+
+/**
+ * Sets an applicative identifier on the mechanical imports. 
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; it enables to associate an identifier with the mechanical import feature which is the result 
+ * of the copy (or the elements of the result if it is a surface set or a solid set).
+ * &lt;br&gt;This identifier allows to retrieve information on the mechanical import using interface @href CATIMmiMechanicalImportApplicative . 
+ * &lt;br&gt; This method must be called before the @href #Run method and it only applies if the link mode is set to true.
+ * @param iApplicativeId
+ * The unique identifier generated by the application.
+ * &lt;ul&gt;
+ *   &lt;li&gt;on Windows, use : &lt;tt&gt;uuidgen -s&lt;/tt&gt;&lt;/li&gt;
+ *   &lt;li&gt;on Unix, use : &lt;tt&gt;uuid_gen -C&lt;/tt&gt;&lt;/li&gt;
+ * &lt;/ul&gt;
+ * Refer to the article &quot;About Globally Unique IDentifiers&quot; in the CAA encyclopedia for more details about these two ways of generating a GUID value. 
+ */
+ HRESULT SetImportApplicativeId(const GUID &amp; iApplicativeId);
+
+/**
+ * Computes the copy according to specified input.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; after constructing the class, select link mode if needed
+ * and then use method Run before getting the result with @href #GetResult .
+ * @param oString
+ * Error Message
+ * @return
+ * S_OK if copy is done, E_FAIL otherwise
+ */
+	HRESULT Run(CATUnicodeString* oString = NULL);
+                                               
+/**
+ * Retrieves the computed result.
+ * @param oResult
+ *   The result of the copy (if ok). Use this method after the @href #Run execution. 
+ * @return
+ * S_OK if result exists, E_FAIL otherwise
+ */
+  HRESULT GetResult(CATISpecObject_var&amp; oResult);
+
+/**
+ * Returns creation status.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; after computing the copy, this method will return S_FALSE 
+ * if the result already existed and so was not created. 
+ * This is only the case for a contextual import in an assembly.
+ * @param oResult
+ * status
+ * @return
+ * S_OK if an object was created, S_FALSE if result already existed, E_FAIL otherwise
+ */
+	HRESULT GetCreationStatus();
+
+/**
+ * Destructor
+ */
+  ~CATMmrInterPartCopy();
+private:
+/**
+ * @nodoc 
+ * Copy construction is forbidden
+ */
+  CATMmrInterPartCopy(const CATMmrInterPartCopy&amp;);
+  // 
+  CATMmrInterPartCopyLetter* _ltr;
+
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrImportComparator.html">← 上一页: CATMmrImportComparator.h</a></div>
+        <div><a href="CATMmrLinearBodyServices.html">下一页: CATMmrLinearBodyServices.h →</a></div>
+    </div>
+</body>
+</html>

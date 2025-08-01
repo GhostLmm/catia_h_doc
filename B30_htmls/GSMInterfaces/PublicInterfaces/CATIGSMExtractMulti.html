@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSMInterfaces/PublicInterfaces/CATIGSMExtractMulti.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GSMInterfaces/PublicInterfaces/CATIGSMExtractMulti.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMDirection.html">← 上一页: CATIGSMDirection.h</a></div>
+        <div><a href="CATIGSMExtractSolide.html">下一页: CATIGSMExtractSolide.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMExtractMulti_H
+#define CATIGSMExtractMulti_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;CATGitInterfacesExportedBy.h&quot;
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATIGSMExtractSolideDef.h&quot;
+
+class CATICkeParm_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGitInterfaces IID  IID_CATIGSMExtractMulti;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMExtractMulti;
+#endif
+
+/**
+* Interface to extract solid feature. 
+* &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of a solid extracted. 
+* @see CATIGSMFactory#CreateExtractMulti
+*/
+
+class ExportedByCATGitInterfaces CATIGSMExtractMulti : public CATBaseUnknown
+{
+    CATDeclareInterface;
+    
+public: 
+    /**
+    * Gets referenced solid feature.
+    *   @return solid feature 
+    */ 
+    virtual CATISpecObject_var GetElem(const int iPosition) = 0;
+    
+    /**
+    * Sets solid element to extract a BRep feature from.
+    *   @param iElem
+    *      solid feature
+    */ 
+    virtual HRESULT SetElem(const CATISpecObject_var iElem, const int iPosition) = 0;
+    
+    /**
+    * Gets propagation type of the extract operation.
+    *   @return
+    *      the type
+    *   @see CATIGSMExtractSolidePropag
+    */ 
+    virtual CATIGSMExtractSolidePropag GetExtractPropagType (const int iPosition) = 0;
+    
+    /**
+    * Sets propagation type of the extract operation.
+    *   @param iType
+    *      Propagation type of the extract operation
+    *   @see CATIGSMExtractSolidePropag  
+    */ 
+    virtual HRESULT SetExtractPropagType (const CATIGSMExtractSolidePropag iType, const int iPosition) = 0;
+    
+    /**
+    * Sets the complementary mode.
+    *   @param IComplementaire
+    *      Complementary mode (CATTrue / CATFalse)
+    *   @see CATBoolean
+    */ 
+    virtual HRESULT SetComplementaryExtract (CATBoolean iComplementaire, const int iPosition) = 0;
+    
+    /**
+    * Gets the complementary mode.
+    *   @return CATBoolean
+    *   @see CATBoolean
+    */ 
+    virtual CATBoolean GetComplementaryExtract (const int iPosition) = 0;
+    
+    /**
+    * Gets the federation mode.
+    *   @param IsFederated
+    *      CATTrue  : Result is federated.
+    *      CATFalse : Result is not federated.
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */ 
+    virtual HRESULT GetIsFederated(CATBoolean&amp; IsFederated, const int iPosition) = 0;
+
+	/**
+    * Sets the federation mode.
+    *   @param IsFederated
+    *      CATTrue  : Result is federated.
+    *      CATFalse : Result is not federated.
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */ 
+    virtual HRESULT SetIsFederated(const CATBoolean IsFederated, const int iPosition) = 0;
+    
+    /**
+    * Gets the curvature deviation threshold literal feature.
+    * &lt;br&gt; Note: This threshold is  a ratio between 0 and 1
+    * &lt;br&gt;  if sets to 0, all curvature discontinuities are smoothed.
+    * &lt;br&gt;  if sets to 1, no curvature discontinuity is smoothed.
+    *   @param Elem
+    *      curvature deviation threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetCurvatureThreshold(CATICkeParm_var &amp; Elem, const int iPosition) = 0;
+    
+    /**
+    * Gets the curvature deviation threshold value. 
+    * &lt;br&gt;This threshold is a ratio between 0 and 1.
+    * &lt;br&gt;  if sets to 0, all curvature discontinuities are smoothed.
+    * &lt;br&gt;  if sets to 1, no curvature discontinuity is smoothed.
+    *   @param val
+    *      curvature deviation threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetCurvatureThreshold(double &amp; val, const int iPosition) = 0;
+    
+    /**
+    * Sets the curvature deviation threshold literal feature.
+    * &lt;br&gt; Note: This threshold is a ratio between 0 and 1.
+    * &lt;br&gt;  if sets to 0, all curvature discontinuities are smoothed.
+    * &lt;br&gt;  if sets to 1, no curvature discontinuity is smoothed.
+    *   @param Elem
+    *      curvature deviation threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetCurvatureThreshold(const CATICkeParm_var Elem, const int iPosition) = 0;
+    
+    /**
+    * Sets the curvature deviation threshold value. 
+    * &lt;br&gt;This threshold is a ratio between 0 and 1
+    * &lt;br&gt; if sets to 0, all curvature discontinuities are smoothed
+    * &lt;br&gt; if sets to 1, no curvature discontinuity is smoothed.
+    *   @param val
+    *      curvature deviation threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetCurvatureThreshold(const double val, const int iPosition) = 0;
+    
+    /**
+    * Gets the curvature deviation threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      Curvature deviation threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT GetCurvatureThresholdActivity(CATBoolean &amp; bAct, const int iPosition) = 0;
+    
+    /**
+    * Sets the curvature deviation threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      Curvature deviation threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT SetCurvatureThresholdActivity(const CATBoolean bAct, const int iPosition) = 0;
+    
+    /**
+    * Gets the list of constraints.
+    *   @param oListOfConstraints
+    *     The list of constraints 
+    */
+    virtual HRESULT GetListOfConstraints(CATLISTV(CATISpecObject_var)	&amp; oListOfConstraints) = 0;
+    
+    /**
+    * Gets the number of elements in the list of constraints.
+    *   @param oNbOfConstraints
+    *     The number of elements in the list of constraints 
+    */
+    virtual HRESULT GetNbOfConstraints(int	&amp; oNbOfConstraints) = 0;
+    
+    /**
+    * @deprecated V5R16 CATIGSMExtractMulti#AddConstraintTolerant
+    * Adds a constraint to the list. 
+    *   @param iConstraint 
+    *     The constraint 
+    *   @param iType 
+    *     type of constraint 
+    *   @param iComplementaire 
+    *     Complementary mode 
+    *   @param isFederate 
+    *     Federate or not 
+    *   @param CurElem
+    *      curvature deviation threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT AddConstraint(const CATISpecObject_var iConstraint, const CATIGSMExtractSolidePropag iType, const CATBoolean iComplementaire,
+        const int IsFederated, const CATICkeParm_var CurElem, const int iPosition) = 0;
+    
+    /**
+    * Adds a constraint to the list. 
+    *   @param iConstraint 
+    *     The constraint 
+    *   @param iType 
+    *     type of constraint 
+    *   @param iComplementaire 
+    *     Complementary mode 
+    *   @param isFederate 
+    *     Federate or not 
+    *   @param DisElem
+    *      distance threshold literal feature
+    *   @param AngElem
+    *      angular threshold literal feature
+    *   @param CurElem
+    *      curvature deviation threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT AddConstraintTolerant(const CATISpecObject_var iConstraint, const CATIGSMExtractSolidePropag iType, const CATBoolean iComplementaire,
+        const int IsFederated, const CATICkeParm_var DisElem, const CATICkeParm_var AngElem, const CATICkeParm_var CurElem, 
+		const int iPosition) = 0;
+    
+    /**
+    * Removes a constraint to the list. 
+    *   @param iRank 
+    *     rank 
+    */
+    virtual HRESULT RemoveConstraint (int iRank) = 0;
+    
+    /**
+    * Replaces solid element to extract a BRep feature from .
+    *   @param iElemToReplace
+    *          Elem to replace 
+    *   @param iNewElem 
+    *          to replace by NewElem 
+    *   @param iPosition 
+    *      Position 
+    */ 
+    virtual HRESULT ReplaceElem(const CATISpecObject_var iElemToReplace, const CATISpecObject_var iNewElem, const int iPosition) = 0;
+
+    /**
+    * Gets the distance threshold literal feature.
+    * &lt;br&gt; Note: This threshold is a Lenght.
+    *   @param Elem
+    *      distance threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetDistanceThreshold(CATICkeParm_var &amp; Elem, const int iPosition) = 0;
+    
+    /**
+    * Gets the distance threshold value. 
+    * &lt;br&gt;This threshold is a Lenght.
+     *   @param val
+    *      distance threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetDistanceThreshold(double &amp; val, const int iPosition) = 0;
+    
+    /**
+    * Sets the distance threshold literal feature.
+    * &lt;br&gt; Note: This threshold is a Lenght.
+    *   @param Elem
+    *      distance threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetDistanceThreshold(const CATICkeParm_var Elem, const int iPosition) = 0;
+    
+    /**
+    * Sets the distance threshold value. 
+    * &lt;br&gt;This threshold is a Lenght.
+    *   @param val
+    *      distance threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetDistanceThreshold(const double val, const int iPosition) = 0;
+    
+    /**
+    * Gets the distance threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      distance threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT GetDistanceThresholdActivity(CATBoolean &amp; bAct, const int iPosition) = 0;
+    
+    /**
+    * Sets the distance threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      distance threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT SetDistanceThresholdActivity(const CATBoolean bAct, const int iPosition) = 0;
+
+    /**
+    * Gets the angular threshold literal feature.
+    * &lt;br&gt; Note: This threshold is an angle.
+    *   @param Elem
+    *      angular threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetAngularThreshold(CATICkeParm_var &amp; Elem, const int iPosition) = 0;
+    
+    /**
+    * Gets the angular threshold value. 
+    * &lt;br&gt;This threshold is an angle.
+     *   @param val
+    *      angular threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT GetAngularThreshold(double &amp; val, const int iPosition) = 0;
+    
+    /**
+    * Sets the distance threshold literal feature.
+    * &lt;br&gt; Note: This threshold is an angle.
+    *   @param Elem
+    *      angular threshold literal feature
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetAngularThreshold(const CATICkeParm_var Elem, const int iPosition) = 0;
+    
+    /**
+    * Sets the angular threshold value. 
+    * &lt;br&gt;This threshold is an angle.
+    *   @param val
+    *      angular threshold value
+    *   @param iPosition 
+    *      Position 
+    */
+    virtual HRESULT SetAngularThreshold(const double val, const int iPosition) = 0;
+    
+    /**
+    * Gets the angular threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      angular threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT GetAngularThresholdActivity(CATBoolean &amp; bAct, const int iPosition) = 0;
+    
+    /**
+    * Sets the angular threshold activity (whether it is taken into
+    * account or not). 
+    * &lt;br&gt;This activity is a CATBoolean (CATTrue or CATFalse).
+    *   @param bAct
+    *      angular threshold activity
+    *   @param iPosition 
+    *      Position 
+    *   @see CATBoolean
+    */
+    virtual HRESULT SetAngularThresholdActivity(const CATBoolean bAct, const int iPosition) = 0;
+
+	/**
+    * Gets support.
+    *   @param iPosition 
+    *      Position 
+    *   @param Support
+    *    solid feature 
+    */ 
+	virtual HRESULT GetSupport (const int Position , CATISpecObject_var &amp; Support) = 0;
+
+	/**
+    * Sets support.
+    *   @param iElem
+    *    solid feature 
+    *   @param iPosition 
+    *      Position 
+    */ 
+	virtual HRESULT SetSupport(const CATISpecObject_var iElem, const int iPosition) = 0;
+    
+
+};
+
+CATDeclareHandler (CATIGSMExtractMulti, CATBaseUnknown);
+#endif // CATIGSMExtractMulti_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMDirection.html">← 上一页: CATIGSMDirection.h</a></div>
+        <div><a href="CATIGSMExtractSolide.html">下一页: CATIGSMExtractSolide.h →</a></div>
+    </div>
+</body>
+</html>

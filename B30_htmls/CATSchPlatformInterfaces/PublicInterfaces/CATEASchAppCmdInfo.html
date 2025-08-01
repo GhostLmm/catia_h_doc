@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppCmdInfo.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATEASchAppCmdInfo.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppCCPCGCntrInfo.html">← 上一页: CATEASchAppCCPCGCntrInfo.h</a></div>
+        <div><a href="CATEASchAppCntrColor.html">下一页: CATEASchAppCntrColor.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEASchAppCmdInfo_H
+#define CATEASchAppCmdInfo_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2004
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#include &quot;CATSchItfCPP.h&quot;
+
+// System
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATDocument;
+
+/**
+ * Super class to derive implementation for interface CATISchAppCmdInfo.
+ * &lt;b&gt;Role&lt;/b&gt;: Adaptor
+ */
+
+class ExportedByCATSchItfCPP CATEASchAppCmdInfo : public CATBaseUnknown
+{
+  public: 
+      
+  CATDeclareClass;
+
+  /**
+   * Constructs an empty CATEASchAppCmdInfo.
+   */
+  CATEASchAppCmdInfo();
+  virtual ~CATEASchAppCmdInfo();  
+
+  /**
+  * Get the default component catalog path. 
+  * @param oCatalogPath
+  *   The default component catalog path.
+  */
+  virtual HRESULT GetComponentCatalogPath (char **oCatalogPath);
+
+  /**
+  * Use the component catalog resource as defined through Project 
+  * management and load the document associated with this resource.
+  * @param opDocument
+  *   The loaded component catalog document.
+  */
+  virtual HRESULT GetComponentCatalogDoc (CATDocument *&amp;opDocument);
+
+  /**
+  * Get the default OnOffSheet catalog path. 
+  * @param oCatalogPath
+  *   The default OnOffSheet catalog path.
+  */
+  virtual HRESULT GetOnOffSheetCatalogPath (char **oCatalogPath);
+
+  /**
+  * Use the OnOffSheet catalog resource as defined through Project 
+  * management and load the document associated with this resource.
+  * @param opDocument
+  *   The loaded OnOffSheet catalog document.
+  */
+  virtual HRESULT GetOnOffSheetCatalogDoc (CATDocument *&amp;opDocument);
+
+  /**
+  * Get the default LineLists catalog path. 
+  * @param iLineType
+  *   The class of the Line ID for which you want the catalog path.
+  *   For example: CATPspPipingLine, CATPspICLoop, CATPspHVACLine.
+  * @param oCatalogPath
+  *   The default LineLists catalog path for the input class of Line ID.
+  */
+  virtual HRESULT GetLineListsCatalogPath (const char *iLineType, char **oCatalogPath);
+
+  /**
+  * Return a flag indicating if Part Selection function should be added to
+  * the Place Component command.
+  * @param oFlag
+  *   Flag indicating if Part Selection function should be added to
+  *   the Place Component command.  0 means don&#x27;t add it.  1 means add it.
+  */
+  virtual HRESULT GetPartSelectionInCompPlace (int *oFlag);
+
+  /**
+  * Get the path where the graphic names .txt files can be found. 
+  * @param oGraphicNamesPath
+  *   The graphic names path.
+  */
+  virtual HRESULT GetGraphicNamesPath (char **oGraphicNamesPath);
+
+  /**
+  * Get the default Annotation Break Symbols catalog path. 
+  * @param oCatalogPath
+  *   The default Annotation Break Symbols catalog path.
+  */
+  virtual HRESULT GetAnnotationBreakCatalogPath (char **oCatalogPath);
+
+  /**
+  * Use the Annotation Break Symbols catalog resource as defined through Project 
+  * management and load the document associated with this resource.
+  * @param opDocument
+  *   The loaded Annotation Break Symbols catalog document.
+  */
+  virtual HRESULT GetAnnotationBreakCatalogDoc (CATDocument *&amp;opDocument);
+
+  /**
+  * Get the default Annotation Symbols catalog path. 
+  * @param oCatalogPath
+  *   The default Annotation Symbols catalog path.
+  */
+  virtual HRESULT GetAnnotationSymbolsCatalogPath (char **oCatalogPath);
+
+  /**
+  * Use the Annotation Symbols catalog resource as defined through Project 
+  * management and load the document associated with this resource.
+  * @param opDocument
+  *   The loaded Annotation Symbols catalog document.
+  */
+  virtual HRESULT GetAnnotationSymbolsCatalogDoc (CATDocument *&amp;opDocument);
+
+  private:
+  // do not implement
+  CATEASchAppCmdInfo (CATEASchAppCmdInfo &amp;);
+  CATEASchAppCmdInfo&amp; operator=(CATEASchAppCmdInfo&amp;);
+};
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATEASchAppCCPCGCntrInfo.html">← 上一页: CATEASchAppCCPCGCntrInfo.h</a></div>
+        <div><a href="CATEASchAppCntrColor.html">下一页: CATEASchAppCntrColor.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCircle.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCircle.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCartesianPoint.html">← 上一页: CATCartesianPoint.h</a></div>
+        <div><a href="CATCldAttribute.html">下一页: CATCldAttribute.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCircle_h
+#define CATCircle_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATConic.h&quot;
+#include &quot;CATMathDef.h&quot;
+class CATMathPlane ;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCircle ;
+#else
+extern &quot;C&quot; const IID IID_CATCircle ;
+#endif
+
+//CAA_Exposed  CATIGemCircle
+/**
+ * Interface representing a geometric circle.
+ *&lt;br&gt; The CATCircle is created by the &lt;tt&gt;CreateCircle&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method.
+ *&lt;br&gt;A CATCircle is defined with:
+ *&lt;table&gt;
+ * &lt;tr&gt;&lt;td&gt;CATMathPlane&lt;/td&gt;&lt;td&gt;&lt;tt&gt; (O,U,V) &lt;/tt&gt;&lt;/td&gt;
+ *                &lt;td&gt; The axis system &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;&lt;tt&gt; R &lt;/tt&gt;&lt;/td&gt;
+ *                &lt;td&gt; The radius           &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iStart &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The low angle limitation &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iEnd &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The high angle limitation&lt;/td&gt;&lt;/tr&gt;
+ *&lt;/table&gt;
+ * with &lt;tt&gt; 0 &lt;= iStart &lt; CAT2PI&lt;/tt&gt;, 
+ * &lt;tt&gt;iStart &lt; iEnd &lt;= iStart + CAT2PI&lt;/tt&gt;. The angles (in radian) are measured
+ * from the first direction of the plane.
+ */
+class ExportedByCATGMGeometricInterfaces CATCircle : public CATConic
+{
+  CATDeclareInterface;
+
+public:
+	//CAA_Exposed
+/**
+ * Returns the circle radius.
+ * @return
+ * The radius.
+ */
+  virtual double GetRadius()const =0;
+
+//CAA_Exposed
+/**
+ * Returns the start limitation of the arc circle angle.
+ * @return
+ * The first angle (in radian) limitation, measured from the first direction of the plane.
+ */
+  virtual CATAngle GetStartAngle() const = 0 ;
+
+//CAA_Exposed
+/**
+ * Returns the end limitation of the arc circle angle.
+ * @return
+ * The end angle (in radian) limitation, measured from the first direction of the plane.
+ */  
+  virtual CATAngle GetEndAngle() const = 0 ;
+
+//CAA_Exposed
+/**
+ * Modifies the circle characteristics.
+ * @param iRadius
+ * The new radius.
+ * @param iSupport
+ * The new plane. The circle origin will be at the origin of &lt;tt&gt;iSupport&lt;/tt&gt;.
+ * @param iStart
+ * The first angle (in radian) limitation, measured from the first direction of the plane.
+ * @param iEnd
+ * The end angle (in radian) limitation, measured from the first direction of the plane.
+ */  
+  virtual void Set (const double   iRadius, 
+		    const CATMathPlane      &amp; iSupport,
+		    const CATAngle            iStart,
+		    const CATAngle            iEnd              ) = 0 ; 
+
+//CAA_Exposed
+/**
+ * Modifies the circle radius.
+ * @param iNewRadius
+ * The new radius.
+ */
+  virtual void SetRadius(double iNewRadius)=0;
+
+};
+  CATDeclareHandler(CATCircle,CATConic);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCartesianPoint.html">← 上一页: CATCartesianPoint.h</a></div>
+        <div><a href="CATCldAttribute.html">下一页: CATCldAttribute.h →</a></div>
+    </div>
+</body>
+</html>

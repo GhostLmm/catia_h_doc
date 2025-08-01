@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAV5V6MechanicalModeler.edu/CAAV5V6MmrUseCreateDatumMode.m/LocalInterfaces/CAAV5V6MmrDatumWindowCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAV5V6MechanicalModeler.edu/CAAV5V6MmrUseCreateDatumMode.m/LocalInterfaces/CAAV5V6MmrDatumWindowCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../../CAAV5V6MmrSettingsAddIn.m/LocalInterfaces/CAAV5V6EMmrSettingsAddIn.html">← 上一页: CAAV5V6EMmrSettingsAddIn.h</a></div>
+        <div><a href="../../PublicInterfaces/CAAIV5V6ExtMmrCCDataExtension.html">下一页: CAAIV5V6ExtMmrCCDataExtension.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAV5V6MmrDatumWindowCmd_h
+#define CAAV5V6MmrDatumWindowCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2012
+
+//===========================================================================
+//  Abstract of the sample:
+//  ----------------------
+//
+//  Command allow to demonstrate how to acces to CreateDatum Settings handle in Part/GSD/FreeStyle..
+//
+// Note : CAAV5V6MmrDatumWindowCmd is the same use case as CAAMmrDatumWindowCmd. 
+//        The objective is to have the same source delivered in V5 and V6. 
+//        Any specific code to either V5 or V6 is flagged.
+//
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  Command displays a dialog box enabling 
+
+//    1- to get the status of the Setting 
+//     Current State field indicates 
+//      - NoDatumCreation 
+//      - DatumCreationPermanent
+//      - DatumCreationTemporary 
+//
+//    2- to modify the value and to react on this modification 
+//      Combo allow to choose a new valkue, once done Apply validate the modification 
+//      ==&gt; Then the command reat to the modification event and the CurrentState fielad is updated 
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//           CATDlgDialog (Dialog Framework)    
+//              CATDialog   (Dialog Framework)
+//                  CATCommand  (System Framework)
+//                      CATBaseUnknown (System Framework)
+//
+//===========================================================================
+
+// Dialog Framework
+#include &quot;CATDlgDialog.h&quot;     // Needed to derive from CATDlgDialog
+
+// System Framework
+#include &quot;CATEventSubscriber.h&quot; // to receice callback
+
+
+class CATDlgSelectorList ;
+class CATDlgCombo;
+
+class CATFrmEditor;
+class CATIMmiPartInfrastructurePreferencesAtt;
+
+class CAAV5V6MmrDatumWindowCmd : public CATDlgDialog
+{
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAAV5V6MmrDatumWindowCmd.CATNls 
+  //    
+  DeclareResource(CAAV5V6MmrDatumWindowCmd, CATDlgDialog);
+  
+  public :
+    
+    // Constructor
+    // -----------
+    // Creates the dialog widgets
+    //
+    CAAV5V6MmrDatumWindowCmd();
+
+    virtual ~CAAV5V6MmrDatumWindowCmd();  
+	
+  private : 
+ 
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAV5V6MmrDatumWindowCmd(const CAAV5V6MmrDatumWindowCmd &amp;iObjectToCopy);
+
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAAV5V6MmrDatumWindowCmd &amp; operator = (const CAAV5V6MmrDatumWindowCmd &amp;iObjectToCopy);
+    //
+    // Close
+    // ----------
+    // The end user clicks Close.
+    // 
+    HRESULT Build();
+    
+    HRESULT InitWindow();
+    //
+    // Apply 
+    // ----------
+    // The end user clicks Close.
+    // 
+    void Apply (CATCommand              *iPublishingCommand, 
+                    CATNotification         *iNotification, 
+                    CATCommandClientData     iUsefulData);
+
+
+     //
+    // Close
+    // ----------
+    // The end user clicks Close.
+    // 
+    void Close(CATCommand              *iPublishingCommand, 
+                    CATNotification         *iNotification, 
+                    CATCommandClientData     iUsefulData);
+
+    // EditorClose
+    // -----------
+    // Enable the destruction of the command when the editor is closed
+    // and the command is always active.
+
+    void EditorClose          (CATCallbackEvent  iEvent,
+                           void             *iFrom,
+                           CATNotification  *iNotification,
+                           CATSubscriberData iData,
+                           CATCallback       iCallBack );
+    void ReceiveDatumModify    (CATCallbackEvent  iEvent,
+                           void             *iFrom,
+                           CATNotification  *iNotification,
+                           CATSubscriberData iData,
+                           CATCallback       iCallBack );
+
+
+  private : 
+
+     // To acces to Interface to CreateDatum component 
+     CATIMmiPartInfrastructurePreferencesAtt * _piCATIMmiPartInfrastructurePreferencesAtt;
+     
+     // To handle dialog object 
+     CATDlgSelectorList    * _pDatumCurrentState ;
+     CATDlgCombo           * _pDatumChoice       ;
+     
+     // To keep Strinfg value for panel fields 
+     CATUnicodeString DatumValueMode[3];
+     
+     // To delete the command when the editor launching it is closed
+     CATFrmEditor      * _pEditor ;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../../CAAV5V6MmrSettingsAddIn.m/LocalInterfaces/CAAV5V6EMmrSettingsAddIn.html">← 上一页: CAAV5V6EMmrSettingsAddIn.h</a></div>
+        <div><a href="../../PublicInterfaces/CAAIV5V6ExtMmrCCDataExtension.html">下一页: CAAIV5V6ExtMmrCCDataExtension.h →</a></div>
+    </div>
+</body>
+</html>

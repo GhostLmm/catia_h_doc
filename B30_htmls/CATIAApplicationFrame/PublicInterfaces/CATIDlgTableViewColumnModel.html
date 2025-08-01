@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATIAApplicationFrame/PublicInterfaces/CATIDlgTableViewColumnModel.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATIAApplicationFrame/PublicInterfaces/CATIDlgTableViewColumnModel.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIContextualMenu.html">← 上一页: CATIContextualMenu.h</a></div>
+        <div><a href="CATIDlgTableViewController.html">下一页: CATIDlgTableViewController.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDlgTableViewColumnModel_h
+#define CATIDlgTableViewColumnModel_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2007
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U4 CATExtIDlgTableViewColumnModel
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATDlgView.h&quot;
+#include &quot;CATDlgTableView.h&quot; // Included for styles definition
+#include &quot;CATString.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListOfCATString.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATDlgView IID IID_CATIDlgTableViewColumnModel;
+#else
+extern &quot;C&quot; const IID IID_CATIDlgTableViewColumnModel;
+#endif
+
+/**
+* Interfaces to retreive informations about columns to be visualized through 
+* the CATDlgTableView component.
+*
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Interfaces to retreive informations about columns to be 
+* visualized through the CATDlgTableView component.
+* &lt;p&gt;
+* Do not directly implement the CATIDlgTableViewColumnModel interface, but use the
+* CATExtIDlgTableViewColumnModel adapter and implement the needed methods.
+*
+* BOA information: this interface cannot be implemented using the BOA (Basic Object Adapter). 
+* To know more about the BOA, refer to the CAA Encyclopedia home page. 
+* Click Middleware at the bottom left, then click the Object Modeler tab page. 
+* Several articles deal with the BOA.
+*
+*/
+class ExportedByCATDlgView CATIDlgTableViewColumnModel : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /** 
+  * Retreives the list of columns to be displayed in the CATDlgTableView.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Gets columns order.
+  *
+  * @param oColumns [out]
+  *   The list of the column ID in order. 
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt;otherwise.
+  *
+  */
+	virtual HRESULT GetOrderedColumns( CATListOfCATString &amp; oColumns ) = 0;
+
+  /** 
+  * Sets the new order of the columns.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets columns order from the order of the CATListOfCATString parameter.
+  * Needed when dragging and dropping columns.
+  *
+  * @param iColumns [in]
+  *   The list of the column ID sorted in new order.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt;otherwise.
+  *
+  */
+	virtual HRESULT SetOrderedColumns( const CATListOfCATString &amp; iColumns ) = 0; 
+
+  /** 
+  * Retrieves column header text.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves a column&#x27;s label from the column&#x27;s ID.
+  *
+  * @param iColumn [in]
+  *   The column ID.
+  * @param oLabel [out]
+  *   The column&#x27;s label.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+  virtual HRESULT GetLabel( const CATString &amp; iColumn, CATUnicodeString &amp; oLabel) = 0; 
+
+  /**
+   * @nodoc
+   * Retrieves column header icon.
+   * Quelle taille est admissible ??
+   */
+  // Aujourd&#x27;hui il n&#x27;y a que du texte
+  // virtual HRESULT GetIcon( const CATString &amp;iColumn, CATString &amp; oIcon) = 0;
+
+  /** 
+  * Retreives the column&#x27;s label style.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the column&#x27;s label style from the column&#x27;s ID.
+  *
+  * @param iColumn [in]
+  *   The column ID.
+  * @param oStyle [out]
+  *   The style of the column&#x27;s label, this style could be a combination of different styles:
+  *   &lt;ul&gt;
+  *       &lt;li&gt;CATDlgTableLeftJustify   | &lt;/li&gt;
+  *       &lt;li&gt;CATDlgTableRightJustify  |- Horizontal cell alignement&lt;/li&gt;
+  *       &lt;li&gt;CATDlgTableCenterJustify | &lt;/li&gt;
+  *
+  *       &lt;li&gt;CATDlgTableTopJustify    | &lt;/li&gt;
+  *       &lt;li&gt;CATDlgTableBottomJustify |- Vertical cell alignement&lt;/li&gt;
+  *       &lt;li&gt;CATDlgTableMiddleJustify | &lt;/li&gt;
+  *
+  *       &lt;li&gt;CATDlgTableColumnVisible |- for column visibility management&lt;/li&gt;
+  *       &lt;li&gt;CATDlgTableColumnHidden  |&lt;/li&gt;
+  *   &lt;/ul&gt;
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+  virtual HRESULT GetStyle( const CATString &amp; iColumn, CATDlgTableStyle &amp; oStyle) = 0;
+
+  /** 
+  * Retrieves the column&#x27;s width.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Each column could have its own width. This method questions the column model 
+  * in order to get the width of a particular column in pixel.
+  *
+  * @param iColumn [in]
+  *   The column ID.
+  * @param oWidth [out]
+  *   The width of the specified column.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+  virtual HRESULT GetWidth( const CATString &amp;iColumn, int &amp; oWidth ) = 0;
+
+  /** 
+  * Sets the column&#x27;s width.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Applies the new column width after user resize.
+  *
+  * @param iColumn [in]
+  *   The column ID
+  * @param iWidth [in]
+  *   The new width of the specified column.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+  virtual HRESULT SetWidth( const CATString &amp;iColumn, int iWidth ) = 0;
+
+  
+  //Ne doit on pas remplacer ceci par qqc de plus generique comme l&#x27;appui sur le titre de la colonne ?
+
+	/** 
+	* Short role of the method.
+	*
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Explain what this method does.
+	*
+	* @param iColumnID [in]
+	*   The parameter role...
+	* @param iReverse [in]
+	*   The parameter role...
+	*
+	* @return
+	*   Explain return values
+	*
+	*/
+	virtual void SetSortDefinition( const CATString &amp;iColumnID, int iReverse= 0 ) = 0;
+	
+  /** 
+	* Short role of the method.
+	*
+	* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Explain what this method does.
+	*
+	* @param oColumnID [out]
+	*   The parameter role...
+	* @param oReverse [out]
+	*   The parameter role...
+	*
+	* @return
+	*   Explain return values
+	*
+	*/
+  virtual void GetSortDefinition( CATString &amp;oColumnID, int &amp;oReverse ) = 0;
+
+  /** 
+  * Sets a column visibility.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Method called when the given column is made visible or invisible by the end user..
+  *
+  * @param iColumn [in]
+  *   The column ID.
+  * @param iStyle [in]
+  *   The style to set the column visibility, possible values are:
+  *   &lt;ul&gt;
+  *     &lt;li&gt;CATDlgTableColumnVisible to show the column.&lt;/li&gt;
+  *     &lt;li&gt;CATDlgTableColumnHidden to hide the column.&lt;/li&gt;
+  *   &lt;/ul&gt;
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+  virtual HRESULT SetVisibility( const CATString &amp; iColumn, CATDlgTableStyle iStyle) = 0;
+
+  /** 
+  * Retreives the background color for all column header of the given style.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retreives the background color for all column header of the given style.
+  *
+  * input : Default color value
+  * ouput : new color value. 
+  * Leave value unchanged to keep default colors
+  *
+  * @param iStyle [in]
+  *   The searched style. The possible values are:
+  *   Normal, Highlight, SubHighlight.
+  * @param ioRed [inout]
+  *   It defines the red component of the border color.The value ranges from 0 to 255. 
+  * @param ioGreen [inout]
+  *   It defines the green component of the border color.The value ranges from 0 to 255. 
+  * @param ioBlue [inout]
+  *   It defines the blue component of the border color.The value ranges from 0 to 255. 
+  * @param ioAlpha [inout]
+  *   Not supported.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+    virtual HRESULT GetBackgroundColor(CATDlgTableStyle iStyle, unsigned int &amp; ioRed, unsigned int &amp; ioGreen, unsigned int &amp; ioBlue, unsigned int &amp; ioAlpha) = 0;
+
+  /** 
+  * Retreives the text color for all column header of the given style.
+  *
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Retrieves the text color for all cells of a given style.
+  *
+  * input : Default color value
+  * ouput : new color value. 
+  * Leave value unchanged to keep default colors
+  *
+  * @param iStyle [in]
+  *   The searched style, this style could be:
+  *   Normal, Highlight, SubHighlight.
+  * @param ioRed [inout]
+  *   It defines the red component of the border color.The value ranges from 0 to 255. 
+  * @param ioGreen [inout]
+  *   It defines the green component of the border color.The value ranges from 0 to 255. 
+  * @param ioBlue [inout]
+  *   It defines the blue component of the border color.The value ranges from 0 to 255. 
+  * @param ioAlpha [inout]
+  *   Not supported.
+  *
+  * @return
+  *   &lt;code&gt;S_OK&lt;/code&gt; if everything ran ok, &lt;code&gt;E_FAIL&lt;/code&gt; otherwise.
+  *
+  */
+    virtual HRESULT GetTextColor(CATDlgTableStyle iStyle, unsigned int &amp; ioRed, unsigned int &amp; ioGreen, unsigned int &amp; ioBlue, unsigned int &amp; ioAlpha) = 0;
+
+  //	virtual void GetGroupColumn( CATString iTopLineID, const CATString &amp;i  iLeftColumnID, int &amp; oNumberOfGroupedColumnToTheRight, int &amp; oNumberOfGroupedLinesToTheBottom)
+
+  //Le groupement des colonnes.
+	// A trouver une syntaxe permettant de definir un layout en i, j ? Ici, un groupe de cellules est regroupees sous un titre.
+	// virtual void SetGroupColumns( CATListOfCATString &amp;oIDs, const CATUnicodeString&amp; iLabel ) = 0;
+};
+
+CATDeclareHandler(CATIDlgTableViewColumnModel, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIContextualMenu.html">← 上一页: CATIContextualMenu.h</a></div>
+        <div><a href="CATIDlgTableViewController.html">下一页: CATIDlgTableViewController.h →</a></div>
+    </div>
+</body>
+</html>

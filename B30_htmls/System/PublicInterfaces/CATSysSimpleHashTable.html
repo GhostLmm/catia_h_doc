@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System/PublicInterfaces/CATSysSimpleHashTable.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>System/PublicInterfaces/CATSysSimpleHashTable.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSysSettingRepository.html">← 上一页: CATSysSettingRepository.h</a></div>
+        <div><a href="CATSysStatisticsDef.html">下一页: CATSysStatisticsDef.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES	1999
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+
+#ifndef CATSysSimpleHashTable_H_
+#define CATSysSimpleHashTable_H_
+
+#include &quot;CO0HTAB.h&quot;
+
+typedef int (*PFCompare)(void*, void*) ;
+typedef unsigned int (*PFHash)(void*) ;
+
+ExportedByCO0HTAB unsigned int CATSimpleHashIt(void * iObj) ;
+ExportedByCO0HTAB int CATSimpleHashCompare(void * iObj1, void * iObj2);
+
+/**
+ * HashTable implementation.
+ */
+class ExportedByCO0HTAB CATSysSimpleHashTable {
+
+	public:
+		/**
+		 * Constructs a CATSysSimpleHashTable.
+		 * @param iSizeEstimate
+		 * The initial estimated size of the hash table.
+		 * @param iPFH
+		 * The given hash function.
+		 * @param iPFC
+		 * The given elemts comparison function.
+		 */
+		CATSysSimpleHashTable(
+					int iSizeEstimate = 0,
+					PFHash iPFH = CATSimpleHashIt,
+					PFCompare iPFC = CATSimpleHashCompare);
+
+		/**
+		 * Destructor.
+		 */
+		~CATSysSimpleHashTable() ;
+  
+		//--------------------------------
+		// Direct handling of elements.
+		//------------------------------
+  
+		/**
+		 * Inserts the given element.
+		 * Returns 0 if an element, equal to the given one, already exists in the hashtable,
+		 * Returns 1 if the given element has been inserted successfully.
+		 * Returns -1 in case of failure.
+		 */
+		int Insert(void* iObj);
+  
+		/**
+		 * Inserts the given element and returns the element stored in the hashtable.
+		 * If an element, equal to the given one, already exists in the hashtable, this method
+		 * returns it, otherwise it returns the given element. Returns NULL in case of failure.
+		 */
+		void* InsertAndReturn(void* iObj);
+  
+		/**
+		 * Returns the element stored next to the given element.
+		 */
+		void * Next(void* iFrom) const;
+
+		/**
+		 * Returns the next element corresponding to the same key of the given object.
+		 */
+		void * NextWithKey(void* iFrom) const;
+
+		/**
+		 * Returns the element stored in the hash table to the specified index.
+		 */
+		void * Get(int iPos) const;
+  
+		//-------------------
+		// Hashed access.
+		//-------------------
+		
+		/**
+		 * Returns a pointer on associated object or NULL if object not found.
+		 */
+		void * Locate(void*) const;
+
+		/**
+		 * Returns a pointer on the BUCKET containing the associated object 
+		 * or NULL if object not found.
+		 */
+		void * LocateBucket(void*) const;
+
+		/**
+		 * Returns a pointer on the first object corresponding to the given key,
+		 * or NULL if not found.
+		 */
+		void * KeyLocate(unsigned int iKey) const;
+  
+		/**
+		 * Removes the associated object from the hash table.
+		 * Returns the removed object if successful, NULL otherwise.
+		 */
+		void * Remove(void*);
+
+		/**
+		 * Removes all the elements of the hash table.
+		 */
+		void RemoveAll();
+
+		/**
+		 * Returns the number of stored elements in the hash table.
+		 */
+		int Size() const;
+
+		/**
+		 * Print stats for the hash table.
+		 */
+		void PrintStats() const ;
+  
+		/**
+		 * Reallocates the hashtable with the specified size.
+		 * If no size is specified, the dimension of the hashtable is doubled.
+		 * Returns 0 if successful, -1 in case of failure.
+		 */
+		int ReAllocate(int new_dim = 0) ;
+		
+	private:
+
+		/*
+		 * Instances of this classes are not copiable. I declare but don&#x27;t define these, so that
+		 * the compiler won&#x27;t generate a default version of them for me, and also so that no one can
+		 * use them by mistake.
+		 */
+		CATSysSimpleHashTable(const CATSysSimpleHashTable&amp;);
+		CATSysSimpleHashTable&amp; operator=(const CATSysSimpleHashTable&amp;);
+	
+		PFCompare _PFC; // Comparison function
+		PFHash _PFH; // Hash function
+		void ** _AllocatedZone; // address of the allocated memory  
+		int _DimArray; // dimension of the hashtab (maximum number of bucket to be stored in the Hashtable)
+		int _NbObjStocke; // number of bucket stored in the hashtable
+
+		static int UpToNiceModulo(int);
+
+		inline void ** NextEmptyBucket() const  // Address of the first free bucket
+		{ return _AllocatedZone + _DimArray + 2 * _NbObjStocke; }
+};
+
+#endif // CATSysSimpleHashTable_H_
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSysSettingRepository.html">← 上一页: CATSysSettingRepository.h</a></div>
+        <div><a href="CATSysStatisticsDef.html">下一页: CATSysStatisticsDef.h →</a></div>
+    </div>
+</body>
+</html>

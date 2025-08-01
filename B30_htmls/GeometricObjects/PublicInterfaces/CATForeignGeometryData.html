@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATForeignGeometryData.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATForeignGeometryData.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATForeignCurveData.html">← 上一页: CATForeignCurveData.h</a></div>
+        <div><a href="CATForeignPCurveData.html">下一页: CATForeignPCurveData.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATForeignGeometryData_H
+#define CATForeignGeometryData_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+#include &quot;YP00IMPL.h&quot;
+#include &quot;CATCGMStreamAttribute.h&quot;
+
+class CATCGMOutput;
+class CATMathStream;
+class CATCloneManager;
+class CATTransfoManager;
+class CATIForeignSurface;
+class CATGeometry;
+class CATCX_CHECKUP;
+#include &quot;CATMathDef.h&quot;
+
+/**
+ * Base class for the definition of foreign data on CGM objects.
+ * &lt;br&gt;  If you want 
+ * to create a new class of CGM data, you have to derive this class. By the way, you will
+ * find two kinds of methods:
+ * &lt;ul&gt;
+ * &lt;li&gt; Mandatory methods: there is no default implementation, you must re-write them for
+ * your own object. 
+ * &lt;li&gt; Optional methods: they have a default implementation. You can re-write them to
+ * increase the performances or to be more adapted to your own class.
+ * &lt;/ul&gt;
+ * You must provide a default constructor. As in any C++ programmation, 
+ * it is also strongly recommended to provide
+ * a copy constructor and an assigment operator.
+ */
+class ExportedByYP00IMPL CATForeignGeometryData : public CATCGMStreamAttribute
+{
+  /** @nodoc */
+  CATCGMDeclareAttribute (CATForeignGeometryData,CATCGMStreamAttribute);
+
+public:
+/**
+ * Constructs a CATForeignGeometryData.
+ */
+  CATForeignGeometryData(); 
+/**
+ * Copy constructor.
+ */
+   CATForeignGeometryData(const CATForeignGeometryData &amp;iToCopy);
+/**
+ * Assignement operator.
+ */
+  CATForeignGeometryData&amp; operator = (const CATForeignGeometryData &amp;iToAssign);
+/**
+ * Destructor
+ */
+  virtual ~CATForeignGeometryData();  
+   
+/** 
+ * Constructs a copy of &lt;tt&gt;this&lt;/tt&gt; CATForeignGeometryData.
+ * &lt;br&gt;Mandatory method.
+ * @param iCloning
+ * The clone process to be used.
+ */
+  virtual CATForeignGeometryData* Clone(CATCloneManager&amp; iCloning) const =0;
+/**
+ * Applies a geometrical transformation to &lt;tt&gt;this&lt;/tt&gt; CATForeignGeometryData. 
+ * &lt;br&gt;Mandatory method.
+ * @param iTransfo
+ * The transformation process to be used.
+ */
+  virtual void           Move3D(CATTransfoManager&amp; iTransfo) =0;
+
+/** 
+ * Constructs a geometrically transformed copy of &lt;tt&gt;this&lt;/tt&gt; CATForeignGeometryData. 
+ * &lt;br&gt;Optional method. By default, copies , then transforms.
+ * @param iTransfo
+ * The transformation process to be used.
+ */
+  virtual CATGeometry*   CloneAndMove3D(CATTransfoManager&amp; iTransfo) const ;
+
+/**
+ * @nodoc
+ * Dumps the general characteristics of &lt;tt&gt;this&lt;/tt&gt;.
+ * &lt;br&gt;Optional method. Dumps the class name by default.
+ * @param iWhereToWrite
+ * The stream where to dump.
+ */
+   virtual void  Dump( CATCGMOutput&amp; iWhereToWrite ) const; 
+/**
+ * Returns an estimation of the size in byte of &lt;tt&gt;this&lt;/tt&gt; CATForeignGeometryData.
+ * &lt;br&gt;Optional method. No size by default. 
+ * @return
+ * The estimated size.
+ */
+  virtual CATLONG32  GetSize() const;   
+
+/**
+ * @nodoc
+ * Checks the validity of &lt;tt&gt;this&lt;/tt&gt; CATForeignGeometryData.
+ * &lt;br&gt;Optional method. No check by default. 
+ */
+  virtual void CheckUp(CATCX_CHECKUP* report);
+
+/** @nodoc */
+  void SetOwningObject(CATGeometry* );
+
+  protected :
+
+/**
+ * Returns the value to be used to define an infinite line.
+ * @return
+ * The value of the infinite.
+ */
+  double GetInfinite() const;
+
+/**
+ * Returns a pointer to the CATGeometry object that owns &lt;tt&gt;this&lt;/tt&gt; data.
+ * @return
+ * The CATForeignCurve or CATForeignSurface that have &lt;tt&gt;this&lt;/tt&gt; data.
+ */
+  CATGeometry* GetInterface() const ;  
+  
+  private :
+  
+  CATGeometry* _OwningObject;
+//=============================================================================
+  
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATForeignCurveData.html">← 上一页: CATForeignCurveData.h</a></div>
+        <div><a href="CATForeignPCurveData.html">下一页: CATForeignPCurveData.h →</a></div>
+    </div>
+</body>
+</html>

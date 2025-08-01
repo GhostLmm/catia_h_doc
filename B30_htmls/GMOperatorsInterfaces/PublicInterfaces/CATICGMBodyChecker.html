@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMBodyChecker.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMBodyChecker.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMAdvancedRemoveFaceOpe.html">← 上一页: CATICGMAdvancedRemoveFaceOpe.h</a></div>
+        <div><a href="CATICGMCloseOperator.html">下一页: CATICGMCloseOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMBodyChecker_h_
+#define CATICGMBodyChecker_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMTopOperator.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATCollec.h&quot;
+#include &quot;CATCGMBodyCheckerDef.h&quot; // enum...
+
+class CATBody;
+class CATGeoFactory;
+class CATTopData;
+
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+class CATLISTP(CATCell);
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMBodyChecker;
+
+//=============================================================================
+/**
+* Class defining the operator to check a given body.
+* &lt;br&gt;&lt;tt&gt;CATICGMBodyChecker&lt;/tt&gt; follows the global frame of the topological operators.
+* &lt;ul&gt;
+* &lt;li&gt;Create it with the &lt;tt&gt;Create&lt;/tt&gt; static function.
+* &lt;li&gt;Run it.
+* &lt;li&gt;Get the result (diagnosis).
+* &lt;li&gt;Remove it with the &lt;tt&gt;Remove&lt;/tt&gt; static function.
+* &lt;/ul&gt;
+*/
+class ExportedByCATGMOperatorsInterfaces CATICGMBodyChecker: public CATICGMTopOperator
+{
+public:
+	/**
+	* Constructor
+	*/
+	CATICGMBodyChecker();
+
+	/**
+	* Constructs an operator that checks a body.
+	* &lt;br&gt;The body to check can contain several domains. All the cells of relevant type from all domains will
+	* be checked for the active body checker rules.
+	* @param ipFactory
+	* The pointer to the factory of the body to check.
+	* @param ipData
+	* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;ipData&lt;/tt&gt; 
+	* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled. 
+	* @param ipBodyToCheck
+	* The pointer to the body to check. It can contain several domains.
+	* In this case, the operator processes all the cells from all the domains.
+	* @return [out, IUnknown#Release]
+	* The pointer to the created operator. 
+	* To remove the operator from memory, use &lt;tt&gt;Release&lt;/tt&gt; method after use.
+	*/
+	static CATICGMBodyChecker *Create(
+		CATGeoFactory *ipFactory,
+		CATTopData *ipData,
+		CATBody *ipBodyToCheck);
+
+	/**
+	* Checks a given body.
+	* &lt;br&gt;The body to check can contain several domains. All the cells of relevant type from all domains will
+	* be checked for the active body checker rules.
+	* @param ipFactory
+	* The pointer to the factory of the body to check.
+	* @param ipBodyToCheck
+	* The pointer to the body to check. It can contain several domains.
+	* In this case, the operator processes all the cells from all the domains.
+	* @param ioNumberOfSevereAnomalies
+	* Total number of severe anomalies found during check operation.
+	* @param ioDetailsOfAnomalies
+	* The details of severe anomalies found during check operation.
+	* @param ibFullCheck
+	* CATBoolean(0) indicates that body check operator would run in &quot;Light&quot; check mode.&lt;br&gt;
+	* CATBoolean(1) indicates that body check operator would run in &quot;Full&quot; check mode.
+	* @return
+	* The result of the check operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if no errors were found, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	static CATBoolean Check(
+		CATGeoFactory *ipFactory,
+		CATBody *ipBodyToCheck,
+		CATLONG32 &amp;ioNumberOfSevereAnomalies,
+		ostream &amp;ioDetailsOfAnomalies,
+		const CATBoolean &amp;ibFullCheck = FALSE);
+
+	// Operator services/specific methods
+	/**
+	* Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+	* @return
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if ok, &lt;tt&gt;0&lt;/tt&gt; if failed.
+	*/
+	virtual int Run() = 0;
+
+	/**
+	* Type of &lt;tt&gt;this&lt;/tt&gt; operator.
+	* @return
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:  &lt;tt&gt;&gt;1&lt;/tt&gt;.
+	*/
+	virtual int Type() const = 0;
+
+	// Methods for querying/altering operator behaviour.
+	/**
+	* Gets the active check mode of the operator.
+	* &lt;br&gt;Note that the default check mode of the operator is &lt;tt&gt;Light&lt;/tt&gt; mode.
+	* @param oCheckMode
+	* The active check mode of the operator.
+	* @return
+	* The result of the operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if succeeded, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	virtual CATBoolean GetCheckMode(CATCGMBodyCheckMode &amp;oCheckMode) = 0;
+
+	/**
+	* Sets the new active check mode of the operator.
+	* &lt;br&gt;Note that the default check mode of the operator is &lt;tt&gt;Light&lt;/tt&gt; mode.
+	* @param iCheckMode
+	* The new active check mode of the operator to be set.
+	* @return
+	* The result of the operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if succeeded, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	virtual CATBoolean SetCheckMode(const CATCGMBodyCheckMode &amp;iCheckMode) = 0;
+
+	/**
+	* Sets the check rules for the operator.
+	* &lt;br&gt;Use this method to restrict the check operation to certain rules of interest.
+	* &lt;br&gt;One can use this method and then set the check mode to &lt;tt&gt;CATICGMBodyChecker::BodyChkModeLightPlus&lt;/tt&gt;,
+	* in which case, the operator checks for rules set by &lt;tt&gt;this&lt;/tt&gt; method in addition to &lt;tt&gt;Light&lt;/tt&gt; rules.
+	* @param iplsCheckRuleIDs
+	* The list of check rule IDs of type &lt;tt&gt;CATCGMBodyCheckerRuleID&lt;/tt&gt; to be checked.
+	* @return
+	* The result of the operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if succeeded, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	virtual CATBoolean SetCheckRules(CATListOfInt *&amp;iplsCheckRuleIDs) = 0;
+
+	/**
+	* Sets the check cells for the operator.
+	* &lt;br&gt;Use this method to restrict the check operation to certain cells of interest.
+	* @param ilsCheckCells
+	* The list of cells to be used for check (a subset from &lt;tt&gt;ipBodyToCheck&lt;/tt&gt;, i.e. body being checked).
+	* @return
+	* The result of the operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if succeeded, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	virtual CATBoolean SetCheckCells(CATLISTP(CATCell) &amp;ilsCheckCells) = 0;
+
+	// Methods for diagnosis/results analysis/iterators
+	/**
+	* Gets the number of diagnoses found after the operator run.
+	* @return
+	* &lt;br&gt;The &lt;b&gt;count&lt;/b&gt; of diagnoses found.
+	*/
+	virtual CATLONG32 GetNbDiagnoses() const = 0;
+
+	/**
+	* Initializes the iterator of the resulting diagnosis.
+	*&lt;br&gt;By default, the initialization is performed once the operator runs, 
+	* and this is therefore only used to read the diagnosis again.
+	*/
+	virtual void BeginningDiagnosis() = 0;
+
+	/**
+	* Skips to the next diagnosis of &lt;tt&gt;this&lt;/tt&gt; operator results, if any.
+	* &lt;br&gt;After &lt;tt&gt;BeginningDiagnosis&lt;/tt&gt;, it skips to the first diagnosis. 
+	* @return
+	* The existence of the next diagnosis.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+	* &lt;dl&gt;&lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt; &lt;dd&gt;if there is a diagnosis
+	*    &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt; &lt;dd&gt;if no more diagnosis.&lt;/dl&gt;
+	*/
+	virtual CATBoolean NextDiagnosis() = 0;
+
+	/**
+	* Gets the current diagnosis of &lt;tt&gt;this&lt;/tt&gt; operator results.
+	* @param oDiagnosisString
+	* The reference to the string to be filled out with diagnosis details.
+	* @return
+	* The result of the operation.
+	* &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if succeeded, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+	*/
+	virtual CATBoolean GetDiagnosis(CATUnicodeString &amp;oDiagnosisString) const = 0;
+
+	/**
+	* Gets all the diagnoses of &lt;tt&gt;this&lt;/tt&gt; operator results after run.
+	* @param ioOutput
+	* The details of severe anomalies found during check operation.
+	*/
+	virtual void Dump(ostream &amp;ioOutput) const = 0;
+
+protected:
+	/**
+	* Destructor
+	*/
+	virtual ~CATICGMBodyChecker(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMBodyChecker_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMAdvancedRemoveFaceOpe.html">← 上一页: CATICGMAdvancedRemoveFaceOpe.h</a></div>
+        <div><a href="CATICGMCloseOperator.html">下一页: CATICGMCloseOperator.h →</a></div>
+    </div>
+</body>
+</html>

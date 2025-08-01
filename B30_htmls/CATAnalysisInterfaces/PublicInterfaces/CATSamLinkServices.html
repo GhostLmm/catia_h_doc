@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATSamLinkServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATSamLinkServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamGroupTypes.html">← 上一页: CATSamGroupTypes.h</a></div>
+        <div><a href="CATSamModifyOccurrencesNotif.html">下一页: CATSamModifyOccurrencesNotif.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2003
+#ifndef CATSamLinkServices_H_ 
+#define CATSamLinkServices_H_ 
+
+/**
+  * @CAA2Level L0
+  * @CAA2Usage U1
+  */
+
+#include &quot;CATAnalysisToolkit.h&quot;
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+#include &quot;CATILinkableObject.h&quot;
+#include &quot;CATIProduct.h&quot;
+#include &quot;CATISamAnalysisManager.h&quot;
+#include &quot;CATDocument.h&quot;
+
+class CATDocument;
+class CATPathElement;
+
+class ExportedByCATAnalysisToolkit CATSamLinkServices
+{
+  public:
+    
+
+    /*
+		*Tells if an object can be selected from a specific analysis cocument
+		*@ param iFromDoc the contextual Analysis document
+		*@ param iPath the path of selected element
+		*@ param iSelected the selected element
+    *@ return TRUE if selection is valid
+		*/
+    static 	CATBoolean			CanBeSelected			(CATDocument * iFromDoc, CATPathElement* iPath, CATBaseUnknown_var &amp;iSelected);
+
+    /*
+		*Returns the contextual positioning instance product for a selected element
+		*@ param iFromDoc the contextual Analysis document
+		*@ param iPath the path of selected element
+		*@ param iSelected the selected element
+		*/
+    static 	CATIProduct_var GetInstanceProduct(CATDocument * iFromDoc, CATPathElement* iPath, CATBaseUnknown_var &amp;iSelected);
+
+
+    /*
+		*Returns All the analysis that can possibly analyse the product
+		*@ param iAnalysisDoc the starting Analysis document
+		*@ param iInstProduct the positioning instance product
+		*@ param oAnalysisDocs list of Analysis
+		*@ param oLocalReferences list of references product/part of iInstProduct in oAnalysisDocs context
+		*/
+		static  HRESULT GetAllProductsAndAnalysis(CATDocument* iAnalysisDoc,
+																							CATIProduct_var iInstProduct,
+																							CATLISTP(CATDocument) &amp;oAnalysisDocs,
+																							CATLISTV(CATBaseUnknown_var) &amp; oLocalReferences);
+
+
+		/*
+		*Returns all instances that have a valid Analysis for assembly as active shape representation
+		*@ param iAnalysisDoc the starting Analysis document
+		*@ param oListProd list of Product instances
+		*@ param oListAnalysis list of coresponding Rep
+		*@ param oListShape list of coresponding Shapes
+		*/
+		static void GetDocumentAssemblyList(CATDocument* iAnalysisDoc,
+																			 CATLISTV(CATBaseUnknown_var) &amp; oListProd,
+																			 CATLISTP(CATDocument) &amp; oListAnalysis,
+																			 CATLISTV(CATUnicodeString) &amp; oListShape);
+		
+
+		/*
+		*tests the validity of the document for assembly use
+		*@ param iAdoc the analysis document to test
+		*@ param iProd the instance product that agregates the document
+		*@ iAdoc must have only one link to geometrie and products are not supported
+		*@ if iProd is not Null, test instance/reference is performed
+		*/
+		static CATBoolean IsDocAllowedForAssembly(CATDocument* iAdoc,CATIProduct_var &amp;iProd);
+
+	private:
+
+		static void GetManager(CATDocument* iDocument, CATISamAnalysisManager_var&amp; oManager);
+		static HRESULT GetAssemblyList(CATDocument* iAnalysisDoc,
+															 CATLISTV(CATBaseUnknown_var) &amp; oListProd,
+															 CATLISTP(CATDocument) &amp; oListAnalysis);
+
+    /*
+		*Returns the right instance in an analysis context
+		*@ param iOldInstProduct an instance of the searched product
+		*@ param iAnalysisDoc the analysis contxt in which the instance must be searched
+		*@ param oNEwInstProduct the found instance
+		*/
+		static void GetNewInstance(CATIProduct_var iOldInstProduct,CATDocument* iAnalysisDoc,CATIProduct_var &amp; oNEwInstProduct);
+
+    /*
+		*Returns the first product and analysis found in a path
+		*@ param iPath the path of selected element
+		*@ param iSelected the selected element
+		*@ param oProduct the first product
+		*@ param oAnalysisDoc the first analysis document
+		*/
+		static	void GetFirstProductAndAnalysis(CATPathElement* iPath, CATBaseUnknown_var &amp;iSelected,
+																						CATIProduct_var &amp; oProduct, CATDocument* &amp;oAnalysisDoc);
+
+
+    /*
+		*Returns the analysis analysing the product
+		*@ param iAnalysisDoc the starting Analysis document
+		*@ param iInstProduct the positioning instance product
+		*@ param oAnalysisDoc the last analysis analysing this product
+		*@ param oLocalReference the reference product of iInstProduct in oAnalysisDoc context
+		*/
+		static	HRESULT GetLocalProductAndAnalysis(CATDocument* iAnalysisDoc,
+																						CATIProduct_var iInstProduct,
+																						CATDocument* &amp;oAnalysisDoc,
+																						CATIProduct_var &amp; oLocalReference);
+
+		static CATBoolean CanBeSelected ( CATDocument * iFromDoc,
+																			CATPathElement* iPath,
+																			CATBaseUnknown_var &amp;iSelected,
+																			CATIProduct_var &amp; oProduct);
+
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamGroupTypes.html">← 上一页: CATSamGroupTypes.h</a></div>
+        <div><a href="CATSamModifyOccurrencesNotif.html">下一页: CATSamModifyOccurrencesNotif.h →</a></div>
+    </div>
+</body>
+</html>

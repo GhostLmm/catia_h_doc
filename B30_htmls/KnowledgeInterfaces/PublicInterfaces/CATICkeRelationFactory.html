@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATICkeRelationFactory.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATICkeRelationFactory.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeRelationExp.html">← 上一页: CATICkeRelationExp.h</a></div>
+        <div><a href="CATICkeRelationForwards.html">下一页: CATICkeRelationForwards.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// Copyright Dassault Systemes 2000
+#ifndef CATICkeRelationFactory_H
+#define CATICkeRelationFactory_H
+
+
+
+/** 
+* @CAA2Level L1
+* @CAA2Usage U3 
+*/
+
+// include root of extension CKE
+#include &quot;CATBaseUnknown.h&quot;
+
+//LiteralFeatures
+#include &quot;KnowledgeItf.h&quot;
+#include &quot;CATICkeRelationForwards.h&quot;
+#include &quot;CATICkeSignature.h&quot;
+#include &quot;CATICkeParameterSet.h&quot;
+#include &quot;CATIParmPublisher.h&quot;
+#include &quot;CATICkeFunction.h&quot;
+
+//ObjectSpecsModeler
+//#include &quot;CATISpecObject.h&quot;
+
+class CATISpecObject_var;
+class CATIList_var;
+
+// OLE
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern IID ExportedByKnowledgeItf IID_CATICkeRelationFactory;
+#else
+extern &quot;C&quot; const IID IID_CATICkeRelationFactory;
+#endif
+
+/**   
+* Interface dedicated to parameter sets creation.
+* &lt;b&gt;Role&lt;/b&gt;: manages the creation of parameter sets.
+* @see CATIParmPublisher
+* @see CATIParmManipulator
+*/
+class ExportedByKnowledgeItf CATICkeRelationFactory : public CATBaseUnknown
+{
+    
+public:
+    
+    
+/**
+* @nodoc
+* Creates an optimization constraint expression.
+* @param name
+* name of the expression 
+* @param comment
+* comment of the expression
+* @param formalSignature
+* This string describes the type of used parameters and the returned type of the expression. &lt;br&gt;
+* For an optimization constraint, no value is returned&lt;br&gt;
+* see the documentation on functions and queries on the knowledgeware PrivateWeb for syntax
+* (http://loicdsy/Developers/InHouse/LiteralFeatures/FunctionsAndQueries.doc)
+* @param body
+* the body of the expression
+    */
+    virtual CATICkeExpression_var CreateOptConstraint (CATUnicodeString name,
+        CATUnicodeString comment,
+        CATUnicodeString formalSignature,
+        CATUnicodeString body) =0;
+    
+    
+		/**
+		* @deprecated V5R16 CATICkeExpressionFactory#CreateConstraint &lt;br&gt;    
+		* Creates a check expression.
+        * @param name
+        * name of the expression 
+        * @param comment
+        * comment of the expression
+        * @param formalSignature
+        * This string describes the type of used parameters and the returned type of the expression. &lt;br&gt;
+        * For a check, no value is returned&lt;br&gt;
+        * @param body
+        * the body of the check expression
+    */
+    virtual CATICkeExpression_var CreateConstraint (CATUnicodeString name,
+        CATUnicodeString comment,
+        CATUnicodeString formalSignature,
+        CATUnicodeString body) =0;
+    
+    
+        /**
+		* @deprecated V5R16 CATICkeExpressionFactory#CreateProgram &lt;br&gt;    
+        * Creates a rule expression.
+        * @param name
+        * name of the expression 
+        * @param comment
+        * comment of the expression
+        * @param formalSignature
+        * This string describes the type of used parameters and the returned type of the expression. &lt;br&gt;
+        * For a rule, no value is returned&lt;br&gt;
+        * @param body
+        * the body of the rule expression
+    */
+    virtual CATICkeExpression_var    CreateProgram    (CATUnicodeString name,
+        CATUnicodeString comment,
+        CATUnicodeString formalSignature,
+        CATUnicodeString body) = 0;
+    
+        /**
+		* @deprecated V5R16 CATICkeExpressionFactory#CreateFunctionalExpression &lt;br&gt;    
+        * Creates a functional expression (to be used in a knowledgeware formula).
+        * @param name
+        * name of the expression 
+        * @param comment
+        * comment of the expression
+        * @param formalSignature
+        * This string describes the type of used parameters and the returned type of the expression. &lt;br&gt;
+        * For a formula, the returned value is the type of the output parameter of the formula&lt;br&gt;
+        * @param body
+        * the body of the functional expression
+    */
+    virtual CATICkeExpression_var CreateFunctionalExpression (CATUnicodeString name,
+        CATUnicodeString comment,
+        CATUnicodeString formalSignature,
+        CATUnicodeString body) = 0;
+    
+    
+        /**
+        * @nodoc
+        * Creating a relation from something else.
+		* SPECIAL CASE FOR FORMULAS : the ouput parameter is at the end of the list.
+    */
+    virtual CATICkeRelationExp_var CreateRelation  (CATUnicodeString n,
+        CATUnicodeString c,
+        CATUnicodeString p,
+        CATCkeListOfParm lstparam,
+        const CATICkeType_var &amp;t,
+        const CATICkeExpression_var &amp;e,
+        CATCke::Boolean synchrone,
+        CATCke::Boolean shared = 0) =0;
+    
+    
+        /**
+        * @nodoc
+        * Create a parameter.
+    */
+    virtual CATICkeParm_var CreateParameter (CATUnicodeString ident,
+        const CATICkeInst_var &amp;val,
+        CATCke::Boolean constval) =0;
+    
+    
+        /**
+        * Creates a relation set.
+        * @param name
+        * name of the relation set. 
+        * @return the newly created relation set viewed a a parameter publisher.
+    */
+    virtual CATIParmPublisher_var CreateRelationSet (const CATUnicodeString name) =0;
+    
+    /**
+    * Creates a parameter set.
+    * @param name
+    * name of the parameter set. 
+    * @return the newly created relation set viewed a a parameter publisher.
+    */
+    virtual CATIParmPublisher_var CreateParameterSet (const CATUnicodeString name) =0;
+    
+    
+    
+    /**
+    * @nodoc
+    */
+    virtual CATIParmPublisher_var CreateOptimizationSet() = 0;
+    
+    
+    /**
+    * @nodoc
+    * Create a formula between parameters (example : y=3*x).&lt;br&gt;
+    * if a syntax error occurs, NULL_var is returned and a CATCkeParseException exception is raised&lt;br&gt;
+    * @param iRelationName formula&#x27;s name
+    * @param iComment no more used for formula !!
+    * @param iFamily not used !!
+    * @param iOutputParameter valuated parameter (y in our example)
+    * @param iListOfParameters  (pointer on list of CATBaseUnknown_var) contains literal used in inputs (x in our example)  
+    * @param iBody contains the string describing the formula (&quot;3*x&quot; in our example)
+    * @param iRoot (CATIParmPublisher) used to name parameters with RelativeName (root) method&lt;br&gt; 
+    * and so to be able to recognize parameters by their name &lt;br&gt;
+    * Not used in realnames = false mode&lt;br&gt;
+    * @param iRealnames  = 2 possibilities to name a parameter in the body.&lt;br&gt; 
+    * &lt;tt&gt;CATCke::True&lt;/tt&gt;  names used are the one returned by RelativeName (root) and we try to recognize names used in the body with parameters of iListParameters..
+    * &lt;tt&gt;CATCke::False&lt;/tt&gt; names used are a1,a2,a3,etc...&lt;br&gt;
+    *                        a1 meaning the first parameter of iListParameters, a2, the second one, etc....&lt;br&gt;
+    * We advise you strongly to use this second method in your application to avoid NLS problems .  &lt;br&gt;
+    * &lt;br&gt;
+    * @return Formula created or NULL_var if syntax error&lt;br&gt;
+    */
+    virtual CATICkeRelation_var CreateFormula (const CATUnicodeString    &amp;iRelationName,
+        const CATUnicodeString    &amp;iComment,
+        const CATUnicodeString    &amp;iFamily,
+        const CATICkeParm_var     &amp;iOutputParameter,
+        const CATCkeListOfParm     iListOfParameters,
+        const CATUnicodeString    &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean     &amp;iRealnames = 1) = 0;
+    
+        /**
+        * @nodoc
+        * Create a rule between parameters (example : if (x&gt; 3) y=3*x else y = 2).&lt;br&gt;
+        * if a syntax error occurs, NULL_var is returned and a CATCkeParseException exception is raised&lt;br&gt;
+        * @param iRelationName  program&#x27;s name
+        * @param iComment comment  !!
+        * @param iFamily not used !!
+        * @param iListOfParameters (pointer on list of CATBaseUnknown_var) contains literal used in inputs or outputs (x and y  in our example)  
+        * @param iBody contains the string describing the program (&quot;if (x&gt; 3) y=3*x else y = 2&quot; in our example)
+        * @param iRoot (CATIParmPublisher) used to name parameters with RelativeName (root) method &lt;br&gt;
+        * and so to be able to recognize parameters by their name&lt;br&gt;
+        * Not used in realnames = false mode&lt;br&gt;
+        * @param iRealnames  = 2 possibilities to name a parameter in the body.&lt;br&gt; 
+        * &lt;tt&gt;CATCke::True&lt;/tt&gt;  names used are the one returned by RelativeName (root) and we try to recognize names used in the body with parameters of iListParameters..
+        * &lt;tt&gt;CATCke::False&lt;/tt&gt; names used are a1,a2,a3,etc...&lt;br&gt;
+        *                        a1 meaning the first parameter of iListParameters, a2, the second one, etc....&lt;br&gt;
+        * We advise you strongly to use this second method in your application to avoid NLS problems .  
+        * &lt;br&gt; 
+        * @return Rule created or NULL_var if syntax error
+    */
+    virtual CATICkeRelation_var CreateProgram (const CATUnicodeString    &amp;iRelationName,
+        const CATUnicodeString    &amp;iComment,
+        const CATUnicodeString    &amp;iFamily,
+        const CATCkeListOfParm     iListOfParameters,
+        const CATUnicodeString    &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean     &amp;iRealnames = 1) = 0;
+    
+        /**
+        * @nodoc
+        * Create a check between parameters (example : x &gt; 3).&lt;br&gt;
+        * if a syntax error occurs, NULL_var is returned and a CATCkeParseException exception is raised&lt;br&gt;
+        * @param iRelationName program&#x27;s name
+        * @param iComment comment
+        * @param iFamily not used !!
+        * @param iListOfParameters (pointer on list of CATBaseUnknown_var) contains literal used in inputs (x and y  in our example)  
+        * @param iBody contains the string describing the check (&quot;x&gt; 3&quot; in our example)
+        * @param iRoot (CATIParmPublisher) used to name parameters with RelativeName (root) method&lt;br&gt; 
+        * and so to be able to recognize parameters by their name&lt;br&gt;
+        * Not used in realnames = false mode&lt;br&gt;
+        * @param iRealnames  = 2 possibilities to name a parameter in the body. &lt;br&gt;
+        * &lt;tt&gt;CATCke::True&lt;/tt&gt;  names used are the one returned by RelativeName (root) and we try to recognize names used in the body with parameters of iListParameters..
+        * &lt;tt&gt;CATCke::False&lt;/tt&gt; names used are a1,a2,a3,etc...&lt;br&gt;
+        *                        a1 meaning the first parameter of iListParameters, a2, the second one, etc....&lt;br&gt;
+        * We advise you strongly to use this second method in your application to avoid NLS problems .  
+        * &lt;br&gt;
+        * @return check created or NULL_var if syntax error
+    */
+    virtual CATICkeRelation_var CreateCheck   (const CATUnicodeString     &amp;iRelationName,
+        const CATUnicodeString     &amp;iComment,
+        const CATUnicodeString     &amp;iFamily,
+        const CATCkeListOfParm    iListOfParameters,
+        const CATUnicodeString     &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean    &amp;iRealnames = 1) = 0;
+	
+		/**
+        * @nodoc
+        * Create an Equivalent Dimension.&lt;br&gt;
+        * if a syntax error occurs, NULL_var is returned&lt;br&gt;
+        * @param name program&#x27;s name
+        * @param Comment comment
+        * @param Family not used !!
+        * @return EquivalentDimension created or NULL_var if no EquivalentDimension has been created
+    */
+	virtual CATICkeRelation_var CreateEquivalentDimensions(
+		const CATUnicodeString	&amp;name,
+		const CATUnicodeString	&amp;comment,
+		const CATUnicodeString	&amp;family) = 0;
+    
+        /**
+        * @nodoc
+        * Create a simple relation between 2 parameters &#x27;y = ax+b&#x27;.
+        * with x is first parameter, y is second one. This relation is synchronous &lt;br&gt;
+        * 
+        * @param iRelationName  relations name
+        * @param iComment comment
+        * @param iFamily not used !!
+        * @param iX input literal
+        * @param iY output literal
+        * @param iA a
+        * @param iB b
+        * @return relation created
+    */
+    virtual CATICkeRelation_var CreateSymetricalRelation (const CATUnicodeString &amp;iRelationName,
+        const CATUnicodeString &amp;iComment,
+        const CATUnicodeString &amp;iFamily,
+        const CATICkeParm_var &amp;iX,
+        const CATICkeParm_var &amp;iY,
+        const double iA,
+        const double iB) = 0;
+    
+        /**
+        * Creates a fully functional design table (with its embedded sheet) from a file (excel or text file).&lt;br&gt;
+        * @Returns an handler on the new design table. if a problem occurs while creating it (bad file format), returns NULL_var 
+        * @param iRelationName The name of the design table
+        * @param iComment The comment associated to the design table
+        * @param iFilePath
+        *	The path of the sheet file.
+        *	- If param sheetWithoutFile = 0 :
+        *			if this path contains &quot;.xls&quot;, the Excel format is assumed, else the tabulated text format is used.
+        *			If this path is empty, no sheet is aggregated to the design table, and the user has to create a sheet 
+        *			(method CreateSheet) and associate it to an excel or text file)
+        *	- If param sheetWithoutFile = 1 :
+        *			no matter with the content of this path
+        * @param orientation
+        *	1 if vertical, 0 else (used only if path != &quot;&quot; and sheetWithoutFile = 0)
+        * @param sheetWithoutFile
+        *	If sheetWithoutFile = 1, a model sheet is created (sheet with persitent memory storage, but no file)
+        *	and it won&#x27;t be possible to associate a file to this sheet.
+    */
+    virtual CATIDesignTable_var CreateDesignTable(const CATUnicodeString     &amp;iRelationName,
+        const CATUnicodeString &amp;iComment,
+        const CATUnicodeString &amp;iFilePath,
+        int orientation = 1,
+        int sheetWithoutFile = 0) = 0;
+    
+    
+        /**
+        * Create a design table sheet. 
+        * @param iFilePath The path of the source file. It can be an Excel or a Lotus sheet
+        * or a tabulated text file, or an empty path (if iType != 4, you&#x27;ll have to call 
+        * CreateSourceFile on CATICkeSheet interface).
+        * If the path isn&#x27;t empty and the file doesn&#x27;t exist, the file is created.
+        * @param iType
+        * - if iType = 4, whatever the content of the path, a model sheet 
+        *   is created (sheet with persitent memory storage, but no file) 
+        * - if path is empty, uses the type to know what kind of sheet has to be created
+        *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: the test can be either
+        *   &lt;tt&gt;1&lt;/tt&gt; Excel one.
+        *   &lt;tt&gt;2&lt;/tt&gt; Text one
+        *   &lt;tt&gt;3&lt;/tt&gt; Lotus one
+        *   &lt;tt&gt;4&lt;/tt&gt; Model one
+        * @return
+        * the created sheet. It returns NULL_var if the file creation failed (in the case where the file has to be created) or if Excel or Lotus is asked on UNIX
+    */
+    virtual CATICkeSheet_var CreateSheet(const CATUnicodeString &amp;iFilePath,int iType = 0) = 0;
+    
+    /**
+    * @nodoc
+    * Create an optimization constraint (example : x &gt; 3).
+    * 
+    * if a syntax error occurs, NULL_var is returned and a CATCkeParseException exception is raised&lt;br&gt;
+    * 
+    * @param iRelationName program&#x27;s name
+    * @param iComment comment
+    * @param iFamily not used !!
+    * @param iListOfParameters (pointer on list of CATBaseUnknown_var) contains literal used in inputs (x and y  in our example)  
+    * @param iBody contains the string describing the check (&quot;x&gt; 3&quot; in our example)
+    * @param iRoot (CATIParmPublisher) used to name parameters with RelativeName (root) method 
+    * and so to be able to recognize parameters by their name &lt;br&gt;
+    * Not used in realnames = false mode
+    * @param iRealnames 2 possibilities to name a parameter in the body. &lt;br&gt;
+    * &lt;tt&gt;CATCke::True&lt;/tt&gt;  names used are the one returned by RelativeName (root) and we try to recognize names used in the body with parameters of iListParameters..
+    * &lt;tt&gt;CATCke::False&lt;/tt&gt; names used are a1,a2,a3,etc...&lt;br&gt;
+    *                        a1 meaning the first parameter of iListParameters, a2, the second one, etc....&lt;br&gt;
+    * We advise you strongly to use this second method in your application to avoid NLS problems .  
+    * 
+    * @return = check created or NULL_var if syntax error
+    */
+    virtual CATICkeRelation_var CreateOptimizationConstraint   (const CATUnicodeString     &amp;iRelationName,
+        const CATUnicodeString     &amp;iComment,
+        double iPrecision,
+        int iPriority,
+        const CATCkeListOfParm    iListOfParameters,
+        const CATUnicodeString     &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean    &amp;iRealnames = 1) = 0;
+    
+        /**
+        * @nodoc
+        * Create a law between parameters and formal parameters (example : y = sin(x) + Real.1).&lt;br&gt;
+        * if a syntax error occurs, NULL_var is returned and a CATCkeParseException exception is raised&lt;br&gt;
+        * @param iRelationName  program&#x27;s name
+        * @param iComment comment  !!
+        * @param iFamily not used !!
+        * @param iListOfParameters (pointer on list of CATBaseUnknown_var) contains literal used in inputs or outputs (Real.1 in our example)  
+        * @param iListOfFormalParameters (pointer on list of CATBaseUnknown_var) contains formal literal used in inputs or outputs (x and y  in our example)  
+        * @param iBody contains the string describing the program (&quot;y = sin(x) + Real.1&quot; in our example)
+        * @param iRoot (CATIParmPublisher) used to name parameters with RelativeName (root) method &lt;br&gt;
+        * and so to be able to recognize parameters by their name&lt;br&gt;
+        * Not used in realnames = false mode&lt;br&gt;
+        * @param iRealnames  = 2 possibilities to name a parameter in the body.&lt;br&gt; 
+        * &lt;tt&gt;CATCke::True&lt;/tt&gt;  names used are the one returned by RelativeName (root) and we try to recognize names used in the body with parameters of iListParameters..
+        * &lt;tt&gt;CATCke::False&lt;/tt&gt; names used are a1,a2,a3,etc...&lt;br&gt;
+        *                        a1 meaning the first parameter of iListParameters, a2, the second one, etc....&lt;br&gt;
+        * We advise you strongly to use this second method in your application to avoid NLS problems .  
+        * &lt;br&gt; 
+        * @return Rule created or NULL_var if syntax error
+    */
+    virtual CATICkeRelation_var CreateLaw (const CATUnicodeString    &amp;iRelationName,
+        const CATUnicodeString    &amp;iComment,
+        const CATUnicodeString    &amp;iFamily,
+        const CATCkeListOfParm     iListOfParameters,
+        const CATCkeListOfParm     iListOfFormalParameters,
+        const CATUnicodeString    &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean     &amp;iRealnames = 1) = 0;
+    
+        /**
+        * Creates a relation from another by copying it.
+        * Works only on formulas, not on rules or checks.
+        * Note that second relation will reference the same parameters, il will be deactivated
+        * @param iRelationToCopy parameter to copy
+        * @return CATICkeRelation_var relation copied
+    */
+    virtual CATICkeRelation_var Copy (const CATICkeRelation_var     &amp;iRelationToCopy) = 0 ;
+    
+    
+    
+    /**
+    * @nodoc
+    * Initialise LiteralFeatures environnement.&lt;br&gt;
+    * It finds all startups needed in this container.&lt;br&gt;
+    */
+    virtual void Init () = 0;
+    
+    /**
+    * @nodoc
+    */
+    virtual void End () = 0;
+    
+    /**
+    * @nodoc
+    * Creates a feature macro with arguments.&lt;br&gt;
+    * It is initialized like the following : &lt;br&gt;
+    * no argument&lt;br&gt;
+    * the entry point is called &lt;it&gt;main&lt;/it&gt;&lt;br&gt;
+    * the body is empty
+    */
+    virtual CATISpecObject_var CreateKweMacro() = 0;
+
+	/**
+    * Creates a feature macro with arguments.&lt;br&gt;
+    * It is initialized with the given arguments
+	* @param iArgumentString the argument string
+	* @param iScriptText the script text
+	* @return The feature macro
+	* @example
+	*	CATICkeFunction_var MyFunc = MyFact-&gt;CreateKweMacro(&quot;MyArg&quot;,&quot;MyArg.Value = 10.0\nEnd Sub&quot;);
+    */
+    virtual CATICkeFunction_var CreateKweMacro(const CATUnicodeString&amp; iArgumentString, const CATUnicodeString&amp; iScriptText) = 0;
+
+
+    /**
+    * @nodoc
+    * Creates an equality link between two parameters. &lt;br&gt;
+    * The output parameter will always be equal to the input parameter. &lt;br&gt;
+    * The equlity mechanism is integrated to update.
+    * @param iOutputParameter : The valuated parameter
+    * @param iInputParameter : The valuating parameter
+    */
+    virtual void CreateEquality(const CATICkeParm_var&amp; iOutputParameter, const CATICkeParm_var&amp; iInputParameter) = 0;
+    
+    /**
+    * @nodoc
+    * Creates a List object.&lt;br&gt;
+    * @param iName name of the list.
+    */
+    virtual CATIList_var   CreateList (const CATUnicodeString &amp;iName) = 0;
+    
+    /**
+    * Do not use.
+    */
+    virtual CATICkeRelation_var CreateAction (const CATUnicodeString    &amp;iRelationName,
+        const CATUnicodeString    &amp;iComment,
+        const CATUnicodeString    &amp;iFamily,
+        const CATICkeSignature_var    &amp;iSignature,
+        const CATCkeListOfParm     iListOfParameters,
+        const CATUnicodeString    &amp;iBody,
+        const CATIParmPublisher_var &amp;iRoot = NULL_var,
+        const CATCke::Boolean     &amp;iRealnames = 1) = 0;
+    
+    /**
+    * Creates a feature reaction.
+    */
+    virtual CATISpecObject_var CreateReaction() = 0;
+    
+    /**
+    * @nodoc
+    * Copy an expression .&lt;br&gt;
+    */
+    virtual CATICkeExpression_var CopyExpression (const CATICkeExpression_var &amp;iExpToCopy) = 0;
+	
+private :  
+    
+    // 2 define ClassName
+    CATDeclareInterface;
+    
+};
+
+
+CATDeclareHandler(CATICkeRelationFactory,CATBaseUnknown);
+
+
+#endif
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICkeRelationExp.html">← 上一页: CATICkeRelationExp.h</a></div>
+        <div><a href="CATICkeRelationForwards.html">下一页: CATICkeRelationForwards.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/CATAttributeDescription.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/CATAttributeDescription.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_ENOVIUpdateEvent.html">← 上一页: TIE_ENOVIUpdateEvent.h</a></div>
+        <div><a href="CATHashTabCATVpmFilterStruct.html">下一页: CATHashTabCATVpmFilterStruct.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIVpmCA_H
+#define CATIVpmCA_H
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+// =================================================================   
+// VPM (c) Copyright Dassault Systemes 1997                           
+// =================================================================   
+// Historique:                                                          
+// April 97 - AHC : Creation
+// =================================================================   
+//
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;VPMIDicElement.h&quot;
+//
+//
+//  AccessVisibillty specification
+//
+//  PUBLIC   = 1
+//  PROTECTED= 2  
+//  PRIVATE  = 3 
+//
+enum AccessVisibility {AccPublic=1,AccProtected=2,AccPrivate=3};
+//
+//  AccessMode specification
+//
+//  RR -&gt; Get the readonly  Attributs
+//  RW -&gt; Get the readwrite Attributs
+//  WW -&gt; Get the write     Attributs
+//
+enum AccessMode {WW=1,RW=2,RR=4};
+//
+//  AccessControl specification (like chmod UNIX)
+//
+enum AccessControl {AC0=0,AC1=1,AC2=2,AC3=3,AC4=4,AC5=5,AC6=6,AC7=7};
+//
+// ======================================================
+//  Attribut definition 
+// ======================================================
+//
+//  BaseType specification
+// --------------------
+//
+//  SIMPLE        -&gt; simple   Attribute
+//  ENTITY        -&gt; entity   Attribute
+//  AGGREGAT      -&gt; aggregte Attribute
+//
+enum BaseTypeOfAttr {SIMPLE=0, REFERENCE=1 , AGGREGAT=2, NOTDEFINED=100 }; 
+//
+//  Type specification
+// --------------------
+//
+//  BINARY        -&gt; binary Attribute
+//  BOOLEANS      -&gt; boolean Attribute
+//  INTEGER       -&gt; integer Attribute
+//  LOGICAL       -&gt; logical Attribute
+//  REAL          -&gt; real Attribute
+//  STRING        -&gt; string Attribute
+//  ENTITY        -&gt; entity Attribute
+//  DEFINED_TYPE  -&gt; defined type Attribute
+//  ARRAY         -&gt; array aggregat Attribute
+//  LIST          -&gt; list aggregat Attribute
+//  SET           -&gt; set aggregat Attribute
+//  BAG           -&gt; bag aggregat Attribute
+//  ENUMERATION   -&gt; enumeration Attribute
+//  SELECT        -&gt; select Attribute
+//  DATETIME      -&gt; date time Attribute
+//  UNDEFINED     -&gt; UNDEFINED Attribute
+//
+//  TypeOfAttr  
+//
+enum TypeOfAttr {BOOLEANS=0     , LOGICAL=1 , BINARY=2      , INTEGER=3,
+                 REAL=4         , ENTITY=5  , DEFINED_TYPE=6, STRING=7 ,
+                 ARRAY=8        , LIST=9    , SET=10        , BAG=11   ,
+                 ENUMERATION=12 , SELECT=13 , DATETIME=14   ,
+                 UNDEFINED=100};
+//
+//  KindOf specification
+// - --------------------
+//
+//  INVERSE       -&gt; inverse Attribute
+//  EXPLICIT      -&gt; explicit Attribute 
+//  DERIVED       -&gt; Dervided Attribute) 
+//
+enum KindOfAttr {EXPLICIT=0, INVERSE=1 , DERIVED=2 , UNDEF=100 }; 
+//
+// Optional Flag 
+// - --------------------
+//
+//  OPT      -&gt; Optional Attribute 
+//  NOTOPT   -&gt; Not Optional  Attribute 
+//
+enum OptionalFlag {NOTOPT=0, OPT=1 }; 
+//
+// Event  Flag 
+// - --------------------
+//
+//  NOTNOTICIABLE  -&gt; not raise event  
+//  NOTICIABLE     -&gt; raise event 
+//
+enum EventFlag {NOTNOTICIABLE=0, NOTICIABLE=1 }; 
+
+/**
+ * A &#x27;VPMCA&#x27; structure is what&#x27;s stored in the ENOVIPropertyInfo object in the ENOVIObjectInfo.
+ * For each attribute of each entity there&#x27;s a VPMCA created when loading the package the entity
+ * belongs to. VPMCA&#x27;s are shared, there can only be one copy of a given attribute&#x27;s VPMCA at any time
+ * (this means that you must not refer to it by value, always by reference). VPMCA&#x27;s are destroyed
+ * when the PropertyInfo that owns them is destroyed, which happens when the PackageInfo (and thus
+ * the ObjectInfo) is destroyed, that is at the end of the Enovia session.
+ *
+ **/
+typedef struct AttributeDescription
+  {
+  void*                _RealAttrDef; // SDAI attrdef.
+  VPMIDicElement*      _DicElem    ;
+  int                  _Length ; 
+  BaseTypeOfAttr       _Base;
+  TypeOfAttr           _Type;
+  TypeOfAttr           _AggrType;
+  KindOfAttr           _KindOf;
+  AccessMode           _Mode;
+  AccessVisibility     _Visibility;
+  OptionalFlag         _Mandatory  ;
+  EventFlag            _EventFlag  ;
+  
+  CATUnicodeString     _EntityName; // these 3 now use proper CATUnicodeString string data sharing.
+  CATUnicodeString     _Name;
+  CATUnicodeString     _Alias;
+  CATUnicodeString     _Magnitude;
+} VPMCA ; 
+//
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="../PublicGenerated/win_b64/TIE_ENOVIUpdateEvent.html">← 上一页: TIE_ENOVIUpdateEvent.h</a></div>
+        <div><a href="CATHashTabCATVpmFilterStruct.html">下一页: CATHashTabCATVpmFilterStruct.h →</a></div>
+    </div>
+</body>
+</html>

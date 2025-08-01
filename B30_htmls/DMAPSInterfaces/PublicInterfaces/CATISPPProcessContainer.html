@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMAPSInterfaces/PublicInterfaces/CATISPPProcessContainer.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DMAPSInterfaces/PublicInterfaces/CATISPPProcessContainer.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPPrivateChildMgt.html">← 上一页: CATISPPPrivateChildMgt.h</a></div>
+        <div><a href="CATISPPProductIO.html">下一页: CATISPPProductIO.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISPPProcessContainer_H
+#define CATISPPProcessContainer_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;ProcessInterfaces.h&quot;
+#include &quot;CATISPPContainer.h&quot;
+#include &quot;CATSPPDeclarations.h&quot;
+
+class CATISPPActivityRoot_var ;
+class CATListValCATBaseUnknown_var ;
+class CATILinkableObject_var ;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByProcessInterfaces IID IID_CATISPPProcessContainer ;
+#else
+extern &quot;C&quot; const IID IID_CATISPPProcessContainer ;
+#endif
+
+/**
+* Interface to manage process container which may be in several documents.
+*/
+
+class ExportedByProcessInterfaces CATISPPProcessContainer : public CATISPPContainer
+{
+  CATDeclareInterface ;  
+
+  public:
+    
+	/**
+	* This method will return the list of root processes available under the
+    * ProcessList of the given CATProcess document.  There is only ONE Root
+    * process available under the ProcessList of the CATProcess document in V5.
+	* @return 
+    * 	Handler to the list of such root processes
+	*/
+    virtual CATListValCATBaseUnknown_var*	GetAllProcess() const = 0 ;
+	/**
+	* Creates a process.
+	* @param iTypeToCreate
+	*       type of activity to create ( as a root ).
+	* @return 
+    * 	Handler on the process newly created.
+	*/
+    virtual CATISPPActivityRoot_var		CreateProcess(const CATUnicodeString&amp; iTypeToCreate=NULL_string) const = 0 ;
+	/**
+	* Removes a process.
+	* @param iProcessRoot
+	*       activity to remove.
+	* @return
+	*    Warning: returns 0 if succeded only since CXR3SP4 ( before, returns 1 when succeded ).
+	*/
+    virtual int					RemoveProcess(const CATISPPActivityRoot_var &amp; iProcess) const = 0 ;
+    
+	/**
+	* This method returns the list of products directly underneath the 
+    * ProductList node in the PPR tree of the CATProcess document.
+	* @return 
+    * 	Pointer to the list of such products.
+	*/
+    virtual CATListValCATBaseUnknown_var*	GetProductContext() const = 0 ;
+
+	/**
+	* This method inserts the given product reference in a CATProcess document.
+    * This will add an instance of inserted product reference directly underneath
+    * the  ProductList node of PPR Tree.
+	* @param iLinkableObj
+	*       the reference product whose instance is to be added as product
+    *       context to the CATProcess document.
+	*/
+    virtual void AddProductContext(const CATILinkableObject_var&amp; iLinkableObj ) = 0 ;
+
+	/**
+	* This method removes the given product reference from the CATProcess 
+    * document. This will remove the product instance under the ProductList
+    * node of PPR Tree.
+	* @param iLinkableObj
+	*       the reference product whose instance is to be removed from the
+    *       CATProcess document
+	*/
+    virtual void RemoveProductContext(const CATILinkableObject_var&amp; iLinkableObj ) = 0 ;
+
+	/**
+	* This method returns the list of resources directly underneath the
+    * ResourceList node in the PPR tree of CATProcess document.
+	* @return 
+    * 	Pointer to the list of such resources.
+	*/
+    virtual CATListValCATBaseUnknown_var*	GetResourceContext() const = 0 ;
+
+	/**
+	* This method inserts the given resource (product) reference in a CATProcess
+    * document.  This will add an instance of inserted resource reference
+    * directly underneath the ResourceList node of PPR tree.
+	* @param iLinkableObj
+	*       the reference product to add as resource context.
+	*/
+    virtual void AddResourceContext(const CATILinkableObject_var&amp; iLinkableObj ) = 0 ;
+
+	/**
+	* This method removes the given resource (product) reference in a CATProcess
+    * document.  This will remove the product instance under the ResourceList
+    * node of PPR Tree.
+	* @param iLinkableObj
+	*       the reference product whose instance is to be removed from the
+    *       CATProcess document
+	*/
+    virtual void RemoveResourceContext(const CATILinkableObject_var&amp; iLinkableObj ) = 0 ;
+
+
+ 	/**
+	* @nodoc
+	*/
+   virtual CATISPPActivityRoot_var		CreateTypedProcess(const CATUnicodeString&amp; iTypeToCreate,const CATUnicodeString&amp; iLibrary) = 0 ;
+
+
+};
+
+CATDeclareHandler( CATISPPProcessContainer, CATISPPContainer) ;
+
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPPrivateChildMgt.html">← 上一页: CATISPPPrivateChildMgt.h</a></div>
+        <div><a href="CATISPPProductIO.html">下一页: CATISPPProductIO.h →</a></div>
+    </div>
+</body>
+</html>

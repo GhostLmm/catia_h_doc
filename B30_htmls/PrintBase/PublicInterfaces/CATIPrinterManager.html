@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintBase/PublicInterfaces/CATIPrinterManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PrintBase/PublicInterfaces/CATIPrinterManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrintables.html">← 上一页: CATIPrintables.h</a></div>
+        <div><a href="CATListOfCATPrintForm.html">下一页: CATListOfCATPrintForm.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPRINTERMANAGER_H
+#define CATIPRINTERMANAGER_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U5
+ */
+
+#include &quot;CATPrintBase.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfCATPrinter.h&quot;
+
+class CATUnicodeString;
+class CATPrinter;
+class CATPrintParameters;
+class CATPrintImage;
+class CATPrinterDevice;
+class CATDialog;
+class CATDlgWindow;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATPrintBase IID IID_CATIPrinterManager;
+#else
+extern &quot;C&quot; const IID IID_CATIPrinterManager;
+#endif
+
+/**
+ * Interface for external Printer Managers.
+ */
+class ExportedByCATPrintBase CATIPrinterManager : public CATBaseUnknown
+{
+    CATDeclareInterface;
+public:
+    /** 
+     * Gets the list of available printers .
+     * @param ioPrinterList
+     *   The list to be filled (initially empty). 
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetPrinterList(CATLISTP(CATPrinter)&amp; ioPrinterList) = 0;
+
+    /** 
+     * Builds a configuration dialog for the given printer.
+     * @param iParent
+     *   The parent dialog.
+     * @param iPrinter
+     *   The printer for which the dialog is to be displayed.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetConfigurationDialog(CATDialog* iParent, CATPrinter&amp; iPrinter, CATDlgWindow*&amp; oDialog) = 0;
+
+    /** 
+     * Gets the status of the given printer.
+     * @param iPrinter
+     *   The printer for which the dialog is to be displayed.
+     * @param oStatus
+     *   A string describing the status of the printer (Idle, Busy, etc.).
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetPrinterStatus(CATPrinter&amp; iPrinter, CATUnicodeString&amp; oStatus) = 0;
+
+    /** 
+     * Builds a status dialog for the given printer.
+     * @param iParent
+     *   The parent dialog.
+     * @param iPrinter
+     *   The printer for which the dialog is to be displayed.
+     * @param oDialog
+     *   A pointer to the dialog.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetStatusDialog(CATDialog* iParent, CATPrinter&amp; iPrinter, CATDlgWindow*&amp; oDialog) = 0;
+
+    /** 
+     * Asks for extented options support (scheduling,...).
+     * @return
+     *   S_OK if extented options support.
+     *   E_FAIL if no extented options support.
+     */
+    virtual HRESULT IsExtendedOptionsSupport(void) = 0;
+
+    /** 
+     * Builds a dialog box for extended options (scheduling,...) 
+     * for the given printer.
+     * @param iParent
+     *   The parent dialog.
+     * @param iPrinter
+     *   The printer for which the dialog is to be displayed.
+     * @param oDialog
+     *   A pointer to the dialog.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetExtendedOptionsDialog(CATDialog* iParent, CATPrinter&amp; iPrinter, CATDlgWindow*&amp; oDialog) = 0;
+
+    /** 
+     * Gets information on extended options of the given printer.
+     * @param iPrinter
+     *   The printer for which the information is to be displayed.
+     * @param oStatus
+     *   A string describing information about extended options 
+     *   (scheduling mode activated, ...).
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetExtendedOptionsInfos(CATPrinter&amp; iPrinter, CATUnicodeString&amp; oStatus) = 0;
+
+    /** 
+     * Builds the printer manager dialog.
+     * @param iParent
+     *   The parent dialog.
+     * @param oDialog
+     *   A pointer to the dialog.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetPrinterManagerDialog(CATDialog* iParent, CATDlgWindow*&amp; oDialog) = 0;
+
+    /** 
+     * Prints an image on a printer with given parameters.
+     * @param iDevice
+     *   The device on which the image is to be printed.
+     * @param iParameters
+     *   The parameters applied to the printout.
+     * @param iImage
+     *   The image to be printed.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT Print(CATPrinterDevice&amp; iDevice, const CATPrintParameters&amp; iParameters, CATPrintImage* iImage) = 0;
+
+    /** 
+     * Gets the last error message.
+     * @param oError
+     *   The error messsage.
+     * @return
+     *   S_OK upon successful execution.
+     */
+    virtual HRESULT GetLastError(CATUnicodeString &amp;oError) = 0;
+};
+
+CATDeclareHandler(CATIPrinterManager, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrintables.html">← 上一页: CATIPrintables.h</a></div>
+        <div><a href="CATListOfCATPrintForm.html">下一页: CATListOfCATPrintForm.h →</a></div>
+    </div>
+</body>
+</html>

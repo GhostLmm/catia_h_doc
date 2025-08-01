@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATGSMUseItf/PublicInterfaces/CATIGSMUseSplit.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATGSMUseItf/PublicInterfaces/CATIGSMUseSplit.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseSpline.html">← 上一页: CATIGSMUseSpline.h</a></div>
+        <div><a href="CATIGSMUseSweep.html">下一页: CATIGSMUseSweep.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIGSMUseSplit_H
+#define CATIGSMUseSplit_H
+// 
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATGSMUseItfExportedBy.h&quot;
+#include &quot;CATIMmiMechanicalFeature.h&quot;
+#include &quot;CATGSMOrientation.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGSMUseItf IID  IID_CATIGSMUseSplit;
+#else
+extern &quot;C&quot; const IID IID_CATIGSMUseSplit;
+#endif
+
+/**
+	* The propagation type specifies the way the splitting element is extrapolated.
+	* @param CATGSMExtrapolationType_None
+	* The splitting element is not extrapolated.
+	* @param CATGSMExtrapolationType_Tangent
+	* The propagation is done in a tangent way along the boundary of the splitting element.
+	* @param CATGSMExtrapolationType_Curvature
+	* The propagation is done in a curvature way.
+	*/
+	typedef enum CATGSMExtrapolationType
+	{
+		CATGSMExtrapolation_None=0,
+		CATGSMExtrapolation_Tangent,
+		CATGSMExtrapolation_Curvature
+	}CATGSMExtrapolationType;
+
+/**
+ * Interface to split feature.
+ * &lt;b&gt;Role&lt;/b&gt;: Allows you to access data of the Split feature created by using an element to cut 
+ * (a curve or a surface),  one or several cutting elements (points, curves or surfaces)
+ * and an orientation for each cutting element. 
+ * &lt;p&gt;  LICENSING INFORMATION: Creation of volume result requires GSO License
+ * &lt;br&gt; if GSO License is not granted , settting of Volume result has not effect 
+ * &lt;br&gt; 
+ * @see CATIGSMUseFactory#CreateSplit
+ */
+class ExportedByCATGSMUseItf CATIGSMUseSplit : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public:
+ 
+   /**
+    * Gets the feature to cut (a curve or a surface).
+    *   @param oElem
+    *      feature to cut
+    */
+ virtual    HRESULT GetElemToCut(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+ 
+   /**
+    * Sets the feature to cut (a curve or a surface).
+    *   @param iElem
+    *      new feature to cut
+    */
+ virtual    HRESULT SetElemToCut(const CATIMmiMechanicalFeature_var iElem) = 0;
+ 
+   /**
+	 * Gets the cutting feature (a point, a curve or a surface).  
+     *   @param oElem
+     *      cutting feature 
+     */
+ virtual    HRESULT GetCuttingElem(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+
+   /**
+     * Sets the cutting feature (a point, a curve or a surface).  
+     *   @param iElem
+     *      new cutting feature
+     */
+ virtual    HRESULT SetCuttingElem(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+   /**
+     * Gets the number of cutting features.
+     *   @param oNbCuttingElem
+     *      Number of  cutting features  
+     */
+ virtual    HRESULT GetNbCuttingElem (int &amp;oNbCuttingElem) = 0;
+
+   /**
+     * Adds a cutting feature.
+     *   @param iElem
+     *      cutting feature 
+     *   @param iOrientation 
+     *      Orientation 
+     */
+ virtual    HRESULT AddCuttingElem(CATIMmiMechanicalFeature_var &amp; iElem, 
+          CATGSMOrientation  iOrientation = CATGSMSameOrientation) = 0;
+
+   /**
+     * Gets the cutting feature at a given index (a point, a curve or a surface).  
+     *   @param oElem
+     *      cutting feature 
+     *   @param iRank
+     *      Index of one of the cutting features  
+     */
+ virtual    HRESULT GetCuttingElem(CATIMmiMechanicalFeature_var &amp; oElem, int iRank) = 0;
+
+   /**
+     * Modifies the cutting feature at a given index (a point, a curve or a surface).  
+	 * Use AddCuttingElem method to specify a new cutting element
+     *   @param oElem
+     *      cutting feature 
+     *   @param iRank
+     *      Index of one of the cutting features  
+     */
+ virtual    HRESULT SetCuttingElem(const CATIMmiMechanicalFeature_var iElem, int iRank) = 0;
+   
+   /**
+     * Removes a cutting feature.
+     *   @param iElem
+     *      cutting feature 
+     */
+ virtual    HRESULT RemoveCuttingElem (CATIMmiMechanicalFeature_var &amp;iElem) = 0; 
+
+   /**
+     * Removes a cutting feature at a given index.
+     *   @param iRank 
+     *      index of the cutting feature 
+     */
+ virtual    HRESULT RemoveCuttingElem (int iRank) = 0; 
+
+   /**
+     * Gets the orientation used to compute the split. 
+     * &lt;br&gt;
+     * Orientation specifies kept parts of cut feature.&lt;BR&gt;
+     *&lt;BR&gt;
+     * When splitting a surface by a surface :&lt;BR&gt; 
+     * - If CATGSMSameOrientation: Kept parts are specified by the &quot;natural&quot; normal to the cutting feature&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: Kept parts are specified by the inverse of the &quot;natural&quot; normal to the cutting feature&lt;BR&gt; 
+     *&lt;BR&gt; 
+     * When splitting a surface by a curve :&lt;BR&gt; 
+     * - If CATGSMSameOrientation:
+            Kept parts are specified by the result of the cross product : normal(surface)^tangent(curve)&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+     *       Kept parts are specified by the inverse of the result of the cross product : normal(surface)^tangent(curve)&lt;BR&gt; 
+     * &lt;BR&gt; 
+     * When splitting a curve by a point or a curve (without support specified): &lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+     *       Kept parts are from beginning of the curve to the first intersection, &lt;BR&gt; 
+     * and, if there is one, from the second to the third intersection and so on until the end of the curve...&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+     *       Kept parts are from the first intersection to the second (if there is one), &lt;BR&gt; 
+     * and, if there is one, from the third to the fourth and so on until the end of the curve...&lt;BR&gt; 
+     *&lt;BR&gt; 
+     * When splitting a curve on support: &lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+	 *		 Kept parts are specified by the result of the cross product : normal(support surface)^tangent(cutting curve)&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+	 *       Kept parts are specified by the inverse of the result of the cross product : normal(support surface)^tangent(cutting curve)&lt;BR&gt; 
+     *&lt;BR&gt; 
+     * When splitting a curve by a surface: &lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+	 *		 Kept parts are specified by the inverse of the normal to the surface&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+	 *		 Kept parts are specified by the normal to the surface&lt;BR&gt; 
+	 *&lt;BR&gt; 
+     *   @param oOrientation
+     *      Orientation used to compute the split (CATGSMSameOrientation or CATGSMInverseOrientation)
+     */
+  virtual    HRESULT GetOrientation(CATGSMOrientation &amp; oOrientation) = 0;
+
+   /**
+     * Gets Orientation used to compute the split.
+     *   @param oOrientation  
+     *      Orientation
+     *   @param iRank 
+     *      index of the cutting feature 
+     */
+  virtual    HRESULT GetOrientation(CATGSMOrientation &amp; oOrientation, int iRank) = 0;
+ 
+   /**
+     * Sets the orientation used to compute the split. 
+     * &lt;br&gt;
+     * Orientation specifies kept parts of cut feature.&lt;BR&gt;
+     *&lt;BR&gt;
+     * When splitting a surface by a surface :&lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+     *      Kept parts are specified by the &quot;natural&quot; normal to the cutting feature&lt;BR&gt; 
+     * - If CATGSMInvertOrientation:
+     *      Kept parts are specified by the inverse of the &quot;natural&quot; normal to the cutting feature&lt;BR&gt; 
+     *&lt;BR&gt; 
+     * When splitting a surface by a curve :&lt;BR&gt; 
+     * - If CATGSMSameOrientation:
+     *      Kept parts are specified by the result of the cross product : normal(surface)^tangent(curve)&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+     *      Kept parts are specified by the inverse of the result of the cross product : normal(surface)^tangent(curve)&lt;BR&gt; 
+     * &lt;BR&gt; 
+     * When splitting a curve (without support specified): &lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+     *      Kept parts are from beginning of the curve to the first intersection, &lt;BR&gt; 
+     *      and, if there is one, from the second to the third intersection and so on until the end of the curve...&lt;BR&gt; 
+     * - If CATGSMInvertOrientation:
+     *   Kept parts are from the first intersection to the second (if there is one), &lt;BR&gt; 
+     *   and, if there is one, from the third to the fourth and so on until the end of the curve...&lt;BR&gt; 
+     *&lt;BR&gt; 
+     * When splitting a curve on support: &lt;BR&gt; 
+     * - If CATGSMSameOrientation: 
+	 *		 Kept parts are specified by the result of the cross product : normal(support surface)^tangent(cutting curve)&lt;BR&gt; 
+     * - If CATGSMInvertOrientation: 
+	 *       Kept parts are specified by the inverse of the result of the cross product : normal(support surface)^tangent(cutting curve)&lt;BR&gt; 
+	 *&lt;BR&gt; 
+     *   @param iOrientation
+     *      Orientation used to compute the split (CATGSMSameOrientation or CATGSMInverseOrientation)
+     */
+ virtual    HRESULT SetOrientation(CATGSMOrientation iOrientation) = 0;
+
+   /**
+     * Sets the orientation used to compute the split.
+     *   @param iOrientation  
+     *      Orientation
+     *   @param iRank 
+     *      index of the cutting feature 
+     */
+ virtual    HRESULT SetOrientation(CATGSMOrientation iOrientation, int iRank) = 0;
+
+   /**
+     * Inverts the orientation used to compute the split.
+     *   @param iRank 
+     *      index of the cutting feature 
+     */
+ virtual    HRESULT InvertOrientation(int iRank = 1) = 0;
+	
+   /**
+	 * Gets the support of the curve to cut (optional). 
+     *   @param oElem
+     *      Support surface
+     */
+ virtual    HRESULT GetSupportElem(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+	
+   /**
+     * Sets the support of the curve to cut (optional). 
+     *   @param iElem
+     *      Support surface
+     */
+ virtual    HRESULT SetSupportElem(const CATIMmiMechanicalFeature_var iElem) = 0;
+
+ 
+  /**
+    * Sets or unsets the computation of intersection.
+    *   @param iMode
+    *      Computation option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT  SetIntersectionComputation(CATBoolean iMode) = 0;
+
+ /**
+    * Queries whether intersection is computed or not.
+    *   @param oMode
+    *      Computation option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT GetIntersectionComputation(CATBoolean &amp; oMode) = 0;
+
+ /**
+     * Gets the intersection at a given index.
+     *   @param oElem
+     *      Intersection
+     *   @param iRank
+     *      Index of one of the intersection features  
+     */
+ virtual    HRESULT GetIntersection(CATIMmiMechanicalFeature_var &amp; oElem, const int iRank) = 0;
+
+ 
+ /**
+    * Sets or unsets the computation of both sides.
+    *   @param iMode
+    *      Computation option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT  SetBothSidesMode(CATBoolean iMode) = 0;
+
+ /**
+    * Queries whether both sides are computed or not.
+    *   @param oMode
+    *      Computation option on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT GetBothSidesMode(CATBoolean &amp; oMode) = 0;
+
+ /**
+     * Gets the other side.
+     *   @param oElem
+     *      Other side
+     */
+ virtual    HRESULT GetOtherSide(CATIMmiMechanicalFeature_var &amp; oElem) = 0;
+
+
+ /**
+  * Adds an element to specifications. This element will be removed.
+  * @param iElement
+  *   Element to remove.  
+  */ 
+ virtual HRESULT AddElementToRemove(const CATIMmiMechanicalFeature_var iElement) = 0;
+
+ /**
+  * Removes an element from specifications.
+  * @param iRank
+  *   Index of the removed element.
+  */ 
+ virtual HRESULT RemoveElementToRemove(const int iRank) = 0;
+
+ /**
+  * Adds an element to specifications. This element will be kept.
+  * @param iElement
+  *   Element to keep.  
+  */ 
+ virtual HRESULT AddElementToKeep(const CATIMmiMechanicalFeature_var iElement) = 0;
+
+ /**
+  * Removes an element from specifications.
+  * @param iRank
+  *   Index of the kept element.
+  */ 
+ virtual HRESULT RemoveElementToKeep(const int iRank) = 0;
+
+ /**
+  * Gets the number of elements to remove.
+  *   @param oNbElementsToRemove
+  *      Number of elements to remove
+  */
+ virtual    HRESULT GetNbElementsToRemove(int &amp; oNbElementsToRemove) = 0;
+
+ /**
+  * Gets the number of elements to keep.
+  *   @param oNbElementsToKeep
+  *      Number of elements to keep
+  */
+ virtual    HRESULT GetNbElementsToKeep(int &amp; oNbElementsToKeep) = 0;
+
+ /**
+  * Gets the removed feature at a given index.
+  *   @param oElem
+  *      Removed feature 
+  *   @param iRank
+  *      Index of one of the removed features  
+  */
+ virtual    HRESULT GetRemovedElem(CATIMmiMechanicalFeature_var &amp; oElem, const int iRank) = 0;
+
+ /**
+  * Gets the kept feature at a given index.
+  *   @param oElem
+  *      Kept feature 
+  *   @param iRank
+  *      Index of one of the kept features  
+  */
+ virtual    HRESULT GetKeptElem(CATIMmiMechanicalFeature_var &amp; oElem, const int iRank) = 0;
+
+ 
+ /**
+    * @deprecated V5R26 
+    * Use @href CATIGSMSplit#SetExtrapolationType
+    * &lt;p&gt;This method is deprecated because the model has changed to enable to extrapol in curvature.&lt;/p&gt;
+    * &lt;p&gt;&lt;b&gt;Migration instructions&lt;/b&gt;: use the signature SetExtrapolationType.&lt;/p&gt;
+    * Example: &quot;SetAutomaticExtrapolationMode(iMode)&quot; should be replaced with &quot;SetExtrapolationType(iExtrapolationType)&quot;.
+    */ 
+ virtual    HRESULT  SetAutomaticExtrapolationMode(CATBoolean iMode) = 0;
+
+ /**
+    * @deprecated V5R26 
+    * Use @href CATIGSMSplit#GetExtrapolationType
+    * &lt;p&gt;This method is deprecated because the model has changed to enable to extrapol in curvature.&lt;/p&gt;
+    * &lt;p&gt;&lt;b&gt;Migration instructions&lt;/b&gt;: use the signature GetExtrapolationType.&lt;/p&gt;
+    * Example: &quot;GetAutomaticExtrapolationMode(oMode)&quot; should be replaced with &quot;GetExtrapolationType(oExtrapolationType)&quot;.
+    */ 
+ virtual    HRESULT GetAutomaticExtrapolationMode(CATBoolean &amp; oMode) = 0;
+
+  /**
+    * Sets the extrapolation type.
+    *   @param iExtrapolationType
+    *      Extrapolation mode 0 (None), 1 (Tangent) or 2 (Curvature)
+    */
+ virtual    HRESULT  SetExtrapolationType(const CATGSMExtrapolationType &amp; iExtrapolationType) = 0;
+
+ /**
+    * Queries whether extrapolation type.
+    *   @param oExtrapolationType
+    *      Extrapolation mode 0 (None), 1 (Tangent) or 2 (Curvature)
+    */
+ virtual    HRESULT GetExtrapolationType(CATGSMExtrapolationType &amp; oExtrapolationType) = 0;
+ 
+ /**
+    * Sets the type of the geometrical result.
+    *   @param iResultType
+    *   FALSE : Result type is surface
+    *   TRUE  : Result type is volume.(Option is effective only in case of volumes, requires GSO License).
+    */
+ virtual    HRESULT  SetVolumeResult(const CATBoolean iResultType) = 0;
+
+ /**
+    * Gets the type of the geometrical result.
+    *   @param oResultType
+    *   FALSE : Result type is surface
+    *   TRUE  : Result type is volume.(Option is effective only in case of volumes)
+    */
+ virtual    HRESULT GetVolumeResult(CATBoolean &amp; oResultType) = 0;
+
+ 
+ /**
+    * Sets or unsets the &#x27;Ignore no intersecting elements&#x27; mode.
+    *   @param iMode
+    *      Mode on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT  SetIgnoreNoIntersectingMode(CATBoolean iMode) = 0;
+ /**
+    * Queries whether &#x27;Ignore no intersecting elements&#x27; mode is activated or not.
+    *   @param oMode
+    *      Mode on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT GetIgnoreNoIntersectingMode(CATBoolean &amp; oMode) = 0;
+
+ /**
+    * Sets or unsets the &#x27;Keep elements in half space&#x27; mode.
+    *   @param iMode
+    *      Mode on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT  SetKeepHalfSpaceMode(CATBoolean iMode) = 0;
+ /**
+    * Queries whether &#x27;Keep elements in half space&#x27; mode is activated or not.
+    *   @param oMode
+    *      Mode on (TRUE) or off (FALSE)
+    */
+ virtual    HRESULT GetKeepHalfSpaceMode(CATBoolean &amp; oMode) = 0;
+
+};
+CATDeclareHandler (CATIGSMUseSplit, CATBaseUnknown);
+#endif // CATIGSMUseSplit_H
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIGSMUseSpline.html">← 上一页: CATIGSMUseSpline.h</a></div>
+        <div><a href="CATIGSMUseSweep.html">下一页: CATIGSMUseSweep.h →</a></div>
+    </div>
+</body>
+</html>

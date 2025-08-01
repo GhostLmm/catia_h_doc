@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATISchAppConnection.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicGenerated/win_b64/TIE_CATISchAppConnection.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATISchAppConnectable.html">← 上一页: TIE_CATISchAppConnectable.h</a></div>
+        <div><a href="TIE_CATISchAppConnector.html">下一页: TIE_CATISchAppConnector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef __TIE_CATISchAppConnection
+#define __TIE_CATISchAppConnection
+
+#include &lt;string.h&gt;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATMetaClass.h&quot;
+#include &quot;CATMacForTie.h&quot;
+#include &quot;CATISchAppConnection.h&quot;
+#include &quot;JS0DSPA.h&quot;
+
+
+#ifdef _WINDOWS_SOURCE
+#define Exported __declspec(dllexport)
+#define Imported __declspec(dllimport)
+#else
+#define Exported 
+#define Imported 
+#endif
+
+
+/* To link an implementation with the interface CATISchAppConnection */
+#define declare_TIE_CATISchAppConnection(classe) \
+ \
+ \
+class TIECATISchAppConnection##classe : public CATISchAppConnection \
+{ \
+   private: \
+      CATDeclareCommonTIEMembers \
+      CATDeclareNotCATBaseUnknownTIEMembers \
+   public: \
+      CATDeclareTIEMethods(CATISchAppConnection, classe) \
+      CATDeclareIUnknownMethodsForNotCATBaseUnknownTIE \
+      CATDeclareCATBaseUnknownMethodsForTIE \
+      virtual HRESULT AppListConnectors (CATICStringList *iLCntrClassFilter, CATIUnknownList **oLCntrs) ; \
+      virtual HRESULT AppListConnectables (CATICStringList *iLCntbleClassFilter, CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrs) ; \
+      virtual HRESULT AppAddConnector (CATISchAppConnector *iCntrToAdd) ; \
+      virtual HRESULT AppRemoveConnector (CATISchAppConnector *iCntrToRemove) ; \
+};
+
+
+
+#define ENVTIEdeclare_CATISchAppConnection(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+virtual HRESULT AppListConnectors (CATICStringList *iLCntrClassFilter, CATIUnknownList **oLCntrs) ; \
+virtual HRESULT AppListConnectables (CATICStringList *iLCntbleClassFilter, CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrs) ; \
+virtual HRESULT AppAddConnector (CATISchAppConnector *iCntrToAdd) ; \
+virtual HRESULT AppRemoveConnector (CATISchAppConnector *iCntrToRemove) ; \
+
+
+#define ENVTIEdefine_CATISchAppConnection(ENVTIEName,ENVTIETypeLetter,ENVTIELetter) \
+HRESULT  ENVTIEName::AppListConnectors (CATICStringList *iLCntrClassFilter, CATIUnknownList **oLCntrs)  \
+{ \
+return (ENVTIECALL(CATISchAppConnection,ENVTIETypeLetter,ENVTIELetter)AppListConnectors (iLCntrClassFilter,oLCntrs)); \
+} \
+HRESULT  ENVTIEName::AppListConnectables (CATICStringList *iLCntbleClassFilter, CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrs)  \
+{ \
+return (ENVTIECALL(CATISchAppConnection,ENVTIETypeLetter,ENVTIELetter)AppListConnectables (iLCntbleClassFilter,oLCntbles,oLCntrs)); \
+} \
+HRESULT  ENVTIEName::AppAddConnector (CATISchAppConnector *iCntrToAdd)  \
+{ \
+return (ENVTIECALL(CATISchAppConnection,ENVTIETypeLetter,ENVTIELetter)AppAddConnector (iCntrToAdd)); \
+} \
+HRESULT  ENVTIEName::AppRemoveConnector (CATISchAppConnector *iCntrToRemove)  \
+{ \
+return (ENVTIECALL(CATISchAppConnection,ENVTIETypeLetter,ENVTIELetter)AppRemoveConnector (iCntrToRemove)); \
+} \
+
+
+/* Name of the TIE class */
+#define class_TIE_CATISchAppConnection(classe)    TIECATISchAppConnection##classe
+
+
+/* Common methods inside a TIE */
+#define common_TIE_CATISchAppConnection(classe) \
+ \
+ \
+/* Static initialization */ \
+CATDefineCommonTIEMembers(CATISchAppConnection, classe) \
+ \
+ \
+CATImplementNotCATBaseUnknownTIEMethods(CATISchAppConnection, classe) \
+CATImplementIUnknownMethodsForNotCATBaseUnknownTIE(CATISchAppConnection, classe, 0) \
+CATImplementCATBaseUnknownMethodsForTIE(CATISchAppConnection, classe) \
+ \
+HRESULT  TIECATISchAppConnection##classe::AppListConnectors (CATICStringList *iLCntrClassFilter, CATIUnknownList **oLCntrs)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;AppListConnectors (iLCntrClassFilter,oLCntrs)); \
+} \
+HRESULT  TIECATISchAppConnection##classe::AppListConnectables (CATICStringList *iLCntbleClassFilter, CATIUnknownList **oLCntbles, CATIUnknownList **oLCntrs)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;AppListConnectables (iLCntbleClassFilter,oLCntbles,oLCntrs)); \
+} \
+HRESULT  TIECATISchAppConnection##classe::AppAddConnector (CATISchAppConnector *iCntrToAdd)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;AppAddConnector (iCntrToAdd)); \
+} \
+HRESULT  TIECATISchAppConnection##classe::AppRemoveConnector (CATISchAppConnector *iCntrToRemove)  \
+{ \
+   return(((classe *)Tie_Method(NecessaryData.ForTIE,ptstat))-&gt;AppRemoveConnector (iCntrToRemove)); \
+} \
+
+
+
+/* Macro used to link an implementation with an interface */
+#define TIE_CATISchAppConnection(classe) \
+ \
+ \
+declare_TIE_CATISchAppConnection(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATISchAppConnection##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATISchAppConnection,&quot;CATISchAppConnection&quot;,NULL,classe::MetaObject(),TIE); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATISchAppConnection(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIECreation(CATISchAppConnection, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATISchAppConnection##classe(classe::MetaObject(),TIECATISchAppConnection##classe::MetaObject(),(void *)CreateTIECATISchAppConnection##classe)
+
+
+
+/* Macro used to link an implementation with an interface */
+/* This TIE is chained on the implementation object */
+#define TIEchain_CATISchAppConnection(classe) \
+ \
+ \
+declare_TIE_CATISchAppConnection(classe) \
+ \
+ \
+CATMetaClass * __stdcall TIECATISchAppConnection##classe::MetaObject() \
+{ \
+   if (!meta_object) \
+   { \
+      meta_object=new CATMetaClass(&amp;IID_CATISchAppConnection,&quot;CATISchAppConnection&quot;,NULL,classe::MetaObject(),TIEchain); \
+   } \
+   return(meta_object); \
+} \
+ \
+ \
+common_TIE_CATISchAppConnection(classe) \
+ \
+ \
+/* creator function of the interface */ \
+/* encapsulate the new */ \
+CATImplementTIEchainCreation(CATISchAppConnection, classe) \
+ \
+/* to put information into the dictionary */ \
+static CATFillDictionary DicCATISchAppConnection##classe(classe::MetaObject(),TIECATISchAppConnection##classe::MetaObject(),(void *)CreateTIECATISchAppConnection##classe)
+
+
+/* Macro to switch between BOA and TIE at build time */ 
+#ifdef CATSYS_BOA_IS_TIE
+#define BOA_CATISchAppConnection(classe) TIE_CATISchAppConnection(classe)
+#else
+#define BOA_CATISchAppConnection(classe) CATImplementBOA(CATISchAppConnection, classe)
+#endif
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="TIE_CATISchAppConnectable.html">← 上一页: TIE_CATISchAppConnectable.h</a></div>
+        <div><a href="TIE_CATISchAppConnector.html">下一页: TIE_CATISchAppConnector.h →</a></div>
+    </div>
+</body>
+</html>

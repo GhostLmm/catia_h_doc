@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CATViz3DViewer.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CATViz3DViewer.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATViz.html">← 上一页: CATViz.h</a></div>
+        <div><a href="CATVizBaseIUnknown.html">下一页: CATVizBaseIUnknown.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATViz3DViewer_H
+#define CATViz3DViewer_H
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+
+// COPYRIGHT DASSAULT SYSTEMES 2001
+
+#include &quot;CATViz.h&quot;
+#include &quot;CATVizViewer.h&quot;
+#include &quot;CATProjectionType.h&quot;
+#include &quot;CATMathDirectionf.h&quot;
+#include &quot;CAT3DBoundingSphere.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+
+class CAT3DScalePlaneRep;
+
+class CAT3DViewpoint;
+class CAT3DViewport;
+class CAT3DRep; 
+class CAT2DRep;
+class CAT3DAxisRep;
+class CAT3DManipulator;
+class CATBasic3DViewpointEditor;
+class CAT2DAnnotationTextRep;
+class CAT2DViewpoint;
+class CATVRImmersionManager;
+
+/**
+ * Class to display 3D Graphic Representations on the screen.
+ * 
+ */
+enum ViewpointManipulationType { Rotate, RotateAxis, LookAt, Translate, Zoom, TurnHead, ZoomArea, Fly, Walk};
+
+class ExportedByCATViz CATViz3DViewer : public CATVizViewer
+{
+
+  CATDeclareClass;
+
+  public :
+
+
+  /**
+   * Constructs a CATViz3DViewer.
+   * @param iFather  
+   * @param iStyle
+   * @param iWidth  Width in pixel
+   * @param iHeight Height in pixel
+   * @param iViewerStyle Options of the viewer&#x27;s behaviour.
+   */
+  CATViz3DViewer (
+      const CATString &amp; iName,
+      const int iWidth= 800,
+      const int iHeight= 500,
+      const CATViewerStyle iViewerStyle=NULL);
+
+  /** @nodoc */
+  virtual void Create(
+#ifdef _WINDOWS_SOURCE
+      CWnd *iFather
+#else
+      Widget iFather
+#endif	  
+      );
+
+
+  /** @nodoc */
+  virtual ~CATViz3DViewer();
+
+  //  operation on the main 3D viewpoint
+  //  ----------------------------------
+  /**
+   * Modifies the Main 3D viewpoint so that the specified CAT3DBoundingSphere 
+   * takes as much place as possible on the screen.
+   * @param iBs3D The CAT3DBoundingSphere you want to reframe on
+   * @see CAT3DBoundingSphere
+   */
+  virtual void ReframeOn(const CAT3DBoundingSphere &amp;iBs3D); // To frame on a specific bounding sphere
+  /** 
+   * Gets the CAT3DBoundingSphere of the scene displayed by the CATViz3DViewer.
+   */
+  CAT3DBoundingSphere GetGlobalBoundingSphere();
+
+  //  definition and fog activation 
+  //  -----------------------------
+
+  /** @nodoc */
+  void SetFogMode    (const int);
+  /** @nodoc */
+  int IsFogOn() const;
+
+  /** @nodoc */
+  CATMathDirectionf GetVertical();
+  /** @nodoc */
+  CATMathDirectionf &amp; GetNorth () ;
+
+  /** @nodoc */
+  void SetGround (const CATMathDirectionf &amp;vertical, const CATMathDirectionf &amp;north);
+
+  // Clipping plane (maximum 6)
+  // -------------------------
+
+  /** @nodoc */
+  void AddClippingPlane (const int nb_planes, const float *point, const float *normal, const int CappingPlaneSeen = 1);
+  /** @nodoc */
+  void RemoveClippingPlane ();
+
+  /** @nodoc */
+  void AddCullingBox (const int nb_planes, const float *point, const float *normal);
+  /** @nodoc */
+  void RemoveCullingBox ();
+
+  //  void InterpretKeybdEvent( CATCallbackEvent, 
+  //			    void *,
+  //			    CATNotification *, 
+  //			    CATSubscriberData, 
+  //			    CATCallback);
+
+  /** @nodoc */
+  virtual void StartViewpointManipulation( const ViewpointManipulationType Type);
+  /** @nodoc */
+  virtual void StopViewpointManipulation();
+
+  /** @nodoc */
+  void RestoreLastMainViewpoint();
+
+  /** @nodoc */
+  void RefreshCurrentScaleTextRep ();
+  /** @nodoc */
+  void SetCurrentScaleDisplay(int i_onOff);
+  /** @nodoc */
+  void CurrentScaleTextRepCB (CATCallbackEvent, void *, CATNotification *, CATSubscriberData, CATCallback);
+
+  /**
+   * Display the reference axes or hide them.
+   * @param iOnOff
+   *   Says the reference axes are to be drawn or not.
+   * &lt;br&gt;&lt;b&gt; Legal values&lt;/b&gt;:
+   * &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt; hide the reference axes&lt;/li&gt;
+   * &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt; display the reference axes (it&#x27;s the default value)&lt;/li&gt;.
+   */
+  virtual void SetReferenceAxis(int iOnOff);
+
+  /** @nodoc */
+  void SetAxisPickable(int OnOff);
+  /** @nodoc */
+  int IsAxisPickable ();
+  /** @nodoc */
+  virtual int IsReferenceAxis();
+
+  //  Navigation Mode
+  /** @nodoc */
+  virtual void SetNavigationStyle( const int iMode);
+  /** @nodoc */
+  virtual int GetNavigationStyle();
+
+  //  Viewpoint save and restore mechanisms
+  /** Stores the Current MainViewpoint so that it cn be restored later. */
+  virtual void SaveViewpoint();
+
+  /** Restores the Viewpoint store before the current viepoint.*/
+  virtual void DisplayPreviousViewpoint();
+
+  /** Restores the Viewpoint store after the current viepoint.*/
+  virtual void DisplayNextViewpoint();
+
+  /** Changes the viewpoint that is affected by Local Transformation .*/
+  virtual void SetMainViewpoint (CATViewpoint *);
+
+  /** @nodoc */
+  virtual void SetDefault2DViewpointEditor(CAT2DViewpointEditor *defaultViewpointEditor);
+
+  /** @nodoc */
+  void ChangeFlySpeed( int s);
+
+  /** @nodoc */
+  CATViewpointEditor * GetManipulatedViewpointEditor();
+
+  /** @nodoc */
+  virtual void ActivateScalePlane(  const int Activate, const float Scale=1.0f, const float Width=200.0f, const float Height = 100.0f, 
+                                    const int ShowPlane = 1, const float LineWidth=10.0f, const float LineHeight=10.0f);
+  /** @nodoc */
+  virtual int  IsScalePlaneActivated();
+
+  /** @nodoc */
+  CATVRImmersionManager* GetVRImmersionManager();
+
+  //------------------------------------------------------------------------------
+
+  protected :
+
+  /** @nodoc */
+  virtual void EndManipulate( CATCommand *Command, CATNotification *Notification, CATCommandClientData Data);
+
+  CATViewpointEditor *_ManipulatedViewpointEditor;
+  CATIndicator *_ViewpointIndicator;
+  CATIndicator *_LastIndicator;
+
+  // Ground informations for Viewpoint manipulation:
+  // -----------------------------------------------
+
+  CATMathDirectionf _north;	
+  CAT3DScalePlaneRep *_3DScalePlaneRep;
+  ProjectionType _ProjectionTypeForScalePlane;
+  int _ScalePlaneActivated;
+  int _ShowScalePlane;
+
+  private :
+  void MainViewpointChanged (CATCommand *, CATNotification *, CATCommandClientData); 
+  //  Viewpoint save mechanisms
+  virtual void ViewpointChanged( CATCallbackEvent, void *, CATNotification *, CATSubscriberData, CATCallback); 
+
+  CATCallback _AnimationStartCB1, _ViewpointChangeCB1, _AnimationStopCB1;
+  CATCallback _AnimationStartCB2, _ViewpointChangeCB2, _AnimationStopCB2;
+
+  void PreviousViewpoint (CATCommand *, CATNotification *, CATCommandClientData); // scroll to previous Viewpoint
+  void NextViewpoint     (CATCommand *, CATNotification *, CATCommandClientData); // scroll to next Viewpoint
+
+  int _IsReferenceAxisOn;
+
+  CATCallback    _AxisViewpointCB, _AxisResizeCB;
+  CAT3DAxisRep   *_Axis3DRep;
+  CAT3DViewpoint *_Axis3DViewpoint;
+  CAT3DManipulator  *_AxisManipulator;
+  int _AxisPickable;
+  int _LastMode;
+
+  short _currentScaleDisplayFlag;
+  CATCallback  _currentScaleModifCB, _currentScaleResizeCB;
+  CAT2DAnnotationTextRep* _pCurrentScaleTextRep;
+  CAT2DViewpoint *_currentScale2DViewpoint;
+
+  CATNotification *  _ManipulatorChangedEvt;
+  CATBasic3DViewpointEditor *_default3DViewpointEditor;
+  CAT2DViewpointEditor *_default2DViewpointEditor;
+
+  void ModifyAxis (CATCallbackEvent, void *, CATNotification *, CATSubscriberData, CATCallback);
+
+  int _save_state;
+  int _saveValue, _saveFog;
+  float _saveAmbientLight[3];
+
+  CATVRImmersionManager*                  _VRImmersionManager;
+
+
+  public :
+
+  //  Event Define
+  //  ------------
+
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_GROUND_CHANGE);
+  /** @nodoc */
+  CATDeclareCBEvent (VIEWPORT_EVENT);
+  /** @nodoc */
+  CATDeclareCBEvent (ROTATE_EVENT);
+  /** @nodoc */
+  CATDeclareCBEvent (POSITION_EVENT);
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_TURN_AROUND_ACTIVATED);
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_WALK_ACTIVATED);
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_FLY_ACTIVATED);
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_VIEWPOINT_ACTION_ENDED);
+  /** @nodoc */
+  CATDeclareCBEvent (NAVIGATION_3D_PICKING);
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATViz.html">← 上一页: CATViz.h</a></div>
+        <div><a href="CATVizBaseIUnknown.html">下一页: CATVizBaseIUnknown.h →</a></div>
+    </div>
+</body>
+</html>

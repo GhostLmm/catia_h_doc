@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVIEventManager.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVIEventManager.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIEventDefinition.html">← 上一页: ENOVIEventDefinition.h</a></div>
+        <div><a href="ENOVIEventPlugin.html">下一页: ENOVIEventPlugin.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//------------------------------------------------------------------------------
+// Interface  : ENOVIEventManager 
+// Author     : RCB/AHC
+// Date       : July/08/1999 revision on sep/08/99
+//------------------------------------------------------------------------------
+#ifndef ENOVIEventManager_H
+#define ENOVIEventManager_H
+//
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATLISTPIUnknown.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;ENOVIStream.h&quot;
+#include &quot;CATVpmType.h&quot;
+#include &quot;ENOVIEvent.h&quot; 
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+// for event fire...
+typedef HRESULT (CATBaseUnknown::*BaseTypMet)
+    ( const ENOVIEvent_var&amp; e, HRESULT&amp; R);
+
+
+
+class ENOVISubscriberEvent_var ;
+class ENOVIPublisher_var ;
+//
+// UUID definition
+//
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVIEventManager;
+#else
+extern &quot;C&quot; const IID IID_ENOVIEventManager;
+#endif
+
+/**
+ * Interface to manage Event Model (subscription, information about events).
+ * &lt;b&gt;Role&lt;/b&gt;: &lt;br&gt; This class managers all the actions around the Enovia Event Model:&lt;br&gt;
+ * -Subscription/Unsubscription to/from events by clients.&lt;br&gt;
+ * -information about subscribers, raised events.&lt;br&gt;
+ * -information about the events clients can subscribe to&lt;br&gt;
+ */
+class ExportedByGUIDVPMInterfaces ENOVIEventManager : public CATBaseUnknown 
+{
+	 
+	 CATDeclareInterface ;
+	 
+public :
+     
+     //==============================================
+     // get  Events a Publisher can raise, according to
+     // Subscriber Identity...
+     //==============================================
+	 
+	 /**
+	  * Gives the list of events a type of object can raise.
+	  *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : According to the nature of the subscriber, gives back the list of events it can subscribe to.
+	  * @param iPublisherType
+	  *   string giving the type of publisher
+	  * @param iSubscriber
+	  *  the client instance which wants to subscribe.
+	  * @param oAvailableEvents
+	  *  the list of events which may be raised by the publisher type.
+	  */
+	 virtual HRESULT GetListOfRaisableEvents (const CATUnicodeString&amp; iPublisherType,
+											  const CATBaseUnknown_var&amp; iSubscriber,
+											  CATListOfCATUnicodeString&amp; oAvailableEvents)=0;
+	 
+	 /**
+	  * Gives the list of events a publisher instance can raise.
+	  *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : According to the nature of the subscriber, gives back the list of events it can subscribe to,
+	  * @param iPublisherinstance
+	  *   a publisher instance
+	  * @param iSubscriber
+	  *  the client instance which wants to subscribe.
+	  * @param oAvailableEvents
+	  *  the list of events which may be raised by the publisher type.
+	  */
+	 virtual HRESULT GetListOfRaisableEvents (const ENOVIPublisher_var&amp; iPublisherinstance,
+											  const CATBaseUnknown_var&amp; iSubscriber,
+											  CATListOfCATUnicodeString&amp; oAvailableEvents)=0;
+	 
+	 
+	 //================
+	 // SUBSCRIPTION
+	 //================
+	 
+
+	 //            Subscribe to Event(==method) on ObjectType  (ex: &quot;Lock on Part&quot;)
+	 //                      to Event (==method) on a given instance...
+	 //  two ways for subscribing : EARLY or LATE
+	 //                              |        |____ give an interface &quot;ENOVISubscriber&quot; .
+	 //                              |_____________ give an interface for direct CallBacks  AND its IID
+
+
+
+
+    /**
+     * @nodoc
+     */  
+    enum EvtSubscriptionMode{EarlyMode,LateMode,BothModes};
+    
+    
+    /**   Subscribes to an event on a given type of object.
+	 *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : subscribe in EARLY mode, i.e. by implementing an explicit CallBack interface,
+	 *    delivered by the publisher side.
+     *    @param  iMethodName 
+	 *         event name you want to subscribe to.
+     *    @param  iObjectType 
+	 *         object type you want to subscribe to.  
+     *    @param  iCallBackInterface 
+	 *         interface for the callback methods, implemented by the client which subscribes.
+     *    @param  iIDOfInterface  
+	 *          Real ID of iCallBackInterface
+     *   @param oSubscriberCookie 
+	 *         given by the event manager. to be kept to unsubscribe with.
+     *    @param  iFireMode
+	 *          step you want to subscribe to (before/after or both).
+     *    @param  iPriority
+	 *          priority of subscription. from 1 to 9 - standard = 5.
+	 *    @param WithPersistency
+	 *          flag to store a persistent subscription.
+	 *          not used.
+     */
+    virtual HRESULT Subscribe(const CATUnicodeString&amp;             iMethodName,
+			      const CATUnicodeString&amp;             iObjectType,
+			      const CATBaseUnknown_var&amp;           iCallBackInterface,
+			      const IID&amp;                          iIDOfInterface,                           
+			      unsigned long*                      oSubscriberCookie,
+			      const ENOVIEvent::VPMEventFireMode&amp; iFireMode = ENOVIEvent::EventFireStandard,
+			      const int&amp;                          iPriority  = 5,
+			      VPM_Boolean                         WithPersistency=bFalse)=0;
+    
+    /**   Subscribes to an event for a given instance.
+	 *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : subscribe in EARLY mode, i.e. by implementing an explicit CallBack interface,
+	 *    delivered by the publisher side.
+     *
+     *    @param  iMethodName 
+	 *         event name you want to subscribe to.
+     *    @param  iObjectInstance
+	 *         object type you want to subscribe to.  
+     *    @param  iCallBackInterface 
+	 *         interface for the callback methods, implemented by the client which subscribes.
+     *    @param  iIDOfInterface  
+	 *          Real ID of iCallBackInterface
+     *   @param oSubscriberCookie 
+	 *         given by the event manager. to be kept to unsubscribe with.
+     *    @param  iFireMode
+	 *          step you want to subscribe to (before/after or both).
+     *    @param  iPriority
+	 *          priority of subscription. from 1 to 9 - standard = 5.
+	 *
+	 *    @param WithPersistency
+	 *          flag to store a persistent subscription.
+	 *          not used.
+     */
+    virtual HRESULT Subscribe(const CATUnicodeString&amp;             iMethodName,
+			      const ENOVIPublisher_var&amp;           iObjectInstance,
+			      const CATBaseUnknown_var&amp;           iCallBackInterface,
+			      const IID&amp;                          iIDOfInterface,
+			      unsigned long *                     oSubscriberCookie,
+			      const ENOVIEvent::VPMEventFireMode&amp; iFireMode = ENOVIEvent::EventFireStandard ,
+			      const int&amp;                          iPriority  = 5,
+			      VPM_Boolean                         WithPersistency=bFalse)=0;
+    
+
+    /**   Subscribes to an event on a given type of object.
+	 *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : subscribe in LATE mode, i.e. by implementing a unique standard  interface @href ENOVISubscriberEvent
+     *    @param  iMethodName 
+	 *         event name you want to subscribe to.
+     *    @param  iObjectType 
+	 *         object type you want to subscribe to.  
+     *    @param  iCallBackInterface 
+	 *         an implementation of the standard callback interface ENOVISubscriberEvent
+     *   @param oSubscriberCookie 
+	 *         given by the event manager. to be kept to unsubscribe with.
+     *    @param  iFireMode
+	 *          step you want to subscribe to (before/after or both).By default both.
+     *    @param  iPriority
+	 *          priority of subscription. from 1 to 9 - standard = 5.
+	 *    @param WithPersistency
+	 *          flag to store a persistent subscription.
+	 *          not used.
+	 *
+     */
+    virtual HRESULT Subscribe(const CATUnicodeString&amp;             iMethodName,
+							  const CATUnicodeString&amp;             iObjectType,
+							  const ENOVISubscriberEvent_var&amp;     iCallBackInterface,
+							  unsigned long *                     oSubscriberCookie,
+							  const ENOVIEvent::VPMEventFireMode&amp; iFireMode = ENOVIEvent::EventFireStandard,
+							  const int&amp;                          iPriority  = 5,
+							  VPM_Boolean                         WithPersistency=bFalse)=0;
+	 
+
+    /**   Subscribes to an event on a given instance.
+	 *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : subscribe in LATE mode, i.e. by implementing a unique standard  interface @href ENOVISubscriberEvent
+     *    @param  iMethodName 
+	 *         event name you want to subscribe to.
+     *    @param  iObjectInstance
+	 *         the object instance you want to subscribe to.  
+     *    @param  iCallBackInterface 
+	 *         an implementation of the standard callback interface ENOVISubscriberEvent
+     *   @param oSubscriberCookie 
+	 *         given by the event manager. to be kept to unsubscribe with.
+     *    @param  iFireMode
+	 *          step you want to subscribe to (before/after or both).By default both.
+     *    @param  iPriority
+	 *          priority of subscription. from 1 to 9 - standard = 5.
+	 *    @param WithPersistency
+	 *          flag to store a persistent subscription.
+	 *          not used.
+	 *
+     */
+    virtual HRESULT Subscribe(const CATUnicodeString&amp;             iMethodName,
+							  const ENOVIPublisher_var&amp;           iObjectInstance,
+							  const ENOVISubscriberEvent_var&amp;     iCallBackInterface,
+							  unsigned long *                     oSubscriberCookie,
+							  const ENOVIEvent::VPMEventFireMode&amp; iFireMode = ENOVIEvent::EventFireStandard ,
+							  const int&amp;                          iPriority  = 5,
+							  VPM_Boolean                         WithPersistency=bFalse)=0;
+ 
+    /**   Adds a filter to a given subscription referred to by its cookie.
+	 *&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : Allow to more precisely determine events you are interested in
+         *    @param  iCookie
+	 *         given by the event manager to identify a subscription
+         *    @param  iCategory
+	 *         the category of the filter: either &quot;ON_EVENT&quot; or &quot;ON_PUBLISHER&quot;.
+         *    ON_EVENT filters allow to select events according to their
+         *    associated @href ENOVIStream.
+         *    ON_PUBLISHER filters allow to select events according to a condition
+         *    on the object that published them. This condition can be built from
+         *    an existing extended data group.
+         *    @param  iName
+	 *         the name of the filter.
+         *    For ON_EVENT filters, iName refers to the name of the argument of the @href ENOVIStream.
+         *    For ON_PUBLISHER filters, it refers to the condition name (whatsoever or existing data group).
+         *    @param  iValue
+	 *         the value of the filter.
+         *    For ON_EVENT filters, iValue refers to the value of the argument of the @href ENOVIStream.
+         *    For ON_PUBLISHER filters, it refers to the condition value itself (a character string).
+	 *
+    */
+    virtual HRESULT AddSubscriptionFilter ( unsigned long iCookie,
+                               const CATUnicodeString &amp; iCategory,
+                               const CATUnicodeString &amp; iName,
+                               const CORBAAny &amp; iValue )=0;
+
+	 /**   Unsubscribes  a client.
+	  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : unsubscription using the cookie given at subscription time.
+	  * @param iCookie
+	  *   the cookie given at subscription time
+	  */
+	 virtual HRESULT Unsubscribe( unsigned long iCookie)=0;
+
+
+    
+    //=========================
+    // GET THE RAISED EVENTS
+    //==========================
+
+    
+    /**   Gets the events raised during the session.
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+     */
+    virtual HRESULT  GetRaisedEvents (CATLISTV(CATBaseUnknown_var) &amp; oListOfRaisedEvents) =0;
+    
+    /**   Gets the event of a given name raised by a type of object during the session.
+     *    @param  iEventName
+	 *            name of the wanted event
+     *    @param  iObjectType
+	 *            type of the object wanted
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+	 *            
+	 *
+     */ 
+	 virtual HRESULT  GetRaisedEvents(const CATUnicodeString         &amp; iEventName,
+									  const CATUnicodeString         &amp; iObjectType,
+									  CATLISTV(CATBaseUnknown_var)   &amp; oListOfRaisedEvents) =0;
+	 
+    /**   Gets the events of a given name  raised during the session.
+     *    @param  iEventName
+	 *            name of the wanted event
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+	 *            
+	 *
+     */ 
+	 virtual HRESULT  GetRaisedEvents(const CATUnicodeString       &amp; iEventName,
+									  CATLISTV(CATBaseUnknown_var) &amp; oListOfRaisedEvents) =0;
+	 
+    /**   Gets the events of a given name  raised by a given publisher during the session.
+     *    @param  iEventName
+	 *            name of the wanted event
+	 *    @param  iPublisher
+	 *            The publisher instance
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+	 *            
+	 *
+     */ 
+	 virtual HRESULT  GetRaisedEvents(const CATUnicodeString        &amp; iEventName,
+									  const ENOVIPublisher_var       &amp; iPublisher,
+									  CATLISTV(CATBaseUnknown_var)   &amp; oListOfRaisedEvents) =0;
+	 
+    /**   Gets all the events raised by a given publisher during the session.
+	 *    @param  iPublisher
+	 *            The publisher instance
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+	 *            
+	 *
+     */ 
+	 virtual HRESULT  GetEventsRaised (const ENOVIPublisher_var           &amp; iPublisher,
+									   CATLISTV(CATBaseUnknown_var) &amp; oListOfRaisedEvents) =0;
+	 
+    /**   Gets all the events raised by a given type of object during the session.
+     *    @param  iObjectType
+	 *            type of the object wanted
+     *    @param  oListOfRaisedEvents
+	 *        the list of events raised since the beginning.    
+	 *            
+	 *
+     */ 
+	 virtual HRESULT  GetRaisedEventsOnType(const CATUnicodeString   &amp; iObjectType,
+											CATLISTV(CATBaseUnknown_var) &amp; oListOfRaisedEvents) =0;
+	 
+	 /**
+	  * @nodoc
+	  */  
+	 virtual HRESULT  PurgeRaisedEvents()=0;
+	 
+	 /**
+	  * @nodoc
+	  */  
+	 virtual HRESULT  PurgeRaisedEvents(const ENOVIPublisher_var       &amp; iPublisher)=0;
+	 
+	 //==================================
+    // GET THE SUBSCRIPTION INFORMATION
+    //==================================
+
+    
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT GetSubscribers
+                   (const CATUnicodeString       &amp; iObjectType,
+		    CATLISTV(CATBaseUnknown_var) &amp; oListOfSubscribers,
+		    const VPM_Boolean            &amp; OnlyType = bTrue)=0;
+    
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT GetSubscribers
+                  (const CATUnicodeString&amp; iObjectType,
+		   const CATUnicodeString&amp; EventType,
+		   CATLISTV(CATBaseUnknown_var)&amp; oListOfSubscribers,
+		   const ENOVIEvent::VPMEventFireMode&amp; iFireMode= ENOVIEvent::EventFireStandard,
+	           const VPM_Boolean           &amp; OnlyType = bTrue )=0;
+
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT GetSubscribers
+                  (const CATUnicodeString&amp; iObjectType,
+		   const CATUnicodeString&amp; EventType,
+		   const CATUnicodeString&amp; iFireMode,
+		   CATLISTV(CATBaseUnknown_var)&amp; oListOfSubscribers,
+		   const VPM_Boolean           &amp; OnlyType = bTrue,
+		   const ENOVIEventManager::EvtSubscriptionMode &amp; iSubMode = ENOVIEventManager::BothModes)=0;
+
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT GetSubscribers
+                   (const ENOVIPublisher_var     &amp; iPublisher,
+		    CATLISTV(CATBaseUnknown_var) &amp; oListOfSubscribers)=0;
+
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT GetSubscribers
+                   (const ENOVIPublisher_var    &amp; iPublisher,
+		   const CATUnicodeString       &amp; iEventType,
+		   CATLISTV(CATBaseUnknown_var)&amp; oListOfSubscribers,
+		   const ENOVIEvent::VPMEventFireMode&amp; iFireMode= ENOVIEvent::EventFireStandard,
+		   const ENOVIEventManager::EvtSubscriptionMode &amp; iSubMode = ENOVIEventManager::BothModes)=0;
+    
+
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT  GetSubscriberCookies(CATListOfInt&amp; oListOfSubscriberCookies,
+										  const ENOVIEventManager::EvtSubscriptionMode &amp; iSubMode = ENOVIEventManager::BothModes)=0;
+    
+
+
+    /**
+     * @nodoc
+     */  
+	 virtual HRESULT GetCookieInformation(unsigned long  iCookie,
+										  CATUnicodeString&amp;   oTypeOfObject,
+										  CATUnicodeString&amp;   oEventName,
+										  CATBaseUnknown_var&amp; oCallBackInterface,
+										  IID&amp;                oIDOfInterface,
+										  boolean&amp;            oIsEarlyType,
+										  boolean&amp;            oIsOnInstance,
+										  ENOVIPublisher_var&amp; oPublisher,
+										  int&amp;                oPriority)=0; 
+					 
+					
+    
+
+    //=============================
+    // To queue events raising...
+    //=============================
+
+    /**
+     * @nodoc
+     */  
+   virtual HRESULT SetQueueMode( const VPM_Boolean&amp; iQueueFlag) = 0;
+
+    /**
+     * @nodoc
+     */  
+   virtual HRESULT GetQueueMode( VPM_Boolean&amp; oQueueFlag) = 0;
+
+    /**
+     * @nodoc
+     */  
+   virtual HRESULT GetListOfQueuedEvents(CATLISTV(CATBaseUnknown_var) &amp; oListOfRaisedEvents) =0;
+    
+
+    
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT InitializeEvent(const CATUnicodeString&amp;              iEventType ,
+				    const ENOVIPublisher_var&amp;            iPublisher )=0;
+    
+    
+    /**
+     * @nodoc
+     */  
+    virtual  HRESULT GetDataEvent
+     	             (const CATUnicodeString&amp;  iEventType , 
+     	              IUnknown*&amp;               iPublisher , 
+     	              ENOVIStream_var&amp;         oDataEvent ) = 0;
+    //
+    /**
+     * @nodoc
+     */  
+    virtual  HRESULT GetCurrentEvent
+     	             (ENOVIEvent_var&amp; oEvent ) = 0;
+    //  
+    /**
+     * @nodoc
+     */  
+    virtual HRESULT EventFire
+	(const CATUnicodeString&amp; iEventType    ,
+	 const CATUnicodeString&amp; iEventFireMod ,
+	 IID&amp;                    iIID          ,
+	 IUnknown*&amp;              iObject       ,
+	 BaseTypMet              MyPtrEvt      ,
+	 BaseTypMet              MyPtrEvtKo    ,
+	 ENOVIStream_var&amp;        oStream       ,
+	 HRESULT&amp;                ioRc          ) =0 ;
+    };
+    /**
+     * @nodoc
+     */  
+CATDeclareHandler(ENOVIEventManager, CATBaseUnknown);
+
+#endif 
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIEventDefinition.html">← 上一页: ENOVIEventDefinition.h</a></div>
+        <div><a href="ENOVIEventPlugin.html">下一页: ENOVIEventPlugin.h →</a></div>
+    </div>
+</body>
+</html>

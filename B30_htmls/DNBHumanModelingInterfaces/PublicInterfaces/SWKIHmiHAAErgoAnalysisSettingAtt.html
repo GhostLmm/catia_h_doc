@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNBHumanModelingInterfaces/PublicInterfaces/SWKIHmiHAAErgoAnalysisSettingAtt.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DNBHumanModelingInterfaces/PublicInterfaces/SWKIHmiHAAErgoAnalysisSettingAtt.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="SWKIExtensionNavigate.html">← 上一页: SWKIExtensionNavigate.h</a></div>
+        <div><a href="SWKIHmiHBRCatalogSettingAtt.html">下一页: SWKIHmiHBRCatalogSettingAtt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2003
+#ifndef SWKIHmiHAAErgoAnalysisSettingAtt_H
+#define SWKIHmiHAAErgoAnalysisSettingAtt_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */
+
+// *****************************************************************************
+// Framework DNBHumanModelingInterfaces
+// Copyright Safework Inc.
+// *****************************************************************************
+//  Abstract:
+//  ---------
+//    SWKIHmiHAAErgoAnalysisSettingAtt interface.
+// *****************************************************************************
+//  Usage:
+//  ------
+//
+// *****************************************************************************
+//  Inheritance:
+//  ------------
+//
+//    CATBaseUnknown
+//
+// *****************************************************************************
+//  Main Methods:
+//  -------------
+//
+//    Initialize
+//    GetShoulderElevation
+//    SetShoulderElevation
+//    GetInfoShoulderElevation
+//    GetArmAbduction
+//    SetArmAbduction
+//    GetInfoArmAbduction
+//    GetArmRotation
+//    SetArmRotation
+//    GetInfoArmRotation
+//    GetWristDeviation
+//    SetWristDeviation
+//    GetInfoWristDeviation
+//    GetWristTwist
+//    SetWristTwist
+//    GetInfoWristTwist
+//    GetNeckTwist
+//    SetNeckTwist
+//    GetInfoNeckTwist
+//    GetNeckSideBend
+//    SetNeckSideBend
+//    GetInfoNeckSideBend
+//    GetTrunkTwist
+//    SetTrunkTwist
+//    GetInfoTrunkTwist
+//    GetTrunkSideBend
+//    SetTrunkSideBend
+//    GetInfoTrunkSideBend
+//    UpdateEnvState
+//    GetSettingRep
+// *****************************************************************************
+//  History
+//  -------
+//
+//  Author: Rachid Azizi
+//  Date  : 04/02/24
+//  Goal  : Creation
+//
+// *****************************************************************************
+//
+// --- System
+#include &quot;CATBaseUnknown.h&quot;
+class CATSettingInfo;
+class CATSettingRepository;
+class CATUnicodeString;
+
+#ifdef _WINDOWS_SOURCE
+#ifdef __SWKHumanModelingItf
+#define ExportedBySWKHumanModelingItf __declspec(dllexport)
+#else
+#define ExportedBySWKHumanModelingItf __declspec(dllimport)
+#endif
+#else
+#define ExportedBySWKHumanModelingItf
+#endif
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedBySWKHumanModelingItf IID IID_SWKIHmiHAAErgoAnalysisSettingAtt;
+#else
+extern &quot;C&quot; const IID IID_SWKIHmiHAAErgoAnalysisSettingAtt;
+#endif
+
+class ExportedBySWKHumanModelingItf SWKIHmiHAAErgoAnalysisSettingAtt : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+	/**
+	  * Initialize all the attributes of the SWKHmiHAAErgoAnalysisSettings settings.
+	  **/
+	virtual HRESULT Initialize() = 0;
+
+	/**
+	  * This function gets the shoulder elevation value.
+	  *
+	  * @param poShoulderElevation The shoulder elevation value.
+	  **/
+	virtual HRESULT GetShoulderElevation(double &amp; poShoulderElevation) = 0;
+
+	/**
+	  * This function sets the shoulder elevation value.
+	  *
+	  * @param piShoulderElevation The new shoulder elevation value.
+	  **/
+	virtual HRESULT SetShoulderElevation(const double piShoulderElevation) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the shoulder elevation value.
+	  **/
+	virtual HRESULT GetShoulderElevationInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the shoulder elevation.
+	  **/
+	virtual HRESULT SetShoulderElevationLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the arm abduction value.
+	  *
+	  * @param poArmAbduction The arm abduction value.
+	  **/
+	virtual HRESULT GetArmAbduction(double &amp; poArmAbduction) = 0;
+
+	/**
+	  * This function sets the arm abduction value.
+	  *
+	  * @param piArmAbduction The new arm abduction value.
+	  **/
+	virtual HRESULT SetArmAbduction(const double piArmAbduction) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the arm abduction value.
+	  **/
+	virtual HRESULT GetArmAbductionInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Arm Abduction.
+	  **/
+	virtual HRESULT SetArmAbductionLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the arm rotation value.
+	  *
+	  * @param poArmRotation The arm rotation value.
+	  **/
+	virtual HRESULT GetArmRotation(double &amp; poArmRotation) = 0;
+
+	/**
+	  * This function sets the arm rotation value.
+	  *
+	  * @param piArmRotation The new arm rotatiion value.
+	  **/
+	virtual HRESULT SetArmRotation(const double piArmRotation) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the arm rotation value.
+	  **/
+	virtual HRESULT GetArmRotationInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Arm Rotation.
+	  **/
+	virtual HRESULT SetArmRotationLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the wrist deviation value.
+	  *
+	  * @param poWristDeviation The wrist deviation value.
+	  **/
+	virtual HRESULT GetWristDeviation(double &amp; poWristDeviation) = 0;
+
+	/**
+	  * This function sets the wrist deviation value.
+	  *
+	  * @param piWristDeviation The new wrist deviatiion value.
+	  **/
+	virtual HRESULT SetWristDeviation(const double piWristDeviation) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the wrist deviation value.
+	  **/
+	virtual HRESULT GetWristDeviationInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Wrist Deviation.
+	  **/
+	virtual HRESULT SetWristDeviationLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the wrist twist value.
+	  *
+	  * @param poWristTwist The wrist twist value.
+	  **/
+	virtual HRESULT GetWristTwist(double &amp; poWristTwist) = 0;
+
+	/**
+	  * This function sets the wrist twist value.
+	  *
+	  * @param piWristTwist The new wrist twist value.
+	  **/
+	virtual HRESULT SetWristTwist(const double piWristTwist) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the wrist twist value.
+	  **/
+	virtual HRESULT GetWristTwistInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Wrist Twist.
+	  **/
+	virtual HRESULT SetWristTwistLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the neck twist value.
+	  *
+	  * @param poNeckTwist The neck twist value.
+	  **/
+	virtual HRESULT GetNeckTwist(double &amp; poNeckTwist) = 0;
+
+	/**
+	  * This function sets the neck twist value.
+	  *
+	  * @param piNeckTwist The new neck twist value.
+	  **/
+	virtual HRESULT SetNeckTwist(const double piNeckTwist) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the neck twist value.
+	  **/
+	virtual HRESULT GetNeckTwistInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Neck Twist.
+	  **/
+	virtual HRESULT SetNeckTwistLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the neck side bend value.
+	  *
+	  * @param poNeckSideBend The neck side bend value.
+	  **/
+	virtual HRESULT GetNeckSideBend(double &amp; poNeckSideBend) = 0;
+
+	/**
+	  * This function sets the neck side bend value.
+	  *
+	  * @param piNeckSideBend The new neck side bend value.
+	  **/
+	virtual HRESULT SetNeckSideBend(const double piNeckSideBend) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the neck side bend value.
+	  **/
+	virtual HRESULT GetNeckSideBendInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Neck Side Bend.
+	  **/
+	virtual HRESULT SetNeckSideBendLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the trunk twist value.
+	  *
+	  * @param poTrunkTwist The trunk twist value.
+	  **/
+	virtual HRESULT GetTrunkTwist(double &amp; poTrunkTwist) = 0;
+
+	/**
+	  * This function sets the trunk twist value.
+	  *
+	  * @param piTrunkTwist The new trunk twist value.
+	  **/
+	virtual HRESULT SetTrunkTwist(const double piTrunkTwist) = 0;
+	
+	/**
+	  * Get the CATSettingInfo of the trunk twist value.
+	  **/
+	virtual HRESULT GetTrunkTwistInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Trunk Twist.
+	  **/
+	virtual HRESULT SetTrunkTwistLock (unsigned char iLocked) = 0;
+
+	/**
+	  * This function gets the trunk side bend value.
+	  *
+	  * @param poTrunkSideBend The trunk side bend value.
+	  **/
+	virtual HRESULT GetTrunkSideBend(double &amp; poTrunkSideBend) = 0;
+
+	/**
+	  * This function sets the trunk side bend value.
+	  *
+	  * @param piTrunkSideBend The new trunk side bend value.
+	  **/
+	virtual HRESULT SetTrunkSideBend(const double piTrunkSideBend) = 0;
+
+	/**
+	  * Get the CATSettingInfo of the trunk side bend value.
+	  **/
+	virtual HRESULT GetTrunkSideBendInfo(CATSettingInfo * poInfo) = 0;
+
+	/**
+	  * Set the Lock of the Trunk Side Bend.
+	  **/
+	virtual HRESULT SetTrunkSideBendLock (unsigned char iLocked) = 0;
+
+	/**
+	  * Update the display of the manikins depending of the settings.
+	  **/
+	virtual HRESULT UpdateEnvState() = 0;
+
+	/**
+	  * Get the setting repository associated with the attributes of the HBR general settings.
+	  **/
+	virtual CATSettingRepository * GetSettingRep() const = 0;
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="SWKIExtensionNavigate.html">← 上一页: SWKIExtensionNavigate.h</a></div>
+        <div><a href="SWKIHmiHBRCatalogSettingAtt.html">下一页: SWKIHmiHBRCatalogSettingAtt.h →</a></div>
+    </div>
+</body>
+</html>

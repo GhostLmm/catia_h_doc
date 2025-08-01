@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManufacturingInterfaces/PublicInterfaces/CATIMfgPrismaticReworkArea.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ManufacturingInterfaces/PublicInterfaces/CATIMfgPrismaticReworkArea.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgPolyLineTraject.html">← 上一页: CATIMfgPolyLineTraject.h</a></div>
+        <div><a href="CATIMfgProcess.html">下一页: CATIMfgProcess.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES 2002
+//=============================================================================
+
+#ifndef CATIMfgPrismaticReworkArea_H
+#define CATIMfgPrismaticReworkArea_H
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &quot;MfgItfEnv.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATListOfInt.h&quot;
+#include &quot;CATLISTP_CATMathPoint2D.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMfgItfEnv IID IID_CATIMfgPrismaticReworkArea;
+#else
+extern &quot;C&quot; const IID IID_CATIMfgPrismaticReworkArea;
+#endif
+
+/**
+* Interface to manage a user rework feature.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: CATIMfgPrismaticReworkArea has methods to manage a user rework feature.
+*/
+
+class ExportedByMfgItfEnv CATIMfgPrismaticReworkArea : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+  public:  
+
+/**
+* Initializes the Mfg2DRAFeature with a Mfg2DMAFeature.
+*/
+
+    virtual HRESULT SetPrismaticMachiningArea (CATBaseUnknown_var&amp; iManufacturingArea) = 0; 
+
+/**
+* Retrieves the Mfg2DMAFeature of the Mfg2DRAFeature.
+*/
+
+    virtual HRESULT GetPrismaticMachiningArea (CATBaseUnknown_var&amp; oManufacturingArea) = 0; 
+
+/**
+* Computes resulting contours of the Mfg2DRAFeature.
+*/
+
+    virtual HRESULT Compute () = 0; 
+
+  /**
+  * Retrieves resulting contours once they have been computed on the Mfg2DRAFeature.
+  * @param oContourType
+*   returns the type for each contour&lt;br&gt;
+  *   &lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;0&quot;&lt;/tt&gt;: Corner&lt;dd&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;1&quot;&lt;/tt&gt;: Channel&lt;dd&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;2&quot;&lt;/tt&gt;: Island&lt;dd&gt;
+  *   &lt;/dl&gt;
+  * @param oNbOfPointsByContour
+  *   returns the number of points for each contour&lt;br&gt;
+	* @param oListOfPoints
+  *   2D (x,y) coordinates for each point&lt;br&gt;
+	* @param oPointType
+  *   returns the type for each point&lt;br&gt;
+  *   &lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;0&quot;&lt;/tt&gt;: Center -&gt; the corresponding point is the middle of an arc of a circle whose beginning point is Point-1 and whose ending point is Point+1.&lt;dd&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;1&quot;&lt;/tt&gt;: Other -&gt; the corresponding point can be the beginning or the end of a segment or the beginning or the end of a circle.&lt;dd&gt;
+  *   &lt;/dl&gt;
+	* @param oHardness
+  *   returns the hardness mode for each point&lt;br&gt;
+	*   The hardness to take into account for a segment or an arc of a circle is the one defined for the first point of the element.&lt;br&gt;
+	*   &lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;0&quot;&lt;/tt&gt;: Hard&lt;dd&gt;
+  *     &lt;dt&gt;&lt;tt&gt;&quot;1&quot;&lt;/tt&gt;: Soft&lt;dd&gt;
+  *   &lt;/dl&gt;
+  * &lt;/dl&gt;
+  * &lt;dt&gt;&lt;b&gt;Example:&lt;/b&gt;
+  * &lt;dd&gt;The following example determines the first contour of a Mfg2DRAFeature
+  * &lt;pre&gt;
+  * int index = 1;
+  *
+  * CATMathPoint2D * StartPoint = oListOfPoints[index];
+  * CATMathPoint2D * MiddlePoint = NULL;
+  * CATMathPoint2D * EndPoint = NULL;
+  *
+  * int IsSoft = oHardness[index];
+  *
+  * index++;
+  *
+  * while (index &lt;= oNbOfPointsByContour[1])
+  * {
+  *
+  *   if (oListOfPoints[index] == 1) // it&#x27;s not the middle of an arc of a circle, so it is the end of a segment
+  *   {
+  *     EndPoint = oListOfPoints[index];
+  * 
+  *     // creation of the segment [StartPoint/EndPoint] with Hardness mode = IsSoft
+  *   }
+  *   else     // circle
+  *   {
+  *     MiddlePoint = oListOfPoints[index];
+  *     index++;
+  *     if (index &gt; oNbOfPointsByContour[1])
+  *     {
+  *       index = 1;
+  *       // if this point is the center of a circle, then there&#x27;s an error
+  *       if (oListOfPoints[index] == 0) {ERROR}
+  *     }
+  *
+  *     EndPoint = oListOfPoints[index];
+  *
+  *     // creation of the circle [StartPoint/MiddlePoint/EndPoint] with Hardness mode = IsSoft
+  *   }
+  * 
+  *   StartPoint = EndPoint;
+  *   MiddlePoint = NULL;
+  *   EndPoint = NULL;
+  *
+  *   IsSoft = oHardness[index];
+  *
+  *   if(index == 1)
+  *   {
+	*     index = oNbOfPointsByContour[1] + 1; // to exit the while loop
+  *   }
+  * }  // end while loop
+  * &lt;/pre&gt;
+  * &lt;/dl&gt;
+  */
+    virtual HRESULT GetResultingContours (CATListOfInt&amp; oContourType,
+											CATListOfInt&amp; oNbOfPointsByContour,
+											CATLISTP(CATMathPoint2D)&amp; oListOfPoints,
+											CATListOfInt&amp; oPointType,CATListOfInt&amp; oHardness) = 0; 
+};
+
+CATDeclareHandler(CATIMfgPrismaticReworkArea, CATBaseUnknown);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfgPolyLineTraject.html">← 上一页: CATIMfgPolyLineTraject.h</a></div>
+        <div><a href="CATIMfgProcess.html">下一页: CATIMfgProcess.h →</a></div>
+    </div>
+</body>
+</html>

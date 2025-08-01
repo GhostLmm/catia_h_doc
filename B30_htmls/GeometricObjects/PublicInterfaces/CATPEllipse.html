@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATPEllipse.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATPEllipse.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATPCurve.html">← 上一页: CATPCurve.h</a></div>
+        <div><a href="CATPHyperbola.html">下一页: CATPHyperbola.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATPEllipse_h
+#define CATPEllipse_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATPCurve.h&quot;
+#include &quot;CATMathDef.h&quot;
+class CATSurParam ;
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATPEllipse ;
+#else
+extern &quot;C&quot; const IID IID_CATPEllipse ;
+#endif
+	//CAA_Exposed CATIGemPEllipse
+/**
+ * Interface representing an ellipse in the space of a surface.
+ *&lt;br&gt; The CATPEllipse is created by the &lt;tt&gt;CreatePEllipse&lt;/tt&gt;
+ * method of the &lt;tt&gt;CATGeoFactory&lt;/tt&gt; interface 
+ * and deleted with the &lt;tt&gt;Remove&lt;/tt&gt; method.
+ *&lt;br&gt;A CATPEllipse is defined with:
+ *&lt;table&gt;
+ * &lt;tr&gt;&lt;td&gt;CATSurface&lt;/td&gt;&lt;td&gt;&lt;tt&gt;Sur &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The underlying surface&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;&lt;tt&gt;A&lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The half length of the major axis&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;&lt;tt&gt;B&lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The half length of minor axis &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iOffset &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The angle between the surface first direction and the
+ *                       major axis&lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iStart &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The low angle limitation &lt;/td&gt;&lt;/tr&gt;
+ * &lt;tr&gt;&lt;td&gt;CATAngle&lt;/td&gt;&lt;td&gt;&lt;tt&gt; iEnd &lt;/tt&gt;&lt;/td&gt;
+ *                 &lt;td&gt; The high angle limitation&lt;/td&gt;&lt;/tr&gt;
+ *&lt;/table&gt;
+ * with &lt;tt&gt; 0 &lt;= iStart &lt; CAT2PI&lt;/tt&gt;, 
+ * &lt;tt&gt;iStart &lt; iEnd &lt;= iStart + CAT2PI&lt;/tt&gt;, &lt;tt&gt;B &lt;= A&lt;/tt&gt;.
+ * The &lt;tt&gt;iStart&lt;/tt&gt; and &lt;tt&gt;iEnd&lt;/tt&gt; angles are measured
+ * from the major axis.&lt;br&gt; 
+ * The parametric equation of the ellipse in the surface is:
+ * &lt;tt&gt;U=a*cos(theta), V=b*sin(theta)&lt;/tt&gt;.
+ * Notice that the CATSurParam associated with (U,V) 
+ * may not correspond to &lt;tt&gt;theta&lt;/tt&gt;. So, do not make any assumption on the
+ * internal ellipse parameterization.&lt;br&gt;
+ * The ellipse equation
+ * in its axis system is &lt;tt&gt;U&amp;sup2;/A&amp;sup2; + V&amp;sup2;/B&amp;sup2; = 1&lt;/tt&gt;.
+ */
+class ExportedByCATGMGeometricInterfaces CATPEllipse : public CATPCurve
+{
+  CATDeclareInterface;
+
+public :
+
+/**
+ * Returns the half length of the major axis.
+ *@return
+ * The half length of the major axis.
+ */
+  virtual double GetMajorAxis() const = 0 ;
+
+/**
+ * Returns the half length of minor axis.
+ *@return
+ * The half length of the minor axis.
+ */
+  virtual double GetMinorAxis() const = 0 ;
+
+/**
+ * Returns the angle between the surface first direction and the major axis
+ * of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @return
+ * The angle.
+ */
+  virtual CATAngle GetOffsetAngle() const = 0 ;
+
+/**
+ * Returns the center of a CATPEllipse.
+ * @param ioCenter
+ * The center.
+ */
+  virtual void GetCenter(CATSurParam &amp;ioCenter) const = 0 ;
+
+/**
+ * Returns the low angle limitation of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @return
+ * The first limitation angle. 
+ */
+  virtual CATAngle GetStartAngle() const = 0 ;
+
+/**
+ * Returns the high angle limitation of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @return
+ * The end limitation angle. 
+ */
+  virtual CATAngle GetEndAngle() const = 0 ;
+
+/**
+ * Modifies the characteristics of &lt;tt&gt;this&lt;/tt&gt; CAPEllipse.
+ * @param iMajorAxis
+ * The new value.
+ * @param iMinorAxis
+ * The new value.
+ * @param iOffsetAngle
+ * The new offset angle value.
+ * @param iCenter
+ * The new center.
+ * @param iStart
+ * The first limitation angle.
+ * @param iEnd
+ * The end limitation angle.
+ */
+  virtual void Set (const double iMajorAxis,
+		    const double iMinorAxis,	
+		    const CATAngle          iOffsetAngle,
+		    const CATSurParam      &amp;iCenter,
+		    const CATAngle          iStart,
+		    const CATAngle          iEnd,
+		          CATSurface*       iSupport) = 0 ;
+/** 
+ * Modifies the half length of the major axis of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @param iNewMajorAxis
+ * The new value.
+ */
+  virtual void SetMajorAxis(const double iNewMajorAxis) = 0 ;
+
+/** 
+ * Modifies the half length of minor axis of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @param iNewMinorAxis
+ * The new value.
+ */
+  virtual void SetMinorAxis(const double iNewMinorAxis) = 0 ;
+ 
+/**
+ * Modifies the angle between the surface first direction and the major axis
+ * of &lt;tt&gt;this&lt;/tt&gt; CATPEllipse.
+ * @param iNewOffsetAngle
+ * The new angle value.
+ */
+  virtual void SetOffsetAngle(const CATAngle iNewOffsetAngle) = 0 ;
+
+/**
+ * Modifies the center of a CATPEllipse.
+ * @param iNewCenter
+ * The new center.
+ */
+  virtual void SetCenter(const CATSurParam &amp; iNewCenter) = 0 ;
+
+/**
+ * Returns the center of a CATPEllipse.
+ * Use preferably the signature which returns the center in output argument.
+ * @return
+ * The center.
+ */
+  virtual CATSurParam GetCenter() const = 0 ;
+
+};
+  CATDeclareHandler(CATPEllipse,CATPCurve);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATPCurve.html">← 上一页: CATPCurve.h</a></div>
+        <div><a href="CATPHyperbola.html">下一页: CATPHyperbola.h →</a></div>
+    </div>
+</body>
+</html>

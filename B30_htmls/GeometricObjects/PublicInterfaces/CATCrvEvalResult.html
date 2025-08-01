@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCrvEvalResult.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCrvEvalResult.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvEvalLocal.html">← 上一页: CATCrvEvalLocal.h</a></div>
+        <div><a href="CATCrvLimits.html">下一页: CATCrvLimits.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCrvEvalResult_H
+#define CATCrvEvalResult_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATIAV5Level.h&quot;
+//#if defined ( CATIAV5R11 )
+#include &quot;CATCGMVirtual.h&quot;
+//#endif
+//#if defined ( CATIAV5R10 )
+#include &quot;ExportedByCATCGMGeoMath.h&quot;
+/*
+#else
+#include &quot;YP00IMPL.h&quot;
+#endif  
+*/
+#include &quot;CATCrvEvalCommand.h&quot;
+
+class CATMathSetOf3DObjects;
+class CATMathSetOfPoints;
+class CATMathSetOfVectors;
+
+/**
+ * Class representing an object that handles the results of a multiple
+ * evaluation on points of a CATCurve.
+ *&lt;br&gt;The definition of the evaluations to performed is declared in a
+ *&lt;tt&gt;CATCrvEvalCommand&lt;/tt&gt; and the evaluation is performed by the
+ *&lt;tt&gt;Eval&lt;/tt&gt; method of the &lt;tt&gt;CATCurve&lt;/tt&gt; interface.
+ * The objects returned
+ * belong to the &lt;tt&gt;CATCrvEvalResult&lt;/tt&gt; and must not be deleted.
+ *&lt;br&gt;Sample
+ */
+//#if defined ( CATIAV5R11 )
+class ExportedByCATCGMGeoMath CATCrvEvalResult : public CATCGMVirtual
+/*
+#else
+#if defined ( CATIAV5R10 )
+class ExportedByCATCGMGeoMath CATCrvEvalResult
+#else
+class ExportedByYP00IMPL CATCrvEvalResult
+#endif  
+#endif  
+*/
+{
+public:
+
+//=============================================================================
+// CONSTRUCTORS AND DESTRUCTOR
+//=============================================================================
+/**
+ * Constructs an empty CATCrvEvalResult.
+ */
+  CATCrvEvalResult();
+
+/**
+  * Destructor.
+  */
+  virtual ~CATCrvEvalResult();
+
+//=============================================================================
+// SET AND GET METHODS
+//=============================================================================
+/**
+ * Defines the types of evaluation of a CATCrvEvalResult.
+ */
+  virtual void SetCommand(const CATCrvEvalCommand &amp;iCommand);
+
+/**
+ * Defines the number of points where the evaluation of a CATCrvEvalResult
+ * has to be performed.
+ *&lt;br&gt;This method must be called after the &lt;tt&gt;SetCommand&lt;/tt&gt; method, in
+ * order to allocate the correct amount of memory for the results.
+ */
+  virtual void SetNumberOfPoints(CATLONG32 iNbOfPoints);
+
+//------------------------------------------------------------
+// Getting all the sets to use them
+//------------------------------------------------------------
+
+/**
+ * Returns the evaluation of the points of a CATCrvEvalResult.
+ * @exception
+ * If this evaluation was not defined for the CATCrvEvalResult.
+ */
+  CATMathSetOfPoints  &amp; GetPoints();
+
+/**
+ * Returns the evaluation of the first derivative at the points of 
+ * a CATCrvEvalResult.
+ * @exception
+ * If this evaluation was not defined for the CATCrvEvalResult.
+ */
+  CATMathSetOfVectors &amp; GetFirstDeriv();
+
+/**
+ * Returns the evaluation of the second derivative at the points of 
+ * a CATCrvEvalResult.
+ * @exception
+ * If this evaluation was not defined for the CATCrvEvalResult.
+ */
+  CATMathSetOfVectors &amp; GetSecondDeriv();
+
+/**
+ * Returns the evaluation of the third derivative at the points of 
+ * a CATCrvEvalResult.
+ * @exception
+ * If this evaluation was not defined for the CATCrvEvalResult.
+ */
+  CATMathSetOfVectors &amp; GetThirdDeriv();
+
+//------------------------------------------------------------
+// Releasing the unused memory
+//------------------------------------------------------------
+/**
+ * Releases the memory unused by the internal grids of points and vectors of 
+ * a CATCrvEvalResult.
+ */
+  void Compress();
+
+//=============================================================================
+// INTERNAL DATAS
+//=============================================================================
+protected:
+// Last command given to the object
+  CATCrvEvalCommand      _CommandEvaluated;
+  CATLONG32 _PointsCount ;
+
+// Array of pointers on CATMathSetOf3DObjects that handle the different results
+// of evaluation. The first set is a CATMathetOfPoints, the other ones are
+// CATMathSetOfVectors.
+
+// One acceed to them in the array using the indices defined below as enumeration. 
+  enum  { CountSets = CATCrvEvalCommand::CountEval};
+
+  CATMathSetOf3DObjects * _SetOfEvaluations[CountSets];
+
+};
+
+#endif
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCrvEvalLocal.html">← 上一页: CATCrvEvalLocal.h</a></div>
+        <div><a href="CATCrvLimits.html">下一页: CATCrvLimits.h →</a></div>
+    </div>
+</body>
+</html>

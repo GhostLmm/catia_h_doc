@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCldGrid.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCldGrid.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCldGenEntity.html">← 上一页: CATCldGenEntity.h</a></div>
+        <div><a href="CATCldMultiCell.html">下一页: CATCldMultiCell.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//==============================================================================================================
+// COPYRIGHT DASSAULT SYSTEMES PROVENCE 1999
+//==============================================================================================================
+// CATCldGrid
+//==============================================================================================================
+// Creation: JLH - ??-Oct-1999
+// 24-03-2014 CGMOFF+CGMPRJ
+//==============================================================================================================
+
+#ifndef CATCldGrid_H
+#define CATCldGrid_H
+
+/**
+ * @CAA2Level L0
+ * @CAA2Usage U0
+ */ 
+
+#include &quot;CATCldUniCell.h&quot;
+
+#include &quot;CATMathAxis.h&quot;
+
+class CATCldScan ;
+class CATCldSetOfScans ;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATCldGrid ;
+#else
+extern &quot;C&quot; const IID IID_CATCldGrid ;
+#endif
+
+/**
+ * Interface for the CloudEditor entity &lt;tt&gt;CATCldGrid&lt;/tt&gt;.&lt;br&gt;
+ * The &lt;tt&gt;CATCldGrid&lt;/tt&gt; corresponds to 2D &lt;i&gt;ordered&lt;/i&gt; set of points.&lt;br&gt;
+ * @see CATCldGenEntity, CATCldCell, CATCldUniCell
+ */
+class ExportedByCATGMGeometricInterfaces CATCldGrid : public CATCldUniCell
+{
+  CATDeclareInterface ;
+
+public:
+
+//==============================================================================================================
+// CATCldGrid characteristics.
+//==============================================================================================================
+
+  /**
+   * Tests if the &lt;tt&gt;CATCldGrid&lt;/tt&gt; has a probe axis.
+   */
+  virtual CATBoolean HasAProbeAxis () const = 0 ;
+
+  /**
+   * Returns the probe axis of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.&lt;br&gt;
+   * Throws an exception if the &lt;tt&gt;CATCldGrid&lt;/tt&gt; has not a probe axis.
+   */
+  virtual const CATMathAxis&amp; GetProbeAxis () const = 0 ;
+
+  /**
+   * Sets the probe axis of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetProbeAxis (const CATMathAxis* iAxis) = 0 ;
+
+  /**
+   * Converts the grid in a set of scans with deletion of the null indexes.&lt;br&gt;
+   * The set of scans references the same &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; than the grid.
+   */
+  virtual CATCldSetOfScans* ConvertInScans () const = 0 ;
+
+  /**
+   * Converts a 1D-indice to the 2D-indices relative to the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void Num1DTo2D (const int  iNoPoint,
+                          int       &amp;oNoPointU,
+                          int       &amp;oNoPointV) const = 0 ;
+
+  /**
+   * Converts 2D-indices to the 1D-indice relative to the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void Num2DTo1D (const int  iNoPointU,
+                          const int  iNoPointV,
+                          int       &amp;oNoPoint) const = 0 ;
+
+//==============================================================================================================
+// Added methods for the public access to the SetOfPoints specific to the CATCldGrid.
+//==============================================================================================================
+
+  /**
+   * Returns the two dimensions of the grid.
+   */
+  virtual void GetNbPointsUV (int &amp;oNbPointsU,
+                              int &amp;oNbPointsV) const = 0 ;
+
+  /**
+   * Returns the indexes 2D-array.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done
+   * by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method, its sizes must be greater
+   * than the expected &lt;tt&gt;oNbPointsU&lt;/tt&gt; and &lt;tt&gt;oNbPointsV&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.
+   */
+  virtual void GetPointsUV (int   &amp;oNbPointsU,
+                            int   &amp;oNbPointsV,
+                            int** &amp;ioIndexes) const = 0 ;
+
+  /**
+   * Returns the indexes array for a row.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be greater
+   * than the expected &lt;&lt;t&gt;&gt;oNbPointsV&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.
+   */
+  virtual void GetPointsV (const int  iNoRowU,
+                           int       &amp;oNbPointsV,
+                           int*      &amp;ioIndexes) const = 0 ;
+
+  /**
+   * Returns the indexes array for a column.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;, its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method and its size must be greater
+   * than the expected &lt;&lt;t&gt;&gt;oNbPointsU&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.
+   */
+  virtual void GetPointsU (const int  iNoColV,
+                           int       &amp;oNbPointsU,
+                           int*      &amp;ioIndexes) const = 0 ;
+
+//==============================================================================================================
+// Specific points management for the CATCldGrid.
+//==============================================================================================================
+
+  /**
+   * Adds points given by their coordinates.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if &lt;tt&gt;iNbPoints&lt;/tt&gt; is different
+   * from the first call of the &lt;tt&gt;AddLine&lt;/tt&gt; or &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddLine (const int    iNbPoints,
+                        const float* iCoords) = 0 ;
+
+  /**
+   * Adds points given by their coordinates.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if &lt;tt&gt;iNbPoints&lt;/tt&gt; is different
+   * from the first call of the &lt;tt&gt;AddLine&lt;/tt&gt; or &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddLine (const int     iNbPoints,
+                        const double* iCoords) = 0 ;
+
+  /**
+   * Adds points given by their coordinates and returns
+   * their indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION 1:&lt;/b&gt; If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method,
+   * its size must be greater than &lt;tt&gt;iNbPoints&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.&lt;br&gt;
+   * &lt;b&gt;CAUTION 2:&lt;/b&gt; An exception is raised if &lt;tt&gt;iNbPoints&lt;/tt&gt;
+   * is different from the first call of the &lt;tt&gt;AddLine&lt;/tt&gt; or
+   * &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddLine (const int     iNbPoints,
+                        const float*  iCoords,
+                        int*         &amp;ioIndexes) = 0 ;
+
+  /**
+   * Adds points given by their coordinates and returns
+   * their indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION 1:&lt;/b&gt; If &lt;tt&gt;ioIndexes&lt;/tt&gt; is &lt;tt&gt;NULL&lt;/tt&gt;,
+   * its allocation is done by the method.&lt;br&gt;
+   * Otherwise it has to be done by the calling method,
+   * its size must be greater than &lt;tt&gt;iNbPoints&lt;/tt&gt;.&lt;br&gt;
+   * But its release &lt;b&gt;HAS TO BE DONE&lt;/b&gt; by the calling method
+   * if it is not &lt;tt&gt;NULL&lt;/tt&gt; in case of no points.&lt;br&gt;
+   * &lt;b&gt;CAUTION 2:&lt;/b&gt; An exception is raised if &lt;tt&gt;iNbPoints&lt;/tt&gt;
+   * is different from the first call of the &lt;tt&gt;AddLine&lt;/tt&gt; or
+   * &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddLine (const int      iNbPoints,
+                        const double*  iCoords,
+                        int*          &amp;ioIndexes) = 0 ;
+
+  /**
+   * Adds points given by their indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if &lt;tt&gt;iNbPoints&lt;/tt&gt;
+   * is different from the first call of the &lt;tt&gt;AddLine&lt;/tt&gt; or
+   * &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddLine (const int  iNbPoints,
+                        const int* iIndexes) = 0 ;
+
+  /**
+   * Adds a &lt;tt&gt;CATCldScan&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if the number of points
+   * of the given scan is different from the first call of the
+   * &lt;tt&gt;AddLine&lt;/tt&gt; or &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddScan  (const CATCldScan* iScan) = 0 ;
+
+  /**
+   * Adds several &lt;tt&gt;CATCldScan&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if the number of points
+   * of each given scan is different from the first call of the
+   * &lt;tt&gt;AddLine&lt;/tt&gt; or &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddScans (const int    iNbScans,
+                         CATCldScan** iScans) = 0 ;
+
+  /**
+   * Adds a &lt;tt&gt;CATCldSetOfScans&lt;/tt&gt;.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; An exception is raised if the number of points
+   * of each scan in the set of scans is different from the first
+   * call of the &lt;tt&gt;AddLine&lt;/tt&gt; or &lt;tt&gt;AddScan(s)&lt;/tt&gt; methods.
+   */
+  virtual void AddScan (const CATCldSetOfScans* iScans) = 0 ;
+
+  /**
+   * Removes one point given by its relative indices in the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.&lt;br&gt;
+   * A point is removed by setting its index to 0.
+   */
+  virtual void RemovePointUV (const int iNoPointU,
+                              const int iNoPointV) = 0 ;
+
+//==============================================================================================================
+// Management of the point flag.
+//==============================================================================================================
+
+  /**
+   * Tests if the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; is active.
+   */
+  virtual CATBoolean IsActiveUV (const int iNoPointU,
+                                 const int iNoPointV) const = 0 ;
+
+  /**
+   * Tests if the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; is selected.
+   */
+  virtual CATBoolean IsSelectedUV (const int iNoPointU,
+                                   const int iNoPointV) const = 0 ;
+
+  /**
+   * Sets the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; as selected.
+   */
+  virtual void SetSelectedUV (const int iNoPointU,
+                              const int iNoPointV) = 0 ;
+
+  /**
+   * Sets the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; as unselected.
+   */
+  virtual void SetUnselectedUV (const int iNoPointU,
+                                const int iNoPointV) = 0 ;
+
+  /**
+   * Tests if the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; is filtered.
+   */
+  virtual CATBoolean IsFilteredUV (const int iNoPointU,
+                                   const int iNoPointV) const = 0 ;
+
+  /**
+   * Sets the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; as filtered.&lt;br&gt;
+   * &lt;b&gt;CAUTION:&lt;/b&gt; The point becomes inactive and invisible.
+   */
+  virtual void SetFilteredUV (const int iNoPointU,
+                              const int iNoPointV) = 0 ;
+
+  /**
+   * Sets the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point in the
+   * &lt;tt&gt;CATCldGrid&lt;/tt&gt; as unfiltered.
+   */
+  virtual void SetUnfilteredUV (const int iNoPointU,
+                                const int iNoPointV) = 0 ;
+
+//==============================================================================================================
+// Indexes management in a CATCldUniCell.
+//==============================================================================================================
+
+  /**
+   * Returns the index in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th
+   * point in the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual int GetIndexUV (const int iNoPointU,
+                          const int iNoPointV) const = 0 ;
+
+  /**
+   * Sets the index in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point
+   * in the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetIndexUV (const int iNoPointU,
+                           const int iNoPointV,
+                           const int iIndex) = 0 ;
+
+  /**
+   * Swaps the indexes in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt; of the &lt;tt&gt;(iNoPointU1,iNoPointV1)&lt;/tt&gt;&#x27;th and the
+   * &lt;tt&gt;(iNoPointU2,iNoPointV2)&lt;/tt&gt;&#x27;th points in the &lt;tt&gt;CATCldrid&lt;/tt&gt;.
+   */
+  virtual void SwapIndexesUV (const int iNoPointU1,
+                              const int iNoPointV1,
+                              const int iNoPointU2,
+                              const int iNoPointV2) = 0 ;
+
+  /**
+   * Returns the relative indices in the &lt;tt&gt;CATCldGrid&lt;/tt&gt; of a point
+   * from its index in the &lt;tt&gt;CATCldSetOfPoints&lt;/tt&gt;.
+   */
+  virtual void GetNumPointUV (const int  iIndex,
+                              int       &amp;oNoPointU,
+                              int       &amp;oNoPointV) const = 0 ;
+
+//==============================================================================================================
+// The following methods are the public access to the SetOfPoints via the point indices relative to the
+// CATCldGrid.
+//==============================================================================================================
+
+  /**
+   * Returns the coordinates of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point
+   * of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void GetNumCoordsUV (const int iNoPointU,
+                               const int iNoPointV,
+                               float     oCoords[3]) const = 0 ;
+
+  /**
+   * Returns the coordinates of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point
+   * of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void GetNumCoordsUV (const int iNoPointU,
+                               const int iNoPointV,
+                               double    oCoords[3]) const = 0 ;
+
+  /**
+   * Returns the associated information of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th
+   * point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void GetNumInfoUV (const int      iNoPointU,
+                             const int      iNoPointV,
+                             CATCldInfoPnt &amp;oInfo) const = 0 ;
+
+  /**
+   * Returns the coordinates and the associated information of the
+   * &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void GetNumPointUV (const int      iNoPointU,
+                              const int      iNoPointV,
+                              float          oCoords[3],
+                              CATCldInfoPnt &amp;oInfo) const = 0 ;
+
+  /**
+   * Returns the coordinates and the associated information of the
+   * &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void GetNumPointUV (const int      iNoPointU,
+                              const int      iNoPointV,
+                              double         oCoords[3],
+                              CATCldInfoPnt &amp;oInfo) const = 0 ;
+
+  /**
+   * Sets the coordinates of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point
+   * of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetNumCoordsUV (const int   iNoPointU,
+                               const int   iNoPointV,
+                               const float iCoords[3]) = 0 ;
+
+  /**
+   * Sets the coordinates of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point
+   * of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetNumCoordsUV (const int    iNoPointU,
+                               const int    iNoPointV,
+                               const double iCoords[3]) = 0 ;
+
+  /**
+   * Sets the associated information of the &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th
+   * point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetNumInfoUV (const int           iNoPointU,
+                             const int           iNoPointV,
+                             const CATCldInfoPnt iInfo) = 0 ;
+
+  /**
+   * Sets the coordinates and the associated information of the
+   * &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetNumPointUV (const int           iNoPointU,
+                              const int           iNoPointV,
+                              const float         iCoords[3],
+                              const CATCldInfoPnt iInfo) = 0 ;
+
+  /**
+   * Sets the coordinates and the associated information of the
+   * &lt;tt&gt;(iNoPointU,iNoPointV)&lt;/tt&gt;&#x27;th point of the &lt;tt&gt;CATCldGrid&lt;/tt&gt;.
+   */
+  virtual void SetNumPointUV (const int           iNoPointU,
+                              const int           iNoPointV,
+                              const double        iCoords[3],
+                              const CATCldInfoPnt iInfo) = 0 ;
+
+} ;
+
+CATDeclareHandler (CATCldGrid, CATCldUniCell) ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCldGenEntity.html">← 上一页: CATCldGenEntity.h</a></div>
+        <div><a href="CATCldMultiCell.html">下一页: CATCldMultiCell.h →</a></div>
+    </div>
+</body>
+</html>

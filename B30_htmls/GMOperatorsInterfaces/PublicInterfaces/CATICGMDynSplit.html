@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMDynSplit.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMDynSplit.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDynShell.html">← 上一页: CATICGMDynShell.h</a></div>
+        <div><a href="CATICGMDynThickness.html">下一页: CATICGMDynThickness.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMDynSplit_h_
+#define CATICGMDynSplit_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMDynOperator.h&quot;
+#include &quot;CATDynOperatorDef.h&quot;
+
+class CATBody;
+class CATPlane;
+class CATSurface;
+class CATTopData;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMDynSplit;
+
+/**
+	* Class defining the operator that splits a 3D body.
+	*&lt;br&gt;
+	* The CATICGMDynSplit operator follows the global frame of the topological operators and satisfies the smart mechanism: 
+	* the input bodies are not modified. A new resulting body is created, 
+	* possibly sharing data with the input bodies.
+	*&lt;ul&gt;
+	* &lt;li&gt;A CATICGMDynSplit operator is created with the &lt;tt&gt;CATCGMCreateDynSplit&lt;/tt&gt; global function:
+	* It must be directly released with the &lt;tt&gt;Release&lt;/tt&gt; method. It is not streamable. 
+	*&lt;li&gt;Options can be precised (such as the splitting object) with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods, before
+	* asking for the computation with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+	*&lt;li&gt;In both cases, the result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+	* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+	* geometric factory.
+	*&lt;/ul&gt;
+	*/
+class ExportedByCATGMOperatorsInterfaces CATICGMDynSplit: public CATICGMDynOperator
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMDynSplit();
+
+  /**
+	 * Defines the splitting plane.
+	 * @param iSplittingPlane
+	 * The pointer to the plane that splits the input body.
+	 */
+  virtual void SetSplit(CATPlane *iSplittingPlane) = 0;
+
+  /**
+	 * Defines the splitting surface.
+	 * @param iSplittingSurface
+	 * The pointer to the surface that splits the input body.
+	 */
+  virtual void SetSplit(CATSurface *iSplittingSurface) = 0;
+
+  /**
+	 * Defines the splitting body.
+	 * @param iSplittingBody
+	 * The pointer to the body that splits the input body. &lt;tt&gt;iSplittingBody&lt;/tt&gt; can contain several
+	 * shell domains if their orientations are compatible.
+	 */
+  virtual void SetSplit(CATBody *iSplittingBody) = 0;
+
+  /**
+	 * Indicates whether the Split Operation has removed some material to the body or not.
+	 * @return
+     * &lt;tt&gt;TRUE&lt;/tt&gt; if it has removed some material, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+    */
+  virtual CATBoolean GetRelimitation() = 0;
+
+#ifdef CATIACGMR216CAA
+
+  /**
+  * Sets Selection Mode.
+  * Allows to decide among 3 possible behaviors for the split operator
+  * (CATDynPositionVsPlaneMode, CATDynKeepMode, CATDynRemoveMode)
+  * @param iSelectionMode
+  * The selection mode. CATDynPositionVsPlaneMode by default.
+  */
+  virtual void SetSelectionMode(CATDynSelectionMode iSelectionMode) = 0;
+
+#endif
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMDynSplit(); // -&gt; delete can&#x27;t be called
+};
+
+/**
+* Creates a CATICGMDynSplit operator.
+* @param iFactory
+* The factory of the geometry. 
+* @param iData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+* @param iBody
+* The pointer to the body to split.
+* @param iSplitType
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; to keep. 
+* &lt;dl&gt;
+* &lt;dt&gt;&lt;tt&gt;CATSplitPositiveSideOnly&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; on the positive side of the splitting object is kept.
+* &lt;dt&gt;&lt;tt&gt;CATSplitNegativeSideOnly&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; on the negative side of the splitting object is kept.
+* &lt;/dl&gt;
+* @param iBody
+* The pointer to the body to split.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMDynSplit *CATCGMCreateDynSplit(
+  CATGeoFactory *iFactory,
+  CATTopData *iData,
+  CATBody *iBody,
+  CATDynSplitType iSplitType);
+
+#ifdef CATIACGMR215CAA
+/**
+* Creates a CATICGMDynSplit operator.
+* @param iFactory
+* The factory of the geometry. 
+* @param iData
+* The pointer to the data defining the software configuration and the journal. If the journal inside &lt;tt&gt;iData&lt;/tt&gt; 
+* is &lt;tt&gt;NULL&lt;/tt&gt;, it is not filled.
+* @param iBody
+* The pointer to the body to split.
+* @param iSplitType
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; to keep. 
+* &lt;dl&gt;
+* &lt;dt&gt;&lt;tt&gt;CATSplitPositiveSideOnly&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; on the positive side of the splitting object is kept.
+* &lt;dt&gt;&lt;tt&gt;CATSplitNegativeSideOnly&lt;/tt&gt;&lt;/dt&gt;&lt;dd&gt;
+* The portion of &lt;tt&gt;iBody&lt;/tt&gt; on the negative side of the splitting object is kept.
+* &lt;/dl&gt;
+* @param iSelectionMode
+* Allows to decide among 3 possible behaviors for the split operator
+* (CATDynPositionVsPlaneMode, CATDynKeepMode, CATDynRemoveMode)
+* @param iBody
+* The pointer to the body to split.
+* @return [out, IUnknown#Release]
+* The pointer to the created operator. To be released with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+*/
+ExportedByCATGMOperatorsInterfaces CATICGMDynSplit *CATCGMCreateDynSplit(
+  CATGeoFactory *iFactory,
+  CATTopData *iData,
+  CATBody *iBody,
+  CATDynSplitType iSplitType,
+  CATDynSelectionMode iSelectionMode);
+#endif
+
+#endif /* CATICGMDynSplit_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMDynShell.html">← 上一页: CATICGMDynShell.h</a></div>
+        <div><a href="CATICGMDynThickness.html">下一页: CATICGMDynThickness.h →</a></div>
+    </div>
+</body>
+</html>

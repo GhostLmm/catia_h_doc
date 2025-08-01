@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIPrtProceduralView.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIPrtProceduralView.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtPart.html">← 上一页: CATIPrtPart.h</a></div>
+        <div><a href="CATIREdge.html">下一页: CATIREdge.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIPrtProceduralView_h
+#define CATIPrtProceduralView_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &lt;CATISpecObject.h&gt;
+#include &lt;CATUnicodeString.h&gt;
+ 
+class CATListValCATISpecObject_var;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIPrtProceduralView;
+#else
+extern &quot;C&quot; const IID IID_CATIPrtProceduralView;
+#endif
+
+
+/**
+ * Interface to insert and reorder a solid feature into a procedural body. 
+ * &lt;b&gt;Role&lt;/b&gt;: A procedural body, see the @href CATIMechanicalTool
+ * interface, is a body which contains solid features involved in the procedural view 
+ * of the body. The solid feature (@href CATIShapeFeatureProperties ) participates to 
+ * the global topological result of 
+ * the federating body in which it is instanciated. It is plugged in a &quot;spine&quot; and 
+ * is automatically involved in a boolean operation with the previous solid feature. The
+ * @href CATIBodyRequest interface enables you to retrieve the result of this procedural body.
+ *
+ * &lt;br&gt;This interface is available for the features which can be set in a procedural body. 
+ * It enables you to:
+ * &lt;ul&gt;
+ * &lt;li&gt;Insert one into a Body or Solid Body: see  @href #InsertInProceduralView &lt;/li&gt;
+ * &lt;li&gt;Relocate one: see  @href #Reorder &lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+class ExportedByMecModItfCPP CATIPrtProceduralView : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+ public:
+
+ /**
+ * Relocates a solid feature in the procedural body.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to move a solid feature, already existing
+ * into a procedural body, at another position.
+ * If the destination for reorder reveals inappropriate, a new destination can sometimes
+ * be redefined automatically.
+ * @param iDestination
+ * The position of the feature into the procedural body depends on this argument:
+ * &lt;ul&gt;
+ * &lt;li&gt;It is a &lt;b&gt;Body or Solid Body&lt;/b&gt;: the feature is set at the first position in the 
+ * Body or Solid Body.&lt;/li&gt;
+ * &lt;li&gt;It is a &lt;b&gt;solid feature&lt;/b&gt;: the feature is set after &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;It is &lt;b&gt;NULL_var&lt;/b&gt;: iDestination is automatically valuated with
+ * the &quot;in work object&quot; feature. You set it thanks to the @href CATIPrtPart#SetCurrentFeature,
+ * method and you retrieve it thanks to the @href CATIPrtPart#GetCurrentFeature method.&lt;/li&gt;
+ * &lt;/ul&gt;
+ * If &lt;tt&gt;iDestination&lt;/tt&gt; or the &quot;in work object&quot; feature is not valid, the &lt;tt&gt;Reorder&lt;/tt&gt;
+ * method will throw @href CATInternalError exceptions.
+ */
+  virtual void Reorder(const CATISpecObject_var&amp; iDestination) = 0;
+
+/**
+ * @nodoc
+ */
+  virtual void GetLimitPositionsForReorder(CATListValCATISpecObject_var&amp; oLst) = 0;
+  
+/**
+ * @nodoc
+ */
+  virtual void ExtractFromProceduralView()=0;
+
+  /**
+ * Inserts a solid feature into a procedural body.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables to insert a solid feature into a procedural body. If the
+ * feature already exists in a Body or Solid Body, use the @href #Reorder method to move it.
+ * @param iDestination
+ * The position of the feature into the procedural body depends on this argument:
+ * &lt;ul&gt;
+ * &lt;li&gt;It is a &lt;b&gt;Body or Solid Body&lt;/b&gt;: the feature is set at the first position in the 
+ * Body or Solid Body.&lt;/li&gt;
+ * &lt;li&gt;It is a &lt;b&gt;solid feature&lt;/b&gt;: the feature is set after &lt;tt&gt;iDestination&lt;/tt&gt;&lt;/li&gt;
+ * &lt;li&gt;It is &lt;b&gt;NULL_var&lt;/b&gt; (the default value): iDestination is automatically valuated with
+ * the &quot;in work object&quot; feature. You set it thanks to the @href CATIPrtPart#SetCurrentFeature,
+ * method and you retrieve it thanks to the @href CATIPrtPart#GetCurrentFeature method.
+ * If the &quot;in work object&quot; is a Body or Solid Body, the insertion will take place in last
+ * position of the Body or Solid Body. &lt;/li&gt;
+ * &lt;/ul&gt;
+ * If &lt;tt&gt;iDestination&lt;/tt&gt; or the &quot;In work object&quot; feature is not valid, the &lt;tt&gt;InsertInProceduralView&lt;/tt&gt;
+ * method will throw @href CATInternalError exceptions.
+ */
+  virtual void InsertInProceduralView(const CATISpecObject_var&amp;  iDestination = NULL_var ) =0 ;
+};
+
+CATDeclareHandler(CATIPrtProceduralView,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtPart.html">← 上一页: CATIPrtPart.h</a></div>
+        <div><a href="CATIREdge.html">下一页: CATIREdge.h →</a></div>
+    </div>
+</body>
+</html>

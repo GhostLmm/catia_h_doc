@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisBase/PublicInterfaces/CATSamDimensionData.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisBase/PublicInterfaces/CATSamDimensionData.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSamDimension.html">← 上一页: CATSamDimension.h</a></div>
+        <div><a href="CATSamExplicitRoot.html">下一页: CATSamExplicitRoot.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES  1999
+/** @CAA2Required */
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+//=============================================================================
+//
+// CATSamDimensionData
+//
+//=============================================================================
+//
+// Usage Notes: dimension information of a collector characteristic
+//
+//=============================================================================
+// Juin 99   Creation                                                  JND, LBK
+//=============================================================================
+#ifndef CATSamDimensionData_H_
+#define CATSamDimensionData_H_
+
+// Acces au Model Explicit
+#include &quot;CATSAM0Explicit.h&quot;
+#include &quot;CATAnalysisExplicitTypes.h&quot;
+
+// Acces au CATListOfCatUnicodeString
+#include &quot;CATListOfCATUnicodeString.h&quot;
+
+class CATSamAxis;
+class CATSamDimension;
+class CATSamDimensionDataExtension;
+
+/**
+ * Dimension information of a collector characteristic.
+ * The values in a CATAnalysisCharacCollector are stored as follows :&lt;br&gt;
+ * Pointer[NbPositions][NbLamina][NbSMI][NbRepeat[IndexPosition][IndexLamina][IndexSmi]][NbComponents]&lt;br&gt;
+ * However NbRepeat can be variable with the position number, lamina number and SMI number.&lt;br&gt;
+ * Let us assume NbPositions=2, NbLamina=1, NbSMI=2, NbRepeat[P1][L1][S1]=2, NbRepeat[P1][L1][S2]=1,
+ *                                                   NbRepeat[P2][L1][S1]=0, NbRepeat[P2][L1][S2]=3
+ *                                               and NbComponents=2.
+ * The values in memory are stored as follows :&lt;br&gt;
+ * &lt;tt&gt;
+ * P1 L1 S1 R11-1 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; R11-2 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * &quot;&quot; &quot;&quot; S2 R12-1 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * P2 L1 S2 R22-1 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; R22-2 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; R22-3 C1&lt;br&gt;
+ * &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot;&quot;&quot;&quot; C2&lt;br&gt;
+ * &lt;/tt&gt;
+ */
+class ExportedByCATSAM0Explicit CATSamDimensionData
+{
+  public :
+    // Default constructor.
+    CATSamDimensionData();
+    // Copy constructor
+    CATSamDimensionData(const CATSamDimensionData&amp; iDimensionData);
+
+    // Destructor
+    virtual ~CATSamDimensionData();
+
+    // operators
+    CATSamDimensionData &amp;operator = (const CATSamDimensionData &amp;iDimensionData);
+    CATBoolean operator == (const CATSamDimensionData &amp;iDimensionData) ;
+
+    // Fill methods
+    HRESULT Fill(const int&amp; iNbPositions, const int * const iPositionsNumber, const int&amp; iNbLaminates, const int * const iLaminatesNumber, const int&amp; iNbSMI, const int * const iSMINumber,
+                 const int * const iNbRepeats, const int * const iRepeatsNumber, const CATSamAggregationMode * const iAggregationMode,
+                 const int&amp; iNbComponents, const int * const iComponentsNumber, const int&amp; iUnitaryValueSize) ;
+
+    HRESULT Fill(const int&amp; iNbPositions, const int * const iPositionsNumber, const int&amp; iNbLaminates, const int * const iLaminatesNumber, const int&amp; iNbSMI, const int * const iSMINumber,
+                 const int * const iNbRepeats, const int * const iRepeatsNumber, const CATSamAggregationMode * const iAggregationMode,
+                 CATSamValue iValueType, CATSamMathType iMathType, const int&amp; iMathDimension) ;
+
+    // SetDataInformations
+    HRESULT SetDataInformations(CATSamValue iValueType, CATSamMathType iMathType, const int&amp; iMathDimension) ;
+
+    // SetNbPositions
+    HRESULT SetNbPositions(const int&amp; iNbPositions, const int * const iPositionsNumber = NULL) ;
+
+    // SetNbLaminates
+    HRESULT SetNbLaminates(const int&amp; iNbLaminates, const int * const iLaminatesNumber = NULL) ;
+
+    // SetNbSMI
+    HRESULT SetNbSMI(const int&amp; iNbSMI, const int * const iSMINumber = NULL) ;
+
+    // SetNbRepeat
+    HRESULT SetNbRepeat(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex, const int&amp; iNbRepeats, const int * const iRepeatsNumber = NULL, const CATSamAggregationMode * const iAggregationMode = NULL);
+
+    // SetNbComponents
+    HRESULT SetNbComponents(const int&amp; iNbComponents, const int * const iComponentNumber = NULL) ;
+
+    // SetUnitaryValueSize
+    HRESULT SetUnitaryValueSize(CATSamValue iValueType) ;
+    HRESULT SetUnitaryValueSize(const int&amp; iUnitaryValueSize) ;
+
+    // Get/SetValuesDistributionMode
+    inline CATSamValuesDistributionMode GetValuesDistributionMode() const;
+    inline HRESULT SetValuesDistributionMode(CATSamValuesDistributionMode iValuesDistributionMode);
+
+    // Get Positions
+    int GetNbPositions() const ;
+    const int* GetPositions() const ;
+
+    // Get Laminates
+    int GetNbLaminates() const ;
+    const int* GetLaminates() const ;
+
+    // Get SMI
+    int GetNbSMI() const ;
+    const int* GetSMI() const ;
+
+    // Get Repeat &amp;&amp; AggregationMode
+    int GetNbRepeatTotal() const ;
+    int GetNbRepeat(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex) const;
+    const int* GetRepeat(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex) const;
+    const CATSamAggregationMode* GetAggregationMode(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex) const;
+    HRESULT GetNbRepeatTo(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex, const int&amp; iRepeatIndex, int &amp;oNbRepeatTo) const;
+    inline CATBoolean HadNegativeNbRepeat() const;
+    CATBoolean HadNbRepeatGreaterThanOne() const;
+    HRESULT ApplyOffsetOnRepeatNumber(int iOffset);
+
+    // GetComponents
+    int GetNbComponents() const ;
+    const int* GetComponents() const ;
+
+    // Get Size &amp; NbValues
+    int GetSizeValuesTotal() const ;
+    int GetNbValuesTotal() const ;
+    int GetSizeValues(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex) const ;
+    int GetNbValues(const int&amp; iPositionIndex, const int&amp; iLaminaIndex, const int&amp; iSMIIndex) const ;
+    int GetUnitaryValueSize() const;
+
+    // Compute the offset on Values Pointer according to the definition of the object.
+    // @param iValuePointerBase : The Pointer on Values.
+    // @param iPositionIndex : The Position Index.
+    // @param iLaminaIndex : The Lamina Index.
+    // @param iSMIIndex : The SMI Index.
+    // @param iRepeatIndex : The Repeat Index for [iPositionIndex, iLaminaIndex, iSMIIndex].
+    // @param iComponentIndex : The Component Index.
+    const void* ValuesAddress(const void* iValuePointerBase, const int&amp; iPositionIndex, int iLaminaIndex = 0, int iSMIIndex = 0, int iRepeatIndex = 0, int iComponentIndex = 0) const ;
+
+    // Dump the contents of the object.
+    void Dump(int iIndent = 0, int iLoopSize = 10) const ; 
+    void Dump(CATListValCATUnicodeString* oListOfString, int iIndent = 0, int iLoopSize = 10) const ;
+
+  protected :
+    // Give access for CATSamAxis et CATSamDimension
+    friend class CATSamAxis;
+    friend class CATSamDimension;
+
+    // Compare the Structure of another CATSamDimensionData object to the current instance.
+    CATBoolean CompareStructure(const CATSamDimensionData &amp;iDimensionData) const;
+  
+    // Init Data Members
+    HRESULT InitSMI();
+    HRESULT InitRepeats();
+    HRESULT InitLaminates();
+    HRESULT InitPositions();
+    HRESULT InitComponents();
+
+    // Reset Data Members
+    HRESULT ResetAll();
+    HRESULT ResetSMI();
+    HRESULT ResetRepeats();
+    HRESULT ResetPositions();
+    HRESULT ResetLaminates();
+    HRESULT ResetComponents();
+    HRESULT ResetDataInformations();
+    HRESULT ResetValuesInformations();
+
+    // Data Members
+    int*                          _Positions ;
+    int*                          _Components ;
+    int                           _NbPositions ;
+    int                           _NbComponents ;
+    int                           _NbValues ;
+    int                           _SizeValues ;
+    int                           _UnitarySizeValue ;
+    CATSamValuesDistributionMode  _ValuesDistributionMode ;
+    CATSamDimensionDataExtension* _DataExtensionPtr;
+} ;
+
+/*****************************************************************/
+/* Implementation of inline Methods                              */
+/*****************************************************************/
+inline int CATSamDimensionData::GetNbPositions() const {return _NbPositions;}
+inline const int* CATSamDimensionData::GetPositions() const {return (const int*)_Positions;}
+inline int CATSamDimensionData::GetNbComponents() const {return _NbComponents;}
+inline const int* CATSamDimensionData::GetComponents() const { return (const int*)_Components;}
+inline HRESULT CATSamDimensionData::ResetDataInformations() {_NbValues = _SizeValues = _UnitarySizeValue = 0; _ValuesDistributionMode = CATSamValuesDistributionModePositive; return S_OK;}
+inline HRESULT CATSamDimensionData::ResetValuesInformations() {_NbValues = _SizeValues = 0; return S_OK;}
+inline CATBoolean CATSamDimensionData::HadNegativeNbRepeat() const { return FALSE; }
+inline CATSamValuesDistributionMode CATSamDimensionData::GetValuesDistributionMode() const { return _ValuesDistributionMode; }
+inline HRESULT CATSamDimensionData::SetValuesDistributionMode(CATSamValuesDistributionMode iValuesDistributionMode) { _ValuesDistributionMode = iValuesDistributionMode; return S_OK; }
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSamDimension.html">← 上一页: CATSamDimension.h</a></div>
+        <div><a href="CATSamExplicitRoot.html">下一页: CATSamExplicitRoot.h →</a></div>
+    </div>
+</body>
+</html>

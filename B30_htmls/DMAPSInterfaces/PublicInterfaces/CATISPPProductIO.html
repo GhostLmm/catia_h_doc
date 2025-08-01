@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMAPSInterfaces/PublicInterfaces/CATISPPProductIO.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DMAPSInterfaces/PublicInterfaces/CATISPPProductIO.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPProcessContainer.html">← 上一页: CATISPPProcessContainer.h</a></div>
+        <div><a href="CATISPPResourceManagement.html">下一页: CATISPPResourceManagement.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+// COPYRIGHT DASSAULT SYSTEMES  1997
+/**********************************************************************/
+/* DON T DIRECTLY INCLUDE THIS HEADER IN YOUR APPLICATION CODE. IT IS */
+/* REQUIRED TO BUILD CAA APPLICATIONS BUT IT MAY DISAPEAR AT ANY TIME */
+/**********************************************************************/
+//=============================================================================
+//
+// CATISPPProductIO :
+//
+//=============================================================================
+// Usage Notes:
+//
+//=============================================================================
+// Nov. 97   Creation                                   P. Motte
+//=============================================================================
+#ifndef CATISPPProductIO_H
+#define CATISPPProductIO_H
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;ProcessInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+class CATISPPItem_var ;
+class CATISPPAbstractActivity_var ;
+class CATISPPProductIO_var ;
+class CATISPPProductFlow_var ;
+class CATListValCATBaseUnknown_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByProcessInterfaces IID IID_CATISPPProductIO ;
+#else
+extern &quot;C&quot; const IID IID_CATISPPProductIO ;
+#endif
+
+/**
+* Interface CATISPPProductIO :
+**/
+
+class ExportedByProcessInterfaces CATISPPProductIO : public CATBaseUnknown
+{
+  CATDeclareInterface ;  
+
+  public:
+    
+    /**
+    *	GetProductInstance() :
+    *	Cette methode permet de recuperer l&#x27;instance porte par le ProductIO.
+    **/
+    virtual CATISPPItem_var	GetProductInstance() const = 0 ;
+    virtual void			SetProductInstance(const CATISPPItem_var &amp; iItem) = 0 ;
+    virtual CATISPPItem_var	GetDefaultItem() const = 0 ;
+    virtual void			SetDefaultItem(const CATISPPItem_var &amp; iItem) = 0 ;
+
+    /**
+    *	Creation d un Product Flow vers (ou en provenance) d un autre ProductIO
+    **/
+    virtual void				LinkTo(const CATISPPProductIO_var &amp; iProductIO) = 0 ;
+
+    /**
+    *	Recuperation du Product Flow associe 
+    **/
+    virtual CATListValCATBaseUnknown_var*		GetProductFlow() const = 0 ;
+
+    /**
+    *	Recuperation de l&#x27;activite le long du Product Flow associe 
+    **/
+//    virtual CATISPPAbstractActivity_var	GetActivityAlongFlow() const = 0 ;
+    virtual CATListValCATBaseUnknown_var*	GetProductIOAlongFlow() const = 0 ;
+
+    /**
+    *	Recuperation de l&#x27;activite associee 
+    **/
+    virtual CATISPPAbstractActivity_var	GetActivity() const = 0 ;
+	/**
+    *	This method allows to set the Label (external user name) of an ProductIO to iLabel.
+    *   The Label of an ProductIO does not need to be unique across a Process document.
+    *   A default Label is given to an ProductIO as it is created.
+    **/
+    virtual void SetLabel(const CATUnicodeString&amp; iLabel) = 0 ;
+    
+    /**
+    *	This method returns the Label (external user name) of an ProductIO.
+    *   A default Label is given to an ProductIO as it is created.    
+    **/
+    virtual CATUnicodeString GetLabel() const = 0 ;
+
+};
+CATDeclareHandler( CATISPPProductIO, CATBaseUnknown) ;
+#endif
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISPPProcessContainer.html">← 上一页: CATISPPProcessContainer.h</a></div>
+        <div><a href="CATISPPResourceManagement.html">下一页: CATISPPResourceManagement.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisualizationBase/PublicInterfaces/CAT3DMarkerGP.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VisualizationBase/PublicInterfaces/CAT3DMarkerGP.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DManipulator.html">← 上一页: CAT3DManipulator.h</a></div>
+        <div><a href="CAT3DPlanRep.html">下一页: CAT3DPlanRep.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAT3DMarkerGP_H
+#define CAT3DMarkerGP_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+//------------------------------------------------------------------------------
+// Abstract: Graphic 3D marker. 
+//------------------------------------------------------------------------------
+// Inheritance: CAT3DMarker
+//                 CATGraphicPrimitive
+//                    CATBaseUnknown (SYSTEM framework)
+//------------------------------------------------------------------------------
+
+#include &quot;CATViz.h&quot;
+
+#include &quot;CATGraphicPrimitive.h&quot;
+#include &quot;CATVizMacForMetaClass.h&quot;
+
+class CATMathPointf;
+class CATStreamer;
+#include &quot;CATSymbolType.h&quot;
+
+/**
+ * Class to create the graphic primitive of 3D markers.
+ * &lt;b&gt;Role&lt;/b&gt;: This graphic primitive is a graphic 3D marker to point to one or
+ * several specific points in the space. A 3D marker size is constant, it does not depend
+ * on the zoom.
+ */
+class ExportedByCATViz CAT3DMarkerGP : public CATGraphicPrimitive
+{ 
+ friend class CATMarshallable3DMarkerGP;
+ CATDeclareClass;
+ CATVizDeclareClass;
+ 
+ public :
+
+  /**
+   * Default constructor.
+   */
+   CAT3DMarkerGP ();
+
+  /**
+   * Constructs 3D markers from a list of 3D points, and the type of symbol wanted to be used.
+   * @param iPoints
+   *   Array containing the coordinates of the points to mark : XYZXYZXYZ... Its size is equal
+   *   to three times the number of points.
+   * @param iNbPoints
+   *   The number of points to mark, which coordinates are stored in the &lt;tt&gt;iPoints&lt;/tt&gt; array.
+   *   If no &lt;tt&gt;iNbPoints&lt;/tt&gt; is specified, the number of points is assumed to be 1.
+   * @param iSymbol
+   *   The symbol wanted to be used to mark the points.
+   *   The default value is &lt;tt&gt;CROSS&lt;/tt&gt;.
+   * @param iAlloc
+   *    Flag used to specify whether points must be duplicated or not.
+   *    &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+   *    &lt;dl&gt;
+   *      &lt;dt&gt;ALLOCATE&lt;/dt&gt;
+   *        &lt;dd&gt;All data are duplicated into the graphic primitive&lt;/dd&gt;
+   *      &lt;dt&gt;DONT_ALLOCATE&lt;/dt&gt;
+   *        &lt;dd&gt;The graphic primitive has a pointer to the data given as parameter
+   *        Warning : If the number of points is equal to 1, the points are duplicated
+   *		anyway (Memory issue). The input data must still be destroyed by the caller.&lt;/dd&gt;
+   *    &lt;/dl&gt;
+   *    The default value is &lt;tt&gt;ALLOCATE&lt;/tt&gt;.
+   */
+   CAT3DMarkerGP (const float iPoints[], const int iNbPoints=1, CATSymbolType iSymbol = CROSS, const int iAlloc=ALLOCATE);
+   
+
+   /**
+    *sets the symbol used to mark the points to a new value.
+    *@param iSymbol
+	  * The new symbol you wish to use.
+    */
+
+   void SetSymbolType (CATSymbolType iSymbol);
+  /**
+   * @nodoc
+   */
+   virtual void Stream(CATStreamer&amp; oStr,int iSaveType=0);
+
+  /**
+   * @nodoc
+   */
+   virtual void UnStream(CATStreamer&amp; iStr);
+
+
+  /**
+   * Retrieves marked points coordinates and the symbol type used
+   * to mark them.
+   * This method must be called this way:
+   * &lt;pre&gt;
+   * float * points;
+   * int nbPoints;
+   * SymbolType symbol;
+   *
+   * Get(&amp;points, &amp;NbPoints, &amp;symbol);
+   * &lt;/pre&gt;
+   * @param oPoints
+   *   Retrieves an array containing marked points coordinates: XYZXYZXYZ...
+   *   Its size is equal to three times the number of marked points.
+   * @param oNbPoints
+   *   Retrieves the number of points marked by this 3D marker.
+   * @param oSymbol
+   *   Retrieves the symbol used to mark the points.
+   */
+   inline void Get (float **oPoints, int *oNbPoint, CATSymbolType * oSymbol) const;
+
+  /**
+   * Draws the 3D marker.
+   * @param iRender
+   *   The render through which the 3D marker is drawn.
+   * @param iViewpoint
+   *   The viewpoint through which the 3D marker is seen.
+   * @param iViewport
+   *   The viewport in which the 3D marker is located.
+   */
+   virtual void Draw (CATRender &amp; iRender);
+    
+  /**
+   * @nodoc
+   */
+  virtual int DetailCulling(CATRender *render);
+  
+  /**
+   * @nodoc
+   */
+   virtual CATVizPrimitive * GetVizPrimitive(int &amp;oAllocateMode);
+
+  /**
+   * @nodoc
+   */
+   virtual void SetVizPrimitive(CATVizPrimitive * iPrimitive, int iAllocateMode);
+
+//------------------------------------------------------------------------------
+
+ protected :
+
+    virtual ~CAT3DMarkerGP();
+
+//------------------------------------------------------------------------------
+
+ private :
+
+   //CATSymbolType _symbol;
+   //float      *_points;
+   //int        _nb_points;
+   //int        _alloc;
+   
+   unsigned short _symbol;
+   unsigned char  _type;
+
+   union 
+   {
+      struct
+      {
+         float  *_points;
+         int     _nb_points;
+         int     _alloc;
+      } _multiple;
+      struct
+      {
+         float _coord[3];
+      } _single;
+   } _data;
+};
+
+/**
+ * @nodoc
+ */
+#define MARKER_SINGLE 0
+/**
+ * @nodoc
+ */
+#define MARKER_MULTIPLE 1
+
+inline void CAT3DMarkerGP::Get (float **points, int *nb_points, CATSymbolType *symbol) const
+{
+   *symbol = (CATSymbolType) _symbol;
+   if (_type == MARKER_MULTIPLE)
+   {
+      *points    = _data._multiple._points;
+      *nb_points = _data._multiple._nb_points;
+   }
+   else
+   {
+      *points = (float*) &amp;(_data._single._coord[0]);
+      *nb_points = 1;
+   }
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAT3DManipulator.html">← 上一页: CAT3DManipulator.h</a></div>
+        <div><a href="CAT3DPlanRep.html">下一页: CAT3DPlanRep.h →</a></div>
+    </div>
+</body>
+</html>

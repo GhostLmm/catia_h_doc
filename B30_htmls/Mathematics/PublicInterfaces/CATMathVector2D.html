@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics/PublicInterfaces/CATMathVector2D.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mathematics/PublicInterfaces/CATMathVector2D.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathVector.html">← 上一页: CATMathVector.h</a></div>
+        <div><a href="CATMathVector2Df.html">下一页: CATMathVector2Df.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathVector2D_H
+#define CATMathVector2D_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;CATMathematics.h&quot;
+
+#include &lt;math.h&gt;
+
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATMathPoint2D.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+class CATMath2x2Matrix;
+class CATMathPoint2D;
+
+/**
+ * Class representing a mathematical vector in dimension 2. 
+ */ 
+class ExportedByCATMathematics CATMathVector2D
+{
+public:
+//=============================================================================
+//- CONSTRUCTORS
+//=============================================================================
+/**
+ * Constructs a (0,0) vector.
+ */ 
+  INLINE CATMathVector2D ();
+
+/**
+ * Constructs a CATMathVector2D from coordinates.
+ */
+  INLINE CATMathVector2D (double iX, double iY);
+
+/**
+ * Constructs a CATMathVector2D from an array of two coordinates.
+ */
+  CATMathVector2D (const double Coord[]);
+
+/**
+ * Copy constructor.
+ */
+  INLINE CATMathVector2D (const CATMathVector2D &amp; iVectorToCopy);
+
+//=============================================================================
+//- Get/Set
+//=============================================================================
+/**
+ * Retrieves the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+  INLINE void GetCoord (double &amp; ioX, double &amp; ioY) const;
+
+/**
+ * Modifies the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D from 2 doubles.
+ */
+  INLINE void SetCoord (double iX, double iY);
+
+/**
+ * Retrieves the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D in an array of 2 doubles.
+ */
+  void GetCoord (double iCoord[]) const;
+  
+/**
+ * Modifies the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D from an array of 2 doubles.
+ */
+  void SetCoord (const double iCoord[]);
+
+
+/**
+ * Retrieves the X coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+  INLINE double GetX () const;
+  
+/**
+ * Modifies the X coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+  INLINE void SetX (double iX);
+
+/**
+ * Retrieves the Y coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+  INLINE double GetY () const;
+
+/**
+ * Modifies the Y coordinate of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+  INLINE void SetY (double iY);
+
+//=============================================================================
+//- Methods
+//=============================================================================
+
+/**
+ * Normalizes &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ *&lt;br&gt; Simply returns if the vector is null.
+ */
+  void Normalize();
+/**
+ * Returns the euclidean norm of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+    double Norm () const;
+
+/**
+ * Returns the square of the euclidean norm of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ */
+    double SquareNorm () const;
+
+
+
+/**
+ * Returns the angle (between - CATPI and CATPI radians) with another CATMathVector2D.
+ * &lt;br&gt; Returns &lt;tt&gt;0&lt;/tt&gt; if one vector is null. 
+ */
+  CATAngle GetAngleTo (const CATMathVector2D &amp; iOtherVector) const;
+
+/**
+ * Returns the diagnosis of parallelism with another CATMathVector2D.
+ * &lt;/br&gt;The method uses the numerical
+ * tolerance. For a user tolerance, use the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method.
+ * @return 
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if they are parallel.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsParallel(const CATMathVector2D &amp; iOtherVector) const;
+
+/**
+ * Returns the diagnosis of orthogonalism with another CATMathVector2D.
+ * &lt;/br&gt;The method uses the numerical
+ * tolerance. For a user tolerance, use the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method.
+ * @return 
+ * &lt;dl&gt;
+ * &lt;dt&gt;&lt;tt&gt;TRUE&lt;/tt&gt;        &lt;dd&gt;if they are orthogonal or one vector is null.
+ * &lt;dt&gt;&lt;tt&gt;FALSE&lt;/tt&gt;        &lt;dd&gt;otherwise.
+ * &lt;/dl&gt;
+ */
+  CATBoolean IsOrthogonal(const CATMathVector2D &amp; iOtherVector) const;
+
+
+//============================================================================
+//- Overloaded Operators
+//============================================================================
+/**
+ * Defines the addition of two CATMathVector2D.
+ */
+  INLINE CATMathVector2D operator + (const CATMathVector2D &amp; iAddedVector) const;
+  
+/**
+ * Defines the subtraction of two CATMathVector2D.
+ */
+  INLINE CATMathVector2D operator - (const CATMathVector2D &amp; iVector) const;
+
+/**
+ * Defines the opposite of a CATMathVector2D.
+ */
+  INLINE CATMathVector2D operator - () const;
+
+/**
+ * Defines the left side scalar muliplication.
+ */
+friend ExportedByCATMathematics CATMathVector2D operator *
+  (double iScalar, const CATMathVector2D &amp; iVector);
+
+/**
+ * Defines the left side scalar muliplication.
+ */
+ INLINE  CATMathVector2D operator * (double iScalar) const;
+
+/**
+ * Defines the scalar division.
+ */
+ INLINE CATMathVector2D operator / (double iScalar) const;
+
+/**
+ * Defines the dot product.
+ */
+  INLINE double operator * (const CATMathVector2D &amp; iVector) const;
+
+/**
+ * Defines the determinant.
+ */
+  INLINE double operator ^ (const CATMathVector2D &amp; iVector) const;
+/**
+ * @nodoc
+ * @deprecated V5R20 GetAngleTo
+ * Use now the &lt;tt&gt;GetAngleTo&lt;/tt&gt; method, in radian.
+ * &lt;br&gt;Returns the angle (between 0 and 180 degrees) with another CATMathVector2D.
+ */
+  CATAngle AngleTo (const CATMathVector2D &amp; iOtherVector) const;
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ */
+friend ExportedByCATMathematics ostream&amp; operator &lt;&lt; (ostream&amp; s,
+				const CATMathVector2D &amp; iVector);
+/**
+ * Dumps the coordinates of &lt;tt&gt;this&lt;/tt&gt; CATMathVector2D.
+ * &lt;br&gt;This writes the following line on the ostream:
+ * &lt;br&gt;&lt;tt&gt;( FirstCoord , SecondCoord )&lt;/tt&gt;
+ * @param iStream
+ * A pointer to the output. If &lt;tt&gt;0L&lt;/tt&gt;, the method dumps the 
+ * coordinates on the &lt;tt&gt;cout&lt;/tt&gt; output.
+ */
+    void Dump(ostream * iStream=0L) const;
+
+
+//=============================================================================
+// INTERNAL DATA
+//=============================================================================
+protected:
+  double _x, _y;
+
+
+//=============================================================================
+// FRIENDS
+//=============================================================================
+/**
+ * @nodoc
+ * @deprecated V5R20.
+ */
+friend ExportedByCATMathematics CATMath2x2Matrix operator %
+  (const CATMathVector2D &amp;iVector1, const CATMathVector2D &amp;iVector2);
+
+};
+
+
+//=============================================================================
+// INLINE IMPLEMENTATIONS
+//=============================================================================
+INLINE CATMathVector2D::CATMathVector2D()
+{
+  _x=0.;
+  _y=0.;
+}
+
+INLINE CATMathVector2D::CATMathVector2D(double X, double Y)
+{
+  _x=X;
+  _y=Y;
+}
+
+INLINE CATMathVector2D::CATMathVector2D(const CATMathVector2D &amp;CopiedVector)
+{
+  _x=CopiedVector._x;
+  _y=CopiedVector._y;
+}
+
+
+INLINE void CATMathVector2D::GetCoord(double &amp;X, double &amp;Y) const
+{
+  X=_x;
+  Y=_y;
+}
+
+INLINE double CATMathVector2D::GetX() const
+{
+  return _x;
+}
+
+INLINE double CATMathVector2D::GetY() const
+{
+  return _y;
+}
+
+// Setting the coordinates
+INLINE void CATMathVector2D::SetCoord(double X, double Y)
+{
+  _x=X;
+  _y=Y;
+}
+
+INLINE void CATMathVector2D::SetX(double X)
+{
+  _x=X;
+}
+
+INLINE void CATMathVector2D::SetY(double Y)
+{
+  _y=Y;
+}
+
+INLINE CATMathVector2D CATMathVector2D::operator+ (const CATMathVector2D &amp;Vector) const
+{
+  return CATMathVector2D(_x+Vector._x, _y+Vector._y);
+}
+
+INLINE CATMathVector2D CATMathVector2D::operator- (const CATMathVector2D &amp;Vector) const
+{
+  return CATMathVector2D(_x-Vector._x, _y-Vector._y);
+}
+
+INLINE CATMathVector2D CATMathVector2D::operator- () const
+{
+  return CATMathVector2D(-_x, -_y);
+}
+
+INLINE CATMathVector2D CATMathVector2D::operator * (double Scale) const
+{
+  return CATMathVector2D(_x*Scale, _y*Scale);
+}
+
+INLINE CATMathVector2D CATMathVector2D::operator / (double Scale) const
+{
+  return CATMathVector2D(_x/Scale, _y/Scale);
+}
+
+INLINE double CATMathVector2D::operator * (const CATMathVector2D &amp; Vector) const
+{
+  return (_x*Vector._x + _y*Vector._y);
+}
+
+INLINE double CATMathVector2D::operator ^ (const CATMathVector2D &amp; Vector) const
+{
+  return (_x*Vector._y - _y*Vector._x);
+}
+
+
+#endif
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathVector.html">← 上一页: CATMathVector.h</a></div>
+        <div><a href="CATMathVector2Df.html">下一页: CATMathVector2Df.h →</a></div>
+    </div>
+</body>
+</html>

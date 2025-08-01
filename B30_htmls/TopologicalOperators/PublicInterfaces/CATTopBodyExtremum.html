@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopologicalOperators/PublicInterfaces/CATTopBodyExtremum.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TopologicalOperators/PublicInterfaces/CATTopBodyExtremum.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATSolidTorus.html">← 上一页: CATSolidTorus.h</a></div>
+        <div><a href="CATTopCorner.html">下一页: CATTopCorner.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATTopBodyExtremum_h
+#define CATTopBodyExtremum_h
+
+//COPYRIGHT DASSAULT SYSTEMES  2003
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U1
+*/
+
+#include &quot;AnalysisTools.h&quot;
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+#include &quot;CATTopOperator.h&quot;
+#include &quot;CATMinMax.h&quot;
+
+class CATBody;
+class CATMathVector;
+class CATMathPoint;
+class CATCGMJournalList;
+
+//-----------------------------------------------------------------------------
+/**
+* Class defining the operator that computes the point the furthest away from a given point
+* in a given direction.
+*&lt;br&gt;
+* The CATTopBodyExtremum operator follows the global frame of the topological operators 
+* and satisfies the smart mechanism: the input body is not modified. The result is a body
+* containing vertices (for isolated solutions), wires or skins.
+*&lt;ul&gt;
+* &lt;li&gt;A CATTopBodyExtremum operator is created with the &lt;tt&gt;CATCreateDirBodyExtremum&lt;/tt&gt; 
+* global method. It must be directly &lt;tt&gt;delete&lt;/tt&gt;d after use. It is not streamable. 
+*&lt;li&gt;The computation is done with the &lt;tt&gt;Run&lt;/tt&gt; method. 
+*&lt;li&gt;The result is accessed with the &lt;tt&gt;GetResult&lt;/tt&gt; method. If you do not want 
+* to keep the resulting body, use the @href CATICGMContainer#Remove method to remove it from the 
+* geometric factory. 
+*&lt;/ul&gt;
+*/
+class ExportedByAnalysisTools CATTopBodyExtremum : public CATTopOperator
+{
+  CATCGMVirtualDeclareClass(CATTopBodyExtremum);
+  public :
+
+  /**
+  * Constructors - NOT TO BE USED
+      */ 
+      CATTopBodyExtremum(CATGeoFactory* iFactory, CATTopData* iTopData);
+      CATTopBodyExtremum(CATGeoFactory* iFactory, CATCGMJournalList* iJournal);
+      
+      virtual ~CATTopBodyExtremum();
+      
+      /**
+      * Runs &lt;tt&gt;this&lt;/tt&gt; operator.
+      */ 
+      virtual int  Run() = 0;
+      
+      /**
+      * Returns the distance between the origin and the extremum projection
+      * along the specified direction.
+      * @return
+      * The value.
+      */
+      virtual double  GetExtremum() = 0;
+      
+      /**
+      * Returns the created body.
+      * @return
+      * The pointer to the created body containing the vertices, wires or surfaces representing
+      * the body extremum.
+      */
+      virtual CATBody * GetResult() = 0;
+};
+
+/**
+* @deprecated V5R22 CATCreateDirNewBodyExtremum
+* Creates the operator that computes the point(s) the furthest away from a given point
+* in a given direction.
+* @param iFactory
+* The pointer to the geometry factory.
+* @param iBody
+* The pointer to the body.
+* @param iTypeOfExtremum
+* The type of extremum: minimum or maximum.
+* @param iDirection
+* The direction.
+* @param iPtOrig
+* The origin from which the distance returned by GetExtremum is computed.
+* By default, the CATMathPoint is (0,0,0).
+* @param iJournal
+* The pointer to the journal. If &lt;tt&gt;NULL&lt;/tt&gt;, the journal is not filled in.
+* @return
+* The pointer to the created operator. To be &lt;tt&gt;delete&lt;/tt&gt;d after use.
+*/
+ExportedByAnalysisTools 
+CATTopBodyExtremum * CATCreateDirBodyExtremum(CATGeoFactory *    iFactory,
+                                              CATTopData *       iTopData,
+                                              CATBody *          iBody, 
+                                              CATMinMax          iTypeOfExtremum, 
+                                              const CATMathVector &amp; iDirection,
+                                              const CATMathPoint  &amp; iPtOrig);
+/**
+* Creates the operator that computes the point(s) the furthest away from a given point
+* in a given direction.
+* @param iFactory
+* The pointer to the geometry factory.
+* @param iBody
+* The pointer to the body.
+* @param iTypeOfExtremum
+* The type of extremum: minimum or maximum.
+* @param iDirection
+* The direction.
+* @param iPtOrig
+* The origin from which the distance returned by GetExtremum is computed.
+* By default, the CATMathPoint is (0,0,0).
+* @param iJournal
+* The pointer to the journal. If &lt;tt&gt;NULL&lt;/tt&gt;, the journal is not filled in.
+* @return
+* The pointer to the created operator. To be &lt;tt&gt;delete&lt;/tt&gt;d after use.
+*/
+ExportedByAnalysisTools 
+CATTopBodyExtremum * CATCreateDirNewBodyExtremum(CATGeoFactory *    iFactory,
+                                              CATTopData *       iTopData,
+                                              CATBody *          iBody, 
+                                              CATMinMax          iTypeOfExtremum, 
+                                              const CATMathVector &amp; iDirection,
+                                              const CATMathPoint  &amp; iPtOrig);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATSolidTorus.html">← 上一页: CATSolidTorus.h</a></div>
+        <div><a href="CATTopCorner.html">下一页: CATTopCorner.h →</a></div>
+    </div>
+</body>
+</html>

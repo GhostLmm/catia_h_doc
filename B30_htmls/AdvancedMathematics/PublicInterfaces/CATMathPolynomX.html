@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdvancedMathematics/PublicInterfaces/CATMathPolynomX.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AdvancedMathematics/PublicInterfaces/CATMathPolynomX.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMathIntervalND.html">← 上一页: CATMathIntervalND.h</a></div>
+        <div><a href="CATMathPolynomXY.html">下一页: CATMathPolynomXY.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATMathPolynomX_H
+#define CATMathPolynomX_H
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+
+#include &quot;YN000FUN.h&quot;
+
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATMathFoundationX.h&quot;
+
+#include &quot;CATTolerance.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+#define CATPolynomXR19NbStaticCoeff 6
+
+class  CATMathInterval;
+class CATMathStream;
+/**
+ * Class defining the real polynom of one variable.
+ */
+class ExportedByYN000FUN CATMathPolynomX : public CATMathFoundationX
+{
+ public:
+  
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  /**
+   * Constructs a polynom of one variable.
+   * @param iDeg
+   * The degree of the polynom.
+   * @param iCoeff
+   * The array of the coefficients such that:
+   * &lt;br&gt;&lt;tt&gt;   pol=Sum_{i=0..iDeg}  iCoef[i] X^i &lt;/tt&gt;.
+   * @param iShift
+   * Internal use.
+   */
+   CATMathPolynomX(const CATLONG32 iDeg = 0, const double *iCoef = 0, const double iShift=0.);
+
+
+
+/**
+ * Copy constructor.
+ */
+  CATMathPolynomX(const CATMathPolynomX &amp; iToCopy);
+
+  /**
+   * Modifies the coeficients of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+   * @param iNewDeg
+   * The new value of the degree.
+   * @param iNewCoef
+   * The array of the new coefficients such that:
+   * &lt;br&gt;&lt;tt&gt;   pol=Sum_{i=0..iDeg}  iCoef[i] X^i &lt;/tt&gt;.
+   */
+  void SetCoefficients(const CATLONG32 iNewDeg = 0, const double *iNewCoef = 0);
+  
+  /**
+   * Returns the degree of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+   * @return
+   * The degree.
+   */
+  CATLONG32 GetDegree() const{return _degree;};
+
+/**
+ * Retrieves the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param ioCoeff
+ * The array (previously allocated) of the coefficients.
+ * &lt;br&gt;&lt;tt&gt;   pol=Sum_{i=0..iDeg}  ioCoef[i] X^i &lt;/tt&gt;.&lt;/tt&gt;.
+ */
+  void GetCoefficients(double * ioCoeff) const;
+
+   /**
+   * Returns the coefficients of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+   * @return
+   * The array of the coefficients. As part of &lt;tt&gt;this&lt;/tt&gt;, it must not be deallocated.
+   */
+  const double * GetCoefficients() const { return _coeff; };
+
+/**
+ * Returns the class name of &lt;tt&gt;this&lt;/tt&gt;  CATMathPolynomX.
+ * @return
+ * A pointer to the name &lt;tt&gt;CATMathPolynomX&lt;/tt&gt;.
+ */
+  virtual CATMathClassId IsA() const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX derives from a class (given by its name).
+ * @param iClassId
+ * The name of the class.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is a kind of &lt;tt&gt;iClassId&lt;/tt&gt;,
+ * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+  virtual CATBoolean IsAKindOf(const CATMathClassId iClassId) const;
+
+/**
+ * Tests whether &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX derives from a class (given by a numerical value).
+ * @param iClassId
+ * The numerical value representing the class type.
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is a type of &lt;tt&gt;iType&lt;/tt&gt;,
+ * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+  virtual CATBoolean IsATypeOf(const CATMathFunctionXTypeId iClassId) const; 
+   
+/**
+ * Tests whether an evaluator is available for &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iOption
+ * The type of evalution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;OptionEval   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the function
+ * &lt;dt&gt;OptionEvalFirstDeriv   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the first derivative of the function
+ * &lt;dt&gt;OptionEvalSecondDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the second derivative of the function
+ * &lt;dt&gt;OptionEvalThirdDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the third derivative of the function
+ * &lt;/dl&gt;
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if the evaluation is available for &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX,
+ * &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+  virtual CATBoolean IsOption(const CATMathOption iOption) const;
+
+  //-----------------------------------------------------------------
+  // Evaluators on doubles
+  //-----------------------------------------------------------------
+/** 
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+  virtual double Eval(const double &amp; iT) const;
+
+/** 
+ * Evaluates the first derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+  virtual double EvalFirstDeriv (const double &amp; iT) const;
+
+/** 
+ * Evaluates the second derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+  virtual double EvalSecondDeriv(const double &amp; iT) const;
+
+/** 
+ * Evaluates the third derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is evaluated.
+ * @return
+ * The result of the evaluation.
+ */
+  virtual double EvalThirdDeriv (const double &amp; iT) const;
+
+/** 
+ * Simultaneously evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX and its derivatives.
+ * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: The pointers
+ * must have been previously allocated if you asked for the corresponding evaluation. 
+ * @param iT
+ * The variable value where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX is evaluated.
+ * @param iOption
+ * The type of evalution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;OptionEval   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the function
+ * &lt;dt&gt;OptionEvalFirstDeriv   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the first derivatives of the function
+ * &lt;dt&gt;OptionEvalSecondDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the second derivatives of the function
+ * &lt;dt&gt;sum of preceeding values&lt;/dt&gt;&lt;dd&gt; multiple evaluation.
+ * &lt;/dl&gt;
+ * @param ioF
+ * A pointer to the value of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param ioDf
+ * A pointer to the first derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param ioD2f
+ * A pointer to the second derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ */
+  virtual void Eval(const double         iT     ,
+                    const CATMathOption  iOption,
+                    double             * ioF    ,
+                    double             * ioDf   = 0,
+                    double             * ioD2f  = 0) const;
+  
+/** 
+ * Simultaneously evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX and its derivatives at regularly spaced values.
+ * &lt;br&gt;&lt;b&gt;Precondition&lt;/b&gt;: The output arrays
+ * must have been previously allocated if you asked for the corresponding evaluation.
+ * @param iI
+ * The interval containing the regularly spaced values.
+ * @param iNbPoints
+ * The number of values of &lt;tt&gt;iI&lt;/tt&gt; where &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX must be evaluated. 
+ * If &lt;tt&gt;NbPoints = 1&lt;/tt&gt;, the evaluations are made on the first value of &lt;tt&gt;iI&lt;/tt&gt;.
+ * @param iOption
+ * The type of evalution.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt; &lt;dt&gt;OptionEval   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the function
+ * &lt;dt&gt;OptionEvalFirstDeriv   &lt;/dt&gt;  &lt;dd&gt;  evaluation of the first derivatives of the function
+ * &lt;dt&gt;OptionEvalSecondDeriv&lt;/dt&gt;  &lt;dd&gt;  evaluation of the second derivatives of the function
+ * &lt;dt&gt;sum of preceeding values&lt;/dt&gt;&lt;dd&gt; multiple evaluation.
+ * &lt;/dl&gt;
+ * @param ioF
+ * The array of evaluations of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX at the regurlarly spaced values.
+ * @param ioDf
+ * The array of the first derivatives of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX at the regurlarly spaced values.
+ * @param ioD2f
+ * The array of the second derivatives of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX at the regurlarly spaced values.
+ */
+  virtual void Eval(const CATMathInterval &amp; iI       ,
+                    const CATLONG32         iNbPoints,
+                    const CATMathOption     iOption  ,
+                    double               *  ioF      ,
+                    double               *  ioDf     = 0,
+                    double               *  ioD2f    = 0) const;
+
+
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+
+   /**
+   * @nodoc
+   * Constucts a Hermite interpolation (iDeg=3 or iDeg=5).
+   */
+  CATMathPolynomX(const CATLONG32 iDeg, const CATMathInterval &amp; iD, 
+    const double *iStart, const double *iEnd, 
+    const CATBoolean iShiftOption=0);  
+
+  virtual ~CATMathPolynomX();
+   /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+   /** @nodoc */
+  virtual CATMathFunctionX * Duplicate() const;
+
+  /** @nodoc */
+  virtual CATMathFunctionX * DeepDuplicate() const;
+
+#if defined ( CATIACGMR216CAA )
+  /** @nodoc  Not Published  */
+  virtual CATMathFunctionX * DeepDuplicateWithTol(const CATTolerance *ipTolObject) const ;
+#endif
+  //-----------------------------------------------------------------
+  // Stream 
+  //-----------------------------------------------------------------
+#if defined ( CATIACGMV5R21 )
+   /**
+    * @nodoc
+    */
+   virtual short GetStreamDomainType(char ioDomain[3]) const;
+#else
+   /**
+    * @nodoc
+    */
+   virtual short GetStreamType() const;
+#endif
+   /** @nodoc */
+  void Stream( CATMathStream&amp; Str, const char iLabelReserved[] = &quot;&quot; ) const;
+  /** @nodoc */
+  virtual size_t  GetStaticMemoryBytes() const;  
+  /** @nodoc */
+   virtual size_t  GetDynamicMemoryBytes() const;   
+   /** @nodoc */
+  virtual CATBoolean _IsStreamable( const CATCGMStreamVersion iTargetVersion, CATBoolean &amp; ioReversible ) const;
+
+  //-----------------------------------------------------------------
+  // Set Methods
+  //-----------------------------------------------------------------
+  
+  /**
+   * @nodoc
+   * Modifies the Shift value.
+   */
+  void SetShift (const double iShift=0.){_Shift=iShift;};
+  /**
+   * @nodoc
+   * Perform the formal shift to set the Shift value to 0.
+   */
+  void CancelShift ();
+
+  //-----------------------------------------------------------------
+  // Information methods
+  //-----------------------------------------------------------------
+
+   /** @nodoc */
+  void GetFormalCoefficients(double * ioCoeff) const;
+
+  /**
+   * @nodoc
+   * Returns the Shift value.
+   */
+   double GetShift ( ) const {return _Shift;};
+
+
+
+   /**
+ * @nodoc
+ * Tests the monotony of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ * @param iD
+ * The interval on which the monotony is checked.
+ * @param ioType
+ * The type of monotony.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Constant
+ * &lt;dt&gt;-1&lt;/dt&gt;&lt;dd&gt;Decreasing
+ * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;Increasing
+ *&lt;/dl&gt;
+ * @return
+ * The result of the test.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;TRUE&lt;/tt&gt; if &lt;tt&gt;this&lt;/tt&gt; is monotonuous, &lt;tt&gt;FALSE&lt;/tt&gt; otherwise.
+ */
+   CATBoolean IsMonotone(const CATMathInterval           &amp; iD           ,
+                               CATLONG32                 &amp; ioType       ,
+                         const CATTolerance              &amp; iTolObject   = CATGetDefaultTolerance(),
+                               CATMathAttrScaleOption   *  iScaleOption = NULL,
+                               CATSoftwareConfiguration *  iConfig      = NULL
+                        ) const;
+  /** @nodoc */
+  int GetDirectComponents(const int iSizeOfComponents, const CATMathFunctionGeneral **ioComponents) const;
+  
+  //-----------------------------------------------------------------
+  // Evaluators on intervals
+  //-----------------------------------------------------------------
+/** 
+ * Evaluates &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX from values defined by an interval.
+ * @param x
+ * The interval containing the input values.
+ * @return
+ * The interval containing the values of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX.
+ */
+  virtual CATMathInterval Eval(const CATMathInterval &amp; x) const;
+/** 
+ * Evaluates the first derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX from values defined by an interval.
+ * @param x
+ * The interval containing the input values.
+ * @return
+ * The interval containing the values of the first derivative.
+ */
+  virtual CATMathInterval EvalFirstDeriv (const CATMathInterval &amp; x) const;
+ /** 
+ * Evaluates the second derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX from values defined by an interval.
+ * @param x
+ * The interval containing the input values.
+ * @return
+ * The interval containing the values of the second derivative.
+ */
+  virtual CATMathInterval EvalSecondDeriv(const CATMathInterval &amp; x) const;
+/** 
+ * Evaluates the third derivative of &lt;tt&gt;this&lt;/tt&gt; CATMathPolynomX from values defined by an interval.
+ * @param x
+ * The interval containing the input values.
+ * @return
+ * The interval containing the values of the third derivative.
+ */
+  virtual CATMathInterval EvalThirdDeriv (const CATMathInterval &amp; x) const;
+
+  
+  //
+  // Computes a good bound on the image of an interval I using the decomposition in orthogonal polynomials
+  //
+ 
+   /** @nodoc */
+  virtual CATMathInterval ComputeOptimalImage    (const CATMathInterval          &amp; I            ,
+                                                  const CATTolerance             &amp; iTolObject   = CATGetDefaultTolerance(),
+                                                        CATMathAttrScaleOption  *  iScaleOption = NULL,
+                                                        CATSoftwareConfiguration*  iConfig      = NULL
+                                                 ) const;
+  /** @nodoc */
+  virtual CATMathInterval ComputeImageByChebychev(const CATMathInterval          &amp; ix         ,
+                                                  const CATTolerance             &amp; iTolObject    = CATGetDefaultTolerance()) const;
+  
+
+  //-----------------------------------------------------------------
+  // - Integrate
+  //-----------------------------------------------------------------
+   /** @nodoc */
+  virtual double Integrate(const CATMathInterval &amp; D, const double tol) const;
+
+  //-----------------------------------------------------------------
+  //- Derivative
+  //-----------------------------------------------------------------
+   /** @nodoc */
+  CATMathFunctionX * CreateDeriv () const;
+  
+
+  //-----------------------------------------------------------------
+  //- Solve
+  //-----------------------------------------------------------------
+   /** @nodoc */
+  virtual CATMathDiagnostic Solve(const CATMathInterval &amp; D,
+                                        CATMathSetOfPointsND &amp; roots,
+                                  const CATMathAttrList * attributes=0,
+                                        CATSoftwareConfiguration* iConfig=NULL
+                                 ) const;
+
+/** @nodoc */
+  friend ExportedByYN000FUN ostream &amp; operator &lt;&lt; (ostream&amp; os, CATMathPolynomX &amp; p);
+
+
+// Modify polynom p(t)into p(alpha*t)
+   /** @nodoc */
+  void ApplyScalingOnVariable               (const double &amp; alpha);
+
+// Modify polynom p(t)into p(t+beta) by shift value modification 
+   /** @nodoc */
+  void ApplyShiftOnVariable                 (const double &amp; beta);
+
+// Modify polynom p(t)into p(t+beta) by coefficients modification
+   /** @nodoc */
+  void ApplyFormalShiftOnVariable           (const double &amp; beta);
+
+// Modify polynom p(t)into p(alpha*t+beta) by shift value modification 
+   /** @nodoc */
+  void ApplyLinearChangeOnVariable          (const double &amp; alpha,const double &amp; beta) ;
+
+// Modify polynom p(t)into p(alpha*t+beta) by coefficients modification
+   /** @nodoc */
+  void ApplyFormalLinearChangeOnVariable    (const double &amp; alpha,const double &amp; beta) ;
+
+// returns the polynom q(t)=p(alpha*t)
+   /** @nodoc */
+  CATMathPolynomX ScaleVariable             (const double &amp; alpha) const;
+
+// returns the polynom q(t)=p(t+beta) by shift value modification 
+   /** @nodoc */
+  CATMathPolynomX ShiftVariable             (const double &amp; beta) const;
+// returns the polynom q(t)=p(t+beta) by coefficients modification
+   /** @nodoc */
+  CATMathPolynomX FormalShiftVariable       (const double &amp; beta) const;
+
+// returns the polynom q(t)=p(alpha*t+beta) by shift value modification 
+   /** @nodoc */
+  CATMathPolynomX LinearChangeVariable      (const double &amp; alpha,
+                                             const double &amp; beta) const;
+
+// returns the polynom q(t)=p(alpha*t+beta) by coefficients modification
+   /** @nodoc */
+  CATMathPolynomX FormalLinearChangeVariable(const double &amp; alpha,
+                                             const double &amp; beta) const;
+
+// return 1 if P( startP+ t * (endP-startP) ) = Q( startQ+ t * (endQ-startQ))
+// with tolerance tol on coefficients, 0 else
+   /** @nodoc */
+  friend ExportedByYN000FUN
+  CATBoolean      IsConjuguate              (const CATMathPolynomX &amp; P,
+                                             const double          &amp; startP,
+                                             const double          &amp; endP,
+                                             const CATMathPolynomX &amp; Q,
+                                             const double          &amp; startQ,
+                                             const double          &amp; endQ,
+                                             const double            tol);
+
+
+  //-----------------------------------------------------------------
+  // Formal Treatment of polynoms (friend functions)
+  // WARNING : all these functions return pointers, the corresponding
+  //           objects must be DELETED afterwards.
+  //-----------------------------------------------------------------
+
+  //- Derivatives and primitive
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * FirstDeriv (const CATMathPolynomX * p);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * SecondDeriv(const CATMathPolynomX * p);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * ThirdDeriv (const CATMathPolynomX * p);
+   /** @nodoc */
+  // see forward
+  friend ExportedByYN000FUN CATMathPolynomX * Primitiv   (const CATMathPolynomX * p,
+                                                          const double c           );
+
+  // Derivatives with a result already allocated
+
+   /** @nodoc */
+  friend ExportedByYN000FUN void              FirstDeriv (const CATMathPolynomX * p      ,
+                                                                CATMathPolynomX * oResult);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              SecondDeriv(const CATMathPolynomX * p      ,
+                                                                CATMathPolynomX * oResult);
+
+  // opposite : -pol
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Opposite   (const CATMathPolynomX * pol    );
+
+  // sum with a double : pol + alpha
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Sum        (const CATMathPolynomX * pol    , const double            alpha  );
+  // sum of two polynomials : pol1 + pol2
+  /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Sum        (const CATMathPolynomX * pol1   , const CATMathPolynomX * pol2   );
+
+  // difference with a double : pol - alpha
+  /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Difference (const CATMathPolynomX * pol    , const double            alpha);
+
+  // difference with a double : alpha - pol
+  /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Difference (const double            alpha  , const CATMathPolynomX * pol);
+
+  // difference of two polynomials : pol1-pol2
+  /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Difference (const CATMathPolynomX * pol1   , const CATMathPolynomX * pol2);
+
+  // product by a double : alpha * pol
+  /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Product    (const CATMathPolynomX * pol    , const double            alpha);
+
+  // product of two polynomials : pol1 * pol2
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Product    (const CATMathPolynomX * pol1   , const CATMathPolynomX * pol2);
+  // product of two polynomials with a result already allocated
+   /** @nodoc */
+  friend ExportedByYN000FUN void              Product    (const CATMathPolynomX * pol1   , const CATMathPolynomX * pol2,
+                                                                CATMathPolynomX * oResult);
+
+
+  // square of a polynomial : pol^2
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Square     (const CATMathPolynomX * pol);
+
+  // square of a polynomial with a result already allocated
+   /** @nodoc */
+  friend ExportedByYN000FUN void              Square     (const CATMathPolynomX * pol,
+                                                                CATMathPolynomX * oResult);
+
+
+  // linear combination : alpha1 * pol1 + alpha2 * pol2
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Combination(const CATMathPolynomX * pol1  ,
+                                                          const CATMathPolynomX * pol2  ,
+                                                          const double            alpha1,
+                                                          const double            alpha2 );
+  // linear combination : alpha1 * pol1 + beta * pol2 + alpha3 * pol3  
+/** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX * Combination(const CATMathPolynomX * pol1  ,
+                                                          const CATMathPolynomX * pol2  ,
+                                                          const CATMathPolynomX * pol3  ,
+                                                          const double            alpha1,
+                                                          const double            alpha2 ,
+                                                          const double            alpha3);
+  
+
+//
+//- Overloaded operators
+//
+/** @nodoc */
+                            CATMathPolynomX &amp; operator =     (const CATMathPolynomX &amp; p);
+   /** @nodoc */
+                            CATMathPolynomX   operator -     ();
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator +     (const CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator +     (const double          &amp; a, const CATMathPolynomX &amp; p);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator +     (const CATMathPolynomX &amp; p, const double          &amp; a);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator -     (const CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator -     (const double          &amp; a, const CATMathPolynomX &amp; p);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator -     (const CATMathPolynomX &amp; p, const double          &amp; a);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator *     (const CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator *     (const double          &amp; a, const CATMathPolynomX &amp; p);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator *     (const CATMathPolynomX &amp; p, const double          &amp; a);
+   /** @nodoc */
+  friend ExportedByYN000FUN CATMathPolynomX   operator /     (const CATMathPolynomX &amp; p, const double          &amp; a);
+/** @nodoc */
+  friend ExportedByYN000FUN void              operator +=    (      CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              operator +=    (      CATMathPolynomX &amp; p, const double          &amp; a);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              operator -=    (      CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              operator -=    (      CATMathPolynomX &amp; p, const double          &amp; a);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              operator *=    (      CATMathPolynomX &amp; p, const CATMathPolynomX &amp; q);
+   /** @nodoc */
+  friend ExportedByYN000FUN void              operator *=    (      CATMathPolynomX &amp; p, const double          &amp; a);
+
+  // protected datas
+ protected:
+                             /** @nodoc */
+  CATLONG32 _degree;
+                             /** @nodoc */
+  double  * _coeff;
+
+                             /** @nodoc */
+  CATLONG32 _nbcoeff;
+  #ifdef CATPolynomXR19NbStaticCoeff
+  double _staticcoeff_nodirectaccess[CATPolynomXR19NbStaticCoeff];
+  #endif
+
+                             /** @nodoc */
+  double _Shift;
+
+                             /** @nodoc */
+  virtual CATMathFunctionX * FormalCompositionX(const CATMathFunctionX  * iF) const;
+
+                             /** @nodoc */
+  virtual CATMathFunctionX * FormalCombination (const CATLONG32           iN       ,
+                                                const CATMathFunctionX ** iFunc    ,
+                                                const double            * iCoef    , 
+                                                const double              iConstant) const;
+
+                             /** @nodoc */
+  void NeedCoeffForDegree(const CATLONG32 degree);
+
+ public:
+// Takes the a_i&#x27;s such that P(x) = sum a_i T_i(x) and returns the b_i&#x27;s such that P(x) = sum b_i x^i
+// where the T_i&#x27;s are Chebyshev&#x27;s polynomials
+// N is the size of the arrays, it must be &lt;= CHEBY_MAXDEGX+1 (=16)
+                             /** @nodoc */
+  static void ChebyshevToCanonical(const double * a, double * b, CATLONG32 N);
+
+ private:
+
+
+
+ friend CATBoolean ShiftCheck (const double iShift1, const double iShift2);
+
+};
+
+//----------------------------------------------------------------------------------------------------------------------------
+// Forward declaration of friend functions
+// (duplication here with default argument values for standard declaration on all platforms)
+//----------------------------------------------------------------------------------------------------------------------------
+
+/** @nodoc */
+ExportedByYN000FUN CATMathPolynomX * Primitiv  (const CATMathPolynomX         *  p           , 
+                                                const double                     c           = 0);
+
+ExportedByYN000FUN CATBoolean        IsMonotone(const CATMathPolynomX         *  iPolynom    ,
+                                                const CATMathInterval          &amp; iD          ,
+                                                      CATLONG32                &amp; ioType      ,
+                                                const CATTolerance             &amp; iTolObject  ,
+                                                      CATMathAttrScaleOption  *  iScaleOption,
+                                                      CATSoftwareConfiguration*  iConfig
+                                               ) ;
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMathIntervalND.html">← 上一页: CATMathIntervalND.h</a></div>
+        <div><a href="CATMathPolynomXY.html">下一页: CATMathPolynomXY.h →</a></div>
+    </div>
+</body>
+</html>

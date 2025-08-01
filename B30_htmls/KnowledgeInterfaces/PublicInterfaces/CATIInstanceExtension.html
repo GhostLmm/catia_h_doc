@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowledgeInterfaces/PublicInterfaces/CATIInstanceExtension.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>KnowledgeInterfaces/PublicInterfaces/CATIInstanceExtension.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIInstance.html">← 上一页: CATIInstance.h</a></div>
+        <div><a href="CATIInstanceListener.html">下一页: CATIInstanceListener.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIInstanceExtension_H
+#define CATIInstanceExtension_H
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/** 
+* @CAA2Level L1
+* @CAA2Usage U4 CATKweInstanceExtensionAdapter
+*/
+
+#include &quot;KnowledgeItfCPP.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+#include &quot;CATListValCATIType.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIValue.h&quot;
+
+extern ExportedByKnowledgeItfCPP IID IID_CATIInstanceExtension ;
+
+/**   
+ * Interface to declare Knowledgeware access on Feature extensions.
+ *
+ * &lt;b&gt;Role&lt;/b&gt;: this interface allows a feature extension to publish its types and values
+ * to KnowledgeWare and to the Search functionality by granting objects with static type information.
+ * &lt;br&gt;
+ * This interface should be implemented by feature extensions.
+ * &lt;br&gt;
+ * The extended feature is supposed to delegate its implementation of @href CATIInstance to the implementation of 
+ * CATIInstanceExtension on its feature extensions.
+ * &lt;br&gt;
+ * Watch out: an extended feature can decide or not to give a Knowledge visibility to its extensions.
+ * &lt;br&gt;
+ * Implementations of that interface should derive from @href CATKweInstanceExtensionAdapter.
+ *
+ * &lt;p&gt;&lt;b&gt;BOA information&lt;/b&gt;: this interface CAN be implemented
+ * using the BOA (Basic Object Adapter).
+ * To know more about the BOA, refer to the CAA Encyclopedia home page.
+ * Click Middleware at the bottom left, then click the Object Modeler tab page.
+ * Several articles deal with the BOA.&lt;/p&gt;
+ *
+ * @see CATIInstance,CATIType,CATIValue
+ */
+class ExportedByKnowledgeItfCPP CATIInstanceExtension: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+ 
+   /**
+	* Fills the given list with types supported by this feature extension.
+	* &lt;br&gt;
+	* The list is input may not be empty. This method is supposed to add some types to the list.
+	*
+	* @param iolListOfCATIType the filled list.
+	*/
+	virtual HRESULT ListSupportedTypes( CATListValCATIType_var&amp; iolListOfCATIType ) const = 0;
+
+	/**
+	* Sets an attribute value.
+	*
+	* @param iKey Name of the attribute.
+	* @param iValue Value of the attribute.
+	*/
+	virtual HRESULT SetValue( const CATUnicodeString&amp; iKey,
+							  const CATIValue_var&amp; iValue ) = 0;
+
+	/**
+	* Gets an attribute value.
+	*
+	* @param iKey Name of the attribute.
+	* @return iValue Value of the attribute (an AddRef is done, if not NULL).
+	*/
+	virtual CATIValue* GetValue( const CATUnicodeString&amp; iKey ) = 0;
+	
+
+
+};
+
+CATDeclareHandler(CATIInstanceExtension,CATBaseUnknown);
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIInstance.html">← 上一页: CATIInstance.h</a></div>
+        <div><a href="CATIInstanceListener.html">下一页: CATIInstanceListener.h →</a></div>
+    </div>
+</body>
+</html>

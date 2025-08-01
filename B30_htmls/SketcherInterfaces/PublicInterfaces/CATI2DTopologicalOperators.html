@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketcherInterfaces/PublicInterfaces/CATI2DTopologicalOperators.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SketcherInterfaces/PublicInterfaces/CATI2DTopologicalOperators.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DSplineCurve.html">← 上一页: CATI2DSplineCurve.h</a></div>
+        <div><a href="CATI2DWFFactory.html">下一页: CATI2DWFFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATI2DTopologicalOperators_h
+#define CATI2DTopologicalOperators_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSketcherInterfaces.h&quot;
+class CATListValCATI2DCurve_var;
+class CATMathPoint2D;
+
+/**
+ * Topological Operators Interface on 2D Geometrical Features.
+ */
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSketcherInterfaces IID IID_CATI2DTopologicalOperators;
+#else
+extern &quot;C&quot; const IID IID_CATI2DTopologicalOperators;
+#endif
+
+class ExportedByCATSketcherInterfaces CATI2DTopologicalOperators : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public: 
+  /**
+   * Breaks and relimits a monoparametric element, onto the next intersections with the other elements in the sketch.
+   * @param &lt;tt&gt;iCurve&lt;/tt&gt;
+   * [in] Inputs the element to be broken.
+   * @param &lt;tt&gt;iSelectedPoint&lt;/tt&gt;
+   * [in] Inputs the location where the iCurve element is selected.
+   * The point makes it possible to find where iCurve has to be broken
+   * and to find the part where iCurve has to be preserved and where iCurve has to be erased 
+   * @param &lt;tt&gt;oNewCurve&lt;/tt&gt;
+   * [out] Outputs the created part(s) from the initial iCurve element:
+   * &lt;dl&gt;
+   * &lt;dt&gt; If iBreak = -1, *oNewCurve will reference the created curve.
+   * A call to the Release() method will be necessary at the end of the process of this pointer.
+   * It can be NULL if there is zero intersection of iCurve
+   *  with any other element of the sketch. Thus iCurve is deleted.
+   * It can be NULL if there is only one intersection of iCurve
+   *  with any other element of the sketch. Thus iCurve is relimited.
+   * &lt;dt&gt; If iBreak = 0, *oNewCurve is NULL because iCurve is relimited, but no extra curve is created.
+   * &lt;dt&gt; If iBreak = 1, *oNewCurve will reference the two created curves, if they exist:
+   * oNewCurve[0] is the first created curve (can be NULL if no curve is created).
+   * oNewCurve[1] is the second created curve (can be NULL if no curve is created).
+   * A call to the Release() method will be necessary at the end of the process of these 2 pointers.
+   * Must be freeded by caller (delete [] oNewCurve).
+   * &lt;/dl&gt;
+   * @param &lt;tt&gt;iBreak&lt;/tt&gt;
+   * [in] =  -1 : The selected part of the iCurve is removed.
+   *      =   0 : The selected part of the iCurve is kept.
+   *      =   1 : The iCurve is broken but no part is removed.
+   * @param &lt;tt&gt;iCreateConstraint&lt;/tt&gt;
+   * [in] =   1 : (Default) The geometrical constraints will be created.
+   *      =   0 : No geometrical constraint will be created.
+   * @param &lt;tt&gt;iIgnoreConstructionElement&lt;/tt&gt;
+   * [in] =   0 : (Default) The contruction elements will be taken into account by the relimit operation
+   *          1 : The contruction elements will be ignored
+   * @return
+   * A &lt;tt&gt;HRESULT&lt;/tt&gt;
+   * &lt;dl&gt;
+   * &lt;dt&gt; &lt;tt&gt;S_OK&lt;/tt&gt;   &lt;dd&gt; iCurve is modified, and oNewCurve is valuated.
+   * &lt;dt&gt; &lt;tt&gt;S_FALSE&lt;/tt&gt;  &lt;dd&gt; No intersection with any other element of the sketch:
+   * The whole element is erased if iBreak=-1.
+   * The whole element is kept if iBreak=0 or iBreak=1.
+   * &lt;dt&gt; &lt;tt&gt;E_xxx&lt;/tt&gt;  &lt;dd&gt; Problem ocurred.
+   * &lt;/dl&gt;
+   */
+  virtual HRESULT QuickRelimit(CATBaseUnknown* iCurve,const CATMathPoint2D&amp; iSelectedPoint,
+                               CATBaseUnknown** oNewCurve,int iBreak=-1,const int iCreateConstraint=1,const int iIgnoreConstructionElement=0) = 0;
+  /**
+   * Informs of the relimitation of two monoparametric elements.
+   * To definitively relimit the elements, use SetStartPoint or SetEndPoints method (as indicated
+   * with the value of the outputs oLim1 and oLim2). 
+   * @param &lt;tt&gt;iElem1&lt;/tt&gt;
+   * [int] Inputs the 1rst element (not previously relimited) to study for the mutual relimitation.
+   * @param &lt;tt&gt;iNo_Limit1&lt;/tt&gt;
+   * [int] : 0 if the relimitation of the 1rst element is to be studied.
+   *         Non zero if the 1rst element has not to be studied in terms of relimitation.
+   * @param &lt;tt&gt;oLim1&lt;/tt&gt;
+   *  [out] : -1 if the 1rst element should be relimited at its beginning
+   *           1 if the 1rst element should be relimited at its end
+   *           0 if the 1rst element cannot be relimited (if iNo_Limit1!=0 or any other raison)
+   * @param &lt;tt&gt;iElem2&lt;/tt&gt;
+   * [in] Inputs the 2nd element (not previously relimited) to study for the mutual relimitation.
+   * @param &lt;tt&gt;iNo_Limit2&lt;/tt&gt;
+   * [int] : 0 if the relimitation of the 2nd element is to be studied.
+   *         Non zero if the 2nd element has not to be studied in terms of relimitation.
+   * @param &lt;tt&gt;oLim2&lt;/tt&gt;
+   * [out] :  -1 if the 2nd element should be relimited at its beginning
+   *           1 if the 2nd element should be relimited at its end
+   *           0 if the 2nd element cannot be relimited (if iNo_Limit2!=0 or any other raison)
+   * @param &lt;tt&gt;iIndicatePoint&lt;/tt&gt;
+   * [in] Inputs the location near the two elements to indicate the parts to keep.
+   * @param &lt;tt&gt;ioRelimitPoint&lt;/tt&gt;
+   * [in/out] Inputs the previous relimitation point, if it exists. In this case, its coordinates will be modified.
+   *          Returns the new relimitation point. It is created if it didn&#x27;t exist previously, otherwise it has
+   *           been modified.
+   *          A call to the Release() method will be necessary at the end of the process of this pointer.
+   */
+  virtual HRESULT Relimit (CATBaseUnknown* iElem1,int iNo_Limit1,int &amp;oLim1,
+                  			   CATBaseUnknown* iElem2,int iNo_Limit2,int &amp;oLim2,
+			                     const CATMathPoint2D &amp;iIndicatePoint,CATBaseUnknown** ioRelimitPoint) = 0;
+  /**
+   * Informs of the relimitation of two monoparametric elements.
+   * To definitively relimit the elements, use SetStartPoint or SetEndPoints method (as indicated
+   * with the value of the outputs oLim1 and oLim2). 
+   * @param &lt;tt&gt;iElem1&lt;/tt&gt;
+   * [int] Inputs the 1rst element (not previously relimited) to study for the mutual relimitation.
+   * @param &lt;tt&gt;iNo_Limit1&lt;/tt&gt;
+   * [int] : 0 if the relimitation of the 1rst element is to be studied.
+   *         Non zero if the 1rst element has not to be studied in terms of relimitation.
+   * @param &lt;tt&gt;oLim1&lt;/tt&gt;
+   *  [out] : -1 if the 1rst element should be relimited at its beginning
+   *           1 if the 1rst element should be relimited at its end
+   *           0 if the 1rst element cannot be relimited (if iNo_Limit1!=0 or any other raison)
+   * @param &lt;tt&gt;iParam1&lt;/tt&gt;
+   * [in] Inputs the parameter around which the 1rst element will be kept.
+   *      Must be initialized at 0.0 if useless (for example, not read for a point)
+   * @param &lt;tt&gt;iElem2&lt;/tt&gt;
+   * [in] Inputs the 2nd element (not previously relimited) to study for the mutual relimitation.
+   * @param &lt;tt&gt;iNo_Limit2&lt;/tt&gt;
+   * [int] : 0 if the relimitation of the 2nd element is to be studied.
+   *         Non zero if the 2nd element has not to be studied in terms of relimitation.
+   * @param &lt;tt&gt;oLim2&lt;/tt&gt;
+   * [out] :  -1 if the 2nd element should be relimited at its beginning
+   *           1 if the 2nd element should be relimited at its end
+   *           0 if the 2nd element cannot be relimited (if iNo_Limit2!=0 or any other raison)
+   * @param &lt;tt&gt;iParam2&lt;/tt&gt;
+   * [in] Inputs the parameter around which the 2nd element will be kept.
+   *      Must be initialized at 0.0 if useless (for example, not read for a point)
+   * @param &lt;tt&gt;ioRelimitPoint&lt;/tt&gt;
+   * [in/out] Inputs the previous relimitation point, if it exists. In this case, its coordinates will be modified.
+   *          Returns the new relimitation point. It is created if it didn&#x27;t exist previously, otherwise it has
+   *           been modified.
+   *          A call to the Release() method will be necessary at the end of the process of this pointer.
+   */
+  virtual HRESULT Relimit (CATBaseUnknown* iElem1,int iNo_Limit1,int &amp;oLim1, double iParam1,
+			                     CATBaseUnknown* iElem2,int iNo_Limit2,int &amp;oLim2, double iParam2,
+			                     CATBaseUnknown** ioRelimitPoint) = 0;
+  /**
+   * Breaks a monoparametric element by a point.
+   * @param &lt;tt&gt;iCurveToBreak&lt;/tt&gt;
+   * [in] Inputs the element to be broken
+   * @param &lt;tt&gt;ioBreakPoint&lt;/tt&gt;
+   * [in/out] Inputs the breaking point: it will be projected on the curve. The result is used to break.
+   *      The input pointer can be modified.
+   *      A call to the AddRef() method is necessary before the use of this Break method.
+   *      A call to the Release() method will be necessary after.
+   * @param &lt;tt&gt;iToErase&lt;/tt&gt;
+   * [in] Inputs the possibility to erase the input point to create a new one.
+   * @param &lt;tt&gt;oNewCurve&lt;/tt&gt;
+   * [out] Outputs the created curve, as the one in input.
+   */
+  virtual HRESULT Break(CATBaseUnknown* iCurveToBreak,
+                  			CATBaseUnknown** ioBreakPoint,
+                        const int iToErase,
+                        CATBaseUnknown** oNewCurve) = 0;
+  /**
+   * Looks for the elements relimited by a input point (and the construction elements too).
+   * @param &lt;tt&gt;iPoint&lt;/tt&gt;
+   * [in] Inputs the point
+   * @param &lt;tt&gt;oCurves&lt;/tt&gt;
+   * [out] Outputs the list of curves relimited by this point and other (see next argument).
+   * @param &lt;tt&gt;iOption&lt;/tt&gt;
+   * [in] Inputs the desired method to find relimited curves:
+   *     = 1  :  (default) Looks for elements relimited by the input point only.
+   *     = 2  :  Looks for elements relimited by the input point 
+   *              and by all the logically coincident points to this point (linked by a coincidence constraint).
+   *     = 3  :  Looks for elements relimited by the input point 
+   *              and by all the geometrically identical points to this point.
+   *     = 4  :  Looks for elements relimited and get through by the input point.
+   *
+   *     Remark: The elements output by option 1 are a part of the elements output by the option 2,
+   *             which are a part of the elements output by the option 3.
+   */
+  virtual HRESULT GetIncidentCurves(CATBaseUnknown* iPoint,
+                                    CATListValCATI2DCurve_var &amp;oCurves,
+                                    int iOption=1) = 0;
+  /**
+   * @nodoc
+   */
+  virtual HRESULT InsertCorner(CATBaseUnknown* iCircle,
+                  			       CATBaseUnknown* iCurve1,int iTrim1,
+                               CATBaseUnknown* iCurve2,int iTrim2) = 0;
+  /**
+   * @nodoc
+   */
+  virtual HRESULT InsertChamfer(CATBaseUnknown* iLine,
+                        				CATBaseUnknown* iCurve1,int iTrim1,
+                                CATBaseUnknown* iCurve2,int iTrim2) = 0;
+  /**
+   * Inserts a soon created corner between two curves and informs about their relimitations.
+   * @param &lt;tt&gt;iCircle&lt;/tt&gt;
+   * [in] Inputs the previously created corner.
+   * @param &lt;tt&gt;iCurve1&lt;/tt&gt;
+   * [in] Inputs the 1rst curve on wich the corner will eventually be relimited.
+   * @param &lt;tt&gt;iTrim1&lt;/tt&gt;
+   * [in] Indicates if the 1rst curve has to be relimited or not.
+   * @param &lt;tt&gt;oLim1&lt;/tt&gt;
+   * [out] :  -1 if the 1st element should be relimited at its beginning
+   *           1 if the 1st element should be relimited at its end
+   *           0 if the 1st element cannot be relimited (if iTrim1==0 or any other raison)
+   * @param &lt;tt&gt;iCurve2&lt;/tt&gt;
+   * [in] Inputs the 2nd curve on wich the corner will eventually be relimited.
+   * @param &lt;tt&gt;iTrim2&lt;/tt&gt;
+   * [in] Indicates if the 1rst curve has to be relimited or not.
+   * @param &lt;tt&gt;oLim2&lt;/tt&gt;
+   * [out] :  -1 if the 2nd element should be relimited at its beginning
+   *           1 if the 2nd element should be relimited at its end
+   *           0 if the 2nd element cannot be relimited (if iTrim2==0 or any other raison)
+   * @param &lt;tt&gt;iCreateConstraints&lt;/tt&gt;
+   * [in] :    0 if the software has not to create tangents, coincidents and mutuals relimitations constraints
+   *           1 if the software has to create tangents, coincidents and mutuals relimitations constraints
+   */
+  virtual HRESULT InsertCorner(CATBaseUnknown* iCircle,
+                               CATBaseUnknown* iCurve1,int iTrim1,int &amp;oLim1,
+                               CATBaseUnknown* iCurve2,int iTrim2,int &amp;oLim2,
+                               int iCreateConstraints=1) = 0;
+  /**
+   * Inserts a soon created chamfer between two curves and informs about their relimitations.
+   * @param &lt;tt&gt;iLine&lt;/tt&gt;
+   * [in] Inputs the previously created chamfer.
+   * @param &lt;tt&gt;iCurve1&lt;/tt&gt;
+   * [in] Inputs the 1rst curve on wich the chamfer will eventually be relimited.
+   * @param &lt;tt&gt;iTrim1&lt;/tt&gt;
+   * [in] Indicates if the 1rst curve has to be relimited or not.
+   * @param &lt;tt&gt;oLim1&lt;/tt&gt;
+   * [out] :  -1 if the 1st element should be relimited at its beginning
+   *           1 if the 1st element should be relimited at its end
+   *           0 if the 1st element cannot be relimited (if iTrim1==0 or any other raison)
+   * @param &lt;tt&gt;iCurve2&lt;/tt&gt;
+   * [in] Inputs the 2nd curve on wich the chamfer will eventually be relimited.
+   * @param &lt;tt&gt;iTrim2&lt;/tt&gt;
+   * [in] Indicates if the 1rst curve has to be relimited or not.
+   * @param &lt;tt&gt;oLim2&lt;/tt&gt;
+   * [out] :  -1 if the 2nd element should be relimited at its beginning
+   *           1 if the 2nd element should be relimited at its end
+   *           0 if the 2nd element cannot be relimited (if iTrim2==0 or any other raison)
+   * @param &lt;tt&gt;iCreateConstraints&lt;/tt&gt;
+   * [in] :    0 if the software has not to create coincidents and mutuals relimitations constraints
+   *           1 if the software has to create coincidents and mutuals relimitations constraints
+   */
+  virtual HRESULT InsertChamfer(CATBaseUnknown* iLine,
+                        				CATBaseUnknown* iCurve1,int iTrim1,int &amp;oLim1,
+                                CATBaseUnknown* iCurve2,int iTrim2,int &amp;oLim2,
+                                int iCreateConstraints=1) = 0;
+};
+
+CATDeclareHandler(CATI2DTopologicalOperators,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATI2DSplineCurve.html">← 上一页: CATI2DSplineCurve.h</a></div>
+        <div><a href="CATI2DWFFactory.html">下一页: CATI2DWFFactory.h →</a></div>
+    </div>
+</body>
+</html>

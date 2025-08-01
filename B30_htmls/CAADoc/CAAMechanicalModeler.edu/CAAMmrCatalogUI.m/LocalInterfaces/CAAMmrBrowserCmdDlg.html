@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAAMechanicalModeler.edu/CAAMmrCatalogUI.m/LocalInterfaces/CAAMmrBrowserCmdDlg.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAAMechanicalModeler.edu/CAAMmrCatalogUI.m/LocalInterfaces/CAAMmrBrowserCmdDlg.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAAMmrBrowserCmd.html">← 上一页: CAAMmrBrowserCmd.h</a></div>
+        <div><a href="../../CAAMmrCombinedCurve.m/LocalInterfaces/CAAEMmrCombCrvCkeFeature.html">下一页: CAAEMmrCombCrvCkeFeature.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAAMmrBrowserCmdDlg_H_
+#define CAAMmrBrowserCmdDlg_H_
+
+// COPYRIGHT DASSAULT SYSTEMES 2002
+
+// Dialog Framework
+#include &quot;CATDlgDialog.h&quot; // To derive from
+class CATDlgEditor; 
+class CATDlgPushButton;
+class CATDlgRadioButton;
+class CATDlgCheckButton;
+class CATDlgFrame;
+class CATDlgPushButton;
+
+// ApplicationFrame Framework
+class CATFrmEditor ;
+
+// ComponentsCatalogsInterfaces framework 
+class CATICatalogBrowser ;
+
+class CAAMmrBrowserCmdDlg : public CATDlgDialog
+{
+
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAAMmrBrowserCmdDlg.CATNls 
+  //    
+  DeclareResource(CAAMmrBrowserCmdDlg,CATDlgDialog) ;
+
+public:
+
+  CAAMmrBrowserCmdDlg(CATDialog * iParent);
+
+  ~CAAMmrBrowserCmdDlg();
+
+  // Constructs the dialog object
+  void Build();
+
+private:
+
+  // Method to close the Catalog Browser
+  void CloseCatalog();
+
+  // Callbacks awake by notifications from the Catalog browser
+  void OKCatalog        (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void CancelCatalog    (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void ChangeChapter    (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void SelectDescription(CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  
+  // Callbacks awake by notifications from the current dialog box
+  void ChangeCatalogAuthorization (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void InstantiationAuthorization (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void DrapAndDropAuthorization   (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void ChangeQuery                (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void LaunchInstantiation        (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+  void CreateBrowser              (CATCommand* iFrom, CATNotification* iNotif, CATCommandClientData iData);
+
+private:
+
+  // Dialog Objects
+  CATDlgEditor           * _pDescEditor;
+  CATDlgEditor           * _pCatalogEditor;
+  CATDlgEditor           * _pQueryEditor ;
+  CATDlgEditor           * _pQueryResultEditor  ;
+
+  CATDlgCheckButton      * _pModalButton ;
+  CATDlgCheckButton      * _pWithTreeButton;
+  CATDlgCheckButton      * _pInstantiateStateButton   ;
+  CATDlgCheckButton      * _pChgtCatalogStateButton  ;
+  CATDlgCheckButton      * _pQueryStateButton  ;
+
+  CATDlgRadioButton      * _pWithOkButton;
+  CATDlgRadioButton      * _pWithCloseButton;
+  CATDlgRadioButton      * _pWithSmallIconsButton;
+  CATDlgRadioButton      * _pWithLargeIconsButton;
+  CATDlgRadioButton      * _pWithDetailsButton;
+
+  CATDlgPushButton       * _pInstButton  ;
+  CATDlgPushButton       * _pOpenBrowserButton ;
+
+  CATDlgFrame            * _pBrowserOptionsFrame ;
+  CATDlgFrame            * _pBrowserQueryFrame ;
+  CATDlgFrame            * _pInstFrame ;
+
+  // The editor of the document
+  // it is useful to create the Catalog browser
+  // because this object implements the CATICatalogBrowserFactory 
+  // interface
+  CATFrmEditor           * _pDocumentEditor ;
+
+  // At the first Catalog browser opening
+  // a specific catalog is set current
+  // 
+  CATBoolean               _FirstOpen ;
+
+  // Pointer on the Catalog Browser
+  //
+  CATICatalogBrowser     * _pICatalogBrowser;
+
+  // Notifications from the Catalog Browser 
+  //
+  CATNotification        * _pOKNotif ;
+  CATNotification        * _pCancelNotif;
+  CATNotification        * _pCloseNotif;
+  CATNotification        * _pSelectNotif;
+  CATNotification        * _pChangeNotif;
+  
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAAMmrBrowserCmd.html">← 上一页: CAAMmrBrowserCmd.h</a></div>
+        <div><a href="../../CAAMmrCombinedCurve.m/LocalInterfaces/CAAEMmrCombCrvCkeFeature.html">下一页: CAAEMmrCombCrvCkeFeature.h →</a></div>
+    </div>
+</body>
+</html>

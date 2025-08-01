@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLParser/PublicInterfaces/CATIDOMCharacterData.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>XMLParser/PublicInterfaces/CATIDOMCharacterData.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMCDATASection.html">← 上一页: CATIDOMCDATASection.h</a></div>
+        <div><a href="CATIDOMComment.html">下一页: CATIDOMComment.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT DASSAULT SYSTEMES 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#ifndef CATIDOMCharacterData_h
+#define CATIDOMCharacterData_h
+
+// System framework
+class CATUnicodeString;
+
+// XMLParser framework
+#include &quot;XMLParserItf.h&quot;
+#include &quot;CATIDOMNode.h&quot;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+	extern ExportedByXMLParserItf IID IID_CATIDOMCharacterData;
+#else // LOCAL_DEFINITION_FOR_IID
+	extern &quot;C&quot; const IID IID_CATIDOMCharacterData ;
+#endif // LOCAL_DEFINITION_FOR_IID
+
+/**
+ * Interface extending &lt;tt&gt;CATIDOMNode&lt;/tt&gt; with a set of 
+ * methods for accessing character data in the DOM.
+ *
+ * For clarity this set is defined here rather than on each class that uses 
+ * these methods. No DOM objects correspond directly to 
+ * @href CATIDOMCharacterData, though @href CATIDOMText and others do inherit 
+ * the interface from it. All &lt;code&gt;offset&lt;/code&gt;s in this interface start 
+ * from 0, and index in terms of Unicode 16 bit storage units.
+ * @see CATIDOMText
+ */
+class ExportedByXMLParserItf CATIDOMCharacterData: public CATIDOMNode {
+	CATDeclareInterface;
+
+	public:
+
+		/**
+		 * Retrieves the character data of the node that implements this interface. 
+		 *
+		 * The DOM implementation may not put arbitrary limits on the amount of data that 
+		 * may be stored in a @href CATIDOMCharacterData node. However, 
+		 * implementation limits may mean that the entirety of a node&#x27;s data may 
+		 * not fit into a single call to &lt;tt&gt;GetData&lt;/tt&gt;. In such cases, the user 
+		 * may call @href #SubstringData to retrieve the data in 
+		 * appropriately sized pieces.
+		 * @param oData
+		 * the character data of the node that implements this interface
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2202&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;DOMSTRING_SIZE_ERR: Raised when it would return more characters than supported by the underlying implementation.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT GetData(
+			CATUnicodeString&amp; oData) = 0;
+
+		/**
+		 * Sets the character data of the node that implements this interface. 
+		 *
+		 * The DOM implementation may not put arbitrary limits on the amount of data that 
+		 * may be stored in a @href CATIDOMCharacterData node. However, 
+		 * implementation limits may mean that the entirety of a node&#x27;s data may 
+		 * not fit into a single call to &lt;tt&gt;GetData&lt;/tt&gt;. In such cases, the user 
+		 * may call @href #SubstringData to retrieve the data in 
+		 * appropriately sized pieces.
+		 *
+		 * @param iData
+		 * The @href CATUnicodeString to set.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2202&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;DOMSTRING_SIZE_ERR: Raised when it would return more characters than supported by the underlying implementation.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT SetData(
+			const CATUnicodeString&amp; iData) = 0;
+
+		/**
+		 * Retrieves the number of characters that are available through &lt;code&gt;data&lt;/code&gt; and 
+		 * the &lt;code&gt;SubstringData&lt;/code&gt; method below. 
+		 *
+		 * This may have the value zero, i.e., &lt;code&gt;CharacterData&lt;/code&gt; nodes may be empty.
+		 *
+		 * @param oLength
+		 * The retrieved number of characters that are available through &lt;code&gt;data&lt;/code&gt;.
+		 *
+		 * @see #SubstringData
+		 */
+		virtual HRESULT GetLength(
+			unsigned int&amp; oLength)  = 0;
+
+		/**
+		 * Extracts a range of data from the node.
+		 *
+		 * @param iOffset
+		 * Start offset of substring to extract.
+		 * @param iCount
+		 * The number of characters to extract.
+		 * @param oSubstringData
+		 * The specified substring. If the sum of &lt;code&gt;iOffset&lt;/code&gt; and 
+		 *   &lt;code&gt;iCount&lt;/code&gt; exceeds the value returned by @href #GetLength, then all 
+		 *   characters to the end of the data are returned.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2201&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INDEX_SIZE_ERR: Raised if the specified &lt;tt&gt;iOffset&lt;/tt&gt; is greater 
+		 *   than the number of characters in &lt;code&gt;data&lt;/code&gt;.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2202&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;DOMSTRING_SIZE_ERR: Raised when it would return more characters than supported by the underlying implementation.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 *
+		 * @see #GetLength
+		 */
+		virtual HRESULT SubstringData(
+			unsigned int iOffSet, 
+			unsigned int iCount,
+			CATUnicodeString&amp; oSubstringData)  = 0;
+
+		/**
+		 * Appends the string to the end of the character data of the node.
+		 *
+		 * Upon success, @href #GetData provides access to the concatenation of 
+		 * &lt;code&gt;data&lt;/code&gt; and the @href CATUnicodeString specified.
+		 *
+		 * @param iAppendedData
+		 * The @href CATUnicodeString to append.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT AppendData(
+			const CATUnicodeString&amp; iAppendedData) = 0;
+
+		/**
+		 * Inserts a string at the specified character offset.
+		 *
+		 * @param iOffSet
+		 * The character offset at which to insert.
+		 * @param iInsertedData
+		 * The @href CATUnicodeString to insert.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2201&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INDEX_SIZE_ERR: Raised if the specified &lt;tt&gt;iOffset&lt;/tt&gt; is greater 
+		 *   than the number of characters in &lt;code&gt;data&lt;/code&gt;.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT InsertData(
+			unsigned int iOffSet, 
+			const CATUnicodeString&amp; iInsertedData) = 0;
+
+		/**
+		 * Removes a range of characters from the node. 
+		 *
+		 * Upon success, the returned values of @href #GetData and 
+		 * @href #GetLength reflect the change.
+		 *
+		 * @param iOffSet
+		 * The offset from which to remove characters.
+		 * @param iCount
+		 * The number of characters to delete. If the sum of 
+		 *   &lt;code&gt;iOffset&lt;/code&gt; and &lt;code&gt;iCount&lt;/code&gt; exceeds the value returned by @href #GetLength
+		 *   then all characters from &lt;code&gt;iOffset&lt;/code&gt; to the end of the data 
+		 *   are deleted.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2201&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INDEX_SIZE_ERR: Raised if the specified &lt;tt&gt;iOffset&lt;/tt&gt; is greater 
+		 *   than the number of characters in &lt;code&gt;data&lt;/code&gt;.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT DeleteData(
+			unsigned int iOffSet, 
+			unsigned int iCount) = 0;
+
+		/**
+		 * Replaces the characters starting at the specified character offset with 
+		 * the specified string.
+		 *
+		 * @param iOffSet
+		 * The offset from which to start replacing.
+		 * @param iCount
+		 * The number of characters to replace. If the sum of 
+		 *   &lt;code&gt;iOffSet&lt;/code&gt; and &lt;code&gt;iCount&lt;/code&gt; exceeds the value returned by @href #GetLength,
+		 *   then all characters to the end of the data are replaced (i.e., the 
+		 *   effect is the same as a @href #DeleteData method call with the same 
+		 *   range, followed by an @href #AppendData method invocation).
+		 * @param iArg
+		 * The @href CATUnicodeString with which the range must be replaced.
+		 *
+		 * &lt;/dl&gt;
+		 * &lt;dt&gt;&lt;b&gt;Errors Returned&lt;/b&gt;:&lt;/dt&gt;
+		 * &lt;dd&gt;
+		 *   &lt;table class=&quot;errtab&quot;&gt;
+		 *     &lt;tr&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Class&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Error Id&lt;/th&gt;
+		 *       &lt;th class=&quot;errth&quot;&gt;Description&lt;/th&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2201&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;INDEX_SIZE_ERR: Raised if the specified &lt;tt&gt;iOffset&lt;/tt&gt; is greater 
+		 *   than the number of characters in &lt;code&gt;data&lt;/code&gt;.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *     &lt;tr&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;@href CATDOMException &lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;XMLParserERR_2207&lt;/td&gt;
+		 *        &lt;td class=&quot;errtd&quot;&gt;NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.&lt;/td&gt;
+		 *     &lt;/tr&gt;
+		 *   &lt;/table&gt;
+		 * &lt;/dd&gt;
+		 */
+		virtual HRESULT ReplaceData(
+			unsigned int iOffSet, 
+			unsigned int iCount, 
+			const CATUnicodeString&amp; iArg) = 0;
+
+
+};
+CATDeclareHandler(CATIDOMCharacterData, CATIDOMNode);
+
+#endif // CATIDOMCharacterData_h
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDOMCDATASection.html">← 上一页: CATIDOMCDATASection.h</a></div>
+        <div><a href="CATIDOMComment.html">下一页: CATIDOMComment.h →</a></div>
+    </div>
+</body>
+</html>

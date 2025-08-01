@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATEdgeCurve.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATEdgeCurve.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCylinder.html">← 上一页: CATCylinder.h</a></div>
+        <div><a href="CATEdgeCurveIterator.html">下一页: CATEdgeCurveIterator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATEdgeCurve_h
+#define CATEdgeCurve_h
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */ 
+
+#include &quot;CATCurve.h&quot;
+#include &quot;CATMathDef.h&quot;
+#include &quot;CATGeoDef.h&quot;
+#include &quot;CATIACGMLevel.h&quot;
+
+
+class CATSurface ;
+class CATPCurve ;
+class CATMathFunctionX ;
+class CATMapX;
+class CATCX_CHECKUP;
+class CATPointOnEdgeCurve;
+
+#include &quot;ExportedByCATGMGeometricInterfaces.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATGMGeometricInterfaces IID IID_CATEdgeCurve ;
+#else
+extern &quot;C&quot; const IID IID_CATEdgeCurve ;
+#endif
+
+/**
+ * Interface defining a curve representing several other curves.
+ * &lt;b&gt;Role&lt;/b&gt;: A CATEdgeCurve is the geometry of a topological edge. As an edge can
+ * bound several faces (with different geometry), 
+ * a CATEdgeCurve is a curve that presents a common behavior for
+ * several curves. 
+ * &lt;br&gt;The aggregation of the CATPCurves resulting of an intersection 
+ * leads to a CATIntCurve, the aggregation of identical CATCurves 
+ * leads to a CATSimCurve and the aggregation of CATCurves with different limits 
+ * or parameterizations leads to a 
+ * CATMergedCurve. To create a CATMergedCurve, use the @href CATEdgeCurveComputation operator.
+ *&lt;br&gt;The aggregation is a recursive notion, and you can aggregate
+ * CATEdgeCurves.
+ *&lt;br&gt;One aggregated curve plays a special role: its manages the evaluations and is called the reference curve.
+ */
+class ExportedByCATGMGeometricInterfaces CATEdgeCurve : public CATCurve
+{
+  CATDeclareInterface;
+
+public:
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //            C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+  * Scans the CATCurves represented by &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+  * @param iCurrentSubElement
+  * The pointer to the CATCurve from which the search is initialized, may
+  * be &lt;tt&gt;NULL&lt;/tt&gt; for retrieving the first CATCurve.
+  * @return
+  * The pointer to the next CATCurve of the aggregation. Remember that a 
+  * CATEdgeCurve is also a CATCurve.
+  *&lt;br&gt;&lt;b&gt;Sample&lt;/b&gt;: Search of all CATCurves of a CATEdgeCurve.
+  *&lt;pre&gt; 
+  * const CATCurve * Current=NULL
+  * while (Current = MyEdgeCurve-&gt;Next(Current) ) 
+  *  { ... process Current ... }
+  *&lt;/pre&gt;
+  */
+  virtual const CATCurve* Next ( const CATCurve *iCurrentSubElement ) const = 0 ;
+
+/**
+ * @nodoc
+ * @deprecated V5R12 CATEdgeCurveIterator
+ * Recursively scans the CATCurves of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve, without returning
+ * the imbedded CATEdgeCurves.
+ * @param iCurrentSubElement
+ * The pointer to the CATCurve from which the search is initialized, may
+ * be &lt;tt&gt;NULL&lt;/tt&gt; for retrieving the first CATCurve.
+ * @return
+ * The pointer to the next CATCurve (not being a CATEdgeCurve) of the aggregation.
+ */
+  virtual const CATCurve* NextThru ( const CATCurve *iCurrentSubElement ) const = 0 ;
+
+/**
+ * Returns the parameter on &lt;tt&gt;this&lt;/tt&gt; EdgeCurve corresponding to the point defined by
+ * parameters on its components.
+ * @param iNbOfCurves
+ * The number of CATCurves.
+ * @param iCurves[]
+ * The array of &lt;tt&gt;iNbOfCurves&lt;/tt&gt; CATCurve pointers.
+ * @param iParams[]
+ * The corresponding parameters on the CATCurves.
+ * @param ioCalcParam
+ * The parameter of the point on &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+ */
+  virtual void GetEquivalentParam( const CATLONG32 iNbOfCurves, 
+						      const CATCurve*     iCurves[],
+						      const CATCrvParam   iParams[],
+						      CATCrvParam&amp;        ioCalcParam) const = 0 ; 
+
+  
+	/**
+	 * The confusion diagnosis of a point on an CATEdgeCurve.
+	 * @param Equal
+	 * Same geometrical points with same parameter.
+	 * @param Similar 
+	 * Same geometrical points with different parameters.
+	 * @param Distinct
+	 * Distinct geometrical points.
+	 */
+	enum CATCompareDiagnostic { Equal, Similar, Distinct } ;
+
+/**
+ * Checks whether points can be merged within the same CATPointOnEdgeCurve.
+ * @param iNbOfCurves
+ * The number of CATCurves.
+ * @param iCurves[]
+ * The array of &lt;tt&gt;iNbOfCurves&lt;/tt&gt; CATCurve pointers.
+ * @param iParams[]
+ * The corresponding parameters of the points to merge.
+ * @param ioSuggestedParam
+ * The parameter of the corresponding point on &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+ * @param ioGap
+ * The maximum distance between the points. If &lt;tt&gt;NULL&lt;/tt&gt;, this distance is not output.
+ * @return
+ * The diagnosis of confusion.
+ */
+  virtual CATEdgeCurve::CATCompareDiagnostic Compare( const CATLONG32 iNbOfCurves, 
+						      const CATCurve*     iCurves[],
+						      const CATCrvParam   iParams[],
+						      CATCrvParam &amp; ioSuggestedParam,
+						      CATPositiveLength* ioGap = NULL) const = 0 ; 
+
+/** 
+ * Reports a point from a curve to another one.
+ * @param iParamOnCurrentCurve
+ * The parameter on &lt;tt&gt;iCurrentCurveOrEdgeCurve&lt;/tt&gt;.
+ * @param iCurrentCurveOrEdgeCurve
+ * The initial CATCurve.
+ * @param iEquivalentCurve
+ * The CATCurve on which the point is to be expressed.
+ * @param ioParamOnEquivalentCurve
+ * The equivalent parameter on &lt;tt&gt;iEquivalentCurve&lt;/tt&gt;.
+ * @param iConverge
+ * The type of computation.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;dl&gt;&lt;dt&gt;1&lt;/dt&gt;&lt;dd&gt;An exact computation.
+ * &lt;dt&gt;0&lt;/dt&gt;&lt;dd&gt;An approximated (and faster) computation.&lt;/dl&gt;
+ */
+  virtual void GetEquivalentPoint ( const CATCrvParam &amp;iParamOnCurrentCurve,
+				    const CATCurve    *iCurrentCurveOrEdgeCurve,
+				    const CATCurve    *iEquivalentCurve, 
+				      CATCrvParam     &amp;ioParamOnEquivalentCurve,
+              short           iConverge=1) const  = 0 ;
+
+ 
+/**
+ * Retrieves the parametric orientation of a CATCurve with regards to the 
+ * orientation of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+ * @param iCurrentCurve
+ * A pointer to a curve of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+ * @return
+ * The relative orientation
+ *&lt;dl&gt; &lt;dt&gt; 1 &lt;dd&gt; &lt;tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iCurrentCurve&lt;/tt&gt; have the same orientation.
+ *     &lt;dt&gt; -1 &lt;dd&gt; &lt;tt&gt;this&lt;/tt&gt; and &lt;tt&gt;iCurrentCurve&lt;/tt&gt; have an opposite orientation.&lt;/dl&gt;  
+ */
+  virtual short GetRelativeOrientation( const CATCurve *iCurrentCurve ) const = 0 ;
+
+// The gap is computed (for a CATMergedCurve) or specified (for a CATSimCurve) at the CATEdgeCurve creation.
+  /**
+  * Returns a length larger than the distance between any couple of corresponding evaluated 
+  * points on all subcurves.
+  * @return
+  * The gap between the curves.
+  * If the gap is 0., @href CATCurve#EvalPoint returns the same value whatever the subcurve 
+  * it applies to.
+  * The gap of an CATIntCurve is always 0., because the evaluators always return an exact value in this case.
+  * However, the equation of a CATIntCurve may not return an exact solution.
+  */
+  virtual CATPositiveLength GetMaxGap() const = 0 ;
+
+/**
+  * Returns the reference curve of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve.
+	* &lt;br&gt; The reference curve manages the evaluations.
+	* @return
+	* A pointer to the curve of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve. 
+  */  
+  virtual CATCurve* GetRefCurve() const = 0;
+
+
+/**
+  * Retrieves the sharpness between the underlying surfaces of two CATPCurves.
+	* @param iC1
+	* A pointer to the first CATPCurve.
+	* @param iC2
+	* A pointer to the second CATPCurve. 
+	* @param ioContinuity
+	* The tangential continuity.
+	* @param ioConvexity
+	* The tangential convexity. If &lt;tt&gt;NULL&lt;/tt&gt;, this argument is not written.
+  */
+  virtual short GetSharpness ( 
+              const CATPCurve   *iC1,
+              const CATPCurve   *iC2,
+              CATGeoContinuity  *ioContinuity,
+              CATGeoConvexity   *ioConvexity=0) const = 0;
+
+/**
+  * Imposes the sharpness between the underlying surfaces of two CATPCurves.
+	* @param iC1
+	* A pointer to the first CATPCurve.
+	* @param iC2
+	* A pointer to the second CATPCurve. 
+	* @param iContinuity
+	* The tangential continuity to impose.
+	* @param iConvexity
+	* The tangential convexity to impose. 
+  */
+  virtual void SetSharpness (
+              const CATPCurve*                  iC1,
+              const CATPCurve*                  iC2,
+              const CATGeoContinuity            iContinuity,
+              const CATGeoConvexity             iConvexity = CATUnknownConvexity) = 0;
+
+
+
+
+
+
+
+
+
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+  //
+  //               N O N - C A A             M E T H O D S
+  //
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+/**
+ * @nodoc
+ * Use a CATEdgeCurveIterator.
+ * Scans the CATPCurves of &lt;tt&gt;this&lt;/tt&gt; CATEdgeCurve lying on a given CATSurface.
+ *&lt;br&gt;This scan is recursive in order to find all the CATPCurves lying on
+ * the surface.
+ * @param iCurrentSubElement
+ * The pointer to the CATPCurve from which the search is initialized, may
+ * be &lt;tt&gt;NULL&lt;/tt&gt; for retrieving the first CATPCurve.
+ * @return
+ * The pointer to the next CATPCurve of the aggregation.
+ */
+  virtual const CATPCurve* NextOnSupport ( const CATCurve *iCurrentSubElement, 
+					   const CATSurface* iSupport          ) const = 0 ;
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//                      Methods that will disappear
+///////////////////////////////////////////////////////////////////////////////
+/** 
+ * @nodoc
+ * Reports a point from a curve to another one.
+ * @param iParamOnCurrentCurve
+ * The parameter on &lt;tt&gt;iCurrentCurveOrEdgeCurve&lt;/tt&gt;.
+ * @param iCurrentCurveOrEdgeCurve
+ * The initial CATCurve.
+ * @param iEquivalentCurve
+ * The CATCurve with which parameters the point is to be expressed.
+ * @return
+ * The equivalent parameter on &lt;tt&gt;iEquivalentCurve&lt;/tt&gt;.
+ */
+  virtual CATCrvParam GetEquivalentPoint ( const CATCrvParam &amp;iParamOnCurrentCurve,
+					   const CATCurve    *iCurrentCurveOrEdgeCurve,
+	 				   const CATCurve    *iEquivalentCurve,
+             const short        iReconverge=1) const  = 0 ;
+
+/**
+ * @nodoc
+ *  Creates and returns the parameter mapping between two curves within this EdgeCurve.
+ *  Caller must delete the returned object.
+ *  Returned function f verifies: Curvefw(f(w)) &lt;=&gt; Curvew(w)
+ *  iDomain contains the limits from iCurvew and iCurvefw
+ */
+  virtual CATMathFunctionX* GetParamMap ( const CATCurve *iCurvew,
+					  const CATCurve *iCurvefw, CATBoolean iAdjustedC2=0, const double * iDomain=0 ) const  = 0 ;
+
+
+	/** @nodoc */
+  virtual CATBoolean CheckGeometry(CATPointOnEdgeCurve *StartPOEC=0, CATPointOnEdgeCurve *EndPOEC=0, double iTol=0.,
+		                 CATCX_CHECKUP* report=0) const = 0;
+
+
+/** @nodoc */
+  virtual CATBoolean IsContainingWithLimits ( const CATCurve* iContained, CATPointOnEdgeCurve *StartPOECOnEdgeCurve,
+                                                                          CATPointOnEdgeCurve *EndPOECOnEdgeCurve,
+                                                                          CATPointOnEdgeCurve *StartPOECOnCurve,
+                                                                          CATPointOnEdgeCurve *EndPOECOnCurve) const=0; 
+/** @nodoc */
+  virtual CATPositiveLength ComputeMaxGap() = 0 ;
+
+/** @nodoc */
+  virtual CATCurve * Simplify(CATSurface * iSurface1,
+			      CATSurface * iSurface2,
+			      CATMathFunctionX * &amp;oMapping) const = 0;
+
+/**
+ * @nodoc
+  * Gets the mapping between the RefCurve and one of the curve of &lt;tt&gt;this&lt;/tt&gt; EdgeCurve
+  * specified by iCurve.
+  * The returned object can be modified but MUST NOT be deleted. It belongs to the EdgeCurve.
+  */
+  virtual CATMapX* GetMapX(const CATCurve* iCurve) const = 0;
+
+/**
+* @nodoc
+ *  Creates and returns the parameter mapping between two curves within &lt;tt&gt;this&lt;/tt&gt; EdgeCurve.
+ *  Caller must delete the returned object.
+ *  The returned MapX RefCurve is iCurve1.
+ */
+  virtual CATMapX* GetMapX(const CATCurve* iCurve1,const CATCurve* iCurve2) const = 0;
+
+/**
+* @nodoc
+  * Sets the mapping between the RefCurve and a Curve. If this mapping already exists
+  * the old mapping is first deleted before being replaced by this one.
+  */
+  virtual void SetMapX(const CATMapX* iMapX) = 0;
+
+/**
+ * @nodoc
+  * Not yet implemented.
+  */
+  virtual void UpdateMapX() = 0;
+
+
+/** 
+ * @nodoc
+ * Reports a point from a curve to another one.
+ * @param iParamOnCurrentCurve
+ *   The parameter on &lt;tt&gt;iCurrentCurveOrEdgeCurve&lt;/tt&gt;.
+ * @param iCurrentCurveOrEdgeCurve
+ *   The initial CATCurve.
+ * @param iEquivalentCurve
+ *   The CATCurve with which parameters the point is to be expressed.
+ * @param iApproximateResolution
+ *   Approximate resolution.
+ * @param ioParamOnEquivalentCurve
+ *   The equivalent parameter on &lt;tt&gt;iEquivalentCurve&lt;/tt&gt;.
+ * @return
+ * The equivalent parameter on &lt;tt&gt;iEquivalentCurve&lt;/tt&gt;.
+ */
+  virtual HRESULT GetApproximateEquivalentPoint( const CATCrvParam       &amp;  iParamOnCurrentCurve,
+				         const CATCurve          *  iCurrentCurveOrEdgeCurve,
+	 			         const CATCurve          *  iEquivalentCurve,
+                                                 const CATPositiveLength &amp;  iApproximateResolution ,
+                                	         CATCrvParam             &amp;  ioParamOnEquivalentCurve ) const  = 0 ;
+
+};
+CATDeclareHandler(CATEdgeCurve,CATCurve);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCylinder.html">← 上一页: CATCylinder.h</a></div>
+        <div><a href="CATEdgeCurveIterator.html">下一页: CATEdgeCurveIterator.h →</a></div>
+    </div>
+</body>
+</html>

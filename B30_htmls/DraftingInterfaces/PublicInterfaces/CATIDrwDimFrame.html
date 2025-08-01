@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftingInterfaces/PublicInterfaces/CATIDrwDimFrame.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DraftingInterfaces/PublicInterfaces/CATIDrwDimFrame.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimFormat.html">← 上一页: CATIDrwDimFormat.h</a></div>
+        <div><a href="CATIDrwDimFunnel.html">下一页: CATIDrwDimFunnel.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATIDrwDimFrame_H
+#define CATIDrwDimFrame_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+class CATGraphicAttributeSet;
+
+
+#include &quot;DraftingItfCPP.h&quot;
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByDraftingItfCPP IID IID_CATIDrwDimFrame ;
+#else
+extern &quot;C&quot; const IID IID_CATIDrwDimFrame ;
+#endif
+
+/**
+ * Manages the dimension frame.
+ */
+
+class ExportedByDraftingItfCPP CATIDrwDimFrame : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+   public:
+
+    /**
+     * @nodoc
+     * Gets graphic properties.
+     *   @return
+     *    Attribute properties.
+     */
+     virtual CATGraphicAttributeSet * GetCATGAS() const = 0;
+
+    /**
+     * Gets frame type.
+     *   @return
+     *    Frame type.
+     *    &lt;br&gt;Legal values are (see define definition file):
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraCircle&lt;/tt&gt; &lt;dd&gt;Circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraScoredCircle&lt;/tt&gt; &lt;dd&gt;Scored circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDiamondShaped&lt;/tt&gt; &lt;dd&gt;Diamond shape.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraSquare&lt;/tt&gt; &lt;dd&gt;Square.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRectangle&lt;/tt&gt; &lt;dd&gt;Rectangle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraOblong&lt;/tt&gt; &lt;dd&gt;Oblong.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRightFlag&lt;/tt&gt; &lt;dd&gt;Right flag.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraTriangle&lt;/tt&gt; &lt;dd&gt;Triangle.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetType() const = 0;
+
+    /**
+     * Gets the framed element for main value.
+     *   @return
+     *    Framed element for main value (see define definition file).
+     *    &lt;br&gt;Framed element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValue&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValTol&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value and the tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValTolText&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value, the tolerance and the text.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetFramedElement() const = 0;
+
+       /**
+     * Gets the framed Group.
+     *   @return
+     *    Framed group (see define definition file).
+     *    &lt;br&gt;Framed group legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraMain&lt;/tt&gt; &lt;dd&gt;The framing mode is applied to the main value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDual&lt;/tt&gt; &lt;dd&gt;The framing mode is applied to the dual value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraMainAndDual&lt;/tt&gt; &lt;dd&gt;The framing mode is applied to the main and dual values (2 frames).&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraBoth&lt;/tt&gt; &lt;dd&gt;The framing mode is applied globally to the main and dual values (1 frames).&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual int GetFramedGroup() const = 0;
+
+    /**
+     * Gets gap.
+     *   @return
+     *    Gap value.
+     */
+     virtual double GetGap() const = 0;
+    
+    /**
+     * Sets frame type.
+     *   @param iType
+     *    Frame type.
+     *    &lt;br&gt;Legal values are (see define definition file):
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraNone&lt;/tt&gt; &lt;dd&gt;None.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraCircle&lt;/tt&gt; &lt;dd&gt;Circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraScoredCircle&lt;/tt&gt; &lt;dd&gt;Scored circle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDiamondShaped&lt;/tt&gt; &lt;dd&gt;Diamond shape.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraSquare&lt;/tt&gt; &lt;dd&gt;Square.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRectangle&lt;/tt&gt; &lt;dd&gt;Rectangle.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraOblong&lt;/tt&gt; &lt;dd&gt;Oblong.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraRightFlag&lt;/tt&gt; &lt;dd&gt;Right flag.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraTriangle&lt;/tt&gt; &lt;dd&gt;Triangle.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetType( const int iType ) = 0;
+
+    /**
+     * Sets the framed element for main value.
+     *   @param iFramedElement
+     *    Framed element for main value (see define definition file).
+     *    &lt;br&gt;Framed element legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValue&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValTol&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value and the tolerance.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraValTolText&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the value, the tolerance and the text.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetFramedElement( const int iFramedElement ) = 0;
+
+    /**
+     * Sets the framed group for dual value.
+     *   @param iFramedGroup
+     *    Framed group for dual value (see define definition file).
+     *    &lt;br&gt;Framed group legal values are:
+     *    &lt;dl&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraMain&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the main value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraDual&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the dual value only.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraMainAndDual&lt;/tt&gt; &lt;dd&gt;the framing mode is applied to the main and dual values.&lt;/dd&gt;
+     *    &lt;dt&gt;&lt;tt&gt;CATDrwDimFraBoth&lt;/tt&gt; &lt;dd&gt;the framing mode is applied globally to the main and dual values.&lt;/dd&gt;
+     *    &lt;/dl&gt;
+     */
+     virtual void SetFramedGroup( const int iFramedGroup ) = 0;
+
+    /**
+     * Sets gap.
+     *   @param gap
+     *    Gap value.
+     */
+     virtual void SetGap(const double gap) = 0;
+
+};
+CATDeclareHandler(CATIDrwDimFrame, CATBaseUnknown);
+#endif
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIDrwDimFormat.html">← 上一页: CATIDrwDimFormat.h</a></div>
+        <div><a href="CATIDrwDimFunnel.html">下一页: CATIDrwDimFunnel.h →</a></div>
+    </div>
+</body>
+</html>

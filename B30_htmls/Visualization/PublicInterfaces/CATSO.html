@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATSO.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATSO.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATRepShortHelp.html">← 上一页: CATRepShortHelp.h</a></div>
+        <div><a href="CATSelector.html">下一页: CATSelector.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATSO_h
+#define CATSO_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+
+#include &quot;CATVisualization.h&quot;
+#include &quot;list.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSysSimpleHashTable.h&quot;
+#include &quot;CATDataType.h&quot;
+
+/**
+* A set of objects.
+* &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : Enclosed objects are instances of the @href CATBaseUnknown class.
+* This class makes use of the AddRef/Release mechanism when adding or removing object.
+*/
+class ExportedByCATVisualization CATSO : public CATBaseUnknown
+{
+   /** @nodoc */
+  CATDeclareClass;
+
+  public:
+
+  /**
+  * Default constructor.
+  *
+  * @param iThereIsNoDuplicata
+  *        Parameter use to avoid the check of each object added.
+  *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; :
+  *        &lt;BR&gt;The default comportment expressed by the default value 0 is
+  *        &lt;BR&gt;to check if the object still exist before added it.
+  *        &lt;BR&gt;If the value is set to 1 you must be sure that each new object
+  *        &lt;BR&gt;not still exist in the set.
+  */
+  CATSO (int iThereIsNoDuplicata = 0);
+
+
+  virtual ~CATSO();
+
+  /**
+   * Subscripting operator.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt; : returns an object using the object index.
+   * &lt;br&gt;&lt;b&gt;Lifecycle rules deviation&lt;/b&gt; : This method doesn&#x27;t AddRef returned value.
+   *
+   * @param iIndex
+   *        The index
+   *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; : &lt;tt&gt;iIndex&lt;/tt&gt; values are between 0 and GetSize()-1.
+   * @return
+   *        The object.
+   */
+  CATBaseUnknown * operator [] (int iIndex) const ;
+  
+  /**
+   * Adds an element to the set.
+   *
+  * @param iElement
+  *   The element to add to the set.
+  *   &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: A copy of &lt;tt&gt;iElementToAdd&lt;/tt&gt; is kept and
+  *   an AddRef is performed. It is Released either when the element is removed from the set,
+  *   or by the CATSO destructor.
+  * @param iCheckIfThere
+  *   Unused argument
+  */
+  virtual HRESULT AddElement    (CATBaseUnknown *iElement, int iCheckIfThere = 1);
+
+  /**
+   * Removes an element from the set.
+   *
+   * @param iElem
+   *        The objectto remove.
+   *        &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt; : the removed object is released.
+   */
+  virtual void RemoveElement (CATBaseUnknown *iElem);
+
+  
+  /**
+   * Remove all elements from the set.
+   * A Release is done for each element.
+   * &lt;br&gt;&lt;b&gt;Cyclic reference&lt;/b&gt;: each object is released.
+   */
+   virtual void Empty ();
+
+
+  /**
+   * Checks if an element ready exists in the set.
+   *
+   * @param iElem
+   *        The object to look for.
+   * @return
+   *        &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt; : return 0 if the element isn&#x27;t in the set, otherwise return 1.
+   */
+   int IsMember (CATBaseUnknown *iElem);
+
+
+  /**
+   * Returns the count of elements in the set.
+   *
+   * @return
+   *        Return the size of the set.
+   */
+   int GetSize ();
+
+  /**
+   * Gathers an other set with this one.
+   *
+   * @param iSo
+   *            The set of elements to add.
+   */
+   void Gather(CATSO *iSo);
+
+  /**
+   * @nodoc
+   * Deprecated.
+   */
+   void InitElementList();
+
+  /**
+   * @nodoc
+   * Deprecated.
+   */
+   CATBaseUnknown * NextElement();
+
+  /**
+   * @nodoc
+   * Deprecated.
+   */
+   CATBaseUnknown * GetCurrentElement();
+
+
+  /**
+   * @nodoc
+   * Do not use.
+   */
+   int IsThereNoDuplicata();
+
+   
+ protected:
+  
+  list&lt;CATBaseUnknown&gt; _Liste;
+  int _thereisnoduplicata;
+
+ private :
+  CATSysSimpleHashTable* _HTable;
+  CATBaseUnknown* _currentelemt;
+  
+  /** @nodoc */
+  CATSO (const CATSO &amp;);
+  /** @nodoc */
+  CATSO &amp; operator = (const CATSO &amp;);
+
+
+ public :
+ /** @nodoc */
+  static unsigned int GetKey(void*);
+  
+ /** @nodoc */
+  static int Compare(void*, void*);
+  
+};
+
+inline CATBaseUnknown * CATSO::operator [] (int i) const { return ( (i&gt;=0)  ? _Liste[i] : 0); }
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATRepShortHelp.html">← 上一页: CATRepShortHelp.h</a></div>
+        <div><a href="CATSelector.html">下一页: CATSelector.h →</a></div>
+    </div>
+</body>
+</html>

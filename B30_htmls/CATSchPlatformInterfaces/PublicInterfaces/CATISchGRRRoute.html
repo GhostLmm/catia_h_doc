@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRRRoute.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchGRRRoute.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchGRRFactory.html">← 上一页: CATISchGRRFactory.h</a></div>
+        <div><a href="CATISchGRRRoute2.html">下一页: CATISchGRRRoute2.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchGRRRoute_H
+#define CATISchGRRRoute_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+// CATSchPlatformInterfaces
+#include &quot;CATSchGeneralEnum.h&quot;
+
+extern &quot;C&quot; const IID IID_CATISchGRRRoute ;
+
+class CATISchGRRRoute;
+class CATISchRouteSymbol;
+class CATISchGRR;
+class CATIUnknownList;
+
+/**
+ * Interface to manage a Schematic route graphic object. 
+ * &lt;b&gt;Role&lt;/b&gt;: Defines Schematic route graphic object content.
+ */
+class CATISchGRRRoute : public IUnknown
+{
+
+  public:   
+  
+  /**
+  * Compress a the defining points of a route graphic, removing coincident points.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Compress () = 0;
+
+  /**
+  * Compress the defining points of a route graphic, removing coincident points.
+  * @param iUnsetGaps
+  *   Whether to unset gaps (in all the effected routes: this route and
+  *   other routes intersecting it) or not
+  *        = SchUnsetGapsOn   : unset gaps
+  *        = SchUnsetGapsOff  : don&#x27;t unset gaps
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Compress2 (CATSchRouteUnsetGapsMode iUnsetGaps = SchUnsetGapsOn) = 0;
+
+  /**
+  * Add a list of point to a route. 
+  * @param iLDbPtPathToAdd
+  *   A list of X-Y coordinates of the points to be added. 
+  *   2 doubles per point.
+  * @param iSizeOfPath
+  *   Total number of points in the list. 2 times the number of points.
+  * @param iAfterWhichPtNum
+  *   The point number to add the points after. Use 0 to indicate adding
+  *   before the first point.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AddPoints (double *iLDb2PtPathToAdd,
+    const int iSizeOfPath, const int iAfterWhichPtNum) = 0;
+    
+  /**
+  * Remove points from route graphic. 
+  * @param iNumOfPtsToRemove
+  *   The number of points to be removed
+  * @param iAfterWhichPtNum
+  *   The point number at which to start removing the point.  
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT RemovePoints (const int iNumOfPtsToRemove,
+    const int iAfterWhichPtNum) = 0;
+
+  /**
+  * Get the defining points of a route graphic.
+  * @param oLDbPtPath
+  *   A list of X-Y coordinates of the points. 2 doubles per point.
+  * @param oSizeOfPath
+  *   Total number of points in the list. 2 times the number of points.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetPath (double **oLDb2PtPath, 
+    int *oSizeOfPath) = 0;
+  
+  /**
+  * Set the defining points of a route graphic.
+  * @param iLDbPtPath
+  *   A list of X-Y coordinates of the points to be set. 2 doubles per point.
+  * @param iSizeOfPath
+  *   Total number of points in the list. 2 times the number of points.
+  * @param iCompress 
+  *   Whether to compress the route (i.e., remove duplicate pts, colinear
+  *   segments, etc.) or not
+  *        = SchCompressOn   : compress
+  *        = SchCompressOff  : don&#x27;t compress
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetPath (double *iLDb2PtPath, const int iSizeOfPath,                                                 
+    CATSchRouteCompressMode iCompress = SchCompressOn) = 0;
+
+  /**
+  * Set the defining points of a route graphic.
+  * @param iLDbPtPath
+  *   A list of X-Y coordinates of the points to be set. 2 doubles per point.
+  * @param iSizeOfPath
+  *   Total number of points in the list. 2 times the number of points.
+  * @param iCompress 
+  *   Whether to compress the route (i.e., remove duplicate pts, colinear
+  *   segments, etc.) or not
+  *        = SchCompressOn   : compress
+  *        = SchCompressOff  : don&#x27;t compress
+  * @param iUnsetGaps
+  *   Whether to unset gaps (in all the effected routes: this route and
+  *   other routes intersecting it) or not
+  *        = SchUnsetGapsOn   : unset gaps
+  *        = SchUnsetGapsOff  : don&#x27;t unset gaps
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetPath2 (double *iLDb2PtPath, const int iSizeOfPath,                                                 
+    CATSchRouteCompressMode iCompress = SchCompressOn,
+    CATSchRouteUnsetGapsMode iUnsetGaps = SchUnsetGapsOn) = 0;
+
+  /**
+  * Break a route graphic into 2 pieces. The old graphic is shortened and a new
+  * graphic is created.
+  * @param iDb2Pt1
+  *   X-Y coordinates of point 1 to break the route at (this point is
+  *   &lt;b&gt;mandatory&lt;/b&gt;).
+  * @param iDb2Pt2
+  *   X-Y coordinates of point 2 to break the route at (this point is
+  *   &lt;b&gt;optional&lt;/b&gt;). If provided the points in between point 1 and this
+  *   point will be eliminated. Point 1 is the last point of the shortened
+  *   old route and point 2 is the first point of the new route. If this point
+  *   is not provided (i.e. sends in a NULL). point 1 and point 2 are the same.
+  * @param oNewGRRRoute
+  *   The new line string graphic created (CATISchGRRRoute interface pointer)
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Break (const double iDb2Pt1[2], double *iDb2Pt2, 
+    CATISchGRRRoute **oNewGRRRoute) = 0;
+
+  /**
+  * Concatenate 2 route graphic objects into one. 
+  * The first route graphic is elongated and the second object is deleted.
+  * @param iWhichEnd1
+  *   =1 at start point; =2 at end point
+  * @param iGRRRoute2
+  *   Second route graphic object (CATISchGRRRoute interface pointer)
+  *   to be concatenated to the first. This route graphic will be deleted.
+  * @param iWhichEnd2
+  *   =1 at start point; =2 at end point
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Concatenate (const int iWhichEnd1, 
+    CATISchGRRRoute *iGRRRoute2, const int iWhichEnd2) = 0;
+
+  /**
+  * Concatenate 2 route graphic objects into one. 
+  * The first route graphic is elongated and the second object is unchanged.
+  * @param iWhichEnd1
+  *   =1 at start point; =2 at end point
+  * @param iGRRRoute2
+  *   Second route graphic object (CATISchGRRRoute interface pointer)
+  *   to be concatenated to the first. This route graphic will be unchanged.
+  * @param iWhichEnd2
+  *   =1 at start point; =2 at end point
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ConcatenateKeepGRR2 (const int iWhichEnd1, 
+    CATISchGRRRoute *iGRRRoute2, const int iWhichEnd2) = 0;
+
+  /**
+  * Get the start point of the route graphic. 
+  * @param oDb2StartPt
+  *   X-Y coordinates of the start point of the route graphic object.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetStartPoint (double *oDb2StartPt) = 0;
+
+  /**
+  * Set the start point of the route graphic.
+  * @param iDb2StartPt
+  *   X-Y coordinates of the start point of the route graphic object to be set.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetStartPoint (const double iDb2StartPt[2]) = 0;
+
+  /**
+  * Get the end point of the route graphic. 
+  * @param oDb2EndPt
+  *   X-Y coordinates of the end point of the route graphic object.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT GetEndPoint (double *oDb2EndPt) = 0;
+
+  /**
+  * Set the end point of the route graphic. 
+  * @param iDb2EndPt
+  *   X-Y coordinates of the end point of the route graphic object to be set.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetEndPoint (const double iDb2EndPt[2]) = 0;
+
+  /**
+  * Place a symbol on the route.
+  * @param iSegNum
+  *   The route segment number to place the symbol on.
+  * @param iSegParm
+  *   The parameter along the segment used to place the symbol on (0.&lt;=iSegParm&lt;=1.).
+  * @param iGRRSymbol
+  *   The graphical primitive (detail) to be used for the symbol.
+  * @param oRouteSymbol
+  *   The created route symbol (ditto).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT CreateRouteSymbol (
+     const int &amp;iSegNum, const double &amp;iSegParm, const CATISchGRR *iGRRSymbol,
+     CATISchRouteSymbol **oRouteSymbol) = 0;
+
+  /**
+  * List route symbols on the route.
+  * @param oLRouteSymbol
+  *   A list of route symbols.
+  *   (members are CATISchRouteSymbol interface pointers).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListRouteSymbols (CATIUnknownList **oLRouteSymbol) = 0;
+
+  /**
+  * Set the defining points of a route graphic.
+  * @param iLDbPtPath
+  *   A list of X-Y coordinates of the points to be set. 2 doubles per point.
+  * @param iSizeOfPath
+  *   Total number of points in the list. 2 times the number of points.
+  * @param iCompress 
+  *   Whether to compress the route (i.e., remove duplicate pts, colinear
+  *   segments, etc.) or not
+  *        = SchCompressOn   : compress
+  *        = SchCompressOff  : don&#x27;t compress
+  * @param iUnsetGaps
+  *   Whether to unset gaps (in all the effected routes: this route and
+  *   other routes intersecting it) or not
+  *        = SchUnsetGapsOn   : unset gaps
+  *        = SchUnsetGapsOff  : don&#x27;t unset gaps
+  * @param iRouteSymbolUpdate
+  *   Whether to update route symbols&#x27; positions
+  *        = SchSymbolUpdateOff  : don&#x27;t update route symbols
+  *        = SchSymbolUpdateOn   : update route symbols
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SetPath3 (double *iLDb2PtPath, const int iSizeOfPath,                                                 
+    CATSchRouteCompressMode iCompress = SchCompressOn,
+    CATSchRouteUnsetGapsMode iUnsetGaps = SchUnsetGapsOn,
+    CATSchRouteSymbolUpdateMode iRouteUpdateSymbols = SchSymbolUpdateOn) = 0;
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchGRRFactory.html">← 上一页: CATISchGRRFactory.h</a></div>
+        <div><a href="CATISchGRRRoute2.html">下一页: CATISchGRRRoute2.h →</a></div>
+    </div>
+</body>
+</html>

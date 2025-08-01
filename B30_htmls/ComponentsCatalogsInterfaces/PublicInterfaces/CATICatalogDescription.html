@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogDescription.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComponentsCatalogsInterfaces/PublicInterfaces/CATICatalogDescription.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogChapterFactory.html">← 上一页: CATICatalogChapterFactory.h</a></div>
+        <div><a href="CATICatalogEnable.html">下一页: CATICatalogEnable.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATICatalogDescription_H_
+#define CATICatalogDescription_H_
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+
+#include &quot;CATCclInterfaces.h&quot;
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;booleanDef.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+
+class CATUnicodeString ;
+class CATILinkableObject ;
+class CATIDocId;
+class CATICatalogChapter ;
+class CATPixelImage ;
+class CATICatalogBrowser;
+class CATICatalogKeyword;
+class CATICatalogLink;
+class CATICatalogBrowser;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATCclInterfaces IID IID_CATICatalogDescription ;
+#else
+extern &quot;C&quot; const IID IID_CATICatalogDescription ;
+#endif
+
+/**
+* @nodoc
+* Enum to describe different kind of description link to objects.
+* &lt;br&gt;
+* DOCUMENT    : link on a document.
+* FEATURE     : link on a feature in a document.
+* UNSET       : no link.
+* DOCUMENTV4  : link on a V4 .model document.
+* &lt;/br&gt;
+*/
+#ifdef _WINDOWS_SOURCE
+extern ExportedByCATCclInterfaces enum COMPONENT_KINDOF
+#else
+enum COMPONENT_KINDOF
+#endif
+{
+   DOCUMENT=0,
+      FEATURE=1,
+      UNSET=2, 
+      DOCUMENTV4=3,
+      DESCRIPTION=4
+} ;
+
+/**
+* Interface to inquire and define catalog descriptions.
+* &lt;b&gt;Role&lt;/b&gt;: A description is a link between a chapter and:
+* &lt;ul&gt;
+*  &lt;li&gt;a chapter, &lt;/li&gt;
+*  &lt;li&gt;a document (CATPart, ...), &lt;/li&gt;
+*  &lt;li&gt;a feature in a document &lt;/li&gt;
+* &lt;li&gt; or nothing. &lt;/li&gt;
+* &lt;/ul&gt;
+* &lt;p&gt;To create descriptions there are three ways:
+* &lt;ul&gt;
+* &lt;li&gt;Part Family, see @href CATICatalogChapter#AddFamilyDescriptionsFromDesignTable &lt;/li&gt;
+* &lt;li&gt;Persistent Query, see @href CATICatalogChapter#AddPersistentQuery &lt;/li&gt;
+* &lt;li&gt;Other, see @href CATICatalogChapter#AddDescription &lt;/li&gt;
+* &lt;/ul&gt;
+*/
+class ExportedByCATCclInterfaces CATICatalogDescription : public CATBaseUnknown
+{
+   CATDeclareInterface;
+public :
+   /**
+   * Enumeration to describe differents kinds of descriptions links to objects.
+   * @param CATCatalogDocument
+   *     The description is linked with a document.
+   * @param CATCatalogFeature
+   *     The description is linked with a feature in a document.
+   * @param CATCatalogUnset
+   *     The description has no link.
+   * @param CATCatalogDescription
+   *     The description is linked with a description (Persistent Query).
+   */
+   enum CATCatalogDescriptionType
+   {
+      CATCatalogDocument=0,
+      CATCatalogFeature=1,
+      CATCatalogUnset=2, 
+      CATCatalogDescription=4
+   } ;
+
+   /**
+   *   Retrieves the chapter containing this description.
+   *   @param oChapter [out, CATBaseUnknown#Release]
+   *      The chapter of current description.
+   */
+   virtual HRESULT GetChapter (CATICatalogChapter*&amp; oChapter) = 0 ;
+   
+   /**
+   *   Retrieves the subchapter from current description.
+   *   @param oSubChapter [out, CATBaseUnknown#Release]
+   *      The chapter pointed by the current description.
+   *   @result
+   *      S_OK if the description point on a chapter.&lt;br&gt;
+   *      E_FAIL otherwise.
+   */
+   virtual HRESULT GetSubChapter (CATICatalogChapter*&amp; oSubChapter) = 0 ;
+   
+   /**
+   *   Retrieves the name of the description.
+   *   @param oName
+   *      The name of the description, displayed in catalog editor and browser.
+   */
+   virtual HRESULT GetName(CATUnicodeString&amp; oName) = 0 ;
+   
+   /**
+   *   Sets the name for the description.
+   *   @param iName
+   *      The new name of the description.
+   */
+   virtual HRESULT SetName (const CATUnicodeString&amp; iName) = 0 ;
+   
+   /**
+   *   Return the type of the pointed chapter.
+   *   @return
+   *      TRUE if pointed object is a sub-chapter, or FALSE if it&#x27;s a EndChapter.
+   */
+   virtual CATBoolean IsObjectASubchapter () = 0 ;
+   
+   /**
+   *   Retrieves the type of the description (for description on objects).
+   *      To known if description has a link on document, feature, V4 model or unset&lt;/br&gt;
+   *   @param ocomponentKindof
+   *      Value to describe different kind of description link to objects.&lt;/br&gt;
+   */
+   virtual HRESULT GetDescriptionType(CATICatalogDescription::CATCatalogDescriptionType&amp; ocomponentKindof)=0;
+
+   /**
+   *   Create a link on current description from a file name.
+   *   &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;To associate a document with the description there
+   *   is two ways:
+   *    &lt;ul&gt;
+   *    &lt;li&gt;@href #SetObject : you give the @href CATILinkableObject interface pointer on
+   *        the document&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;SetDocumentName&lt;/tt&gt; : you give only the complete path of the document. In this case, 
+   *        the document is not opened. &lt;/li&gt;
+   *     &lt;/ul&gt;
+   *   @param iFileName
+   *      File name of the document to link to the description.
+   *
+   */
+   virtual HRESULT SetDocumentName (const CATUnicodeString&amp; iFileName) = 0 ;
+
+   /**
+   *   Creates a link on the current description.
+   *   @param iExternalObject
+   *      The external object to link, it could be any CATILinkable object (document or feature).&lt;/br&gt;
+   *      NULL to unset current link.
+   */
+   virtual HRESULT SetObject (CATILinkableObject* iExternalObject) = 0 ;
+   
+   /**
+   *   Retrieves the object linked to the current description.
+   *   @param oExternalObject [out, CATBaseUnknown#Release]
+   *      The linked external object.
+   */
+   virtual HRESULT GetObject (CATBaseUnknown*&amp; oExternalObject) = 0 ;
+   
+   /**
+   *   Associates an embedded image to the current description.&lt;/br&gt;
+   *   This image is always use if it exist for display in editor and browser.
+   *   @param iImage
+   *      The pixel image to store in catalog, NULL to unset.
+   */
+   virtual HRESULT SetPreview (CATPixelImage* iImage) = 0 ;
+   
+   /**
+   *   Retrieves an embedded image to current description.&lt;/br&gt;
+   *   This image is always use if it exist for display in editor and browser.
+   *   @param oImage  [out, CATBaseUnknown#Release]
+   *      The pixel image retrieving in catalog, NULL to unset.
+   */   
+   virtual HRESULT GetPreview (CATPixelImage** oImage) = 0 ;
+   
+   /**
+   *   Associates an preview file to current description.&lt;/br&gt;
+   *   This image is use if no embedded preview is available.
+   *   @param iexternalObjectName
+   *      The name of file to use a preview (.bmp, .jpg).
+   */
+   virtual HRESULT SetPreviewName (const CATUnicodeString&amp; iexternalObjectName) = 0 ;
+   
+   /**
+   *   Retrieves a preview file to current description.&lt;/br&gt;
+   *   This image is use if no embedded preview is available.
+   *   @param oexternalObjectName
+   *      The name of file to use a preview (.bmp, .jpg).
+   */
+   virtual HRESULT GetPreviewName (CATUnicodeString&amp; oexternalObjectName) = 0 ;
+   
+   /**
+   *   Sets the keyword value on the current description.
+   *   @param iName
+   *      The keyword to valuate.
+   *   @param iValue
+   *      The value to set on selected keyword, for example &quot;3mm&quot;.
+   */
+   virtual HRESULT SetValue (const CATUnicodeString&amp; iName, const CATUnicodeString&amp; iValue) = 0 ;
+   
+   /**
+   *   Sets the keyword value on the current description (real).
+   *   @param iName
+   *      The keyword to valuate.
+   *   @param iValue
+   *      The real value to set on selected keyword.
+   */
+   virtual HRESULT SetDouble (const CATUnicodeString&amp; iName, double iValue) = 0 ;
+   
+   /**
+   *   Sets the keyword value on the current description (integer).
+   *   @param iName
+   *      The keyword to valuate.
+   *   @param iValue
+   *      The integer value to set on selected keyword.
+   */
+   virtual HRESULT SetInteger (const CATUnicodeString&amp; iName, int iValue) = 0 ;  
+   
+   /**
+   *   Sets the keyword value on the current description (boolean).
+   *   @param iName
+   *      The keyword to valuate.
+   *   @param iValue
+   *      The boolean value to set on selected keyword.
+   */
+   virtual HRESULT SetBoolean (const CATUnicodeString&amp; iName, CATBoolean iValue) = 0 ;
+   
+   /**
+   *   Sets the keyword value on the current description (string).
+   *   @param iName
+   *      The keyword to valuate.
+   *   @param iValue
+   *      The string value to set on selected keyword.
+   */
+   virtual HRESULT SetString (const CATUnicodeString&amp; iName, const CATUnicodeString&amp; iValue) = 0 ;
+   
+   /**
+   *   Suppresses the keyword value on current description. The default value will be used.
+   *   @param iName
+   *      The keyword to unset.
+   */
+   virtual HRESULT UnsetKeyword (const CATUnicodeString&amp; iName) = 0 ;
+   
+   /**
+   *   Retrieves the keyword value on the current description.
+   *   @param iName
+   *      The keyword to read.
+   *   @param oValue
+   *      The value of the keyword, for example &quot;3mm&quot;.
+   */
+   virtual HRESULT GetValue (const CATUnicodeString&amp; iName, CATUnicodeString&amp; oValue) = 0 ;
+   
+   /**
+   *   Retrieves the keyword value on the current description (real).
+   *   @param iName
+   *      The keyword to read.
+   *   @param oValue
+   *      The real value of the keyword.
+   */
+   virtual HRESULT GetDouble (const CATUnicodeString&amp; iName, double&amp; oValue) = 0 ;  
+   
+   /**
+   *   Retrieves the keyword value on the current description (integer).
+   *   @param iName
+   *      The keyword to read.
+   *   @param oValue
+   *      The integer value of the keyword.
+   */
+   virtual HRESULT GetInteger (const CATUnicodeString&amp; iName, int&amp; oValue) = 0 ;  
+   
+   /**
+   *   Retrieves the keyword value on the current description (CATBoolean).
+   *   @param iName
+   *      The keyword to read.
+   *   @param oValue
+   *      The boolean value of the keyword.
+   */
+   virtual HRESULT GetBoolean (const CATUnicodeString&amp; iName, CATBoolean&amp; oValue) = 0 ;  
+   
+   /**
+   *   Retrieves the keyword value on the current description (string).
+   *   @param iName
+   *      The keyword to read.
+   *   @param oValue
+   *      The string value of the keyword.
+   */
+   virtual HRESULT GetString (const CATUnicodeString&amp; iName, CATUnicodeString&amp; oValue) = 0 ;
+
+   /**
+   *   Resolves the current description.
+   *   &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;When a description is linked with a CATPart which contain a Design Table, the description can be resolved.&lt;br&gt; 
+   *   In this case, a new CATPart document is created with the right configuration and the description is linked with this new document.&lt;br&gt; 
+   *   In the new document, the link with the Design Table is deleted.&lt;br&gt; 
+   */
+   virtual HRESULT ResolvedDocumentFromDesignTable() =0;
+
+   /**
+   *   Retrieves if the description is resolved or not.
+   *   @param oAnswer
+   *      1 if the description is resolved, 0 otherwise.
+   */
+   virtual HRESULT IsResolvedObjectComputed(int &amp; oAnswer) =0;
+
+   /**
+   *  Launches an instantiation.
+   *  @param iBrowser
+   *    The interface pointer on the current Catalog Browser (it can be NULL)
+   *  @param iInstantiateMode
+   *    The mode of the instantiation is useful for a document instantiation:
+   *    &lt;ul&gt;
+   *    &lt;li&gt;&lt;tt&gt;0&lt;/tt&gt;: The document in the destination document is created by new From&lt;/li&gt;
+   *    &lt;li&gt;&lt;tt&gt;1&lt;/tt&gt;: The document in the destination document is linked 
+   *              towards the component  &lt;/li&gt;
+   *    &lt;/ul&gt;
+   *    otherwise, it is useless.
+   *  @param iRepeatMode
+   *
+   */
+   virtual HRESULT RunInstantiationCmd(const CATICatalogBrowser* iBrowser, int iInstantiateMode, int iRepeatMode) = 0;
+
+   //-----------------------------------------------------------------------------------------------
+   // NODOC or DEPRECATED
+   //-----------------------------------------------------------------------------------------------
+   /**
+   *  @nodoc
+   *   Retrieve a link object display name  on current description.
+   *   @param oExternalObjectDisplayName
+   *      Name of external linked document. For a feature, this is the name of document containing feature.
+   *   @return
+   *      Error code of function.&lt;br&gt;
+   */
+   virtual HRESULT GetObjectDisplayName (CATUnicodeString&amp; oExternalObjectDisplayName) = 0;
+   
+   /**
+   *  @nodoc
+   *   Create a link on current description.
+   *   @param iExternalObjectDocId 
+   *      DocId of external linked document. For a feature, this is the name of document containing feature.
+   *   @return
+   *      Error code of function.&lt;br&gt;
+   */
+   virtual HRESULT SetObjectDocId (CATIDocId* iExternalObjectDocId) = 0;
+
+   /**
+   *  @nodoc
+   *   Retrieve a link on current description.
+   *   @param oExternalObjectDocId [out, CATBaseUnknown#Release]
+   *      DocId of external linked document. For a feature, this is the name of document containing feature.
+   *   @return
+   *      Error code of function.&lt;br&gt;
+   */
+   virtual HRESULT GetObjectDocId (CATIDocId*&amp; oExternalObjectDocId) = 0;
+   
+   /**
+   * @nodoc
+   *   Create a link on current description from a file name.
+   *   @param iExternalObjectName
+   *      Name of external file to link.
+   *   @param itIsAChapter
+   *      For internal use only.
+   *   @return
+   *      Error code of function.&lt;br&gt;
+   */
+   virtual HRESULT SetObjectName (const CATUnicodeString&amp; iExternalObjectName, int itIsAChapter=0) = 0 ;
+   
+   /**
+   * @nodoc
+   *   Retrieve a link on current description.
+   *   @param oExternalObjectName
+   *      Name of external linked document. For a feature, this is the name of document containing feature.
+   *   @return
+   *      Error code of function.&lt;br&gt;
+   */
+   virtual HRESULT GetObjectName (CATUnicodeString&amp; oExternalObjectName) = 0 ;
+   
+   /**
+   * @nodoc
+   * Returns TRUE if description value is a computed value, result of a formula
+   */
+   virtual CATBoolean IsAComputedValue(const CATUnicodeString&amp; keywordName) = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolet method, do not use
+   */
+   virtual HRESULT SetObjectFilter (const CATUnicodeString&amp; expression) = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolet method, do not use
+   */
+   virtual CATUnicodeString GetObjectFilter () = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolet method, do not use
+   */
+   
+   virtual HRESULT SetPreview (CATILinkableObject* externalObject) = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolet method, do not use
+   */
+   virtual HRESULT GetPreview (CATILinkableObject*&amp; externalObject) = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolete method, do not use
+   * @return  CATBaseUnknown#Release
+   */
+   virtual CATICatalogChapter* GetChapter () = 0 ;
+   
+   /**
+   * @nodoc
+   * Obsolete method, do not use
+   * @return  CATBaseUnknown#Release
+   */
+   virtual CATICatalogChapter* GetSubChapter () = 0 ;
+
+      /**
+   * @nodoc 
+   * call GetDescriptionType
+   */
+   virtual HRESULT KindOf (COMPONENT_KINDOF&amp; componentKindof) = 0 ;
+
+   /**
+   * Checks if the link to the document is correct or not.
+   * 
+   * @return
+   &lt;ul&gt;
+   *&lt;li&gt;  S_OK : pointed document is available (without loading)&lt;/li&gt;
+   *&lt;li&gt;  S_FALSE :pointed document is not available or the description does not point to a document&lt;/li&gt;
+   *&lt;li&gt;  E_FAIL in case of error or if there is no pointed object associated to the catalog description&lt;/li&gt;
+   */
+   virtual HRESULT IsPointedDocumentAvailable()=0;
+  /**
+   * Releases the pointing document if possible.
+   * 
+   * @return
+   &lt;ul&gt;
+   *&lt;li&gt;  S_OK :   pointed document has been released and removed from memory &lt;/li&gt;
+   *&lt;li&gt; E_FAIL : unable to remove pointed document, several possible reason:&lt;/li&gt;
+   *&lt;li&gt;          There is another link in session to this document&lt;/li&gt;
+   *&lt;li&gt;          The pointed document has been modified in session, impossible to unload it without data loss&lt;/li&gt;
+   */
+   virtual HRESULT ResetLinkToPointedDocument()=0;
+
+
+
+
+
+};
+
+
+
+CATDeclareHandler( CATICatalogDescription, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICatalogChapterFactory.html">← 上一页: CATICatalogChapterFactory.h</a></div>
+        <div><a href="CATICatalogEnable.html">下一页: CATICatalogEnable.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisModel.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAnalysisInterfaces/PublicInterfaces/CATISamAnalysisModel.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisManager.html">← 上一页: CATISamAnalysisManager.h</a></div>
+        <div><a href="CATISamAnalysisModelFactory.html">下一页: CATISamAnalysisModelFactory.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=================================================================================
+#ifndef CATISamAnalysisModel_H
+#define CATISamAnalysisModel_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999  
+
+/**
+  * @CAA2Level L1
+  * @CAA2Usage U3
+  */
+//=================================================================================
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATAnalysisInterface.h&quot;
+
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATBoolean.h&quot;
+
+class CATISamAnalysisCase;
+class CATISpecObject;
+class CATISamMeshNegociator;
+class CATISamImageModel;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATAnalysisInterface IID IID_CATISamAnalysisModel ;
+#else
+extern &quot;C&quot; const IID IID_CATISamAnalysisModel ;
+#endif
+
+//=================================================================================
+/**
+ * Interface to define  the	analysis Model.
+ * &lt;b&gt;Role&lt;/b&gt;: In the analysis document, an Analysis Model is the feature
+ * dedicated to set and manage all the required data for the discretization 
+ * and idealization of a Finite Element model.
+ */
+class ExportedByCATAnalysisInterface CATISamAnalysisModel: public CATBaseUnknown
+{
+	CATDeclareInterface;
+
+	public:
+
+/**
+ * Sets the Mesh Set associated with the Finite Element Model.
+ * @param iMesh
+ * Mesh Set to be associated.
+ */
+		virtual HRESULT SetMesh(CATBaseUnknown* iMesh) = 0;
+/**
+ * Retrieves the Mesh Set associated with the Finite Element Model.
+ * @param oMesh [out , CATBaseUnknown#Release]
+ * Mesh Set associated.
+ */
+		virtual HRESULT GetMesh(CATBaseUnknown*&amp; oMesh) const = 0;
+/**
+ * Retrieves the Mesh Set Negociator associated with the Finite Element Model.
+ * @param oMeshNegociator [out , CATBaseUnknown#Release]
+ * Mesh Negociator associated.
+ */
+		virtual HRESULT GetMeshNegociator(CATISamMeshNegociator*&amp; oMeshNegociator) = 0;
+
+/**
+ * Adds a previously created case under the analysis model in the tree.
+ * @param iCase. The case to be added.
+ * @param iUpdateVisualization. Defines the impact on current visualization.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;TRUE&lt;/font color=&quot;red&quot;&gt; Previous current case (and all its children) is hidden.&lt;/li&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;FALSE&lt;/font color=&quot;red&quot;&gt; Previous current case visualization is keept.&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+		virtual HRESULT AddCase(const CATISamAnalysisCase* iCase,
+                            CATBoolean iUpdateVisualization=TRUE) = 0;
+
+/**
+ * Retrieves a created case with a given under the analysis model.
+ * @param iName
+ * Name value for search.
+ * @param oFoundCase  [out , CATBaseUnknown#Release]
+ * Case found.
+ */
+
+		virtual HRESULT GetNamedCase(const CATUnicodeString&amp; iName,CATISamAnalysisCase*&amp; oFoundCase) = 0;
+
+/**
+ * Retrieves all the cases in the context of the Analysis model.
+ * @param oCasesList
+ * Collection of cases found.
+ */
+
+		virtual HRESULT GetAllCases(CATLISTV(CATBaseUnknown_var)&amp; oCasesList) = 0;
+
+/**
+ * Retrieves the current case in the context of the Analysis model.
+ * @param oCase  [out , CATBaseUnknown#Release]
+ * The current Case.
+ */
+
+		virtual HRESULT GetCurrentCase(CATISamAnalysisCase* &amp;oCase) = 0;
+
+/**
+ * Sets the current case in the context of the Analysis model.
+ * @param iCase The Case to make current.
+ * @param iUpdateVisualization. Defines the impact on current visualization.
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;TRUE&lt;/font color=&quot;red&quot;&gt; Previous current case (and all its children) is hidden.&lt;/li&gt;
+ * &lt;li&gt;&lt;font color=&quot;red&quot;&gt;FALSE&lt;/font color=&quot;red&quot;&gt; Previous current case visualization is keept.&lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+
+		virtual HRESULT SetCurrentCase(const CATISamAnalysisCase* iCase,
+                                   CATBoolean iUpdateVisualization=TRUE) = 0;
+
+
+/**
+ * Removes analysis feature from the Analysis Model.&lt;br&gt;
+ * This methode will effectivelly delete the feature.
+ * For example, if you delete an analysiset, the set will be removed from all the cases 
+ * that referenced it and removed from the document.
+ * @param iAnalysisFeature The feature to remove.
+ * Note that the set must be created using the  @href CATISamAnalysisModelFactory#CreateUserSet method &lt;br&gt;
+ * where the iContainingObject is the AnalysisModel.
+ */
+		virtual HRESULT RemoveAnalysisFeature(const CATISpecObject* iAnalysisFeature) = 0;
+
+
+/**
+ * Retrieves the CATISamImageModel. &lt;br&gt;
+ * @param oImageModel  [out , CATBaseUnknown#Release]
+ * The image model manager.
+ */
+		virtual HRESULT GetImageModel(CATISamImageModel* &amp;oImageModel) = 0;
+
+/**
+ * Return an Integer Value. 
+ */
+    virtual int GetInternalCount() = 0;
+
+
+
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler( CATISamAnalysisModel, CATBaseUnknown );
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISamAnalysisManager.html">← 上一页: CATISamAnalysisManager.h</a></div>
+        <div><a href="CATISamAnalysisModelFactory.html">下一页: CATISamAnalysisModelFactory.h →</a></div>
+    </div>
+</body>
+</html>

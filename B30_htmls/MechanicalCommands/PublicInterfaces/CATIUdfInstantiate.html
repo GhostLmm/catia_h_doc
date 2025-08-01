@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalCommands/PublicInterfaces/CATIUdfInstantiate.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalCommands/PublicInterfaces/CATIUdfInstantiate.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeatureUser.html">← 上一页: CATIUdfFeatureUser.h</a></div>
+        <div><a href="CATUdfInterfaces.html">下一页: CATUdfInterfaces.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATIUdfInstantiate_H
+#define CATIUdfInstantiate_H
+// -------------------------------------------------------------------
+// Copyright Dassault Systemes 2000
+//---------------------------------------------------------------------
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+#include &quot;CATUdfInterfaces.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+
+#include &quot;CATLISTV_CATBaseUnknown.h&quot;
+#include &quot;CATLISTV_CATISpecObject.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+class CATIContainer_var;
+class CATPathElement;
+class CATBaseUnknown_var;
+
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATUdfInterfaces IID IID_CATIUdfInstantiate ;
+#else
+extern &quot;C&quot; const IID IID_CATIUdfInstantiate ;
+#endif
+
+//------------------------------------------------------------------
+/**
+  * Interface to instantiate a template reference.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Interface that enables the instantiation of a &lt;tt&gt;template&lt;/tt&gt; reference.&lt;br&gt;
+  * &lt;p&gt;The &lt;tt&gt;template&lt;/tt&gt; can be a &lt;tt&gt;User Feature&lt;/tt&gt;, a &lt;tt&gt;Power Copy&lt;/tt&gt;, a &lt;tt&gt;Document Template&lt;/tt&gt;,
+  * and in that case, they have been created with the @href CATIUdfFactory interface and defined with the
+  * @href CATIUdfFeature interface.&lt;br&gt;
+  * But it can also be a &lt;tt&gt;Machining Process&lt;/tt&gt;, an &lt;tt&gt;Action&lt;/tt&gt;, or a
+  * set of features like an &lt;tt&gt;Ordered Geometrical Set&lt;/tt&gt;, a &lt;tt&gt;Body&lt;/tt&gt;, ...
+  * &lt;p&gt;The instantiation process depends on the reference: it can be based on a &lt;tt&gt;Copy/Paste&lt;/tt&gt; mechanism,
+  * or on an &lt;tt&gt;Instance/Reference&lt;/tt&gt; mechanism.
+  * Refer to the CAA Encyclopedia article entitled &#x27;An Overview of Power Copies and User Features&#x27; for details
+  * about the different mechanisms of instantiation in the case of &lt;tt&gt;Power Copies&lt;/tt&gt; and &lt;tt&gt;User Features&lt;/tt&gt;.&lt;br&gt;
+  * &lt;p&gt;However the instantiation process remains identical: you need to call the methods of this interface in the right order:
+  * &lt;ol&gt;
+  * &lt;li&gt;&lt;b&gt;First Step: Initialization&lt;/b&gt;:&lt;br&gt;
+  * It is the step where you define the destination of instantiation.&lt;br&gt;
+  * There are two different methods: only one of them should be called depending on what you want to instantiate.&lt;br&gt;
+  * &lt;ul&gt;
+  * &lt;li&gt;@href #SetDestinationPath :&lt;br&gt;
+  * This method should be called when you want to instantiate the reference &lt;tt&gt;template&lt;/tt&gt;:&lt;br&gt;
+  * &lt;ul&gt;
+  * &lt;li&gt;in a Product context: where a new Part may be created on the fly.&lt;/li&gt;
+  * &lt;li&gt;in a Part context, when you do not need to indicate the location of insertion of the created objects.&lt;/li&gt;
+  * &lt;/ul&gt;&lt;/li&gt;
+  * &lt;li&gt;@href #SetDestinationPathOfInsertion :&lt;br&gt;
+  * This method should be called when you want to instantiate the reference &lt;tt&gt;template&lt;/tt&gt; in a Part context and indicate
+  * the location of insertion of the created objects.&lt;br&gt;
+  * You can retrieve the default destination using the @href #GetDefaultDestinationOfInsertion method.&lt;/li&gt;
+  * &lt;/ul&gt;&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Second Step: Input valuation&lt;/b&gt;:&lt;br&gt;
+  * It is the step where you valuate the inputs, either manually or automatically.&lt;br&gt;
+  * Use @href #GetOldInputs , @href #GetOldInput , @href #GetNewInput , @href #GetNewInputPathElement to retrieve the inputs values either on the reference or on the instance.&lt;br&gt;
+  * Use @href #FilterInput , @href #SetNewInput , @href #UseIdenticalName to valuate the inputs.&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Third Step: Parameters modification&lt;/b&gt;:&lt;br&gt;
+  * This step is optional: use the @href #GetParameters method to retrieve the published parameters and modify their values.&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Fourth Step: Validation&lt;/b&gt;:&lt;br&gt;
+  * It is the step where the reference is instantiated. After the @href #Instantiate method, you can not modify the inputs and parameters values anymore.&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Fith Step: Analyse&lt;/b&gt;&lt;br&gt;
+  * This step is optional: use the @href #GetInstantiated method to retrieve the created feature, and @href #SetDisplayName to modify its name.&lt;br&gt;
+  * To retrieve this name, use @href #GetDisplayName .&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Sixth Step: Ending of the instantiation process&lt;/b&gt;:&lt;br&gt;
+  * Use @href #EndInstantiate method to end the instantiation process.&lt;/li&gt;
+  * &lt;li&gt;&lt;b&gt;Seventh Step: Reset once the instantiation process is fully completed&lt;/b&gt;:&lt;br&gt;
+  * Use @href #Reset method to clean up data when instantiation is terminated.&lt;/li&gt;
+  * &lt;/ol&gt;
+  * &lt;/ul&gt;
+  * Only the third and fifth steps are optional, while all others are &lt;b&gt;mandatory&lt;/b&gt;.&lt;br&gt;
+  * Refer to the CAA Encyclopedia article entitled &#x27;Instantiating a User Feature Reference&#x27;
+  * for details  about the usage of this interface.
+  * @see CATIUdfFactory, CATIUdfFeature 
+  */
+class ExportedByCATUdfInterfaces CATIUdfInstantiate: public CATBaseUnknown
+{
+   CATDeclareInterface;
+   
+public:
+
+   /**
+     * Sets the destination path for the instantiation.
+     * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This is the first step of the instantiation process.&lt;br&gt;
+     * Use this method when you want to instantiate a &lt;tt&gt;template&lt;/tt&gt; reference in a Product context
+     * or if you want to instantiate it in a Part context without specifying the location of insertion of the created features.&lt;br&gt;
+     * If you want to set this location, you should use the other method @href #SetDestinationPathOfInsertion .
+     * @param iPath
+     *  It is the complete path of a Part or a Product where the instantiated elements will be created.&lt;br&gt;
+     *  The created features will be set in the current set of features of the active Part.&lt;br&gt;
+     *  &lt;ul&gt;&lt;li&gt;If &lt;tt&gt;iPath&lt;/tt&gt; represents the path of a Part, this Part is the destination Part.&lt;/li&gt;
+     *  &lt;li&gt;If &lt;tt&gt;iPath&lt;/tt&gt; represents the path of a Product, a new Part may be automatically created depending on the reference.&lt;/li&gt;&lt;/ul&gt;
+     * @param oDestinationPath
+     *  &lt;ul&gt;
+     *  &lt;li&gt;This value is NULL if &lt;tt&gt;iPath&lt;/tt&gt; is the complete path of a Part&lt;/li&gt;
+     *  &lt;li&gt;This value is the complete path of the created Part (when it exists).&lt;tt&gt;iPath&lt;/tt&gt; is then the complete path of a Product.&lt;/li&gt;
+     *  &lt;/ul&gt;
+     *  The command must UIactivate this new path before modifying the inputs, this is mandatory
+     *  to create links between documents (&lt;tt&gt;Reference Elements&lt;/tt&gt; in the Part).
+     * @param oDestination
+     *  &lt;ul&gt;
+     *  &lt;li&gt;This value is NULL_var if &lt;tt&gt;iPath&lt;/tt&gt; is the complete path of a Part.&lt;/li&gt;
+     *  &lt;li&gt;This Value is the pointer of the created Part (when it exists). &lt;tt&gt;iPath&lt;/tt&gt; is then complete path of a Product.&lt;/li&gt;
+     *  &lt;/ul&gt;
+     */
+   virtual HRESULT SetDestinationPath (CATPathElement* iPath,
+                                       CATPathElement*&amp; oDestinationPath,
+                                       CATBaseUnknown_var&amp; oDestination) = 0;
+
+   /** 
+     * Sets the destination path and position for the instantiation.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This is the first step of the instantiation process.&lt;br&gt;
+     * Use this method when you want to instantiate a &lt;tt&gt;template&lt;/tt&gt; reference in a Part context and specify the location
+     * of insertion of the created features.&lt;br&gt;
+     * If you do not need to specify the location of insertion, or if you want to instantiate the &lt;tt&gt;template&lt;/tt&gt; reference in a 
+     * Product context, you should use the other @href #SetDestinationPath method.
+     * @param iPathOfInsertion
+     *  The complete path of the feature where you want to insert the result of the instantiation.&lt;br&gt;
+     *  &lt;ul&gt;&lt;li&gt;If this destination feature is a set of features (like a &lt;tt&gt;Geometrical Set&lt;/tt&gt;, a &lt;tt&gt;Body&lt;/tt&gt;, ...), the instantiation is done
+     *  either inside or after it, depending on the &lt;tt&gt;iRelativePosition&lt;/tt&gt; argument.&lt;/li&gt;
+     *  &lt;li&gt;Otherwise if the destination feature is not a set of features, the instantiation is done after it and the &lt;tt&gt;iRelativePosition&lt;/tt&gt; is
+     *  imperatively positioned on &lt;tt&gt;After&lt;/tt&gt;.&lt;/li&gt;&lt;/ul&gt;
+     * @param iRelativePosition
+     *  The position of insertion relatively to the destination feature.&lt;br&gt;
+     *  For mechanical features, it is either &lt;tt&gt;After&lt;/tt&gt; or &lt;tt&gt;Inside&lt;/tt&gt;, depending on the destination feature.
+     * @return
+     *  &lt;ul&gt;&lt;li&gt;&lt;code&gt;S_OK&lt;/code&gt; when the destination of insertion is valid.&lt;/li&gt;
+     *  &lt;li&gt;&lt;code&gt;E_FAIL&lt;/code&gt; when the destination of insertion is not valid. An error message is then raised with a CATError.&lt;br&gt;
+     *  It is the case for example when you set a &lt;tt&gt;Body&lt;/tt&gt; as destination of insertion of a &lt;tt&gt;Power Copy&lt;/tt&gt; that contains a
+     *  &lt;tt&gt;Geometrical Set&lt;/tt&gt; and you use the &lt;tt&gt;Inside&lt;/tt&gt; position. As a &lt;tt&gt;Geometrical Set&lt;/tt&gt; can not be inserted inside a &lt;tt&gt;Body&lt;/tt&gt;,
+     * the method returns E_FAIL and an error message explaining why the destination is not possible is raised.&lt;/li&gt;&lt;/ul&gt;
+     */
+   virtual HRESULT SetDestinationPathOfInsertion (CATPathElement* iPathOfInsertion,
+                                                  const CATUnicodeString&amp; iRelativePosition) = 0;
+   /** 
+     * Retrieves the default destination path and its relative position.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method is used in combination with @href #SetDestinationPathOfInsertion . Use it to retrieve the default destination
+     * feature and the default position of the insertion when it is defined.&lt;br&gt;
+     * For example, in case of mechanical features, the default destination is the current feature. If this feature is a set of features, the relative
+     * position is &lt;tt&gt;Inside&lt;/tt&gt;, otherwise it is &lt;tt&gt;After&lt;/tt&gt;.
+     * @param iPartPath
+     *  The complete path of a Part where the instantiated elements will be created.&lt;br&gt;
+     * @param oDefaultDestinatioPath
+     *  The complete path of the default destination feature.
+     * @param oDefaultRelativePosition
+     *  The default destination position.
+     * @return
+     *  &lt;ul&gt;&lt;li&gt;&lt;code&gt;S_OK&lt;/code&gt; when the default destination path is retrieved.&lt;/li&gt;
+     *  &lt;li&gt;&lt;code&gt;E_FAIL&lt;/code&gt; when no default destination is valid. In that case, a CATError is raised, explining why there is no valid destination.&lt;/li&gt;&lt;/ul&gt;
+     */
+   virtual HRESULT GetDefaultDestinationOfInsertion (CATPathElement* iPartPath, CATPathElement*&amp; oDefaultDestinatioPath,
+                                                     CATUnicodeString&amp; oDefaultRelativePosition) = 0;
+
+   /**
+     * @nodoc 
+     * Lists all available formats for the instantiation.
+     * @param oFormatList
+     *   List of format
+     */
+   virtual HRESULT GetListAvalaibleFormat (CATListOfCATUnicodeString*&amp; oFormatList) = 0;
+
+   /**
+     * @nodoc 
+     * Select format for duplication, these format are the same as Copy format
+     * @param iFormat
+     *   Format to select
+     */
+   virtual HRESULT SetCurrentFormat (const CATUnicodeString&amp; iFormat) = 0;
+
+   /**
+     * @nodoc 
+     * Read format for duplication, these format are the same as Copy format
+     * @param oFormat
+     *   Selected format
+     */
+   virtual HRESULT GetCurrentFormat (CATUnicodeString&amp; oFormat) = 0;
+
+   /**
+     * @nodoc 
+     * deprecated : use GetOldInputs
+     */
+   virtual HRESULT GetListInputs (CATListValCATISpecObject_var*&amp; oInputList,
+                                  CATListOfCATUnicodeString*&amp; oRoleList) = 0;
+
+   /**
+     * Retrieves the list of all the inputs of the reference along with their role.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve the inputs of the reference &lt;tt&gt;template&lt;/tt&gt;
+     * along with their role (defined by the @href CATIUdfFeature#SetInputRole method).
+     * @param oOldValues
+     *  The list of inputs of the reference &lt;tt&gt;template&lt;/tt&gt;.
+     * @param oRoleList
+     *  The list of NLS texts to help the user to better understand the inputs.
+     *  This list has always the same size as the oOldValues list.
+     * @return
+     *  &lt;code&gt;S_OK&lt;/code&gt; if the inputs are retrieved correctly, &lt;code&gt;E_FAIL&lt;/code&gt; if there is a problem while retrieving the inputs.
+     */
+   virtual HRESULT GetOldInputs (CATListValCATBaseUnknown_var*&amp; oOldValues,
+                                 CATListOfCATUnicodeString*&amp; oRoleList) = 0;
+
+   /**
+     * Retrieves one input of the reference template.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve the input of the reference &lt;tt&gt;template&lt;/tt&gt; located at the &lt;tt&gt;iPos&lt;/tt&gt; position.&lt;br&gt;
+     * You get the same result when getting the &lt;tt&gt;iPos&lt;/tt&gt;th element of the list given by the @href #GetOldInputs method. 
+     * @param iPos
+     *  Input position, from 1 to the size of the list returned by @href #GetOldInputs 
+     * @return
+     *   The &lt;tt&gt;iPos&lt;/tt&gt;th input feature.
+     */
+   virtual CATBaseUnknown_var GetOldInput (const int iPos) = 0;
+
+   /**
+     * Retrieves one input of the instance.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve the input set by the @href #SetNewInput method or 
+     * after the @href #UseIdenticalName method.
+     * @param iPos
+     *  Input position, from 1 to the size of the list returned by @href #GetOldInputs 
+     * @return
+     *   NULL_var if the &lt;tt&gt;iPos&lt;/tt&gt;th input is not valuated otherwise the input of the current instance.
+     */
+   virtual CATBaseUnknown_var GetNewInput (const int iPos) = 0;
+
+   /**
+     * Retrieves the path of one input of the instance.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve the path of an input set by the @href #SetNewInput method or 
+     * after the @href #UseIdenticalName method.&lt;br&gt;
+     * Warning, this path can be different from the one set in the @href #SetNewInput method: for example, the new input can be the result of an import 
+     * of the given input. 
+     * @param iPos
+     *  The input position, from 1 to the size of the list returned by @href #GetOldInputs
+     * @param oPath
+     *  The returned path element. It has to be released after use if method returs S_OK.
+     * @return
+     *   E_FAIL if &lt;tt&gt;iPos&lt;/tt&gt; position is outside the authorized range, otherwise S_OK.
+     */
+   virtual HRESULT GetNewInputPathElement(int iPos, CATPathElement *&amp;oPath) = 0;
+
+   /**
+     * Filters the selection for the valuation of one input of the instance.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method is called during the selection made by the user to valuate a given input at the &lt;tt&gt;iPos&lt;/tt&gt; position.
+     * The filter is done on &lt;tt&gt;Replace&lt;/tt&gt; compliancy.
+     * The output of this method is a new CATPathElement, &lt;tt&gt;oFilteredSelection&lt;/tt&gt;, and if this path is not empty it is the new input.
+     * @param iPos
+     *  Input position, from 1 to the size of the list returned by @href #GetOldInputs 
+     * @param iSelection
+     *  A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the new object, this path must contain the full selection
+     *   path for a valid import mechanism in multidocument context.
+     * @param oFilteredSelection
+     *  A subpath of &lt;tt&gt;iSelection&lt;/tt&gt; containing the authorized feature for the @href #SetNewInput method.
+     * @return
+     *  &lt;code&gt;E_FAIL&lt;/code&gt; if the selection is not valid for the input valuation, &lt;code&gt;S_OK&lt;/code&gt; otherwise.
+    */
+   virtual HRESULT FilterInput (const int iPos,
+                                CATPathElement* iSelection,
+                                CATPathElement** oFilteredSelection) = 0;
+
+   /**
+   * Gets an information message explaining the FilterInput failure.
+   * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method is called by standard instantiation command after the call of @href #FilterInput . The goal is to
+   * customize the tooltip shown on selection agent to provide more information to the user. This can be used in customized
+   * instantiation commands to help the user in the instantiation process. 
+   * @param oMsg
+   * The message that can be used as an help for the end user. 
+   * In the standard instantiation command, if this message is not empty after the call of this method,
+   * the tooltip of the selection agent is modified with it
+   * @return
+   * S_OK if the method succeeds, E_FAIL otherwise
+   */
+	virtual HRESULT GetFilterInputMessage(CATUnicodeString &amp;oMsg) = 0;
+
+   /**
+     * Sets one input of the instance at a given position.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to valuate the input located at the &lt;tt&gt;iPos&lt;/tt&gt; position of the instance.
+     * @param iPos
+     *  Input position, from 1 to the size of the list returned by @href #GetOldInputs 
+     * @param iSelection
+     *  A &lt;tt&gt;CATPathElement&lt;/tt&gt; with the object. This path must contain the full selection
+     *  path for a valid import mechanism in multidocument context.
+     * @return
+     *  &lt;code&gt;E_FAIL&lt;/code&gt; if the valuation fails, &lt;code&gt;S_OK&lt;/code&gt; otherwise.
+     */
+   virtual HRESULT SetNewInput (const int iPos,
+                                CATPathElement* iSelection) = 0;
+
+   /**
+     * Valuates automatically all the inputs of the instance.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method tries to find a feature for each input, looking for features having
+     * the same @href CATIAlias name than the role of the input.
+     * &lt;br&gt;After this method, some inputs may be still unvaluated. Test the valuation 
+     * with the @href #GetNewInput method. 
+     * @param iRoot
+     *  The location where to search for the inputs.
+     * @return
+     *  &lt;code&gt;E_FAIL&lt;/code&gt; if the &lt;tt&gt;iRoot&lt;/tt&gt; argument is not valid, &lt;code&gt;S_OK&lt;/code&gt; otherwise.
+     */
+   virtual HRESULT UseIdenticalName (const CATBaseUnknown_var iRoot) = 0;
+
+   /**
+     * Retrieves the list of all published parameters along with their role.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve all published parameters in order to change their value.
+     * But it is not necessary to modify them.
+     * @param oParamList
+     *  The list of published parameters.
+     * @param oRoleList
+     *  The list of roles dedicated to each published parameter. The list has the same size as &lt;tt&gt;oParamList&lt;/tt&gt;.
+     */
+   virtual HRESULT GetParameters (CATListValCATBaseUnknown_var*&amp; oParamList,
+                                  CATListOfCATUnicodeString*&amp; oRoleList) = 0;
+
+   /**
+     * @nodoc 
+     * Read all external links on selected components.&lt;br&gt;
+     * @param oExternalLinks
+     *   liste of CATIExternalLink*
+     */
+   virtual HRESULT GetExternalLinks (CATListValCATBaseUnknown_var*&amp; oExternalLinks) = 0;
+
+   /**
+     * @nodoc 
+     *   Update the preview feature after a parameter modification.
+     */
+   virtual HRESULT UpdatePreview() = 0;
+
+   /**
+     * Validates the instantiation.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The new instance is now created, you can get a pointer to this instance when it exists,
+     * using the @href #GetInstantiated method (Indeed, for &lt;tt&gt;Power Copy&lt;/tt&gt; instantiation in &lt;tt&gt;One Step&lt;/tt&gt; mode,
+     * no instance is created).&lt;br&gt;
+     * After this call you can not modify its inputs and its parameters anymore.
+     * @param iDestination
+     *  The Part destination of instantiation.&lt;br&gt;
+     *  &lt;ul&gt;&lt;li&gt;For User Feature, there is no need to set a destination. Then the &lt;tt&gt;iDestination&lt;/tt&gt; argument is NULL_var.&lt;/li&gt;
+     *  &lt;li&gt;For Power Copy, the destination is the Part where the instantiation should be done.&lt;br&gt;
+     *  &lt;ul&gt;&lt;li&gt;In case you use the @href #SetDestinationPath method, it is the first argument of this method if it is a Part,
+     *  otherwise it is the last argument of the method if the first agument is a Product.&lt;/li&gt;
+     *  &lt;li&gt;In case you use the @href #SetDestinationPathOfInsertion method, it is the Part containing the destination feature of the first
+     *  argument of this method.&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;
+     * @return
+     *  &lt;code&gt;E_FAIL&lt;/code&gt; if the instantiation fails, &lt;code&gt;S_OK&lt;/code&gt; otherwise.
+     */
+   virtual HRESULT Instantiate (const CATBaseUnknown_var&amp; iDestination) = 0;
+
+   /**
+     * Retrieves the instantiated feature.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to retrieve a pointer to the new instance.&lt;br&gt;
+     * You can call this method only after the @href #Instantiate method, and only before the @href #EndInstantiate method.&lt;br&gt;
+     * Use this method &lt;b&gt;only&lt;/b&gt; in the case of a &lt;tt&gt;User Feature&lt;/tt&gt; instantiation.  
+     * @param iFrom
+     *   This.
+     * @return
+     *   The instantiated object.
+     */
+   virtual CATBaseUnknown_var GetInstantiated (const CATBaseUnknown_var iFrom) = 0;
+
+   /**
+     * Sets the name of the instantiated feature.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Use this method to modify the name of the instance in the case of a &lt;tt&gt;User Feature&lt;/tt&gt; instantiation.&lt;br&gt;
+     * The default name is the name of the &lt;tt&gt;User Feature&lt;/tt&gt; reference followed by a number. This name is returned by @href #GetDisplayName .&lt;br&gt;
+     * This method is available &lt;b&gt;only&lt;/b&gt; if the reference object is a single object (not available for &lt;tt&gt;PowerCopy&lt;/tt&gt; with multiple features
+     * for example).
+     * @param iName
+     *  The new name of the instance.
+     * @return
+     *  &lt;code&gt;S_OK&lt;/code&gt;
+     */
+   virtual HRESULT SetDisplayName (const CATUnicodeString&amp; iName) = 0;
+
+   /**
+     * Ends the instantiation process.
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: After this call, the instantiation is ended.&lt;br&gt;
+     * All the links to the reference are broken.
+     * In case of &lt;tt&gt;User Feature&lt;/tt&gt; instantiation, you can modify the created instance using the @href CATIUdfFeatureInstance interface.
+     * @return
+     */
+   virtual HRESULT EndInstantiate() = 0;
+
+   /** 
+   * This method has to be called at the end of the instantiation.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: It cleans memory, resets the template so that it can be re-instantiated. 
+   * Its call is mandatory for Document Templates instantiation.
+   * @return
+   *   &lt;code&gt;S_OK&lt;/code&gt;
+   */
+   virtual HRESULT Reset() = 0;
+
+   /**
+     * Retrieves the name of the reference template.
+     * @param iReferenceName
+     *  It is the name of the reference &lt;tt&gt;template&lt;/tt&gt;.&lt;br&gt;
+     *  Note that this name is not modifiable even if you use the @href #SetDisplayName method as this last method applies on the instance and not on
+     * the reference.
+     * @return
+     */
+   virtual HRESULT GetDisplayName (CATUnicodeString&amp; iReferenceName) = 0;
+};
+
+//------------------------------------------------------------------
+
+CATDeclareHandler (CATIUdfInstantiate, CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIUdfFeatureUser.html">← 上一页: CATIUdfFeatureUser.h</a></div>
+        <div><a href="CATUdfInterfaces.html">下一页: CATUdfInterfaces.h →</a></div>
+    </div>
+</body>
+</html>

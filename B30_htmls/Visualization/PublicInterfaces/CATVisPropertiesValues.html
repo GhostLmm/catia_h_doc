@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization/PublicInterfaces/CATVisPropertiesValues.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Visualization/PublicInterfaces/CATVisPropertiesValues.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATVisPropertiesPrivateValues.html">← 上一页: CATVisPropertiesPrivateValues.h</a></div>
+        <div><a href="CATVisPropertyAction.html">下一页: CATVisPropertyAction.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATVisPropertiesValues_H
+#define CATVisPropertiesValues_H
+//
+// COPYRIGHT DASSAULT SYSTEMES 1999
+//
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATVisPropertiesPrivateValues.h&quot;
+#include &quot;CATShowAttribut.h&quot;
+
+#include &quot;CATVisualization.h&quot;
+#include &quot;CATVisPropertyType.h&quot;
+#include &quot;CATSymbolType.h&quot;
+#include &quot;CATPickAttribut.h&quot;
+#include &quot;CATRenderingAttribut.h&quot;
+
+/**
+* Class to represent a set of graphic properties.
+* &lt;b&gt;Role&lt;/b&gt;: This class is used in the @href CATIVisPropertiesAbstract#GetPropertiesAtt , @href CATIVisPropertiesAbstract#SetPropertiesAtt 
+* and in the @href CATIVisPropertiesAbstract#ResetPropertiesAtt methods. 
+* @see CATIVisProperties
+*/
+
+class ExportedByCATVisualization CATVisPropertiesValues : public CATVisPropertiesPrivateValues
+{
+public:
+
+  /** 
+  * Constructs a graphic property set.
+  */
+  CATVisPropertiesValues ();
+
+  /**
+  * Sets the color.
+  * @param iRed
+  * A value between 0 and 255.
+  * @param iGreen
+  * A value between 0 and 255.
+  * @param iBlue
+  * A value between 0 and 255.
+  * @param iInheritance
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance 
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;
+  * &lt;dd&gt;Heritance
+  * &lt;/dl&gt;
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+
+  HRESULT SetColor   (unsigned int  iRed, unsigned int  iGreen, unsigned int  iBlue, unsigned int  iInheritance=0);
+
+  /**
+  * Retrieves the color.
+  * @param oRed
+  * A value between 0 and 255.
+  * @param oGreen
+  * A value between 0 and 255.
+  * @param oBlue
+  * A value between 0 and 255.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The color has been defined using the @href #SetColor method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The color has not been defined using the @href #SetColor method or the color has been 
+  * reset using the @href #ResetColor method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetColor   (unsigned int&amp; oRed, unsigned int&amp; oGreen, unsigned int&amp; oBlue);
+
+  /**
+  * Resets the color.
+  * The color becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetColor ();
+
+  /**
+  * Sets the opacity value.
+  * @param iOpacity
+  * The opacity is defined from 255 (total opacity) to 0 (total transparency). 
+  * &lt;br&gt;In Material visualization mode the transparency is real, so the element
+  * is truly  more or less opaque. But in any other visualization mode, the transparency is a 
+  * simulation, so if the opacity is between 0 and 254, the element is transparent and displayed
+  * in the same way whatever the opacity value, and if the opacity is 255 the element is opaque. 
+  * @param iInheritance
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance for the opacity
+  * &lt;/dl&gt;
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetOpacity   (unsigned int  iOpacity, unsigned int  iInheritance=0);
+
+  /**
+  * Retrieves the opacity value.
+  * @param oOpacity
+  * A value between 0 and 255.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The opacity has been defined using the @href #SetOpacity  method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The opacity has not been defined using the @href #SetOpacity method or the 
+  * opacity has been reset using the @href #ResetOpacity  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetOpacity   (unsigned int&amp; oOpacity);
+
+  /**
+  * Resets the opacity value.
+  * The opacity becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetOpacity ();
+
+  /**
+  * Sets the point symbol.
+  * @param iSymbol
+  *     The point symbol.
+  *	&lt;br&gt;&lt;b&gt;legal values&lt;/b&gt;:
+  *	&lt;ul&gt;
+  *	&lt;li&gt; CROSS: a cross which looks like a &quot;X&quot;.&lt;/li&gt;
+  *	&lt;li&gt; PLUS: a cross which looks like a &quot;+&quot;&lt;/li&gt;
+  *	&lt;li&gt; CONCENTRIC: an unfilled circle&lt;/li&gt;
+  *	&lt;li&gt; COINCIDENT: two unfilled concentric circles&lt;/li&gt;
+  *	&lt;li&gt; FULLCIRCLE: a filled circle&lt;/li&gt;
+  *	&lt;li&gt; FULLSQUARE: a filled square&lt;/li&gt;
+  *	&lt;li&gt; STAR: a star which is the union of a 2D marker CROSS, a 2D marker PLUS and a 2D marker DOT&lt;/li&gt;
+  *	&lt;li&gt; DOT: a dot &lt;/li&gt;
+  *	&lt;li&gt; SMALLDOT: a smalldot whose size is one pixel&lt;/li&gt;
+  *	&lt;li&gt; MISC1: a kind of arrow which points to the bottom-left
+  *	&lt;pre&gt;
+  *	     /
+  *	|  /
+  *	|/__
+  *	&lt;/pre&gt;
+  *	&lt;/li&gt;
+  *	&lt;li&gt; MISC2: a kind of arrow which points to the top-rigth
+  *	&lt;pre&gt;
+  *	    ___ 	
+  *	      /| 
+  *	    /  |
+  *	  /
+  *	&lt;/pre&gt;
+  *	&lt;/li&gt;
+  *	&lt;li&gt; FULLCIRCLE2: a big FULLCIRCLE&lt;/li&gt;
+  *	&lt;li&gt; FULLSQUARE2: a big FULLSQUARE&lt;/li&gt;
+  *	&lt;/ul&gt;
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetSymbolType    (CATSymbolType  iSymbol);
+
+  /** @nodoc . */
+  HRESULT SetSymbol    (unsigned int  iSymbol);
+
+  /**
+  * Retrieves the point symbol. 
+  * @param oSymbol
+  *   The point symbol.
+  *   &lt;br&gt;see the @href #SetSymbolType method to have the list of legal values. 
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The symbol has been defined using the @href #SetSymbolType method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The symbol has not been defined using the @href #SetSymbolType  method 
+  * or the symbol has been reset using the @href #ResetSymbolType  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetSymbolType    (CATSymbolType&amp; oSymbol);
+
+  /** @nodoc . */
+  HRESULT GetSymbol    (unsigned int&amp; oSymbol);
+
+  /**
+  * Resets the point symbol.
+  * The symbol becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetSymbolType  ();
+
+  /** @nodoc . */
+  HRESULT ResetSymbol  ();
+
+  /**
+  * Sets the line type.
+  * @param iLineType
+  * The value ranges from 1 to 63. Each index is a line type customizable in
+  * the Tools/Options/General/Display/Line Type property page.
+  * @param iInheritance
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance 
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;
+  * &lt;dd&gt;Heritance
+  * &lt;/dl&gt; 
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetLineType    (unsigned int  iLineType, unsigned int  iInheritance=0);
+
+  /**
+  * Retrieves the line type.
+  * @param oLineType
+  * The value ranges from 1 to 63. Each index is a line type customizable in
+  * the page Tools/Options/General/Display/Line Type.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The line type has been defined using the @href #SetLineType method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The line type has not been defined using the @href #SetLineType method or 
+  * the line type has been reset using the @href #ResetLineType  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetLineType    (unsigned int&amp; oLineType);
+
+  /**
+  * Resets the line type.
+  * The line type becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetLineType  ();
+
+   /**
+  * Sets the line width.
+  * @param iWidth
+  * The value ranges from 1 to 63. Each index is a thickness customizable in
+  * the Tools/Options/General/Display/thickness property page.
+  * @param iInheritance
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance 
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;
+  * &lt;dd&gt;Heritance
+  * &lt;/dl&gt; 
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetWidth    (unsigned int  iWidth, unsigned int  iInheritance=0);
+
+  /**
+  * Retrieves the line width.
+  * @param oWidth
+  * The value ranges from 1 to 63. Each index is a thickness customizable in
+  * the Tools/Options/General/Display/thickness property page.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The line width has been defined using the @href #SetWidth method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The line width has not been defined using the @href #SetWidth method or 
+  * the line width has been reset using the @href #ResetWidth  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetWidth    (unsigned int&amp; oWidth);
+
+  /**
+  * Resets the line width.
+  * The line width becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetWidth  ();
+
+  /**
+  * Sets the inheritance flag for a given property.
+  * @param iType
+  * The type of property. The &lt;b&gt;legal values&gt;&lt;/b&gt; are:Color,Opacity,Line Type,Line Width.  
+  * @param iInheritance
+  * The inheritance flag for the iType property.
+  * &lt;br&gt;&lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance 
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;
+  * &lt;dd&gt;Heritance
+  * &lt;/dl&gt; 
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;iType is valid
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;iType is not valid.
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetInheritance    (CATVisPropertyType iType, unsigned int  iInheritance);
+
+  /**
+  * Retrieves the inheritance flag for a given property.
+  * @param iType
+  * The type of property. The &lt;b&gt;legal values&gt;&lt;/b&gt; are:Color,Opacity,Line Type,Line Width.  
+  * @param oInheritance
+  * The flag of inheritance for the iType property.
+  * &lt;br&gt;&lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;0&lt;/tt&gt;
+  * &lt;dd&gt;No heritance 
+  * &lt;dt&gt;&lt;tt&gt;1&lt;/tt&gt;
+  * &lt;dd&gt;Heritance
+  * &lt;/dl&gt; 
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The inheritance flag has been defined using the Setxxx method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The inheritance flag has not been defined using the the Setxxx method or 
+  * the inheritance flag has been reset using the @href #ResetInheritance  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetInheritance    (CATVisPropertyType iType, unsigned int&amp; oInheritance);
+
+  /**
+  * Resets all inheritance flags.
+  * All inheritance flags become undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetInheritance  ();
+
+  /**
+  * Sets the show flag.
+  * @param iShow
+  * The show flag
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetShowAttr    (CATShowAttribut  iShow);
+  
+  /** @nodoc. */
+  HRESULT SetShow    (CATShowAttribut  iShow);
+
+  /**
+  * Retrieves the show flag.
+  * @param oShow
+  * The show flag
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The show flag has been defined using the @href #SetShowAttr method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The show flag has not been defined using the @href #SetShowAttr method or 
+  * the show flag has been reset using the @href #ResetShowAttr  method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetShowAttr    (CATShowAttribut&amp; oShow);
+
+  /** @nodoc. */
+  HRESULT GetShow    (CATShowAttribut&amp; oShow);
+
+  /**
+  * Resets the show flag.
+  * The show flag becomes undefined
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetShowAttr  ();
+
+  /** @nodoc. */
+  HRESULT ResetShow  ();
+
+   /**
+  * Sets the pick flag.
+  * @param iPick
+  * The pick flag
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetPickAttr    (CATPickAttribut  iPick);
+
+  /** @nodoc. */
+  HRESULT SetPick    (unsigned int  iPick);
+
+  /**
+  * Retrieves the pick flag.
+  * @param oPick
+  * The pick flag
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The pick flag has been defined using the @href #SetPickAttr method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The pick flag has not been defined using the @href #SetPickAttr method or 
+  * the pick flag has been reset using the @href #ResetPickAttr method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetPickAttr    (CATPickAttribut&amp; oPick);
+
+  /** @nodoc. */
+  HRESULT GetPick    (unsigned int&amp; oPick);
+
+  /**
+  * Resets the pick flag.
+  * The pick flag becomes undefined
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetPickAttr  ();
+
+  /** @nodoc. */
+  HRESULT ResetPick  ();
+
+  /** @nodoc. */
+  HRESULT SetLowInt    (unsigned int iLowInt);
+
+  /** @nodoc. */
+  HRESULT GetLowInt    (unsigned int&amp; oLowInt);
+
+  /** @nodoc. */
+  HRESULT ResetLowInt  ();
+
+  /** @nodoc. */
+  HRESULT SetRenderingStyle    (CATRenderingAttribut iRenderingStyle);
+
+  /** @nodoc. */
+  HRESULT GetRenderingStyle    (CATRenderingAttribut&amp; oRenderingStyle);
+
+  /** @nodoc. */
+  HRESULT ResetRenderingStyle  ();
+
+   /**
+  * Sets the layer number.
+  * @param iLayer
+  * The layer number between 0 and 999
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT SetLayer    (unsigned int  iLayer);
+
+  /**
+  * Retrieves the layer number.
+  * @param oLayer
+  * The layer number between 0 and 999
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;dd&gt;The layer value has been defined using the @href #SetLayer method.
+  * &lt;dt&gt;&lt;tt&gt;E_FAIL&lt;/tt&gt;
+  * &lt;dd&gt;The layer value has not been defined using the @href #SetLayer method or 
+  * the layer value has been reset using the @href #ResetLayer method.
+  * &lt;/dl&gt; 
+  */
+  HRESULT GetLayer    (unsigned int&amp; oLayer);
+
+  /**
+  * Resets the layer value.
+  * The layer value becomes undefined.
+  * @return 
+  * &lt;b&gt;Legal value:&lt;/b&gt;
+  * &lt;dl&gt;
+  * &lt;dt&gt;&lt;tt&gt;S_OK&lt;/tt&gt;
+  * &lt;/dl&gt; 
+  */
+  HRESULT ResetLayer  ();
+
+  /** @nodoc */
+  void operator += (CATVisPropertiesValues&amp; otherValue);
+
+  /** @nodoc */
+  //void operator = (CATVisPropertiesValues&amp; otherValue);
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATVisPropertiesPrivateValues.html">← 上一页: CATVisPropertiesPrivateValues.h</a></div>
+        <div><a href="CATVisPropertyAction.html">下一页: CATVisPropertyAction.h →</a></div>
+    </div>
+</body>
+</html>

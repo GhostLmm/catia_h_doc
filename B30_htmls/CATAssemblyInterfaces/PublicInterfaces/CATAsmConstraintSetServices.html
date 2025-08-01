@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATAssemblyInterfaces/PublicInterfaces/CATAsmConstraintSetServices.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATAssemblyInterfaces/PublicInterfaces/CATAsmConstraintSetServices.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATAsmConstraintServices.html">← 上一页: CATAsmConstraintServices.h</a></div>
+        <div><a href="CATAsmConstraintSettingServices.html">下一页: CATAsmConstraintSettingServices.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 20004
+#ifndef CATAsmConstraintSetServices_H
+#define CATAsmConstraintSetServices_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+
+#include &quot;CATAssemblyInterfaces.h&quot;
+
+#include &quot;CATIAsmCstSetFeature.h&quot; // default value NULL_var
+#include &quot;CATBoolean.h&quot;
+
+class CATIProduct_var;
+
+/**
+ * Class dedicated to Assembly Constraints&#x27; Sets creation and management.
+ */
+class ExportedByCATAssemblyInterfaces CATAsmConstraintSetServices
+{
+  public:
+
+
+    /**
+     * Gets the Root Set associated to the given product
+     * (corresponding to the Constraints&#x27; Node).
+     * @param iProduct
+     *    The product holding the constraints.
+     * @param oCstSetRoot
+     *    the set root.
+     * @param iCreate
+     *  creation mode:
+     *  &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     *  &lt;br&gt;&lt;tt&gt;FALSE&lt;/tt&gt; = if the root set doesn&#x27;t yet exist, don&#x27;t force the creation
+     *  &lt;br&gt;&lt;tt&gt;TRUE&lt;/tt&gt;  = if the root set doesn&#x27;t yet exist, create it
+     * @return
+     *    Error code of function.
+     */
+    static HRESULT GetRootSet( const CATIProduct_var &amp; iProduct,
+                               CATIAsmCstSetFeature_var &amp; oCstSetRoot,
+                               CATBoolean iCreate );
+
+
+    /**
+     * Adds a new set child to an existing set.
+     *   @param iParentSet
+     *      The set which will hold the created child
+     *   @param oNewSetChild
+     *      the new created set child
+     *   @param iPreviousSet
+     *      the new set will appear after this previous set.
+     *      default value NULL_var: the new set will appear at the end of the parent set
+     *   @return
+     *      Error code of function.
+     */
+    static HRESULT AddNewSetChild(const CATIAsmCstSetFeature_var &amp; iParentSet,
+                                        CATIAsmCstSetFeature_var &amp; oNewSetChild,
+                                  const CATIAsmCstSetFeature_var &amp; iPreviousSet = NULL_var );
+
+};
+
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATAsmConstraintServices.html">← 上一页: CATAsmConstraintServices.h</a></div>
+        <div><a href="CATAsmConstraintSettingServices.html">下一页: CATAsmConstraintSettingServices.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MechanicalModeler/PublicInterfaces/CATMmrShapeFeaturePropertiesAdapter.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MechanicalModeler/PublicInterfaces/CATMmrShapeFeaturePropertiesAdapter.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrLinearBodyServices.html">← 上一页: CATMmrLinearBodyServices.h</a></div>
+        <div><a href="../../Multimedia/PublicInterfaces/CATMMediaVertexOption.html">下一页: CATMMediaVertexOption.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2002
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+#ifndef CATMmrShapeFeaturePropertiesAdapter_H
+#define CATMmrShapeFeaturePropertiesAdapter_H
+
+#include &quot;CATIShapeFeatureProperties.h&quot;
+#include &quot;CATMechanicalModeler.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATUnicodeString.h&quot; 
+#include &quot;CATISpecObject.h&quot;
+#include &quot;CATMathPlane.h&quot;
+
+class CATListValCATISpecObject_var; 
+
+//-----------------------------------------------------------------------
+
+/**
+ * Adapter class for the CATIShapeFeatureProperties interface.
+ * &lt;b&gt;Role:&lt;/b&gt; This class enables to implement the @href CATIShapeFeatureProperties
+ * interface. Create a new class deriving from the current one, and reimplement the 
+ * necessary methods among the four following methods:
+ * &lt;ul&gt;
+ * &lt;li&gt;@href #GetPolarity &lt;/li&gt;
+ * &lt;li&gt;@href #GiveMeYourFavoriteSketches &lt;/li&gt;
+ * &lt;li&gt;@href #GiveMeYourBRepSpecifications &lt;/li&gt;
+ * &lt;li&gt;@href #CanBePatterned &lt;/li&gt;
+ * &lt;/ul&gt;
+ */
+class ExportedByCATMechanicalModeler CATMmrShapeFeaturePropertiesAdapter: public CATIShapeFeatureProperties
+{
+
+  public:
+
+  /**
+    * Constructs the class.
+    */
+     CATMmrShapeFeaturePropertiesAdapter ();
+
+     virtual ~CATMmrShapeFeaturePropertiesAdapter ();
+
+  /**
+    * Returns the polarity of the solid feature.
+    * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns the polarity of the solid feature. The polarity 
+    * of a feature enables to know if the feature adds or removes matter. 
+    * @return 
+    * The polarity of the feature:
+    *  &lt;ul&gt;
+    *  &lt;li&gt;&lt;b&gt;EltAdd&lt;/b&gt;: The solid feature adds matter&lt;/li&gt;
+    *  &lt;li&gt;&lt;b&gt;EltRemove&lt;/b&gt;: The solid feature removes matter&lt;/li&gt;
+    *  &lt;/ul&gt;
+    * The default implementation returns &lt;tt&gt;EltAdd&lt;/tt&gt;.
+    */
+  virtual CATUnicodeString GetPolarity( )  const;
+
+/**
+ * Returns specific sketches.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method returns specific referenced sketches of the solid feature. These sketches 
+ * will be used in two cases:
+ *  &lt;ul&gt;
+ *  &lt;li&gt;&lt;b&gt;Feature deletion&lt;/b&gt;: When the feature will be deleted, if the &quot;Delete referenced sketches&quot; 
+ * ckeck button is
+ *  activated in Tools/Options, the given sketches will be also deleted.&lt;/li&gt;
+ *  &lt;li&gt;&lt;b&gt;Feature copy&lt;/b&gt;: When the feature will be copied, the given sketches will be also copied&lt;/li&gt;
+ *  &lt;/ul&gt;
+ * The default implementation returns an empty list.
+ */
+  virtual CATLISTV(CATISpecObject_var) GiveMeYourFavoriteSketches() const;
+
+/** 
+ * Returns all the BRep specifications.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method returns all the BRep (@href CATIFeaturize ) features 
+ * which are specifications of this solid feature.
+ * &lt;br&gt;The default implementation returns an empty list.
+ */
+  virtual CATLISTV(CATISpecObject_var) GiveMeYourBRepSpecifications() const; 
+
+  /**
+    * Returns if the current feature can be patterned.
+    * @return
+    *  An integer value.
+    *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+    *   &lt;ul&gt;
+    *   &lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature can be patterned.
+    *   &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature cannot be patterned.
+    *   &lt;/ul&gt;
+    * The default implementation returns &lt;tt&gt;0&lt;/tt&gt;.
+    */
+  virtual int CanBePatterned() const;
+
+/**
+ * Returns if the current solid feature is contextual.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to know if the solid feature is a contextual feature or
+ * not. 
+ *
+ * @return
+ *  An integer value.
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+ *   &lt;ul&gt;&lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature is contextual.
+ *   &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature is not contextual.
+ * &lt;/ul&gt;
+ * For the features representing a boolean operation ( Add, Assemble, Remove, Intersect and
+ * Union Trim) the value is 0.
+ */
+  virtual int  IsAContextualFeature( )  const;
+
+/**
+  * Returns if the current solid feature is a form feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;This method enables you to know if the solid feature is a form feature or
+  * not. 
+  *
+  * @return
+  *  An integer value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: 
+  *   &lt;ul&gt;
+  *      &lt;li&gt;&lt;b&gt;1&lt;/b&gt; the current feature is a form feature.
+  *      &lt;li&gt;&lt;b&gt;0&lt;/b&gt; the current feature is not a form feature.
+  *   &lt;/ul&gt;
+  * For the features representing a boolean operation ( Add, Assemble, Remove, Intersect and
+  * Union Trim) the value is 0.
+  */
+  virtual int  IsAFreeFormFeature( )  const;
+  
+  /** @nodoc */
+  virtual int HasAnAxis() const;
+
+  /** @nodoc */
+  virtual int HasAnAxis(CATBaseUnknown_var iElt) const;
+
+  /** @nodoc */
+  virtual CATMathPlane GetBoundingPlane(CATUnicodeString&amp; iSide) const;
+
+  private:
+  // Copy constructor and equal operator
+  // -----------------------------------
+  CATMmrShapeFeaturePropertiesAdapter (CATMmrShapeFeaturePropertiesAdapter &amp;);
+  CATMmrShapeFeaturePropertiesAdapter&amp; operator=(CATMmrShapeFeaturePropertiesAdapter&amp;);
+
+};
+
+//-----------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATMmrLinearBodyServices.html">← 上一页: CATMmrLinearBodyServices.h</a></div>
+        <div><a href="../../Multimedia/PublicInterfaces/CATMMediaVertexOption.html">下一页: CATMMediaVertexOption.h →</a></div>
+    </div>
+</body>
+</html>

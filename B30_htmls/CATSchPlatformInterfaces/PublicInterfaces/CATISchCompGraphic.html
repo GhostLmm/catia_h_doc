@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATSchPlatformInterfaces/PublicInterfaces/CATISchCompGraphic.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CATSchPlatformInterfaces/PublicInterfaces/CATISchCompGraphic.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISchCompFlow.html">← 上一页: CATISchCompFlow.h</a></div>
+        <div><a href="CATISchCompGroupExt.html">下一页: CATISchCompGroupExt.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATISchCompGraphic_H
+#define CATISchCompGraphic_H
+
+//	COPYRIGHT DASSAULT SYSTEMES 2000
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+// System
+#include &quot;IUnknown.h&quot;
+#include &quot;CATBooleanDef.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+class CATISchGRRComp;
+class CATIUnknownList;
+
+extern &quot;C&quot; const IID IID_CATISchCompGraphic ;
+
+/**
+ * Interface to manage Schematic component&#x27;s association with its
+ * graphical representations.  
+ * &lt;b&gt;Role&lt;/b&gt;: To modify component&#x27;s links to its
+ * graphical representations.
+ */
+class CATISchCompGraphic : public IUnknown
+{
+  public:   
+  
+  /**
+  * Add a graphical representation to a component.
+  * @param iGRRToAdd
+  *   The graphical representation to be added to the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT AddGraphicalRepresentation (CATISchGRRComp *iGRRToAdd) = 0;
+
+  /**
+  * Remove a graphical representation from a component.
+  * @param iGRRToRemove
+  *   The graphical representation to be removed from the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT RemoveGraphicalRepresentation (CATISchGRRComp *iGRRToRemove) = 0;
+
+  /**
+  * List all graphical representation of a component.
+  * @param oLGRR
+  *   A list of graphical representations
+  *   (members are CATISchGRRComp interface pointers).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListGraphicalRepresentations (CATIUnknownList **oLGRR) = 0;
+
+  /**
+  * List all graphical images (instances of the rep) of a component.
+  * @param oLGRR
+  *   A list of graphical images
+  *   (members are CATISchGRRComp interface pointers).
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT ListGraphicalImages (CATIUnknownList **oLGRR) = 0;
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATISchCompGraphic#SwitchAll2 instead.
+  * Replace all occurances of the images of this component with those of
+  * the graphical representation with the input name.
+  * @param iGRRName
+  *   The name of the graphical representation
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SwitchAll (const char *iGRRName) = 0;
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATISchCompGraphic#Switch2 instead.
+  * Replace the input image object with an image of the graphical.
+  * representation with the input name
+  * @param iGRR
+  *   Pointer to the component graphical image to be switched.
+  * @param oGRR
+  *   Pointer to the new graphical image of the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Switch (CATISchGRRComp *iGRR,
+    const char *iGRRName, CATISchGRRComp **oGRR) = 0;
+
+  /**
+  * @deprecated V5R15 
+  * Use @href CATISchCompGraphic#Activate2 instead.
+  * To add a new image to an existing object. This new image is
+  * an instance of graphical representation with the input
+  * name. 
+  * @param iGRRName
+  *   The name of the graphic representation
+  * @param iDb2WhereAt
+  *   The x-y coordinates of the image position. If NULL, the image
+  *   will be positioned at the origin.
+  * @param oGRR
+  *   Pointer to the new graphical image of the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Activate (const char *iGRRName,
+    double *iDb2WhereAt, CATISchGRRComp **oGRR) = 0;
+
+  /**
+  * To remove an image to an existing object. 
+  * @param iGRR
+  *   The graphical image to be removed from the component. 
+  * @param iDb2WhereAt
+  *   The x-y coordinates of the image position. If NULL, the image
+  *   will be positioned at the origin.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Deactivate (CATISchGRRComp *iGRR) = 0;
+
+  /**
+  * Replace all occurances of the images of this component with those of
+  * the graphical representation with the input name.
+  * @param iGRRName
+  *   The name of the graphical representation
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT SwitchAll2 (const CATUnicodeString &amp;iGRRName) = 0;
+
+  /**
+  * Replace the input image object with an image of the graphical.
+  * representation with the input name
+  * @param iGRR
+  *   Pointer to the component graphical image to be switched.
+  * @param oGRR
+  *   Pointer to the new graphical image of the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Switch2 (CATISchGRRComp *iGRR,
+    const CATUnicodeString &amp;iGRRName, CATISchGRRComp **oGRR) = 0;
+
+  /**
+  * To add a new image to an existing object. This new image is
+  * an instance of graphical representation with the input
+  * name. 
+  * @param iGRRName
+  *   The name of the graphic representation
+  * @param iDb2WhereAt
+  *   The x-y coordinates of the image position. If NULL, the image
+  *   will be positioned at the origin.
+  * @param oGRR
+  *   Pointer to the new graphical image of the component.
+  * @return
+  *   An HRESULT value.
+  *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+  *   &lt;dl&gt;
+  *     &lt;dt&gt;S_OK&lt;/dt&gt;
+  *     &lt;dd&gt;operation is successful&lt;/dd&gt;
+  *     &lt;dt&gt;E_FAIL&lt;/dt&gt;
+  *     &lt;dd&gt;operation failed&lt;/dd&gt;
+  *   &lt;/dl&gt;
+  */
+  virtual HRESULT Activate2 (const CATUnicodeString &amp;iGRRName,
+    double *iDb2WhereAt, CATISchGRRComp **oGRR) = 0;
+
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISchCompFlow.html">← 上一页: CATISchCompFlow.h</a></div>
+        <div><a href="CATISchCompGroupExt.html">下一页: CATISchCompGroupExt.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PartInterfaces/PublicInterfaces/CATIPrtBooleanOperation.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PartInterfaces/PublicInterfaces/CATIPrtBooleanOperation.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtBooleanFactory.html">← 上一页: CATIPrtBooleanFactory.h</a></div>
+        <div><a href="CATIPrtCDSHoleManagement.html">下一页: CATIPrtCDSHoleManagement.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">
+
+#ifndef CATIPrtBooleanOperation_H
+#define CATIPrtBooleanOperation_H
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#include &lt;PartItf.h&gt;
+#include &lt;CATBaseUnknown.h&gt;
+#include &lt;CATISpecObject.h&gt; 
+#include &lt;CATLISTV_CATISpecObject.h&gt;
+
+class CATBody_var;
+class CATUnicodeString;
+//-----------------------------------------------------------------------------
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByPartItf IID IID_CATIPrtBooleanOperation;
+#else
+extern &quot;C&quot; const IID IID_CATIPrtBooleanOperation;
+#endif
+
+/**
+* Class to define methods relative to boolean operations.
+* &lt;b&gt;Role&lt;/b&gt;: A boolean operation is an operation between two mechanical
+* bodies. It inserts the second body after the last feature of
+* the first body, the first body may have no feature.
+*/
+
+class ExportedByPartItf CATIPrtBooleanOperation : public CATBaseUnknown
+{
+  CATDeclareInterface;
+public:
+  /**
+  * Returns the tool of a boolean operation. 
+  * @return The object linked to the  second body.
+  * Note that the remove lump operation has no tool 
+  * (result = NULL_var).
+  */  
+  virtual CATISpecObject_var GetTool() = 0 ;
+  /**
+  * Returns the first operated body.
+  * @return The body.
+  */   
+  virtual CATBody_var        GetFirstOperand() = 0 ;
+  /**
+  * Returns the second operated body.
+  * @return The body.  Note that the remove lump operation
+  * has no second body (result = NULL_var).
+  */
+  virtual CATBody_var        GetSecondOperand() = 0 ;
+  /** @nodoc */
+  virtual CATISpecObject_var GetSpecFirstOperand() = 0 ;
+  /** @nodoc */
+  virtual CATISpecObject_var GetSpecSecondOperand() = 0 ;   
+  /** @nodoc */
+  virtual void GetFaces(const CATUnicodeString &amp;iAttribute, CATLISTV(CATISpecObject_var) &amp;oList ) = 0 ;
+  /** @nodoc */ 
+  virtual HRESULT GetListOfModifiedFeatures(CATListValCATBaseUnknown_var&amp; ListOfModifiedFeatures) = 0;
+
+  /**
+  * Modifies the First Operand.
+  * input Volume to replace
+  */ 
+  virtual HRESULT ModifyFirstOperatedVolume(CATISpecObject_var&amp; iSpecObject) = 0;
+
+  /**
+  * Modifies the Second Operand.
+  * input object to repalce with Body or Volume
+  */ 
+  virtual HRESULT ModifyOperatedObject(CATISpecObject_var&amp; iSpecObject) = 0;
+
+  /**
+  * Swaps the operands. Both the Operands must be Volume.
+  * This is available only for Volume Add and Volume UnionTrim Operations
+  */ 
+  virtual HRESULT SwapOperatedVolume() = 0;
+
+  /** @nodoc */
+  virtual int GetBooleanContext() = 0;
+
+ };
+
+CATDeclareHandler ( CATIPrtBooleanOperation, CATBaseUnknown );
+
+#endif
+
+
+
+
+
+
+
+
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIPrtBooleanFactory.html">← 上一页: CATIPrtBooleanFactory.h</a></div>
+        <div><a href="CATIPrtCDSHoleManagement.html">下一页: CATIPrtCDSHoleManagement.h →</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog/PublicInterfaces/CATInteractiveApplication.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dialog/PublicInterfaces/CATInteractiveApplication.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgXToolkit.html">← 上一页: CATDlgXToolkit.h</a></div>
+        <div><a href="DI0PANV2.html">下一页: DI0PANV2.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATINTERACTIVEAPPLICATION_H
+#define CATINTERACTIVEAPPLICATION_H
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U2
+ */
+
+
+//------------------------------------------------------------------------------
+// Abstract: The base class for dialog applications.
+//
+//------------------------------------------------------------------------------
+// Usage:    Derive to suit your need
+//------------------------------------------------------------------------------
+// Inheritance:   CATInteractiveApplication    (Dialog framework)
+//                  CATApplication             (System framework)
+//------------------------------------------------------------------------------
+// Main methods:
+//
+//           Destroy                    to terminate the application
+//------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------
+#include &quot;DI0PANV2.h&quot;
+
+#include &quot;CATDlgControl.h&quot;
+#include &quot;CATApplication.h&quot;
+#include &quot;CATString.h&quot;
+#include &quot;CATListOfCATUnicodeString.h&quot;
+//--------------------------------------------------------------------------
+class l_CATInteractiveApplication;
+struct IDataObject;
+class CATDlgSession;
+
+//--------------------------------------------------------------------------
+/**
+ * base class for all interactive applications.
+ * &lt;b&gt;Role&lt;/b&gt;: Base class for an interactive application,
+ * whether it displays only a single dialog window, a classical Single 
+ * Document Interface (SDI) application, or a Multiple Document 
+ * Interface (MDI) application such as CATIA Version 5.
+ * &lt;p&gt;
+ * To create your interactive application, you should: 
+ * &lt;ul&gt;
+ * &lt;li&gt;Create a class for your application that derives from 
+ * CATInteractiveApplication&lt;/li&gt; 
+ * &lt;li&gt;Override at least the methods BeginApplication and EndApplication&lt;/li&gt;
+ * &lt;/ul&gt;
+ * To not instanciate this class directly.
+ */
+class ExportedByDI0PANV2 CATInteractiveApplication : public CATApplication
+{
+
+//--------------------------------------------------------------------------
+ public:
+
+//      constructor - destructor
+/**
+ * Constructs an interactive application.
+ * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;
+ * Note that, deriving this class, your interactive application constructor 
+ * should have a single argument: its name. When calling this base class
+ * constructor from the derived class one, a NULL value should be passed
+ * as iParent.
+ * @param iParent
+ *   The parent class in the @href CATCommand agregation 
+ *   hierarchy. 
+ * @param iApplicationName
+ *   The application name. 
+ */
+        CATInteractiveApplication(CATCommand *iParent, const CATString&amp; iApplicationName);
+/**
+ * @nodoc 
+ */
+        virtual ~CATInteractiveApplication();
+
+        // Specific methods
+/**
+ * Initializes the application environment.
+ * &lt;p&gt;
+ * Called with UNIX only.
+ * @param iArgc
+ *   The number of arguments passed to the application. 
+ * @param iArgv
+ *   The argument list. 
+ * @param iEnvVariableList
+ *   The environment variable list. 
+ */
+        virtual void BuildApplicationEnvironment(int iArgc, 
+                                                 char** iArgv, 
+                                                 char** iEnvVariableList);
+// Runs the application. 
+// Architecture detail, called with UNIX only.
+// Deserves interfacing with System framework JS0FM module
+/**
+ * @nodoc 
+ */
+        virtual void RunApplication();
+/**
+ * Application mean to transmit the return code to this software.
+ * The application calls the Destroy method (when the user selects 
+ * File/Exit, see @href #Destroy, which calls the EndApplication 
+ * method. You overload the EndApplication method, transmitting this
+ * way the recturn code to this software.
+ */
+        virtual int  EndApplication();
+/**
+ * Retrieve the arguments passed to the application.
+ * @return
+ *   The argument list.  
+ */
+        CATListOfCATUnicodeString&amp; GetArgs();
+/**
+ * Retrieve the arguments passed to the application.
+ * @param oArgCount
+ *   The number of arguments passed to the application. 
+ * @param oArgList
+ *   The argument list. 
+ *   The variable to pass here as a parameter has to be contructed the
+ *   following way: you declare a char** in the calling service and 
+ *   pass its address as oArgList to the GetArgs of your class
+ *   deriving from CATInteractiveApplication.
+ */
+        void GetArgs( int* oArgCount, char*** oArgList);
+/**
+ * Terminate the application.
+ * The application must call this service when it wants to
+ * end the application. In practice, the application will call
+ * this service when the user selects File/Exit , and only
+ * at this moment.
+ * &lt;p&gt;
+ * This method calls the EndApplication method (that the application
+ * must overload) which transmit to this software your return code.
+ */
+        void Destroy();
+
+/**
+ * Request that the display cursor be changed to a busy cursor.
+ */
+        void SetBusyCursor();
+
+/**
+ * @nodoc 
+ * only for compatibility 
+*/  
+        void SetDialogBitmapName(int ifield, const CATString&amp; bmpName);
+/**
+ * @nodoc 
+*/  
+        void SetApplicationLogo(const CATString&amp; bmpName);
+/**
+ * @nodoc 
+ */  
+        void SetApplicationBackground(const CATString&amp; bmpName);
+/**
+ * @nodoc
+ * Not implemented. Reserved for future use.
+ */
+        void SetDialogBoxBottom(const CATString &amp; bmpName);
+/**
+ * Retrieve the user interface class (P1, P2, P3).
+ * @return
+ *   The user interface style. 
+ *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the style is P1,
+ *   or &lt;tt&gt;2&lt;/tt&gt; if the style is P2, or &lt;tt&gt;3&lt;/tt&gt; if the style is P3.
+ */
+        int GetUIClass();
+/**
+ * Request that the contextual help be automatically set to any control of 
+ * any window. 
+ * &lt;p&gt;
+ * This service will be called only once during execution.
+ * Then, when this service has been called, activating &quot;What&#x27;s This&quot; command
+ * becomes available to the end-user. To activate the &quot;What&#x27;s This&quot; command, 
+ * the end-user will have to select the possible dedicated icon or, on Windowsonly, 
+ * the panel question mark selection, or, on WIndows and UNIX, the panel help 
+ * button selection. 
+ * &lt;p&gt;
+ * We remind you what the &quot;What&#x27;s This&quot; command is.  
+ * It turns the cursor to a question mark, and then, 
+ * when the end-user clicks a control, displays the control associated 
+ * &quot;Long Help&quot; in a balloon. The clicks, after displaying the balloon,
+ * ends the current &quot;What&#x27;s This&quot; command.
+ * Entering the &quot;What&#x27;s This&quot; command will be done, at the Dialog framework
+ * level, through calling the QueryHelpOnContext method on any @href CATDlgWindow .
+ */
+        void SetAutomaticContextualHelp();
+/**
+ * @nodoc 
+ */
+        void UnsetAutomaticContextualHelp();
+/**
+ * @nodoc 
+ */
+        CATUnicodeString GetCurrentLongHelpId();
+/**
+ * Assign a splash screen.
+ * @param iFileName
+ *   The splash file name. The extension must not be appended.
+ *   The file will be a .png or a .bmp picture.
+ *   It must be located in the splashscreens directory of the 
+ *   graphic directory defined using the &lt;tt&gt;CATGraphicPath&lt;/tt&gt; environment variable.
+ */
+        void SetSplashScreen(CATString&amp; iFileName);
+/**
+ * Request that the display be updated.
+ * At the end of a given interaction, the panels display is automatically
+ * updated (the X server does it), thus no call to this service has 
+ * to be made. A call to this service will be made only if, during a
+ * long process, the application wants to update the display so that to
+ * give a regular feedback to the user. 
+ */
+        void UpdateDisplay();
+
+// Set the unit for a given applicative magnitude.
+// We remind you that, for a given control (CATDlgSpinner, CATDlgEditor
+// or CATDlgCombo), you can associate it, if you want, to an applicative
+// magnitude (length, angle ...) using @href CATControl#SetMagnitude. 
+// This enables an automatic unit management.
+// At a given moment of the execution, all the controls which are
+// asociated to the same applicative magnitude, share the same unit.
+// The unit of all these controls can be processed globally through
+// the current method. When calling this service, all the controls
+// sharing the given applicative magnitude will be assigned the
+// new unit, with all subsequent conversions managed. 
+// @param iControlMagnitude
+//    The control magnitude that the call to this method relates to.
+// @param iControlMagnitudeUnit
+//    The new unit for the given control magnitude.
+//
+// This service is not of very much use.
+/**
+ * @nodoc 
+ */
+        void SetMagnitudeCurrentUnit( 
+                CATDlgControl::CATDlgMagnitude iControlMagnitude, 
+                CATDlgControl::CATDlgUnit iControlMagnitudeUnit);
+// This service is not of very much use.
+/**
+ * @nodoc 
+ */
+        CATDlgControl::CATDlgUnit GetMagnitudeCurrentUnit( 
+                CATDlgControl::CATDlgMagnitude iControlMagnitude);
+//
+// Convert, for given magnitude, a given MKS value into the user unit 
+// system.
+//
+// This service is not of very much use.
+/**
+ * @nodoc 
+ */
+        CATUnicodeString&amp; GetDoubleValueString( 
+                     double iMagnitudeMKSValue, 
+                     CATDlgControl::CATDlgMagnitude iControlMagnitude);
+
+//      Drag And Drop operations 
+
+// The Drag and Drop methods are not to be used directly by CAA2 developpers.
+// ApplicationFrame wrapped software should be used. In fact, CAA2 purpose
+// is the development around CATIA itself.
+//
+// Set the drag and drop ability.
+// In practice, the drag and drop ability may, as in CATIA V5, be given
+// from a dedicated command. For example, in CATIA V5, the drag and drop
+// is offered in particular during the following actions (set when entering 
+// the command and supressing the availability when leaving the command):
+// &lt;ul&gt;
+// &lt;li&gt;Select command: when beeing inside this command, you have in particular
+// the possibility to make drag and drop of features inside the application&lt;/li&gt;
+// &lt;li&gt;Tools/Customize: drag and drop from a toolbar to another&lt;/li&gt;
+// &lt;/ul&gt;
+// Thus, in practice, drag and drop availability is localized to a dedicated
+// command.
+// &lt;p&gt;
+// After an application has called this service, the software sends the
+// following events, that the application can trap:
+// &lt;ul&gt;
+// &lt;li&gt;when a mouse drag begins: CATDlgStartDragNotification&lt;/li&gt;
+// &lt;li&gt;when the cursor begins to cross a widget (the widget will be a Dialog
+// framework object. For a viewer showing geometric data for example, 
+// the viewer is considered globally as one widget): CATDlgDragEnterNotification&lt;/li&gt;
+// &lt;li&gt;when the cursor is beeing above a widget, crossing it:
+// CATDlgDragOverNotification&lt;/li&gt;
+// &lt;li&gt;when the cursor ends crossing a widget: CATDlgDragLeaveNotification&lt;/li&gt;
+// &lt;li&gt;when the user does a drop above a valid father: CATDlgDropNotification&lt;/li&gt;
+// &lt;li&gt;when the user does a drop above nothing: CATDlgCancelDragNotification&lt;/li&gt;
+// &lt;/ul&gt;   
+// @param iAvailable
+//   The drag and drop availability.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; so that the drag and drop be available,
+//   or &lt;tt&gt;0&lt;/tt&gt; so that the drag an drop be no more available.
+/**
+ * @nodoc 
+ */
+        void SetDragAvailability(int iAvailable);
+// Determine if drag and drop is currently available.
+// This method gives the value currently set for drag and drop availability.
+// See @href SetDragAvailability .
+// @return
+//   The drag and drop availability.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;1&lt;/tt&gt; if the drag and drop is currently available,
+//   or &lt;tt&gt;0&lt;/tt&gt; if the drag an drop is not currently available.
+/**
+ * @nodoc 
+ */
+        int  GetDragAvailability();
+/**
+ * @nodoc 
+ */
+        int  GetDragState( CATDialog** source, 
+                           CATDialog** target, 
+                           POINTL&amp; TargetPosition, 
+                           DWORD&amp; keyModifier);
+// Start the drag and drop operation.
+// The application should call this service when a CATDlgStartDragNotification 
+// event is sent.
+// See @href SetDragAvailability .
+// @param iDataObject
+//   OLE Object initialized by ApplicationFrame (Windows only). 
+// @param iDragAndDropOptionsDeliveredToUser
+//   The drag and drop options that will be delivered to the user.
+//   During execution, the user will choose effectively between the
+//   options using the CTRL key (to choose copy instead of move) and
+//   the SHIFT key (CTRL and SHIFT simultaneously to choose link instead 
+//   of the data itself). The cursor form will precise the current option.
+//   Specifying here the options that will be delivered to the user,
+//   you will cumulate them using a logical or.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;DROPEFFECT_COPY&lt;/tt&gt; so that the 
+//   copy be delivered, or &lt;tt&gt;DROPEFFECT_MOVE&lt;/tt&gt; so that the move be delivered, 
+//   or &lt;tt&gt;DROPEFFECT_LINK&lt;/tt&gt; so that the link be delivered, or 
+//   &lt;tt&gt;DROPEFFECT_SCROLL&lt;/tt&gt; so that the scroll be delivered.
+/**
+ * @nodoc 
+ */
+        void StartDrag ( IDataObject* iDataObject, DWORD iDeliveredDragAndDropOptions );
+/**
+ * @nodoc 
+ */
+        IDataObject* GetDragDataObject();
+// Cancels the drag and drop operation.
+// Call this service when a a CATDlgCancelDragNotification occurs (when 
+// the user does a drop above nothing). 
+// See @href SetDragAvailability .
+/**
+ * @nodoc 
+ */
+        void CancelDrag();
+// Set the drag and drop current option.
+// The application should call this method when the current state of the keys 
+// controlling the current drag and drop option (CTRL to choose copy instead 
+// of move and SHIFT which, cumulated with CTRL, indicates link instead 
+// of the data itself) changes.
+// Changing the current option through a call to this service will
+// change automatically the cursor form.
+// See @href SetDragAvailability .
+// @param iDragAndDropCurrentOption
+//   The drag and drop current option.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;DROPEFFECT_COPY&lt;/tt&gt; so that the 
+//   current option be a copy, or &lt;tt&gt;DROPEFFECT_MOVE&lt;/tt&gt; so that 
+//   the current option be a move, or &lt;tt&gt;DROPEFFECT_LINK&lt;/tt&gt; so that the 
+//   current option be a link, or &lt;tt&gt;DROPEFFECT_SCROLL&lt;/tt&gt; so that 
+//   the current option be a scroll.
+/**
+ * @nodoc 
+ */
+        void SetDropEffect(DROPEFFECT m);
+// Get the drag and drop current option.
+// See @href SetDragAvailability .
+// @param iDragAndDropCurrentOption
+//   The drag and drop current option.
+//   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;DROPEFFECT_COPY&lt;/tt&gt; if the 
+//   current option is a copy, or &lt;tt&gt;DROPEFFECT_MOVE&lt;/tt&gt; if 
+//   the current option is a move, or &lt;tt&gt;DROPEFFECT_LINK&lt;/tt&gt; if the 
+//   current option is a link, or &lt;tt&gt;DROPEFFECT_SCROLL&lt;/tt&gt; if 
+//   the current option is a scroll.
+/**
+ * @nodoc 
+ */
+        DROPEFFECT GetDropEffect();
+
+//      get application Name
+/**
+ * @nodoc 
+ */
+        virtual CATString GetApplicationName ();
+
+//      get framework internal object
+/**
+ * @nodoc 
+ */
+        l_CATInteractiveApplication* GetLetterObject();
+
+//      drag&amp;drop from an external application
+/**
+ * @nodoc 
+ */
+        CATDeclareCBEvent(DRAGENTER);
+/**
+ * @nodoc 
+ */
+        CATDeclareCBEvent(DRAGLEAVE);
+/**
+ * @nodoc 
+ */
+        CATDeclareCBEvent(ACTIVATION);
+/**
+ * @nodoc 
+ */
+        CATDeclareCBEvent(DEACTIVATION);
+
+/**
+ * @nodoc 
+ */
+        CATDeclareCBEvent(DLGNOTIFYENTER);
+
+/**
+ * @nodoc 
+ */
+        CATCallbackManager* GetCallbackManager();
+
+/**
+ * @nodoc
+ */
+        CATDlgSession * GetSession ();
+
+/**
+ * @nodoc
+ * Requests the ClassName, IsA, and IsAKindOf methods to be created.
+ */
+        CATDeclareClass ;
+
+#ifdef _WINDOWS_SOURCE
+/**
+ * @nodoc
+ * Returns the VBA application object, along with the name
+ * of the type library where this object is described.
+ * The object must support all of VBA constraints (have a
+ * coclass, be dual, have the appobject IDL tag, support
+ * IProvideClassInfo2...). 
+ */
+        virtual HRESULT GetVBAApplicationObject(
+                IDispatch*&amp; oAppObject,
+                CATUnicodeString&amp; oAppName,
+                CATUnicodeString&amp; oTypelibName);
+#endif // _WINDOWS_SOURCE
+	//--------------------------------------------------------------------------
+ private:
+
+//      address of internal object.
+/**
+ * @nodoc 
+ */
+        l_CATInteractiveApplication *_applicationObject;        
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATDlgXToolkit.html">← 上一页: CATDlgXToolkit.h</a></div>
+        <div><a href="DI0PANV2.html">下一页: DI0PANV2.h →</a></div>
+    </div>
+</body>
+</html>

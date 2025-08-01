@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENOVIAPlugIn/PublicInterfaces/ENOVPublishAttributeValue.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ENOVIAPlugIn/PublicInterfaces/ENOVPublishAttributeValue.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVPublishAttributeNode.html">← 上一页: ENOVPublishAttributeNode.h</a></div>
+        <div><a href="ENOVPublishEnvironment.html">下一页: ENOVPublishEnvironment.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef  ENOVPublishAttributeValue_h
+#define  ENOVPublishAttributeValue_h
+// EAPS
+// Version 1 Release 0
+// COPYRIGHT DASSAULT SYSTEMES 2000
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */
+// *****************************************************************
+//
+//   Identification :
+//   ---------------
+//
+//      RESPONSIBLE :  Jean-Luc MEDIONI
+//      FUNCTION    :  Publish information from ENOVIA to External system
+//      USE         :  ENOVIA V5 Life Cycle Application
+//
+// *****************************************************************
+//
+//   Description :
+//   ------------
+//
+//   Node that enable to associate a value to a multi-valuated attribute
+//
+// *****************************************************************
+//
+//   Remarks :
+//   ---------
+//
+//    Enable an external application to view, modify and keep an
+//    extract of some ENOVIA Objects
+//   
+/**
+ * Class enabling to manage value node for a Multi-valuated Attribute node.
+ *
+ * &lt;b&gt;Role&lt;/b&gt;: This class enables to manage attribute values for a Multi-valuated 
+ * Attribute node.
+ * &lt;br&gt;
+ * &lt;br&gt;&lt;b&gt;No Tag is defined on Attribute Value&lt;/b&gt;
+ *
+ * @see ENOVPublishAttributeNode
+ */
+//
+// ***************************************************************
+//
+//   Story :
+//   -------
+//
+//   Revision 1.0  06/07/2000   JLM : Initial Revision
+//   Revision 1.1  04/10/2000   JLM : introduce ISO 8601 as date format
+//   Revision 1.2  15/02/2001   JLM : introduce to support meta-data
+//   Revision 1.3  20/03/2002   JLM : Support NLS encoding througth UTF8
+//
+// ****************************************************************
+//
+// INSIDE class:
+// -------------
+//
+//
+//
+// ****************************************************************
+// Abstract class    : No
+// Template code     : No
+// Ilined   Function : No
+// ****************************************************************
+
+#include &quot;ENOVIAPubStream.h&quot;
+
+// --- List of referenced classes
+
+class ENOVPublishAttributeValue ;
+class ENOVPublishXMLHandler     ;
+
+// --- Header that need to be referenced
+
+#include &quot;ENOVPublishObject.h&quot;
+#include &quot;CATUnicodeString.h&quot;
+
+// --- Class definition
+
+class ExportedByENOVIAPubStream ENOVPublishAttributeValue : public ENOVPublishObject
+{
+      // --- Constructor
+
+   public:
+    /**
+     * Constructs an Attribute value node.
+     * 
+     * @param ixFather
+     * Points to the father attribute node (@href ENOVPublishAttributeNode ) for this value node.
+     * 
+     * @param inValueType
+     * Attribute value type
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: It can be set to either:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeInteger&lt;/tt&gt; For integer value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeReal&lt;/tt&gt; For real value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeString&lt;/tt&gt; For character string value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeBinary&lt;/tt&gt; For binary value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeOid&lt;/tt&gt; For Object id value (an hexa-decimal string)&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeUid&lt;/tt&gt; For symbolic link value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeTimestamp&lt;/tt&gt; For timestamp value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeVaultReference&lt;/tt&gt; For Vault reference value&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      ENOVPublishAttributeValue( ENOVPublishObject * ixFather
+                               , int                 inValueType = ENOVPublishUnknown ) ;
+
+      // --- Destructor 
+
+      virtual ~ENOVPublishAttributeValue() ;
+
+      // --- Copy-constructor
+
+    /**
+     * Copy constructor.
+     * 
+     * @param ixNode
+     * Object to be duplicated.
+     */
+      ENOVPublishAttributeValue( const ENOVPublishAttributeValue &amp; ixNode ) ;
+
+      // --- Operateur d&#x27;affectation
+
+    /**
+     * Copy constructor.
+     * 
+     * @param ixNode
+     * Object to be duplicated.
+     */
+      const ENOVPublishAttributeValue &amp; operator=( const ENOVPublishAttributeValue &amp; ixNode ) ;
+
+      // --- Access to attribute information
+
+    /**
+     * Returns the type value for this attribute.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to access to Attribute name information.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param onValueType
+     * Attribute value type
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: It can be set to either:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeInteger&lt;/tt&gt; For integer value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeReal&lt;/tt&gt; For real value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeString&lt;/tt&gt; For character string value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeBinary&lt;/tt&gt; For binary value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeOid&lt;/tt&gt; For Object id value (an hexa-decimal string)&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeUid&lt;/tt&gt; For symbolic link value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeTimestamp&lt;/tt&gt; For timestamp value&lt;/li&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishTypeVaultReference&lt;/tt&gt; For Vault reference value&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      int GetValueType( int &amp; nAttributeType ) const ;
+
+      // --- Analyze if object could be modified
+
+    /**
+     * Returns if attribute modification is authorized.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Returns if attribute modification is authorized.
+     *
+     * @return
+     * Define the access mode for this attribute
+     * &lt;br&gt;&lt;b&gt;Legal values:&lt;/b&gt; It can be set to either:
+     * &lt;ul&gt;
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishNoAccess&lt;/tt&gt;  To forbid any access 
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishReadOnly&lt;/tt&gt;  To authorize read only access
+     * &lt;li&gt;&lt;tt&gt;ENOVPublishReadWrite&lt;/tt&gt; To autorize read and write access
+     * &lt;ul/&gt;
+     */
+      int IsModificationAuthorized() const ;
+
+      // --- Access to attribute value
+      // --- * Integer values
+
+    /**
+     * Returns attribute value for an integer value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read integer value of the Attribute value node.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param onValue
+     * Attribute value.
+     */
+      int GetValue( int &amp; onValue ) const ;
+
+    /**
+     * Sets attribute value for an integer value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets value of the integer Attribute value node.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;Returns 0 if operation runs well.&lt;/li&gt;
+     * &lt;li&gt;Returns 1 if attribute has not a requested type.&lt;/li&gt;
+     * &lt;li&gt;Returns 4 if attribute modification not authorized.&lt;/li&gt;
+     * &lt;/ul&gt;
+     * 
+     * @param inValue
+     * Attribute value.
+     */
+      int SetValue( int inValue ) ;
+
+      // --- * Real values
+
+    /**
+     * Returns attribute value for a floating point value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read floating point value of the Attribute value.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param odValue
+     * Attribute value.
+     */
+      int GetValue( double &amp; odValue ) const ;
+
+    /**
+     * Sets attribute value for a floating point value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets floating point value of the Attribute value.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;:
+     * &lt;ul&gt;
+     * &lt;li&gt;Returns 0 if operation runs well.&lt;/li&gt;
+     * &lt;li&gt;Returns 1 if attribute has not a requested type.&lt;/li&gt;
+     * &lt;li&gt;Returns 4 if attribute modification not authorized.&lt;/li&gt;
+     * &lt;/ul&gt;
+     * 
+     * @param idValue
+     *  Attribute value.
+     */
+      int SetValue( double idValue ) ;
+
+      // --- * String &amp; Timestamp values
+      // ---    For Timestamp values (date), they are expressed using one ISO 8601 format
+      // ---    called Extended format for ordinal date and time of the day :
+      // ---     (Application will used Coordinated Universal Time UTC)
+      // ---
+      // ---      CCYY-MM-DDThh:mm:ss   (for instance &quot;2000-00-01T00:00:01&quot; )
+      // ---      CCYY-MM-DDThh:mm      (for instance &quot;2000-00-01T00:00&quot; )
+      // ---      CCYY-MM-DD            (for instance &quot;2000-00-01&quot; No time information set to 00:00:00)
+      // ---      hh:mm:ss              (for instance &quot;12:10:01&quot; means today)
+      // ---      hh:mm                 (for instance &quot;14:00&quot;  means today &amp; second set to zero   )
+      // ---
+      // ---      Where CC  represents century component
+      // ---            YY  represents year within century
+      // ---            MM  represents months since January [1, 12]
+      // ---            DD  represents days day of the month [1, 31]
+      // ---            hh  represents hours from begining of days
+      // ---            mm  represents minutes
+      // ---            ss  represents seconds
+      // ---
+      // ---            To Encode or Decode those format, you can use DecodeDate
+      // ---            and EncodeDate from ENOVPublishObject class
+
+   /**
+     * Returns attribute value for string or date &amp; time.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read value of the Attribute node for string or date &amp; time.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocValue
+     *  Attribute value.
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Date is expressed using one ISO 8601 format called
+     * Extended format for ordinal date and time of the day (Application will used
+     * Coordinated Universal Time UTC) (cf @href ENOVPublishAttributeNode )
+     *
+     */
+      int GetValue( const char * &amp; ocValue ) const ;
+
+   /**
+     * Returns attribute value for string.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read value of the Attribute node for string.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocValue
+     *  Attribute value.
+     */
+      int GetValue( CATUnicodeString &amp; ocValue ) const ;
+
+    /**
+     * Sets attribute value for a string or date &amp; time value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets string or date &amp; time value of the Attribute value node.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param inValue
+     *  Attribute value.
+     */
+      int SetValue( const char * icValue ) ;
+
+    /**
+     * Sets attribute value for a string.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets string of the Attribute value node.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param inValue
+     *  Attribute value.
+     */
+      int SetValue( const CATUnicodeString &amp; icValue ) ;
+
+      // --- * Timestamp values (Application will used Coordinated Universal Time UTC)
+
+    /**
+     * Returns attribute value for a date &amp; time value Attribute.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read date &amp; time value of the Attribute value node.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param otValue
+     *  Attribute value.
+     */
+      int GetTimeValue( time_t &amp; otValue ) const ;
+
+    /**
+     * Sets attribute value for an date &amp; time value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets date &amp; time value of the Attribute node in case of 
+     * mono-valuated attribute.
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param itValue
+     *  Attribute value.
+     */
+      int SetTimeValue( time_t itValue ) ;
+
+      // --- *  Oid, Uuid and VaultItem values
+
+    /**
+     * Returns attribute value for a binary value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to read binary value of the Attribute value node.
+     * (This method needs to be invoked for 
+     * &lt;tt&gt;ENOVPublishTypeOid&lt;/tt&gt;, &lt;tt&gt;ENOVPublishTypeUid&lt;/tt&gt; and
+     * &lt;tt&gt;ENOVPublishTypeVaultReference&lt;/tt&gt; attributes.)
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param obValue
+     *  Binary string value.
+     * 
+     * @param onValueLength
+     *  Binary string length.
+     */
+      int GetValue( const unsigned char * &amp; obValue
+                  , int                   &amp; onValueLength ) const ;
+
+    /**
+     * Sets attribute value for a binary value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Sets binary value of the Attribute value node.
+     * (This method needs to be invoked for 
+     * &lt;tt&gt;ENOVPublishTypeOid&lt;/tt&gt;, &lt;tt&gt;ENOVPublishTypeUid&lt;/tt&gt; and
+     * &lt;tt&gt;ENOVPublishTypeVaultReference&lt;/tt&gt; attributes.)
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ibValue
+     *  Attribute value.
+     * 
+     * @param inValueLength
+     *  Binary string length.
+     */
+      int SetValue( const unsigned char * ibValue
+                  , int                   inValueLength ) ;
+
+      // --- Decode &amp; Encode stream value according value type
+
+    /** @nodoc
+     */
+      int DecodeValue( const CATUnicodeString &amp; cValue ) ;
+
+    /** 
+     * Enables to encode attribute value.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Enables to encode current attribute value.
+     * (This method could be usefull when an Attribute is search by its value)
+     * 
+     * @return
+     * Method return code 
+     * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: Returns 0 if operation runs well. 
+     * 
+     * @param ocValue
+     *  A character string long enough to get the result.
+     * &lt;ul&gt;
+     * &lt;li&gt;10 characters for &lt;tt&gt;ENOVPublishTypeInteger&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;16 characters for &lt;tt&gt;ENOVPublishTypeReal&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;4 times the number of characters for &lt;tt&gt;ENOVPublishTypeString&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;Twice the number of bytes plus 2 &lt;tt&gt;ENOVPublishTypeBinary&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;34 characters for &lt;tt&gt;ENOVPublishTypeOid&lt;/tt&gt; or &lt;tt&gt;ENOVPublishTypeUid&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;18 characters for &lt;tt&gt;ENOVPublishTypeTimestamp&lt;/tt&gt;&lt;/li&gt;
+     * &lt;li&gt;Twice the number of bytes plus 2 &lt;tt&gt;ENOVPublishTypeVaultReference&lt;/tt&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+      int EncodeValue( char * ocValue ) const ;
+
+    /** @nodoc
+     */
+      int EncodeValue( ENOVPublishObject * ixStream ) const ;
+
+      // --- Unstream information from an XML stream
+
+    /** @nodoc
+     */
+      virtual int GetFromStream( ENOVPublishXMLHandler &amp; xHandler
+                               , AttributeList         &amp; xAttributes ) ;
+    /**
+     * @nodoc
+     */
+      virtual int SetValueFromStream( ENOVPublishXMLHandler &amp; xHandler
+                                    , const void * const      cText ) ;
+
+      // --- Stream information into an XML stream
+
+    /** @nodoc
+     */
+      virtual int PutToStream( ENOVPublishObject * xStream ) ;
+
+      // --- Print attribute identity card
+
+    /**
+     * Print a report on standard output.
+     *
+     * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Print the content of this node and its children.
+     * 
+     * @param inLevel
+     * Enable to have an indented presentation according to the tree depth of the node.
+     */
+      virtual void Print( int inLevel = 0 ) const ;
+
+      // --- Test a basic predicate type Name = Value
+
+    /** @nodoc
+     */
+      virtual int CheckPredicate( const char * cInTag
+                                , const char * cInValue ) const ;
+
+      // --- Current Attribute information
+
+    protected :
+      int              _nValueType   ;
+      int              _nValue       ;
+      CATUnicodeString _cValue       ;
+      double           _dValue       ;
+      unsigned char *  _bValue       ;
+      int              _nValueLength ;
+      time_t           _tValue       ;
+} ;
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVPublishAttributeNode.html">← 上一页: ENOVPublishAttributeNode.h</a></div>
+        <div><a href="ENOVPublishEnvironment.html">下一页: ENOVPublishEnvironment.h →</a></div>
+    </div>
+</body>
+</html>

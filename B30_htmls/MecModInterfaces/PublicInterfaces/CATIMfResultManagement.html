@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MecModInterfaces/PublicInterfaces/CATIMfResultManagement.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MecModInterfaces/PublicInterfaces/CATIMfResultManagement.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfRedge.html">← 上一页: CATIMfRedge.h</a></div>
+        <div><a href="CATIMfRsur.html">下一页: CATIMfRsur.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">// COPYRIGHT Dassault Systemes 2002
+
+#ifndef CATIMfResultManagement_H
+#define CATIMfResultManagement_H
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;MecModItfCPP.h&quot;
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;CATLISTP_Declare.h&quot;
+class CATCell;
+class CATLISTP(CATCell); 
+class CATBody;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByMecModItfCPP IID IID_CATIMfResultManagement;
+#else
+extern &quot;C&quot; const IID IID_CATIMfResultManagement ;
+#endif
+
+//------------------------------------------------------------------
+
+
+/**
+ * Interface to create a generic naming scope without a procedural report.
+ * &lt;b&gt;Role:&lt;/b&gt; This advanced interface is useful to create the genering naming scope (the result) of 
+ * a new geometrical feature without input specification. To compute the result of a geometrical feature, there are two interfaces:
+ *  &lt;ul&gt;
+ *  &lt;li&gt;@href CATIMfProcReport &lt;/li&gt;
+ *   &lt;p&gt;A procedural report is used to create the scope&lt;/p&gt;
+ *  &lt;li&gt;CATIMfResultManagement &lt;/li&gt;
+ *   &lt;p&gt;The scope is created without the procedural report&lt;/p&gt;
+ * &lt;/ul&gt;
+ * This interface will be used in the @href CATIBuild interface implementation.
+ * &lt;tt&gt;CATIBuild&lt;/tt&gt; enables you to build the result of the feature. The result consists in two 
+ * parts:
+ *  &lt;ul&gt;
+ *   &lt;li&gt;The topological result:&lt;/li&gt;
+ *    &lt;p&gt;There is a &lt;tt&gt;CATBody&lt;/tt&gt;. It will be created by topological
+ *       operators. Refer to the NewTopologicalOperators framework.&lt;/p&gt;
+ *    &lt;li&gt;&lt;b&gt;A scope&lt;/b&gt;: &lt;/li&gt;
+ *    &lt;p&gt;It is an object which manages a stable access to the cells of the &lt;tt&gt;CATBody&lt;/tt&gt;. It 
+ *     contains nodes for each following cells. A following cell is:
+ *     &lt;ul&gt;
+ *      &lt;li&gt;The faces of a solid,&lt;/li&gt;
+ *      &lt;li&gt;The boundary edges and the faces of a shell,&lt;/li&gt;
+ *      &lt;li&gt;The extremity vertices and the edges of a wire.&lt;/li&gt;
+ *     &lt;/ul&gt;
+ *   &lt;/ul&gt;
+ *  This interface allows you to create this scope by two means:
+ *     &lt;ul&gt;
+ *       &lt;li&gt;The naming of the following cells is automatically computed&lt;/li&gt;
+ *       &lt;li&gt;You associate yourself the name of the following cells&lt;/li&gt;
+ *     &lt;/ul&gt;
+ */
+class ExportedByMecModItfCPP CATIMfResultManagement: public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+  public:
+
+  /**
+  * Creates result of geometrical feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method creates a scope for the feature. The naming associated with 
+  * each following cell is automatically computed.&lt;/b&gt;
+  * @param iBody
+  *  The &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the geometrical feature.
+  */ 
+  virtual HRESULT CreateScopeResult(CATBody* iBody) = 0;
+
+  /**
+  * Creates result of the geometrical feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt; This method creates a scope for the feature. The naming associated with 
+  * each following cell (iGNUserCells) is given by a key (iUserKeys).&lt;/b&gt;
+  * @param iBody
+  *  The &lt;tt&gt;CATBody&lt;/tt&gt; to associate with the geometrical feature.
+  * @param iGNUserCells
+  *  The list of following cells to associate with key.
+  * @param iUserKeys
+  *  The list of corresponding key. Only number key are authorised. 
+  */
+  virtual HRESULT CreateScopeResult(CATBody* iBody,CATLISTP(CATCell) *iGNUserCells,CATListOfCATUnicodeString *iUserKeys) = 0;
+
+  /**
+  * Deletes result of the geometrical feature.
+  * &lt;br&gt;&lt;b&gt;Role:&lt;/b&gt;You should use this method only used when the scope has been created 
+  * and an error occurs in the @href CATIBuild#Build method. Before leaving the method, and in case of
+  * error, the scope must be deleted.
+  */ 
+  virtual HRESULT DeleteScopeResult() = 0;  
+};
+
+
+CATDeclareHandler( CATIMfResultManagement, CATBaseUnknown ) ;
+
+//------------------------------------------------------------------
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATIMfRedge.html">← 上一页: CATIMfRedge.h</a></div>
+        <div><a href="CATIMfRsur.html">下一页: CATIMfRsur.h →</a></div>
+    </div>
+</body>
+</html>

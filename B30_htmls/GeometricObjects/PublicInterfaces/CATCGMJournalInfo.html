@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeometricObjects/PublicInterfaces/CATCGMJournalInfo.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GeometricObjects/PublicInterfaces/CATCGMJournalInfo.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMJournal.html">← 上一页: CATCGMJournal.h</a></div>
+        <div><a href="CATCGMJournalItem.html">下一页: CATCGMJournalItem.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATCGMJournalInfo_h_
+#define CATCGMJournalInfo_h_
+
+// COPYRIGHT DASSAULT SYSTEMES  1999
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+ */ 
+
+#include &quot;YP00IMPL.h&quot;
+/** @c++ansi fbq 2004-08-05.10:18:26 [Replace forward declaration by #include &lt;iosfwd.h&gt;] **/
+#ifdef _CAT_ANSI_STREAMS
+#include &lt;iosfwd.h&gt;
+#else
+class ostream;
+#endif
+class CATString;
+class CATCGMOutput;
+class CATCGMStream;
+
+#include &quot;CATCGMNewArray.h&quot;
+#include &quot;CATDataType.h&quot;
+#include &quot;CATMathInline.h&quot;
+
+/**
+ * Defines an additional information associated with an journal item.
+ * &lt;br&gt;This data is a CATLONG32. If a journal information is used by a journal, it is
+ * automatically deleted with that journal.
+ */
+
+class ExportedByYP00IMPL CATCGMJournalInfo
+{
+public:
+/**
+ * Constructs a journal information.
+ * @param iInfo
+ * The value of the additional information.
+ */
+  CATCGMJournalInfo(CATLONG32 iInfo) ;
+  virtual ~CATCGMJournalInfo();
+  /** @nodoc */
+  CATCGMNewClassArrayDeclare;
+
+/**
+ * Copy constructor.
+ */
+  CATCGMJournalInfo(const CATCGMJournalInfo&amp; iToCopy);
+
+/**
+ * Affectation operator.
+ */
+  CATCGMJournalInfo&amp; operator = (const CATCGMJournalInfo&amp; iToCopy);
+
+/** @nodoc */
+  virtual void Dump(ostream&amp; os) const ;
+
+/**
+ * @nodoc
+ * Dumps the content of &lt;tt&gt;this&lt;/tt&gt; journal information.
+ * @param iWhereToWrite
+ * The output to write the journal information.
+ */
+  virtual void Dump(CATCGMOutput&amp; iWhereToWrite) const;
+  
+/**
+ * Returns value of &lt;tt&gt;this&lt;/tt&gt; item information.
+ * @return
+ * The value.
+ */
+  CATLONG32 GetNumber() const ;
+
+/**
+ * Replaces the value of &lt;tt&gt;this&lt;/tt&gt; item information.
+ * @param iVal
+ * The value.
+ */
+  void SetNumber(CATLONG32 iVal);
+
+/**
+* Retrieves &lt;tt&gt;this&lt;/tt&gt; item information as a string.
+* @param iName
+* The information value as a string.
+*/
+  virtual void GetName(CATString&amp; iName) const;
+  
+/** @nodoc */	
+  INLINE CATULONG32   IncCounter();
+/** @nodoc */	
+  INLINE CATULONG32   DecCounter();
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  virtual void Stream(CATCGMStream &amp;os);
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  static CATCGMJournalInfo *UnStream(CATCGMStream &amp; os);
+
+
+protected:
+  /** @nodoc */
+  CATLONG32  _number;
+
+  /** @nodoc */
+  CATULONG32  _Counter;
+
+	/**
+	* @nodoc
+	* True Stream management
+	*/
+  virtual void _UnStream(CATCGMStream &amp; os);
+};
+
+ExportedByYP00IMPL CATULONG32   CATCGMJournalInfo::IncCounter()
+{
+  return ++_Counter;
+}
+
+ExportedByYP00IMPL CATULONG32   CATCGMJournalInfo::DecCounter()
+{
+  return --_Counter;
+}
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATCGMJournal.html">← 上一页: CATCGMJournal.h</a></div>
+        <div><a href="CATCGMJournalItem.html">下一页: CATCGMJournalItem.h →</a></div>
+    </div>
+</body>
+</html>

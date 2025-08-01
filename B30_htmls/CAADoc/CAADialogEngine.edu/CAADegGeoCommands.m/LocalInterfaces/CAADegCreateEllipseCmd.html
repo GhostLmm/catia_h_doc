@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAADoc/CAADialogEngine.edu/CAADegGeoCommands.m/LocalInterfaces/CAADegCreateEllipseCmd.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CAADoc/CAADialogEngine.edu/CAADegGeoCommands.m/LocalInterfaces/CAADegCreateEllipseCmd.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CAADegCreateCylinder2Cmd.html">← 上一页: CAADegCreateCylinder2Cmd.h</a></div>
+        <div><a href="CAADegCreateLineCmd.html">下一页: CAADegCreateLineCmd.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CAADegCreateEllipseCmd_h
+#define CAADegCreateEllipseCmd_h
+
+// COPYRIGHT DASSAULT SYSTEMES 1999
+
+//===========================================================================
+//  Abstract of the sample:
+//  ----------------------
+//
+//  Application using a new document (CAAGeometry) with its own workshop 
+//  (CAAAfrGeometryWks) and its own commands.
+//     
+//  CAAGeometry and CAAAfrGeometryWks are described in the 
+//  CAAApplicationFrame.edu FW, and state commands are described in this FW
+//     
+//===========================================================================
+//  Abstract of the class:
+//  ----------------------
+//
+//  State command which creates an ellipse from a selected plane, an indication
+//  for the center and radius values entered in a dialog box.
+//
+//  Illustrates:
+//
+//     - Creation of a State command
+//     - Use of CATPathElementAgent and CATIndicationAgent 
+//     - Use of a Camera
+//     - Use of the CATCSO (Set of Current Objects)
+//     - Use of a dialog which does not have effect upon the dialog.
+//
+//  Usage:
+//     S
+//     the center indication.
+//     Select a plane ==&gt; The viewpoint is modified. 
+//     Click in the background ==&gt; A temporary point is created for the 
+//                                 ellipse center
+//     Moreover, a dialog box enables to enter the two radius at any moment
+//     before the circle indication (so either before or after the plane 
+//     selection).
+//     As soon as the center is indicated, an ellipse is created with the 
+//     radius values from the dialog box. If you haven&#x27;t entered such values,
+//     default values (1,1) are taken instead.
+//     The ellipse becomes the current selected object.
+// 
+//  Graph:
+//     Is composed of 2 states:
+//       * stGetPlane containing one agent
+//         - a CATPathElementAgent to react to plane selection
+//       * stGetEllipse containing one agent
+//         - a CATIndicationAgent to react to indication
+//
+//      These states are consecutive. The first transition enables to progress
+//      from the frist state to the second one. 
+//      The last transition leaves the stGetEllipse and reaches the NULL
+//      state to end the command. 
+//
+//       +------------------+
+//       ! PlanePathAgent   !   
+//       +--------+---------+
+//                !   CreateCamera 
+//       +--------V---------+
+//       ! CenterIndicAgent !   
+//       +--------+---------+
+//                !   CreateEllipse
+//                V
+//               NULL
+//
+//===========================================================================
+//  Inheritance:
+//  ------------
+//              CATStateCommand (DialogEngine Framework)
+//                CATCommand (System Framework)
+//                  CATEventSubscriber (System Framework)
+//                    CATBaseUnknown (System Framework)
+//
+//===========================================================================
+//  Main Method:
+//  ------------
+//
+//  BuilGraph    :Implements the statechart
+//  CreateCamera :Changes the viewpoint to make the selected plane and the 
+//                 screen plane coincide.
+//  CreateEllipse:Creates the ellipse.
+//
+//===========================================================================
+// DialogEngine Framework
+#include &quot;CATStateCommand.h&quot;  //Needed to derive from CATStateCommand
+
+// Mathematics Framework
+#include &quot;CATMathPoint.h&quot;     //Needed by NewEllispe
+#include &quot;CATMathPlane.h&quot;     //Needed to the plane projection
+
+// DialogEngine Framework
+class CATPathElementAgent ;   //Needed to get the plane
+class CATIndicationAgent ;    //Needed to get the center ellipse
+
+// Local Framework
+class CAADegRadiusEllipseEditor ;//The dialog box to edit radius
+
+class CAADegCreateEllipseCmd : public CATStateCommand
+{
+  //
+  // In the Cnext/resources/msgcatalog you have :
+  //     CAADegCreateEllipseCmd.CATNls 
+  //    
+  // the beginning of the format of each line in the NLS file is :
+  //
+  //     CAADegCreateEllipseCmd.
+  //
+  CmdDeclareResource(CAADegCreateEllipseCmd,CATStateCommand);
+
+  public :
+
+    // Manage the lifecyle of the command
+    //
+    CAADegCreateEllipseCmd();
+    virtual ~CAADegCreateEllipseCmd(); 
+
+    // Activate
+    // --------
+    // Called when the command selector gives the focus to this command. 
+    // Two cases can happen:
+    //  -The command starts from the beginning.
+    //  -The command restarts at the state that was current when a shared command 
+    //   took the focus from it.
+    //
+    // These two cases can be distinguished thanks to the notification type.
+    //
+    CATStatusChangeRC Activate   ( CATCommand *iCmd,CATNotification *iNotif);
+
+    // Cancel
+    // --------
+    // Called when the command selector gives the focus to an exclusive command,
+    // or if this command completes. In this latter case, the focus is given to 
+    // the default command (usually Select). 
+    // You should not take care of the command destruction. This is done
+    // by the dialog state command engine.
+    // 
+    // If the end user selects this command again, it is recreated. 
+    //
+    CATStatusChangeRC Cancel     ( CATCommand *iCmd,CATNotification *iNotif);
+
+    // Deactivate
+    // ----------
+    // Called when the command selector freezes this command to give
+    // the focus to a shared command. When the shared command completes, this
+    // frozen command will be reactivated from its current state. 
+    //  
+    CATStatusChangeRC Desactivate( CATCommand *iCmd,CATNotification *iNotif);
+	
+    // BuildGraph
+    // -----------
+    // Implements the statechart. 
+    // It is called once, even if the command is in repeat mode
+    // 
+    virtual void BuildGraph() ;
+
+    // CreateCamera
+    // -----------
+    // Retrieves  the CATMathPlane from the selected plane, and sets 
+    // the projection plane for the indicator agent. Changes the viewpoint
+    // to make the selected plane and the screen plane coincide.
+    //
+    CATBoolean  CreateCamera(void * iUsefulData);
+
+    // CreateEllipse
+    // -------------
+    // Calls NewEllipse with the selected point as center.  
+    //
+    CATBoolean  CreateEllipse(void * iUsefulData);
+
+  private :
+
+    // Creates ellipse in the document 
+    void        NewEllipse(const CATMathPoint iCenter,
+                           const float        iUvalues, 
+                           const float        iVvalues);
+
+    // Copy constructor, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAADegCreateEllipseCmd(const CAADegCreateEllipseCmd &amp;iObjectToCopy);
+
+    // Assignment operator, not implemented
+    // Set as private to prevent from compiler automatic creation as public.
+    CAADegCreateEllipseCmd &amp; operator = (const CAADegCreateEllipseCmd &amp;iObjectToCopy);
+
+  private :
+
+    // Dialog Agent
+    CATPathElementAgent            * _daPathEltPlane        ; 
+    CATIndicationAgent             * _daIndicEllipseCenter  ; 
+
+    // Dialog box to get the large and small radius 
+    CAADegRadiusEllipseEditor      * _pRadiusEditor ;
+
+    // The plane projection
+    CATMathPlane                     _ProjPlane       ;   
+
+    // To create elements in the document
+    CATBaseUnknown                 * _pUIActiveObject ;      
+    CATBaseUnknown                 * _pContainer ;   
+
+};
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CAADegCreateCylinder2Cmd.html">← 上一页: CAADegCreateCylinder2Cmd.h</a></div>
+        <div><a href="CAADegCreateLineCmd.html">下一页: CAADegCreateLineCmd.h →</a></div>
+    </div>
+</body>
+</html>

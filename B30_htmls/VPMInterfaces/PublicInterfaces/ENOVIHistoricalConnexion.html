@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPMInterfaces/PublicInterfaces/ENOVIHistoricalConnexion.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VPMInterfaces/PublicInterfaces/ENOVIHistoricalConnexion.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIGraphManagement.html">← 上一页: ENOVIGraphManagement.h</a></div>
+        <div><a href="ENOVILightExpandable.html">下一页: ENOVILightExpandable.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">//=============================================================================
+// COPYRIGHT DASSAULT SYSTEMES 2001
+//=============================================================================
+/** 
+* @CAA2Level L1
+* @CAA2Usage U3
+*/
+
+#ifndef ENOVIHistoricalConnexion_H_
+#define ENOVIHistoricalConnexion_H_
+
+#include &quot;ENOVIConnexion.h&quot;
+#include &quot;CATIAV5Level.h&quot;
+#include &quot;GUIDVPMInterfaces.h&quot;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByGUIDVPMInterfaces IID IID_ENOVIHistoricalConnexion;
+#else
+extern &quot;C&quot; const IID IID_ENOVIHistoricalConnexion;
+#endif
+
+/**
+* @nodoc
+*/
+#define HTY_SYNC 0
+/** 
+* @nodoc
+*/
+#define HTY_UNSYNC 1
+/** 
+* @nodoc 
+*/
+#define HTY_AUTHORIZED_SYNC 2
+
+/**
+* Subclass of ENOVIConnexion.
+*&lt;br&gt;&lt;b&gt;Role&lt;/b&gt; Interface to connections pointing objects,
+* connection objects and connectors through branches.
+* An historical connection is a connection pointing objects,
+* connectable objects and/or connectors through branches. A branch is a
+* kind of relationship attribute object.&lt;p&gt;
+* An historical connection also manages
+* timestamps on pointed objects and branches. So an historical connection
+* knows if it is synchronized with its pointed objets.&lt;/p&gt;
+* A more complex operation is to authorize an object.
+* An authorized object represents a collection of
+* unsynchronized objects. The authorized object is synchronous with at least
+* one object of the collection it represents.
+* It allows a branch to return a synchronous state on a set of 
+* equivalent objects with different timestamps instead of being
+* synchronous only to one object.
+* It&#x27;s a kind of acceptable set of time stamps.
+*/
+class ExportedByGUIDVPMInterfaces ENOVIHistoricalConnexion : public ENOVIConnexion 
+{
+  CATDeclareInterface;
+  public:
+
+  // oState=0 synchronized / oState=1 unsynchronized / oState=2 missing object
+  /**
+  * Checks connection synchronization state.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: When an historical connection is
+  * created it takes a copy of the time stamp attribute for each pointed
+  * object. CheckConnexionState then tells if the copy and the actual time
+  * stamps are equal for each pointed object.
+  *@param oState 
+  *	The output state the method valuate this attribute.
+  *	&lt;br&gt;&lt;b&gt;Legal value:&lt;/b&gt;
+  *	&lt;ul&gt;
+  *		&lt;li&gt;&lt;code&gt;0&lt;/code&gt;: The connection is synchronized with each 
+  *		of its pointed object.&lt;/li&gt;
+  *		&lt;li&gt;&lt;code&gt;1&lt;/code&gt;: not.&lt;/li&gt; 
+  *		&lt;li&gt;&lt;code&gt;2&lt;/code&gt;: If there is a missing object.&lt;/li&gt;
+  *	&lt;/ul&gt;
+  *@param iApplyFilter 
+  *	The default value is 1, that means to apply a filter.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL 
+  *	The method fails.
+  */
+  virtual HRESULT CheckConnexionState(long&amp; oState, int iApplyFilter=1) = 0; 
+
+  // oState=0 synchronized / oState=1 unsynchronized / oState=2 authorized
+  /**
+  * Checks a particular object synchronization state.
+  *@param iConnectedObject 
+  *	The object pointed by the connection.
+  *@param oState 
+  *	The output state valuated by the method.
+  *	&lt;br&gt;&lt;b&gt;Legal value:&lt;/b&gt;
+  *	&lt;ul&gt;
+  *		&lt;li&gt;&lt;code&gt;0&lt;/code&gt;: It is synchronized.&lt;/li&gt;
+  *		&lt;li&gt;&lt;code&gt;1&lt;/code&gt;: It is not synchronized.&lt;/li&gt;
+  *		&lt;li&gt;&lt;code&gt;2&lt;/code&gt;: It is authorized.&lt;/li&gt;
+  *	&lt;/ul&gt;
+  *@param iConnector 
+  *		The connector name. The default value is &quot;unval&quot; and
+  *		it is required if the concerned	object is pointed
+  *		through a connector.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL 
+  *	The method fails.
+  */
+  virtual HRESULT CheckConnectedObjectState(const CATIVpmFactoryObject_var&amp; iConnectedObject,
+					    long&amp; oState, 
+					    const CATUnicodeString&amp; iConnector = &quot;unval&quot;) = 0; 
+  
+  /* iObject = NULL_var : global synchronization */
+  /**
+  * Synchronizes the connection.
+  *@param iObject 
+  *		The object to synchronize.
+  *		The default is NULL_var, this means that the a global
+  *		synchronization is done. If it is valuated,
+  *		that particular pointed object will be synchronized.
+  *		This object is either a connected object or the object owner
+  * 		of the connection.
+  *@param iConnector 
+  *		The name of the connector, its default value is &quot;unval&quot;,
+  *		it is required if the concerned 	object is pointed through
+  *		a connector.
+  *@param iApplyFilter 
+  *		Indicates whether a filter is to be applied.
+  *		Its default value is 1, that means to apply a filter.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL 
+  *	The method fails.
+  */
+  virtual HRESULT Synchronize(const CATIVpmFactoryObject_var&amp; iObject = NULL_var, 
+			      const CATUnicodeString&amp; iConnector = &quot;unval&quot;,
+				  int iApplyFilter=1) = 0;
+
+
+  /**
+  * Authorizes an object.
+  *@param iObject 
+  *		The object to authorize. The default value is NULL_var,
+  *		meaning a global autorization: all pointed objects and connectors
+  *		will be authorized.
+  *@param iConnector 
+  *		The name of the connector. The default value is &quot;unval&quot;,
+  *		it is required if the concerned
+  *		object is pointed through a connector.
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL 
+  *	The method fails.
+  */
+  virtual HRESULT Authorize(const CATIVpmFactoryObject_var&amp; iObject = NULL_var, 
+			    const CATUnicodeString&amp; iConnector = &quot;unval&quot;) = 0;
+
+  /**
+  * Retrieves connected objects states.
+  * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method is similar to check each connected
+  * object state and then store the results in a list.
+  *@param oConnectedObjects 
+  *	The list of retrieved connected objects.
+  *@param oConnectors 
+  *		The list of retrieved connectors objects. 
+  *		oConnectors[i] is the connector of object oConnectedObjects[i].
+  *@param oStates 
+  *		The corresponding list of state. oStates[i] is the state
+  *		of object oConnectedObjects[i].
+  *@param iRole
+  *     Optional parmater for V508_role
+  *     allowed values:&quot;BB Owner&quot; or &quot;Published Doc&quot;
+  *     avaialble only for R17
+  *@return S_OK 
+  *	The method succeeds.
+  *@return E_FAIL 
+  *	The method fails.
+  */
+
+  #if !defined(CATIAV5R17)
+  virtual HRESULT GetConnectedObjectsState(CATLISTV(CATIVpmFactoryObject_var)&amp; oConnectedObjects,
+					   CATListOfCATUnicodeString&amp; oConnectors, 
+					   CATListOfInt&amp; oStates) = 0;
+  #endif
+
+  #if defined(CATIAV5R17)
+  virtual HRESULT GetConnectedObjectsState(CATLISTV(CATIVpmFactoryObject_var)&amp; oConnectedObjects,
+					   CATListOfCATUnicodeString&amp; oConnectors, 
+					   CATListOfInt&amp; oStates,const CATUnicodeString&amp; iRole=&quot;&quot;) = 0;
+  #endif
+
+
+};
+
+CATDeclareHandler(ENOVIHistoricalConnexion, ENOVIConnexion);
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="ENOVIGraphManagement.html">← 上一页: ENOVIGraphManagement.h</a></div>
+        <div><a href="ENOVILightExpandable.html">下一页: ENOVILightExpandable.h →</a></div>
+    </div>
+</body>
+</html>

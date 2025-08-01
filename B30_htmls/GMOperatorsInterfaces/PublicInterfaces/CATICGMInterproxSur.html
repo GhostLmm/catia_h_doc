@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMOperatorsInterfaces/PublicInterfaces/CATICGMInterproxSur.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMOperatorsInterfaces/PublicInterfaces/CATICGMInterproxSur.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMInterproxCrv.html">← 上一页: CATICGMInterproxCrv.h</a></div>
+        <div><a href="CATICGMLayDownOperator.html">下一页: CATICGMLayDownOperator.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">#ifndef CATICGMInterproxSur_h_
+#define CATICGMInterproxSur_h_
+
+// COPYRIGHT DASSAULT SYSTEMES 2006
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U1
+*/
+
+#include &quot;CATGMOperatorsInterfaces.h&quot;
+#include &quot;CATICGMVirtual.h&quot;
+
+class CATFrFNurbsMultiForm;
+class CATMathSetOfVectors;
+class CATNurbsSurface;
+
+extern ExportedByCATGMOperatorsInterfaces IID IID_CATICGMInterproxSur;
+
+/**
+ * Class representing the geometric operator that deforms surfaces on a set of points.
+ * &lt;br&gt;Several parameters define this operator:
+ * &lt;ul&gt;&lt;li&gt;The tension parameter strengthens the shape: a higher tension gives a flatter shape.
+ * &lt;li&gt;The curvature (or smoothness) parameter regularizes the surface curvature: 
+ * a higher curvature coefficient gives a smoother surface.
+ * &lt;/ul&gt;
+ * This operator projects the set of points on the surfaces and use a least squares method to deform the surfaces. 
+ * &lt;br&gt;To use it in &lt;tt&gt;BASIC&lt;/tt&gt; mode:
+ * &lt;ul&gt;&lt;li&gt;Create it with the &lt;tt&gt;CATCGMCreateInterproxSur&lt;/tt&gt; global method. The run is automatically done and the
+ * input surfaces are directly deformed.
+ * &lt;li&gt;Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ * &lt;/ul&gt;
+ * &lt;br&gt;To use it in &lt;tt&gt;ADVANCED&lt;/tt&gt; mode:
+ * &lt;ul&gt;&lt;li&gt;Create it with the &lt;tt&gt;CATCGMCreateInterproxSur&lt;/tt&gt; global method.
+ * &lt;li&gt;Change the smoothness or tension parameters with the &lt;tt&gt;SetXxx&lt;/tt&gt; methods.
+ * &lt;li&gt;Run it. This step directly deforms the input surfaces, it is the reason why there is no &lt;tt&gt;GetResult&lt;/tt&gt;
+ * method. You can &lt;tt&gt;Run&lt;/tt&gt; again the operator with different parameters, 
+ * allowing you to iterate on the deformation.
+ * &lt;li&gt;Release the operator with the &lt;tt&gt;Release&lt;/tt&gt; method after use.
+ * &lt;/ul&gt;
+ */
+class ExportedByCATGMOperatorsInterfaces CATICGMInterproxSur: public CATICGMVirtual
+{
+public:
+  /**
+   * Constructor
+   */
+  CATICGMInterproxSur();
+
+  /**
+ * Runs &lt;tt&gt;this&lt;/tt&gt; operator (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * &lt;br&gt;The input surfaces are directly modified
+ */
+  virtual void Run() = 0;
+
+  /**
+ * Defines the tension parameter (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * @param iTension
+ * The new value of the tension parameter.
+ */
+  virtual void SetTensionParameter(const double iTension) = 0;
+
+  /**
+ * Defines the smoothness parameter (&lt;tt&gt;ADVANCED&lt;/tt&gt; mode).
+ * @param iSmoothness
+ * The new value of the smoothness parameter.
+ */
+  virtual void SetCurvatureParameter(const double iSmoothness) = 0;
+
+  /**
+ * Defines the continuity constraints.
+ * @param iImposition
+ * The array [4*Nbsur] defining the type of constraints at each extremities of the deformed surface.
+ * The array is filled as follows, for the input surfaces from &lt;tt&gt;0 &lt;= i &lt; Nbsur&lt;/tt&gt;:
+ * &lt;ul&gt;
+ * &lt;li&gt;&lt;tt&gt;iImposition[0+4*i]&lt;/tt&gt; for the iso-parametric boundary &lt;tt&gt;v=0&lt;/tt&gt; of the &lt;tt&gt;i-&lt;/tt&gt;th surface.
+ * &lt;li&gt;&lt;tt&gt;iImposition[1+4*i]&lt;/tt&gt; for the iso-parametric boundary &lt;tt&gt;u=0&lt;/tt&gt; of the &lt;tt&gt;i-&lt;/tt&gt;th surface.
+ * &lt;li&gt;&lt;tt&gt;iImposition[2+4*i]&lt;/tt&gt; for the iso-parametric boundary &lt;tt&gt;v=vmax&lt;/tt&gt; of the &lt;tt&gt;i-&lt;/tt&gt;th surface.
+ * &lt;li&gt;&lt;tt&gt;iImposition[3+4*i]&lt;/tt&gt; for the iso-parametric boundary &lt;tt&gt;u=umax&lt;/tt&gt; of the &lt;tt&gt;i-&lt;/tt&gt;th surface.
+ * &lt;/ul&gt;
+ * &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: &lt;tt&gt;0&lt;/tt&gt; for a free boundary,
+ * &lt;tt&gt;1&lt;/tt&gt; for a C0 continuity with the input surface, 
+ * &lt;tt&gt;2&lt;/tt&gt; for a C1 continuity, &lt;tt&gt;3&lt;/tt&gt; for a C2 continuity.
+ */
+  virtual void SetContinuity(const int *iImposition) = 0;
+
+protected:
+  /**
+   * Destructor
+   */
+  virtual ~CATICGMInterproxSur(); // -&gt; delete can&#x27;t be called
+};
+
+#endif /* CATICGMInterproxSur_h_ */
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATICGMInterproxCrv.html">← 上一页: CATICGMInterproxCrv.h</a></div>
+        <div><a href="CATICGMLayDownOperator.html">下一页: CATICGMLayDownOperator.h →</a></div>
+    </div>
+</body>
+</html>

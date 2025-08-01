@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketcherInterfaces/PublicInterfaces/CATISketchPositioning.h</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .navigation a {
+            color: #2980b9;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 3px;
+            border: 1px solid #bdc3c7;
+        }
+        .navigation a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .back-to-index {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .back-to-index a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SketcherInterfaces/PublicInterfaces/CATISketchPositioning.h</h1>
+    </div>
+    
+    <div class="navigation">
+        <div><a href="CATISketchFactory.html">← 上一页: CATISketchFactory.h</a></div>
+        <div><a href="CATISketchProperties.html">下一页: CATISketchProperties.h →</a></div>
+    </div>
+    
+    <div class="back-to-index">
+        <a href="index.html">📁 返回目录</a>
+    </div>
+    
+    <div class="content">/* -*-c++-*- */
+#ifndef CATISketchPositioning_h
+#define CATISketchPositioning_h
+
+// COPYRIGHT DASSAULT SYSTEMES 2001
+
+/**
+ * @CAA2Level L1
+ * @CAA2Usage U3
+ */
+
+#include &quot;CATBaseUnknown.h&quot;
+#include &quot;CATSketcherInterfaces.h&quot;
+
+#include &quot;CATSktPosSupportMode.h&quot;
+#include &quot;CATSktPosOriginMode.h&quot;
+#include &quot;CATSktPosOrientationMode.h&quot;
+#include &quot;CATSktPosDirection.h&quot;
+
+class CATListValCATISpecObject_var;
+class CATListValCATBaseUnknown_var;
+
+#ifndef LOCAL_DEFINITION_FOR_IID
+extern ExportedByCATSketcherInterfaces IID IID_CATISketchPositioning;
+#else
+extern &quot;C&quot; const IID IID_CATISketchPositioning;
+#endif
+
+/**
+ * Interface to manage the positioning of a sketch.
+ * &lt;b&gt;Role&lt;/b&gt;: This interface is used to manage the attributes of a sketch 
+ * from which the position will be computed.
+ */
+
+class ExportedByCATSketcherInterfaces CATISketchPositioning : public CATBaseUnknown
+{
+  CATDeclareInterface;
+
+public:
+
+  /**
+   * Retrieves the support reference elements.
+   * @param &lt;tt&gt;oReferences&lt;/tt&gt;
+   * [out] List of support reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetSupportReferences(CATListValCATISpecObject_var&amp; oReferences) = 0;
+
+  /**
+   * Sets the support reference elements.
+   * @param &lt;tt&gt;iReferences&lt;/tt&gt;
+   * [in] List of support reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetSupportReferences(const CATListValCATBaseUnknown_var&amp; iReferences) = 0;
+  
+  /**
+   * Retrieves the support definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The support definition mode lets you define the sketch support references.
+   * Support definition modes are listed in the @href CATSktPosSupportMode definition.
+   * @param oMode
+   *   [out] Support definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktSupOnePlane&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetSupportMode(CATSktPosSupportMode&amp; oMode)= 0;
+
+  /**
+   * Sets the support definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The support definition mode lets you define the sketch support references.
+   * Support definition modes are listed in the @href CATSktPosSupportMode definition.
+   * @param iMode
+   *   [in] Support definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktSupOnePlane&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetSupportMode(const CATSktPosSupportMode iMode) = 0;
+
+  /**
+   * Retrieves the origin reference elements.
+   * @param &lt;tt&gt;oReferences&lt;/tt&gt;
+   * [out] List of origin reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetOriginReferences(CATListValCATISpecObject_var&amp; oReferences) = 0;
+
+  /**
+   * Sets the origin reference elements and definition mode.
+   * @param &lt;tt&gt;iReferences&lt;/tt&gt;
+   * [in] List of origin reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetOriginReferences(const CATListValCATBaseUnknown_var&amp; iReferences) = 0;
+
+  /**
+   * Retrieves the origin definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The origin definition mode lets you define the sketch origin.
+   * Origin definition modes are listed in the @href CATSktPosOriginMode definition.
+   * @param oMode
+   *   [out] Origin definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktOriPartOrigin&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetOriginMode(CATSktPosOriginMode&amp; oMode)= 0;
+
+  /**
+   * Sets the origin definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The origin definition mode lets you define the sketch origin.
+   * Origin definition modes are listed in the @href CATSktPosOriginMode definition.
+   * @param iMode
+   *   [in] Origin definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktOriPartOrigin&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetOriginMode(const CATSktPosOriginMode iMode) = 0;
+
+  /**
+   * Retrieves the orientation reference elements.
+   * @param &lt;tt&gt;oReferences&lt;/tt&gt;
+   * [out] List of orientation reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetOrientationReferences(CATListValCATISpecObject_var&amp; oReferences) = 0;
+
+  /**
+   * Sets the orientation reference elements.
+   * @param &lt;tt&gt;iReferences&lt;/tt&gt;
+   * [in] List of orientation reference elements.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetOrientationReferences(const CATListValCATBaseUnknown_var&amp; iReferences) = 0;
+
+  /**
+   * Retrieves the orientation definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The orientation definition mode lets you define the absolute axis orientation.
+   * Orientation definition modes are listed in the @href CATSktPosOrientationMode definition.
+   * @param oMode
+   *   [out] Orientation definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktOrtThroughAPoint&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+ virtual HRESULT GetOrientationMode(CATSktPosOrientationMode&amp; oMode)= 0;
+
+  /**
+   * Sets the orientation definition mode.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The orientation definition mode lets you define the absolute axis orientation.
+   * Orientation definition modes are listed in the @href CATSktPosOrientationMode definition.
+   * @param iMode
+   *   [in] Origin definition mode.
+   *   &lt;br&gt;e.g.: &lt;code&gt;CATSktOrtThroughAPoint&lt;/code&gt;
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetOrientationMode(const CATSktPosOrientationMode iMode) = 0;
+
+  /**
+   * Retrieves the direction of the sketch axis which is oriented.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The orientation direction lets you specify whether 
+   * the orientation references will be applied on axis H or V.
+   * Direction definitions are listed in the @href CATSktPosDirection definition.
+   * @param oDirection
+   *   [out] Oriented direction.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The oriented direction value can be CATSktDirHorizontal for the horizontal axis
+   *   or CATSktDirVertical for the vertical axis.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetOrientationDirection(CATSktPosDirection&amp; oDirection)= 0;
+
+  /**
+   * Sets the oriented direction of the sketch axis.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: The orientation direction allows lets you specify whether 
+   * the orientation references will be applied on axis H or V.
+   * Direction definitions are listed in the @href CATSktPosDirection definition.
+   * @param iDirection
+   *   [in] Oriented direction.
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The oriented direction value can be CATSktDirHorizontal for the horizontal axis
+   *   or CATSktDirVertical for the vertical axis.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SetOrientationDirection(const CATSktPosDirection iDirection )= 0;
+
+  /**
+   * Retrieves the direction coordinates for orientation.
+   * @param &lt;tt&gt;oXYZ&lt;/tt&gt;
+   * [out] A list of 3 literal parameters for each coordinate.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetDirectionCoordinates(CATListValCATISpecObject_var&amp; oXYZ)= 0;
+
+  /**
+   * Retrieves the Horizontal direction.
+   * @param &lt;tt&gt;oDirection&lt;/tt&gt;
+   * [out] Direction coefficient.
+   * &lt;dt&gt; &lt;tt&gt;+1&lt;/tt&gt;   &lt;dd&gt; Same direction.
+   * &lt;dt&gt; &lt;tt&gt;-1&lt;/tt&gt;   &lt;dd&gt; Reverse direction.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetHDirectionSense (int&amp; oDirection)= 0;
+
+  /**
+   * Retrieves the Vertical direction.
+   * @param &lt;tt&gt;oDirection&lt;/tt&gt;
+   * [out] Direction coefficient.
+   * &lt;dt&gt; &lt;tt&gt;+1&lt;/tt&gt;   &lt;dd&gt; Same direction.
+   * &lt;dt&gt; &lt;tt&gt;-1&lt;/tt&gt;   &lt;dd&gt; Reverse direction.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetVDirectionSense (int&amp; oDirection)= 0;
+
+  /**
+   * Retrieves the Normal direction.
+   * @param &lt;tt&gt;oDirection&lt;/tt&gt;
+   * [out] Direction coefficient.
+   * &lt;dt&gt; &lt;tt&gt;+1&lt;/tt&gt;   &lt;dd&gt; Same direction.
+   * &lt;dt&gt; &lt;tt&gt;-1&lt;/tt&gt;   &lt;dd&gt; Reverse direction.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT GetNormalSense (int&amp; oDirection)= 0;
+
+  /**
+   * Reverses the Horizontal direction.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT ReverseHDirection(void) = 0;
+
+  /**
+   * Reverses the Vertical direction.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT ReverseVDirection(void) = 0;
+
+  /**
+   * Swaps the Horizontal and Vertical directions.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT SwapHVDirections(void) = 0;
+
+  /**
+   * Compute, evaluate and analyze the new position of the sketch.
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: This method lets you know if the sketch is correctly positioned.
+   * @param oSupportStatus
+   *   [out] Evaluation status of the sketch support positioning
+   * @param oOriginStatus
+   *   [out] Evaluation status of the sketch origin positioning
+   * @param oOrientationStatus
+   *   [out] Evaluation status of the sketch orientation positioning
+   * @param iEvaluationMode
+   *   [in] Evaluation mode  
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The evaluation mode value can be 1 for creation state or 2 for edition state.
+   * @param iMovingMode
+   *   [in] Moving mode  
+   *   &lt;br&gt;&lt;b&gt;Legal values&lt;/b&gt;: The moving mode value can be 1 to move the absolute axis and the sketch geometry or
+   *   0 to move the absolute axis only.
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   */
+  virtual HRESULT EvalPosition(HRESULT&amp; oSupportStatus, HRESULT&amp; oOriginStatus, HRESULT&amp; oOrientationStatus, const int iEvaluationMode=1, const int iMovingMode=1) = 0;
+
+  /**
+   * &lt;br&gt;&lt;b&gt;Role&lt;/b&gt;: Puts the sketch ARWL (As Result With Link) at the same position as the original sketch,
+   * and set the type of the sketch on CATSktSupPositionedAsRef
+   * @return &lt;tt&gt;HRESULT&lt;/tt&gt;
+   *     - S_OK, if the sketch has been successfully positioned as its reference.
+   *     - E_FAIL, otherwise.
+   */
+  virtual HRESULT PositionAsReference()=0;
+
+};
+
+CATDeclareHandler(CATISketchPositioning,CATBaseUnknown);
+
+#endif
+</div>
+    
+    <div class="navigation">
+        <div><a href="CATISketchFactory.html">← 上一页: CATISketchFactory.h</a></div>
+        <div><a href="CATISketchProperties.html">下一页: CATISketchProperties.h →</a></div>
+    </div>
+</body>
+</html>
