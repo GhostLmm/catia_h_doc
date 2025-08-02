@@ -6,7 +6,7 @@
 
 ## 🌐 在线访问
 
-**网站地址**: [https://ghostlmm.github.io/catia_h_doc/](https://ghostlmm.github.io/catia_h_doc/)
+**网站地址**: [https://ghostlmm.github.io/catia_h_doc/api/](https://ghostlmm.github.io/catia_h_doc/api/)
 
 ## 📚 文档内容
 
@@ -106,4 +106,4 @@ catia_h_doc/
 
 **维护者**: GhostLmm  
 **仓库地址**: [https://github.com/GhostLmm/catia_h_doc](https://github.com/GhostLmm/catia_h_doc)  
-**在线文档**: [https://ghostlmm.github.io/catia_h_doc/](https://ghostlmm.github.io/catia_h_doc/)
+**在线文档**: [https://ghostlmm.github.io/catia_h_doc/api/](https://ghostlmm.github.io/catia_h_doc/api/)

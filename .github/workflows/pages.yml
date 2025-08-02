@@ -28,14 +28,14 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
       
-      - name: 验证 B30_htmls 目录存在
+      - name: 验证 B30_htmls/api 目录存在
         run: |
-          if [ ! -d "B30_htmls" ]; then
-            echo "错误: B30_htmls 目录不存在"
+          if [ ! -d "B30_htmls/api" ]; then
+            echo "错误: B30_htmls/api 目录不存在"
             exit 1
           fi
-          echo "B30_htmls 目录存在，包含以下文件:"
-          ls -la B30_htmls/ | head -10
+          echo "B30_htmls/api 目录存在，包含以下文件:"
+          ls -la B30_htmls/api/ | head -10
       
       - name: 设置 Pages
         uses: actions/configure-pages@v4
@@ -43,8 +43,8 @@ jobs:
       - name: 上传构件
         uses: actions/upload-pages-artifact@v3
         with:
-          # 上传 B30_htmls 目录
-          path: './B30_htmls'
+          # 上传 B30_htmls/api 目录
+          path: './B30_htmls/api'
   
   # 部署作业
   deploy:
