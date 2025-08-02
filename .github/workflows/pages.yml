@@ -1,4 +1,4 @@
-# GitHub Pages 部署工作流
+# GitHub Pages 部署工作流 - 改进版
 name: Deploy CATIA B30 Documentation to Pages
 
 on:
@@ -28,6 +28,15 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
       
+      - name: 验证 B30_htmls 目录存在
+        run: |
+          if [ ! -d "B30_htmls" ]; then
+            echo "错误: B30_htmls 目录不存在"
+            exit 1
+          fi
+          echo "B30_htmls 目录存在，包含以下文件:"
+          ls -la B30_htmls/ | head -10
+      
       - name: 设置 Pages
         uses: actions/configure-pages@v4
       
@@ -48,3 +57,7 @@ jobs:
       - name: 部署到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+      - name: 显示部署结果
+        run: |
+          echo "网站已部署到: ${{ steps.deployment.outputs.page_url }}"
